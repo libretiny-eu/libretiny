@@ -1,0 +1,18 @@
+{
+	"build": {
+		"mcu": "rtl8710bn",
+		"f_cpu": "125000000L",
+		"amb_ota1_offset": "0x0800B000",
+		"amb_ota2_offset": "0x080D0000"
+	},
+	"frameworks": [
+		"realtek-ambz-sdk"
+	],
+	"upload": {
+		"maximum_size": 2097152,
+		"maximum_ram_size": 262144
+	},
+	"name": "WR3 Wi-Fi Module",
+	"url": "",
+	"vendor": "Tuya"
+}
