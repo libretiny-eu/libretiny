@@ -1,0 +1,30 @@
+{
+  "name": "libretuya",
+  "title": "LibreTuya",
+  "description": "Free your Tuya IoT modules.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kuba2k2/platformio-libretuya"
+  },
+  "version": "1.0.0",
+  "frameworks": {
+    "realtek-ambz-sdk": {
+      "tilte": "Realtek AmebaZ - SDK",
+      "package": "framework-realtek-amb1",
+      "script": "builder/frameworks/realtek-ambz-sdk.py"
+    }
+  },
+  "packages": {
+    "framework-realtek-amb1": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/kuba2k2/amb1_sdk"
+    },
+    "toolchain-gccarmnoneeabi": {
+      "type": "toolchain",
+      "optionalVersions": [
+        "~1.40804.0"
+      ]
+    }
+  }
+}
