@@ -12,6 +12,11 @@
       "tilte": "Realtek AmebaZ - SDK",
       "package": "framework-realtek-amb1",
       "script": "builder/frameworks/realtek-ambz-sdk.py"
+    },
+    "realtek-ambz-arduino": {
+      "tilte": "Realtek AmebaZ - Arduino",
+      "package": "framework-realtek-amb1",
+      "script": "builder/frameworks/realtek-ambz-arduino.py"
     }
   },
   "packages": {
