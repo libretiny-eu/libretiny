@@ -55,39 +55,13 @@ env.Append(
         ("bool", "unsigned char"),
     ],
     LINKFLAGS=[
-        "-Wl,--undefined=InfraStart",
         "--specs=nosys.specs",
         "-Wl,--as-needed",
-        "-Wl,--no-undefined",
-        # "-nodefaultlibs",
-        # "-nostdlib",
-        "-Wl,--cref",
         "-Wl,--build-id=none",
-        # "-Wl,-wrap,strcat",
-        # "-Wl,-wrap,strchr",
-        # "-Wl,-wrap,strcmp",
-        # "-Wl,-wrap,strncmp",
-        # "-Wl,-wrap,strcpy",
-        # "-Wl,-wrap,strncpy",
-        # "-Wl,-wrap,strlen",
-        # "-Wl,-wrap,strnlen",
-        # "-Wl,-wrap,strncat",
-        # "-Wl,-wrap,strpbrk",
-        # "-Wl,-wrap,strstr",
-        # "-Wl,-wrap,strtok",
-        # "-Wl,-wrap,strsep",
-        # "-Wl,-wrap,strtoll",
-        # "-Wl,-wrap,strtoul",
-        # "-Wl,-wrap,strtoull",
-        # "-Wl,-wrap,atoi",
-        # "-Wl,-wrap,malloc",
-        # "-Wl,-wrap,free",
-        # "-Wl,-wrap,realloc",
-        # "-Wl,-wrap,memcmp",
-        # "-Wl,-wrap,memcpy",
-        # "-Wl,-wrap,memmove",
-        # "-Wl,-wrap,memset",
+        "-Wl,--cref",
         "-Wl,--no-enum-size-warning",
+        "-Wl,--no-undefined",
+        "-Wl,--undefined=InfraStart",
         "-Wl,--warn-common",
     ],
 )
@@ -110,7 +84,7 @@ env.Prepend(
 env.Append(
     CPPPATH=[
         # fmt: off
-        # includes missing in the vanilla SDK makefiles
+        # includes that are missing in the vanilla SDK makefiles
         join(SDK_DIR, "component", "common", "drivers", "sdio", "realtek", "sdio_host", "inc"),
         join(SDK_DIR, "component", "common", "file_system", "fatfs"),
         join(SDK_DIR, "component", "common", "file_system", "fatfs", "r0.10c", "include"),
@@ -165,8 +139,8 @@ sources_core = [
 # Libs & linker config
 env.Append(
     LIBS=[
-        # "stdc++",
-        # "supc++",
+        "stdc++",
+        "supc++",
     ],
 )
 env.Replace(
