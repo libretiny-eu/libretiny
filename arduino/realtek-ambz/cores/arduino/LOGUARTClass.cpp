@@ -73,13 +73,9 @@ void IrqHandler( void )
 
 void LOGUARTClass::begin( const uint32_t dwBaudRate )
 {
-    DiagPrintf("LOGUARTClass::begin\r\n");
     DIAG_UartReInit((IRQ_FUN) IrqHandler);
-    DiagPrintf("DIAG_UartReInit ok\r\n");
     NVIC_SetPriority(UART_LOG_IRQ, 10);
-    DiagPrintf("NVIC_SetPriority ok\r\n");
     LOGUART_SetBaud(dwBaudRate);
-    DiagPrintf("LOGUART_SetBaud ok\r\n");
 }
 
 void LOGUARTClass::end( void )
