@@ -23,7 +23,10 @@
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optionalVersions": [
-        "~1.40804.0"
+        "~1.40804.0",
+        "~1.50401.0",
+        "~1.90301.0",
+        "~1.100301.0"
       ]
     }
   }

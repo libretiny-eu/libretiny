@@ -5,18 +5,21 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 board = env.BoardConfig()
 
+mcu = board.get("build.mcu").upper()
+family = board.get("build.family").upper()
+variant = board.get("build.variant")
+ldscript = board.get("build.ldscript_sdk")
+
 SDK_DIR = platform.get_package_dir("framework-realtek-amb1")
+BOARD_DIR = join(platform.get_dir(), "boards", variant)
+FIXUPS_DIR = join(platform.get_dir(), "fixups", "realtek-ambz")
 assert isdir(SDK_DIR)
+assert isdir(env.subst(BOARD_DIR))
+assert isdir(env.subst(FIXUPS_DIR))
 
 ota1_offset = board.get("build.amb_ota1_offset")
 ota2_offset = board.get("build.amb_ota2_offset")
-
-# Firmware name
-if env.get("PROGNAME", "program") == "program":
-    env.Replace(PROGNAME="firmware")
-env.Replace(
-    PROGSUFFIX=".elf",
-)
+boot_all = board.get("build.amb_boot_all")
 
 # Outputs
 env.Replace(
@@ -38,7 +41,8 @@ env.Replace(
 
 # Flags
 env.Replace(
-    CCFLAGS=[
+    CFLAGS=[
+        "-std=gnu99",
         "-mcpu=cortex-m4",
         "-mthumb",
         "-mfloat-abi=hard",
@@ -47,19 +51,19 @@ env.Replace(
         "-w",
         "-O2",
         "-Wno-pointer-sign",
-        "-fno-common",
-        "-fmessage-length=0",
-        "-ffunction-sections",
         "-fdata-sections",
-        "-fomit-frame-pointer",
+        "-ffunction-sections",
+        "-fmessage-length=0",
+        "-fno-common",
         "-fno-short-enums",
-        "-std=gnu99",
+        "-fomit-frame-pointer",
         "-fsigned-char",
     ],
     CPPDEFINES=[
         "M3",
         "CONFIG_PLATFORM_8711B",
         ("F_CPU", "166000000L"),
+        ("LWIP_TIMEVAL_PRIVATE", "0"),
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",
@@ -169,18 +173,12 @@ sources = [
     # app uart_adapter
     "+<" + SDK_DIR +"/component/common/application/uart_adapter/uart_adapter.c>",
     # cmsis
-    "+<" + SDK_DIR +"/component/soc/realtek/8711b/cmsis/device/app_start.c>",
+    # NOTE: a fixup is used instead, to remove default main()
+    # "+<" + SDK_DIR +"/component/soc/realtek/8711b/cmsis/device/app_start.c>",
     "+<" + SDK_DIR +"/component/soc/realtek/8711b/fwlib/ram_lib/startup.c>",
     "+<" + SDK_DIR +"/component/soc/realtek/8711b/cmsis/device/system_8195a.c>",
     # console
-    # "+<" + SDK_DIR +"/component/common/api/at_cmd/atcmd_lwip.c>",
-    # "+<" + SDK_DIR +"/component/common/api/at_cmd/atcmd_sys.c>",
-    # "+<" + SDK_DIR +"/component/common/api/at_cmd/atcmd_wifi.c>",
-    # "+<" + SDK_DIR +"/component/common/api/at_cmd/log_service.c>",
-    # "+<" + SDK_DIR +"/component/soc/realtek/8711b/app/monitor/ram/low_level_io.c>",
-    # "+<" + SDK_DIR +"/component/soc/realtek/8711b/app/monitor/ram/monitor.c>",
-    "+<" + SDK_DIR +"/component/soc/realtek/8711b/app/monitor/ram/rtl_consol.c>",
-    # "+<" + SDK_DIR +"/component/soc/realtek/8711b/app/monitor/ram/rtl_trace.c>",
+    "+<" + SDK_DIR +"/component/soc/realtek/8711b/app/monitor/ram/rtl_trace.c>",
     # network api wifi rtw_wpa_supplicant
     "+<" + SDK_DIR +"/component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wifi_eap_config.c>",
     "+<" + SDK_DIR +"/component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wifi_p2p_config.c>",
@@ -349,36 +347,6 @@ sources = [
     "+<" + SDK_DIR +"/component/soc/realtek/8711b/misc/rtl8710b_ota.c>",
     "+<" + SDK_DIR +"/component/soc/realtek/8711b/fwlib/ram_lib/rtl8710b_pinmapcfg.c>",
     "+<" + SDK_DIR +"/component/soc/realtek/8711b/fwlib/ram_lib/rtl8710b_sleepcfg.c>",
-    # utilities example
-    # "+<" + SDK_DIR +"/component/common/example/bcast/example_bcast.c>",
-    # "+<" + SDK_DIR +"/component/common/example/dct/example_dct.c>",
-    # "+<" + SDK_DIR +"/component/common/example/eap/example_eap.c>",
-    # "+<" + SDK_DIR +"/component/common/example/example_entry.c>",
-    # "+<" + SDK_DIR +"/component/common/example/get_beacon_frame/example_get_beacon_frame.c>",
-    # "+<" + SDK_DIR +"/component/common/example/high_load_memory_use/example_high_load_memory_use.c>",
-    # "+<" + SDK_DIR +"/component/common/example/http_client/example_http_client.c>",
-    # "+<" + SDK_DIR +"/component/common/example/httpc/example_httpc.c>",
-    # "+<" + SDK_DIR +"/component/common/example/httpd/example_httpd.c>",
-    # "+<" + SDK_DIR +"/component/common/example/http_download/example_http_download.c>",
-    # "+<" + SDK_DIR +"/component/common/example/mcast/example_mcast.c>",
-    # "+<" + SDK_DIR +"/component/common/example/mdns/example_mdns.c>",
-    # "+<" + SDK_DIR +"/component/common/example/mqtt/example_mqtt.c>",
-    # "+<" + SDK_DIR +"/component/common/example/nonblock_connect/example_nonblock_connect.c>",
-    # "+<" + SDK_DIR +"/component/common/example/rarp/example_rarp.c>",
-    # "+<" + SDK_DIR +"/component/common/example/sntp_showtime/example_sntp_showtime.c>",
-    # "+<" + SDK_DIR +"/component/common/example/socket_select/example_socket_select.c>",
-    # "+<" + SDK_DIR +"/component/common/example/socket_tcp_trx/example_socket_tcp_trx_1.c>",
-    # "+<" + SDK_DIR +"/component/common/example/socket_tcp_trx/example_socket_tcp_trx_2.c>",
-    # "+<" + SDK_DIR +"/component/common/example/ssl_download/example_ssl_download.c>",
-    # "+<" + SDK_DIR +"/component/common/example/ssl_server/example_ssl_server.c>",
-    # "+<" + SDK_DIR +"/component/common/example/tcp_keepalive/example_tcp_keepalive.c>",
-    # "+<" + SDK_DIR +"/component/common/example/uart_atcmd/example_uart_atcmd.c>",
-    # "+<" + SDK_DIR +"/component/common/example/wifi_mac_monitor/example_wifi_mac_monitor.c>",
-    # "+<" + SDK_DIR +"/component/common/example/wlan_fast_connect/example_wlan_fast_connect.c>",
-    # "+<" + SDK_DIR +"/component/common/example/wlan_scenario/example_wlan_scenario.c>",
-    # "+<" + SDK_DIR +"/component/common/example/websocket/example_wsclient.c>",
-    # "+<" + SDK_DIR +"/component/common/example/xml/example_xml.c>",
-    # "+<" + SDK_DIR +"/component/common/example/uart_firmware_update/example_uart_update.c>",
     # network - httpc
     "+<" + SDK_DIR +"/component/common/network/httpc/httpc_tls.c>",
     # network - httpd
@@ -391,14 +359,22 @@ sources = [
     # fmt: on
 ]
 
+# Fixups
+sources += [
+    "+<" + FIXUPS_DIR + "/app_start_patch.c>",
+    "+<" + FIXUPS_DIR + "/cmsis_ipsr.c>",
+    "+<" + FIXUPS_DIR + "/log_uart.c>",
+    "+<" + FIXUPS_DIR + "/wifi_mode.c>",
+]
+
 # Libs & linker config
 env.Append(
     LIBPATH=[
         # fmt: off
         join(SDK_DIR, "component", "soc", "realtek", "8711b", "misc", "bsp", "lib", "common", "GCC"),
-        # linker script path
-        join(SDK_DIR, "project", "realtek_amebaz_va0_example", "GCC-RELEASE"),
         # fmt: on
+        # linker script path
+        join(BOARD_DIR, "ld"),
     ],
     LIBS=[
         "_platform",
@@ -418,9 +394,7 @@ env.Append(
 )
 env.Replace(
     LDSCRIPT_PATH=[
-        # fmt: off
-        join(SDK_DIR, "project", "realtek_amebaz_va0_example", "GCC-RELEASE", "rlx8711B-symbol-v02-img2_xip1.ld"),
-        # fmt: on
+        join(BOARD_DIR, "ld", ldscript),
     ],
 )
 
@@ -565,15 +539,20 @@ actions.append(env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"))
 actions.append(env.VerboseAction("true", f"- OTA1 flash offset: {ota1_offset}"))
 actions.append(env.VerboseAction("true", f"- OTA2 flash offset: {ota2_offset}"))
 
+# Clone env to ignore options from child projects
+envsdk = env.Clone()
+
 # SDK library target
-target_sdk = env.BuildLibrary(join("$BUILD_DIR", "SDK"), SDK_DIR, sources)
+target_sdk = envsdk.BuildLibrary(
+    join("$BUILD_DIR", "ambz_sdk"),
+    SDK_DIR,
+    sources,
+)
 target_boot = env.StaticLibrary(
     join("$BUILD_DIR", "boot_all"),
     env.BinToObj(
         join("$BUILD_DIR", "boot_all.o"),
-        # fmt: off
-        join(SDK_DIR, "component", "soc", "realtek", "8711b", "misc", "bsp", "image", "boot_all.bin"),
-        # fmt: on
+        join(BOARD_DIR, "bin", boot_all),
     ),
 )
 env.Prepend(LIBS=[target_sdk, target_boot])
