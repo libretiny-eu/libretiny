@@ -79,12 +79,17 @@ void sys_info(void) {
 				HalGetCpuClk(), xPortGetFreeHeapSize(), tcm_heap_freeSpace());
 }				
 
+flash_t flashobj;
+bool fspic_isinit = false;
+
 unsigned int GetFlashSize(void)
 {
 	unsigned int FlashSize;
 	if(!fspic_isinit) flash_get_status(&flashobj);
-	if(flashobj.SpicInitPara.id[3] >= 0x14 && flashobj.SpicInitPara.id[0] <= 0x19) {
-		FlashSize = 1<<(flashobj.SpicInitPara.id[2]); // Flash size in bytes
+	fspic_isinit = true;
+	uint8_t* flash_id = *(uint8_t**)(&flashobj.SpicInitPara.FLASH_Id);
+	if(flash_id[3] >= 0x14 && flash_id[0] <= 0x19) {
+		FlashSize = 1<<(flash_id[2]); // Flash size in bytes
 	}
 	else FlashSize = 1024*1024;  // 1 mbytes
 	return FlashSize;
@@ -93,7 +98,9 @@ unsigned int GetFlashSize(void)
 unsigned int GetFlashId(void)
 {
 	if(!fspic_isinit) flash_get_status(&flashobj);
-	return (flashobj.SpicInitPara.id[0]<<16) | (flashobj.SpicInitPara.id[1]<<8) | flashobj.SpicInitPara.id[2];
+	fspic_isinit = true;
+	uint8_t* flash_id = *(uint8_t**)(&flashobj.SpicInitPara.FLASH_Id);
+	return (flash_id[0]<<16) | (flash_id[1]<<8) | flash_id[2];
 }
 
 
@@ -230,4 +237,3 @@ void __throw_out_of_range(const char* str)
 }
 
 */    
-

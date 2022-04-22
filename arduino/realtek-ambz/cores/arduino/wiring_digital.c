@@ -241,7 +241,7 @@ void pinRemoveMode(uint32_t ulPin) {
     if ( g_APinDescription[ulPin].ulPinType == PIO_PWM ) {
         // The PWM pin can only be disabled
         pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
-        HAL_Pwm_Disable( &obj->pwm_hal_adp );
+        // HAL_Pwm_Disable( &obj->pwm_hal_adp );
         g_APinDescription[ulPin].ulPinMode = PWM_MODE_DISABLED;
     }
     if ( g_APinDescription[ulPin].ulPinType == PIO_GPIO ) {
@@ -263,4 +263,3 @@ void pinRemoveMode(uint32_t ulPin) {
 #ifdef __cplusplus
 }
 #endif
-

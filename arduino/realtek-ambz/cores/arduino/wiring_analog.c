@@ -43,13 +43,6 @@ bool g_adc_enabled[] = {
     false, false, false
 };
 
-/* DAC */
-dac_t dac0;
-
-bool g_dac_enabled[] = {
-    false
-};
-
 extern void *gpio_pin_struct[];
 
 //
@@ -151,39 +144,27 @@ void analogWrite(uint32_t ulPin, uint32_t ulValue)
 {
     pwmout_t *obj;
 
-    if (ulPin == DAC0)
-    {
-        if (g_dac_enabled[0] == false) {
-            analogout_init(&dac0, DA_0);
-            g_dac_enabled[0] = true;
-        }
-        ulValue %= (1<<_writeResolution);
-        analogout_write(&dac0, ulValue * 1.0 / (1<<_writeResolution) );       
-    }
-    else
-    {
-        if ((g_APinDescription[ulPin].ulPinAttribute & PIO_PWM) == PIO_PWM) {
-            /* Handle */
-            if ( g_APinDescription[ulPin].ulPinType != PIO_PWM )
-            {
-                if ( (g_APinDescription[ulPin].ulPinType == PIO_GPIO) || (g_APinDescription[ulPin].ulPinType == PIO_GPIO_IRQ) ) {
-                    pinRemoveMode(ulPin);
-                }
-                gpio_pin_struct[ulPin] = malloc ( sizeof(pwmout_t) );
-                pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
-                pwmout_init( obj, g_APinDescription[ulPin].pinname );
-                pwmout_period_us( obj, _writePeriod);
-                pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
-                g_APinDescription[ulPin].ulPinType = PIO_PWM;
-                g_APinDescription[ulPin].ulPinMode = PWM_MODE_ENABLED;
-            } else {
-                pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
-                pwmout_period_us( obj, _writePeriod);
-                pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
-                if ( g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED ) {
-                    HAL_Pwm_Enable( &obj->pwm_hal_adp );
-                }
+    if ((g_APinDescription[ulPin].ulPinAttribute & PIO_PWM) == PIO_PWM) {
+        /* Handle */
+        if ( g_APinDescription[ulPin].ulPinType != PIO_PWM )
+        {
+            if ( (g_APinDescription[ulPin].ulPinType == PIO_GPIO) || (g_APinDescription[ulPin].ulPinType == PIO_GPIO_IRQ) ) {
+                pinRemoveMode(ulPin);
             }
+            gpio_pin_struct[ulPin] = malloc ( sizeof(pwmout_t) );
+            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
+            pwmout_init( obj, g_APinDescription[ulPin].pinname );
+            pwmout_period_us( obj, _writePeriod);
+            pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
+            g_APinDescription[ulPin].ulPinType = PIO_PWM;
+            g_APinDescription[ulPin].ulPinMode = PWM_MODE_ENABLED;
+        } else {
+            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
+            pwmout_period_us( obj, _writePeriod);
+            pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
+            /* if ( g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED ) {
+                HAL_Pwm_Enable( &obj->pwm_hal_adp );
+            } */
         }
     }
 }
@@ -232,9 +213,9 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration)
         pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
         pwmout_period( obj, 1.0/frequency );
         pwmout_pulsewidth( obj, 1.0/(frequency * 2));
-        if (g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED) {
+        /* if (g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED) {
             HAL_Pwm_Enable( &obj->pwm_hal_adp );
-        }
+        } */
     }
 
     if (duration > 0) {

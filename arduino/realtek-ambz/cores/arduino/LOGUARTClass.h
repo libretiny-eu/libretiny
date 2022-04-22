@@ -35,16 +35,11 @@ class LOGUARTClass : public HardwareSerial
     void flush(void);
     size_t write(const uint8_t c);
 
-
-    void IrqHandler(void);
-
     using Print::write; // pull in write(str) and write(buf, size) from Print
 
     operator bool() { return true; }; // UART always active
 
   protected:
-    void init(const uint32_t dwBaudRate, const uint32_t config);
-
     RingBuffer *_rx_buffer;
 
     int _dwIrq;

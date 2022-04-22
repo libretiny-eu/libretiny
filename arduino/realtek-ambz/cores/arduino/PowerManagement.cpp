@@ -5,6 +5,7 @@ extern "C" {
 
 #include "freertos_pmu.h"
 #include "sys_api.h"
+#include "sleep_ex_api.h"
 
 #include "wiring_digital.h"
 
@@ -22,10 +23,6 @@ extern "C" {
 #endif
 
 bool PowerManagementClass::reservePLL = true;
-
-void PowerManagementClass::setPllReserved(bool reserve) {
-    pmu_set_pll_reserved(reserve);
-}
 
 void PowerManagementClass::sleep(uint32_t bitflg) {
     if (!safeLock()) {
@@ -63,4 +60,3 @@ void PowerManagementClass::softReset() {
 }
 
 PowerManagementClass PowerManagement;
-

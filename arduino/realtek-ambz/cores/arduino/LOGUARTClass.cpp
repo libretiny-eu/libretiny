@@ -29,27 +29,15 @@
 extern "C" {
 #endif
 
-#include "log_uart_api.h"
-#include "hal_irqn.h"
-
-log_uart_t log_uart_obj;
+#include "osdep_service.h"
+#include "rtl8710b.h"
+extern int LOGUART_SetBaud(uint32_t BaudRate); // from fixups/log_uart.c
 
 #ifdef __cplusplus
 }
 #endif
 
 RingBuffer rx_buffer0;
-
-void arduino_loguart_irq_handler(uint32_t id, LOG_UART_INT_ID event)
-{
-    char c;
-    RingBuffer *pRxBuffer = (RingBuffer *)id;
-
-    if (event == IIR_RX_RDY || IIR_CHAR_TIMEOUT) {
-        c = log_uart_getc(&log_uart_obj);
-        pRxBuffer->store_char(c);
-    }
-}
 
 LOGUARTClass::LOGUARTClass(int dwIrq, RingBuffer* pRx_buffer )
 {
@@ -65,7 +53,7 @@ LOGUARTClass::LOGUARTClass(int dwIrq, RingBuffer* pRx_buffer )
 // Public Methods //////////////////////////////////////////////////////////////
 
 
-void LOGUARTClass::IrqHandler( void )
+void IrqHandler( void )
 {
 
     uint8_t     data = 0;
@@ -75,8 +63,8 @@ void LOGUARTClass::IrqHandler( void )
     DiagSetIsrEnReg(0);
 
     data = DiagGetChar(PullMode);
-	if ( data > 0 ) 
-		_rx_buffer->store_char(data);
+	if ( data > 0 )
+		rx_buffer0.store_char(data);
 
     DiagSetIsrEnReg(IrqEn);
 
@@ -85,24 +73,19 @@ void LOGUARTClass::IrqHandler( void )
 
 void LOGUARTClass::begin( const uint32_t dwBaudRate )
 {
-#if LOG_UART_MODIFIABLE_BAUD_RATE
-    /* log uart initialize in 38400 baud rate.
-     * If we change baud rate here, Serail Monitor would not detect this change and show nothing on screen.
-     */
-    log_uart_init(&log_uart_obj, dwBaudRate, 8, ParityNone, 1);
-#else
-    log_uart_init(&log_uart_obj, 38400, 8, ParityNone, 1);
-#endif
-    log_uart_irq_set(&log_uart_obj, IIR_RX_RDY, 1);
-    log_uart_irq_handler(&log_uart_obj, arduino_loguart_irq_handler, (uint32_t)_rx_buffer);
+    DiagPrintf("LOGUARTClass::begin\r\n");
+    DIAG_UartReInit((IRQ_FUN) IrqHandler);
+    DiagPrintf("DIAG_UartReInit ok\r\n");
+    NVIC_SetPriority(UART_LOG_IRQ, 10);
+    DiagPrintf("NVIC_SetPriority ok\r\n");
+    LOGUART_SetBaud(dwBaudRate);
+    DiagPrintf("LOGUART_SetBaud ok\r\n");
 }
 
 void LOGUARTClass::end( void )
 {
     // clear any received data
     _rx_buffer->_iHead = _rx_buffer->_iTail ;
-
-    log_uart_free(&log_uart_obj);
 }
 
 int LOGUARTClass::available( void )
@@ -134,7 +117,7 @@ int LOGUARTClass::read( void )
 
 void LOGUARTClass::flush( void )
 {
-// TODO: 
+// TODO:
 // while ( serial_writable(&(this->sobj)) != 1 );
 /*
   // Wait for transmission to complete
@@ -145,7 +128,7 @@ void LOGUARTClass::flush( void )
 
 size_t LOGUARTClass::write( const uint8_t uc_data )
 {
-    log_uart_putc(&log_uart_obj, uc_data);
+    DiagPutChar(uc_data);
   	return 1;
 }
 

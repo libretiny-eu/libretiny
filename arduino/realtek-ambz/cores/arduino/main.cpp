@@ -24,6 +24,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include "rtl8710b.h"
 extern void HalCpuClkConfig(u8  CpuType);
 extern void SystemCoreClockUpdate(void);
 extern void En32KCalibration(void);
@@ -31,7 +32,6 @@ extern void En32KCalibration(void);
 #include "FreeRTOS.h"
 #include "task.h"
 #include "diag.h"
-#include "rtl8195a.h"
 extern int tcm_heap_freeSpace(void);
 extern void console_init(void);
 
@@ -65,30 +65,6 @@ void Init_Rand(void)
 	_rand_first = 1;
 }
 
-/*
- * \brief Set CPU CLK 166MHz
- * clk : 0 - 166666666 Hz, 1 - 83333333 Hz, 2 - 41666666 Hz, 3 - 20833333 Hz, 4 - 10416666 Hz, 5 - 4000000 Hz
- *       6 - 200000000 Hz, 7 - 10000000 Hz, 8 - 50000000 Hz, 9 - 25000000 Hz, 10 - 12500000 Hz, 11 - 4000000 Hz
- * baud: 38400,...
- */
-void Init_CPU_CLK_UART(int clkn, int baud)
-{
-//	if(HalGetCpuClk() < 166000000)
-		if(clkn > 5) {
-	 		HalCpuClkConfig(clkn - 6);
-	 		*((int *)0x40000074) |= (1<<17);
-		}
-		else
-		{
-	 		HalCpuClkConfig(clkn);
-	 		*((int *)0x40000074) &= (~(1<<17));
-		}
-		HAL_LOG_UART_ADAPTER pUartAdapter;
-		pUartAdapter.BaudRate = baud;
-		HalLogUartSetBaudRate(&pUartAdapter);
-		SystemCoreClockUpdate();
-		En32KCalibration();
-}
 /*
  * \brief handle sketch
  */
@@ -143,4 +119,3 @@ int main( void )
 #ifdef __cplusplus
 }
 #endif
-

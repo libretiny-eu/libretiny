@@ -57,11 +57,6 @@ extern void wait_us(int us);
 
 extern void yield(void);
 
-extern uint32_t DiagPrintf(const char *fmt, ...);
-
-extern int rtl_printf(const char *fmt, ...);
-extern int rtl_sprintf(char* str, const char* fmt, ...);
-
 #ifndef printf
 #define printf		rtl_printf
 #endif
