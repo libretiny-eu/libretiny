@@ -23,7 +23,10 @@
     "framework-realtek-amb1": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/kuba2k2/amb1_sdk"
+      "version": "https://github.com/ambiot/amb1_sdk",
+      "manifest": {
+        "description": "SDK for Ameba1"
+      }
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
