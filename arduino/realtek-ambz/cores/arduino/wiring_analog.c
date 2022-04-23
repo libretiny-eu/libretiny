@@ -74,14 +74,14 @@ static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to)
         return value << (to-from);
 }
 
-eAnalogReference analog_reference = AR_DEFAULT;
+uint8_t analog_reference = AR_DEFAULT;
 
-void analogReference(eAnalogReference ulMode)
+void analogReference(uint8_t mode)
 {
-    analog_reference = ulMode;
+    analog_reference = mode;
 }
 
-uint32_t analogRead(uint32_t ulPin)
+int analogRead(pin_size_t pinNumber)
 {
     uint32_t ulValue = 0;
     uint32_t ulChannel;
@@ -89,14 +89,14 @@ uint32_t analogRead(uint32_t ulPin)
     float    voltage;
     float    adc_value;
 
-    switch ( ulPin ) {
-        case A0:
+    switch ( pinNumber ) {
+        case PIN_A0:
             if (g_adc_enabled[0] == false)
             {
                 analogin_init(&adc1, AD_1);
                 g_adc_enabled[0] = true;
             }
-        case A1:
+        case PIN_A1:
             if (g_adc_enabled[1] == false)
             {
                 analogin_init(&adc2, AD_2);
@@ -104,7 +104,7 @@ uint32_t analogRead(uint32_t ulPin)
             }
             ret = analogin_read_u16(&adc2);
             break;
-        case A2:
+        case PIN_A2:
             if (g_adc_enabled[2] == false)
             {
                 analogin_init(&adc3, AD_3);
@@ -113,7 +113,7 @@ uint32_t analogRead(uint32_t ulPin)
             ret = analogin_read_u16(&adc3);
             break;
         default:
-            printf("%s : ulPin %d wrong\n", __FUNCTION__, ulPin);
+            printf("%s : pinNumber %d wrong\n", __FUNCTION__, pinNumber);
             return 0;
     }
 
@@ -140,29 +140,29 @@ void analogOutputInit(void) {
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
-void analogWrite(uint32_t ulPin, uint32_t ulValue) 
+void analogWrite(pin_size_t pinNumber, int value)
 {
     pwmout_t *obj;
 
-    if ((g_APinDescription[ulPin].ulPinAttribute & PIO_PWM) == PIO_PWM) {
+    if ((g_APinDescription[pinNumber].ulPinAttribute & PIO_PWM) == PIO_PWM) {
         /* Handle */
-        if ( g_APinDescription[ulPin].ulPinType != PIO_PWM )
+        if ( g_APinDescription[pinNumber].ulPinType != PIO_PWM )
         {
-            if ( (g_APinDescription[ulPin].ulPinType == PIO_GPIO) || (g_APinDescription[ulPin].ulPinType == PIO_GPIO_IRQ) ) {
-                pinRemoveMode(ulPin);
+            if ( (g_APinDescription[pinNumber].ulPinType == PIO_GPIO) || (g_APinDescription[pinNumber].ulPinType == PIO_GPIO_IRQ) ) {
+                pinRemoveMode(pinNumber);
             }
-            gpio_pin_struct[ulPin] = malloc ( sizeof(pwmout_t) );
-            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
-            pwmout_init( obj, g_APinDescription[ulPin].pinname );
+            gpio_pin_struct[pinNumber] = malloc ( sizeof(pwmout_t) );
+            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
+            pwmout_init( obj, g_APinDescription[pinNumber].pinname );
             pwmout_period_us( obj, _writePeriod);
-            pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
-            g_APinDescription[ulPin].ulPinType = PIO_PWM;
-            g_APinDescription[ulPin].ulPinMode = PWM_MODE_ENABLED;
+            pwmout_write( obj, value * 1.0 / (1<<_writeResolution));
+            g_APinDescription[pinNumber].ulPinType = PIO_PWM;
+            g_APinDescription[pinNumber].ulPinMode = PWM_MODE_ENABLED;
         } else {
-            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
+            pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
             pwmout_period_us( obj, _writePeriod);
-            pwmout_write( obj, ulValue * 1.0 / (1<<_writeResolution));
-            /* if ( g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED ) {
+            pwmout_write( obj, value * 1.0 / (1<<_writeResolution));
+            /* if ( g_APinDescription[pinNumber].ulPinMode == PWM_MODE_DISABLED ) {
                 HAL_Pwm_Enable( &obj->pwm_hal_adp );
             } */
         }

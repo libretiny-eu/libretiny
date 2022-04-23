@@ -16,44 +16,71 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_ARDUINO_AMEBA_
-#define _VARIANT_ARDUINO_AMEBA_
+#pragma once
 
-#include "Arduino.h"
-#include <stdarg.h>
-#ifdef __cplusplus
-#include "LOGUARTClass.h"
-#endif
+#include <WVariant.h>
 
-/* Analog pin mapping */
-#define A0 1 // PA_19
-#define A1 0 // dummy, this is NOT usable
-#define A2 5 // PA_20
+// Pins
+// ----
 
-// LOGUARTClass
-#define UART2_TX							 PA_30
-#define UART2_RX							 PA_29
-// UARTClassOne
-#define UART0_TX							 PA_23
-#define UART0_RX							 PA_18
-// UARTClassTwo
-// #define UART3_TX							 PB_1
-// #define UART3_RX							 PB_2
+// Number of pins defined in PinDescription array
+#define PINS_COUNT           (12u)
+#define NUM_DIGITAL_PINS     (12u)
+#define NUM_ANALOG_INPUTS    (2u)
+#define NUM_ANALOG_OUTPUTS   (0u)
 
-#define TOTAL_GPIO_PIN_NUM (12)
-#define TOTAL_PWM_PIN_NUM  (9)
-
-#define LED_BUILTIN 4
-#define SS			8
-
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
+// Low-level pin register query macros
+// -----------------------------------
 #define portOutputRegister(P) ((volatile uint32_t *)(0x40001000 + (P)*0x0C))
 #define portInputRegister(P)  ((volatile uint32_t *)(0x40001050 + (P)*4))
 #define portModeRegister(P)	  ((volatile uint32_t *)(0x40001004 + (P)*0x0C))
 
+// LEDs
+// ----
+#define PIN_LED     (4u)
+#define LED_BUILTIN PIN_LED
+
+// Analog pins
+// -----------
+#define PIN_A0               (1u) // PA_19
+#define PIN_A1               (0u) // dummy, this is NOT usable
+#define PIN_A2               (5u) // PA_20
+
+static const uint8_t A0  = PIN_A0;
+static const uint8_t A1  = PIN_A1;
+static const uint8_t A2  = PIN_A2;
+
+// SPI Interfaces
+// --------------
+#define SPI_INTERFACES_COUNT 0
+
+// Wire Interfaces
+// ---------------
+#define WIRE_INTERFACES_COUNT 0
+
+// Serial ports
+// ------------
+#ifdef __cplusplus
+#include "LOGUARTClass.h"
+extern LOGUARTClass Serial;
+// LOGUARTClass
+#define PIN_SERIAL2_RX							 PA_29
+#define PIN_SERIAL2_TX							 PA_30
+// UARTClassOne
+#define PIN_SERIAL0_RX							 PA_18
+#define PIN_SERIAL0_TX							 PA_23
+#endif // __cplusplus
+
+#define SERIAL_PORT_USBVIRTUAL      Serial
+#define SERIAL_PORT_MONITOR         Serial
+#define SERIAL_PORT_HARDWARE        Serial
+#define SERIAL_PORT_HARDWARE_OPEN   Serial
+
+// Misc
+// ----
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 /*
  * Wait until enter debug mode
  *
@@ -61,15 +88,6 @@ extern "C" {
  * Use this function along with J-LINK or other debug tool
  **/
 extern void wait_for_debug();
-
 #ifdef __cplusplus
 }
 #endif
-
-#ifdef __cplusplus
-
-extern LOGUARTClass Serial;
-
-#endif
-
-#endif /* _VARIANT_ARDUINO_AMEBA_ */

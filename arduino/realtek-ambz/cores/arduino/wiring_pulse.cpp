@@ -17,8 +17,6 @@
 */
 
 #include "Arduino.h"
-#include "wiring_private.h"
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,7 +33,7 @@ extern void *gpio_pin_struct[];
  * or LOW, the type of pulse to measure.  Works on pulses from 2-3 microseconds
  * to 3 minutes in length, but must be called at least a few dozen microseconds
  * before the start of the pulse. */
-extern uint32_t pulseIn( uint32_t ulPin, uint32_t state, uint32_t timeout )
+extern unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 {
 	// cache the port and bit of the pin in order to speed up the
 	// pulse width measuring loop and achieve finer resolution.  calling
@@ -44,15 +42,15 @@ extern uint32_t pulseIn( uint32_t ulPin, uint32_t state, uint32_t timeout )
 
 	uint32_t start_ticks, cur_ticks;
 
-	if ( ulPin < 0 || ulPin > TOTAL_GPIO_PIN_NUM || (g_APinDescription[ulPin].pinname == NC) ) return 0;
+	if ( pin < 0 || pin > PINS_COUNT || (g_APinDescription[pin].pinname == NC) ) return 0;
 
 	/* Handle */
-	if ( g_APinDescription[ulPin].ulPinType != PIO_GPIO )
+	if ( g_APinDescription[pin].ulPinType != PIO_GPIO )
 	{
         return 0;
 	}
 
-	pGpio_t = (gpio_t *)gpio_pin_struct[ulPin];
+	pGpio_t = (gpio_t *)gpio_pin_struct[pin];
 
 	// wait for any previous pulse to end
 	start_ticks = us_ticker_read();
@@ -86,4 +84,3 @@ extern uint32_t pulseIn( uint32_t ulPin, uint32_t state, uint32_t timeout )
 #ifdef __cplusplus
 }
 #endif
-

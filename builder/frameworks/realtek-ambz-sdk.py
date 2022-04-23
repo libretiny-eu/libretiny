@@ -1,5 +1,6 @@
-from os.path import join, isdir
-from SCons.Script import DefaultEnvironment, Builder
+from os.path import isdir, join
+
+from SCons.Script import Builder, DefaultEnvironment
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -360,6 +361,7 @@ sources = [
 ]
 
 # Fixups
+env.Append(CPPPATH=[FIXUPS_DIR])
 sources += [
     "+<" + FIXUPS_DIR + "/app_start_patch.c>",
     "+<" + FIXUPS_DIR + "/cmsis_ipsr.c>",

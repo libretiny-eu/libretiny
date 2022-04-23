@@ -37,6 +37,11 @@ static __inline uint32_t __get_ipsr__(void)
   return(__regIPSR);
 }
 
+void init(void)
+{
+    // nop
+}
+
 void delay( uint32_t ms )
 {
 	osStatus ret;
@@ -47,7 +52,7 @@ void delay( uint32_t ms )
 	}
 }
 
-void delayMicroseconds(uint32_t us)
+void delayMicroseconds(unsigned int us)
 {
     int i;
     uint32_t t0, tn;

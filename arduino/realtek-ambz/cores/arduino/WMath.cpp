@@ -17,7 +17,7 @@
 */
 
 #include <inttypes.h>
-#include "WMath.h"
+#include "api/Common.h"
 
 extern "C" {
 extern void rtl_srandom( uint32_t seed );

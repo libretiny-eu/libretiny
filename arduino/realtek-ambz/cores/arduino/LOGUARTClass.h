@@ -16,11 +16,12 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _LOGUART_CLASS_
-#define _LOGUART_CLASS_
+#pragma once
 
-#include "HardwareSerial.h"
-#include "RingBuffer.h"
+#include "api/HardwareSerial.h"
+#include "api/RingBuffer.h"
+
+using namespace arduino;
 
 class LOGUARTClass : public HardwareSerial
 {
@@ -28,6 +29,9 @@ class LOGUARTClass : public HardwareSerial
     LOGUARTClass(int dwIrq, RingBuffer* pRx_buffer );
 
     void begin(const uint32_t dwBaudRate);
+    inline void begin(const uint32_t dwBaudRate, uint16_t config) {
+        begin(dwBaudRate); // TODO implement this properly
+    }
     void end(void);
     int available(void);
     int peek(void);
@@ -47,7 +51,3 @@ class LOGUARTClass : public HardwareSerial
   private:
     friend bool Serial_available();
 };
-
-extern LOGUARTClass Serial;
-
-#endif // _LOGUART_CLASS_

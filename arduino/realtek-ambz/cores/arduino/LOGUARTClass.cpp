@@ -18,9 +18,6 @@
 
 #include "Arduino.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "LOGUARTClass.h"
 
 #define LOG_UART_MODIFIABLE_BAUD_RATE 1

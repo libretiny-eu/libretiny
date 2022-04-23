@@ -23,17 +23,21 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-#include "rtl8710b.h"
-extern void HalCpuClkConfig(u8  CpuType);
-extern void SystemCoreClockUpdate(void);
-extern void En32KCalibration(void);
+#endif // __cplusplus
 
+#include "rtl8710b.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "diag.h"
+extern void HalCpuClkConfig(u8 CpuType);
+extern void SystemCoreClockUpdate(void);
+extern void En32KCalibration(void);
 extern int tcm_heap_freeSpace(void);
 extern void console_init(void);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 osThreadId main_tid = 0;
 
@@ -42,12 +46,8 @@ osThreadId main_tid = 0;
 void initVariant() __attribute__((weak));
 void initVariant() { }
 
-/*
- * \brief User PreInit of Arduino application
- */
-void UserPreInit(void) __attribute__((weak));
-void UserPreInit(void) { }
-
+// Initialize C library
+extern "C" void __libc_init_array(void);
 
 /*
  * \brief Init Random()
@@ -70,17 +70,8 @@ void Init_Rand(void)
  */
 void main_task( void const *arg )
 {
-
     setup();
 
-/*    
-	 ConfigDebugErr  = -1;
-	 ConfigDebugInfo = ~_DBG_SPI_FLASH_;
-	 ConfigDebugWarn = -1;
-	 CfgSysDebugErr = -1;
-	 CfgSysDebugInfo = -1;
-	 CfgSysDebugWarn = -1;
-*/
     for (;;)
     {
         loop();
@@ -95,16 +86,11 @@ void main_task( void const *arg )
  */
 int main( void )
 {
-	UserPreInit();
-	
     init();
 
-    initVariant();
+    __libc_init_array();
 
-#if 0 // pvvx: add start info
-    vPortFree(pvPortMalloc(4)); // Init RAM heap
-	sys_info();
-#endif 
+    initVariant();
 
     osThreadDef(main_task, osPriorityRealtime, 1, 4096*4); 
     main_tid = osThreadCreate(osThread (main_task), NULL);
@@ -115,7 +101,3 @@ int main( void )
 
     return 0;
 }
-
-#ifdef __cplusplus
-}
-#endif

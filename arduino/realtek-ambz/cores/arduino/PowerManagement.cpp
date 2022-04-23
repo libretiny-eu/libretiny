@@ -1,14 +1,11 @@
 #include "PowerManagement.h"
+#include "Arduino.h"
 
 #ifdef __cplusplus
 extern "C" {
-
 #include "freertos_pmu.h"
 #include "sys_api.h"
 #include "sleep_ex_api.h"
-
-#include "wiring_digital.h"
-
 }
 #endif
 

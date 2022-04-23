@@ -21,7 +21,7 @@
 #define WiFi_Drv_h
 
 #include <inttypes.h>
-#include "IPAddress.h"
+#include "api/IPAddress.h"
 #include "wl_definitions.h"
 
 #ifdef __cplusplus

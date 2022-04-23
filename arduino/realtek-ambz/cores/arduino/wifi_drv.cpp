@@ -3,7 +3,6 @@
 // arduino includes
 #include "wl_definitions.h"
 #include "wl_types.h"
-#include "wiring.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -73,6 +73,10 @@ class LibretuyaPlatform(PlatformBase):
         if framework.startswith("realtek-ambz"):
             self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.50401.0"
 
+        # make ArduinoCore-API required
+        if "arduino" in framework:
+            self.packages["framework-arduino-api"]["optional"] = False
+
         # save platform packages for later
         global libretuya_packages
         libretuya_packages = self.packages

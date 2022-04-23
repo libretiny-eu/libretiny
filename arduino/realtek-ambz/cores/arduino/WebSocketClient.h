@@ -7,7 +7,6 @@
 #define WEBSOCKETCLIENT_H_
 
 #include <Arduino.h>
-#include <Stream.h>
 extern "C" {
 #include "libwsclient.h"
 #include "wsclient_api.h"

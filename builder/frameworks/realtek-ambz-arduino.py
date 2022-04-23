@@ -1,4 +1,5 @@
-from os.path import join, isdir
+from os.path import isdir, join
+
 from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
@@ -6,6 +7,7 @@ platform = env.PioPlatform()
 board = env.BoardConfig()
 
 env.SConscript("realtek-ambz-sdk.py", exports="env")
+env.SConscript("../arduino-api.py", exports="env")
 
 mcu = board.get("build.mcu").upper()
 family = board.get("build.family").upper()
@@ -102,13 +104,11 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/b64.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/cxxabi-compat.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/hooks.c>",
-    "+<" + CORE_DIR + "/cores/arduino/IPAddress.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/itoa.c>",
     "+<" + CORE_DIR + "/cores/arduino/LOGUARTClass.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/lwip_info.c>",
     "+<" + CORE_DIR + "/cores/arduino/main.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/PowerManagement.cpp>",
-    "+<" + CORE_DIR + "/cores/arduino/Print.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/RingBuffer.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/rtl_sys.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/server_drv.cpp>",
@@ -118,7 +118,6 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_hydrogen.c>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_nucleus.c>",
     "+<" + CORE_DIR + "/cores/arduino/ssl_drv.cpp>",
-    "+<" + CORE_DIR + "/cores/arduino/Stream.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/Tone.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/WebSocketClient.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/wifi_drv.cpp>",
@@ -131,7 +130,6 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/wiring_shift.c>",
     "+<" + CORE_DIR + "/cores/arduino/wiring_watchdog.c>",
     "+<" + CORE_DIR + "/cores/arduino/WMath.cpp>",
-    "+<" + CORE_DIR + "/cores/arduino/WString.cpp>",
     "+<" + BOARD_DIR + "/variant.cpp>",
     # fmt: on
 ]

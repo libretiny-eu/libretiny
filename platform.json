@@ -28,6 +28,14 @@
         "description": "SDK for Ameba1"
       }
     },
+    "framework-arduino-api": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/arduino/ArduinoCore-API",
+      "manifest": {
+        "description": "Hardware independent layer of the Arduino cores"
+      }
+    },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optionalVersions": [

@@ -1,31 +1,29 @@
+#include "Arduino.h"
 
-#include "WInterrupts.h"
-
-void attachInterrupt(uint32_t pin, void (*callback)(void), uint32_t mode) {
-    if ( g_APinDescription[pin].ulPinType != PIO_GPIO_IRQ ) {
-        pinRemoveMode(pin);
-        
+void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus mode) {
+    if ( g_APinDescription[interruptNumber].ulPinType != PIO_GPIO_IRQ ) {
+        pinRemoveMode(interruptNumber);
     }
 
     switch(mode) {
         case LOW:
-            pinMode(pin, INPUT_IRQ_LOW);
-            digitalSetIrqHandler(pin, (void *)callback);
+            pinMode(interruptNumber, INPUT_IRQ_LOW);
+            digitalSetIrqHandler(interruptNumber, (void *)callback);
             break;
 
         case HIGH:
-            pinMode(pin, INPUT_IRQ_HIGH);
-            digitalSetIrqHandler(pin, (void *)callback);
+            pinMode(interruptNumber, INPUT_IRQ_HIGH);
+            digitalSetIrqHandler(interruptNumber, (void *)callback);
             break;
 
         case FALLING:
-            pinMode(pin, INPUT_IRQ_FALL);
-            digitalSetIrqHandler(pin, (void *)callback);
+            pinMode(interruptNumber, INPUT_IRQ_FALL);
+            digitalSetIrqHandler(interruptNumber, (void *)callback);
             break;
 
         case RISING:
-            pinMode(pin, INPUT_IRQ_RISE);
-            digitalSetIrqHandler(pin, (void *)callback);
+            pinMode(interruptNumber, INPUT_IRQ_RISE);
+            digitalSetIrqHandler(interruptNumber, (void *)callback);
             break;
 
         case CHANGE:
@@ -34,8 +32,8 @@ void attachInterrupt(uint32_t pin, void (*callback)(void), uint32_t mode) {
     }
 }
 
-void detachInterrupt(uint32_t pin) {
-    if ( g_APinDescription[pin].ulPinType == PIO_GPIO_IRQ ) {
-        pinRemoveMode(pin);
+void detachInterrupt(pin_size_t interruptNumber) {
+    if ( g_APinDescription[interruptNumber].ulPinType == PIO_GPIO_IRQ ) {
+        pinRemoveMode(interruptNumber);
     }
 }

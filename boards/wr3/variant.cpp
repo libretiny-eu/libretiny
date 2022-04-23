@@ -16,6 +16,7 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "variant.h"
+#include "Arduino.h"
 #include "gpio_api.h"
 
 #ifdef __cplusplus
@@ -24,12 +25,10 @@ extern "C" {
 
 #include "PinNames.h"
 
-void __libc_init_array(void);
-
 /*
  * Pins descriptions
  */
-PinDescription g_APinDescription[TOTAL_GPIO_PIN_NUM] = {
+PinDescription g_APinDescription[PINS_COUNT] = {
 	// D0: UART0_RTS, SPI1_MISO, SPI0_MISO, I2C0_SCL, SD_D0, PWM5, I2S_WS, WAKEUP_2
 	{PA_22, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM,	NOT_INITIAL},
 	// D1: UART0_CTS, SPI1_CS, SPI0_CS, I2C0_SDA, SD_D3, TIMER5_TRIG, I2S_SD_TX, ADC1
@@ -56,19 +55,8 @@ PinDescription g_APinDescription[TOTAL_GPIO_PIN_NUM] = {
 	{PA_23, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM, NOT_INITIAL},
 };
 
-void *gpio_pin_struct[TOTAL_GPIO_PIN_NUM] = {NULL};
-void *gpio_irq_handler_list[TOTAL_GPIO_PIN_NUM] = {NULL};
-
-/** The heap API in OS layer */
-// extern int vPortAddHeapRegion(uint8_t *addr, size_t size);
-
-// it should be the last symbol in SRAM in link result
-// extern void *__HeapLimit;
-
-// it should be the last symbol in SDRAM in link result
-// extern void *__sdram_bss_end__;
-
-// extern int HalPinCtrlRtl8195A(int  Function, int PinLocation, int Operation);
+void *gpio_pin_struct[PINS_COUNT] = {NULL};
+void *gpio_irq_handler_list[PINS_COUNT] = {NULL};
 
 #ifdef __cplusplus
 } // extern C
@@ -77,19 +65,10 @@ void *gpio_irq_handler_list[TOTAL_GPIO_PIN_NUM] = {NULL};
 void serialEvent() __attribute__((weak));
 bool Serial_available() __attribute__((weak));
 
-// ----------------------------------------------------------------------------
-
 void serialEventRun(void) {
 	if (Serial_available && serialEvent && Serial_available())
 		serialEvent();
 }
-
-void init(void) {
-	// Initialize C library
-	__libc_init_array();
-}
-
-// ----------------------------------------------------------------------------
 
 void wait_for_debug() {
 	while (((CoreDebug->DHCSR) & CoreDebug_DHCSR_C_DEBUGEN_Msk) == 0) {
