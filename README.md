@@ -68,30 +68,29 @@ A (mostly) complete* list of Tuya wireless module boards.
 
 ```
 arduino/
-├─ <platform name>/				Arduino Core for specific platform
-│  ├─ cores/						Core files
-│  ├─ libraries/					Supported built-in libraries
+├─ <platform name>/             Arduino Core for specific platform
+│  ├─ cores/                        Core files
+│  ├─ libraries/                    Supported built-in libraries
 boards/
-├─ <board name>/				Board-specific code
-│  ├─ variant.cpp					Arduino variant initialization
-│  ├─ variant.h						Arduino variant pin configs
-├─ <board name>.json			PlatformIO board description
+├─ <board name>/                Board-specific code
+│  ├─ variant.cpp                   Arduino variant initialization
+│  ├─ variant.h                     Arduino variant pin configs
+├─ <board name>.json            PlatformIO board description
 builder/
-├─ frameworks/					Framework builders for PlatformIO
-│  ├─ <platform name>-sdk.py		Vanilla SDK build system
-│  ├─ <platform name>-arduino.py	Arduino Core build system
-├─ main.py						Main PlatformIO builder
+├─ frameworks/                  Framework builders for PlatformIO
+│  ├─ <platform name>-sdk.py        Vanilla SDK build system
+│  ├─ <platform name>-arduino.py    Arduino Core build system
+├─ main.py                      Main PlatformIO builder
 fixups/
-├─ <platform name>/				Code fix-ups to replace SDK parts
+├─ <platform name>/             Code fix-ups to replace SDK parts
 platform/
-├─ <platform name>/				Other platform-specific files
-│  ├─ bin/							Binary blobs (bootloaders, etc.)
-│  ├─ ld/							Linker scripts
+├─ <platform name>/             Other platform-specific files
+│  ├─ bin/                          Binary blobs (bootloaders, etc.)
+│  ├─ ld/                           Linker scripts
 tools/
-├─ <tool name>/					Tools used during the build
-platform.json				PlatformIO manifest
-platform.py					Custom PlatformIO script
-
+├─ <tool name>/                 Tools used during the build
+platform.json                   PlatformIO manifest
+platform.py                     Custom PlatformIO script
 ```
 
 ## Platforms
