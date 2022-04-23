@@ -8,7 +8,7 @@
 		"f_cpu": "125000000L",
 		"amb_ota1_offset": "0x0800B000",
 		"amb_ota2_offset": "0x080D0000",
-		"amb_boot_all": "boot_all.bin"
+		"amb_boot_all": "boot_all_77F7.bin"
 	},
 	"frameworks": [
 		"realtek-ambz-sdk",

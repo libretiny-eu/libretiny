@@ -14,9 +14,11 @@ ldscript = board.get("build.ldscript_sdk")
 SDK_DIR = platform.get_package_dir("framework-realtek-amb1")
 BOARD_DIR = join(platform.get_dir(), "boards", variant)
 FIXUPS_DIR = join(platform.get_dir(), "fixups", "realtek-ambz")
+PLATFORM_DIR = join(platform.get_dir(), "platform", "realtek-ambz")
 assert isdir(SDK_DIR)
 assert isdir(env.subst(BOARD_DIR))
 assert isdir(env.subst(FIXUPS_DIR))
+assert isdir(env.subst(PLATFORM_DIR))
 
 ota1_offset = board.get("build.amb_ota1_offset")
 ota2_offset = board.get("build.amb_ota2_offset")
@@ -98,6 +100,9 @@ env.Replace(
 env.Append(
     CPPPATH=[
         # fmt: off
+        join(BOARD_DIR),
+        join(FIXUPS_DIR),
+        join(PLATFORM_DIR),
         join(SDK_DIR, "project", "realtek_amebaz_va0_example", "inc"),
         join(SDK_DIR, "component", "os", "freertos"),
         join(SDK_DIR, "component", "os", "freertos", "freertos_v8.1.2", "Source", "include"),
@@ -376,7 +381,7 @@ env.Append(
         join(SDK_DIR, "component", "soc", "realtek", "8711b", "misc", "bsp", "lib", "common", "GCC"),
         # fmt: on
         # linker script path
-        join(BOARD_DIR, "ld"),
+        join(PLATFORM_DIR, "ld"),
     ],
     LIBS=[
         "_platform",
@@ -396,7 +401,7 @@ env.Append(
 )
 env.Replace(
     LDSCRIPT_PATH=[
-        join(BOARD_DIR, "ld", ldscript),
+        join(PLATFORM_DIR, "ld", ldscript),
     ],
 )
 
@@ -554,7 +559,7 @@ target_boot = env.StaticLibrary(
     join("$BUILD_DIR", "boot_all"),
     env.BinToObj(
         join("$BUILD_DIR", "boot_all.o"),
-        join(BOARD_DIR, "bin", boot_all),
+        join(PLATFORM_DIR, "bin", boot_all),
     ),
 )
 env.Prepend(LIBS=[target_sdk, target_boot])

@@ -64,13 +64,43 @@ A (mostly) complete* list of Tuya wireless module boards.
 
 ** I/O count includes GPIOs, ADCs, PWM outputs and UART, but doesn't count CEN/RST and power pins.
 
+## Project structure
+
+```
+arduino/
+├─ <platform name>/				Arduino Core for specific platform
+│  ├─ cores/						Core files
+│  ├─ libraries/					Supported built-in libraries
+boards/
+├─ <board name>/				Board-specific code
+│  ├─ variant.cpp					Arduino variant initialization
+│  ├─ variant.h						Arduino variant pin configs
+├─ <board name>.json			PlatformIO board description
+builder/
+├─ frameworks/					Framework builders for PlatformIO
+│  ├─ <platform name>-sdk.py		Vanilla SDK build system
+│  ├─ <platform name>-arduino.py	Arduino Core build system
+├─ main.py						Main PlatformIO builder
+fixups/
+├─ <platform name>/				Code fix-ups to replace SDK parts
+platform/
+├─ <platform name>/				Other platform-specific files
+│  ├─ bin/							Binary blobs (bootloaders, etc.)
+│  ├─ ld/							Linker scripts
+tools/
+├─ <tool name>/					Tools used during the build
+platform.json				PlatformIO manifest
+platform.py					Custom PlatformIO script
+
+```
+
 ## Platforms
 
 A list of platforms currently available in this project.
 
 Platform name  | Supported MCU(s)                                                       | Arduino Core | Source SDK (PIO framework)
 ---------------|------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------
-`realtek-ambz` | Realtek [AmebaZ](https://www.amebaiot.com/en/amebaz/) SoC (`RTL87xxB`) | ❌            | `framework-realtek-amb1` ([amb1_sdk](https://github.com/ambiot/amb1_sdk))
+`realtek-ambz` | Realtek [AmebaZ](https://www.amebaiot.com/en/amebaz/) SoC (`RTL87xxB`) | ✔️           | `framework-realtek-amb1` ([amb1_sdk](https://github.com/ambiot/amb1_sdk))
 
 ### Realtek Ameba
 
@@ -96,3 +126,34 @@ As such, there are numerous CPUs with the same numbers but different series, whi
 - and probably many more
 
 Different Ameba series are not compatible with each other. Apparently, there isn't a public SDK for AmebaZ that can support C++ properly (yet).
+
+## Arduino Core support status
+
+Note: this list will probably change with each functionality update.
+
+&nbsp; | `realtek-ambz`
+--|--
+Core functions|✔️
+GPIO/PWM/IRQ|✔️/❓/✔️
+Analog input|❓
+UART I/O|✔️
+Flash I/O|❓
+**LIBRARIES**
+SPI|❌
+SPIFFS|❌
+Wire|❌
+BLE|-
+Wi-Fi|❌
+HTTP|❌
+NTP|❌
+OTA|❌
+MDNS|❌
+MQTT|❌
+SD|❌
+
+Legend:
+- ✔️ working
+- ❗ broken
+- ❓ untested
+- ❌ not implemented (yet?)
+- \- not applicable

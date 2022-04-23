@@ -1,0 +1,6 @@
+tools Firmware tools (i.e. flashers)
+platform Platform files (blobs, linker scripts)
+fixups Code fixups
+builder PlatformIO builders
+boards Board definitions
+arduino Arduino cores
