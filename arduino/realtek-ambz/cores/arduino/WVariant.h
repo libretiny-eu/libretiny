@@ -40,30 +40,6 @@ extern void yield(void);
 #define sprintf		rtl_sprintf
 #endif
 
-/*
-extern void *pvPortMalloc( size_t xWantedSize );
-extern void vPortFree( void *pv );
-extern void *pvPortReAlloc( void *pv,  size_t xWantedSize );
-extern size_t xPortGetFreeHeapSize( void );
-extern size_t xPortGetMinimumEverFreeHeapSize( void );
-
-extern void *tcm_heap_malloc(int size);
-extern void *tcm_heap_calloc(int size);
-extern void tcm_heap_free(void * mem);
-extern void tcm_heap_dump(void);
-extern int tcm_heap_freeSpace(void);
-
-#ifndef malloc
-#define malloc                  pvPortMalloc
-#endif
-#ifndef free
-#define free                    vPortFree
-#endif
-#ifndef realloc
-#define realloc                 pvPortReAlloc
-#endif
-*/
-
 #define NOT_INITIAL  (1UL<<0)
 #define PIO_GPIO     (1UL<<1)
 #define PIO_PWM	     (1UL<<2)
@@ -78,32 +54,26 @@ extern int tcm_heap_freeSpace(void);
 /* Types used for the tables below */
 typedef struct _PinDescription
 {
-
   // HW PinNames
   uint32_t 	pinname;
-
   // Current Pin Type
   uint32_t 	ulPinType;
-
   // Supported Pin Function
   uint32_t  ulPinAttribute;
-
   // Current Pin Mode
   uint32_t  ulPinMode;
-
 } PinDescription ;
 
 /* Pins table to be instanciated into variant.cpp */
 extern PinDescription g_APinDescription[];
 
+extern bool pinInvalid(pin_size_t pinNumber);
+extern void pinRemoveMode(pin_size_t pinNumber);
+
 /* moved from wiring_digital.h */
-extern void digitalChangeDir( uint32_t ulPin, uint8_t direction);
 /**************************** Extend API by RTK ***********************************/
-extern uint32_t digitalPinToPort( uint32_t ulPin );
-extern uint32_t digitalPinToBitMask( uint32_t ulPin );
-extern uint32_t digitalSetIrqHandler( uint32_t ulPin, void (*handler)(uint32_t id, uint32_t event) );
-extern uint32_t digitalClearIrqHandler( uint32_t ulPin );
-extern void pinRemoveMode(uint32_t ulPin);
+extern uint32_t digitalPinToPort( uint32_t pinNumber );
+extern uint32_t digitalPinToBitMask( uint32_t pinNumber );
 
 /* moved from wiring_analog.h */
 /*
@@ -122,23 +92,9 @@ extern void analogOutputInit( void ) ;
 extern void analogWritePeriod(int us);
 
 /* moved from wiring_constants.h */
-// TODO use these correctly in wiring
-// #define INPUT_PULLDOWN 				INPUT
-// #define INPUT_PULLNONE 		0x03
-#define INPUT_IRQ_FALL      0x05
-#define INPUT_IRQ_RISE      0x06
-#define INPUT_IRQ_LOW       0x07
-#define INPUT_IRQ_HIGH      0x08
-
 #define DEFAULT 1
 #define EXTERNAL 0
 
-// undefine stdlib's abs if encountered
-/* #ifdef abs
-#undef abs
-#endif // abs
-
-#define abs(x) ((x)>0?(x):-(x)) */
 #define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 
 extern uint32_t ulPortSetInterruptMask( void );

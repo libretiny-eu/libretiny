@@ -15,8 +15,8 @@
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "variant.h"
 #include "Arduino.h"
+#include "variant.h"
 #include "gpio_api.h"
 
 #ifdef __cplusplus
