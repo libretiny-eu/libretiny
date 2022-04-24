@@ -163,6 +163,24 @@ sources_core += [
     "+<" + FIXUPS_DIR + "/ssl_tls.c>",  # rtl sdk defines S1 and S2 which conflicts here
 ]
 
+# Arduino libraries
+sources_libs = [
+    # fmt: off
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFi.cpp>"
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiClient.cpp>"
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiServer.cpp>"
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiSSLClient.cpp>"
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiUdp.cpp>"
+    # fmt: on
+]
+env.Append(
+    CPPPATH=[
+        # fmt: off
+        join(CORE_DIR, "libraries", "WiFi", "src"),
+        # fmt: on
+    ],
+)
+
 # Libs & linker config
 env.Append(
     LIBS=[
@@ -180,9 +198,14 @@ env.Replace(
 envarduino = env.Clone()
 
 # Arduino Core library target
-target_lib = envarduino.BuildLibrary(
+target_core = envarduino.BuildLibrary(
     join("$BUILD_DIR", "ambz_arduino_core"),
     CORE_DIR,
     sources_core,
 )
-env.Prepend(LIBS=[target_lib])
+target_libs = envarduino.BuildLibrary(
+    join("$BUILD_DIR", "ambz_arduino_libs"),
+    CORE_DIR,
+    sources_libs,
+)
+env.Prepend(LIBS=[target_core, target_libs])

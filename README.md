@@ -130,25 +130,27 @@ Different Ameba series are not compatible with each other. Apparently, there isn
 
 Note: this list will probably change with each functionality update.
 
-&nbsp; | `realtek-ambz`
---|--
-Core functions|✔️
-GPIO/PWM/IRQ|✔️/❓/✔️
-Analog input|❓
-UART I/O|✔️
-Flash I/O|❓
-**LIBRARIES**
-SPI|❌
-SPIFFS|❌
-Wire|❌
-BLE|-
-Wi-Fi|❌
-HTTP|❌
-NTP|❌
-OTA|❌
-MDNS|❌
-MQTT|❌
-SD|❌
+&nbsp;              | `realtek-ambz`
+--------------------|---------------
+Core functions      | ✔️
+GPIO/PWM/IRQ        | ✔️/❓/✔️
+Analog input        | ❓
+UART I/O            | ✔️
+Flash I/O           | ❓
+**CORE LIBRARIES**  |
+SoftwareSerial      | ❌
+SPI                 | ❌
+Wire                | ❌
+**OTHER LIBRARIES** |
+SPIFFS              | ❌
+BLE                 | -
+Wi-Fi (SSL)         | ✔️ (❌)
+HTTP                | ❌
+NTP                 | ❌
+OTA                 | ❌
+MDNS                | ❌
+MQTT                | ❌
+SD                  | ❌
 
 Legend:
 - ✔️ working
