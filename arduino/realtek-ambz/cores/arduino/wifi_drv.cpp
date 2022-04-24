@@ -3,6 +3,7 @@
 // arduino includes
 #include "wl_definitions.h"
 #include "wl_types.h"
+#include "Arduino.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,8 +29,8 @@ char 	 WiFiDrv::_networkSsid[][WL_SSID_MAX_LENGTH] = {{"1"},{"2"},{"3"},{"4"},{"
 int32_t  WiFiDrv::_networkRssi[WL_NETWORKS_LIST_MAXNUM] = { 0 };
 uint32_t WiFiDrv::_networkEncr[WL_NETWORKS_LIST_MAXNUM] = { 0 };
 
-static char init_wlan = false;
-static char init_lwip = false;
+static bool init_wlan = false;
+static int wifi_mode = NULL;
 
 static rtw_network_info_t wifi = {0};
 static rtw_ap_info_t ap = {0};
@@ -55,13 +56,22 @@ static void init_wifi_struct(void)
 
 void WiFiDrv::wifiDriverInit()
 {
-    if (init_lwip == false) {
-	    init_lwip = true;
-        LwIP_Init();
-	}        
-    if (init_wlan == false) {
-        init_wlan = true;
-        wifi_on(RTW_MODE_STA);
+	struct netif * pnetif = &xnetif[0];
+	
+    if (init_wlan == false) {    		
+			init_wlan = true;
+			LwIP_Init();        
+			wifi_on(RTW_MODE_STA);
+			wifi_mode = RTW_MODE_STA;      
+    }else if (init_wlan == true) {
+    	if (wifi_mode != RTW_MODE_STA){    		
+				dhcps_deinit();				
+				wifi_off();				
+				vTaskDelay(20);				
+				wifi_on(RTW_MODE_STA);
+				dhcps_init(pnetif);
+				wifi_mode = RTW_MODE_STA;
+    	}
     }
 }
 
@@ -285,7 +295,7 @@ int8_t WiFiDrv::apActivate()
 		if(wext_get_ssid(WLAN0_NAME, (unsigned char *) essid) > 0) {
 			if(strcmp((const char *) essid, (const char *)ap.ssid.val) == 0) {
 				printf("\n\r%s started\n", ap.ssid.val);
-				ret = WL_SUCCESS;
+				ret = WL_SUCCESS;				
 				break;
 			}
 		}
@@ -306,20 +316,15 @@ int8_t WiFiDrv::apActivate()
 
 exit:
 	init_wifi_struct( );
+	if(ret == WL_SUCCESS){
+		wifi_mode = RTW_MODE_AP;		
+	}
 	return ret;
 }
-
 int8_t WiFiDrv::disconnect()
 {
     wifi_disconnect();
-    
-    return WL_DISCONNECTED;
-}
 
-int8_t WiFiDrv::off()
-{
-	wifi_off();
-    init_wlan = false;
     return WL_DISCONNECTED;
 }
 
@@ -481,7 +486,7 @@ int WiFiDrv::getHostByName(const char* aHostname, IPAddress& aResult)
 	}
 }
 
-int WiFiDrv::SetDTIM(uint8_t dtn)
+int WiFiDrv::disablePowerSave()
 {
-	return wifi_set_lps_dtim(dtn);
+    return wifi_disable_powersave();
 }

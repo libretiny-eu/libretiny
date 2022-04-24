@@ -1,15 +1,17 @@
 #ifndef ARD_SSL_H
 #define ARD_SSL_H
 
-struct ssl_context;
+struct mbedtls_ssl_context;
+struct mbedtls_ssl_config;
 
 typedef struct {
-	int socket;
+    int socket;
     int recvTimeout;
-	ssl_context *ssl;
+    mbedtls_ssl_context *ssl;
+    mbedtls_ssl_config *conf;
 } sslclient_context;
 
-int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char* rootCABuff, unsigned char* cli_cert, unsigned char* cli_key);
+int start_ssl_client(sslclient_context *ssl_client, uint32_t ipAddress, uint32_t port, unsigned char* rootCABuff, unsigned char* cli_cert, unsigned char* cli_key, unsigned char* pskIdent, unsigned char* psKey, char* SNI_hostname);
 
 void stop_ssl_socket(sslclient_context *ssl_client);
 

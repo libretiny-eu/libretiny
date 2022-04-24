@@ -1,7 +1,3 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <platform_opts.h>
 #include <lwip/sockets.h> 
 #include <lwip/netif.h>
@@ -216,7 +212,3 @@ int start_client(uint32_t ipAddress, uint16_t port, uint8_t protMode)
 
     return _sock;
 }
-
-#ifdef __cplusplus
-}
-#endif

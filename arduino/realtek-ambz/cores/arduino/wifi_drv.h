@@ -127,13 +127,6 @@ public:
     static int8_t disconnect();
 
     /*
-     * Wifi_off()
-     *
-     * return: WL_SUCCESS or WL_FAILURE
-     */
-    static int8_t off();
-
-    /*
      * Disconnect from the network
      *
      * return: one value of wl_status_t enum
@@ -271,7 +264,7 @@ public:
 
 	static int8_t apActivate();
 
-	static int SetDTIM(uint8_t dtn);
+    static int disablePowerSave();
 };
 
 extern WiFiDrv wiFiDrv;

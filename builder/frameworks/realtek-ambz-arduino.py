@@ -1,3 +1,4 @@
+from glob import glob
 from os.path import isdir, join
 
 from SCons.Script import DefaultEnvironment
@@ -93,14 +94,22 @@ env.Append(
         join(SDK_DIR, "component", "common", "file_system", "fatfs", "r0.10c", "include"),
         join(SDK_DIR, "component", "common", "network", "mdns"),
         join(SDK_DIR, "component", "common", "network", "libwsclient"),
+        join(SDK_DIR, "component", "common", "network", "ssl", "mbedtls-2.4.0", "include"),
         # fmt: on
     ],
+)
+env["CPPPATH"].remove(
+    # fmt: off
+    # remove polarssl
+    join(SDK_DIR, "component", "common", "network", "ssl", "polarssl-1.3.8", "include"),
+    # fmt: on
 )
 
 # Sources
 sources_core = [
     # fmt: off
     "+<" + CORE_DIR + "/cores/arduino/ard_socket.c>",
+    "+<" + CORE_DIR + "/cores/arduino/ard_ssl.c>",
     "+<" + CORE_DIR + "/cores/arduino/avr/dtostrf.c>",
     "+<" + CORE_DIR + "/cores/arduino/b64.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/cxxabi-compat.cpp>",
@@ -133,6 +142,25 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/WMath.cpp>",
     "+<" + BOARD_DIR + "/variant.cpp>",
     # fmt: on
+]
+
+# add mbedTLS from SDK
+mbedtls_glob = join(
+    SDK_DIR, "component", "common", "network", "ssl", "mbedtls-2.4.0", "library", "*.c"
+)
+for file in glob(env.subst(mbedtls_glob)):
+    if file.endswith("ssl_tls.c"):
+        continue  # skip ssl_tls.c for a fixup
+    sources_core.append(f"+<{file}>")
+env.Append(
+    CPPDEFINES=[
+        "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
+    ],
+)
+
+# Fixups
+sources_core += [
+    "+<" + FIXUPS_DIR + "/ssl_tls.c>",  # rtl sdk defines S1 and S2 which conflicts here
 ]
 
 # Libs & linker config
