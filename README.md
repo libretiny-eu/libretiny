@@ -2,6 +2,12 @@
 
 PlatformIO development platform for IoT modules manufactured by Tuya Inc.
 
+The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
+the project focuses on developing working Arduino-compatible cores for supported platforms. The cores are inspired by Espressif's official core for ESP32,
+which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd party) platforms.
+
+LibreTuya also provides a common interface for all platform implementations. The interface is based on ESP32 official libraries.
+
 **Note:** this project is work-in-progress.
 
 ## Board List
@@ -71,6 +77,8 @@ arduino/
 ├─ <platform name>/             Arduino Core for specific platform
 │  ├─ cores/                        Core files
 │  ├─ libraries/                    Supported built-in libraries
+├─ libretuya-api/
+│  ├─ <library name>/           Library interfaces (.h) for LibreTuya Arduino cores
 boards/
 ├─ <board name>/                Board-specific code
 │  ├─ variant.cpp                   Arduino variant initialization
