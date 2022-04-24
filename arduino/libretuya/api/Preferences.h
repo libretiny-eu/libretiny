@@ -35,8 +35,8 @@ typedef enum {
 
 class IPreferences {
   public:
-	IPreferences(){};
-	~IPreferences(){};
+	IPreferences() {}
+	~IPreferences() {}
 
 	bool begin(const char *name, bool readOnly = false, const char *partition_label = NULL);
 	void end();

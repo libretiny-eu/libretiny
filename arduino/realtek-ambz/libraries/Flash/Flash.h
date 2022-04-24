@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libretuya-api/Flash.h"
+#include "api/Flash.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
 typedef struct {
 	uint8_t manufacturerId;
 	uint8_t chipId;
@@ -13,8 +12,8 @@ typedef struct {
 
 class IFlashClass {
   public:
-	IFlashClass(){};
-	~IFlashClass(){};
+	IFlashClass() {}
+	~IFlashClass() {}
 
 	virtual FlashId getChipId() = 0;
 	virtual uint32_t getSize() = 0;

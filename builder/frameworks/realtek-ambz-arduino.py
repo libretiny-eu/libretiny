@@ -8,7 +8,7 @@ platform = env.PioPlatform()
 board = env.BoardConfig()
 
 env.SConscript("realtek-ambz-sdk.py", exports="env")
-env.SConscript("../arduino-api.py", exports="env")
+env.SConscript("../arduino-common.py", exports="env")
 
 mcu = board.get("build.mcu").upper()
 family = board.get("build.family").upper()

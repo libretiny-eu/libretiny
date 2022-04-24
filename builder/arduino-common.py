@@ -7,16 +7,16 @@ platform = env.PioPlatform()
 board = env.BoardConfig()
 
 API_DIR = platform.get_package_dir("framework-arduino-api")
-ARDUINO_DIR = join(platform.get_dir(), "arduino")
+LT_API_DIR = join(platform.get_dir(), "arduino", "libretuya")
 assert isdir(API_DIR)
-assert isdir(ARDUINO_DIR)
+assert isdir(LT_API_DIR)
 
 # Includes
 env.Prepend(
     CPPPATH=[
         # fmt: off
         join(API_DIR),
-        join(ARDUINO_DIR), # for libretuya-api
+        join(LT_API_DIR), # for libretuya-api
         # fmt: on
     ]
 )
@@ -29,6 +29,7 @@ sources_api = [
 	"+<" + API_DIR + "/api/Print.cpp>",
 	"+<" + API_DIR + "/api/Stream.cpp>",
 	"+<" + API_DIR + "/api/String.cpp>",
+    "+<" + LT_API_DIR + "/IPv6Address.cpp>",
     # fmt: on
 ]
 
