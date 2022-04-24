@@ -13,12 +13,13 @@ typedef struct {
 class IFlashClass {
   public:
 	IFlashClass() {}
+
 	~IFlashClass() {}
 
 	virtual FlashId getChipId() = 0;
-	virtual uint32_t getSize() = 0;
+	virtual uint32_t getSize()	= 0;
 
-	virtual bool eraseSector(uint32_t sector) = 0;
-	virtual bool readBlock(uint32_t offset, uint8_t *data, size_t size) = 0;
+	virtual bool eraseSector(uint32_t sector)							 = 0;
+	virtual bool readBlock(uint32_t offset, uint8_t *data, size_t size)	 = 0;
 	virtual bool writeBlock(uint32_t offset, uint8_t *data, size_t size) = 0;
 };

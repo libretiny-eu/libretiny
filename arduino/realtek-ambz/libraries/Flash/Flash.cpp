@@ -24,8 +24,8 @@ FlashId FlashClass::getChipId() {
 	uint8_t idBytes[3];
 	flash_read_id(flash, idBytes, 3);
 	id.manufacturerId = idBytes[0];
-	id.chipId = idBytes[1];
-	id.chipSizeId = idBytes[2];
+	id.chipId		  = idBytes[1];
+	id.chipSizeId	  = idBytes[2];
 	return id;
 }
 

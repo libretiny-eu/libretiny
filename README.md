@@ -77,8 +77,9 @@ arduino/
 ├─ <platform name>/             Arduino Core for specific platform
 │  ├─ cores/                        Core files
 │  ├─ libraries/                    Supported built-in libraries
-├─ libretuya-api/
-│  ├─ <library name>/           Library interfaces (.h) for LibreTuya Arduino cores
+├─ libretuya/
+│  ├─ api/                      Library interfaces (.h) for LibreTuya Arduino cores
+│  ├─ <library name>.cpp        Built-in platform-independent libraries
 boards/
 ├─ <board name>/                Board-specific code
 │  ├─ variant.cpp                   Arduino variant initialization
