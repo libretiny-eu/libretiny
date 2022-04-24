@@ -13,7 +13,7 @@ extern void *gpio_pin_struct[PINS_COUNT];
 extern void *gpio_irq_handler_list[PINS_COUNT];
 
 bool pinInvalid(pin_size_t pinNumber) {
-	return pinNumber < 0 || pinNumber > PINS_COUNT || g_APinDescription[pinNumber].pinname == NC;
+	return pinNumber < 0 || pinNumber >= PINS_COUNT || g_APinDescription[pinNumber].pinname == NC;
 }
 
 void pinRemoveMode(pin_size_t pinNumber) {
