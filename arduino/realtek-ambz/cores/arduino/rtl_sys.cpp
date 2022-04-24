@@ -27,7 +27,6 @@ extern "C" {
 #endif // __cplusplus
 
 #include <diag.h>
-#include <flash_api.h>
 
 extern void *pvPortMalloc( size_t xWantedSize );
 extern void vPortFree( void *pv );
@@ -77,31 +76,6 @@ void debug_on(void)
 void sys_info(void) {
 	rtl_printf("\r\nCLK CPU\t\t%d Hz\r\nRAM heap\t%d bytes\r\nTCM heap\t%d bytes\r\n",
 				HalGetCpuClk(), xPortGetFreeHeapSize(), tcm_heap_freeSpace());
-}				
-
-bool fspic_isinit = false;
-
-unsigned int GetFlashSize(void)
-{
-	unsigned int FlashSize;
-	if(!fspic_isinit) flash_get_status(NULL);
-	fspic_isinit = true;
-	uint8_t flash_id[3];
-	flash_read_id(NULL, flash_id, 3);
-	if(flash_id[2] >= 0x14 && flash_id[2] <= 0x19) {
-		FlashSize = 1<<(flash_id[2]); // Flash size in bytes
-	}
-	else FlashSize = 1024*1024;  // 1 mbytes
-	return FlashSize;
-}
-
-unsigned int GetFlashId(void)
-{
-	if(!fspic_isinit) flash_get_status(NULL);
-	fspic_isinit = true;
-	uint8_t flash_id[3];
-	flash_read_id(NULL, flash_id, 3);
-	return (flash_id[0]<<16) | (flash_id[1]<<8) | flash_id[2];
 }
 
 

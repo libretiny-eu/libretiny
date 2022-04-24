@@ -103,9 +103,3 @@ extern void vPortClearInterruptMask( uint32_t ulNewMask );
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
-extern unsigned int GetFlashSize(void); // default 1048576 bytes (1 Mbytes)
-/* FlashID: manufacturer ID : memory type : memory density
-  0xC22015 - MXIC MX25L1606E, F11AMIM13 (RTL8711AM) module,
-  0xC22014 - MXIC MX25L8006E, RTL00 (RTL8710AF) module */
-extern unsigned int GetFlashId(void);

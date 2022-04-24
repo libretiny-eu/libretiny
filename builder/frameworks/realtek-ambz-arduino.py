@@ -166,16 +166,18 @@ sources_core += [
 # Arduino libraries
 sources_libs = [
     # fmt: off
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFi.cpp>"
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiClient.cpp>"
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiServer.cpp>"
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiSSLClient.cpp>"
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiUdp.cpp>"
+    "+<" + CORE_DIR +"/libraries/Flash/Flash.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFi.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiClient.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiServer.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiSSLClient.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiUdp.cpp>",
     # fmt: on
 ]
 env.Append(
     CPPPATH=[
         # fmt: off
+        join(CORE_DIR, "libraries", "Flash"),
         join(CORE_DIR, "libraries", "WiFi", "src"),
         # fmt: on
     ],

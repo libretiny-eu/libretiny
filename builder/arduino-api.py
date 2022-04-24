@@ -7,13 +7,16 @@ platform = env.PioPlatform()
 board = env.BoardConfig()
 
 API_DIR = platform.get_package_dir("framework-arduino-api")
+ARDUINO_DIR = join(platform.get_dir(), "arduino")
 assert isdir(API_DIR)
+assert isdir(ARDUINO_DIR)
 
 # Includes
 env.Prepend(
     CPPPATH=[
         # fmt: off
         join(API_DIR),
+        join(ARDUINO_DIR), # for libretuya-api
         # fmt: on
     ]
 )
