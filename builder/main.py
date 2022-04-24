@@ -1,12 +1,14 @@
 from SCons.Script import Default, DefaultEnvironment
 
 env = DefaultEnvironment()
+board = env.BoardConfig()
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 env.Replace(PROGSUFFIX=".elf")
 
+# Toolchain config - TODO multiple arch, specified in board.json
 env.Replace(
     AR="arm-none-eabi-gcc-ar",
     AS="arm-none-eabi-gcc",
@@ -21,8 +23,17 @@ env.Replace(
     SIZETOOL="arm-none-eabi-size",
 )
 
-# I have no idea how does PlatformIO work
-# env.SConscript("frameworks/realtek-ambz-sdk.py")
+# Flash layout defines
+flash_layout: dict = board.get("flash")
+if flash_layout:
+    defines = {}
+    for name, layout in flash_layout.items():
+        name = name.upper()
+        (offset, _, length) = layout.partition("+")
+        defines[f"FLASH_{name}_OFFSET"] = offset
+        defines[f"FLASH_{name}_LENGTH"] = length
+    env.Append(CPPDEFINES=defines.items())
+    env.Replace(**defines)
 
 target_elf = env.BuildProgram()
 target_fw = env.DumpFirmwareBinary("firmware.bin", target_elf)

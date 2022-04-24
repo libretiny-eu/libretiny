@@ -9,15 +9,15 @@ MEMORY
 	ROM (rx) : 			ORIGIN = 0x00000000, LENGTH = 0x80000	/* ROM: 512k */
 	ROMBSS_RAM (rw)  : 		ORIGIN = 0x10000000, LENGTH = 0x2000	/* ROM BSS RAM: 8K */
 	BOOTLOADER_RAM (rwx)  : 	ORIGIN = 0x10002000, LENGTH = 0x3000	/* BOOT Loader RAM: 12K */
-	BD_RAM (rwx)  : 		ORIGIN = 0x10005000, LENGTH = 0x39000	/* MAIN RAM: 228 */
+	BD_RAM (rwx)  : 		ORIGIN = 0x10005000, LENGTH = 0x39000	/* MAIN RAM: 228k */
 	MSP_RAM (wx)  : 		ORIGIN = 0x1003E000, LENGTH = 0x1000	/* MSP RAM: 4k */
 	RDP_RAM (wx)  : 		ORIGIN = 0x1003F000, LENGTH = 0xFF0	/* RDP RAM: 4k-0x10 */
 
-	XIPBOOT (rx)  :			ORIGIN = 0x08000000+0x20, LENGTH = 0x04000-0x20	/* XIPBOOT: 32k, 32 Bytes resvd for header*/
+	XIPBOOT (rx)  :			ORIGIN = 0x08000000+0x20, LENGTH = 0x04000-0x20	/* XIPBOOT: 16k, 32 Bytes resvd for header*/
 	XIPSYS (r) :			ORIGIN = 0x08009000, LENGTH = 0x1000	/* XIPSYS: 4K system data in flash */
 	XIPCAL (r) :			ORIGIN = 0x0800A000, LENGTH = 0x1000	/* XIPCAL: 4K calibration data in flash */
-	XIP1 (rx)  : 			ORIGIN = 0x0800B000+0x20, LENGTH = 0xC5000-0x20	/* XIP1: 2*468k, 32 Bytes resvd for header */
-	XIP2 (rx)  : 			ORIGIN = 0x080D0000+0x20, LENGTH = 0xC5000-0x20	/* XIP2: 2*468k, 32 Bytes resvd for header */
+	XIP1 (rx)  : 			ORIGIN = 0x0800B000+0x20, LENGTH = 0xC5000-0x20	/* XIP1: 788k, 32 Bytes resvd for header */
+	XIP2 (rx)  : 			ORIGIN = 0x080D0000+0x20, LENGTH = 0xC5000-0x20	/* XIP2: 788k, 32 Bytes resvd for header */
 }
 
 

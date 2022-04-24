@@ -20,9 +20,12 @@ assert isdir(env.subst(BOARD_DIR))
 assert isdir(env.subst(FIXUPS_DIR))
 assert isdir(env.subst(PLATFORM_DIR))
 
-ota1_offset = board.get("build.amb_ota1_offset")
-ota2_offset = board.get("build.amb_ota2_offset")
+flash_addr = board.get("build.amb_flash_addr")
+flash_ota1_offset = env.subst("$FLASH_OTA1_OFFSET")
+flash_ota2_offset = env.subst("$FLASH_OTA2_OFFSET")
 boot_all = board.get("build.amb_boot_all")
+ota1_offset = hex(int(flash_addr, 16) + int(flash_ota1_offset, 16))
+ota2_offset = hex(int(flash_addr, 16) + int(flash_ota2_offset, 16))
 
 # Outputs
 env.Replace(
@@ -543,8 +546,8 @@ actions.append(env.VerboseAction(pick_tool, "Wrapping binary images"))
 actions.append(env.VerboseAction(concat_xip_ram, "Packaging firmware image - $IMG_FW"))
 # actions.append(env.VerboseAction(checksum_img, "Generating checksum"))
 actions.append(env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"))
-actions.append(env.VerboseAction("true", f"- OTA1 flash offset: {ota1_offset}"))
-actions.append(env.VerboseAction("true", f"- OTA2 flash offset: {ota2_offset}"))
+actions.append(env.VerboseAction("true", f"- OTA1 flash offset: {flash_ota1_offset}"))
+actions.append(env.VerboseAction("true", f"- OTA2 flash offset: {flash_ota2_offset}"))
 
 # Clone env to ignore options from child projects
 envsdk = env.Clone()
