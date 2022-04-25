@@ -47,9 +47,9 @@ bool IPv6Address::operator==(const uint8_t* addr) const
     return memcmp(addr, _address.bytes, sizeof(_address.bytes)) == 0;
 }
 
-/* size_t IPv6Address::printTo(Print& p) const
+size_t IPv6Address::printTo(Print& p) const
 {
-    size_t n = 0;
+    /* size_t n = 0;
     for(int i = 0; i < 16; i+=2) {
         if(i){
             n += p.print(':');
@@ -58,8 +58,8 @@ bool IPv6Address::operator==(const uint8_t* addr) const
         n += p.printf("%02x", _address.bytes[i+1]);
 
     }
-    return n;
-} */
+    return n; */
+}
 
 String IPv6Address::toString() const
 {

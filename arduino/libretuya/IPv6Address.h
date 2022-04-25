@@ -17,14 +17,15 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef IPv6Address_h
-#define IPv6Address_h
+#pragma once
 
 #include <stdint.h>
 #include <api/String.h>
-#include <api/Printable.h>
+#include <api/Print.h>
 
 // A class to make it easier to handle and pass around IP addresses
+
+namespace arduino {
 
 class IPv6Address: public Printable
 {
@@ -84,7 +85,7 @@ public:
     IPv6Address& operator=(const uint8_t *address);
 
     // TODO implement printTo()
-    // virtual size_t printTo(Print& p) const;
+    virtual size_t printTo(Print& p) const;
     String toString() const;
 
     friend class UDP;
@@ -92,4 +93,6 @@ public:
     friend class Server;
 };
 
-#endif
+}
+
+using arduino::IPv6Address;

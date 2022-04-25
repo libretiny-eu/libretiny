@@ -28,9 +28,9 @@ class IWiFiServer : public Server {
   public:
 	void listenOnLocalhost() {}
 
-	WiFiServer(uint16_t port = 80, uint8_t max_clients = 4) {}
+	IWiFiServer(uint16_t port = 80, uint8_t max_clients = 4) {}
 
-	~WiFiServer() {
+	~IWiFiServer() {
 		end();
 	}
 

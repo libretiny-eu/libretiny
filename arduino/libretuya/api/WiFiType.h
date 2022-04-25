@@ -24,10 +24,10 @@
 #define WIFI_SCAN_RUNNING (-1)
 #define WIFI_SCAN_FAILED  (-2)
 
-#define WiFiMode_t	 wl_mode_t
-#define WiFiMode	 wl_mode_t
+#define WiFiMode_t	 wifi_mode_t
+#define WiFiMode	 wifi_mode_t
 #define WiFiStatus	 wl_status_t
-#define WiFiAuthMode wl_auth_mode_t
+#define WiFiAuthMode wifi_auth_mode_t
 
 #define WIFI_OFF	WIFI_MODE_NULL
 #define WIFI_STA	WIFI_MODE_STA
@@ -40,7 +40,7 @@ typedef enum {
 	WIFI_MODE_AP,
 	WIFI_MODE_APSTA,
 	WIFI_MODE_MAX,
-} wl_mode_t;
+} wifi_mode_t;
 
 typedef enum {
 	WL_NO_SHIELD	   = 255, // for compatibility with WiFi Shield library
@@ -56,11 +56,11 @@ typedef enum {
 typedef enum {
 	WIFI_AUTH_INVALID	   = 255,
 	WIFI_AUTH_AUTO		   = 200,
-	WIFI_AUTH_OPEN_SYSTEM  = 0,
-	WIFI_AUTH_SHARED_KEY   = 1,
+	WIFI_AUTH_OPEN		   = 0,
+	WIFI_AUTH_WEP		   = 1,
 	WIFI_AUTH_WPA		   = 10,
 	WIFI_AUTH_WPA2		   = 11,
 	WIFI_AUTH_WPA_PSK	   = 2,
 	WIFI_AUTH_WPA2_PSK	   = 3,
 	WIFI_AUTH_WPA_WPA2_PSK = 4,
-} wl_auth_mode_t;
+} wifi_auth_mode_t;

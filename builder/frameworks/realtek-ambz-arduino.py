@@ -130,7 +130,6 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/ssl_drv.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/Tone.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/WebSocketClient.cpp>",
-    "+<" + CORE_DIR + "/cores/arduino/wifi_drv.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/WInterrupts.c>",
     "+<" + CORE_DIR + "/cores/arduino/wiring.c>",
     "+<" + CORE_DIR + "/cores/arduino/wiring_analog.c>",
@@ -167,18 +166,18 @@ sources_core += [
 sources_libs = [
     # fmt: off
     "+<" + CORE_DIR +"/libraries/Flash/Flash.cpp>",
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFi.cpp>",
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiClient.cpp>",
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiServer.cpp>",
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiSSLClient.cpp>",
-    "+<" + CORE_DIR +"/libraries/WiFi/src/WiFiUdp.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFi.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiAP.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiGeneric.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiScan.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiSTA.cpp>",
     # fmt: on
 ]
 env.Append(
     CPPPATH=[
         # fmt: off
         join(CORE_DIR, "libraries", "Flash"),
-        join(CORE_DIR, "libraries", "WiFi", "src"),
+        join(CORE_DIR, "libraries", "WiFi"),
         # fmt: on
     ],
 )

@@ -21,11 +21,10 @@
 
 #include <Arduino.h>
 #include <api/Client.h>
-#include <memory>
 
 class IWiFiClient : public Client {
   public:
-	WiFiClient(int fd);
+	IWiFiClient(int fd) {}
 
 	int connect(IPAddress ip, uint16_t port, int32_t timeout);
 	int connect(const char *host, uint16_t port, int32_t timeout);
@@ -36,7 +35,7 @@ class IWiFiClient : public Client {
 	int socket();
 	int setTimeout(uint32_t seconds);
 
-	WiFiClient &operator=(const WiFiClient &other);
+	IWiFiClient &operator=(const WiFiClient &other);
 
 	bool operator==(const bool value) {
 		return bool() == value;
@@ -46,9 +45,9 @@ class IWiFiClient : public Client {
 		return bool() != value;
 	}
 
-	bool operator==(const WiFiClient &);
+	bool operator==(const IWiFiClient &);
 
-	bool operator!=(const WiFiClient &rhs) {
+	bool operator!=(const IWiFiClient &rhs) {
 		return !this->operator==(rhs);
 	};
 

@@ -70,6 +70,7 @@ env.Replace(
         "CONFIG_PLATFORM_8711B",
         ("F_CPU", "166000000L"),
         ("LWIP_TIMEVAL_PRIVATE", "0"),
+        ("LWIP_NETIF_HOSTNAME", "1"),
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",

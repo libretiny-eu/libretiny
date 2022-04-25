@@ -27,147 +27,151 @@
 #include <api/IPAddress.h>
 #include <api/Print.h>
 
-#include "WiFiClient.h"
-#include "WiFiServer.h"
 #include "WiFiType.h"
-#include "WiFiUdp.h"
 
 // TODO wifi events
 // TODO WiFiMulti library
 
-class IWiFi {
+class IWiFiClass {
   public:
-	void printDiag(Print &dest);
+	virtual void printDiag(Print &dest) = 0;
+};
 
-	// WiFiGenericClass
-	int32_t channel(void);
-	static bool mode(WiFiMode mode);
-	static WiFiMode getMode();
+class IWiFiGenericClass {
+  public:
+	virtual int32_t channel(void)	 = 0;
+	virtual bool mode(WiFiMode mode) = 0;
+	virtual WiFiMode getMode()		 = 0;
+	virtual WiFiStatus status()		 = 0;
 
-	bool enableSTA(bool enable);
-	bool enableAP(bool enable);
+	virtual bool enableSTA(bool enable) = 0;
+	virtual bool enableAP(bool enable)	= 0;
 
-	bool setSleep(bool enable);
-	bool getSleep();
+	virtual bool setSleep(bool enable) = 0;
+	virtual bool getSleep()			   = 0;
 
-	bool setTxPower(int power);
-	int getTxPower();
+	virtual bool setTxPower(int power) = 0;
+	virtual int getTxPower()		   = 0;
 
-	static int hostByName(const char *aHostname, IPAddress &aResult);
+	virtual int hostByName(const char *hostname, IPAddress &aResult) {
+		aResult = hostByName(hostname);
+		return true;
+	}
+
+	virtual IPAddress hostByName(const char *hostname) = 0;
 
 	static IPAddress calculateNetworkID(IPAddress ip, IPAddress subnet);
 	static IPAddress calculateBroadcast(IPAddress ip, IPAddress subnet);
 	static uint8_t calculateSubnetCIDR(IPAddress subnetMask);
+	static String macToString(uint8_t *mac);
+};
 
-	// WiFiSTAClass
-	WiFiStatus begin(
+class IWiFiSTAClass {
+  public:
+	virtual WiFiStatus begin(
 		const char *ssid,
 		const char *passphrase = NULL,
 		int32_t channel		   = 0,
 		const uint8_t *bssid   = NULL,
-		bool connect		   = true,
-	);
-	WiFiStatus
-	begin(char *ssid, char *passphrase = NULL, int32_t channel = 0, const uint8_t *bssid = NULL, bool connect = true, );
-	WiFiStatus begin();
+		bool connect		   = true
+	) = 0;
+	virtual WiFiStatus begin(
+		char *ssid, char *passphrase = NULL, int32_t channel = 0, const uint8_t *bssid = NULL, bool connect = true
+	) = 0;
 
-	bool config(
-		IPAddress local_ip,
+	virtual bool config(
+		IPAddress localIP,
 		IPAddress gateway,
 		IPAddress subnet,
 		IPAddress dns1 = (uint32_t)0x00000000,
-		IPAddress dns2 = (uint32_t)0x00000000,
-	);
+		IPAddress dns2 = (uint32_t)0x00000000
+	) = 0;
 
-	bool reconnect();
-	bool disconnect(bool wifioff = false, bool eraseap = false);
+	virtual bool reconnect()					  = 0;
+	virtual bool disconnect(bool wifiOff = false) = 0;
 
-	bool isConnected();
+	virtual bool isConnected();
 
-	bool setAutoConnect(bool autoConnect);
-	bool getAutoConnect();
+	virtual bool setAutoReconnect(bool autoReconnect) = 0;
+	virtual bool getAutoReconnect()					  = 0;
 
-	bool setAutoReconnect(bool autoReconnect);
-	bool getAutoReconnect();
+	virtual WiFiStatus waitForConnectResult(unsigned long timeout) = 0;
 
-	uint8_t waitForConnectResult();
+	virtual IPAddress localIP()					   = 0;
+	virtual uint8_t *macAddress(uint8_t *mac)	   = 0;
+	virtual String macAddress()					   = 0;
+	virtual IPAddress subnetMask()				   = 0;
+	virtual IPAddress gatewayIP()				   = 0;
+	virtual IPAddress dnsIP(uint8_t dns_no = 0)	   = 0;
+	virtual IPAddress broadcastIP()				   = 0;
+	virtual IPAddress networkID()				   = 0;
+	virtual uint8_t subnetCIDR()				   = 0;
+	virtual bool enableIpV6()					   = 0;
+	virtual IPv6Address localIPv6()				   = 0;
+	virtual const char *getHostname()			   = 0;
+	virtual bool setHostname(const char *hostname) = 0;
+	virtual bool setMacAddress(const uint8_t *mac) = 0;
 
-	IPAddress localIP();
-	uint8_t *macAddress(uint8_t *mac);
-	String macAddress();
-	IPAddress subnetMask();
-	IPAddress gatewayIP();
-	IPAddress dnsIP(uint8_t dns_no = 0);
-	IPAddress broadcastIP();
-	IPAddress networkID();
-	uint8_t subnetCIDR();
-	bool enableIpV6();
-	IPv6Address localIPv6();
-	const char *getHostname();
-	bool setHostname(const char *hostname);
-
-	bool hostname(const String &aHostname) {
+	inline bool hostname(const String &aHostname) {
 		return setHostname(aHostname.c_str());
 	}
 
-	static WiFiStatus status();
-	String SSID() const;
-	String psk() const;
-	uint8_t *BSSID();
-	String BSSIDstr();
-	int8_t RSSI();
+	virtual const String SSID()			 = 0;
+	virtual const String psk()			 = 0;
+	virtual uint8_t *BSSID()			 = 0;
+	virtual String BSSIDstr()			 = 0;
+	virtual int8_t RSSI()				 = 0;
+	virtual WiFiAuthMode getEncryption() = 0;
+};
 
-	// WiFiScanClass
-	int16_t scanNetworks(
+class IWiFiScanClass {
+  public:
+	virtual int16_t scanNetworks(
 		bool async				 = false,
-		bool show_hidden		 = false,
+		bool showHidden			 = false,
 		bool passive			 = false,
-		uint32_t max_ms_per_chan = 300,
-		uint8_t channel			 = 0,
-	);
-	bool getNetworkInfo(
+		uint32_t maxMsPerChannel = 300,
+		uint8_t channel			 = 0
+	) = 0;
+	virtual bool getNetworkInfo(
 		uint8_t networkItem,
 		String &ssid,
 		WiFiAuthMode &encryptionType,
 		int32_t &RSSI,
 		uint8_t *&BSSID,
-		int32_t &channel,
-	);
+		int32_t &channel
+	) = 0;
 
-	int16_t scanComplete();
-	void scanDelete();
+	virtual int16_t scanComplete() = 0;
+	virtual void scanDelete()	   = 0;
 
-	String SSID(uint8_t networkItem);
-	WiFiAuthMode encryptionType(uint8_t networkItem);
-	int32_t RSSI(uint8_t networkItem);
-	uint8_t *BSSID(uint8_t networkItem);
-	String BSSIDstr(uint8_t networkItem);
-	int32_t channel(uint8_t networkItem);
-
-	static void *getScanInfoByIndex(int i) {
-		return _getScanInfoByIndex(i);
-	};
-
-	// WiFiAPClass
-	bool softAP(
-		const char *ssid, const char *passphrase = NULL, int channel = 1, int ssid_hidden = 0, int max_connection = 4
-	);
-	bool softAPConfig(IPAddress local_ip, IPAddress gateway, IPAddress subnet);
-	bool softAPdisconnect(bool wifioff = false);
-
-	uint8_t softAPgetStationNum();
-
-	IPAddress softAPIP();
-	IPAddress softAPBroadcastIP();
-	IPAddress softAPNetworkID();
-	uint8_t softAPSubnetCIDR();
-	bool softAPenableIpV6();
-	IPv6Address softAPIPv6();
-	const char *softAPgetHostname();
-	bool softAPsetHostname(const char *hostname);
-	uint8_t *softAPmacAddress(uint8_t *mac);
-	String softAPmacAddress(void);
-	String softAPSSID(void) const;
+	virtual String SSID(uint8_t networkItem)				 = 0;
+	virtual WiFiAuthMode encryptionType(uint8_t networkItem) = 0;
+	virtual int32_t RSSI(uint8_t networkItem)				 = 0;
+	virtual uint8_t *BSSID(uint8_t networkItem)				 = 0;
+	virtual String BSSIDstr(uint8_t networkItem)			 = 0;
+	virtual int32_t channel(uint8_t networkItem)			 = 0;
 };
 
-extern WiFiClass WiFi;
+class IWiFiAPClass {
+  public:
+	virtual bool softAP(
+		const char *ssid, const char *passphrase = NULL, int channel = 1, bool ssidHidden = false, int maxClients = 4
+	)																				  = 0;
+	virtual bool softAPConfig(IPAddress localIP, IPAddress gateway, IPAddress subnet) = 0;
+	virtual bool softAPdisconnect(bool wifiOff = false)								  = 0;
+
+	virtual uint8_t softAPgetStationNum() = 0;
+
+	virtual IPAddress softAPIP()						 = 0;
+	virtual IPAddress softAPBroadcastIP()				 = 0;
+	virtual IPAddress softAPNetworkID()					 = 0;
+	virtual uint8_t softAPSubnetCIDR()					 = 0;
+	virtual bool softAPenableIpV6()						 = 0;
+	virtual IPv6Address softAPIPv6()					 = 0;
+	virtual const char *softAPgetHostname()				 = 0;
+	virtual bool softAPsetHostname(const char *hostname) = 0;
+	virtual uint8_t *softAPmacAddress(uint8_t *mac)		 = 0;
+	virtual String softAPmacAddress(void)				 = 0;
+	virtual const String softAPSSID(void)				 = 0;
+};
