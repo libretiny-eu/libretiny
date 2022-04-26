@@ -29,6 +29,7 @@ sources_api = [
 	"+<" + API_DIR + "/api/Print.cpp>",
 	"+<" + API_DIR + "/api/Stream.cpp>",
 	"+<" + API_DIR + "/api/String.cpp>",
+    "+<" + LT_API_DIR + "/api/LwIPRxBuffer.cpp>",
     "+<" + LT_API_DIR + "/api/IPv6Address.cpp>",
     # fmt: on
 ]

@@ -58,6 +58,8 @@ env.Append(
         # the SDK declares bool and #ifndef somehow doesn't work...
         # so it's either -fpermissive or this:
         ("bool", "unsigned char"),
+        # enable LwIPRxBuffer
+        "LT_HAS_LWIP",
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",
