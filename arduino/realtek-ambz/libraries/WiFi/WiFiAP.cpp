@@ -21,9 +21,9 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	if (passphrase) {
 		strcpy((char *)ap_password, passphrase);
-		wifi.security_type = RTW_SECURITY_WPA2_AES_PSK;
-		wifi.password	   = ap_password;
-		wifi.password_len  = strlen(passphrase);
+		ap.security_type = RTW_SECURITY_WPA2_AES_PSK;
+		ap.password		 = ap_password;
+		ap.password_len	 = strlen(passphrase);
 	}
 
 	dhcps_deinit();
@@ -96,6 +96,7 @@ bool WiFiClass::softAPdisconnect(bool wifiOff) {
 
 uint8_t WiFiClass::softAPgetStationNum() {
 	// TODO
+	// the struct is at wifi_conf.c:2576
 	return 0;
 }
 

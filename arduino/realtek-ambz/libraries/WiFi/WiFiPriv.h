@@ -18,6 +18,18 @@ extern "C" {
 #define WIFI_CLIENT_SELECT_TIMEOUT	1000
 #define WIFI_CLIENT_FLUSH_BUF_SIZE	1024
 
+// I think I don't understand how that works.
+// For some reason, LwIP uses a different (extern) errno,
+// while this macro refers to a function __errno, which
+// reads a totally different variable.
+#undef errno
+#include <lwip/arch.h>
+
+// disable #defines removing lwip_ prefix
+#undef LWIP_COMPAT_SOCKETS
+#define LWIP_COMPAT_SOCKETS 0
+#include <lwip/sockets.h>
+
 #include <autoconf.h>
 #include <dhcp/dhcps.h>
 #include <lwip/api.h>

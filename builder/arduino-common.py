@@ -17,6 +17,7 @@ env.Prepend(
         # fmt: off
         join(API_DIR),
         join(LT_API_DIR),
+        join(LT_API_DIR, "compat"),
         # fmt: on
     ]
 )

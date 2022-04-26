@@ -28,6 +28,10 @@ class IWiFiClient : public Client {
 
 	IWiFiClient(int sock) {}
 
+	~IWiFiClient() {
+		stop();
+	}
+
 	virtual int connect(IPAddress ip, uint16_t port, int32_t timeout)	  = 0;
 	virtual int connect(const char *host, uint16_t port, int32_t timeout) = 0;
 
@@ -66,4 +70,5 @@ class IWiFiClient : public Client {
 	virtual uint16_t localPort(int sock) const	= 0;
 
 	using Print::write;
+	using Client::stop;
 };

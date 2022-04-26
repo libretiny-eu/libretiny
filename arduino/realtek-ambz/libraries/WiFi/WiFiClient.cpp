@@ -1,38 +1,27 @@
 #include "WiFiClient.h"
 #include "WiFiPriv.h"
 
-// I think I don't understand how that works.
-// For some reason, LwIP uses a different (extern) errno,
-// while this macro refers to a function __errno, which
-// reads a totally different variable.
-#undef errno
-#include <lwip/arch.h>
-
-// disable #defines removing lwip_ prefix
-#undef LWIP_COMPAT_SOCKETS
-#define LWIP_COMPAT_SOCKETS 0
-#include <lwip/sockets.h>
-
-WiFiClient::WiFiClient() : _sock(-1), _connected(false) {
-	_timeout = WIFI_CLIENT_CONNECT_TIMEOUT;
+WiFiClient::WiFiClient() {
+	DiagPrintf("WiFiClient()\r\n");
+	_sock	   = -1;
+	_connected = false;
+	_rxBuffer  = NULL;
+	_timeout   = WIFI_CLIENT_CONNECT_TIMEOUT;
 }
 
 WiFiClient::WiFiClient(int sock) {
 	_sock	   = sock;
 	_connected = true;
-	_rxBuffer.reset(new LwIPRxBuffer(sock));
-	_timeout = WIFI_CLIENT_CONNECT_TIMEOUT;
-}
-
-WiFiClient::~WiFiClient() {
-	stop();
+	_rxBuffer  = new LwIPRxBuffer(sock);
+	_timeout   = WIFI_CLIENT_CONNECT_TIMEOUT;
 }
 
 WiFiClient &WiFiClient::operator=(const IWiFiClient &other) {
 	stop();
-	// _sock	   = other._sock;
-	// _connected = other._connected;
-	// _rxBuffer  = other._rxBuffer;
+	WiFiClient *oth = (WiFiClient *)&other;
+	_sock			= oth->_sock;
+	_connected		= oth->_connected;
+	_rxBuffer		= oth->_rxBuffer;
 	return *this;
 }
 
@@ -115,7 +104,8 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 		lwip_close(_sock);
 	_sock	   = sock;
 	_connected = true;
-	_rxBuffer.reset(new LwIPRxBuffer(_sock));
+	free(_rxBuffer);
+	_rxBuffer = new LwIPRxBuffer(_sock);
 	return 1;
 }
 
@@ -264,7 +254,8 @@ void WiFiClient::stop() {
 		lwip_close(_sock);
 	_sock	   = -1;
 	_connected = false;
-	_rxBuffer  = NULL;
+	free(_rxBuffer);
+	_rxBuffer = NULL;
 }
 
 uint8_t WiFiClient::connected() {
@@ -292,7 +283,7 @@ uint8_t WiFiClient::connected() {
 	return _connected;
 }
 
-IPAddress getaddr(int sock, int (*func)(int, struct sockaddr *, socklen_t *)) {
+IPAddress __attribute__((noinline)) getaddr(int sock, int (*func)(int, struct sockaddr *, socklen_t *)) {
 	struct sockaddr addr;
 	socklen_t len = sizeof(addr);
 	func(sock, &addr, &len);
@@ -300,7 +291,7 @@ IPAddress getaddr(int sock, int (*func)(int, struct sockaddr *, socklen_t *)) {
 	return IPAddress((uint32_t)(s->sin_addr.s_addr));
 }
 
-uint16_t getport(int sock, int (*func)(int, struct sockaddr *, socklen_t *)) {
+uint16_t __attribute__((noinline)) getport(int sock, int (*func)(int, struct sockaddr *, socklen_t *)) {
 	struct sockaddr addr;
 	socklen_t len = sizeof(addr);
 	func(sock, &addr, &len);

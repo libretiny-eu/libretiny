@@ -29,6 +29,7 @@ extern "C" {
 #include <diag.h>
 
 extern void *pvPortMalloc( size_t xWantedSize );
+extern void *os_zalloc( size_t xWantedSize );
 extern void vPortFree( void *pv );
 extern void *pvPortReAlloc( void *pv,  size_t xWantedSize );
 extern size_t xPortGetFreeHeapSize( void );
@@ -79,7 +80,7 @@ void sys_info(void) {
 }
 
 
-void * malloc(size_t size)
+/* void * malloc(size_t size)
 {
 	void * ret;
 	if((ret = pvPortMalloc(size)) == NULL)
@@ -99,7 +100,7 @@ void * zalloc(size_t size)
 void *calloc(size_t count, size_t size)
 {
   return zalloc(count * size);
-}
+} */
 
 void free(void *pv)
 {

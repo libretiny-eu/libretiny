@@ -20,39 +20,47 @@
 #pragma once
 
 #include <Arduino.h>
-#include <api/Server.h>
+#include <api/Print.h>
 
 #include "WiFiClient.h"
 
-class IWiFiServer : public Server {
+#include <type_traits>
+
+template <typename TWiFiClient, typename = std::enable_if<std::is_base_of<IWiFiClient, TWiFiClient>::value>>
+
+class IWiFiServer : public Print { // arduino::Server is useless anyway
   public:
 	void listenOnLocalhost() {}
 
-	IWiFiServer(uint16_t port = 80, uint8_t max_clients = 4) {}
+	IWiFiServer(uint16_t port = 80, uint8_t maxClients = 4) {}
 
 	~IWiFiServer() {
-		end();
+		stop();
 	}
 
-	WiFiClient available();
-
-	WiFiClient accept() {
-		return available();
-	}
+	TWiFiClient available() {
+		return accept();
+	};
 
 	virtual operator bool() = 0;
 
-	void begin(uint16_t port = 0);
-	void begin(uint16_t port, int reuse_enable);
-	void end();
-	void close();
-	void stop();
+	virtual bool begin(uint16_t port = 0, bool reuseAddr = true) = 0;
+	virtual void end()											 = 0;
+	virtual TWiFiClient accept()								 = 0;
 
-	int setTimeout(uint32_t seconds);
-	void stopAll();
-	void setNoDelay(bool nodelay);
-	bool getNoDelay();
-	bool hasClient();
+	void close() {
+		end();
+	}
+
+	void stop() {
+		end();
+	}
+
+	virtual int setTimeout(uint32_t seconds) = 0;
+	virtual void stopAll()					 = 0;
+	virtual void setNoDelay(bool noDelay)	 = 0;
+	virtual bool getNoDelay()				 = 0;
+	virtual bool hasClient()				 = 0;
 
 	size_t write(uint8_t data) {
 		return write(&data, 1);

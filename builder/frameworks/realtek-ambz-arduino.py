@@ -61,6 +61,7 @@ env.Append(
         ("bool", "bool"),
         # enable LwIPRxBuffer
         "LT_HAS_LWIP",
+        ("zalloc", "os_zalloc"),
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",
@@ -170,6 +171,7 @@ sources_libs = [
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiClient.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiGeneric.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiScan.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiServer.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiSTA.cpp>",
     # fmt: on
 ]

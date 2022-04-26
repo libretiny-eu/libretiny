@@ -16,12 +16,11 @@ bool WiFiClass::mode(WiFiMode mode) {
 		// initialize wifi first
 		LwIP_Init();
 		reset_wifi_struct();
-		wifi_manager_init();
+		// wifi_manager_init(); // these are events!
 		_initialized = true;
 	}
 	if (currentMode) {
 		// stop wifi to change mode
-		dhcps_deinit();
 		if (wifi_off() != RTW_SUCCESS)
 			return false;
 		vTaskDelay(20);
@@ -29,10 +28,6 @@ bool WiFiClass::mode(WiFiMode mode) {
 
 	if (wifi_on((rtw_mode_t)mode) != RTW_SUCCESS)
 		return false;
-
-	if (mode & WIFI_MODE_AP) {
-		dhcps_init(NETIF_RTW_STA);
-	}
 	return true;
 }
 
@@ -52,7 +47,7 @@ WiFiStatus WiFiClass::status() {
 
 bool WiFiClass::enableSTA(bool enable) {
 	WiFiMode currentMode = getMode();
-	if ((currentMode & WIFI_MODE_STA != 0) != enable) {
+	if (((currentMode & WIFI_MODE_STA) != 0) != enable) {
 		return mode((WiFiMode)(currentMode ^ WIFI_MODE_STA));
 	}
 	return true;
@@ -60,7 +55,7 @@ bool WiFiClass::enableSTA(bool enable) {
 
 bool WiFiClass::enableAP(bool enable) {
 	WiFiMode currentMode = getMode();
-	if ((currentMode & WIFI_MODE_AP != 0) != enable) {
+	if (((currentMode & WIFI_MODE_AP) != 0) != enable) {
 		return mode((WiFiMode)(currentMode ^ WIFI_MODE_AP));
 	}
 	return true;

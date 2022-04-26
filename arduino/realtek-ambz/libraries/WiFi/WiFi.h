@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 #include "WiFiClient.h"
+#include "WiFiServer.h"
 
 class WiFiClass : public IWiFiClass,
 				  public IWiFiGenericClass,

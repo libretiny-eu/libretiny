@@ -151,9 +151,13 @@ SoftwareSerial      | ❌
 SPI                 | ❌
 Wire                | ❌
 **OTHER LIBRARIES** |
+Wi-Fi Station       | ✔️
+Wi-Fi Access Point  | ❌
+Wi-Fi Events        | ❌
+Wi-Fi Client (SSL)  | ✔️ (❌)
+Wi-Fi Server        | ❌
 SPIFFS              | ❌
 BLE                 | -
-Wi-Fi (SSL)         | ✔️ (❌)
 HTTP                | ❌
 NTP                 | ❌
 OTA                 | ❌

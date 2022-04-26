@@ -2,18 +2,16 @@
 
 #include <api/LwIPRxBuffer.h>
 #include <api/WiFiClient.h>
-#include <memory>
 
 class WiFiClient : public IWiFiClient {
   private:
 	int _sock;
 	bool _connected;
-	std::shared_ptr<LwIPRxBuffer> _rxBuffer;
+	LwIPRxBuffer *_rxBuffer;
 
   public:
 	WiFiClient();
 	WiFiClient(int sock);
-	~WiFiClient();
 
 	int connect(IPAddress ip, uint16_t port);
 	int connect(const char *host, uint16_t port);
