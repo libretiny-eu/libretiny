@@ -55,9 +55,10 @@ env.Append(
         "ARDUINO_SDK",
         "ARDUINO_ARCH_AMBZ",
         f"BOARD_{family}",
-        # the SDK declares bool and #ifndef somehow doesn't work...
+        # the SDK declares bool if not defined before
+        # which conflicts with C++ built-in bool
         # so it's either -fpermissive or this:
-        ("bool", "unsigned char"),
+        ("bool", "bool"),
         # enable LwIPRxBuffer
         "LT_HAS_LWIP",
     ],
@@ -110,8 +111,6 @@ env["CPPPATH"].remove(
 # Sources
 sources_core = [
     # fmt: off
-    "+<" + CORE_DIR + "/cores/arduino/ard_socket.c>",
-    "+<" + CORE_DIR + "/cores/arduino/ard_ssl.c>",
     "+<" + CORE_DIR + "/cores/arduino/avr/dtostrf.c>",
     "+<" + CORE_DIR + "/cores/arduino/b64.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/cxxabi-compat.cpp>",
@@ -123,13 +122,11 @@ sources_core = [
     "+<" + CORE_DIR + "/cores/arduino/PowerManagement.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/RingBuffer.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/rtl_sys.cpp>",
-    "+<" + CORE_DIR + "/cores/arduino/server_drv.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_cache.c>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_check.c>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_gc.c>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_hydrogen.c>",
     "+<" + CORE_DIR + "/cores/arduino/spiffs/spiffs_nucleus.c>",
-    "+<" + CORE_DIR + "/cores/arduino/ssl_drv.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/Tone.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/WebSocketClient.cpp>",
     "+<" + CORE_DIR + "/cores/arduino/WInterrupts.c>",
@@ -170,6 +167,7 @@ sources_libs = [
     "+<" + CORE_DIR +"/libraries/Flash/Flash.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFi.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiAP.cpp>",
+    "+<" + CORE_DIR +"/libraries/WiFi/WiFiClient.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiGeneric.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiScan.cpp>",
     "+<" + CORE_DIR +"/libraries/WiFi/WiFiSTA.cpp>",

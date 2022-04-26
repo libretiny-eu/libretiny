@@ -2,15 +2,8 @@
 
 #include "api/Flash.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-#include <flash_api.h>
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
+struct flash_s;
+typedef struct flash_s flash_t;
 
 class FlashClass : public IFlashClass {
   private:

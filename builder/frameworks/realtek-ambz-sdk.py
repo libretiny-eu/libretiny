@@ -70,7 +70,11 @@ env.Replace(
         "CONFIG_PLATFORM_8711B",
         ("F_CPU", "166000000L"),
         ("LWIP_TIMEVAL_PRIVATE", "0"),
-        ("LWIP_NETIF_HOSTNAME", "1"),
+        ("LWIP_NETIF_HOSTNAME", "1"),  # to support hostname changing
+        ("LWIP_PROVIDE_ERRNO", "1"),  # for extern int errno and codes
+        ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
+        ("INT_MAX", "2147483647"),  # for RECV_BUFSIZE_DEFAULT
+        ("ERRNO", "1"),  # for LwIP
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",

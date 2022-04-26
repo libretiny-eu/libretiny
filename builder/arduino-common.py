@@ -16,7 +16,7 @@ env.Prepend(
     CPPPATH=[
         # fmt: off
         join(API_DIR),
-        join(LT_API_DIR), # for libretuya-api
+        join(LT_API_DIR),
         # fmt: on
     ]
 )

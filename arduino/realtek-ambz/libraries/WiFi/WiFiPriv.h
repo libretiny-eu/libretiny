@@ -4,7 +4,19 @@
 extern "C" {
 #endif // __cplusplus
 
-#define LWIP_NETIF_HOSTNAME 1 // this is defined in PIO builder
+// these are defined in PIO builder (for IDE to understand)
+#define LWIP_TIMEVAL_PRIVATE 0
+#define LWIP_NETIF_HOSTNAME	 1
+// this should define all errno values, as well as the extern int
+#define LWIP_PROVIDE_ERRNO	 1
+#define LWIP_SO_RCVBUF		 1
+
+#define MAX_SOCK_NUM				4
+#define WIFI_CLIENT_CONNECT_TIMEOUT 3000
+#define WIFI_CLIENT_READ_TIMEOUT	3000
+#define WIFI_CLIENT_WRITE_RETRY		10
+#define WIFI_CLIENT_SELECT_TIMEOUT	1000
+#define WIFI_CLIENT_FLUSH_BUF_SIZE	1024
 
 #include <autoconf.h>
 #include <dhcp/dhcps.h>
@@ -12,6 +24,7 @@ extern "C" {
 #include <lwip/dns.h>
 #include <lwip/err.h>
 #include <lwip_netconf.h>
+#include <sys/time.h>
 #include <wifi_conf.h>
 #include <wifi_constants.h>
 #include <wifi_structures.h>

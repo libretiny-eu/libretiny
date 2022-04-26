@@ -1,5 +1,17 @@
 #include "Flash.h"
 
+#include <Arduino.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+#include <flash_api.h>
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
 FlashClass::FlashClass() {
 	flash = NULL;
 }

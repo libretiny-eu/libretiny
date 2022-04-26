@@ -24,41 +24,46 @@
 
 class IWiFiClient : public Client {
   public:
-	IWiFiClient(int fd) {}
+	IWiFiClient() {}
 
-	int connect(IPAddress ip, uint16_t port, int32_t timeout);
-	int connect(const char *host, uint16_t port, int32_t timeout);
+	IWiFiClient(int sock) {}
 
-	size_t write(Stream &stream);
+	virtual int connect(IPAddress ip, uint16_t port, int32_t timeout)	  = 0;
+	virtual int connect(const char *host, uint16_t port, int32_t timeout) = 0;
 
-	int fd() const;
-	int socket();
-	int setTimeout(uint32_t seconds);
+	virtual size_t write(Stream &stream) = 0;
 
-	IWiFiClient &operator=(const WiFiClient &other);
+	virtual int fd() const					 = 0;
+	virtual int socket()					 = 0;
+	virtual int setTimeout(uint32_t seconds) = 0;
 
-	bool operator==(const bool value) {
+	virtual IWiFiClient &operator=(const IWiFiClient &other) = 0;
+	virtual bool operator==(const IWiFiClient &other) const	 = 0;
+
+	operator bool() {
+		return connected();
+	}
+
+	virtual bool operator==(const bool value) {
 		return bool() == value;
 	}
 
-	bool operator!=(const bool value) {
+	virtual bool operator!=(const bool value) {
 		return bool() != value;
 	}
 
-	bool operator==(const IWiFiClient &);
-
-	bool operator!=(const IWiFiClient &rhs) {
-		return !this->operator==(rhs);
+	virtual bool operator!=(const IWiFiClient &other) {
+		return !this->operator==(other);
 	};
 
-	IPAddress remoteIP() const;
-	IPAddress remoteIP(int fd) const;
-	uint16_t remotePort() const;
-	uint16_t remotePort(int fd) const;
-	IPAddress localIP() const;
-	IPAddress localIP(int fd) const;
-	uint16_t localPort() const;
-	uint16_t localPort(int fd) const;
+	virtual IPAddress remoteIP() const			= 0;
+	virtual IPAddress remoteIP(int sock) const	= 0;
+	virtual uint16_t remotePort() const			= 0;
+	virtual uint16_t remotePort(int sock) const = 0;
+	virtual IPAddress localIP() const			= 0;
+	virtual IPAddress localIP(int sock) const	= 0;
+	virtual uint16_t localPort() const			= 0;
+	virtual uint16_t localPort(int sock) const	= 0;
 
 	using Print::write;
 };
