@@ -23,8 +23,8 @@
 
 #include <stdint.h>
 
-#include <IPv6Address.h>
 #include <api/IPAddress.h>
+#include <api/IPv6Address.h>
 #include <api/Print.h>
 
 #include "WiFiType.h"

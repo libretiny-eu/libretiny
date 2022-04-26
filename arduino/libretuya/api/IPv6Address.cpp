@@ -18,8 +18,9 @@
  */
 
 #include <Arduino.h>
-#include <IPv6Address.h>
 #include <api/Print.h>
+
+#include "IPv6Address.h"
 
 IPv6Address::IPv6Address()
 {
