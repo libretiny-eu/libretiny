@@ -5,6 +5,8 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 	if (!enableAP(true))
 		return false;
 
+	vTaskDelay(20);
+
 	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32)
 		return false;
 

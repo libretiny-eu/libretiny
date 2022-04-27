@@ -12,6 +12,7 @@ class WiFiClient : public IWiFiClient {
   public:
 	WiFiClient();
 	WiFiClient(int sock);
+	~WiFiClient();
 
 	int connect(IPAddress ip, uint16_t port);
 	int connect(const char *host, uint16_t port);

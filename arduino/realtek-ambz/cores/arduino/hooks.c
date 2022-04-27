@@ -28,7 +28,12 @@
 static void __empty() {
 	// Empty
 }
-void yield(void) __attribute__ ((weak, alias("__empty")));
+
+#include "cmsis_os.h"
+
+void yield(void) {
+  taskYIELD();
+}
 
 /**
  * SysTick hook

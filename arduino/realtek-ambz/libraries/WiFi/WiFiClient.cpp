@@ -2,7 +2,6 @@
 #include "WiFiPriv.h"
 
 WiFiClient::WiFiClient() {
-	DiagPrintf("WiFiClient()\r\n");
 	_sock	   = -1;
 	_connected = false;
 	_rxBuffer  = NULL;
@@ -14,6 +13,10 @@ WiFiClient::WiFiClient(int sock) {
 	_connected = true;
 	_rxBuffer  = new LwIPRxBuffer(sock);
 	_timeout   = WIFI_CLIENT_CONNECT_TIMEOUT;
+}
+
+WiFiClient::~WiFiClient() {
+	stop();
 }
 
 WiFiClient &WiFiClient::operator=(const IWiFiClient &other) {
@@ -254,14 +257,14 @@ void WiFiClient::stop() {
 		lwip_close(_sock);
 	_sock	   = -1;
 	_connected = false;
-	free(_rxBuffer);
+	delete _rxBuffer;
 	_rxBuffer = NULL;
 }
 
 uint8_t WiFiClient::connected() {
 	if (_connected) {
 		uint8_t dummy;
-		if (lwip_recv(_sock, &dummy, 0, MSG_DONTWAIT) < 0) {
+		if (lwip_recv(_sock, &dummy, 0, MSG_DONTWAIT) <= 0) {
 			switch (errno) {
 				case EWOULDBLOCK:
 				case ENOENT: // caused by vfs

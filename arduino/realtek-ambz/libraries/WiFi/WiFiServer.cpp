@@ -51,7 +51,7 @@ WiFiClient WiFiServer::accept() {
 		return WiFiClient();
 
 	int sock;
-	if (_sockAccepted) {
+	if (_sockAccepted >= 0) {
 		sock		  = _sockAccepted;
 		_sockAccepted = -1;
 	} else {
