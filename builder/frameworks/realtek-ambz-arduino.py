@@ -17,13 +17,13 @@ ldscript = board.get("build.ldscript_arduino")
 
 SDK_DIR = platform.get_package_dir("framework-realtek-amb1")
 BOARD_DIR = join(platform.get_dir(), "boards", variant)
-FIXUPS_DIR = join(platform.get_dir(), "fixups", "realtek-ambz")
 PLATFORM_DIR = join(platform.get_dir(), "platform", "realtek-ambz")
+FIXUPS_DIR = join(PLATFORM_DIR, "fixups")
 CORE_DIR = join(platform.get_dir(), "arduino", "realtek-ambz")
 assert isdir(SDK_DIR)
 assert isdir(env.subst(BOARD_DIR))
-assert isdir(env.subst(FIXUPS_DIR))
 assert isdir(env.subst(PLATFORM_DIR))
+assert isdir(env.subst(FIXUPS_DIR))
 assert isdir(env.subst(CORE_DIR))
 
 # Flags

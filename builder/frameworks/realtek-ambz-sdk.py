@@ -13,12 +13,12 @@ ldscript = board.get("build.ldscript_sdk")
 
 SDK_DIR = platform.get_package_dir("framework-realtek-amb1")
 BOARD_DIR = join(platform.get_dir(), "boards", variant)
-FIXUPS_DIR = join(platform.get_dir(), "fixups", "realtek-ambz")
 PLATFORM_DIR = join(platform.get_dir(), "platform", "realtek-ambz")
+FIXUPS_DIR = join(PLATFORM_DIR, "fixups")
 assert isdir(SDK_DIR)
 assert isdir(env.subst(BOARD_DIR))
-assert isdir(env.subst(FIXUPS_DIR))
 assert isdir(env.subst(PLATFORM_DIR))
+assert isdir(env.subst(FIXUPS_DIR))
 
 flash_addr = board.get("build.amb_flash_addr")
 flash_ota1_offset = env.subst("$FLASH_OTA1_OFFSET")
@@ -110,7 +110,6 @@ env.Append(
         # fmt: off
         join(BOARD_DIR),
         join(FIXUPS_DIR),
-        join(PLATFORM_DIR),
         join(SDK_DIR, "project", "realtek_amebaz_va0_example", "inc"),
         join(SDK_DIR, "component", "os", "freertos"),
         join(SDK_DIR, "component", "os", "freertos", "freertos_v8.1.2", "Source", "include"),

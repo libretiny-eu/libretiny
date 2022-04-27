@@ -78,8 +78,9 @@ arduino/
 │  ├─ cores/                        Core files
 │  ├─ libraries/                    Supported built-in libraries
 ├─ libretuya/
-│  ├─ api/                      Library interfaces (.h) for LibreTuya Arduino cores
-│  ├─ <library name>.cpp        Built-in platform-independent libraries
+│  ├─ api/                      LibreTuya API for Arduino frameworks
+│  ├─ compat/                   Fixes for compatibility with ESP32 framework
+│  ├─ libraries/                Built-in platform-independent libraries
 boards/
 ├─ <board name>/                Board-specific code
 │  ├─ variant.cpp                   Arduino variant initialization
@@ -89,13 +90,15 @@ builder/
 ├─ frameworks/                  Framework builders for PlatformIO
 │  ├─ <platform name>-sdk.py        Vanilla SDK build system
 │  ├─ <platform name>-arduino.py    Arduino Core build system
+├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
 ├─ main.py                      Main PlatformIO builder
-fixups/
-├─ <platform name>/             Code fix-ups to replace SDK parts
+docs/                           Project documentation, guides, tips, etc.
 platform/
-├─ <platform name>/             Other platform-specific files
+├─ <platform name>/             Platform-specific configurations
 │  ├─ bin/                          Binary blobs (bootloaders, etc.)
+│  ├─ fixups/                       Code fix-ups to replace SDK parts
 │  ├─ ld/                           Linker scripts
+│  ├─ openocd/                      OpenOCD configuration files
 tools/
 ├─ <tool name>/                 Tools used during the build
 platform.json                   PlatformIO manifest
@@ -133,7 +136,7 @@ As such, there are numerous CPUs with the same numbers but different series, whi
 - RTL8722DM (found in ambd_arduino)
 - and probably many more
 
-Different Ameba series are not compatible with each other. Apparently, there isn't a public SDK for AmebaZ that can support C++ properly (yet).
+Different Ameba series are not compatible with each other. Apparently, there isn't an official public SDK for AmebaZ that can support C++ properly.
 
 ## Arduino Core support status
 
@@ -171,3 +174,18 @@ Legend:
 - ❓ untested
 - ❌ not implemented (yet?)
 - \- not applicable
+
+## License
+
+See [LICENSE](LICENSE). Project is licensed under MIT License.
+
+Parts of the code may come from third parties, vendor SDKs or other open-source projects.
+Most of these files are marked with appropriate copyright/author/license notices.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
