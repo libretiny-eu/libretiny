@@ -37,5 +37,6 @@ if flash_layout:
     env.Replace(**defines)
 
 target_elf = env.BuildProgram()
-target_fw = env.DumpFirmwareBinary("firmware.bin", target_elf)
+target_fw = env.DumpFirmwareBinary("$IMG_FW", target_elf)
+env.AddPlatformTarget("upload", target_fw, env["UPLOAD_ACTIONS"], "Upload")
 Default(target_fw)

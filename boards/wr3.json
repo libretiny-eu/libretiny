@@ -37,8 +37,15 @@
 		"realtek-ambz-arduino"
 	],
 	"upload": {
+		"flash_size": "2MB",
 		"maximum_size": 806912,
-		"maximum_ram_size": 262144
+		"maximum_ram_size": 262144,
+		"require_upload_port": true,
+		"speed": 1500000,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
 	},
 	"name": "WR3 Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1",

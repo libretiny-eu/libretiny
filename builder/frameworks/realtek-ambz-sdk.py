@@ -1,6 +1,7 @@
+import sys
 from os.path import isdir, join
 
-from SCons.Script import Builder, DefaultEnvironment
+from SCons.Script import AlwaysBuild, Builder, DefaultEnvironment
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
@@ -553,6 +554,31 @@ actions.append(env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"))
 actions.append(env.VerboseAction("true", f"- OTA1 flash offset: {flash_ota1_offset}"))
 actions.append(env.VerboseAction("true", f"- OTA2 flash offset: {flash_ota2_offset}"))
 
+# Uploader
+upload_protocol = env.subst("$UPLOAD_PROTOCOL")
+upload_source = ""
+upload_actions = []
+# from platform-espressif32/builder/main.py
+if upload_protocol == "uart":
+    env.Replace(
+        UPLOADER=join(platform.get_dir(), "tools", "rtltool.py"),
+        UPLOADERFLAGS=[
+            "--port",
+            "$UPLOAD_PORT",
+            "--go",  # run firmware after uploading
+            "wf",  # Write a binary file to Flash data
+        ],
+        UPLOADCMD='"$PYTHONEXE" "$UPLOADER" $UPLOADERFLAGS $FLASH_OTA1_OFFSET "$BUILD_DIR/$IMG_FW"',
+    )
+    upload_actions = [
+        env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
+        env.VerboseAction("$UPLOADCMD", "Uploading $IMG_FW"),
+    ]
+elif upload_protocol == "custom":
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $IMG_FW")]
+else:
+    sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
+
 # Clone env to ignore options from child projects
 envsdk = env.Clone()
 
@@ -576,4 +602,5 @@ env.Append(
     BUILDERS=dict(
         DumpFirmwareBinary=Builder(action=actions),
     ),
+    UPLOAD_ACTIONS=upload_actions,
 )
