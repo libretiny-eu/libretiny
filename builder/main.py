@@ -14,6 +14,7 @@ env.Replace(
     AS="arm-none-eabi-gcc",
     CC="arm-none-eabi-gcc",
     CXX="arm-none-eabi-g++",
+    GDB="arm-none-eabi-gdb",
     NM="arm-none-eabi-gcc-nm",
     LINK="arm-none-eabi-gcc",
     LD="arm-none-eabi-gcc",

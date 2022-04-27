@@ -9,6 +9,19 @@
 		"amb_flash_addr": "0x08000000",
 		"amb_boot_all": "boot_all_77F7.bin"
 	},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "amebaz.cfg",
+		"gdb_init": [
+			"mem 0x8000000 0x8010000 ro"
+		]
+	},
 	"flash": {
 		"boot_xip": "0x000000+0x4000",
 		"boot_ram": "0x004000+0x4000",

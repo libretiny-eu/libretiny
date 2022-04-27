@@ -1,7 +1,12 @@
+from os.path import dirname
+
+from platformio.debug.config.base import DebugConfigBase
+from platformio.debug.exception import DebugInvalidOptionsError
 from platformio.managers.platform import PlatformBase
 from platformio.package.exception import MissingPackageManifestError
 from platformio.package.manager.base import BasePackageManager
 from platformio.package.meta import PackageItem, PackageSpec
+from platformio.platform.board import PlatformBoardConfig
 
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
@@ -63,11 +68,13 @@ class LibretuyaPlatform(PlatformBase):
     def configure_default_packages(self, options, targets):
         framework = options.get("pioframework")[0]
         # patch find_pkg root to ignore missing manifests and save PackageSpec
-        BasePackageManager._find_pkg_root = BasePackageManager.find_pkg_root
-        BasePackageManager.find_pkg_root = find_pkg_root
+        if not hasattr(BasePackageManager, "_find_pkg_root"):
+            BasePackageManager._find_pkg_root = BasePackageManager.find_pkg_root
+            BasePackageManager.find_pkg_root = find_pkg_root
         # patch load_manifest to generate manifests from PackageSpec
-        BasePackageManager._load_manifest = BasePackageManager.load_manifest
-        BasePackageManager.load_manifest = load_manifest
+        if not hasattr(BasePackageManager, "_load_manifest"):
+            BasePackageManager._load_manifest = BasePackageManager.load_manifest
+            BasePackageManager.load_manifest = load_manifest
 
         # set specific compiler versions
         if framework.startswith("realtek-ambz"):
@@ -82,3 +89,82 @@ class LibretuyaPlatform(PlatformBase):
         libretuya_packages = self.packages
 
         return super().configure_default_packages(options, targets)
+
+    def get_boards(self, id_=None):
+        result = PlatformBase.get_boards(self, id_)
+        if not result:
+            return result
+        if id_:
+            return self._add_default_debug_tools(result)
+        else:
+            for key, value in result.items():
+                result[key] = self._add_default_debug_tools(value)
+        return result
+
+    def _add_default_debug_tools(self, board: PlatformBoardConfig):
+        # inspired by platform-ststm32/platform.py
+        debug = board.manifest.get("debug", {})
+        if not debug:
+            return board
+        protocols = debug.get("protocols", [])
+        if "tools" not in debug:
+            debug["tools"] = {}
+        if "custom" not in debug["tools"]:
+            debug["tools"]["custom"] = {}
+        init = debug.get("gdb_init", [])
+
+        for link in protocols:
+            if link == "openocd":
+                args = ["-s", "$PACKAGE_DIR/scripts"]
+                if debug.get("openocd_config"):
+                    args.extend(
+                        [
+                            "-f",
+                            "$LTPATH/platform/$LTPLATFORM/openocd/%s"
+                            % debug.get("openocd_config"),
+                        ]
+                    )
+                debug["tools"][link] = {
+                    "server": {
+                        "package": "tool-openocd",
+                        "executable": "bin/openocd",
+                        "arguments": args,
+                    },
+                    "extra_cmds": init,
+                }
+            else:
+                continue
+            debug["tools"][link]["default"] = link == debug.get("protocol", "")
+
+        debug["tools"]["custom"]["extra_cmds"] = init
+
+        board.manifest["debug"] = debug
+        return board
+
+    def configure_debug_session(self, debug_config: DebugConfigBase):
+        opts = debug_config.env_options
+        server = debug_config.server
+        lt_path = dirname(__file__)
+        lt_platform = opts["framework"][0].rpartition("-")[0]
+        if not server:
+            debug_tool = opts.get("debug_tool", "custom")
+            board = opts.get("board", "<unknown>")
+            if debug_tool == "custom":
+                return
+            exc = DebugInvalidOptionsError(
+                f"[LibreTuya] Debug tool {debug_tool} is not supported by board {board}."
+            )
+            exc.MESSAGE = ""
+            raise exc
+        if "arguments" in server:
+            # allow setting interface via platformio.ini
+            if opts.get("openocd_interface"):
+                server["arguments"] = [
+                    "-f",
+                    "interface/%s.cfg" % opts.get("openocd_interface"),
+                ] + server["arguments"]
+            # replace $LTPLATFORM with actual name
+            server["arguments"] = [
+                arg.replace("$LTPLATFORM", lt_platform).replace("$LTPATH", lt_path)
+                for arg in server["arguments"]
+            ]
