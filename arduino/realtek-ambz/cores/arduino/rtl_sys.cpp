@@ -112,7 +112,7 @@ void * realloc(void *pv, size_t size)
 	return pvPortReAlloc(pv, size);
 }
 
-void *operator new(size_t size)
+/* void *operator new(size_t size)
 {
 	void * ret;
 	if((ret = zalloc(size)) == NULL) {
@@ -140,7 +140,7 @@ void operator delete(void * ptr)
 void operator delete[](void * ptr)
 {
     free(ptr);
-}
+} */
 
 /*
 extern "C" void __cxa_pure_virtual(void) __attribute__ ((__noreturn__));
