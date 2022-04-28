@@ -9,11 +9,13 @@ int32_t WiFiClass::channel() {
 
 bool WiFiClass::mode(WiFiMode mode) {
 	WiFiMode currentMode = getMode();
+	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
 	if (mode == currentMode)
 		return true;
 
 	if (!currentMode && mode && !_initialized) {
 		// initialize wifi first
+		LT_I("Initializing LwIP");
 		LwIP_Init();
 		reset_wifi_struct();
 		// wifi_manager_init(); // these are events!
@@ -21,13 +23,18 @@ bool WiFiClass::mode(WiFiMode mode) {
 	}
 	if (currentMode) {
 		// stop wifi to change mode
+		LT_D_WG("Stopping WiFi to change mode");
 		if (wifi_off() != RTW_SUCCESS)
 			return false;
 		vTaskDelay(20);
+		if (mode == WIFI_MODE_NULL)
+			return false;
 	}
 
-	if (wifi_on((rtw_mode_t)mode) != RTW_SUCCESS)
+	if (wifi_on((rtw_mode_t)mode) != RTW_SUCCESS) {
+		LT_E("Error while changing mode(%u)", mode);
 		return false;
+	}
 	return true;
 }
 
@@ -62,6 +69,7 @@ bool WiFiClass::enableAP(bool enable) {
 }
 
 bool WiFiClass::setSleep(bool enable) {
+	LT_D_WG("WiFi sleep mode %u", enable);
 	if (enable)
 		if (wifi_enable_powersave() != RTW_SUCCESS)
 			return false;

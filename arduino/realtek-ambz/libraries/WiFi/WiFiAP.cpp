@@ -7,11 +7,15 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	vTaskDelay(20);
 
-	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32)
+	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
+		LT_W("SSID not specified or too long");
 		return false;
+	}
 
-	if (passphrase && strlen(passphrase) < 8)
+	if (passphrase && strlen(passphrase) < 8) {
+		LT_W("Passphrase too short");
 		return false;
+	}
 
 	strcpy((char *)ap.ssid.val, ssid);
 	ap.ssid.len = strlen(ssid);
@@ -29,6 +33,8 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 	}
 
 	dhcps_deinit();
+
+	LT_I("Creating SoftAP %s", ssid);
 
 	int ret;
 	if (!ssidHidden) {
@@ -51,8 +57,10 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 		);
 	}
 
-	if (ret < 0)
+	if (ret < 0) {
+		LT_E("SoftAP failed; ret=%d", ret);
 		return false;
+	}
 
 	uint8_t timeout = 20;
 	unsigned char essid[33];

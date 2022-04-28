@@ -15,8 +15,10 @@ bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
 		_port = port;
 
 	_sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (_sock < 0)
+	if (_sock < 0) {
+		LT_E("Socket failed; errno=%d", errno);
 		return false;
+	}
 
 	int enable = reuseAddr;
 	lwip_setsockopt(_sock, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
@@ -26,11 +28,17 @@ bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
 	addr.sin_addr.s_addr = INADDR_ANY;
 	addr.sin_port		 = htons(_port);
 
-	if (lwip_bind(_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	if (lwip_bind(_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+		LT_E("Bind failed; errno=%d", errno);
 		return false;
+	}
 
-	if (lwip_listen(_sock, _maxClients) < 0)
+	if (lwip_listen(_sock, _maxClients) < 0) {
+		LT_E("Bind failed; errno=%d", errno);
 		return false;
+	}
+
+	LT_I("Server running on :%hu", _port);
 
 	lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
 	_active		  = true;
@@ -74,6 +82,7 @@ WiFiClient WiFiServer::accept() {
 				// and receive data, so LwIP still sees a connected client that sends nothing. At least
 				// that's what I understand. And any loop that doesn't call delay() seems to block the TCP
 				// stack completely and prevents it from even being pinged.
+				LT_D_WS("Got client");
 				delay(5);
 				return WiFiClient(sock);
 			}

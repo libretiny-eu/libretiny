@@ -23,7 +23,8 @@
 #include "WCharacterFixup.h"
 #endif
 #define PinMode PinModeArduino // this conflicts with SDK enum
-#include "api/ArduinoAPI.h"
+#include <api/ArduinoAPI.h>
+#include <api/LibreTuyaAPI.h>
 #undef PinMode
 
 #ifdef __cplusplus

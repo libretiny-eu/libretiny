@@ -86,6 +86,7 @@ void main_task( void const *arg )
  */
 int main( void )
 {
+    LT_BANNER();
     init();
 
     __libc_init_array();

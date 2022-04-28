@@ -76,6 +76,7 @@ env.Replace(
         ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
         ("INT_MAX", "2147483647"),  # for RECV_BUFSIZE_DEFAULT
         ("ERRNO", "1"),  # for LwIP
+        ("vprintf", "rtl_vprintf"),
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",

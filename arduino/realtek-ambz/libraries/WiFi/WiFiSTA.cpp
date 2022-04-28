@@ -10,11 +10,15 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 	if (!enableSTA(true))
 		return WL_CONNECT_FAILED;
 
-	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32)
+	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
+		LT_W("SSID not specified or too long");
 		return WL_CONNECT_FAILED;
+	}
 
-	if (passphrase && strlen(passphrase) > 64)
+	if (passphrase && strlen(passphrase) > 64) {
+		LT_W("Passphrase too long");
 		return WL_CONNECT_FAILED;
+	}
 
 	memset(wifi.bssid.octet, 0, ETH_ALEN);
 	strcpy((char *)wifi.ssid.val, ssid);
@@ -60,6 +64,8 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	int ret;
 	uint8_t dhcpRet;
 
+	LT_I("Connecting to %s", wifi.ssid.val);
+
 	if (!bssid) {
 		ret = wifi_connect(
 			(char *)wifi.ssid.val,
@@ -88,9 +94,11 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		dhcpRet = LwIP_DHCP(0, DHCP_START);
 		if (dhcpRet == DHCP_ADDRESS_ASSIGNED)
 			return true;
+		LT_E("DHCP failed; dhcpRet=%d", dhcpRet);
 		wifi_disconnect();
 		return false;
 	}
+	LT_E("Connection failed; ret=%d", ret);
 	return false;
 }
 

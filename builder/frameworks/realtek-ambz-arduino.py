@@ -61,6 +61,7 @@ env.Append(
         ("bool", "bool"),
         # enable LwIPRxBuffer
         "LT_HAS_LWIP",
+        ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
         ("zalloc", "os_zalloc"),
     ],
     LINKFLAGS=[

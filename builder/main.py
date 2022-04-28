@@ -24,6 +24,12 @@ env.Replace(
     SIZETOOL="arm-none-eabi-size",
 )
 
+env.Append(
+    CPPDEFINES=[
+        ("LT_VERSION", "0.1.0"),
+    ]
+)
+
 # Flash layout defines
 flash_layout: dict = board.get("flash")
 if flash_layout:

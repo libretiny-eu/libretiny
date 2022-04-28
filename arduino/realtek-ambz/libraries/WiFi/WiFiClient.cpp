@@ -2,6 +2,7 @@
 #include "WiFiPriv.h"
 
 WiFiClient::WiFiClient() {
+	LT_V_WC("WiFiClient()");
 	_sock	   = -1;
 	_connected = false;
 	_rxBuffer  = NULL;
@@ -9,6 +10,7 @@ WiFiClient::WiFiClient() {
 }
 
 WiFiClient::WiFiClient(int sock) {
+	LT_V_WC("WiFiClient(%d)", sock);
 	_sock	   = sock;
 	_connected = true;
 	_rxBuffer  = new LwIPRxBuffer(sock);
@@ -16,6 +18,7 @@ WiFiClient::WiFiClient(int sock) {
 }
 
 WiFiClient::~WiFiClient() {
+	LT_V_WC("~WiFiClient()");
 	stop();
 }
 
@@ -69,19 +72,19 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 
 	int res = lwip_connect(sock, (struct sockaddr *)&addr, sizeof(addr));
 	if (res < 0 && errno != EINPROGRESS) {
-		printf("lwip_connect() errno %d\r\n", errno);
+		LT_E("Connect failed; errno=%d", errno);
 		lwip_close(sock);
 		return -1;
 	}
 
 	res = lwip_select(sock + 1, NULL, &fdset, NULL, timeout < 0 ? NULL : &tv);
 	if (res < 0) {
-		printf("lwip_select() errno %d\r\n", errno);
+		LT_E("Select failed; errno=%d", errno);
 		lwip_close(sock);
 		return 0;
 	}
 	if (res == 0) {
-		printf("lwip_select() timeout errno %d\r\n", errno);
+		LT_E("Select timeout; errno=%d", errno);
 		lwip_close(sock);
 		return 0;
 	}
@@ -91,6 +94,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	res			  = lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &sockerr, &len);
 
 	if (res < 0 || sockerr != 0) {
+		LT_E("Socket error; res=%d, sockerr=%d", res, sockerr);
 		lwip_close(sock);
 		return 0;
 	}
@@ -151,6 +155,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
 		retry--;
 
 		if (lwip_select(_sock + 1, NULL, &fdset, NULL, &tv) < 0) {
+			LT_W("Select failed; errno=%d", errno);
 			return 0;
 		}
 
@@ -166,6 +171,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
 					retry = WIFI_CLIENT_WRITE_RETRY;
 				}
 			} else if (res < 0 && errno != EAGAIN) {
+				LT_W("Send failed; errno=%d", errno);
 				setWriteError(res);
 				_connected = false;
 				retry	   = 0;
@@ -253,6 +259,7 @@ void WiFiClient::flush() {
 }
 
 void WiFiClient::stop() {
+	LT_V_WC("stop()");
 	if (_sock != -1)
 		lwip_close(_sock);
 	_sock	   = -1;
@@ -268,6 +275,7 @@ uint8_t WiFiClient::connected() {
 			switch (errno) {
 				case EWOULDBLOCK:
 				case ENOENT: // caused by vfs
+				case 0:
 					_connected = true;
 					break;
 				case ENOTCONN:
@@ -275,9 +283,11 @@ uint8_t WiFiClient::connected() {
 				case ECONNRESET:
 				case ECONNREFUSED:
 				case ECONNABORTED:
+					LT_W("Connection closed; errno=%d", errno);
 					_connected = false;
 					break;
 				default:
+					LT_I("Connection status unknown; errno=%d", errno);
 					_connected = true;
 					break;
 			}
