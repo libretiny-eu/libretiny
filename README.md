@@ -155,10 +155,10 @@ SPI                 | ❌
 Wire                | ❌
 **OTHER LIBRARIES** |
 Wi-Fi Station       | ✔️
-Wi-Fi Access Point  | ❌
+Wi-Fi Access Point  | ✔️
 Wi-Fi Events        | ❌
 Wi-Fi Client (SSL)  | ✔️ (❌)
-Wi-Fi Server        | ❌
+Wi-Fi Server        | ✔️
 SPIFFS              | ❌
 BLE                 | -
 HTTP                | ❌
