@@ -76,7 +76,7 @@ void main_task( void const *arg )
     {
         loop();
         if (serialEventRun) serialEventRun();
-        osThreadYield();
+        yield();
     }
 }
 

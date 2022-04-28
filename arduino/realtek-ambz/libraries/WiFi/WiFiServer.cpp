@@ -65,6 +65,16 @@ WiFiClient WiFiServer::accept() {
 		if (lwip_setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable)) == ERR_OK) {
 			enable = _noDelay;
 			if (lwip_setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable)) == ERR_OK) {
+				// HOTFIX: allow the TCP thread to receive data
+				// I'm not sure what's happening there, so this should probably be fixed properly.
+				// When a connection arrives, sometimes TCP hasn't received anything yet. This causes
+				// calling WiFiClient::connected() check for lwip_recv(), which returns EWOULDBLOCK
+				// as the client is still connected. The problem is that there's basically an infinite loop
+				// created: nowhere in that code is a yield()/delay() that would allow TCP thread to work
+				// and receive data, so LwIP still sees a connected client that sends nothing. At least
+				// that's what I understand. And any loop that doesn't call delay() seems to block the TCP
+				// stack completely and prevents it from even being pinged.
+				delay(5);
 				return WiFiClient(sock);
 			}
 		}

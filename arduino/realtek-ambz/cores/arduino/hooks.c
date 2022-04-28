@@ -32,6 +32,7 @@ static void __empty() {
 #include "cmsis_os.h"
 
 void yield(void) {
+  vTaskDelay(1);
   taskYIELD();
 }
 
