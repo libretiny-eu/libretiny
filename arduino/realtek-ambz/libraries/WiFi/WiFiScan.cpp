@@ -34,7 +34,11 @@ rtw_result_t WiFiClass::scanHandler(rtw_scan_handler_result_t *result) {
 int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint32_t maxMsPerChannel, uint8_t channel) {
 	if (_scanning)
 		return WIFI_SCAN_RUNNING;
+	if (wifi_mode == WIFI_MODE_NULL)
+		enableSTA(true);
 	scanDelete();
+
+	LT_I("Starting WiFi scan");
 
 	if (wifi_scan_networks(scanHandler, this) != RTW_SUCCESS)
 		return WIFI_SCAN_FAILED;
@@ -42,6 +46,7 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	_scanning = true;
 
 	if (!async) {
+		LT_I("Waiting for results");
 		xSemaphoreTake(_scanSem, 1); // reset the semaphore quickly
 		xSemaphoreTake(_scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
 		return _netCount;
