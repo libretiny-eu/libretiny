@@ -1,0 +1,23 @@
+site_name: LibreTuya
+docs_dir: .
+site_url: https://kuba2k2.github.io/libretuya/
+repo_url: https://github.com/kuba2k2/libretuya
+theme:
+  name: material
+plugins:
+  - same-dir
+markdown_extensions:
+  - md_in_html
+
+nav:
+  - "Home": "README.md"
+  - "Configuration": "docs/config.md"
+  - "Libraries":
+      - "Built-in": "docs/libs-built-in.md"
+      - "Third party": "docs/libs-3rd-party.md"
+  - "Platforms":
+      - "Realtek AmebaZ Series":
+          - "Boards":
+              - "WR3": "boards/wr3/README.md"
+          - "Debugging": "docs/platform/realtek/debugging.md"
+          - "Exception decoder": "docs/platform/realtek/exception-decoder.md"

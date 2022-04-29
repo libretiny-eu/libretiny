@@ -1,6 +1,6 @@
 # LibreTuya
 
-<div align="center">
+<div align="center" markdown>
 
 [![Discord](https://img.shields.io/discord/967863521511608370?color=%235865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/SyGCB9Xwtf)
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/kuba2k2/platform/libretuya.svg)](https://registry.platformio.org/platforms/kuba2k2/libretuya)
@@ -25,7 +25,7 @@ LibreTuya also provides a common interface for all platform implementations. The
 1. [Install PlatformIO](https://platformio.org/platformio-ide)
 2. `platformio platform install libretuya`
 3. Create a project, build it and upload!
-4. See the [docs](docs/README.md) for any questions/problems.
+4. See the [docs](https://kuba2k2.github.io/libretuya/) for any questions/problems.
 
 ## Board List
 
@@ -133,12 +133,14 @@ Platform name  | Supported MCU(s)                                               
 ### Realtek Ameba
 
 The logic behind naming of Realtek chips and their series took me some time to figure out:
+
 - RTL8xxxA - Ameba1/Ameba Series
 - RTL8xxxB - AmebaZ Series
 - RTL8xxxC - AmebaZ2/ZII Series
 - RTL8xxxD - AmebaD Series
 
 As such, there are numerous CPUs with the same numbers but different series, which makes them require different code and SDKs.
+
 - [RTL8195AM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8195am)
 - RTL8710AF (found in amb1_arduino)
 - [RTL8711AM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8711am)
@@ -187,6 +189,7 @@ MQTT                | ✅
 SD                  | ❌
 
 Symbols:
+
 - ✔️ working
 - ✅ tested, external library
 - ❓ untested
@@ -195,6 +198,7 @@ Symbols:
 - \- not applicable
 
 Names:
+
 - Core functions - stuff like delay(), millis(), yield(), etc.
 - **CORE LIBRARIES** - included normally in all Arduino cores
 - **OTHER LIBRARIES** - included in ESP32 core or downloadable

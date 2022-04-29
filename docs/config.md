@@ -1,6 +1,6 @@
 # LibreTuya API Configuration
 
-Note: see [LibreTuyaConfig.h](../../arduino/libretuya/api/LibreTuyaConfig.h) for most options and their defaults.
+Note: see [LibreTuyaConfig.h](../arduino/libretuya/api/LibreTuyaConfig.h) for most options and their defaults.
 
 All options are configurable via C++ defines in PlatformIO project file. For example:
 ```ini

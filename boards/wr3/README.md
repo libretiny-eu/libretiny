@@ -2,7 +2,7 @@
 
 [Product page](https://developer.tuya.com/en/docs/iot/wifiwr1module?id=K9605tc0k90t3)
 
-- [Debugging](../../docs/platform/realtek/Debugging.md)
+- [Debugging](../../docs/platform/realtek/debugging.md)
 
 Parameter    | Value
 -------------|-------------------------
