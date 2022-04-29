@@ -2,6 +2,8 @@
 
 [Product page](https://developer.tuya.com/en/docs/iot/wifiwr1module?id=K9605tc0k90t3)
 
+- [Debugging](../../docs/platform/realtek/Debugging.md)
+
 Parameter    | Value
 -------------|-------------------------
 MCU          | RTL8710BN
@@ -24,8 +26,8 @@ No. | Pin   | Alt. function | PWM
 ----|-------|---------------|-----
 D0  | PA_22 |               | PWM5
 D1  | PA_19 |               |
-D2  | PA_14 |               | PWM0
-D3  | PA_15 |               | PWM1
+D2  | PA_14 | SWCLK         | PWM0
+D3  | PA_15 | SWDAT         | PWM1
 D4  | PA_0  |               | PWM2
 D5  | PA_20 |               |
 D6  | PA_29 | UART_Log_RXD  | PWM4
