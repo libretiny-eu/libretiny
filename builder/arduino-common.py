@@ -19,6 +19,9 @@ env.Prepend(
         join(API_DIR, "api", "deprecated"),
         join(LT_API_DIR),
         join(LT_API_DIR, "compat"),
+        join(LT_API_DIR, "libraries", "base64"),
+        join(LT_API_DIR, "libraries", "HTTPClient"),
+        join(LT_API_DIR, "libraries", "WiFiMulti"),
         # fmt: on
     ],
     CPPDEFINES=[
@@ -35,10 +38,8 @@ sources_api = [
 	"+<" + API_DIR + "/api/Print.cpp>",
 	"+<" + API_DIR + "/api/Stream.cpp>",
 	"+<" + API_DIR + "/api/String.cpp>",
-    "+<" + LT_API_DIR + "/api/IPv6Address.cpp>",
-    "+<" + LT_API_DIR + "/api/LibreTuyaAPI.cpp>",
-    "+<" + LT_API_DIR + "/api/lt_logger.c>",
-    "+<" + LT_API_DIR + "/api/LwIPRxBuffer.cpp>",
+    "+<" + LT_API_DIR + "/api/*.c*>",
+    "+<" + LT_API_DIR + "/libraries/**/*.c*>",
     # fmt: on
 ]
 

@@ -49,6 +49,31 @@ void lt_log(const uint8_t level, const char *format, ...);
 #define LT_F(...)
 #endif
 
+// ESP32 compat
+#define log_printf(...)		LT_I(__VA_ARGS__)
+#define log_v(...)			LT_V(__VA_ARGS__)
+#define log_d(...)			LT_D(__VA_ARGS__)
+#define log_i(...)			LT_I(__VA_ARGS__)
+#define log_w(...)			LT_W(__VA_ARGS__)
+#define log_e(...)			LT_E(__VA_ARGS__)
+#define log_n(...)			LT_E(__VA_ARGS__)
+#define isr_log_v(...)		LT_V(__VA_ARGS__)
+#define isr_log_d(...)		LT_D(__VA_ARGS__)
+#define isr_log_i(...)		LT_I(__VA_ARGS__)
+#define isr_log_w(...)		LT_W(__VA_ARGS__)
+#define isr_log_e(...)		LT_E(__VA_ARGS__)
+#define isr_log_n(...)		LT_E(__VA_ARGS__)
+#define ESP_LOGV(...)		LT_V(__VA_ARGS__)
+#define ESP_LOGD(...)		LT_D(__VA_ARGS__)
+#define ESP_LOGI(...)		LT_I(__VA_ARGS__)
+#define ESP_LOGW(...)		LT_W(__VA_ARGS__)
+#define ESP_LOGE(...)		LT_E(__VA_ARGS__)
+#define ESP_EARLY_LOGV(...) LT_V(__VA_ARGS__)
+#define ESP_EARLY_LOGD(...) LT_D(__VA_ARGS__)
+#define ESP_EARLY_LOGI(...) LT_I(__VA_ARGS__)
+#define ESP_EARLY_LOGW(...) LT_W(__VA_ARGS__)
+#define ESP_EARLY_LOGE(...) LT_E(__VA_ARGS__)
+
 #define LT_T_MOD(module, ...)                                                                                          \
 	do {                                                                                                               \
 		if (module) {                                                                                                  \
