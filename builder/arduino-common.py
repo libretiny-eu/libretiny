@@ -19,7 +19,11 @@ env.Prepend(
         join(LT_API_DIR),
         join(LT_API_DIR, "compat"),
         # fmt: on
-    ]
+    ],
+    CPPDEFINES=[
+        ("LT_VERSION", platform.version),
+        ("LT_BOARD", board.get("build.variant")),
+    ],
 )
 
 sources_api = [
