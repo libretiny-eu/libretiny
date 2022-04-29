@@ -1,5 +1,15 @@
 # LibreTuya
 
+<div align="center">
+
+[![Discord](https://img.shields.io/discord/967863521511608370?color=%235865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/SyGCB9Xwtf)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/kuba2k2/platform/libretuya.svg)](https://registry.platformio.org/platforms/kuba2k2/libretuya)
+![GitHub last commit](https://img.shields.io/github/last-commit/kuba2k2/libretuya)
+
+![RTL8710BN](https://img.shields.io/badge/-rtl8710bn-blue)
+
+</div>
+
 PlatformIO development platform for IoT modules manufactured by Tuya Inc.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
@@ -9,6 +19,13 @@ which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd 
 LibreTuya also provides a common interface for all platform implementations. The interface is based on ESP32 official libraries.
 
 **Note:** this project is work-in-progress.
+
+## Usage
+
+1. [Install PlatformIO](https://platformio.org/platformio-ide)
+2. `platformio platform install libretuya`
+3. Create a project, build it and upload!
+4. See the [docs](docs/README.md) for any questions/problems.
 
 ## Board List
 
