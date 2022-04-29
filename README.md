@@ -176,21 +176,28 @@ Wi-Fi Access Point  | ✔️
 Wi-Fi Events        | ❌
 Wi-Fi Client (SSL)  | ✔️ (❌)
 Wi-Fi Server        | ✔️
+NVS / Preferences   | ❌
 SPIFFS              | ❌
 BLE                 | -
 HTTP                | ❌
 NTP                 | ❌
 OTA                 | ❌
 MDNS                | ❌
-MQTT                | ❌
+MQTT                | ✅
 SD                  | ❌
 
-Legend:
+Symbols:
 - ✔️ working
-- ❗ broken
+- ✅ tested, external library
 - ❓ untested
+- ❗ broken
 - ❌ not implemented (yet?)
 - \- not applicable
+
+Names:
+- Core functions - stuff like delay(), millis(), yield(), etc.
+- **CORE LIBRARIES** - included normally in all Arduino cores
+- **OTHER LIBRARIES** - included in ESP32 core or downloadable
 
 ## License
 

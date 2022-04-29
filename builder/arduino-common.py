@@ -16,6 +16,7 @@ env.Prepend(
     CPPPATH=[
         # fmt: off
         join(API_DIR),
+        join(API_DIR, "api", "deprecated"),
         join(LT_API_DIR),
         join(LT_API_DIR, "compat"),
         # fmt: on
@@ -35,6 +36,7 @@ sources_api = [
 	"+<" + API_DIR + "/api/Stream.cpp>",
 	"+<" + API_DIR + "/api/String.cpp>",
     "+<" + LT_API_DIR + "/api/IPv6Address.cpp>",
+    "+<" + LT_API_DIR + "/api/LibreTuyaAPI.cpp>",
     "+<" + LT_API_DIR + "/api/lt_logger.c>",
     "+<" + LT_API_DIR + "/api/LwIPRxBuffer.cpp>",
     # fmt: on

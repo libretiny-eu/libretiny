@@ -34,3 +34,5 @@ extern "C" {
 		__LINE__,                                                                                                      \
 		"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__                        \
 	)
+
+extern char *strdup(const char *);
