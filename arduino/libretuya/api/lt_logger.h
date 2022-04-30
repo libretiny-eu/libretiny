@@ -77,14 +77,14 @@ void lt_log(const uint8_t level, const char *format, ...);
 #define LT_T_MOD(module, ...)                                                                                          \
 	do {                                                                                                               \
 		if (module) {                                                                                                  \
-			LT_T(__VA_ARGS__)                                                                                          \
+			LT_T(__VA_ARGS__);                                                                                         \
 		}                                                                                                              \
 	} while (0)
 
 #define LT_D_MOD(module, ...)                                                                                          \
 	do {                                                                                                               \
 		if (module) {                                                                                                  \
-			LT_D(__VA_ARGS__)                                                                                          \
+			LT_D(__VA_ARGS__);                                                                                         \
 		}                                                                                                              \
 	} while (0)
 

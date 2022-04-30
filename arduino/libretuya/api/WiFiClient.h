@@ -35,6 +35,10 @@ class IWiFiClient : public Client {
 
 	virtual size_t write(Stream &stream) = 0;
 
+	size_t write_P(PGM_P buffer, size_t size) {
+		return write((const uint8_t *)buffer, size);
+	}
+
 	virtual int fd() const					 = 0;
 	virtual int socket()					 = 0;
 	virtual int setTimeout(uint32_t seconds) = 0;

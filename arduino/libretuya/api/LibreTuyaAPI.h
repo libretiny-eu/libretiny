@@ -36,3 +36,7 @@ extern "C" {
 	)
 
 extern char *strdup(const char *);
+
+// ArduinCore-API doesn't define these anymore
+#define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
+#define PGM_VOID_P			const void *
