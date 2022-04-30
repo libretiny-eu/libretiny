@@ -2,12 +2,15 @@
 
 #include <api/LwIPRxBuffer.h>
 #include <api/WiFiClient.h>
+#include <memory>
+
+class SocketHandle;
 
 class WiFiClient : public IWiFiClient {
   private:
-	int _sock;
 	bool _connected;
-	LwIPRxBuffer *_rxBuffer;
+	std::shared_ptr<SocketHandle> _sock;
+	std::shared_ptr<LwIPRxBuffer> _rxBuffer;
 
   public:
 	WiFiClient();
@@ -35,9 +38,7 @@ class WiFiClient : public IWiFiClient {
 	void stop();
 	uint8_t connected();
 
-	WiFiClient &operator=(const IWiFiClient &other);
-
-	bool operator==(const IWiFiClient &other) const;
+	WiFiClient &operator=(const WiFiClient &other);
 
 	IPAddress remoteIP() const;
 	IPAddress remoteIP(int sock) const;
@@ -47,4 +48,6 @@ class WiFiClient : public IWiFiClient {
 	IPAddress localIP(int sock) const;
 	uint16_t localPort() const;
 	uint16_t localPort(int sock) const;
+
+	using Print::write;
 };

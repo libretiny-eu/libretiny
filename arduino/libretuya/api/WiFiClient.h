@@ -39,8 +39,7 @@ class IWiFiClient : public Client {
 	virtual int socket()					 = 0;
 	virtual int setTimeout(uint32_t seconds) = 0;
 
-	virtual IWiFiClient &operator=(const IWiFiClient &other) = 0;
-	virtual bool operator==(const IWiFiClient &other) const	 = 0;
+	bool operator==(const IWiFiClient &other) const;
 
 	operator bool() {
 		return connected();
