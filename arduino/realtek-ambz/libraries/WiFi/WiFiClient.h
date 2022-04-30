@@ -1,7 +1,7 @@
 #pragma once
 
-#include <api/LwIPRxBuffer.h>
 #include <api/WiFiClient.h>
+#include <LwIPRxBuffer.h>
 #include <memory>
 
 class SocketHandle;

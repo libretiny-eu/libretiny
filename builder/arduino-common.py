@@ -21,6 +21,7 @@ env.Prepend(
         join(LT_API_DIR, "compat"),
         join(LT_API_DIR, "libraries", "base64"),
         join(LT_API_DIR, "libraries", "HTTPClient"),
+        join(LT_API_DIR, "libraries", "NetUtils"),
         join(LT_API_DIR, "libraries", "WebServer"),
         join(LT_API_DIR, "libraries", "WiFiMulti"),
         # fmt: on
