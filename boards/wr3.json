@@ -19,7 +19,7 @@
 		],
 		"openocd_config": "amebaz.cfg",
 		"gdb_init": [
-			"mem 0x8000000 0x8010000 ro"
+			"mem 0x8000000 0x8200000 ro"
 		]
 	},
 	"flash": {

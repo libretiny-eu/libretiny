@@ -112,6 +112,7 @@ class LibretuyaPlatform(PlatformBase):
         if "custom" not in debug["tools"]:
             debug["tools"]["custom"] = {}
         init = debug.get("gdb_init", [])
+        init += ["set mem inaccessible-by-default off"]
 
         for link in protocols:
             if link == "openocd":

@@ -71,7 +71,6 @@ To disable auto reset before and after debugging:
 ```ini
 [env:my_board]
 debug_init_cmds =
-  mem 0x8000000 0x8010000 ro
   target extended-remote $DEBUG_PORT ; remove this line if you're debugging locally
   $INIT_BREAK
 ;   monitor reset halt
@@ -82,7 +81,7 @@ debug_init_cmds =
 
 ## Technical details
 
-GDB is first configured with `mem 0x8000000 0x8010000 ro` in order to mark flash section as read-only. This makes GDB use hardware breakpoints, as software BPs don't work on these boards.
+GDB is first configured with `mem 0x8000000 0x8200000 ro` in order to mark flash memory as read-only. This makes GDB use hardware breakpoints, as software BPs don't work on these boards.
 
 ## More powerful playground
 
