@@ -173,11 +173,13 @@ SoftwareSerial      | ❌
 SPI                 | ❌
 Wire                | ❌
 **OTHER LIBRARIES** |
-Wi-Fi Station       | ✔️
-Wi-Fi Access Point  | ✔️
-Wi-Fi Events        | ❌
+Wi-Fi STA/AP/Mixed  | ✔️
 Wi-Fi Client (SSL)  | ✔️ (❌)
 Wi-Fi Server        | ✔️
+Wi-Fi Events        | ❌
+IPv6                | ❌
+HTTP Client (SSL)   | ✔️ (❌)
+HTTP Server         | ✔️
 NVS / Preferences   | ❌
 SPIFFS              | ❌
 BLE                 | -
