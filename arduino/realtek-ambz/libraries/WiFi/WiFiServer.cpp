@@ -1,8 +1,9 @@
 #include "WiFiServer.h"
 #include "WiFiPriv.h"
 
-WiFiServer::WiFiServer(uint16_t port, uint8_t maxClients)
-	: _sock(-1), _sockAccepted(-1), _port(port), _maxClients(maxClients), _active(false), _noDelay(false) {}
+WiFiServer::WiFiServer(uint32_t addr, uint16_t port, uint8_t maxClients)
+	: _sock(-1), _sockAccepted(-1), _addr(addr), _port(port), _maxClients(maxClients), _active(false), _noDelay(false) {
+}
 
 WiFiServer::operator bool() {
 	return _active;
@@ -25,7 +26,7 @@ bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
 
 	struct sockaddr_in addr;
 	addr.sin_family		 = AF_INET;
-	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_addr.s_addr = _addr;
 	addr.sin_port		 = htons(_port);
 
 	if (lwip_bind(_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
@@ -38,7 +39,8 @@ bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
 		return false;
 	}
 
-	LT_I("Server running on :%hu", _port);
+	uint8_t *addrB = (uint8_t *)&_addr;
+	LT_I("Server running on %hhu.%hhu.%hhu.%hhu:%hu", addrB[0], addrB[1], addrB[2], addrB[3], _port);
 
 	lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
 	_active		  = true;

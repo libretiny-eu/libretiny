@@ -34,6 +34,8 @@ class IWiFiServer : public Print { // arduino::Server is useless anyway
 
 	IWiFiServer(uint16_t port = 80, uint8_t maxClients = 4) {}
 
+	IWiFiServer(const IPAddress &addr, uint16_t port = 80, uint8_t maxClients = 4) {}
+
 	~IWiFiServer() {
 		stop();
 	}
