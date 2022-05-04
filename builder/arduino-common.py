@@ -1,54 +1,49 @@
+# Copyright (c) Kuba Szczodrzyński 2022-04-23.
+
 from os.path import isdir, join
 
 from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
 platform = env.PioPlatform()
-board = env.BoardConfig()
 
 API_DIR = platform.get_package_dir("framework-arduino-api")
 LT_API_DIR = join(platform.get_dir(), "arduino", "libretuya")
 assert isdir(API_DIR)
 assert isdir(LT_API_DIR)
 
-# Includes
-env.Prepend(
-    CPPPATH=[
-        # fmt: off
-        join(API_DIR),
-        join(API_DIR, "api", "deprecated"),
-        join(LT_API_DIR),
-        join(LT_API_DIR, "compat"),
-        join(LT_API_DIR, "libraries", "base64"),
-        join(LT_API_DIR, "libraries", "HTTPClient"),
-        join(LT_API_DIR, "libraries", "NetUtils"),
-        join(LT_API_DIR, "libraries", "WebServer"),
-        join(LT_API_DIR, "libraries", "WiFiMulti"),
-        # fmt: on
+# Sources - ArduinoCore-API
+env.AddLibrary(
+    name="arduino_api",
+    base_dir=API_DIR,
+    srcs=[
+        "+<api/Common.cpp>",
+        "+<api/IPAddress.cpp>",
+        "+<api/PluggableUSB.cpp>",
+        "+<api/Print.cpp>",
+        "+<api/Stream.cpp>",
+        "+<api/String.cpp>",
     ],
-    CPPDEFINES=[
-        ("LT_VERSION", platform.version),
-        ("LT_BOARD", board.get("build.variant")),
+    includes=[
+        "!<.>",
+        "!<api/deprecated>",
     ],
 )
 
-sources_api = [
-    # fmt: off
-	"+<" + API_DIR + "/api/Common.cpp>",
-	"+<" + API_DIR + "/api/IPAddress.cpp>",
-	"+<" + API_DIR + "/api/PluggableUSB.cpp>",
-	"+<" + API_DIR + "/api/Print.cpp>",
-	"+<" + API_DIR + "/api/Stream.cpp>",
-	"+<" + API_DIR + "/api/String.cpp>",
-    "+<" + LT_API_DIR + "/api/*.c*>",
-    "+<" + LT_API_DIR + "/libraries/**/*.c*>",
-    # fmt: on
-]
-
-# Arduino API library target
-target_api = env.BuildLibrary(
-    join("$BUILD_DIR", "arduino_api"),
-    API_DIR,
-    sources_api,
+# Sources - LibreTuya API
+env.AddLibrary(
+    name="libretuya_api",
+    base_dir=LT_API_DIR,
+    srcs=[
+        "+<api/*.c*>",
+        "+<libraries/**/*.c*>",
+    ],
+    includes=[
+        "!<.>",
+        "!<compat>",
+        "!<libraries/*>",
+    ],
 )
-env.Prepend(LIBS=[target_api])
+
+# Build all libraries
+env.BuildLibraries(safe=False)
