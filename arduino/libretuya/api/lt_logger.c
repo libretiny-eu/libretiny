@@ -40,8 +40,8 @@ const uint8_t colors[] = {
 
 unsigned long millis(void);
 
-#if LT_LOGGER_FILE
-void lt_log(const uint8_t level, const char *filename, const unsigned short line, const char *format, ...) {
+#if LT_LOGGER_CALLER
+void lt_log(const uint8_t level, const char *caller, const unsigned short line, const char *format, ...) {
 #else
 void lt_log(const uint8_t level, const char *format, ...) {
 #endif
@@ -85,8 +85,8 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #if LT_LOGGER_COLOR
 		"\e[0m"
 #endif
-#if LT_LOGGER_FILE
-		"%s:%hu: "
+#if LT_LOGGER_CALLER
+		"%s():%hu: "
 #endif
 #if LT_LOGGER_TASK
 		"%s%c "
@@ -106,9 +106,9 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		zero // append missing zeroes if printf "%11.3f" prints "0."
 #endif
 #endif
-#if LT_LOGGER_FILE
+#if LT_LOGGER_CALLER
 		,
-		filename,
+		caller,
 		line
 #endif
 #if LT_LOGGER_TASK

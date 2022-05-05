@@ -22,42 +22,28 @@
 
 #include <Arduino.h>
 
-#include "WiFi.h"
+#include "WiFiClient.h"
 
-class IWiFiClientSecure : public IWiFiClient {
+class IWiFiClientSecure {
   public:
-	int connect(IPAddress ip, uint16_t port, const char *rootCABuff, const char *cli_cert, const char *cli_key);
-	int connect(const char *host, uint16_t port, const char *rootCABuff, const char *cli_cert, const char *cli_key);
-	int connect(IPAddress ip, uint16_t port, const char *pskIdent, const char *psKey);
-	int connect(const char *host, uint16_t port, const char *pskIdent, const char *psKey);
+	virtual int
+	connect(IPAddress ip, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey) = 0;
+	virtual int
+	connect(const char *host, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey) = 0;
+	virtual int connect(IPAddress ip, uint16_t port, const char *pskIdent, const char *psk)						   = 0;
+	virtual int connect(const char *host, uint16_t port, const char *pskIdent, const char *psk)					   = 0;
 
-	int lastError(char *buf, const size_t size);
-	void setInsecure(); // Don't validate the chain, just accept whatever is given. VERY INSECURE!
-	void setPreSharedKey(const char *pskIdent, const char *psKey); // psKey in Hex
-	void setCACert(const char *rootCA);
-	void setCertificate(const char *client_ca);
-	void setPrivateKey(const char *private_key);
-	bool loadCACert(Stream &stream, size_t size);
-	bool loadCertificate(Stream &stream, size_t size);
-	bool loadPrivateKey(Stream &stream, size_t size);
-	bool verify(const char *fingerprint, const char *domain_name);
-	void setHandshakeTimeout(unsigned long handshake_timeout);
-
-	WiFiClientSecure &operator=(const WiFiClientSecure &other);
-
-	bool operator==(const bool value) {
-		return bool() == value;
-	}
-
-	bool operator!=(const bool value) {
-		return bool() != value;
-	}
-
-	bool operator==(const WiFiClientSecure &);
-
-	bool operator!=(const WiFiClientSecure &rhs) {
-		return !this->operator==(rhs);
-	};
-
-	using Print::write;
+	virtual int lastError(char *buf, const size_t size) = 0;
+	virtual void setInsecure() = 0; // Don't validate the chain, just accept whatever is given. VERY INSECURE!
+	virtual void setPreSharedKey(const char *pskIdent, const char *psk)	 = 0; // psk in hex
+	virtual void setCACert(const char *rootCA)							 = 0;
+	virtual void setCertificate(const char *clientCA)					 = 0;
+	virtual void setPrivateKey(const char *privateKey)					 = 0;
+	virtual bool loadCACert(Stream &stream, size_t size)				 = 0;
+	virtual bool loadCertificate(Stream &stream, size_t size)			 = 0;
+	virtual bool loadPrivateKey(Stream &stream, size_t size)			 = 0;
+	virtual bool verify(const char *fingerprint, const char *domainName) = 0;
+	virtual void setHandshakeTimeout(unsigned long handshakeTimeout)	 = 0;
+	virtual void setAlpnProtocols(const char **alpnProtocols)			 = 0;
+	virtual bool getFingerprintSHA256(uint8_t result[32])				 = 0;
 };

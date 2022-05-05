@@ -21,8 +21,8 @@
 #define LT_LOGGER_TIMESTAMP 1
 #endif
 
-#ifndef LT_LOGGER_FILE
-#define LT_LOGGER_FILE 0
+#ifndef LT_LOGGER_CALLER
+#define LT_LOGGER_CALLER 1
 #endif
 
 #ifndef LT_LOGGER_TASK
@@ -61,4 +61,8 @@
 
 #ifndef LT_DEBUG_WIFI_AP
 #define LT_DEBUG_WIFI_AP 0
+#endif
+
+#ifndef LT_DEBUG_SSL
+#define LT_DEBUG_SSL 0
 #endif
