@@ -174,7 +174,7 @@ SPI                 | ❌
 Wire                | ❌
 **OTHER LIBRARIES** |
 Wi-Fi STA/AP/Mixed  | ✔️
-Wi-Fi Client (SSL)  | ✔️ (❌)
+Wi-Fi Client (SSL)  | ✔️ (✔️)
 Wi-Fi Server        | ✔️
 Wi-Fi Events        | ❌
 IPv6                | ❌

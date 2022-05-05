@@ -19,5 +19,7 @@ nav:
       - "Realtek AmebaZ Series":
           - "Boards":
               - "WR3": "boards/wr3/README.md"
+          - "stdlib usage":
+              - "Memory management": "docs/platform/realtek-ambz/memory-management.md"
           - "Debugging": "docs/platform/realtek/debugging.md"
           - "Exception decoder": "docs/platform/realtek/exception-decoder.md"

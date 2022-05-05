@@ -12,6 +12,8 @@ extern "C" {
 #include <stdarg.h>
 #define boolean boolean_rtl
 #include "rtl_lib.h"
+#include "rand.h"
+#include "rt_lib_rom.h"
 #undef boolean
 
 /* moved from Arduino.h */
@@ -32,6 +34,18 @@ extern void wait_us(int us);
 #define delay_us	wait_us
 
 extern void yield(void);
+
+extern void *pvPortMalloc(size_t xWantedSize);
+extern void *pvPortZalloc(size_t size);
+extern void *pvPortCalloc(size_t nmemb, size_t size);
+extern void *pvPortReAlloc(void *pv, size_t xWantedSize);
+extern void vPortFree(void *pv);
+
+#define malloc pvPortMalloc
+#define zalloc pvPortZalloc
+#define calloc pvPortCalloc
+#define realloc pvPortReAlloc
+#define free vPortFree
 
 #ifndef printf
 #define printf		rtl_printf

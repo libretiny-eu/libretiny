@@ -6,6 +6,8 @@ from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
 
+env.Replace(AMBZ_NO_POLARSSL=True)
+
 env.SConscript("realtek-ambz-sdk.py", exports="env")
 env.SConscript("../arduino-common.py", exports="env")
 
@@ -45,8 +47,8 @@ env.Append(
         # enable LwIPRxBuffer
         "LT_HAS_LWIP",
         ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
-        ("zalloc", "os_zalloc"),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",  # enable PSK in mbedTLS
+        # "MBEDTLS_DEBUG_C",
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",
