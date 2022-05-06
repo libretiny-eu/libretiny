@@ -109,7 +109,7 @@ See https://docs.platformio.org/page/projectconf/build_configurations.html
     def addr2line(self, addr):
         trace = ""
         enc = "mbcs" if WINDOWS else "utf-8"
-        args = [self.addr2line_path, u"-fipC", u"-e", self.firmware_path]
+        args = [self.addr2line_path, "-fipC", "-e", self.firmware_path]
         if PY2:
             args = [a.encode(enc) for a in args]
         try:
