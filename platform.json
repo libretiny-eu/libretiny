@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kuba2k2/platformio-libretuya"
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "frameworks": {
     "realtek-ambz-sdk": {
       "tilte": "Realtek AmebaZ - SDK",
