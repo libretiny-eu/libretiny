@@ -91,11 +91,12 @@ A (mostly) complete* list of Tuya wireless module boards.
 
 ```
 arduino/
-├─ <platform name>/             Arduino Core for specific platform
-│  ├─ cores/                        Core files
-│  ├─ libraries/                    Supported built-in libraries
+├─ <platform name>/             Arduino Core for specific SoC
+│  ├─ cores/                        Wiring core files
+│  ├─ libraries/                    Supported built-in platform libraries
 ├─ libretuya/
-│  ├─ api/                      LibreTuya API for Arduino frameworks
+│  ├─ api/                      LibreTuya API (interfaces + LT class) for Arduino frameworks
+│  ├─ common/                   Units common to all platforms
 │  ├─ compat/                   Fixes for compatibility with ESP32 framework
 │  ├─ libraries/                Built-in platform-independent libraries
 boards/
@@ -109,6 +110,7 @@ builder/
 │  ├─ <platform name>-arduino.py    Arduino Core build system
 ├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
 ├─ main.py                      Main PlatformIO builder
+├─ utils.py                     SCons utils used during the build
 docs/                           Project documentation, guides, tips, etc.
 platform/
 ├─ <platform name>/             Platform-specific configurations
