@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-22. */
+
 #include <stdint.h>
 
 // for some reason, cmsis_os.c does not link properly when this method is inlined in core_cmFunc.h

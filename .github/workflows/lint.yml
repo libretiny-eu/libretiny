@@ -6,7 +6,6 @@ jobs:
   lint-clang-format:
     name: Lint with clang-format
     runs-on: ubuntu-latest
-    if: ${{ false }}  # disable for now
     steps:
       - name: Checkout
         uses: actions/checkout@v2

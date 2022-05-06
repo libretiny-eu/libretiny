@@ -1,13 +1,8 @@
-#include "Arduino.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "gpio_api.h"
-#include "gpio_irq_api.h"
-#include "gpio_irq_ex_api.h"
-#include "pwmout_api.h"
+#include <Arduino.h>
+#include <gpio_api.h>
+#include <gpio_irq_api.h>
+#include <gpio_irq_ex_api.h>
+#include <pwmout_api.h>
 
 extern void *gpio_pin_struct[PINS_COUNT];
 extern void *gpio_irq_handler_list[PINS_COUNT];
@@ -33,7 +28,7 @@ void pinRemoveMode(pin_size_t pinNumber) {
 		gpio_irq_deinit(obj);
 		free(obj);
 	}
-	gpio_pin_struct[pinNumber] = NULL;
+	gpio_pin_struct[pinNumber]			   = NULL;
 	g_APinDescription[pinNumber].ulPinType = NOT_INITIAL;
 	g_APinDescription[pinNumber].ulPinMode = NOT_INITIAL;
 }
@@ -59,7 +54,7 @@ void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 
 	if (g_APinDescription[pinNumber].ulPinType == NOT_INITIAL) {
 		// allocate memory if pin not used before
-		gpio = malloc(sizeof(gpio_t));
+		gpio					   = malloc(sizeof(gpio_t));
 		gpio_pin_struct[pinNumber] = gpio;
 		gpio_init(gpio, g_APinDescription[pinNumber].pinname);
 		g_APinDescription[pinNumber].ulPinType = PIO_GPIO;
@@ -74,23 +69,23 @@ void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 
 	switch (pinMode) {
 		case INPUT:
-			dir = PIN_INPUT;
+			dir	 = PIN_INPUT;
 			mode = PullNone;
 			break;
 		case INPUT_PULLDOWN:
-			dir = PIN_INPUT;
+			dir	 = PIN_INPUT;
 			mode = PullDown;
 			break;
 		case INPUT_PULLUP:
-			dir = PIN_INPUT;
+			dir	 = PIN_INPUT;
 			mode = PullUp;
 			break;
 		case OUTPUT:
-			dir = PIN_OUTPUT;
+			dir	 = PIN_OUTPUT;
 			mode = PullNone;
 			break;
 		case OUTPUT_OPENDRAIN:
-			dir = PIN_OUTPUT;
+			dir	 = PIN_OUTPUT;
 			mode = OpenDrain;
 			break;
 		default:
@@ -138,7 +133,3 @@ uint32_t digitalPinToBitMask(uint32_t pinNumber) {
 	uint32_t pin_name = HAL_GPIO_GetPinName(g_APinDescription[pinNumber].pinname);
 	return 1 << (HAL_GPIO_GET_PIN_BY_NAME(pin_name));
 }
-
-#ifdef __cplusplus
-}
-#endif

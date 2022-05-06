@@ -19,7 +19,7 @@ size_t LwIPRxBuffer::r_available() {
 		return 0;
 	}
 	uint16_t count = 0;
-	int res = lwip_ioctl(_sock, FIONREAD, &count);
+	int res		   = lwip_ioctl(_sock, FIONREAD, &count);
 	if (res < 0) {
 		_failed = true;
 		return 0;

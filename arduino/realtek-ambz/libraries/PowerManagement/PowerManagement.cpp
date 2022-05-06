@@ -1,15 +1,14 @@
 #include "PowerManagement.h"
-#include "Arduino.h"
+
+#include <Arduino.h>
 
 #ifdef __cplusplus
 extern "C" {
-#include "freertos_pmu.h"
-#include "sys_api.h"
-#include "sleep_ex_api.h"
+#include <freertos_pmu.h>
+#include <sleep_ex_api.h>
+#include <sys_api.h>
 }
 #endif
-
-#include "variant.h"
 
 #if defined(BOARD_RTL8195A)
 #define SAVE_LOCK_PIN 18
@@ -22,38 +21,38 @@ extern "C" {
 bool PowerManagementClass::reservePLL = true;
 
 void PowerManagementClass::sleep(uint32_t bitflg) {
-    if (!safeLock()) {
-        pmu_release_wakelock(bitflg);
-    }
+	if (!safeLock()) {
+		pmu_release_wakelock(bitflg);
+	}
 }
 
 void PowerManagementClass::sleep(void) {
-    if (!safeLock()) {
-        pmu_release_wakelock(BIT(PMU_OS));
-    }
+	if (!safeLock()) {
+		pmu_release_wakelock(BIT(PMU_OS));
+	}
 }
 
 void PowerManagementClass::active(uint32_t bitflg) {
-    pmu_acquire_wakelock(bitflg);
+	pmu_acquire_wakelock(bitflg);
 }
 
 void PowerManagementClass::active(void) {
-    pmu_acquire_wakelock(BIT(PMU_OS));
+	pmu_acquire_wakelock(BIT(PMU_OS));
 }
 
 void PowerManagementClass::deepsleep(uint32_t duration_ms) {
-    if (!safeLock()) {
-        deepsleep_ex(DSLEEP_WAKEUP_BY_TIMER, duration_ms);
-    }
+	if (!safeLock()) {
+		deepsleep_ex(DSLEEP_WAKEUP_BY_TIMER, duration_ms);
+	}
 }
 
 bool PowerManagementClass::safeLock() {
-    pinMode(SAVE_LOCK_PIN, INPUT_PULLUP);
-    return (digitalRead(SAVE_LOCK_PIN) == 1) ? false : true;
+	pinMode(SAVE_LOCK_PIN, INPUT_PULLUP);
+	return (digitalRead(SAVE_LOCK_PIN) == 1) ? false : true;
 }
 
 void PowerManagementClass::softReset() {
-    sys_reset();
+	sys_reset();
 }
 
 PowerManagementClass PowerManagement;

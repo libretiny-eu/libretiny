@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-29. */
+
 #include "LibreTuyaAPI.h"
 
 __weak char *strdup(const char *s) {

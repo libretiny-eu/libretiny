@@ -36,6 +36,7 @@ env.AddLibrary(
     base_dir=LT_API_DIR,
     srcs=[
         "+<api/*.c*>",
+        "+<common/*.c*>",
         "+<libraries/**/*.c*>",
     ],
     includes=[

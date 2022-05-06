@@ -1,5 +1,7 @@
-#include "ameba_soc.h"
-#include "osdep_service.h"
+/* Copyright (c) Kuba Szczodrzyński 2022-04-22. */
+
+#include <ameba_soc.h>
+#include <osdep_service.h>
 
 // usage:
 // extern int LOGUART_SetBaud(uint32_t BaudRate);

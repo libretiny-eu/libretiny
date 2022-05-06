@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
+
 #include "WiFi.h"
 #include "WiFiPriv.h"
 

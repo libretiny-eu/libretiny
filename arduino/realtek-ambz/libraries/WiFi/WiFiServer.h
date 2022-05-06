@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-26. */
+
 #pragma once
 
 #include <api/WiFiServer.h>

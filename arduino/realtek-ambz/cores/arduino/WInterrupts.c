@@ -1,15 +1,13 @@
-#include "Arduino.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include "gpio_api.h"
-#include "gpio_irq_api.h"
-#include "gpio_irq_ex_api.h"
+#include <Arduino.h>
+#include <gpio_api.h>
+#include <gpio_irq_api.h>
+#include <gpio_irq_ex_api.h>
 
 extern void *gpio_pin_struct[PINS_COUNT];
 extern void *gpio_irq_handler_list[PINS_COUNT];
+
+extern bool pinInvalid(pin_size_t pinNumber);
+extern void pinRemoveMode(pin_size_t pinNumber);
 
 void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
 	if (gpio_irq_handler_list[id] != NULL) {
@@ -36,7 +34,7 @@ void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus
 
 	if (g_APinDescription[interruptNumber].ulPinType == NOT_INITIAL) {
 		// allocate memory if pin not used before
-		gpio = malloc(sizeof(gpio_irq_t));
+		gpio							 = malloc(sizeof(gpio_irq_t));
 		gpio_pin_struct[interruptNumber] = gpio;
 		gpio_irq_init(gpio, g_APinDescription[interruptNumber].pinname, gpioIrqHandler, interruptNumber);
 		g_APinDescription[interruptNumber].ulPinType = PIO_GPIO_IRQ;
@@ -78,7 +76,3 @@ void detachInterrupt(pin_size_t interruptNumber) {
 	}
 	gpio_irq_handler_list[interruptNumber] = NULL;
 }
-
-#ifdef __cplusplus
-}
-#endif

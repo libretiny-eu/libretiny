@@ -1,33 +1,13 @@
-/*
-	Copyright (c) 2011 Arduino.  All right reserved.
+/* Copyright (c) Kuba Szczodrzyński 2022-04-22. */
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU Lesser General Public
-	License as published by the Free Software Foundation; either
-	version 2.1 of the License, or (at your option) any later version.
-
-	This library is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-	See the GNU Lesser General Public License for more details.
-
-	You should have received a copy of the GNU Lesser General Public
-	License along with this library; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-#include "Arduino.h"
 #include "variant.h"
-#include "gpio_api.h"
 
-#ifdef __cplusplus
 extern "C" {
-#endif
-
-#include "PinNames.h"
 
 /*
  * Pins descriptions
  */
+// clang-format off
 PinDescription g_APinDescription[PINS_COUNT] = {
 	// D0: UART0_RTS, SPI1_MISO, SPI0_MISO, I2C0_SCL, SD_D0, PWM5, I2S_WS, WAKEUP_2
 	{PA_22, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM,	NOT_INITIAL},
@@ -48,31 +28,15 @@ PinDescription g_APinDescription[PINS_COUNT] = {
 	// D8: SDIO_SIDEBAND_INT, PWM4, WAKEUP_1
 	{PA_5,  NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM,	NOT_INITIAL},
 	// D9: PWM3
-	{PA_12, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM, NOT_INITIAL},
+	{PA_12, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM,	NOT_INITIAL},
 	// D10: UART0_RXD, SPI1_CLK, SPI0_SCK, I2C1_SCL, SD_D2, TIMER4_TRIG, I2S_MCK, WAKEUP_0
 	{PA_18, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ,			NOT_INITIAL},
 	// D11: UART0_TXD, SPI1_MOSI, SPI0_MOSI, I2C1_SDA, SD_D1, PWM0, WAKEUP_3
-	{PA_23, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM, NOT_INITIAL},
+	{PA_23, NOT_INITIAL, PIO_GPIO | PIO_GPIO_IRQ | PIO_PWM,	NOT_INITIAL},
 };
+// clang-format on
 
-void *gpio_pin_struct[PINS_COUNT] = {NULL};
+void *gpio_pin_struct[PINS_COUNT]		= {NULL};
 void *gpio_irq_handler_list[PINS_COUNT] = {NULL};
 
-#ifdef __cplusplus
 } // extern C
-#endif
-
-void serialEvent() __attribute__((weak));
-bool Serial_available() __attribute__((weak));
-
-void serialEventRun(void) {
-	if (Serial_available && serialEvent && Serial_available())
-		serialEvent();
-}
-
-void wait_for_debug() {
-	while (((CoreDebug->DHCSR) & CoreDebug_DHCSR_C_DEBUGEN_Msk) == 0) {
-		asm("nop");
-	}
-	delay(1000);
-}

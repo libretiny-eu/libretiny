@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-24. */
+
 #pragma once
 
 #include "api/Flash.h"

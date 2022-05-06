@@ -18,87 +18,62 @@
 */
 
 #define ARDUINO_MAIN
-#include "Arduino.h"
-#include "cmsis_os.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-#include "rtl8710b.h"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "diag.h"
-extern void HalCpuClkConfig(u8 CpuType);
-extern void SystemCoreClockUpdate(void);
-extern void En32KCalibration(void);
-extern int tcm_heap_freeSpace(void);
-extern void console_init(void);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
-osThreadId main_tid = 0;
+#include <Arduino.h>
+#include <cmsis_os.h>
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));
-void initVariant() { }
+
+void initVariant() {}
 
 // Initialize C library
 extern "C" void __libc_init_array(void);
 
-/*
- * \brief Init Random()
- * \note Use in void __low_level_init(void) { Init_Rand(); } !
- */
-void Init_Rand(void)
-{
-	extern u32 _rand_z1, _rand_z2, _rand_z3, _rand_z4, _rand_first;
-	u32 *p = (u32 *)0x1FFFFF00;
-	while(p < (u32 *)0x20000000) _rand_z1 ^= *p++;
-	_rand_z1 ^= (*((u32 *)0x40002018) << 24) ^ (*((u32 *)0x40002118) << 16) ^ (*((u32 *)0x40002218) << 8) ^ *((u32 *)0x40002318);
-	_rand_z2 = ((_rand_z1 & 0x007F00FF) << 7) ^	((_rand_z1 & 0x0F80FF00) >> 8);
-	_rand_z3 = ((_rand_z2 & 0x007F00FF) << 7) ^	((_rand_z2 & 0x0F80FF00) >> 8);
-	_rand_z4 = ((_rand_z3 & 0x007F00FF) << 7) ^	((_rand_z3 & 0x0F80FF00) >> 8);
-	_rand_first = 1;
+osThreadId main_tid = 0;
+
+void main_task(const void *arg) {
+	setup();
+
+	for (;;) {
+		loop();
+		if (serialEventRun)
+			serialEventRun();
+		yield();
+	}
 }
 
-/*
- * \brief handle sketch
- */
-void main_task( void const *arg )
-{
-    setup();
+int main(void) {
+	LT_BANNER();
+	init();
 
-    for (;;)
-    {
-        loop();
-        if (serialEventRun) serialEventRun();
-        yield();
-    }
+	__libc_init_array();
+
+	initVariant();
+
+	osThreadDef(main_task, osPriorityRealtime, 1, 4096 * 4);
+	main_tid = osThreadCreate(osThread(main_task), NULL);
+
+	osKernelStart();
+
+	while (1)
+		;
+
+	return 0;
 }
 
+void serialEvent() __attribute__((weak));
+bool Serial_available() __attribute__((weak));
 
-/*
- * \brief Main entry point of Arduino application
- */
-int main( void )
-{
-    LT_BANNER();
-    init();
+void serialEventRun(void) {
+	if (Serial_available && serialEvent && Serial_available())
+		serialEvent();
+}
 
-    __libc_init_array();
-
-    initVariant();
-
-    osThreadDef(main_task, osPriorityRealtime, 1, 4096*4); 
-    main_tid = osThreadCreate(osThread (main_task), NULL);
-
-    osKernelStart();
-
-    while(1);
-
-    return 0;
+void wait_for_debug() {
+	while (((CoreDebug->DHCSR) & CoreDebug_DHCSR_C_DEBUGEN_Msk) == 0) {
+		asm("nop");
+	}
+	delay(1000);
 }

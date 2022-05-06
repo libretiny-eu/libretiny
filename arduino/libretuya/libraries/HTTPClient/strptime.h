@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-29. */
+
 #pragma once
 
 #include <time.h>

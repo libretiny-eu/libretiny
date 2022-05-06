@@ -1,3 +1,5 @@
+/* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
+
 /* WCharacter.h uses deprecated isascii() and toascii(),
    which are available in gnu++11 but not c++11 */
 #include <cstddef>

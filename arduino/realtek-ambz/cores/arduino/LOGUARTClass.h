@@ -8,7 +8,7 @@
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the GNU Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
@@ -18,36 +18,41 @@
 
 #pragma once
 
-#include "api/HardwareSerial.h"
-#include "api/RingBuffer.h"
+#include <api/HardwareSerial.h>
+#include <api/RingBuffer.h>
 
 using namespace arduino;
 
-class LOGUARTClass : public HardwareSerial
-{
+// TODO this class begs to be rewritten :(
+
+class LOGUARTClass : public HardwareSerial {
   public:
-    LOGUARTClass(int dwIrq, RingBuffer* pRx_buffer );
+	LOGUARTClass(int dwIrq, RingBuffer *pRx_buffer);
 
-    void begin(const uint32_t dwBaudRate);
-    inline void begin(const uint32_t dwBaudRate, uint16_t config) {
-        begin(dwBaudRate); // TODO implement this properly
-    }
-    void end(void);
-    int available(void);
-    int peek(void);
-    int read(void);
-    void flush(void);
-    size_t write(const uint8_t c);
+	void begin(const uint32_t dwBaudRate);
 
-    using Print::write; // pull in write(str) and write(buf, size) from Print
+	inline void begin(const uint32_t dwBaudRate, uint16_t config) {
+		begin(dwBaudRate); // TODO implement this properly
+	}
 
-    operator bool() { return true; }; // UART always active
+	void end(void);
+	int available(void);
+	int peek(void);
+	int read(void);
+	void flush(void);
+	size_t write(const uint8_t c);
+
+	using Print::write; // pull in write(str) and write(buf, size) from Print
+
+	operator bool() {
+		return true; // UART always active
+	}
 
   protected:
-    RingBuffer *_rx_buffer;
+	RingBuffer *_rx_buffer;
 
-    int _dwIrq;
+	int _dwIrq;
 
   private:
-    friend bool Serial_available();
+	friend bool Serial_available();
 };
