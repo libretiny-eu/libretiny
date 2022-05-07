@@ -1,11 +1,12 @@
 name: Deploy docs on GitHub Pages
+
 on:
   push:
     branches:
       - master
 
 jobs:
-  build:
+  docs:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
@@ -17,5 +18,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFIG_FILE: mkdocs.yml
-          EXTRA_PACKAGES: build-base
+          EXTRA_PACKAGES: build-base doxygen
           REQUIREMENTS: docs/requirements.txt

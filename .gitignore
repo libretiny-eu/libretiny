@@ -252,3 +252,9 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/c,c++,visualstudiocode,python
 
 .vscode/settings.json
+
+# mkdocs
+xml/
+ltapi/
+ltambz/
+hashChanges.yaml

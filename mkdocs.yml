@@ -1,26 +1,30 @@
 site_name: LibreTuya
 docs_dir: .
+
 site_url: https://kuba2k2.github.io/libretuya/
 repo_url: https://github.com/kuba2k2/libretuya
+
 theme:
   name: material
+
 plugins:
   - same-dir
+  - mkdoxy:
+      projects:
+        # project names must be alphanumeric, else snippets won't work
+        ltapi:
+          src-dirs: arduino/libretuya/
+          doxy-cfg:
+            PREDEFINED: __cplusplus
+        ltambz:
+          src-dirs: arduino/realtek-ambz/
+          doxy-cfg:
+            PREDEFINED: __cplusplus
+      save-api: .
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - include-markdown
+
 markdown_extensions:
   - md_in_html
-
-nav:
-  - "Home": "README.md"
-  - "Configuration": "docs/config.md"
-  - "Libraries":
-      - "Built-in": "docs/libs-built-in.md"
-      - "Third party": "docs/libs-3rd-party.md"
-  - "Platforms":
-      - "Realtek AmebaZ Series":
-          - "Boards":
-              - "WR3": "boards/wr3/README.md"
-          - "C library":
-              - "Built-in functions": "docs/platform/realtek-ambz/stdlib.md"
-              - "Memory management": "docs/platform/realtek-ambz/memory-management.md"
-          - "Debugging": "docs/platform/realtek/debugging.md"
-          - "Exception decoder": "docs/platform/realtek/exception-decoder.md"

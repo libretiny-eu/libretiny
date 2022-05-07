@@ -49,3 +49,26 @@ extern char *strdup(const char *);
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
 #endif
+
+// Main class
+#ifdef __cplusplus
+/**
+ * @brief Main LibreTuya API class.
+ *
+ * This class contains all functions common amongst all platforms.
+ * Implementations of these methods may vary between platforms.
+ *
+ * The class is accessible using the `LT` global object (defined by the platform).
+ */
+class LibreTuya {
+
+	/* Common methods*/
+
+  public:
+	/* Platform-defined methods */
+
+  public:
+};
+
+extern LibreTuya LT;
+#endif

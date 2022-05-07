@@ -2,17 +2,17 @@
 
 <div align="center" markdown>
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kuba2k2/libretuya/docs?label=docs)](https://kuba2k2.github.io/libretuya/)
-![GitHub last commit](https://img.shields.io/github/last-commit/kuba2k2/libretuya)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kuba2k2/libretuya/Deploy%20docs%20on%20GitHub%20Pages?label=docs&logo=markdown)](https://kuba2k2.github.io/libretuya/)
+![GitHub last commit](https://img.shields.io/github/last-commit/kuba2k2/libretuya?logo=github)
 
-[![Code style: clang-format](https://img.shields.io/badge/code%20style-clang--format-purple.svg)](https://github.com/psf/black)
+[![Code style: clang-format](https://img.shields.io/badge/code%20style-clang--format-purple.svg)](.clang-format)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 [![Discord](https://img.shields.io/discord/967863521511608370?color=%235865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/SyGCB9Xwtf)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/kuba2k2/platform/libretuya.svg)](https://registry.platformio.org/platforms/kuba2k2/libretuya)
 
 ![RTL8710BN](https://img.shields.io/badge/-rtl8710bn-blue)
 
-<!-- [![PlatformIO Registry](https://badges.registry.platformio.org/packages/kuba2k2/platform/libretuya.svg)](https://registry.platformio.org/platforms/kuba2k2/libretuya) -->
 </div>
 
 PlatformIO development platform for IoT modules manufactured by Tuya Inc.
