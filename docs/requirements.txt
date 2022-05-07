@@ -2,4 +2,4 @@ mkdocs-same-dir
 mkdocs-literate-nav
 mkdocs-section-index
 mkdocs-include-markdown-plugin
--e git+https://github.com/kuba2k2/mkdoxy
+-e git+https://github.com/kuba2k2/mkdoxy#mkdoxy
