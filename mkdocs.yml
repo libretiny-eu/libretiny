@@ -16,10 +16,12 @@ plugins:
           src-dirs: arduino/libretuya/
           doxy-cfg:
             PREDEFINED: __cplusplus
+            CASE_SENSE_NAMES: NO
         ltambz:
           src-dirs: arduino/realtek-ambz/
           doxy-cfg:
             PREDEFINED: __cplusplus
+            CASE_SENSE_NAMES: NO
       save-api: .
   - literate-nav:
       nav_file: SUMMARY.md
