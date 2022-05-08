@@ -29,7 +29,7 @@
 
 #ifdef HTTPCLIENT_1_1_COMPATIBLE
 #include <WiFi.h>
-// #include <WiFiClientSecure.h>
+#include <WiFiClientSecure.h>
 #endif
 
 // #include <StreamString.h>
@@ -63,7 +63,7 @@ class TLSTraits : public TransportTraits {
 	TLSTraits(const char *CAcert, const char *clicert = nullptr, const char *clikey = nullptr)
 		: _cacert(CAcert), _clicert(clicert), _clikey(clikey) {}
 
-	/* std::unique_ptr<WiFiClient> create() override {
+	std::unique_ptr<WiFiClient> create() override {
 		return std::unique_ptr<WiFiClient>(new WiFiClientSecure());
 	}
 
@@ -77,7 +77,7 @@ class TLSTraits : public TransportTraits {
 			wcs.setPrivateKey(_clikey);
 		}
 		return true;
-	} */
+	}
 
   protected:
 	const char *_cacert;

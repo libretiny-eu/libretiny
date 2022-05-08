@@ -42,12 +42,12 @@ class MbedTLSClient : public WiFiClient, public IWiFiClientSecure {
 	int connect(
 		const char *host,
 		uint16_t port,
+		int32_t timeout,
 		const char *rootCABuf,
 		const char *clientCert,
 		const char *clientKey,
 		const char *pskIdent,
-		const char *psk,
-		const char **alpnProtocols
+		const char *psk
 	);
 
   public:

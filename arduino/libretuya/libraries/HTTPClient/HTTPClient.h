@@ -33,7 +33,7 @@
 
 #include <Arduino.h>
 #include <WiFiClient.h>
-// #include <WiFiClientSecure.h>
+#include <WiFiClientSecure.h>
 #include <memory>
 
 /// Cookie jar support

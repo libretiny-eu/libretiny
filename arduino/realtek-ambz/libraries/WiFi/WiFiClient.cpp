@@ -68,6 +68,9 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 		return -1;
 	}
 
+	if (timeout <= 0)
+		timeout = _timeout; // use default when -1 passed as timeout
+
 	lwip_fcntl(sock, F_SETFL, lwip_fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
 
 	struct sockaddr_in addr;
@@ -80,7 +83,7 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	FD_ZERO(&fdset);
 	FD_SET(sock, &fdset);
 	tv.tv_sec  = 0;
-	tv.tv_usec = timeout * 1000;
+	tv.tv_usec = timeout * 1000; // millis -> micros
 
 	int res = lwip_connect(sock, (struct sockaddr *)&addr, sizeof(addr));
 	if (res < 0 && errno != EINPROGRESS) {

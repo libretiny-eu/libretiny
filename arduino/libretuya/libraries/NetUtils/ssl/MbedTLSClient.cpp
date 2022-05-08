@@ -19,9 +19,13 @@ extern "C" {
 } // extern "C"
 #endif
 
-MbedTLSClient::MbedTLSClient() : WiFiClient() {}
+MbedTLSClient::MbedTLSClient() : WiFiClient() {
+	init(); // ensure the context is zero filled
+}
 
-MbedTLSClient::MbedTLSClient(int sock) : WiFiClient(sock) {}
+MbedTLSClient::MbedTLSClient(int sock) : WiFiClient(sock) {
+	init(); // ensure the context is zero filled
+}
 
 void MbedTLSClient::stop() {
 	WiFiClient::stop();
@@ -46,33 +50,33 @@ void MbedTLSClient::init() {
 }
 
 int MbedTLSClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
-	return connect(ipToString(ip).c_str(), port, timeout) == 0;
+	return connect(ipToString(ip).c_str(), port, timeout);
 }
 
 int MbedTLSClient::connect(const char *host, uint16_t port, int32_t timeout) {
 	if (_pskIdentStr && _pskStr)
-		return connect(host, port, NULL, NULL, NULL, _pskIdentStr, _pskStr, _alpnProtocols) == 0;
-	return connect(host, port, _caCertStr, _clientCertStr, _clientKeyStr, NULL, NULL, _alpnProtocols) == 0;
+		return connect(host, port, timeout, NULL, NULL, NULL, _pskIdentStr, _pskStr) == 0;
+	return connect(host, port, timeout, _caCertStr, _clientCertStr, _clientKeyStr, NULL, NULL) == 0;
 }
 
 int MbedTLSClient::connect(
 	IPAddress ip, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
 ) {
-	return connect(ipToString(ip).c_str(), port, rootCABuf, clientCert, clientKey, NULL, NULL, _alpnProtocols) == 0;
+	return connect(ipToString(ip).c_str(), port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }
 
 int MbedTLSClient::connect(
 	const char *host, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
 ) {
-	return connect(host, port, rootCABuf, clientCert, clientKey, NULL, NULL, _alpnProtocols) == 0;
+	return connect(host, port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }
 
 int MbedTLSClient::connect(IPAddress ip, uint16_t port, const char *pskIdent, const char *psk) {
-	return connect(ipToString(ip).c_str(), port, NULL, NULL, NULL, pskIdent, psk, _alpnProtocols) == 0;
+	return connect(ipToString(ip).c_str(), port, 0, NULL, NULL, NULL, pskIdent, psk) == 0;
 }
 
 int MbedTLSClient::connect(const char *host, uint16_t port, const char *pskIdent, const char *psk) {
-	return connect(host, port, NULL, NULL, NULL, pskIdent, psk, _alpnProtocols) == 0;
+	return connect(host, port, 0, NULL, NULL, NULL, pskIdent, psk) == 0;
 }
 
 static int ssl_random(void *data, unsigned char *output, size_t len) {
@@ -96,23 +100,26 @@ void debug_cb(void *ctx, int level, const char *file, int line, const char *str)
 int MbedTLSClient::connect(
 	const char *host,
 	uint16_t port,
+	int32_t timeout,
 	const char *rootCABuf,
 	const char *clientCert,
 	const char *clientKey,
 	const char *pskIdent,
-	const char *psk,
-	const char **alpnProtocols
+	const char *psk
 ) {
 	LT_D_SSL("Free heap before TLS: TODO");
 
 	if (!rootCABuf && !pskIdent && !psk && !_insecure && !_useRootCA)
 		return -1;
 
+	if (timeout <= 0)
+		timeout = _timeout; // use default when -1 passed as timeout
+
 	IPAddress addr = WiFi.hostByName(host);
 	if (!(uint32_t)addr)
 		return -1;
 
-	int ret = WiFiClient::connect(addr, port, _timeout);
+	int ret = WiFiClient::connect(addr, port, timeout);
 	if (ret < 0) {
 		LT_E("SSL socket failed");
 		return ret;
@@ -135,8 +142,8 @@ int MbedTLSClient::connect(
 	LT_RET_NZ(ret);
 
 #ifdef MBEDTLS_SSL_ALPN
-	if (alpnProtocols) {
-		ret = mbedtls_ssl_conf_alpn_protocols(&_sslCfg, alpnProtocols);
+	if (_alpnProtocols) {
+		ret = mbedtls_ssl_conf_alpn_protocols(&_sslCfg, _alpnProtocols);
 		LT_RET_NZ(ret);
 	}
 #endif
@@ -208,10 +215,11 @@ int MbedTLSClient::connect(
 
 	_sockTls = fd();
 	mbedtls_ssl_set_bio(&_sslCtx, &_sockTls, mbedtls_net_send, mbedtls_net_recv, NULL);
+	mbedtls_net_set_nonblock((mbedtls_net_context *)&_sockTls);
 
 	LT_V_SSL("SSL handshake");
 	if (_handshakeTimeout == 0)
-		_handshakeTimeout = _timeout * 1000;
+		_handshakeTimeout = timeout;
 	unsigned long start = millis();
 	while (ret = mbedtls_ssl_handshake(&_sslCtx)) {
 		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {

@@ -185,7 +185,7 @@ Wi-Fi Client (SSL)  | ✔️ (✔️)
 Wi-Fi Server        | ✔️
 Wi-Fi Events        | ❌
 IPv6                | ❌
-HTTP Client (SSL)   | ✔️ (❌)
+HTTP Client (SSL)   | ✔️ (✔️)
 HTTP Server         | ✔️
 NVS / Preferences   | ❌
 SPIFFS              | ❌
