@@ -45,10 +45,8 @@ env.Append(
         # so it's either -fpermissive or this:
         ("bool", "bool"),
         # enable LwIPRxBuffer
-        "LT_HAS_LWIP",
+        ("LT_HAS_LWIP", "1"),
         ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
-        "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",  # enable PSK in mbedTLS
-        # "MBEDTLS_DEBUG_C",
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",
@@ -91,32 +89,6 @@ env.AddLibrary(
     base_dir="$BOARD_DIR",
     srcs=[
         "+<variant.cpp>",
-    ],
-)
-
-# Sources - mbedTLS
-env.AddLibrary(
-    name="ambz_mbedtls",
-    base_dir="$SDK_DIR",
-    srcs=[
-        # mbedTLS from SDK
-        "+<component/common/network/ssl/mbedtls-2.4.0/library/*.c>",
-        # skip ssl_tls.c for a fixup
-        "-<component/common/network/ssl/mbedtls-2.4.0/library/ssl_tls.c>",
-    ],
-    includes=[
-        "+<component/common/network/ssl/mbedtls-2.4.0/include>",
-        # remove polarssl
-        "-<component/common/network/ssl/polarssl-1.3.8/include>",
-    ],
-)
-
-# Sources - platform fixups
-env.AddLibrary(
-    name="ambz_arduino_fixups",
-    base_dir="$FIXUPS_DIR",
-    srcs=[
-        "+<ssl_tls.c>",  # rtl sdk defines S1 and S2 which conflicts here
     ],
 )
 

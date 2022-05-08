@@ -9,6 +9,7 @@
 #define boolean boolean_rtl
 #include <ameba_soc.h>
 #include <gpio_api.h>
+#include <main.h>
 #include <rand.h>
 #include <rt_lib_rom.h>
 #include <rtl_lib.h>

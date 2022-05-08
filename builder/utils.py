@@ -41,6 +41,7 @@ def env_add_defaults(env, platform_name: str, sdk_name: str):
         CPPPATH=[
             "$BOARD_DIR",
             "$FIXUPS_DIR",
+            "$FIXUPS_DIR/inc",
         ],
         LIBPATH=[
             "$LD_DIR",

@@ -60,11 +60,12 @@ env.Append(
         ("F_CPU", "166000000L"),
         ("LWIP_TIMEVAL_PRIVATE", "0"),
         ("LWIP_NETIF_HOSTNAME", "1"),  # to support hostname changing
-        ("LWIP_PROVIDE_ERRNO", "1"),  # for extern int errno and codes
         ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
         ("INT_MAX", "2147483647"),  # for RECV_BUFSIZE_DEFAULT
         ("ERRNO", "1"),  # for LwIP
         ("vprintf", "rtl_vprintf"),
+        "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",  # enable PSK in mbedTLS
+        # "MBEDTLS_DEBUG_C",
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",
@@ -223,7 +224,7 @@ env.AddLibrary(
         "+<component/common/network/lwip/lwip_v1.4.1/src/include/lwip>",
         "+<component/common/network/lwip/lwip_v1.4.1/src/include/ipv4>",
         "+<component/common/network/lwip/lwip_v1.4.1/port/realtek>",
-        "+<component/common/network/ssl/polarssl-1.3.8/include>",
+        "+<component/common/network/ssl/mbedtls-2.4.0/include>",
         "+<component/common/network/ssl/ssl_ram_map/rom>",
         "+<component/common/utilities>",
         "+<component/soc/realtek/8711b/app/monitor/include>",
@@ -243,57 +244,21 @@ env.AddLibrary(
     ],
 )
 
-# Sources - PolarSSL library
-if "AMBZ_NO_POLARSSL" not in env or not env["AMBZ_NO_POLARSSL"]:
-    env.AddLibrary(
-        name="ambz_polarssl",
-        base_dir="$SDK_DIR",
-        srcs=[
-            "+<component/common/network/ssl/polarssl-1.3.8/library/aesni.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/blowfish.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/camellia.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ccm.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/certs.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/cipher.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/cipher_wrap.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/debug.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ecp_ram.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/entropy.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/entropy_poll.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/error.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/gcm.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/havege.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/md2.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/md4.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/memory_buffer_alloc.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/net.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/padlock.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/pbkdf2.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/pkcs11.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/pkcs12.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/pkcs5.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/pkparse.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/platform.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ripemd160.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ssl_cache.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ssl_ciphersuites.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ssl_cli.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ssl_srv.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/ssl_tls.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/threading.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/timing.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/version.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/version_features.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509_create.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509_crl.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509_crt.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509_csr.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509write_crt.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/x509write_csr.c>",
-            "+<component/common/network/ssl/polarssl-1.3.8/library/xtea.c>",
-        ],
-    )
+# Sources - mbedTLS
+env.AddLibrary(
+    name="ambz_mbedtls",
+    base_dir="$SDK_DIR",
+    srcs=[
+        # mbedTLS from SDK
+        "+<component/common/network/ssl/mbedtls-2.4.0/library/*.c>",
+        # replace these with fixups
+        "-<component/common/network/ssl/mbedtls-2.4.0/library/net_sockets.c>",
+        "-<component/common/network/ssl/mbedtls-2.4.0/library/ssl_tls.c>",
+    ],
+    includes=[
+        "+<component/common/network/ssl/mbedtls-2.4.0/include>",
+    ],
+)
 
 # Sources - platform fixups
 env.AddLibrary(
@@ -303,6 +268,8 @@ env.AddLibrary(
         "+<app_start_patch.c>",
         "+<cmsis_ipsr.c>",
         "+<log_uart.c>",
+        "+<net_sockets.c>",  # fix non-blocking sockets (Realtek disabled this for unknown reason)
+        "+<ssl_tls.c>",  # rtl sdk defines S1 and S2 which conflicts here
         "+<wifi_mode.c>",
     ],
 )

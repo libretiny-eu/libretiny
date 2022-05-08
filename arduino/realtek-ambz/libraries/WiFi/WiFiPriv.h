@@ -9,8 +9,6 @@ extern "C" {
 // these are defined in PIO builder (for IDE to understand)
 #define LWIP_TIMEVAL_PRIVATE 0
 #define LWIP_NETIF_HOSTNAME	 1
-// this should define all errno values, as well as the extern int
-#define LWIP_PROVIDE_ERRNO	 1
 #define LWIP_SO_RCVBUF		 1
 
 #define MAX_SOCK_NUM				4
@@ -19,13 +17,6 @@ extern "C" {
 #define WIFI_CLIENT_WRITE_RETRY		10
 #define WIFI_CLIENT_SELECT_TIMEOUT	1000
 #define WIFI_CLIENT_FLUSH_BUF_SIZE	1024
-
-// I think I don't understand how that works.
-// For some reason, LwIP uses a different (extern) errno,
-// while this macro refers to a function __errno, which
-// reads a totally different variable.
-#undef errno
-#include <lwip/arch.h>
 
 // disable #defines removing lwip_ prefix
 #undef LWIP_COMPAT_SOCKETS
