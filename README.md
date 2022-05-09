@@ -100,9 +100,10 @@ arduino/
 │  ├─ cores/                        Wiring core files
 │  ├─ libraries/                    Supported built-in platform libraries
 ├─ libretuya/
-│  ├─ api/                      LibreTuya API (interfaces + LT class) for Arduino frameworks
+│  ├─ api/                      Library interfaces
 │  ├─ common/                   Units common to all platforms
 │  ├─ compat/                   Fixes for compatibility with ESP32 framework
+│  ├─ core/                     LibreTuya API for Arduino cores
 │  ├─ libraries/                Built-in platform-independent libraries
 boards/
 ├─ <board name>/                Board-specific code

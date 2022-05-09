@@ -8,9 +8,9 @@ env = DefaultEnvironment()
 platform = env.PioPlatform()
 
 API_DIR = platform.get_package_dir("framework-arduino-api")
-LT_API_DIR = join(platform.get_dir(), "arduino", "libretuya")
+LT_ARDUINO_DIR = join(platform.get_dir(), "arduino", "libretuya")
 assert isdir(API_DIR)
-assert isdir(LT_API_DIR)
+assert isdir(LT_ARDUINO_DIR)
 
 # Sources - ArduinoCore-API
 env.AddLibrary(
@@ -33,15 +33,17 @@ env.AddLibrary(
 # Sources - LibreTuya API
 env.AddLibrary(
     name="libretuya_api",
-    base_dir=LT_API_DIR,
+    base_dir=LT_ARDUINO_DIR,
     srcs=[
         "+<api/*.c*>",
         "+<common/*.c*>",
+        "+<core/*.c*>",
         "+<libraries/**/*.c*>",
     ],
     includes=[
         "!<.>",
         "!<compat>",
+        "!<core>",
         "!<libraries/*>",
     ],
 )

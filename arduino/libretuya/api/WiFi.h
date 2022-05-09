@@ -30,7 +30,6 @@
 #include "WiFiType.h"
 
 // TODO wifi events
-// TODO WiFiMulti library
 
 class IWiFiClass {
   public:

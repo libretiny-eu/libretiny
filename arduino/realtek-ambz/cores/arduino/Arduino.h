@@ -8,7 +8,7 @@
 
 #define PinMode PinModeArduino // this conflicts with SDK enum
 #include <api/ArduinoAPI.h>
-#include <api/LibreTuyaAPI.h>
+#include <core/LibreTuyaAPI.h>
 #undef PinMode
 
 #ifdef __cplusplus
