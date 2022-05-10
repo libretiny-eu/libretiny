@@ -1,51 +1,12 @@
 {
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb"
+	],
 	"build": {
 		"mcu": "rtl8710bn",
 		"family": "rtl8710",
-		"variant": "wr3",
-		"ldscript_sdk": "rlx8711B-symbol-v02-img2_xip1_2M_cpp.ld",
-		"ldscript_arduino": "rlx8711B-symbol-v02-img2_xip1_2M_cpp.ld",
-		"f_cpu": "125000000L",
-		"amb_flash_addr": "0x08000000",
-		"amb_boot_all": "boot_all_77F7.bin"
-	},
-	"connectivity": [
-		"wifi"
-	],
-	"debug": {
-		"protocol": "openocd",
-		"protocols": [
-			"openocd"
-		],
-		"openocd_config": "amebaz.cfg",
-		"gdb_init": [
-			"mem 0x8000000 0x8200000 ro"
-		]
-	},
-	"flash": {
-		"boot_xip": "0x000000+0x4000",
-		"boot_ram": "0x004000+0x4000",
-		"system": "0x009000+0x1000",
-		"calibration": "0x00A000+0x1000",
-		"ota1": "0x00B000+0xC5000",
-		"ota2": "0x0D0000+0xC5000",
-		"userdata": "0x195000+0x6A000",
-		"rdp": "0x1FF000+0x1000"
-	},
-	"frameworks": [
-		"realtek-ambz-sdk",
-		"realtek-ambz-arduino"
-	],
-	"upload": {
-		"flash_size": "2MB",
-		"maximum_size": 806912,
-		"maximum_ram_size": 262144,
-		"require_upload_port": true,
-		"speed": 1500000,
-		"protocol": "uart",
-		"protocols": [
-			"uart"
-		]
+		"variant": "wr3"
 	},
 	"name": "WR3 Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1",

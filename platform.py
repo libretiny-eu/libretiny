@@ -1,7 +1,10 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
-from os.path import dirname
+import json
+from os.path import dirname, join
+from typing import Dict
 
+from platformio import util
 from platformio.debug.config.base import DebugConfigBase
 from platformio.debug.exception import DebugInvalidOptionsError
 from platformio.managers.platform import PlatformBase
@@ -67,6 +70,8 @@ def find_pkg_root(self, path: str, spec: PackageSpec):
 
 
 class LibretuyaPlatform(PlatformBase):
+    boards_base: Dict[str, dict] = {}
+
     def configure_default_packages(self, options, targets):
         framework = options.get("pioframework")[0]
         # patch find_pkg root to ignore missing manifests and save PackageSpec
@@ -97,13 +102,35 @@ class LibretuyaPlatform(PlatformBase):
         if not result:
             return result
         if id_:
-            return self._add_default_debug_tools(result)
+            return self.update_board(result)
         else:
             for key, value in result.items():
-                result[key] = self._add_default_debug_tools(value)
+                result[key] = self.update_board(value)
         return result
 
-    def _add_default_debug_tools(self, board: PlatformBoardConfig):
+    def update_board(self, board: PlatformBoardConfig):
+
+        if "_base" in board:
+            base = board.get("_base")
+            if not isinstance(base, list):
+                base = [base]
+
+            result = None
+            for base_name in base:
+                if base_name not in self.boards_base:
+                    file = join(
+                        dirname(__file__), "boards", "_base", f"{base_name}.json"
+                    )
+                    with open(file, encoding="utf-8") as f:
+                        self.boards_base[base_name] = json.load(f)
+
+                if not result:
+                    result = self.boards_base[base_name]
+                else:
+                    util.merge_dicts(result, self.boards_base[base_name])
+            util.merge_dicts(result, board._manifest)
+            board._manifest = result
+
         # inspired by platform-ststm32/platform.py
         debug = board.manifest.get("debug", {})
         if not debug:

@@ -8,10 +8,10 @@
 // ----
 
 // Number of pins defined in PinDescription array
-#define PINS_COUNT		   (12u)
-#define NUM_DIGITAL_PINS   (12u)
-#define NUM_ANALOG_INPUTS  (2u)
-#define NUM_ANALOG_OUTPUTS (0u)
+#define PINS_COUNT		   12
+#define NUM_DIGITAL_PINS   11
+#define NUM_ANALOG_INPUTS  2
+#define NUM_ANALOG_OUTPUTS 0
 
 // Low-level pin register query macros
 // -----------------------------------
@@ -21,14 +21,14 @@
 
 // LEDs
 // ----
-#define PIN_LED		(4u)
-#define LED_BUILTIN PIN_LED
+#define PIN_LED		4u		// PA_0
+#define LED_BUILTIN PIN_LED // PA_0
 
 // Analog pins
 // -----------
-#define PIN_A0 (1u) // PA_19
-#define PIN_A1 (0u) // dummy, this is NOT usable
-#define PIN_A2 (5u) // PA_20
+#define PIN_A0 1u  // PA_19
+#define PIN_A1 11u // VBAT_MEAS
+#define PIN_A2 0u  // dummy, this is NOT usable
 
 static const uint8_t A0 = PIN_A0;
 static const uint8_t A1 = PIN_A1;
@@ -44,18 +44,19 @@ static const uint8_t A2 = PIN_A2;
 
 // Serial ports
 // ------------
-#ifdef __cplusplus
-#include "LOGUARTClass.h"
-extern LOGUARTClass Serial;
 // LOGUARTClass
-#define PIN_SERIAL2_RX PA_29
-#define PIN_SERIAL2_TX PA_30
+#define PIN_SERIAL2_RX 5u // PA_29
+#define PIN_SERIAL2_TX 6u // PA_30
 // UARTClassOne
-#define PIN_SERIAL0_RX PA_18
-#define PIN_SERIAL0_TX PA_23
-#endif // __cplusplus
+#define PIN_SERIAL0_RX 9u  // PA_18
+#define PIN_SERIAL0_TX 10u // PA_23
 
 #define SERIAL_PORT_USBVIRTUAL	  Serial
 #define SERIAL_PORT_MONITOR		  Serial
 #define SERIAL_PORT_HARDWARE	  Serial
 #define SERIAL_PORT_HARDWARE_OPEN Serial
+
+#ifdef __cplusplus
+#include "LOGUARTClass.h"
+extern LOGUARTClass Serial;
+#endif // __cplusplus

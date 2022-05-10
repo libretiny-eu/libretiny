@@ -1,0 +1,42 @@
+{
+	"build": {
+		"f_cpu": "125000000L",
+		"amb_flash_addr": "0x08000000"
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "amebaz.cfg",
+		"gdb_init": [
+			"mem 0x8000000 0x8200000 ro"
+		]
+	},
+	"frameworks": [
+		"realtek-ambz-sdk",
+		"realtek-ambz-arduino"
+	],
+	"upload": {
+		"maximum_ram_size": 262144,
+		"require_upload_port": true,
+		"speed": 1500000,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "AmebaZ",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		}
+	}
+}
