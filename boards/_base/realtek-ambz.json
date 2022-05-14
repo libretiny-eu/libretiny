@@ -37,6 +37,14 @@
 			"extra": {
 				"Wi-Fi": "802.11 b/g/n"
 			}
-		}
+		},
+		"links": {
+			"Debugging": "../../docs/platform/realtek/debugging.md",
+			"Flashing (Tuya manual)": "https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8"
+		},
+		"extra": [
+			"RDP is most likely not used in Tuya firmwares, as the System Data partition contains an incorrect offset 0xFF000 for RDP, which is in the middle of OTA2 image.",
+			"Additionally, Tuya firmware uses an encrypted KV or file storage, which resides at the end of flash memory. This seems to overlap system RDP area."
+		]
 	}
 }

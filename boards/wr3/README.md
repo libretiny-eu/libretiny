@@ -1,44 +1,45 @@
 # WR3 Wi-Fi Module
 
-[Product page](https://developer.tuya.com/en/docs/iot/wifiwr1module?id=K9605tc0k90t3)
+*by Tuya Inc.*
+
+[Product page](https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1)
 
 - [Debugging](../../docs/platform/realtek/debugging.md)
+- [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
 
 Parameter    | Value
--------------|-------------------------
+-------------|----------------------------------
 MCU          | RTL8710BN
 Manufacturer | Realtek
 Series       | AmebaZ
-Max. clock   | 125 MHz
+Frequency    | 125 MHz
 Flash size   | 2 MiB
 RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
-I/O          | 7x GPIO, 2x UART, 1x ADC
+I/O          | 11x GPIO, 6x PWM, 2x UART, 2x ADC
 Wi-Fi        | 802.11 b/g/n
 
 ## Pinout
 
-![image](pinout.png)
+![Pinout](pinout_wr3.svg)
 
-## Arduino core pin map
+## Arduino Core pin mapping
 
-No. | Pin   | Alt. function | PWM
-----|-------|---------------|-----
-D0  | PA_22 |               | PWM5
-D1  | PA_19 |               |
-D2  | PA_14 | SWCLK         | PWM0
-D3  | PA_15 | SWDAT         | PWM1
-D4  | PA_0  |               | PWM2
-D5  | PA_20 |               |
-D6  | PA_29 | UART_Log_RXD  | PWM4
-D7  | PA_30 | UART_Log_TXD  | PWM3
-D8  | PA_5  |               | PWM4
-D9  | PA_12 |               | PWM3
-D10 | PA_18 | UART0_RXD     |
-D11 | PA_23 | UART0_TXD     | PWM0
-A0  | PA_19 |               |
-A1  | -     |               |
-A2  | PA_20 |               |
+No. | Pin        | UART      | I²C      | SPI                  | PWM  | Other
+----|------------|-----------|----------|----------------------|------|------
+D0  | PA22       | UART0_RTS | I2C0_SCL | SPI0_MISO, SPI1_MISO | PWM5 |
+D1  | PA19       | UART0_CTS | I2C0_SDA | SPI0_CS, SPI1_CS     |      |
+D2  | PA14       |           |          |                      | PWM0 | SWCLK
+D3  | PA15       |           |          |                      | PWM1 | SWDIO
+D4  | PA00       |           |          |                      | PWM2 |
+D5  | PA29       | UART2_RX  | I2C0_SCL |                      | PWM4 |
+D6  | PA30       | UART2_TX  | I2C0_SDA |                      | PWM4 |
+D7  | PA05       |           |          |                      | PWM4 |
+D8  | PA12       |           |          |                      | PWM3 |
+D9  | PA18       | UART0_RX  | I2C1_SCL | SPI0_SCK, SPI1_SCK   |      |
+D10 | PA23       | UART0_TX  | I2C1_SDA | SPI0_MOSI, SPI1_MOSI | PWM0 |
+A0  | PA19, ADC1
+A1  | ADC2
 
 ## Flash memory map
 
@@ -58,7 +59,6 @@ OTA2 Image  | 0x0D0000 | 788 KiB / 0xC5000 | 0x195000
 User Data   | 0x195000 | 424 KiB / 0x6A000 | 0x1FF000
 RDP         | 0x1FF000 | 4 KiB / 0x1000    | 0x200000
 
-RDP is most likely not used in Tuya firmwares, as the System Data partition contains
-an incorrect offset 0xFF000 for RDP, which is in the middle of OTA2 image.
+RDP is most likely not used in Tuya firmwares, as the System Data partition contains an incorrect offset 0xFF000 for RDP, which is in the middle of OTA2 image.
 
 Additionally, Tuya firmware uses an encrypted KV or file storage, which resides at the end of flash memory. This seems to overlap system RDP area.
