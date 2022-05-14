@@ -4,15 +4,12 @@
 
 #include <Arduino.h>
 
-#ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
-
 #include <flash_api.h>
+}
 
-#ifdef __cplusplus
-} // extern "C"
-#endif
+// Global Flash object.
+FlashClass Flash;
 
 FlashClass::FlashClass() {
 	flash = NULL;
@@ -67,5 +64,3 @@ bool FlashClass::writeBlock(uint32_t offset, uint8_t *data, size_t size) {
 	initialize();
 	return flash_stream_write(flash, offset, size, data);
 }
-
-FlashClass Flash;

@@ -40,7 +40,11 @@ static const uint8_t A2 = PIN_A2;
 
 // Wire Interfaces
 // ---------------
-#define WIRE_INTERFACES_COUNT 0
+#define WIRE_INTERFACES_COUNT 2
+#define PIN_WIRE0_SDA		  1u  // PA_19
+#define PIN_WIRE0_SCL		  0u  // PA_22
+#define PIN_WIRE1_SDA		  10u // PA_23
+#define PIN_WIRE1_SCL		  9u  // PA_18
 
 // Serial ports
 // ------------

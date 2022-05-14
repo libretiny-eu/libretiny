@@ -179,7 +179,7 @@ Flash I/O           | ❓
 **CORE LIBRARIES**  |
 SoftwareSerial      | ❌
 SPI                 | ❌
-Wire                | ❌
+Wire                | ❗
 **OTHER LIBRARIES** |
 Wi-Fi STA/AP/Mixed  | ✔️
 Wi-Fi Client (SSL)  | ✔️ (✔️)
