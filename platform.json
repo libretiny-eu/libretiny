@@ -8,6 +8,10 @@
   },
   "version": "0.3.0",
   "frameworks": {
+    "arduino": {
+      "title": "Generic Arduino framework",
+      "script": "builder/frameworks/arduino.py"
+    },
     "realtek-ambz-sdk": {
       "tilte": "Realtek AmebaZ - SDK",
       "package": "framework-realtek-amb1",

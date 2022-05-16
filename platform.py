@@ -83,6 +83,13 @@ class LibretuyaPlatform(PlatformBase):
             BasePackageManager._load_manifest = BasePackageManager.load_manifest
             BasePackageManager.load_manifest = load_manifest
 
+        # allow using "arduino" as framework
+        if framework == "arduino":
+            board = self.get_boards(options.get("board"))
+            frameworks = board.get("frameworks")
+            framework = next(fw for fw in frameworks if framework in fw)
+            options.get("pioframework")[0] = framework
+
         # set specific compiler versions
         if framework.startswith("realtek-ambz"):
             self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.50401.0"
@@ -130,6 +137,11 @@ class LibretuyaPlatform(PlatformBase):
                     util.merge_dicts(result, self.boards_base[base_name])
             util.merge_dicts(result, board._manifest)
             board._manifest = result
+
+        # add "arduino" framework
+        has_arduino = any("arduino" in fw for fw in board.manifest["frameworks"])
+        if has_arduino:
+            board.manifest["frameworks"].append("arduino")
 
         # inspired by platform-ststm32/platform.py
         debug = board.manifest.get("debug", {})
