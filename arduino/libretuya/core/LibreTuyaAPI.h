@@ -24,6 +24,7 @@ extern "C" {
 #endif // __cplusplus
 
 #include "lt_logger.h"
+#include "lt_posix_api.h"
 
 #ifdef __cplusplus
 } // extern "C"
@@ -43,7 +44,7 @@ extern "C" {
 #define PGM_VOID_P			const void *
 
 // C functions
-extern char *strdup(const char *);
+void lt_rand_bytes(uint8_t *buf, size_t len);
 
 // C++ only functions
 #ifdef __cplusplus

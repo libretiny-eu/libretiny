@@ -80,16 +80,7 @@ int MbedTLSClient::connect(const char *host, uint16_t port, const char *pskIdent
 }
 
 static int ssl_random(void *data, unsigned char *output, size_t len) {
-	int *buf = (int *)output;
-	size_t i;
-	for (i = 0; len >= sizeof(int); len -= sizeof(int)) {
-		buf[i++] = rand();
-	}
-	if (len) {
-		int rem				= rand();
-		unsigned char *pRem = (unsigned char *)&rem;
-		memcpy(output + i * sizeof(int), pRem, len);
-	}
+	lt_rand_bytes((uint8_t *)output, len);
 	return 0;
 }
 

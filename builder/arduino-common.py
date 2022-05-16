@@ -39,12 +39,14 @@ env.AddLibrary(
         "+<common/*.c*>",
         "+<core/*.c*>",
         "+<libraries/**/*.c*>",
+        "+<posix/*.c>",
     ],
     includes=[
         "!<.>",
         "!<compat>",
         "!<core>",
         "!<libraries/*>",
+        "!<posix>",
     ],
 )
 
