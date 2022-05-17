@@ -12,6 +12,8 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 	if (!enableSTA(true))
 		return WL_CONNECT_FAILED;
 
+	LT_HEAP_I();
+
 	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
 		LT_W("SSID not specified or too long");
 		return WL_CONNECT_FAILED;
@@ -47,18 +49,26 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
 	if (!enableSTA(true))
 		return false;
-	struct netif *ifs = NETIF_RTW_STA;
-	struct ip_addr ipaddr, netmask, gw, d1, d2;
-	ipaddr.addr	 = localIP;
-	netmask.addr = subnet;
-	gw.addr		 = gateway;
-	d1.addr		 = dns1;
-	d2.addr		 = dns2;
-	netif_set_addr(ifs, &ipaddr, &netmask, &gw);
+
+	struct ip_addr d1, d2;
+	d1.addr = dns1;
+	d2.addr = dns2;
 	if (dns1[0])
 		dns_setserver(0, &d1);
 	if (dns2[0])
 		dns_setserver(0, &d2);
+
+	if (!localIP[0]) {
+		LwIP_DHCP(0, DHCP_START);
+		return true;
+	}
+	struct netif *ifs = NETIF_RTW_STA;
+	struct ip_addr ipaddr, netmask, gw;
+	ipaddr.addr	 = localIP;
+	netmask.addr = subnet;
+	gw.addr		 = gateway;
+	netif_set_addr(ifs, &ipaddr, &netmask, &gw);
+	LwIP_DHCP(0, DHCP_STOP);
 	return true;
 }
 
@@ -94,8 +104,21 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 
 	if (ret == RTW_SUCCESS) {
 		dhcpRet = LwIP_DHCP(0, DHCP_START);
-		if (dhcpRet == DHCP_ADDRESS_ASSIGNED)
+		if (dhcpRet == DHCP_ADDRESS_ASSIGNED) {
+			LT_HEAP_I();
+			EventInfo *eventInfo				   = (EventInfo *)zalloc(sizeof(EventInfo));
+			eventInfo->got_ip.if_index			   = 0;
+			eventInfo->got_ip.esp_netif			   = NULL;
+			eventInfo->got_ip.ip_info.ip.addr	   = localIP();
+			eventInfo->got_ip.ip_info.gw.addr	   = gatewayIP();
+			eventInfo->got_ip.ip_info.netmask.addr = subnetMask();
+			eventInfo->got_ip.ip_changed		   = true;
+			// pass the event through the queue
+			wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
+			// free memory as wifi_indication creates a copy
+			free(eventInfo);
 			return true;
+		}
 		LT_E("DHCP failed; dhcpRet=%d", dhcpRet);
 		wifi_disconnect();
 		return false;

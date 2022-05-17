@@ -17,3 +17,5 @@ extern void vPortFree(void *pv);
 #define calloc	pvPortCalloc
 #define realloc pvPortReAlloc
 #define free	vPortFree
+
+#define LT_HEAP_FUNC xPortGetFreeHeapSize

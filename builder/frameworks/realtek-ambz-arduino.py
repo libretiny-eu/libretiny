@@ -6,7 +6,13 @@ from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
 
+# SDK options
 env.Replace(AMBZ_NO_POLARSSL=True)
+env.Replace(
+    LIB_AMBZ_SDK_SKIP=[
+        "component/common/api/wifi/wifi_ind.c",
+    ]
+)
 
 env.SConscript("realtek-ambz-sdk.py", exports="env")
 env.SConscript("../arduino-common.py", exports="env")

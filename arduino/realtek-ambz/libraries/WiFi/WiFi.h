@@ -73,6 +73,8 @@ class WiFiClass : public IWiFiClass,
 	static uint8_t calculateSubnetCIDR(IPAddress subnetMask);
 	static String macToString(uint8_t *mac);
 
+	static void handleRtwEvent(uint16_t event, char *data, int len, int flags);
+
   public:
 	// IWiFiSTAClass
 	WiFiStatus begin(

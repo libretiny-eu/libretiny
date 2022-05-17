@@ -73,6 +73,13 @@ def env_add_library(
             expr = join(base_dir, src[2:-1])
 
         sources.append(src[0] + "<" + expr + ">")
+
+    # allow removing sources from parent builders
+    key = f"LIB_{name.upper()}_SKIP"
+    if key in env:
+        for expr in env[key]:
+            sources.append("-<" + expr + ">")
+
     # queue library for further env clone and build
     env.Prepend(LIBQUEUE=[[join("$BUILD_DIR", name), base_dir, sources]])
 

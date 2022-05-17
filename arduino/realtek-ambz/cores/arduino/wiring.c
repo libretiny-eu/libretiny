@@ -31,7 +31,7 @@ static __inline uint32_t __get_ipsr__(void) {
 	return (__regIPSR);
 }
 
-void init(void) {
+__attribute__((weak)) void init(void) {
 	// nop
 }
 

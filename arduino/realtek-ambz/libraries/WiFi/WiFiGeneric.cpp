@@ -9,20 +9,24 @@ int32_t WiFiClass::channel() {
 	return channel;
 }
 
+extern void startWifiTask();
+
 bool WiFiClass::mode(WiFiMode mode) {
 	WiFiMode currentMode = getMode();
 	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
 	if (mode == currentMode)
 		return true;
+	LT_HEAP_I();
+	startWifiTask();
 
 	if (!currentMode && mode && !_initialized) {
 		// initialize wifi first
 		LT_I("Initializing LwIP");
 		LwIP_Init();
 		reset_wifi_struct();
-		// wifi_manager_init(); // these are events!
 		_initialized = true;
 	}
+	LT_HEAP_I();
 	if (currentMode) {
 		// stop wifi to change mode
 		LT_D_WG("Stopping WiFi to change mode");
@@ -37,6 +41,7 @@ bool WiFiClass::mode(WiFiMode mode) {
 		LT_E("Error while changing mode(%u)", mode);
 		return false;
 	}
+	LT_HEAP_I();
 	return true;
 }
 

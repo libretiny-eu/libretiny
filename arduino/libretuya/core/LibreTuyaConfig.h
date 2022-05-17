@@ -44,6 +44,11 @@
 #define LT_LOGLEVEL LT_LEVEL_INFO
 #endif
 
+// Free heap size debugging
+#ifndef LT_LOG_HEAP
+#define LT_LOG_HEAP 0
+#endif
+
 // Per-module debugging
 #ifndef LT_DEBUG_WIFI
 #define LT_DEBUG_WIFI 0

@@ -51,6 +51,12 @@ void lt_log(const uint8_t level, const char *format, ...);
 #define LT_F(...)
 #endif
 
+#if LT_LOG_HEAP
+#define LT_HEAP_I() LT_I("Free heap: %u", LT_HEAP_FUNC());
+#else
+#define LT_HEAP_I()
+#endif
+
 // ESP32 compat
 #define log_printf(...)		LT_I(__VA_ARGS__)
 #define log_v(...)			LT_V(__VA_ARGS__)

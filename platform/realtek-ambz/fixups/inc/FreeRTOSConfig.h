@@ -94,7 +94,7 @@ extern uint32_t SystemCoreClock;
 #define configSYSTICK_CLOCK_HZ			32768
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 512 )
 #ifdef CONFIG_WIFI_EN
-#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 110 * 1024 ) )
+#define configTOTAL_HEAP_SIZE			( ( size_t ) ( 160 * 1024 ) )
 #else
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 20 * 1024 ) )
 #endif

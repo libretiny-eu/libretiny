@@ -26,10 +26,10 @@
 #include <api/IPAddress.h>
 #include <api/IPv6Address.h>
 #include <api/Print.h>
+#include <vector>
 
+#include "Events.h"
 #include "WiFiType.h"
-
-// TODO wifi events
 
 class IWiFiClass {
   public:
@@ -63,6 +63,20 @@ class IWiFiGenericClass {
 	static IPAddress calculateBroadcast(IPAddress ip, IPAddress subnet);
 	static uint8_t calculateSubnetCIDR(IPAddress subnetMask);
 	static String macToString(uint8_t *mac);
+
+  protected:
+	static std::vector<EventHandler> handlers;
+
+  public:
+	uint16_t onEvent(EventCb callback, EventId eventId = ARDUINO_EVENT_MAX);
+	uint16_t onEvent(EventFuncCb callback, EventId eventId = ARDUINO_EVENT_MAX);
+	uint16_t onEvent(EventSysCb callback, EventId eventId = ARDUINO_EVENT_MAX);
+	void removeEvent(EventCb callback, EventId eventId);
+	void removeEvent(EventSysCb callback, EventId eventId);
+	void removeEvent(uint16_t id);
+
+  protected:
+	static void postEvent(EventId eventId, EventInfo eventInfo);
 };
 
 class IWiFiSTAClass {
