@@ -30,6 +30,11 @@
       "version": "https://github.com/ambiot/amb1_sdk",
       "manifest": {
         "description": "SDK for Ameba1"
+      },
+      "libraries": {
+        "lwip": [
+          "v1.4.1-amb1"
+        ]
       }
     },
     "framework-arduino-api": {
