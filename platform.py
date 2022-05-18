@@ -38,6 +38,9 @@ def load_manifest(self, src):
     manifest: dict = libretuya_packages[spec.name]
     # find additional manifest info
     manifest = manifest.get("manifest", manifest_default)
+    # extract tag version
+    if "#" in spec.url:
+        manifest["version"] = spec.url.rpartition("#")[2].lstrip("v")
     # put info from spec
     manifest.update(
         {
@@ -52,6 +55,8 @@ def load_manifest(self, src):
     cache_key = "load_manifest-%s" % path
     self.memcache_set(cache_key, manifest)
     # result = ManifestParserFactory.new(json.dumps(manifest), ManifestFileType.PACKAGE_JSON).as_dict()
+    with open(join(path, self.manifest_names[0]), "w") as f:
+        json.dump(manifest, f)
     return manifest
 
 
