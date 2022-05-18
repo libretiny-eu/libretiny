@@ -7,6 +7,8 @@ board = env.BoardConfig()
 
 # Utilities
 env.SConscript("utils.py", exports="env")
+# Vendor-specific library ports
+env.SConscript("libs/lwip.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":

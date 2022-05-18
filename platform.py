@@ -99,6 +99,28 @@ class LibretuyaPlatform(PlatformBase):
         if framework.startswith("realtek-ambz"):
             self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.50401.0"
 
+        # use appropriate vendor library versions
+        sdk_package_name = self.frameworks[framework]["package"]
+        sdk_package = self.packages[sdk_package_name]
+        sdk_libraries = sdk_package["libraries"] if "libraries" in sdk_package else {}
+        packages_new = {}
+        for name, package in self.packages.items():
+            if not name.startswith("library-"):
+                continue
+            name = name[8:]  # strip "library-"
+            if name not in sdk_libraries:
+                continue
+            lib_version = sdk_libraries[name][-1]  # get latest version tag
+            package = dict(**package)  # clone the base package
+            package["version"] = (
+                package["base_url"] + "#" + lib_version
+            )  # use the specific version
+            package["optional"] = False  # make it required
+            lib_version = lib_version.lstrip("v")  # strip "v" in target name
+            name = f"library-{name}@{lib_version}"
+            packages_new[name] = package  # put the package under a new name
+        self.packages.update(packages_new)
+
         # make ArduinoCore-API required
         if "arduino" in framework:
             self.packages["framework-arduino-api"]["optional"] = False

@@ -40,6 +40,14 @@
         "description": "Hardware independent layer of the Arduino cores"
       }
     },
+    "library-lwip": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/libretuya/lwip",
+      "manifest": {
+        "description": "lwIP - A Lightweight TCPIP stack"
+      }
+    },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optionalVersions": [
