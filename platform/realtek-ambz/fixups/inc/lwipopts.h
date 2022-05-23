@@ -41,7 +41,10 @@
 
 /* Define LWIP_COMPAT_MUTEX if the port has no mutexes and binary semaphores
  should be used instead */
-#define LWIP_COMPAT_MUTEX       1
+#define LWIP_COMPAT_MUTEX         1
+#define LWIP_COMPAT_MUTEX_ALLOWED 1
+
+#define LWIP_TCPIP_TIMEOUT      1
 
 #define ETHARP_TRUST_IP_MAC     0
 #define IP_REASSEMBLY           1

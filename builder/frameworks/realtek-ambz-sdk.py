@@ -58,9 +58,14 @@ env.Append(
         "M3",
         "CONFIG_PLATFORM_8711B",
         ("F_CPU", "166000000L"),
+        # LwIP options
         ("LWIP_TIMEVAL_PRIVATE", "0"),
         ("LWIP_NETIF_HOSTNAME", "1"),  # to support hostname changing
         ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
+        ("ip_addr", "ip4_addr"),  # LwIP 2.0.x compatibility
+        ("ip_addr_t", "ip4_addr_t"),  # LwIP 2.0.x compatibility
+        ("IN_ADDR_T_DEFINED", "1"),
+        ("in_addr_t", "u32_t"),
         ("INT_MAX", "2147483647"),  # for RECV_BUFSIZE_DEFAULT
         ("ERRNO", "1"),  # for LwIP
         ("vprintf", "rtl_vprintf"),
@@ -204,8 +209,8 @@ env.AddLibrary(
     ],
 )
 
-# Sources - lwIP 1.4.1
-env.AddLibraryLwIP(version="1.4.1", port="amb1")
+# Sources - lwIP 2.0.0
+env.AddLibraryLwIP(version="2.0.0", port="amb1")
 
 # Sources - mbedTLS
 env.AddLibrary(

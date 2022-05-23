@@ -6,7 +6,18 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// disable typedef in basic_types.h
 #define boolean boolean_rtl
+
+#include <strproc.h> // define string macros first
+#undef isdigit		 // then remove them, as they conflict
+#undef islower		 // with ctype.h macros
+#undef isprint
+#undef isspace
+#undef isxdigit
+#undef strtol
+#undef strtoul
+
 #include <ameba_soc.h>
 #include <gpio_api.h>
 #include <main.h>
@@ -14,6 +25,8 @@
 #include <rt_lib_rom.h>
 #include <rtl_lib.h>
 #include <wait_api.h>
+
+// remove previously defined workaround
 #undef boolean
 
 // stdio.h
@@ -36,3 +49,5 @@ extern void wait_us(int us);
 extern int LOGUART_SetBaud(uint32_t BaudRate);	  // from fixups/log_uart.c
 extern void DumpForOneBytes(void *addr, int cnt); // cnt max 0x70!
 extern void SystemCoreClockUpdate(void);
+
+extern int _sscanf_patch(const char *buf, const char *fmt, ...);

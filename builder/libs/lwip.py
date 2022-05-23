@@ -39,7 +39,6 @@ def env_add_lwip(
         ],
         includes=[
             "+<src/include>",
-            "+<src/include/lwip>",
             "+<src/include/ipv4>",
             *port_includes,
         ],

@@ -1,6 +1,7 @@
 // CHANGES:
 // - 2022-05-08 change CONFIG_USE_POLARSSL to CONFIG_USE_MBEDTLS
 // - 2022-05-08 use static int errno
+// - 2022-05-18 include lwip/init.h
 
 
 /**
@@ -22,6 +23,7 @@
 #undef errno // undefine __errno() macro
 extern int errno; // use a static errno
 
+#include <lwip/init.h>
 
 /*For MP mode setting*/
 //#define SUPPORT_MP_MODE		1
