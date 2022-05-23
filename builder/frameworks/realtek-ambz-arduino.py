@@ -52,6 +52,8 @@ env.Append(
         ("bool", "bool"),
         # enable LwIPRxBuffer
         ("LT_HAS_LWIP", "1"),
+        # enable LwIPmDNS
+        ("LT_HAS_LWIP2", "1"),
         ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
     ],
     LINKFLAGS=[

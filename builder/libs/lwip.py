@@ -35,6 +35,7 @@ def env_add_lwip(
             "+<src/core/ipv4/*.c>",
             "+<src/netif/ethernet.c>",  # 2.0.x
             "+<src/netif/etharp.c>",  # 1.4.x
+            "+<src/apps/mdns/mdns.c>",
             *port_srcs,
         ],
         includes=[

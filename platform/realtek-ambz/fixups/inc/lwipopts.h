@@ -1,5 +1,8 @@
 // CHANGES:
 // - 2022-05-08 undefine LWIP_PROVIDE_ERRNO
+// - 2022-05-23 enable LWIP_MDNS_RESPONDER
+// - 2022-05-23 set LWIP_NUM_NETIF_CLIENT_DATA to 1
+// - 2022-05-23 set MEMP_NUM_UDP_PCB to 7
 
 
 /**
@@ -83,7 +86,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_PBUF           100
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
-#define MEMP_NUM_UDP_PCB        6
+#define MEMP_NUM_UDP_PCB        7
 /* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
    connections. */
 #define MEMP_NUM_TCP_PCB        10
@@ -318,6 +321,10 @@ The STM32F2x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 #ifndef DNS_IGNORE_REPLY_ERR
 #define DNS_IGNORE_REPLY_ERR   1
 #endif /* DNS_IGNORE_REPLY_ERR */
+
+// for mDNS support
+#define LWIP_MDNS_RESPONDER 1
+#define LWIP_NUM_NETIF_CLIENT_DATA 1
 
 #endif /* __LWIPOPTS_H__ */
 

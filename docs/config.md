@@ -40,3 +40,4 @@ Platforms should generally call i.e. WiFiClient debugging for client-related cod
 ## Platform options
 
 - LT_HAS_LWIP - whether platform SDK has LwIP. This causes `LwIPRxBuffer.cpp` to be compiled for platform libraries to use.
+- LT_HAS_LWIP2 - whether platform has LwIP v2.0.0 or newer. This causes `LwIPmDNS.cpp` to be compiled.
