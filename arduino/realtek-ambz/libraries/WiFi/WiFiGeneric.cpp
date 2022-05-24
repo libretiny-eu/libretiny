@@ -9,9 +9,13 @@ int32_t WiFiClass::channel() {
 	return channel;
 }
 
+extern WiFiClass *pWiFi;
 extern void startWifiTask();
 
 bool WiFiClass::mode(WiFiMode mode) {
+	// store a pointer to WiFi for WiFiEvents.cpp
+	pWiFi = this;
+
 	WiFiMode currentMode = getMode();
 	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
 	if (mode == currentMode)

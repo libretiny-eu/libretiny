@@ -10,6 +10,8 @@
 static xQueueHandle wifiEventQueueHandle = NULL;
 static xTaskHandle wifiEventTaskHandle	 = NULL;
 
+WiFiClass *pWiFi = NULL;
+
 // C code to support SDK-defined events (in wifi_conf.c)
 extern "C" {
 // SDK events
@@ -133,6 +135,9 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 		handler(data, len, flags, event_callback_list[event][i].handler_user_data);
 	}
 
+	if (pWiFi == NULL)
+		return;
+
 	EventId eventId;
 	EventInfo eventInfo;
 	String ssid;
@@ -155,18 +160,18 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 
 		case WIFI_EVENT_FOURWAY_HANDSHAKE_DONE:
 			eventId								  = ARDUINO_EVENT_WIFI_STA_CONNECTED;
-			ssid								  = WiFi.SSID();
+			ssid								  = pWiFi->SSID();
 			eventInfo.wifi_sta_connected.ssid_len = ssid.length();
-			eventInfo.wifi_sta_connected.channel  = WiFi.channel();
-			eventInfo.wifi_sta_connected.authmode = WiFi.getEncryption();
+			eventInfo.wifi_sta_connected.channel  = pWiFi->channel();
+			eventInfo.wifi_sta_connected.authmode = pWiFi->getEncryption();
 			memcpy(eventInfo.wifi_sta_connected.ssid, ssid.c_str(), eventInfo.wifi_sta_connected.ssid_len + 1);
-			memcpy(eventInfo.wifi_sta_connected.bssid, WiFi.BSSID(), 6);
+			memcpy(eventInfo.wifi_sta_connected.bssid, pWiFi->BSSID(), 6);
 			break;
 
 		case WIFI_EVENT_SCAN_DONE:
 			eventId							 = ARDUINO_EVENT_WIFI_SCAN_DONE;
 			eventInfo.wifi_scan_done.status	 = 0;
-			eventInfo.wifi_scan_done.number	 = WiFi._netCount;
+			eventInfo.wifi_scan_done.number	 = pWiFi->_netCount;
 			eventInfo.wifi_scan_done.scan_id = 0;
 			break;
 
