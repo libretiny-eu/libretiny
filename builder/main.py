@@ -9,6 +9,7 @@ board = env.BoardConfig()
 env.SConscript("utils.py", exports="env")
 # Vendor-specific library ports
 env.SConscript("libs/lwip.py", exports="env")
+env.SConscript("libs/flashdb.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":
@@ -35,11 +36,14 @@ env.Replace(
 flash_layout: dict = board.get("flash")
 if flash_layout:
     defines = {}
+    flash_size = 0
     for name, layout in flash_layout.items():
         name = name.upper()
         (offset, _, length) = layout.partition("+")
         defines[f"FLASH_{name}_OFFSET"] = offset
         defines[f"FLASH_{name}_LENGTH"] = length
+        flash_size = max(flash_size, int(offset, 16) + int(length, 16))
+    defines["FLASH_LENGTH"] = flash_size
     env.Append(CPPDEFINES=defines.items())
     env.Replace(**defines)
 

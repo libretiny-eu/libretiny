@@ -112,6 +112,18 @@ env.AddLibrary(
     ],
 )
 
+# Sources - external library ports
+env.AddLibrary(
+    name="ambz_arduino_port",
+    base_dir="$ARDUINO_DIR",
+    srcs=[
+        "+<port/**/*.c*>",
+    ],
+    includes=[
+        "+<port/*>",
+    ],
+)
+
 # Libs & linker config
 env.Append(
     LIBS=[

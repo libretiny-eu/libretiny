@@ -43,6 +43,11 @@
       "version": "https://github.com/arduino/ArduinoCore-API",
       "manifest": {
         "description": "Hardware independent layer of the Arduino cores"
+      },
+      "libraries": {
+        "flashdb": [
+          "03500fa"
+        ]
       }
     },
     "library-lwip": {
@@ -51,6 +56,14 @@
       "base_url": "https://github.com/libretuya/lwip",
       "manifest": {
         "description": "lwIP - A Lightweight TCPIP stack"
+      }
+    },
+    "library-flashdb": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/armink/FlashDB",
+      "manifest": {
+        "description": "An ultra-lightweight database that supports key-value and time series data"
       }
     },
     "toolchain-gccarmnoneeabi": {

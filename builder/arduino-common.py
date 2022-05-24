@@ -39,6 +39,7 @@ env.AddLibrary(
         "+<common/*.c*>",
         "+<core/*.c*>",
         "+<libraries/**/*.c*>",
+        "+<port/**/*.c*>",
         "+<posix/*.c>",
     ],
     includes=[
@@ -46,9 +47,13 @@ env.AddLibrary(
         "!<compat>",
         "!<core>",
         "!<libraries/*>",
+        "!<port/*>",
         "!<posix>",
     ],
 )
+
+# Sources - external library ports
+env.AddLibraryFlashDB(version="03500fa")
 
 # Build all libraries
 env.BuildLibraries(safe=False)
