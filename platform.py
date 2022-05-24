@@ -39,15 +39,16 @@ def load_manifest(self, src):
     # find additional manifest info
     manifest = manifest.get("manifest", manifest_default)
     # extract tag version
-    if "#" in spec.url:
-        manifest["version"] = spec.url.rpartition("#")[2].lstrip("v")
+    url = getattr(spec, "url", None) or getattr(spec, "uri", None) or ""
+    if "#" in url:
+        manifest["version"] = url.rpartition("#")[2].lstrip("v")
     # put info from spec
     manifest.update(
         {
             "name": spec.name,
             "repository": {
                 "type": "git",
-                "url": spec.url,
+                "url": url,
             },
         }
     )
@@ -95,22 +96,37 @@ class LibretuyaPlatform(PlatformBase):
             framework = next(fw for fw in frameworks if framework in fw)
             options.get("pioframework")[0] = framework
 
+        framework_obj = self.frameworks[framework]
+
         # set specific compiler versions
         if framework.startswith("realtek-ambz"):
             self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.50401.0"
 
+        # make ArduinoCore-API required
+        if "arduino" in framework:
+            self.packages["framework-arduino-api"]["optional"] = False
+
+        # mark framework SDK as required
+        self.packages[framework_obj["package"]]["optional"] = False
+
+        # gather library dependencies
+        libraries = framework_obj["libraries"] if "libraries" in framework_obj else {}
+        for name, package in self.packages.items():
+            if "optional" in package and package["optional"]:
+                continue
+            if "libraries" not in package:
+                continue
+            libraries.update(package["libraries"])
+
         # use appropriate vendor library versions
-        sdk_package_name = self.frameworks[framework]["package"]
-        sdk_package = self.packages[sdk_package_name]
-        sdk_libraries = sdk_package["libraries"] if "libraries" in sdk_package else {}
         packages_new = {}
         for name, package in self.packages.items():
             if not name.startswith("library-"):
                 continue
             name = name[8:]  # strip "library-"
-            if name not in sdk_libraries:
+            if name not in libraries:
                 continue
-            lib_version = sdk_libraries[name][-1]  # get latest version tag
+            lib_version = libraries[name][-1]  # get latest version tag
             package = dict(**package)  # clone the base package
             package["version"] = (
                 package["base_url"] + "#" + lib_version
@@ -120,10 +136,6 @@ class LibretuyaPlatform(PlatformBase):
             name = f"library-{name}@{lib_version}"
             packages_new[name] = package  # put the package under a new name
         self.packages.update(packages_new)
-
-        # make ArduinoCore-API required
-        if "arduino" in framework:
-            self.packages["framework-arduino-api"]["optional"] = False
 
         # save platform packages for later
         global libretuya_packages
