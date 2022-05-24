@@ -43,10 +43,9 @@ extern "C" {
 #define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
 #define PGM_VOID_P			const void *
 
-// C functions
 void lt_rand_bytes(uint8_t *buf, size_t len);
+void hexdump(uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16);
 
-// C++ only functions
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
 #endif
