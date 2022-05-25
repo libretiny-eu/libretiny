@@ -44,10 +44,12 @@ extern "C" {
 #define PGM_VOID_P			const void *
 
 void lt_rand_bytes(uint8_t *buf, size_t len);
-void hexdump(uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16);
 
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
+void hexdump(uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16);
+#else
+void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width);
 #endif
 
 // Main class

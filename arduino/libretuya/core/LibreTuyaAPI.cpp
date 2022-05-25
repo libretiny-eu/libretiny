@@ -35,7 +35,7 @@ void lt_rand_bytes(uint8_t *buf, size_t len) {
  * @param offset increment printed offset by this value
  * @param width how many bytes on a line
  */
-void hexdump(uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16) {
+void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 	uint16_t pos = 0;
 	while (pos < len) {
 		// print hex offset
