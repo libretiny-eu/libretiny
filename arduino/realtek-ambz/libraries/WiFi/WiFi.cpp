@@ -74,21 +74,20 @@ void WiFiClass::printDiag(Print &dest) {
 }
 
 WiFiAuthMode WiFiClass::securityTypeToAuthMode(uint8_t type) {
-	switch (wifi_setting.security_type) {
-		case RTW_SECURITY_OPEN:
+	// the value reported in rtw_scan_result is rtw_encryption_t, even though it's rtw_security_t in the header file
+	switch (type) {
+		case RTW_ENCRYPTION_OPEN:
 			return WIFI_AUTH_OPEN;
-		case RTW_SECURITY_WEP_SHARED:
+		case RTW_ENCRYPTION_WEP40:
+		case RTW_ENCRYPTION_WEP104:
 			return WIFI_AUTH_WEP;
-		case RTW_SECURITY_WPA_TKIP_PSK:
+		case RTW_ENCRYPTION_WPA_TKIP:
+		case RTW_ENCRYPTION_WPA_AES:
 			return WIFI_AUTH_WPA_PSK;
-		case RTW_SECURITY_WPA_AES_PSK:
-			return WIFI_AUTH_WPA;
-		case RTW_SECURITY_WPA2_TKIP_PSK:
+		case RTW_ENCRYPTION_WPA2_TKIP:
+		case RTW_ENCRYPTION_WPA2_AES:
+		case RTW_ENCRYPTION_WPA2_MIXED:
 			return WIFI_AUTH_WPA2_PSK;
-		case RTW_SECURITY_WPA2_AES_PSK:
-			return WIFI_AUTH_WPA2;
-		case RTW_SECURITY_WPA_WPA2_MIXED:
-			return WIFI_AUTH_WPA_WPA2_PSK;
 	}
 	return WIFI_AUTH_INVALID;
 }
