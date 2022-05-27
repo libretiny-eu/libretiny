@@ -38,8 +38,8 @@ D7  | PA05       |           |          |                      | PWM4 |
 D8  | PA12       |           |          |                      | PWM3 |
 D9  | PA18       | UART0_RX  | I2C1_SCL | SPI0_SCK, SPI1_SCK   |      |
 D10 | PA23       | UART0_TX  | I2C1_SDA | SPI0_MOSI, SPI1_MOSI | PWM0 |
-A0  | PA19, ADC1
-A1  | ADC2
+A0  | PA19, ADC1 |           |          |                      |      |
+A1  | ADC2       |           |          |                      |      |
 
 ## Flash memory map
 
@@ -47,17 +47,18 @@ Flash size: 2 MiB / 2,097,152 B / 0x200000
 
 Hex values are in bytes.
 
-Name        | Start    | Length            | End
-------------|----------|-------------------|---------
-Boot XIP    | 0x000000 | 16 KiB / 0x4000   | 0x004000
-Boot RAM    | 0x004000 | 16 KiB / 0x4000   | 0x008000
-(reserved)  | 0x008000 | 4 KiB / 0x1000    | 0x009000
-System Data | 0x009000 | 4 KiB / 0x1000    | 0x00A000
-Calibration | 0x00A000 | 4 KiB / 0x1000    | 0x00B000
-OTA1 Image  | 0x00B000 | 788 KiB / 0xC5000 | 0x0D0000
-OTA2 Image  | 0x0D0000 | 788 KiB / 0xC5000 | 0x195000
-User Data   | 0x195000 | 424 KiB / 0x6A000 | 0x1FF000
-RDP         | 0x1FF000 | 4 KiB / 0x1000    | 0x200000
+Name            | Start    | Length            | End
+----------------|----------|-------------------|---------
+Boot XIP        | 0x000000 | 16 KiB / 0x4000   | 0x004000
+Boot RAM        | 0x004000 | 16 KiB / 0x4000   | 0x008000
+(reserved)      | 0x008000 | 4 KiB / 0x1000    | 0x009000
+System Data     | 0x009000 | 4 KiB / 0x1000    | 0x00A000
+Calibration     | 0x00A000 | 4 KiB / 0x1000    | 0x00B000
+OTA1 Image      | 0x00B000 | 788 KiB / 0xC5000 | 0x0D0000
+OTA2 Image      | 0x0D0000 | 788 KiB / 0xC5000 | 0x195000
+Key-Value Store | 0x195000 | 24 KiB / 0x6000   | 0x19B000
+User Data       | 0x19B000 | 400 KiB / 0x64000 | 0x1FF000
+RDP             | 0x1FF000 | 4 KiB / 0x1000    | 0x200000
 
 RDP is most likely not used in Tuya firmwares, as the System Data partition contains an incorrect offset 0xFF000 for RDP, which is in the middle of OTA2 image.
 
