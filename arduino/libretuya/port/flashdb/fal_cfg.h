@@ -10,16 +10,16 @@ extern const struct fal_flash_dev flash0;
 #define FAL_FLASH_DEV_TABLE                                                                                            \
 	{ &flash0, }
 
+#define FAL_DEV_NAME_MAX 16 // no need for 24 chars (default)
+
 // Partition table
 #define FAL_PART_HAS_TABLE_CFG
 
-#define FAL_PART_TABLE                                                                                                 \
+#define FAL_PART_TABLE_ITEM(part_lower, part_upper)                                                                    \
 	{                                                                                                                  \
-		{                                                                                                              \
-			.magic_word = FAL_PART_MAGIC_WORD,                                                                         \
-			.name		= "userdata",                                                                                  \
-			.flash_name = FAL_FLASH_DEV_NAME,                                                                          \
-			.offset		= FLASH_USERDATA_OFFSET,                                                                       \
-			.len		= 0x4000,                                                                                      \
-		},                                                                                                             \
-	}
+		.magic_word = FAL_PART_MAGIC_WORD,		   /* magic word */                                                    \
+		.name		= #part_lower,				   /* lowercase name as string */                                      \
+		.flash_name = FAL_FLASH_DEV_NAME,		   /* flash device name */                                             \
+		.offset		= FLASH_##part_upper##_OFFSET, /* partition offset macro as uppercase string */                    \
+		.len		= FLASH_##part_upper##_LENGTH, /* partition length macro as uppercase string */                    \
+	},
