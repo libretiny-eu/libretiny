@@ -5,6 +5,8 @@
 		* [Class reference](ltapi/class_libre_tuya.md)
 		* [Static functions](ltapi/_libre_tuya_a_p_i_8cpp.md)
 		* [Logger](ltapi/lt__logger_8h.md)
+		* [Chip types & UF2 families](ltapi/_chip_type_8h.md)
+		* [POSIX utilities](lt__posix__api_8h.md)
 	* Common API
 		* [Flash](ltapi/class_i_flash_class.md)
 		* [FS](ltapi/classfs_1_1_f_s.md)
@@ -19,6 +21,7 @@
 	* [LibreTuya libraries](docs/libs-built-in.md)
 		* [base64](ltapi/classbase64.md)
 		* [HTTPClient](ltapi/class_h_t_t_p_client.md)
+		* [mDNS](ltapi/classm_d_n_s.md)
 		* NetUtils
 			* [ssl/MbedTLSClient](ltapi/class_mbed_t_l_s_client.md)
 			* [IPv6Address](ltapi/classarduino_1_1_i_pv6_address.md)
