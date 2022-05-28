@@ -31,6 +31,8 @@
 		* [Functions](ltapi/functions.md)
 		* [Macros](ltapi/macros.md)
 		* [File list](ltapi/files.md)
+* [OTA format](docs/ota/README.md)
+	* [uf2ota.py tool](docs/ota/uf2ota.md)
 * Platforms
 	* Realtek AmebaZ Series
 		* Boards
