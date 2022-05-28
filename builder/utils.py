@@ -49,6 +49,8 @@ def env_add_defaults(env, platform_name: str, sdk_name: str):
         CPPDEFINES=[
             ("LT_VERSION", platform.version),
             ("LT_BOARD", board.get("build.variant")),
+            ("F_CPU", board.get("build.f_cpu")),
+            ("MCU", board.get("build.mcu").upper()),
         ],
     )
 
