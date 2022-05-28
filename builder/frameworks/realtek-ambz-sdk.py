@@ -57,7 +57,6 @@ env.Append(
     CPPDEFINES=[
         "M3",
         "CONFIG_PLATFORM_8711B",
-        ("F_CPU", "166000000L"),
         # LwIP options
         ("LWIP_TIMEVAL_PRIVATE", "0"),
         ("LWIP_NETIF_HOSTNAME", "1"),  # to support hostname changing

@@ -68,7 +68,7 @@ uint32_t millis(void) {
 uint32_t micros(void) {
 	uint32_t tick1, tick2;
 	uint32_t us;
-	uint32_t tick_per_us = 166666;
+	uint32_t tick_per_us = F_CPU / 1000;
 
 	if (__get_ipsr__() == 0) {
 		tick1 = xTaskGetTickCount();
