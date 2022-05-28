@@ -4,7 +4,7 @@ from math import ceil
 from typing import Dict
 
 from models import Family, Flags, Tag
-from utils import intto8, inttole24, inttole32, letoint
+from utils import align_up, intto8, inttole24, inttole32, letoint
 
 
 class Block:
@@ -113,6 +113,17 @@ class Block:
 
         self.data = data[32 : 32 + self.length]
         return True
+
+    @staticmethod
+    def get_tags_length(tags: Dict[Tag, bytes]) -> int:
+        out = 0
+        # add tag headers
+        out += 4 * len(tags)
+        # add all tag lengths, padded to 4 bytes
+        out += sum(align_up(l, 4) for l in map(len, tags.values()))
+        # add final 0x00 tag
+        out += 4
+        return out
 
     def __str__(self) -> str:
         flags = self.flags

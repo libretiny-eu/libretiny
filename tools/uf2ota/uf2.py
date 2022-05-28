@@ -5,7 +5,7 @@ from typing import Dict, List
 
 from models import Family, Flags, Tag
 from uf2_block import Block
-from utils import intto8, inttole16, inttole32
+from utils import align_down, align_up, intto8, inttole16, inttole32
 
 
 class UF2:
@@ -56,7 +56,7 @@ class UF2:
     def put_int8(self, tag: Tag, value: int):
         self.tags[tag] = intto8(value)
 
-    def read(self) -> bool:
+    def read(self, block_tags: bool = True) -> bool:
         while True:
             data = self.f.read(512)
             if len(data) not in [0, 512]:
@@ -73,7 +73,8 @@ class UF2:
                 return False
             self.family = block.family
 
-            self.tags.update(block.tags)
+            if block_tags or not block.length:
+                self.tags.update(block.tags)
             if block.length and not block.flags.not_main_flash:
                 self.data.append(block)
         return True
@@ -98,13 +99,33 @@ class UF2:
         return cnt
 
     def write_header(self):
+        comment = "Hi! Please visit https://kuba2k2.github.io/libretuya/ to read specifications of this file format."
         bl = Block(self.family)
         bl.flags.has_tags = True
         bl.flags.not_main_flash = True
         bl.block_seq = 0
         bl.block_count = self.block_count
         bl.tags = self.tags
-        self.f.write(bl.encode())
+
+        data = bl.encode()
+        # add comment in the unused space
+        tags_len = align_up(Block.get_tags_length(bl.tags), 16)
+        comment_len = len(comment)
+        if 476 - 16 >= tags_len + comment_len:
+            space = 476 - 16 - tags_len
+            start = (space - comment_len) / 2
+            start = align_down(start, 16)
+            padding1 = b"\x00" * start
+            padding2 = b"\x00" * (476 - tags_len - comment_len - start)
+            data = (
+                data[0 : 32 + tags_len]
+                + padding1
+                + comment.encode()
+                + padding2
+                + data[-4:]
+            )
+
+        self.f.write(data)
 
     def write(self):
         if self.tags and self.seq == 0:

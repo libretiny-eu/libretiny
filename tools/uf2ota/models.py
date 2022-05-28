@@ -73,6 +73,10 @@ class Tag(IntEnum):
     LT_BINPATCH = 0xB948DE  # binary patch to convert OTA1->OTA2
 
 
+class Opcode(IntEnum):
+    DIFF32 = 0xFE  # difference between 32-bit values
+
+
 class Flags:
     not_main_flash: bool = False
     file_container: bool = False
@@ -114,3 +118,71 @@ class Flags:
         if self.has_tags:
             flags.append("TAG")
         return ",".join(flags)
+
+
+class Input:
+    ota1_part: str = None
+    ota1_offs: int = 0
+    ota1_file: str = None
+    ota2_part: str = None
+    ota2_offs: int = 0
+    ota2_file: str = None
+
+    def __init__(self, input: str) -> None:
+        input = input.split(":")
+        n = len(input)
+        if n not in [2, 4]:
+            raise ValueError(
+                "Incorrect input format - should be part+offs:file[:part+offs:file]"
+            )
+        # just spread the same image twice for single-OTA scheme
+        if n == 2:
+            input += input
+
+        if input[0] and input[1]:
+            if "+" in input[0]:
+                (self.ota1_part, self.ota1_offs) = input[0].split("+")
+                self.ota1_offs = int(self.ota1_offs, 16)
+            else:
+                self.ota1_part = input[0]
+            self.ota1_file = input[1]
+        if input[2] and input[3]:
+            if "+" in input[2]:
+                (self.ota2_part, self.ota2_offs) = input[2].split("+")
+                self.ota2_offs = int(self.ota2_offs, 16)
+            else:
+                self.ota2_part = input[2]
+            self.ota2_file = input[3]
+
+        if self.ota1_offs != self.ota2_offs:
+            # currently, offsets cannot differ when storing images
+            # (this would require to actually store it twice)
+            raise ValueError(f"Offsets cannot differ ({self.ota1_file})")
+
+    @property
+    def is_single(self) -> bool:
+        return self.ota1_part == self.ota2_part and self.ota1_file == self.ota2_file
+
+    @property
+    def single_part(self) -> str:
+        return self.ota1_part or self.ota2_part
+
+    @property
+    def single_offs(self) -> int:
+        return self.ota1_offs or self.ota2_offs
+
+    @property
+    def single_file(self) -> str:
+        return self.ota1_file or self.ota2_file
+
+    @property
+    def has_ota1(self) -> bool:
+        return not not (self.ota1_part and self.ota1_file)
+
+    @property
+    def has_ota2(self) -> bool:
+        return not not (self.ota2_part and self.ota2_file)
+
+    @property
+    def is_simple(self) -> bool:
+        return self.ota1_file == self.ota2_file or not (self.has_ota1 and self.has_ota2)
