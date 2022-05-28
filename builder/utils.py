@@ -28,7 +28,7 @@ def env_add_defaults(env, platform_name: str, sdk_name: str):
         OPENOCD_DIR=join("${PLATFORM_DIR}", "openocd"),
         # Board config variables
         MCU=board.get("build.mcu").upper(),
-        FAMILY=board.get("build.family").upper(),
+        FAMILY=board.get("build.family"),
         VARIANT=board.get("build.variant"),
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
@@ -51,6 +51,7 @@ def env_add_defaults(env, platform_name: str, sdk_name: str):
             ("LT_BOARD", board.get("build.variant")),
             ("F_CPU", board.get("build.f_cpu")),
             ("MCU", board.get("build.mcu").upper()),
+            ("FAMILY", board.get("build.family")),
         ],
     )
 

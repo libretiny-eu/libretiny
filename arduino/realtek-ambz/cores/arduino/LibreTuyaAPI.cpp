@@ -14,7 +14,7 @@ void LibreTuya::restart() {
 ChipType LibreTuya::getChipType() {
 	uint8_t chipId;
 	EFUSE_OneByteReadROM(9902, 0xF8, &chipId, L25EOUTVOLTAGE);
-	return (ChipType)((RTL8710B << 8) | chipId);
+	return (ChipType)(((RTL8710B >> 24) << 8) | chipId);
 }
 
 const char *LibreTuya::getChipModel() {

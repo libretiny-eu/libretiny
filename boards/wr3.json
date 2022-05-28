@@ -6,7 +6,6 @@
 	],
 	"build": {
 		"mcu": "rtl8710bn",
-		"family": "rtl8710",
 		"variant": "wr3"
 	},
 	"name": "WR3 Wi-Fi Module",

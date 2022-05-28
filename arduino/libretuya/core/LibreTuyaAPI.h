@@ -71,6 +71,8 @@ class LibreTuya {
 	const char *getVersion();
 	const char *getBoard();
 	const char *getDeviceName();
+	ChipFamily getChipFamily();
+	const char *getChipFamilyName();
 
   public: /* Inline methods */
 	inline uint32_t getFlashChipSize() {

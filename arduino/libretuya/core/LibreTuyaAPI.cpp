@@ -74,6 +74,20 @@ const char *LibreTuya::getBoard() {
 	return LT_BOARD_STR;
 }
 
+/**
+ * @brief Get CPU family ID.
+ */
+ChipFamily LibreTuya::getChipFamily() {
+	return FAMILY;
+}
+
+/**
+ * @brief Get CPU family name as string.
+ */
+const char *LibreTuya::getChipFamilyName() {
+	return STRINGIFY_MACRO(FAMILY);
+}
+
 static char *deviceName = NULL;
 
 /**

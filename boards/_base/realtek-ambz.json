@@ -1,5 +1,6 @@
 {
 	"build": {
+		"family": "RTL8710B",
 		"f_cpu": "125000000L",
 		"amb_flash_addr": "0x08000000"
 	},
