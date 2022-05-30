@@ -2,8 +2,11 @@
 
 #include <LibreTuyaAPI.h>
 
+extern "C" {
+#include <flash_api.h>
 #include <rtl8710b.h>
 #include <sys_api.h>
+}
 
 void LibreTuya::restart() {
 	sys_reset();
@@ -71,13 +74,14 @@ uint32_t LibreTuya::getMaxAllocHeap() {
 
 /* OTA-related */
 
-uint8_t LibreTuya::getOtaRunning() {
+uint8_t LibreTuya::otaGetStoredIndex() {
 	uint32_t *otaAddress = (uint32_t *)0x8009000;
 	if (*otaAddress == 0xFFFFFFFF)
 		return 1;
 	uint32_t otaCounter = *((uint32_t *)0x8009004);
-	// what the-
-	// "LSB 0 bits number is odd/even"
+	// even count of zero-bits means OTA1, odd count means OTA2
+	// this allows to switch OTA images by simply clearing next bits,
+	// without needing to erase the flash
 	uint8_t count = 0;
 	for (uint8_t i = 0; i < 32; i++) {
 		if ((otaCounter & (1 << i)) == 0)
@@ -86,11 +90,55 @@ uint8_t LibreTuya::getOtaRunning() {
 	return 1 + (count % 2);
 }
 
-uint8_t LibreTuya::getOtaTarget() {
-	return getOtaRunning() ^ 0b11;
+bool LibreTuya::otaSupportsDual() {
+	return true;
 }
 
-bool LibreTuya::switchOta() {}
+bool LibreTuya::otaHasImage1() {
+	uint8_t *ota1Addr = (uint8_t *)(SPI_FLASH_BASE + FLASH_OTA1_OFFSET);
+	return memcmp(ota1Addr, "81958711", 8) == 0;
+}
+
+bool LibreTuya::otaHasImage2() {
+	uint8_t *ota2Addr = (uint8_t *)(SPI_FLASH_BASE + FLASH_OTA2_OFFSET);
+	return memcmp(ota2Addr, "81958711", 8) == 0;
+}
+
+bool LibreTuya::otaSwitch(bool force) {
+	if (!force && otaGetRunning() != otaGetStoredIndex())
+		// OTA has already been switched
+		return true;
+	// this function does:
+	// - read OTA1 firmware magic from 0xB000
+	// - read OTA2 address from 0x9000
+	// - read OTA2 firmware magic from that address
+	// - read current OTA switch value from 0x9004
+	// - reset OTA switch to 0xFFFFFFFF if it's 0x0
+	// - check first non-zero bit of OTA switch
+	// - write OTA switch with first non-zero bit cleared
+	// sys_clear_ota_signature();
+	// ok, this function is broken (crashes with HardFault)
+
+	if (!otaHasImage1() || !otaHasImage2())
+		return false;
+
+	uint32_t value = HAL_READ32(SPI_FLASH_BASE, FLASH_SYSTEM_OFFSET + 4);
+	if (value == 0) {
+		// TODO does this work at all?
+		FLASH_EreaseDwordsXIP(FLASH_SYSTEM_OFFSET + 4, 1);
+	}
+	uint8_t i;
+	// find first non-zero bit
+	for (i = 0; i < 32; i++) {
+		if (value & (1 << i))
+			break;
+	}
+	// clear the bit
+	value &= ~(1 << i);
+	// write OTA switch to flash
+	flash_write_word(NULL, FLASH_SYSTEM_OFFSET + 4, value);
+	return true;
+}
 
 /* Global instance */
 

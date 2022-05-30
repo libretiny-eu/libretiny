@@ -70,9 +70,13 @@ class LibreTuya {
   public: /* Common methods - note: these are documented in LibreTuyaAPI.cpp */
 	const char *getVersion();
 	const char *getBoard();
-	const char *getDeviceName();
 	ChipFamily getChipFamily();
 	const char *getChipFamilyName();
+	const char *getDeviceName();
+	uint8_t otaGetRunning();
+	uint8_t otaGetTarget();
+	bool otaRollback();
+	bool otaCanRollback();
 
   public: /* Inline methods */
 	inline uint32_t getFlashChipSize() {
@@ -146,21 +150,30 @@ class LibreTuya {
 
   public: /* OTA-related */
 	/**
-	 * @brief Get the currently running firmware OTA index.
+	 * @brief Read the currently active OTA index, i.e. the one that will boot upon restart.
 	 */
-	uint8_t getOtaRunning();
+	uint8_t otaGetStoredIndex();
 	/**
-	 * @brief Get the OTA index for updated firmware.
-	 *
-	 * Note: should return 1 for chips without dual-OTA.
+	 * @brief Check if the chip supports dual-OTA.
 	 */
-	uint8_t getOtaTarget();
+	bool otaSupportsDual();
+	/**
+	 * @brief Check if OTA1 image is valid.
+	 */
+	bool otaHasImage1();
+	/**
+	 * @brief Check if OTA2 image is valid.
+	 */
+	bool otaHasImage2();
 	/**
 	 * @brief Try to switch OTA index to the other image.
 	 *
-	 * @return false if writing failed or dual-OTA not supported; true otherwise
+	 * Note: should return true for chips without dual-OTA. Should return false if one of two images is not valid.
+	 *
+	 * @param force switch even if other image already marked as active
+	 * @return false if writing failed; true otherwise
 	 */
-	bool switchOta();
+	bool otaSwitch(bool force = false);
 };
 
 extern LibreTuya LT;
