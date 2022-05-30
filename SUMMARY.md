@@ -26,6 +26,7 @@
 			* [ssl/MbedTLSClient](ltapi/class_mbed_t_l_s_client.md)
 			* [IPv6Address](ltapi/classarduino_1_1_i_pv6_address.md)
 			* [LwIPRxBuffer](ltapi/class_lw_i_p_rx_buffer.md)
+		* [Update](ltapi/class_update.md)
 		* [WebServer](ltapi/class_web_server.md)
 		* [WiFiMulti](ltapi/class_wi_fi_multi.md)
 	* [Third party libraries](docs/libs-3rd-party.md)
