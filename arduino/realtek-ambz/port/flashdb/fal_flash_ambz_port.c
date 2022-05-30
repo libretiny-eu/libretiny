@@ -18,7 +18,7 @@ static int erase(long offset, size_t size) {
 	for (uint16_t i = 0; i < size; i++) {
 		flash_erase_sector(NULL, offset + i * FLASH_ERASE_MIN_SIZE);
 	}
-	return size;
+	return size * FLASH_ERASE_MIN_SIZE;
 }
 
 const struct fal_flash_dev flash0 = {

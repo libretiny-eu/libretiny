@@ -11,6 +11,7 @@ UF2 files may contain multiple firmware images that are to be flashed, i.e. main
 Some CPUs support dual-OTA schemes: firmware runs from one image, while the other one is reserved for updated firmware. After applying the update, a reboot causes to run the other image instead.
 
 Each firmware image may be either applicable:
+
 1. only when flashing OTA1 (`part:file::`)
 2. only when flashing OTA2 (`::part:file`)
 3. for both schemes to a single partition (`part:file`)
@@ -88,11 +89,16 @@ OTA2 images are not stored directly, as that would needlessly double the UF2 fil
 There can be at most one binpatch tag in a UF2 block. It has the following format:
 
 - opcode (1 byte) - operation type:
+
   - `DIFF32` (0xFE) - difference between 32-bit values
+
 - length (1 byte) - data length
 - data (`length` bytes)
+
   - for `DIFF32`:
+
     - difference value (signed int 32-bit)
+
 	- offset table (`length-4` bytes)
 
 The presented structure can be repeated in a single binpatch tag.

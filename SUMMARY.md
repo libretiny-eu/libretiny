@@ -6,7 +6,7 @@
 		* [Static functions](ltapi/_libre_tuya_a_p_i_8cpp.md)
 		* [Logger](ltapi/lt__logger_8h.md)
 		* [Chip types & UF2 families](ltapi/_chip_type_8h.md)
-		* [POSIX utilities](lt__posix__api_8h.md)
+		* [POSIX utilities](ltapi/lt__posix__api_8h.md)
 	* Common API
 		* [Flash](ltapi/class_i_flash_class.md)
 		* [FS](ltapi/classfs_1_1_f_s.md)
@@ -36,6 +36,8 @@
 		* [File list](ltapi/files.md)
 * [OTA format](docs/ota/README.md)
 	* [uf2ota.py tool](docs/ota/uf2ota.md)
+	* [uf2ota.h library](docs/ota/library.md)
+	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * Platforms
 	* Realtek AmebaZ Series
 		* Boards
