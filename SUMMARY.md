@@ -52,3 +52,4 @@
 			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
 		* [Debugging](docs/platform/realtek/debugging.md)
 		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
+* [🔗 Resources](docs/resources.md)
