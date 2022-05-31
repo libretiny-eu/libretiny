@@ -92,79 +92,6 @@ A (mostly) complete* list of Tuya wireless module boards.
 
 ** I/O count includes GPIOs, ADCs, PWM outputs and UART, but doesn't count CEN/RST and power pins.
 
-## Project structure
-
-```
-arduino/
-├─ <platform name>/             Arduino Core for specific SoC
-│  ├─ cores/                        Wiring core files
-│  ├─ libraries/                    Supported built-in platform libraries
-├─ libretuya/
-│  ├─ api/                      Library interfaces
-│  ├─ common/                   Units common to all platforms
-│  ├─ compat/                   Fixes for compatibility with ESP32 framework
-│  ├─ core/                     LibreTuya API for Arduino cores
-│  ├─ libraries/                Built-in platform-independent libraries
-boards/
-├─ <board name>/                Board-specific code
-│  ├─ variant.cpp                   Arduino variant initialization
-│  ├─ variant.h                     Arduino variant pin configs
-├─ <board name>.json            PlatformIO board description
-builder/
-├─ frameworks/                  Framework builders for PlatformIO
-│  ├─ <platform name>-sdk.py        Vanilla SDK build system
-│  ├─ <platform name>-arduino.py    Arduino Core build system
-├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
-├─ main.py                      Main PlatformIO builder
-├─ utils.py                     SCons utils used during the build
-docs/                           Project documentation, guides, tips, etc.
-platform/
-├─ <platform name>/             Platform-specific configurations
-│  ├─ bin/                          Binary blobs (bootloaders, etc.)
-│  ├─ fixups/                       Code fix-ups to replace SDK parts
-│  ├─ ld/                           Linker scripts
-│  ├─ openocd/                      OpenOCD configuration files
-tools/
-├─ <tool name>/                 Tools used during the build
-platform.json                   PlatformIO manifest
-platform.py                     Custom PlatformIO script
-```
-
-## Platforms
-
-A list of platforms currently available in this project.
-
-Platform name  | Supported MCU(s)                                                       | Arduino Core | Source SDK (PIO framework)
----------------|------------------------------------------------------------------------|--------------|--------------------------------------------------------------------------
-`realtek-ambz` | Realtek [AmebaZ](https://www.amebaiot.com/en/amebaz/) SoC (`RTL87xxB`) | ✔️           | `framework-realtek-amb1` ([amb1_sdk](https://github.com/ambiot/amb1_sdk))
-
-### Realtek Ameba
-
-The logic behind naming of Realtek chips and their series took me some time to figure out:
-
-- RTL8xxxA - Ameba1/Ameba Series
-- RTL8xxxB - AmebaZ Series
-- RTL8xxxC - AmebaZ2/ZII Series
-- RTL8xxxD - AmebaD Series
-
-As such, there are numerous CPUs with the same numbers but different series, which makes them require different code and SDKs.
-
-- [RTL8195AM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8195am)
-- RTL8710AF (found in amb1_arduino)
-- [RTL8711AM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8711am)
-- [RTL8710BN](https://www.realtek.com/en/products/communications-network-ics/item/rtl8710bn)
-- RTL8710BX (found in Tuya product pages)
-- RTL8710B? (found in amb1_sdk)
-- RTL8711B? (found in amb1_sdk)
-- [RTL8710CM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8710cm)
-- RTL8722CSM (found in ambd_arduino)
-- RTL8720DN (found in ambd_arduino)
-- [RTL8721DM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8721dm)
-- RTL8722DM (found in ambd_arduino)
-- and probably many more
-
-Different Ameba series are not compatible with each other. Apparently, there isn't an official public SDK for AmebaZ that can support C++ properly.
-
 ## Arduino Core support status
 
 Note: this list will probably change with each functionality update.
@@ -188,13 +115,12 @@ Wi-Fi Events        | ✔️
 IPv6                | ❌
 HTTP Client (SSL)   | ✔️ (✔️)
 HTTP Server         | ✔️
-NVS / Preferences   | ❌
+NVS / Preferences   | ✔️
 SPIFFS              | ❌
 BLE                 | -
-HTTP                | ❌
 NTP                 | ❌
-OTA                 | ❌
-MDNS                | ❌
+OTA                 | ❓
+MDNS                | ✔️
 MQTT                | ✅
 SD                  | ❌
 

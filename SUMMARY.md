@@ -1,6 +1,9 @@
 * [Home](README.md)
-* [Configuration](docs/config.md)
-* Reference
+* [💻 Platform list](docs/platforms.md)
+* [✔️ Implementation status](docs/implementation-status.md)
+* [🔧 Configuration](docs/config.md)
+* [📁 Project structure](docs/project-structure.md)
+* 🔖 Code reference
 	* [LibreTuya API](docs/reference/lt-api.md)
 		* [Class reference](ltapi/class_libre_tuya.md)
 		* [Static functions](ltapi/_libre_tuya_a_p_i_8cpp.md)
@@ -26,7 +29,7 @@
 			* [ssl/MbedTLSClient](ltapi/class_mbed_t_l_s_client.md)
 			* [IPv6Address](ltapi/classarduino_1_1_i_pv6_address.md)
 			* [LwIPRxBuffer](ltapi/class_lw_i_p_rx_buffer.md)
-		* [Update](ltapi/class_update.md)
+		* [Update](ltapi/class_update_class.md)
 		* [WebServer](ltapi/class_web_server.md)
 		* [WiFiMulti](ltapi/class_wi_fi_multi.md)
 	* [Third party libraries](docs/libs-3rd-party.md)
@@ -35,11 +38,12 @@
 		* [Functions](ltapi/functions.md)
 		* [Macros](ltapi/macros.md)
 		* [File list](ltapi/files.md)
-* [OTA format](docs/ota/README.md)
+* [✈️ OTA format](docs/ota/README.md)
 	* [uf2ota.py tool](docs/ota/uf2ota.md)
 	* [uf2ota.h library](docs/ota/library.md)
 	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * Platforms
+	* [Realtek - notes](docs/platform/realtek/README.md)
 	* Realtek AmebaZ Series
 		* Boards
 			* [WR3](boards/wr3/README.md)
