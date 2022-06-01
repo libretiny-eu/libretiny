@@ -21,6 +21,7 @@ ota2_offset = hex(int(flash_addr, 16) + int(flash_ota2_offset, 16))
 env.Replace(
     IMG_FW="image2_all_ota1.bin",
     IMG_OTA="ota_all.bin",
+    LINK="python ${LT_DIR}/tools/link2bin.py AMBZ xip1 xip2",
 )
 
 # Tools
@@ -278,65 +279,6 @@ env.Replace(
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
 
-# Image conversion
-def pick_tool(target, source, env):
-    sections = [
-        "__ram_image2_text_start__",
-        "__ram_image2_text_end__",
-        "__xip_image2_start__",
-    ]
-    addrs = [None] * len(sections)
-    with open(env.subst("${BUILD_DIR}/${PROGNAME}.nmap")) as f:
-        for line in f:
-            for i, section in enumerate(sections):
-                if section not in line:
-                    continue
-                addrs[i] = line.split()[0]
-    files = [
-        join("$BUILD_DIR", "ram_2.r.bin"),  # RAM image with padding
-        join("$BUILD_DIR", "ram_2.bin"),  # RAM image, stripped
-        join("$BUILD_DIR", "ram_2.p.bin"),  # RAM image, stripped, with header
-        join("$BUILD_DIR", "xip_image2.bin"),  # raw firmware image
-        join("$BUILD_DIR", "xip_image2.p.bin"),  # firmware with header
-    ]
-    commands = [
-        f"$PICK 0x{addrs[0]} 0x{addrs[1]} {files[0]} {files[1]} raw",
-        f"$PICK 0x{addrs[0]} 0x{addrs[1]} {files[1]} {files[2]}",
-        f"$PICK 0x{addrs[2]} 0x{addrs[2]} {files[3]} {files[4]}",
-    ]
-    for command in commands:
-        status = env.Execute("@" + command + " > " + join("$BUILD_DIR", "pick.txt"))
-        if status:
-            return status
-
-
-def concat_xip_ram(target, source, env):
-    with open(env.subst("${BUILD_DIR}/xip_image2.p.bin"), "rb") as f:
-        xip = f.read()
-    with open(env.subst("${BUILD_DIR}/ram_2.p.bin"), "rb") as f:
-        ram = f.read()
-    with open(env.subst("${BUILD_DIR}/${IMG_FW}"), "wb") as f:
-        f.write(xip)
-        f.write(ram)
-
-
-def checksum_img(target, source, env):
-    source = join("$BUILD_DIR", "$IMG_FW")
-    status = env.Execute(f"@$CHECKSUM {source}")
-    if status:
-        return status
-
-
-def package_ota(target, source, env):
-    source = join("$BUILD_DIR", "$IMG_FW")
-    target = join("$BUILD_DIR", "$IMG_OTA")
-    status = env.Execute(
-        f"@$OTA {source} {ota1_offset} {source} {ota2_offset} 0x20170111 {target}"
-    )
-    if status:
-        return status
-
-
 env.Append(
     BUILDERS=dict(
         BinToObj=Builder(
@@ -353,63 +295,11 @@ env.Append(
         )
     ),
 )
-commands = [
-    (
-        "${PROGNAME}.nmap",
-        [
-            "$NM",
-            "$SOURCE",
-            "> $BIN",
-        ],
-    ),
-    (
-        "ram_2.r.bin",
-        [
-            "$OBJCOPY",
-            "-j .ram_image2.entry",
-            "-j .ram_image2.data",
-            "-j .ram_image2.bss",
-            "-j .ram_image2.skb.bss",
-            "-j .ram_heap.data",
-            "-O binary",
-            "$SOURCE",
-            "$BIN",
-        ],
-    ),
-    (
-        "xip_image2.bin",
-        [
-            "$OBJCOPY",
-            "-j .xip_image2.text",
-            "-O binary",
-            "$SOURCE",
-            "$BIN",
-        ],
-    ),
-    (
-        "rdp.bin",
-        [
-            "$OBJCOPY",
-            "-j .ram_rdp.text",
-            "-O binary",
-            "$SOURCE",
-            "$BIN",
-        ],
-    ),
-]
 actions = [
-    env.VerboseAction(
-        " ".join(command).replace("$BIN", join("$BUILD_DIR", target)),
-        f"Generating {target}",
-    )
-    for target, command in commands
+    # env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"),
+    env.VerboseAction("true", f"- OTA1 flash offset: $FLASH_OTA1_OFFSET"),
+    env.VerboseAction("true", f"- OTA2 flash offset: $FLASH_OTA2_OFFSET"),
 ]
-actions.append(env.VerboseAction(pick_tool, "Wrapping binary images"))
-actions.append(env.VerboseAction(concat_xip_ram, "Packaging firmware image - $IMG_FW"))
-# actions.append(env.VerboseAction(checksum_img, "Generating checksum"))
-actions.append(env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"))
-actions.append(env.VerboseAction("true", f"- OTA1 flash offset: $FLASH_OTA1_OFFSET"))
-actions.append(env.VerboseAction("true", f"- OTA2 flash offset: $FLASH_OTA2_OFFSET"))
 
 # Uploader
 upload_protocol = env.subst("$UPLOAD_PROTOCOL")
