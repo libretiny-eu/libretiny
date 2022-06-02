@@ -33,8 +33,9 @@ def env_add_defaults(env, family_name: str, sdk_name: str):
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
         # Link2Bin tool
-        LINK2BIN="${PYTHONEXE} ${LT_DIR}/tools/link2bin.py",
-        UF2OTA_PY="${PYTHONEXE} ${LT_DIR}/tools/uf2ota/uf2ota.py",
+        LINK2BIN='"${PYTHONEXE}" "${LT_DIR}/tools/link2bin.py"',
+        UF2OTA_PY='"${PYTHONEXE}" "${LT_DIR}/tools/uf2ota/uf2ota.py"',
+        UF2UPLOAD_PY='"${PYTHONEXE}" "${LT_DIR}/tools/upload/uf2upload.py"',
     )
     env.Replace(**vars)
     for k, v in vars.items():

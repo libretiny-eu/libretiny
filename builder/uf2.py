@@ -1,5 +1,6 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
+import sys
 from datetime import datetime
 from os.path import basename, join, normpath
 
@@ -26,6 +27,8 @@ def env_uf2ota(env, *args, **kwargs):
         f"lt{lt_version}",
     ]
     output = join("${BUILD_DIR}", "_".join(output)) + ".uf2"
+    env["UF2OUT"] = output
+    env["UF2OUT_BASE"] = basename(output)
 
     cmd = [
         "@${UF2OTA_PY}",
@@ -44,6 +47,34 @@ def env_uf2ota(env, *args, **kwargs):
     env.Execute(" ".join(cmd))
 
 
+def env_uf2upload(env, target):
+    protocol = env.subst("${UPLOAD_PROTOCOL}")
+    actions = []
+    # from platform-espressif32/builder/main.py
+    if protocol == "uart":
+        # upload via UART
+        env["UPLOADERFLAGS"] = [
+            "${UF2OUT}",
+            "uart",
+            "${UPLOAD_PORT}",
+        ]
+        actions = [
+            env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
+        ]
+    elif protocol == "custom":
+        actions = [
+            env.VerboseAction("${UPLOADCMD}", "Uploading firmware"),
+        ]
+    else:
+        sys.stderr.write("Warning! Unknown upload protocol %s\n" % protocol)
+        return
+
+    # add main upload target
+    env.Replace(UPLOADER="${UF2UPLOAD_PY}", UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS}")
+    actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
+    env.AddPlatformTarget("upload", target, actions, "Upload")
+
+
 env.Append(
     BUILDERS=dict(
         BuildUF2OTA=Builder(
@@ -51,3 +82,4 @@ env.Append(
         )
     )
 )
+env.AddMethod(env_uf2upload, "AddUF2Uploader")

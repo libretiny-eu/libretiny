@@ -73,7 +73,9 @@ target_elf = env.BuildProgram()
 targets = [target_elf]
 
 if "UF2OTA" in env:
-    targets.append(env.BuildUF2OTA(target_elf))
+    target_uf2 = env.BuildUF2OTA(target_elf)
+    targets.append(target_uf2)
+    env.AddUF2Uploader(target_uf2)
 elif "IMG_FW" in env:
     target_fw = env.subst("$IMG_FW")
     env.AddPlatformTarget("upload", target_fw, env["UPLOAD_ACTIONS"], "Upload")

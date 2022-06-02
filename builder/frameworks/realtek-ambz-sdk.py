@@ -1,6 +1,5 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
-import sys
 from os.path import join
 
 from SCons.Script import Builder, DefaultEnvironment
@@ -271,31 +270,6 @@ env.Append(
     ),
 )
 
-# Uploader
-upload_protocol = env.subst("$UPLOAD_PROTOCOL")
-upload_source = ""
-upload_actions = []
-# from platform-espressif32/builder/main.py
-if upload_protocol == "uart":
-    env.Replace(
-        UPLOADER=join("$TOOLS_DIR", "rtltool.py"),
-        UPLOADERFLAGS=[
-            "--port",
-            "$UPLOAD_PORT",
-            "--go",  # run firmware after uploading
-            "wf",  # Write a binary file to Flash data
-        ],
-        UPLOADCMD='"$PYTHONEXE" "$UPLOADER" $UPLOADERFLAGS $FLASH_OTA1_OFFSET "$BUILD_DIR/$IMG_FW"',
-    )
-    upload_actions = [
-        env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
-        env.VerboseAction("$UPLOADCMD", "Uploading $IMG_FW"),
-    ]
-elif upload_protocol == "custom":
-    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $IMG_FW")]
-else:
-    sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
-
 # Bootloader library
 boot_all = board.get("build.amb_boot_all")
 target_boot = env.StaticLibrary(
@@ -325,6 +299,4 @@ env.Replace(
             "${BUILD_DIR}/image_${FLASH_OTA2_OFFSET}.ota2.bin",
         ),
     ],
-    # uploader
-    UPLOAD_ACTIONS=upload_actions,
 )

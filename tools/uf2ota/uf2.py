@@ -75,6 +75,11 @@ class UF2:
                 return False
             self.family = block.family
 
+            if block.block_seq != self.seq:
+                print(f"Mismatched sequence number ({self.seq} != {block.block_seq}")
+                return False
+            self.seq += 1
+
             if block_tags or not block.length:
                 self.tags.update(block.tags)
             if block.length and not block.flags.not_main_flash:
