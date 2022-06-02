@@ -61,9 +61,12 @@ def cli():
             uf2.put_str(Tag.LT_VERSION, args.version)
 
         if args.fw:
-            (fw_name, fw_ver) = args.fw.split(":")
-            uf2.put_str(Tag.FIRMWARE, fw_name)
-            uf2.put_str(Tag.VERSION, fw_ver)
+            if ":" in args.fw:
+                (fw_name, fw_ver) = args.fw.split(":")
+                uf2.put_str(Tag.FIRMWARE, fw_name)
+                uf2.put_str(Tag.VERSION, fw_ver)
+            else:
+                uf2.put_str(Tag.FIRMWARE, args.fw)
 
         uf2.put_int8(Tag.OTA_VERSION, 1)
         uf2.put_str(Tag.DEVICE, "LibreTuya")

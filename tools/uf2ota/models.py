@@ -129,11 +129,11 @@ class Input:
     ota2_file: str = None
 
     def __init__(self, input: str) -> None:
-        input = input.split(":")
+        input = input.split(";")
         n = len(input)
         if n not in [2, 4]:
             raise ValueError(
-                "Incorrect input format - should be part+offs:file[:part+offs:file]"
+                "Incorrect input format - should be part+offs;file[;part+offs;file]"
             )
         # just spread the same image twice for single-OTA scheme
         if n == 2:

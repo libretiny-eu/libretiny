@@ -13,7 +13,7 @@ uf2ota: error: the following arguments are required: action, inputs
 Generate a UF2 file from a firmware image or several images.
 
 ```bash
-$ python uf2ota.py write --family RTL8710B --board wr3 --version 0.4.0 --fw esphome:2022.6.0-dev ota1:xip1.bin:ota2:xip2.bin
+$ python uf2ota.py write --family RTL8710B --board wr3 --version 0.4.0 --fw esphome:2022.6.0-dev "ota1;xip1.bin;ota2;xip2.bin"
 
 $ ls -l out.uf2
 -rw-r--r-- 1 Kuba None 605696 May 28 14:35 out.uf2
@@ -21,15 +21,15 @@ $ ls -l out.uf2
 
 ## inputs format
 
-Format for `inputs` parameter is `part:file[:part:file]` (square brackets mean optional). First two (colon separated) values correspond to flashing OTA1 region, second two to OTA2.
+Format for `inputs` parameter is `part;file[;part;file]` (square brackets mean optional). First two (colon separated) values correspond to flashing OTA1 region, second two to OTA2.
 
-Partition name can be suffixed by `+offset`, which causes writing the image file to the partition after some byte offset. Both files and/or partition names can be equal. Values can be empty (like `part:file::` or `::part:file`) if OTA1/2 images are not present in this file.
+Partition name can be suffixed by `+offset`, which causes writing the image file to the partition after some byte offset. Both files and/or partition names can be equal. Values can be empty (like `part;file;;` or `;;part;file`) if OTA1/2 images are not present in this file.
 
 When using two different firmware binaries, they need to have the same `offset` and be of the same size.
 
 `inputs` parameter can be repeated in order to embed multiple files in the UF2. For example:
-```
-bootloader:boot.bin ota1:xip1.bin:ota2:xip2.bin config:config1.bin:config:config2.bin
+```bash
+"bootloader;boot.bin" "ota1;xip1.bin;ota2;xip2.bin" "config;config1.bin;config;config2.bin"
 ```
 will:
 - flash the bootloader in both OTA schemes

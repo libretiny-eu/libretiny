@@ -68,19 +68,19 @@ class Block:
     def decode(self, data: bytes) -> bool:
         # check block size
         if len(data) != 512:
-            print(f"Invalid block size ({len(data)=})")
+            print(f"Invalid block size ({len(data)})")
             return False
         # check Magic 1
         if letoint(data[0:4]) != 0x0A324655:
-            print(f"Invalid Magic 1 ({data[0:4]=})")
+            print(f"Invalid Magic 1 ({data[0:4]})")
             return False
         # check Magic 2
         if letoint(data[4:8]) != 0x9E5D5157:
-            print(f"Invalid Magic 2 ({data[4:8]=})")
+            print(f"Invalid Magic 2 ({data[4:8]})")
             return False
         # check Magic 3
         if letoint(data[508:512]) != 0x0AB16F30:
-            print(f"Invalid Magic 13({data[508:512]=})")
+            print(f"Invalid Magic 13({data[508:512]})")
             return False
 
         self.flags.decode(letoint(data[8:12]))
@@ -134,4 +134,4 @@ class Block:
         file_size = self.file_size
         family = self.family.name
         tags = [(k.name, v) for k, v in self.tags.items()]
-        return f"Block[{block_seq}/{block_count}]({flags=}, {address=}, {length=}, {file_size=}, {family=}, {tags=})"
+        return f"Block[{block_seq}/{block_count}](flags={flags}, address={address}, length={length}, file_size={file_size}, family={family}, tags={tags})"

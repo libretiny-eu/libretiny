@@ -60,7 +60,7 @@ class UF2:
         while True:
             data = self.f.read(512)
             if len(data) not in [0, 512]:
-                print(f"Block size invalid ({len(data)=})")
+                print(f"Block size invalid ({len(data)})")
                 return False
             if not len(data):
                 break
@@ -69,7 +69,7 @@ class UF2:
                 return False
 
             if self.family != Family.INVALID and self.family != block.family:
-                print(f"Mismatched family ({self.family=} != {block.family=})")
+                print(f"Mismatched family ({self.family} != {block.family})")
                 return False
             self.family = block.family
 

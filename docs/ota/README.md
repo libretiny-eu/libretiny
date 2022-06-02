@@ -12,12 +12,12 @@ Some CPUs support dual-OTA schemes: firmware runs from one image, while the othe
 
 Each firmware image may be either applicable:
 
-1. only when flashing OTA1 (`part:file::`)
-2. only when flashing OTA2 (`::part:file`)
-3. for both schemes to a single partition (`part:file`)
-4. for both schemes but different partitions (`part1:file:part2:file`)
-5. for both schemes but with a different binary (`part:file1:part:file2`)
-6. for both schemes, with different binaries and target partitions (`part1:file1:part2:file2`)
+1. only when flashing OTA1 (`part;file;;`)
+2. only when flashing OTA2 (`;;part;file`)
+3. for both schemes to a single partition (`part;file`)
+4. for both schemes but different partitions (`part1;file;part2;file`)
+5. for both schemes but with a different binary (`part;file1;part;file2`)
+6. for both schemes, with different binaries and target partitions (`part1;file1;part2;file2`)
 
 \* *`part` means partition here*
 
