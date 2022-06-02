@@ -49,6 +49,7 @@ Name          | ID       | Type       | Description
 `OTA_VERSION` | 0x5D57D0 | int 8-bit  | format version (for simple compatibility checks)
 `BOARD`       | 0xCA25C8 | string     | board name / code (lowercase)
 `FIRMWARE`    | 0x00DE43 | string     | firmware description / name
+`BUILD_DATE`  | 0x822F30 | int 32-bit | build date/time as Unix timestamp
 `LT_VERSION`  | 0x59563D | semver     | LT version
 `LT_PART_1`   | 0x805946 | string     | OTA1 partition name
 `LT_PART_2`   | 0xA1E4D7 | string     | OTA2 partition name

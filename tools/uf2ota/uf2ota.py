@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-27.
 
 from argparse import ArgumentParser
+from datetime import datetime
 from zlib import crc32
 
 from dump import uf2_dump
@@ -21,6 +22,7 @@ def cli():
     parser.add_argument("--board", help="Board name/code", type=str)
     parser.add_argument("--version", help="LibreTuya core version", type=str)
     parser.add_argument("--fw", help="Firmware name:version", type=str)
+    parser.add_argument("--date", help="Build date (Unix, default now)", type=int)
     args = parser.parse_args()
 
     if args.action == "info":
@@ -70,6 +72,7 @@ def cli():
 
         uf2.put_int8(Tag.OTA_VERSION, 1)
         uf2.put_str(Tag.DEVICE, "LibreTuya")
+        uf2.put_int32le(Tag.BUILD_DATE, args.date or int(datetime.now().timestamp()))
 
         any_ota1 = False
         any_ota2 = False

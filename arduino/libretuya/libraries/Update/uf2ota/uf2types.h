@@ -72,6 +72,7 @@ typedef enum {
 	UF2_TAG_OTA_VERSION = 0x5D57D0, // format version
 	UF2_TAG_BOARD		= 0xCA25C8, // board name (lowercase code)
 	UF2_TAG_FIRMWARE	= 0x00DE43, // firmware description / name
+	UF2_TAG_BUILD_DATE	= 0x822F30, // build date/time as Unix timestamp
 	UF2_TAG_LT_VERSION	= 0x59563D, // LT version (semver)
 	UF2_TAG_PART_1		= 0x805946, // OTA1 partition name
 	UF2_TAG_PART_2		= 0xA1E4D7, // OTA2 partition name
