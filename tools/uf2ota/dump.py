@@ -8,7 +8,8 @@ from typing import Dict, Tuple
 
 from models import Opcode, Tag
 from uf2 import UF2
-from utils import inttole32, letoint, letosint
+
+from tools.util.intbin import inttole32, letoint, letosint
 
 fs: Dict[str, Tuple[int, FileIO]] = {}
 output_dir = ""

@@ -1,14 +1,21 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-27.
 
+import sys
+from os.path import dirname, join
+
+sys.path.append(join(dirname(__file__), "..", ".."))
+
 from argparse import ArgumentParser
 from datetime import datetime
 from zlib import crc32
 
 from dump import uf2_dump
-from models import Family, Input, Tag
+from models import Input, Tag
 from uf2 import UF2
 from uf2_block import Block
 from utils import binpatch32
+
+from tools.util.platform import get_family
 
 BLOCK_SIZE = 256
 
@@ -47,11 +54,7 @@ def cli():
     with open(out, "wb") as f:
         uf2 = UF2(f)
 
-        try:
-            uf2.family = next(f for f in Family if f.name == args.family)
-        except:
-            families = ", ".join(f.name for f in Family)[9:]
-            raise ValueError(f"Invalid family name - should be one of {families}")
+        uf2.family = get_family(args.family)
 
         # store global tags (for entire file)
         if args.board:

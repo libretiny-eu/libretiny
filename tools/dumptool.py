@@ -1,24 +1,17 @@
 # Copyright 2022-04-24 kuba2k2
 
-import json
+import sys
+from os.path import dirname, join
+
+sys.path.append(join(dirname(__file__), ".."))
+
 from argparse import ArgumentParser, FileType
 from binascii import crc32
 from os import makedirs
-from os.path import basename, dirname, isfile, join
+from os.path import basename, dirname, join
 
-
-def crc16(data):
-    # https://gist.github.com/pintoXD/a90e398bba5a1b6c121de4e1265d9a29
-    crc = 0x0000
-    for b in data:
-        crc ^= b
-        for j in range(0, 8):
-            if (crc & 0x0001) > 0:
-                crc = (crc >> 1) ^ 0xA001
-            else:
-                crc = crc >> 1
-    return crc
-
+from tools.util.crypto import crc16
+from tools.util.platform import get_board_manifest
 
 if __name__ == "__main__":
     parser = ArgumentParser("dumptool", description="Convert flash dump images")
@@ -30,21 +23,12 @@ if __name__ == "__main__":
     parser.add_argument("--no-checksum", "-c", help="Don't append checksum to filename")
     args = parser.parse_args()
 
-    if isfile(args.board):
-        board = args.board
-    else:
-        board = join(dirname(__file__), "..", "boards", f"{args.board}.json")
-    if not isfile(board):
-        print("Board not found")
-        exit()
+    board = get_board_manifest(args.board)
 
-    with open(board, "r") as f:
-        data = json.load(f)
-
-    if "flash" not in data:
+    if "flash" not in board:
         print("Flash layout not defined")
         exit()
-    flash_layout = data["flash"]
+    flash_layout = board["flash"]
 
     output = join(dirname(args.file.name), basename(args.file.name) + ".split")
     output = args.output or output

@@ -3,16 +3,18 @@
 from io import BytesIO, FileIO
 from typing import Dict, List
 
-from models import Family, Flags, Tag
+from models import Tag
 from uf2_block import Block
-from utils import align_down, align_up, intto8, inttole16, inttole32
+
+from tools.util.intbin import align_down, align_up, intto8, inttole16, inttole32
+from tools.util.models import Family
 
 
 class UF2:
     f: FileIO
     seq: int = 0
 
-    family: Family = Family.INVALID
+    family: Family = None
     tags: Dict[Tag, bytes] = {}
     data: List[Block] = []
 
@@ -68,7 +70,7 @@ class UF2:
             if not block.decode(data):
                 return False
 
-            if self.family != Family.INVALID and self.family != block.family:
+            if self.family and self.family != block.family:
                 print(f"Mismatched family ({self.family} != {block.family})")
                 return False
             self.family = block.family
@@ -80,7 +82,7 @@ class UF2:
         return True
 
     def dump(self):
-        print(f"Family: {self.family.name}")
+        print(f"Family: {self.family.short_name} / {self.family.description}")
         print(f"Tags:")
         for k, v in self.tags.items():
             if "\\x" not in str(v):

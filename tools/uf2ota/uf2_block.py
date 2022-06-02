@@ -3,8 +3,11 @@
 from math import ceil
 from typing import Dict
 
-from models import Family, Flags, Tag
-from utils import align_up, intto8, inttole24, inttole32, letoint
+from models import Flags, Tag
+
+from tools.util.intbin import align_up, intto8, inttole24, inttole32, letoint
+from tools.util.models import Family
+from tools.util.platform import get_family
 
 
 class Block:
@@ -23,11 +26,10 @@ class Block:
     md5_data: bytes = None
     tags: Dict[Tag, bytes] = {}
 
-    def __init__(self, family: Family = Family.INVALID) -> None:
+    def __init__(self, family: Family = None) -> None:
         self.flags = Flags()
         self.family = family
-        if self.family != Family.INVALID:
-            self.flags.has_family_id = True
+        self.flags.has_family_id = not not self.family
 
     def encode(self) -> bytes:
         self.flags.has_tags = not not self.tags
@@ -42,7 +44,7 @@ class Block:
         if self.flags.file_container:
             data += inttole32(self.file_size)
         elif self.flags.has_family_id:
-            data += inttole32(self.family.value)
+            data += inttole32(self.family.id)
         else:
             data += b"\x00\x00\x00\x00"
         if not self.data:
@@ -91,7 +93,7 @@ class Block:
         if self.flags.file_container:
             self.file_size = letoint(data[28:32])
         if self.flags.has_family_id:
-            self.family = Family(letoint(data[28:32]))
+            self.family = get_family(id=letoint(data[28:32]))
 
         if self.flags.has_md5:
             self.md5_data = data[484:508]  # last 24 bytes of data[]
@@ -132,6 +134,6 @@ class Block:
         block_seq = self.block_seq
         block_count = self.block_count
         file_size = self.file_size
-        family = self.family.name
+        family = self.family.short_name
         tags = [(k.name, v) for k, v in self.tags.items()]
         return f"Block[{block_seq}/{block_count}](flags={flags}, address={address}, length={length}, file_size={file_size}, family={family}, tags={tags})"

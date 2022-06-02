@@ -4,7 +4,7 @@ A list of families currently available in this project.
 
 **Note:** the term *family* was chosen over *platform*, in order to reduce possible confusion between LibreTuya supported "platforms" and PlatformIO's "platform", as an entire package. *Family* is also more compatible with the UF2 term.
 
-The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../uf2families.json). The IDs are also present in [uf2ota/models.py](../tools/uf2ota/models.py) and [ChipType.h](../arduino/libretuya/core/ChipType.h).
+The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../uf2families.json). The IDs are also present in [ChipType.h](../arduino/libretuya/core/ChipType.h).
 
 Full name                                                              | Code   | Short name & ID         | Supported MCU(s) | Arduino Core | Source SDK
 -----------------------------------------------------------------------|--------|-------------------------|------------------|--------------|--------------------------------------------------------------------------
