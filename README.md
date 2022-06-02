@@ -18,10 +18,10 @@
 PlatformIO development platform for IoT modules manufactured by Tuya Inc.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
-the project focuses on developing working Arduino-compatible cores for supported platforms. The cores are inspired by Espressif's official core for ESP32,
-which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd party) platforms.
+the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,
+which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd party) modules.
 
-LibreTuya also provides a common interface for all platform implementations. The interface is based on ESP32 official libraries.
+LibreTuya also provides a common interface for all family implementations. The interface is based on ESP32 official libraries.
 
 **Note:** this project is work-in-progress.
 
@@ -36,7 +36,7 @@ LibreTuya also provides a common interface for all platform implementations. The
 
 A (mostly) complete* list of Tuya wireless module boards.
 
-&nbsp;                        | Module Name                                                                                    | MCU                     | Flash | RAM      | Pins**      | Wi-Fi | BLE | Platform name
+&nbsp;                        | Module Name                                                                                    | MCU                     | Flash | RAM      | Pins**      | Wi-Fi | BLE | Family name
 ------------------------------|------------------------------------------------------------------------------------------------|-------------------------|-------|----------|-------------|-------|-----|---------------
 ❌                             | [WB1S](https://developer.tuya.com/en/docs/iot/wb1s?id=K9duevbj3ol4x)                           | BK7231T @ 120 MHz       | 2 MiB | 256 KiB  | 18 (11 I/O) | ✔️    | ✔️  | -
 ❌                             | [WB2L](https://developer.tuya.com/en/docs/iot/wb2l-datasheet?id=K9duegc9bualu)                 | BK7231T @ 120 MHz       | 2 MiB | 256 KiB  | 7 (5 I/O)   | ✔️    | ✔️  | -

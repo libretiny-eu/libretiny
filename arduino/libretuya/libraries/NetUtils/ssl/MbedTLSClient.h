@@ -5,7 +5,7 @@
 #include <api/WiFiClient.h>
 #include <api/WiFiClientSecure.h>
 
-#include <WiFiClient.h> // extend platform's WiFiClient impl
+#include <WiFiClient.h> // extend family's WiFiClient impl
 
 #ifdef __cplusplus
 extern "C" {

@@ -4,9 +4,11 @@ import json
 from os.path import dirname, isdir, join
 
 HEADER = """\
-# Platforms
+# Families
 
-A list of platforms currently available in this project.
+A list of families currently available in this project.
+
+**Note:** the term *family* was chosen over *platform*, in order to reduce possible confusion between LibreTuya supported "platforms" and PlatformIO's "platform", as an entire package. *Family* is also more compatible with the UF2 term.
 
 The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../uf2families.json). The IDs are also present in [uf2ota/models.py](../tools/uf2ota/models.py) and [ChipType.h](../arduino/libretuya/core/ChipType.h).
 """
@@ -18,8 +20,8 @@ def format_row(row: list, lengths: list) -> str:
 
 
 if __name__ == "__main__":
-    data = join(dirname(__file__), "..", "uf2families.json")
-    out = join(dirname(__file__), "platforms.md")
+    data = join(dirname(__file__), "..", "families.json")
+    out = join(dirname(__file__), "families.md")
     with open(data, "r") as f:
         data = json.load(f)
 
@@ -27,9 +29,9 @@ if __name__ == "__main__":
 
     lengths = [0, 0, 0, 0, 0, 0]
     header = [
-        "Platform name",
-        "Platform code",
-        "Family name & ID",
+        "Full name",
+        "Code",
+        "Short name & ID",
         "Supported MCU(s)",
         "Arduino Core",
         "Source SDK",
@@ -40,29 +42,23 @@ if __name__ == "__main__":
         id = family["id"]
         short_name = family["short_name"]
         description = family["description"]
-        platform = family.get("platform", "")
-        platform_code = family.get("platform_code", "-")
-        platform_url = family.get("platform_url", "-")
-        platform_sdk = family.get("platform_sdk", "-")
-        platform_framework = family.get("platform_framework", "-")
+        name = family.get("name", "")
+        code = family.get("code", "-")
+        url = family.get("url", "-")
+        sdk = family.get("sdk", "-")
+        framework = family.get("framework", "-")
         mcus = family.get("mcus", "-")
-        platform_sdk_name = platform_sdk.rpartition("/")[2]
+        sdk_name = sdk.rpartition("/")[2]
         arduino = (
-            isdir(join(dirname(__file__), "..", "arduino", platform))
-            if platform
-            else False
+            isdir(join(dirname(__file__), "..", "arduino", name)) if name else False
         )
         row = [
-            f"[{description}]({platform_url}) (`{platform}`)"
-            if platform
-            else description,
-            f"`{platform_code}`",
+            f"[{description}]({url}) (`{name}`)" if name else description,
+            f"`{code}`",
             f"`{short_name}` ({id})",
             ", ".join(mcus),
             "✔️" if arduino else "❌",
-            f"`{platform_framework}` ([{platform_sdk_name}]({platform_sdk}))"
-            if platform
-            else "-",
+            f"`{framework}` ([{sdk_name}]({sdk}))" if name else "-",
         ]
         rows.append(row)
 

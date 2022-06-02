@@ -52,8 +52,8 @@ if flash_layout:
     env.Append(CPPDEFINES=defines.items())
     env.Replace(**defines)
 
-# Platform builders details:
-# - call env.AddDefaults("platform name", "sdk name") to add dir paths
+# Family builders details:
+# - call env.AddDefaults("family name", "sdk name") to add dir paths
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources
 # - call env.BuildLibraries() to build lib targets with safe envs
 # - configure LINK, UF2OTA and UPLOAD_ACTIONS

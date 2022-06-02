@@ -2,15 +2,15 @@
 
 ```
 arduino/
-├─ <platform name>/             Arduino Core for specific SoC
+├─ <family name>/               Arduino Core for specific SoC
 │  ├─ cores/                        Wiring core files
-│  ├─ libraries/                    Supported built-in platform libraries
+│  ├─ libraries/                    Supported built-in family libraries
 ├─ libretuya/
 │  ├─ api/                      Library interfaces
-│  ├─ common/                   Units common to all platforms
+│  ├─ common/                   Units common to all families
 │  ├─ compat/                   Fixes for compatibility with ESP32 framework
 │  ├─ core/                     LibreTuya API for Arduino cores
-│  ├─ libraries/                Built-in platform-independent libraries
+│  ├─ libraries/                Built-in family-independent libraries
 boards/
 ├─ <board name>/                Board-specific code
 │  ├─ variant.cpp                   Arduino variant initialization
@@ -18,20 +18,21 @@ boards/
 ├─ <board name>.json            PlatformIO board description
 builder/
 ├─ frameworks/                  Framework builders for PlatformIO
-│  ├─ <platform name>-sdk.py        Vanilla SDK build system
-│  ├─ <platform name>-arduino.py    Arduino Core build system
+│  ├─ <family name>-sdk.py          Vanilla SDK build system
+│  ├─ <family name>-arduino.py      Arduino Core build system
 ├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
 ├─ main.py                      Main PlatformIO builder
 ├─ utils.py                     SCons utils used during the build
 docs/                           Project documentation, guides, tips, etc.
 platform/
-├─ <platform name>/             Platform-specific configurations
+├─ <family name>/               Family-specific configurations
 │  ├─ bin/                          Binary blobs (bootloaders, etc.)
 │  ├─ fixups/                       Code fix-ups to replace SDK parts
 │  ├─ ld/                           Linker scripts
 │  ├─ openocd/                      OpenOCD configuration files
 tools/
 ├─ <tool name>/                 Tools used during the build
+families.json                   List of supported device families
 platform.json                   PlatformIO manifest
 platform.py                     Custom PlatformIO script
 ```

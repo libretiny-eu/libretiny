@@ -203,7 +203,7 @@ env.AddLibrary(
     ],
 )
 
-# Sources - platform fixups
+# Sources - family fixups
 env.AddLibrary(
     name="ambz_fixups",
     base_dir="$FIXUPS_DIR",

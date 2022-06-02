@@ -2,7 +2,7 @@
 
 #pragma once
 
-// include platform stdlib APIs
+// include family stdlib APIs
 #include <WVariant.h>
 
 #include "uf2binpatch.h"

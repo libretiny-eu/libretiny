@@ -61,10 +61,10 @@ void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width);
 /**
  * @brief Main LibreTuya API class.
  *
- * This class contains all functions common amongst all platforms.
- * Implementations of these methods may vary between platforms.
+ * This class contains all functions common amongst all families.
+ * Implementations of these methods may vary between families.
  *
- * The class is accessible using the `LT` global object (defined by the platform).
+ * The class is accessible using the `LT` global object (defined by the family).
  */
 class LibreTuya {
   public: /* Common methods - note: these are documented in LibreTuyaAPI.cpp */
@@ -90,7 +90,7 @@ class LibreTuya {
 	// inline bool partitionWrite(const esp_partition_t *partition, uint32_t offset, uint32_t *data, size_t size) {}
 	// inline bool partitionRead(const esp_partition_t *partition, uint32_t offset, uint32_t *data, size_t size) {}
 
-  public: /* Platform-defined methods */
+  public: /* Family-defined methods */
 	/**
 	 * @brief Reboot the CPU.
 	 */

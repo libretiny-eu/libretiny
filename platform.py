@@ -201,7 +201,7 @@ class LibretuyaPlatform(PlatformBase):
                     args.extend(
                         [
                             "-f",
-                            "$LTPATH/platform/$LTPLATFORM/openocd/%s"
+                            "$LTPATH/platform/$LTFAMILY/openocd/%s"
                             % debug.get("openocd_config"),
                         ]
                     )
@@ -226,7 +226,7 @@ class LibretuyaPlatform(PlatformBase):
         opts = debug_config.env_options
         server = debug_config.server
         lt_path = dirname(__file__)
-        lt_platform = opts["framework"][0].rpartition("-")[0]
+        lt_family = opts["framework"][0].rpartition("-")[0]
         if not server:
             debug_tool = opts.get("debug_tool", "custom")
             board = opts.get("board", "<unknown>")
@@ -244,8 +244,8 @@ class LibretuyaPlatform(PlatformBase):
                     "-f",
                     "interface/%s.cfg" % opts.get("openocd_interface"),
                 ] + server["arguments"]
-            # replace $LTPLATFORM with actual name
+            # replace $LTFAMILY with actual name
             server["arguments"] = [
-                arg.replace("$LTPLATFORM", lt_platform).replace("$LTPATH", lt_path)
+                arg.replace("$LTFAMILY", lt_family).replace("$LTPATH", lt_path)
                 for arg in server["arguments"]
             ]

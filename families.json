@@ -8,11 +8,11 @@
 		"id": "0x22E0D6FC",
 		"short_name": "RTL8710B",
 		"description": "Realtek AmebaZ",
-		"platform": "realtek-ambz",
-		"platform_code": "ambz",
-		"platform_url": "https://www.amebaiot.com/en/amebaz/",
-		"platform_sdk": "https://github.com/ambiot/amb1_sdk",
-		"platform_framework": "framework-realtek-amb1",
+		"name": "realtek-ambz",
+		"code": "ambz",
+		"url": "https://www.amebaiot.com/en/amebaz/",
+		"sdk": "https://github.com/ambiot/amb1_sdk",
+		"framework": "framework-realtek-amb1",
 		"mcus": [
 			"RTL87xxB"
 		]

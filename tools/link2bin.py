@@ -218,7 +218,7 @@ if __name__ == "__main__":
         description="Link to BIN format",
         prefix_chars="@",
     )
-    parser.add_argument("soc", type=str, help="SoC name/platform short name")
+    parser.add_argument("soc", type=str, help="SoC name/family short name")
     parser.add_argument("ota1", type=str, help=".LD file OTA1 pattern")
     parser.add_argument("ota2", type=str, help=".LD file OTA2 pattern")
     parser.add_argument("args", type=str, nargs="*", help="Linker arguments")

@@ -1,5 +1,5 @@
 * [Home](README.md)
-* [💻 Platform list](docs/platforms.md)
+* [💻 Family list](docs/families.md)
 * [✔️ Implementation status](docs/implementation-status.md)
 * [🔧 Configuration](docs/config.md)
 * [📁 Project structure](docs/project-structure.md)
@@ -42,7 +42,7 @@
 	* [uf2ota.py tool](docs/ota/uf2ota.md)
 	* [uf2ota.h library](docs/ota/library.md)
 	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
-* Platforms
+* Families
 	* [Realtek - notes](docs/platform/realtek/README.md)
 	* Realtek AmebaZ Series
 		* Boards

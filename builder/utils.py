@@ -12,20 +12,20 @@ platform = env.PioPlatform()
 board = env.BoardConfig()
 
 
-def env_add_defaults(env, platform_name: str, sdk_name: str):
+def env_add_defaults(env, family_name: str, sdk_name: str):
     vars = dict(
         SDK_DIR=platform.get_package_dir(sdk_name),
         LT_DIR=platform.get_dir(),
         # Root dirs
         BOARD_DIR=join("${LT_DIR}", "boards", "${VARIANT}"),
-        ARDUINO_DIR=join("${LT_DIR}", "arduino", platform_name),
-        PLATFORM_DIR=join("${LT_DIR}", "platform", platform_name),
+        ARDUINO_DIR=join("${LT_DIR}", "arduino", family_name),
+        FAMILY_DIR=join("${LT_DIR}", "platform", family_name),
         TOOLS_DIR=join("${LT_DIR}", "tools"),
-        # Platform-specific dirs
-        BIN_DIR=join("${PLATFORM_DIR}", "bin"),
-        FIXUPS_DIR=join("${PLATFORM_DIR}", "fixups"),
-        LD_DIR=join("${PLATFORM_DIR}", "ld"),
-        OPENOCD_DIR=join("${PLATFORM_DIR}", "openocd"),
+        # Family-specific dirs
+        BIN_DIR=join("${FAMILY_DIR}", "bin"),
+        FIXUPS_DIR=join("${FAMILY_DIR}", "fixups"),
+        LD_DIR=join("${FAMILY_DIR}", "ld"),
+        OPENOCD_DIR=join("${FAMILY_DIR}", "openocd"),
         # Board config variables
         MCU=board.get("build.mcu").upper(),
         FAMILY=board.get("build.family"),

@@ -23,7 +23,7 @@ extern uint32_t SystemCoreClock;
 #define interrupts()   vPortClearInterruptMask(0)
 #define noInterrupts() ulPortSetInterruptMask()
 
-// Include platform-specific code
+// Include family-specific code
 #include "WVariant.h"
 // Include board variant
 #include "variant.h"

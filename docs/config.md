@@ -29,7 +29,7 @@ build_flags =
 
 The following options enable library-specific debugging messages. They are only effective if `LT_LOGLEVEL` is set below INFO. All of them are disabled by default.
 
-Platforms should generally call i.e. WiFiClient debugging for client-related code, even if the `WiFiClient.cpp` file is physically absent.
+Families should generally call i.e. WiFiClient debugging for client-related code, even if the `WiFiClient.cpp` file is physically absent.
 
 - LT_DEBUG_WIFI - `WiFi.cpp`
 - LT_DEBUG_WIFI_CLIENT - `WiFiClient.cpp`
@@ -37,7 +37,7 @@ Platforms should generally call i.e. WiFiClient debugging for client-related cod
 - LT_DEBUG_WIFI_STA - `WiFiSTA.cpp`
 - LT_DEBUG_WIFI_AP - `WiFiAP.cpp`
 
-## Platform options
+## Family options
 
-- LT_HAS_LWIP - whether platform SDK has LwIP. This causes `LwIPRxBuffer.cpp` to be compiled for platform libraries to use.
-- LT_HAS_LWIP2 - whether platform has LwIP v2.0.0 or newer. This causes `LwIPmDNS.cpp` to be compiled.
+- LT_HAS_LWIP - whether family SDK has LwIP. This causes `LwIPRxBuffer.cpp` to be compiled for family libraries to use.
+- LT_HAS_LWIP2 - whether family has LwIP v2.0.0 or newer. This causes `LwIPmDNS.cpp` to be compiled.
