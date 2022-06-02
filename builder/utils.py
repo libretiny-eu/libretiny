@@ -32,6 +32,9 @@ def env_add_defaults(env, platform_name: str, sdk_name: str):
         VARIANT=board.get("build.variant"),
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
+        # Link2Bin tool
+        LINK2BIN="${PYTHONEXE} ${LT_DIR}/tools/link2bin.py",
+        UF2OTA_PY="${PYTHONEXE} ${LT_DIR}/tools/uf2ota/uf2ota.py",
     )
     env.Replace(**vars)
     for k, v in vars.items():

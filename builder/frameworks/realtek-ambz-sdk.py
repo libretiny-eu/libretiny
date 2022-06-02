@@ -10,31 +10,6 @@ board = env.BoardConfig()
 
 env.AddDefaults("realtek-ambz", "framework-realtek-amb1")
 
-flash_addr = board.get("build.amb_flash_addr")
-flash_ota1_offset = env.subst("$FLASH_OTA1_OFFSET")
-flash_ota2_offset = env.subst("$FLASH_OTA2_OFFSET")
-boot_all = board.get("build.amb_boot_all")
-ota1_offset = hex(int(flash_addr, 16) + int(flash_ota1_offset, 16))
-ota2_offset = hex(int(flash_addr, 16) + int(flash_ota2_offset, 16))
-
-# Outputs
-env.Replace(
-    IMG_FW="image2_all_ota1.bin",
-    IMG_OTA="ota_all.bin",
-    LINK="python ${LT_DIR}/tools/link2bin.py AMBZ xip1 xip2",
-)
-
-# Tools
-# fmt: off
-TOOL_DIR = join("$SDK_DIR", "component", "soc", "realtek", "8711b", "misc", "iar_utility", "common", "tools")
-# fmt: on
-env.Replace(
-    PICK=join(TOOL_DIR, "pick"),
-    PAD=join(TOOL_DIR, "pad"),
-    CHECKSUM=join(TOOL_DIR, "checksum"),
-    OTA=join(TOOL_DIR, "ota"),
-)
-
 # Flags
 env.Append(
     CFLAGS=[
@@ -295,11 +270,6 @@ env.Append(
         )
     ),
 )
-actions = [
-    # env.VerboseAction(package_ota, "Packaging OTA image - $IMG_OTA"),
-    env.VerboseAction("true", f"- OTA1 flash offset: $FLASH_OTA1_OFFSET"),
-    env.VerboseAction("true", f"- OTA2 flash offset: $FLASH_OTA2_OFFSET"),
-]
 
 # Uploader
 upload_protocol = env.subst("$UPLOAD_PROTOCOL")
@@ -327,6 +297,7 @@ else:
     sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
 
 # Bootloader library
+boot_all = board.get("build.amb_boot_all")
 target_boot = env.StaticLibrary(
     join("$BUILD_DIR", "boot_all"),
     env.BinToObj(
@@ -339,10 +310,21 @@ env.Prepend(LIBS=[target_boot])
 # Build all libraries
 env.BuildLibraries()
 
-# Main firmware binary builder
-env.Append(
-    BUILDERS=dict(
-        DumpFirmwareBinary=Builder(action=actions),
-    ),
+# Main firmware outputs and actions
+env.Replace(
+    # linker command (dual .bin outputs)
+    LINK="${LINK2BIN} AMBZ xip1 xip2",
+    # default output .bin name
+    IMG_FW="image_${FLASH_OTA1_OFFSET}.ota1.bin",
+    # UF2OTA input list
+    UF2OTA=[
+        (
+            "ota1",
+            "${BUILD_DIR}/image_${FLASH_OTA1_OFFSET}.ota1.bin",
+            "ota2",
+            "${BUILD_DIR}/image_${FLASH_OTA2_OFFSET}.ota2.bin",
+        ),
+    ],
+    # uploader
     UPLOAD_ACTIONS=upload_actions,
 )
