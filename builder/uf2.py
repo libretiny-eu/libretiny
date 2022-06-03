@@ -14,9 +14,13 @@ def env_uf2ota(env, *args, **kwargs):
     now = datetime.now()
     project_dir = env.subst("$PROJECT_DIR")
     project_name = basename(normpath(project_dir))
-    # TODO support specifying custom version
     project_version = now.strftime("%y.%m.%d")
     lt_version = platform.version
+
+    if platform.custom("fw_name"):
+        project_name = platform.custom("fw_name")
+    if platform.custom("fw_version"):
+        project_version = platform.custom("fw_version")
 
     inputs = " ".join(f'"{";".join(input)}"' for input in env["UF2OTA"])
     output = [

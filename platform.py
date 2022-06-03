@@ -77,6 +77,7 @@ def find_pkg_root(self, path: str, spec: PackageSpec):
 
 class LibretuyaPlatform(PlatformBase):
     boards_base: Dict[str, dict] = {}
+    custom_opts: Dict[str, object] = {}
 
     def configure_default_packages(self, options, targets):
         framework = options.get("pioframework")[0]
@@ -141,7 +142,17 @@ class LibretuyaPlatform(PlatformBase):
         global libretuya_packages
         libretuya_packages = self.packages
 
+        # save custom options from env
+        self.custom_opts = {}
+        for key, value in options.items():
+            if not key.startswith("custom_"):
+                continue
+            self.custom_opts[key[7:]] = value
+
         return super().configure_default_packages(options, targets)
+
+    def custom(self, key: str) -> object:
+        return self.custom_opts.get(key, None)
 
     def get_boards(self, id_=None):
         result = PlatformBase.get_boards(self, id_)

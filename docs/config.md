@@ -1,4 +1,18 @@
-# LibreTuya API Configuration
+# Configuration
+
+## Project options
+
+```ini
+[env:my_board]
+# custom firmware name, present in UF2 output files
+# - default: project directory name
+custom_fw_name = my_firmware
+# custom firmware version
+# - default: current date in yy.mm.dd format
+custom_fw_version = 1.2.0
+```
+
+## LibreTuya API
 
 Note: see [LibreTuyaConfig.h](../arduino/libretuya/core/LibreTuyaConfig.h) for most options and their defaults.
 
@@ -9,7 +23,7 @@ build_flags =
   -D LT_LOGLEVEL=LT_LEVEL_DEBUG
 ```
 
-## Logging
+### Logging
 
 - LT_LOGGER - enable/disable LibreTuya logger globally. Enabled by default.
 - LT_LOGLEVEL - global LT loglevel:
@@ -25,7 +39,7 @@ build_flags =
 - LT_LOGGER_COLOR - output ANSI terminal colors
 - LT_PRINTF_BROKEN - whether printf outputs "0." for floats with value 0
 
-## Debug logging
+### Debug logging
 
 The following options enable library-specific debugging messages. They are only effective if `LT_LOGLEVEL` is set below INFO. All of them are disabled by default.
 
@@ -37,7 +51,7 @@ Families should generally call i.e. WiFiClient debugging for client-related code
 - LT_DEBUG_WIFI_STA - `WiFiSTA.cpp`
 - LT_DEBUG_WIFI_AP - `WiFiAP.cpp`
 
-## Family options
+### Family options
 
 - LT_HAS_LWIP - whether family SDK has LwIP. This causes `LwIPRxBuffer.cpp` to be compiled for family libraries to use.
 - LT_HAS_LWIP2 - whether family has LwIP v2.0.0 or newer. This causes `LwIPmDNS.cpp` to be compiled.
