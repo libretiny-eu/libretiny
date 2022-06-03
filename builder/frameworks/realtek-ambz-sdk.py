@@ -180,6 +180,8 @@ env.AddLibrary(
         "+<component/common/mbed/hal_ext>",
         "+<component/common/mbed/targets/cmsis>",
         "+<component/common/mbed/targets/hal/rtl8711b>",
+        # keep PolarSSL for headers for ROM crypto functions
+        "+<component/common/network/ssl/polarssl-1.3.8/include>",
     ],
 )
 
