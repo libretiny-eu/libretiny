@@ -12,6 +12,13 @@ void LibreTuya::restart() {
 	sys_reset();
 }
 
+void LibreTuya::gpioRecover() {
+	// PA14 and PA15 are apparently unusable with SWD enabled
+	sys_jtag_off();
+	Pinmux_Config(PA_14, PINMUX_FUNCTION_GPIO);
+	Pinmux_Config(PA_15, PINMUX_FUNCTION_GPIO);
+}
+
 /* CPU-related */
 
 ChipType LibreTuya::getChipType() {

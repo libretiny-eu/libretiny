@@ -93,6 +93,11 @@ class LibreTuya {
 	 * @brief Reboot the CPU.
 	 */
 	void restart();
+	/**
+	 * @brief Reconfigure GPIO pins used for debugging
+	 * (SWD/JTAG), so that they can be used as normal I/O.
+	 */
+	void gpioRecover();
 
   public: /* CPU-related */
 	/**

@@ -167,3 +167,7 @@ bool LibreTuya::otaCanRollback() {
 		return true;
 	return false;
 }
+
+__attribute__((weak)) void LibreTuya::gpioRecover() {
+	// nop by default
+}
