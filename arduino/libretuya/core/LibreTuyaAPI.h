@@ -70,6 +70,7 @@ class LibreTuya {
 	ChipFamily getChipFamily();
 	const char *getChipFamilyName();
 	const char *getDeviceName();
+	uint32_t getCpuFreqMHz();
 	uint8_t otaGetRunning();
 	uint8_t otaGetTarget();
 	bool otaRollback();
@@ -115,13 +116,13 @@ class LibreTuya {
 	 */
 	const char *getChipCoreType();
 	/**
-	 * @brief Get CPU frequency in MHz.
+	 * @brief Get CPU frequency in Hz.
 	 */
-	uint32_t getCpuFreqMHz();
+	uint32_t getCpuFreq();
 	/**
 	 * @brief Get CPU cycle count.
 	 */
-	inline uint32_t getCycleCount() __attribute__((always_inline));
+	uint32_t getCycleCount();
 
   public: /* Memory management */
 	/**

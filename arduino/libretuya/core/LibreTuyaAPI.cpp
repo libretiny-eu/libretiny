@@ -108,6 +108,13 @@ const char *LibreTuya::getDeviceName() {
 	return deviceName;
 }
 
+/**
+ * @brief Get CPU frequency in MHz.
+ */
+uint32_t LibreTuya::getCpuFreqMHz() {
+	return getCpuFreq() / 1000000;
+}
+
 static uint8_t otaRunningIndex = 0;
 
 /**

@@ -42,11 +42,11 @@ const char *LibreTuya::getChipCoreType() {
 	return "ARM Cortex-M4F";
 }
 
-uint32_t LibreTuya::getCpuFreqMHz() {
-	return CPU_ClkGet(false) / 1000000;
+uint32_t LibreTuya::getCpuFreq() {
+	return CPU_ClkGet(false);
 }
 
-inline uint32_t LibreTuya::getCycleCount() {
+uint32_t LibreTuya::getCycleCount() {
 	return microsecondsToClockCycles(micros());
 }
 
