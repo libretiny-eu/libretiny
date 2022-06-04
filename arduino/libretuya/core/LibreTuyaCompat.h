@@ -18,6 +18,9 @@
 #define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
 #define PGM_VOID_P			const void *
 #define vsnprintf_P			vsnprintf
+#define OUTPUT_OPEN_DRAIN	OUTPUT_OPENDRAIN
+#define attachInterruptArg	attachInterruptParam
+#define voidFuncPtrArg		voidFuncPtrParam
 
 // FreeRTOS utilities
 #if LT_HAS_FREERTOS

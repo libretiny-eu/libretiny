@@ -4,22 +4,31 @@
 #include <gpio_irq_ex_api.h>
 
 extern void *gpio_pin_struct[PINS_COUNT];
-extern void *gpio_irq_handler_list[PINS_COUNT];
+static void *gpio_irq_handler_list[PINS_COUNT] = {NULL};
+static void *gpio_irq_handler_args[PINS_COUNT] = {NULL};
 
 extern bool pinInvalid(pin_size_t pinNumber);
 extern void pinRemoveMode(pin_size_t pinNumber);
 
 void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
 	if (gpio_irq_handler_list[id] != NULL) {
-		((void (*)(uint32_t, uint32_t))gpio_irq_handler_list[id])(id, (uint32_t)event);
+		if (gpio_irq_handler_args[id] != NULL)
+			((voidFuncPtr)gpio_irq_handler_list[id])();
+		else
+			((voidFuncPtrParam)gpio_irq_handler_list[id])(gpio_irq_handler_args[id]);
 	}
 }
 
 void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus mode) {
+	attachInterruptParam(interruptNumber, callback, mode, NULL);
+}
+
+void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback, PinStatus mode, void *param) {
 	if (pinInvalid(interruptNumber))
 		return;
 
 	gpio_irq_handler_list[interruptNumber] = callback;
+	gpio_irq_handler_args[interruptNumber] = param;
 
 	if (g_APinDescription[interruptNumber].ulPinType == PIO_GPIO_IRQ &&
 		g_APinDescription[interruptNumber].ulPinMode == mode)
