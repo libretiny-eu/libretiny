@@ -190,6 +190,9 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 		// call progress callback
 		if (callback)
 			callback(bytesWritten, bytesTotal);
+		// reset the buffer as it's used already
+		if (bufSize() == UF2_BLOCK_SIZE)
+			bufPos = buf;
 		return UF2_BLOCK_SIZE;
 	}
 
