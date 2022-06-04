@@ -238,7 +238,8 @@ env.Append(
         "_wps",
         "_p2p",
         "_dct",
-        "_rtlstd",
+        # use lib_rtlstd.a without some __aeabi functions
+        "_rtlstd_patch",
         "m",
         "c",
         "nosys",

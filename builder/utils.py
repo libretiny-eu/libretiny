@@ -49,6 +49,7 @@ def env_add_defaults(env, family_name: str, sdk_name: str):
         ],
         LIBPATH=[
             "$LD_DIR",
+            "$FIXUPS_DIR",
         ],
         CPPDEFINES=[
             ("LIBRETUYA", "1"),
