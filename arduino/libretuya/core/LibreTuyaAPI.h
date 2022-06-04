@@ -15,6 +15,7 @@
 #define LT_BOARD_STR	   STRINGIFY_MACRO(LT_BOARD)
 
 // Includes
+#include "LibreTuyaCompat.h"
 #include "LibreTuyaConfig.h"
 #include <Arduino.h>
 
@@ -38,10 +39,6 @@ extern "C" {
 		__LINE__,                                                                                                      \
 		"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__                        \
 	)
-
-// ArduinoCore-API doesn't define these anymore
-#define FPSTR(pstr_pointer) (reinterpret_cast<const __FlashStringHelper *>(pstr_pointer))
-#define PGM_VOID_P			const void *
 
 void lt_rand_bytes(uint8_t *buf, size_t len);
 

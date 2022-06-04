@@ -81,6 +81,8 @@ void lt_log(const uint8_t level, const char *format, ...);
 #define ESP_EARLY_LOGI(...) LT_I(__VA_ARGS__)
 #define ESP_EARLY_LOGW(...) LT_W(__VA_ARGS__)
 #define ESP_EARLY_LOGE(...) LT_E(__VA_ARGS__)
+#define ets_printf(...)		LT_I(__VA_ARGS__)
+#define ETS_PRINTF(...)		LT_I(__VA_ARGS__)
 
 #define LT_T_MOD(module, ...)                                                                                          \
 	do {                                                                                                               \

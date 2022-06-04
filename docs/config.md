@@ -55,3 +55,5 @@ Families should generally call i.e. WiFiClient debugging for client-related code
 
 - LT_HAS_LWIP - whether family SDK has LwIP. This causes `LwIPRxBuffer.cpp` to be compiled for family libraries to use.
 - LT_HAS_LWIP2 - whether family has LwIP v2.0.0 or newer. This causes `LwIPmDNS.cpp` to be compiled.
+- LT_HAS_FREERTOS - whether family supports FreeRTOS
+- LT_HAS_MBEDTLS - whether family has mbedTLS

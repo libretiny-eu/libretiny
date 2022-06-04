@@ -18,6 +18,9 @@ extern "C" {
 #define LT_MD5_CTX_T void
 #endif
 
+// for compatibility with ESP8266
+typedef LT_MD5_CTX_T md5_context_t;
+
 void MD5Init(LT_MD5_CTX_T *context);
 void MD5Update(LT_MD5_CTX_T *context, const unsigned char *buf, unsigned len);
 void MD5Final(unsigned char digest[16], LT_MD5_CTX_T *context);

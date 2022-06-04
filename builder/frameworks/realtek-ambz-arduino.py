@@ -49,11 +49,6 @@ env.Append(
         # which conflicts with C++ built-in bool
         # so it's either -fpermissive or this:
         ("bool", "bool"),
-        # enable LwIPRxBuffer
-        ("LT_HAS_LWIP", "1"),
-        # enable LwIPmDNS
-        ("LT_HAS_LWIP2", "1"),
-        ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",

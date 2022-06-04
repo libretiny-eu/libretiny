@@ -30,6 +30,13 @@ env.Append(
         "-fsigned-char",
     ],
     CPPDEFINES=[
+        # LibreTuya configuration
+        ("LT_HAS_LWIP", "1"),
+        ("LT_HAS_LWIP2", "1"),
+        ("LT_HAS_FREERTOS", "1"),
+        ("LT_HAS_MBEDTLS", "1"),
+        ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
+        # other options
         "M3",
         "CONFIG_PLATFORM_8711B",
         # LwIP options

@@ -51,6 +51,7 @@ def env_add_defaults(env, family_name: str, sdk_name: str):
             "$LD_DIR",
         ],
         CPPDEFINES=[
+            ("LIBRETUYA", "1"),
             ("LT_VERSION", platform.version),
             ("LT_BOARD", board.get("build.variant")),
             ("F_CPU", board.get("build.f_cpu")),
