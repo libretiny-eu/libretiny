@@ -94,12 +94,11 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		"%s%c "
 #endif
 		,
-		levels[level]
 #if LT_LOGGER_COLOR
-		,
 		c_bright, // whether text is bright
-		c_value	  // text color
+		c_value,  // text color
 #endif
+		levels[level]
 #if LT_LOGGER_TIMESTAMP
 		,
 		seconds // float
