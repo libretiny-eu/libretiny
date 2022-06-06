@@ -126,7 +126,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	pwmout_t *obj;
 
 	if ((g_APinDescription[pinNumber].ulPinAttribute & PIO_PWM) == PIO_PWM) {
-		/* Handle */
+		float percent = value * 1.0 / (1 << _writeResolution);
 		if (g_APinDescription[pinNumber].ulPinType != PIO_PWM) {
 			if ((g_APinDescription[pinNumber].ulPinType == PIO_GPIO) ||
 				(g_APinDescription[pinNumber].ulPinType == PIO_GPIO_IRQ)) {
@@ -136,16 +136,13 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			pwmout_t *obj			   = (pwmout_t *)gpio_pin_struct[pinNumber];
 			pwmout_init(obj, g_APinDescription[pinNumber].pinname);
 			pwmout_period_us(obj, _writePeriod);
-			pwmout_write(obj, value * 1.0 / (1 << _writeResolution));
+			pwmout_write(obj, percent);
 			g_APinDescription[pinNumber].ulPinType = PIO_PWM;
 			g_APinDescription[pinNumber].ulPinMode = PWM_MODE_ENABLED;
 		} else {
 			pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
-			pwmout_period_us(obj, _writePeriod);
-			pwmout_write(obj, value * 1.0 / (1 << _writeResolution));
-			/* if ( g_APinDescription[pinNumber].ulPinMode == PWM_MODE_DISABLED ) {
-				HAL_Pwm_Enable( &obj->pwm_hal_adp );
-			} */
+			// pwmout_period_us(obj, _writePeriod);
+			pwmout_write(obj, percent);
 		}
 	}
 }

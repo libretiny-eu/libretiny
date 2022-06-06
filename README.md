@@ -99,27 +99,27 @@ Note: this list will probably change with each functionality update.
 &nbsp;              | `realtek-ambz`
 --------------------|---------------
 Core functions      | ✔️
-GPIO/PWM/IRQ        | ✔️/❓/✔️
+GPIO/PWM/IRQ        | ✔️/✔️/✔️
 Analog input        | ❓
 UART I/O            | ✔️
-Flash I/O           | ❓
+Flash I/O           | ✔️
 **CORE LIBRARIES**  |
 SoftwareSerial      | ❌
 SPI                 | ❌
 Wire                | ❗
 **OTHER LIBRARIES** |
 Wi-Fi STA/AP/Mixed  | ✔️
-Wi-Fi Client (SSL)  | ✔️ (✔️)
-Wi-Fi Server        | ✔️
 Wi-Fi Events        | ✔️
+TCP Client (SSL)    | ✔️ (✔️)
+TCP Server          | ✔️
 IPv6                | ❌
 HTTP Client (SSL)   | ✔️ (✔️)
 HTTP Server         | ✔️
-NVS / Preferences   | ✔️
+NVS / Preferences   | ❌
 SPIFFS              | ❌
 BLE                 | -
 NTP                 | ❌
-OTA                 | ❓
+OTA                 | ✔️
 MDNS                | ✔️
 MQTT                | ✅
 SD                  | ❌
