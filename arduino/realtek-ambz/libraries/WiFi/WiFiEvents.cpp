@@ -145,10 +145,6 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 	memset(&eventInfo, 0, sizeof(EventInfo));
 
 	switch (event) {
-		case WIFI_EVENT_CONNECT:
-			eventId = ARDUINO_EVENT_WIFI_STA_START;
-			break;
-
 		case WIFI_EVENT_DISCONNECT:
 		case WIFI_EVENT_RECONNECTION_FAIL:
 			eventId									 = ARDUINO_EVENT_WIFI_STA_DISCONNECTED;
@@ -189,6 +185,7 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 			memcpy(eventInfo.wifi_ap_stadisconnected.mac, (const char *)data, 6);
 			break;
 
+		// case WIFI_EVENT_CONNECT:
 		// case WIFI_EVENT_SCAN_RESULT_REPORT:
 		// case WIFI_EVENT_SEND_ACTION_DONE:
 		// case WIFI_EVENT_RX_MGNT:

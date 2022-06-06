@@ -3,6 +3,11 @@
 #include "WiFi.h"
 #include "WiFiPriv.h"
 
+typedef struct {
+	int count;
+	rtw_mac_t mac_list[AP_STA_NUM];
+} client_info_t;
+
 bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bool ssidHidden, int maxClients) {
 	if (!enableAP(true))
 		return false;
@@ -61,6 +66,8 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 		);
 	}
 
+	wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_START, -2);
+
 	if (ret < 0) {
 		LT_E("SoftAP failed; ret=%d", ret);
 		return false;
@@ -109,9 +116,11 @@ bool WiFiClass::softAPdisconnect(bool wifiOff) {
 }
 
 uint8_t WiFiClass::softAPgetStationNum() {
-	// TODO
 	// the struct is at wifi_conf.c:2576
-	return 0;
+	client_info_t info;
+	info.count = AP_STA_NUM;
+	wifi_get_associated_client_list(&info, sizeof(info));
+	return info.count;
 }
 
 IPAddress WiFiClass::softAPIP() {

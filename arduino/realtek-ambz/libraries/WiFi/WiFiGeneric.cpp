@@ -45,6 +45,18 @@ bool WiFiClass::mode(WiFiMode mode) {
 		LT_E("Error while changing mode(%u)", mode);
 		return false;
 	}
+
+	// send STA start/stop events and AP stop event (start is handled in softAP())
+	if ((mode & WIFI_MODE_STA) != (currentMode & WIFI_MODE_STA)) {
+		if (mode & WIFI_MODE_STA)
+			wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_START, -2);
+		else
+			wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_STOP, -2);
+	}
+	if (!(mode & WIFI_MODE_AP) && (currentMode & WIFI_MODE_AP)) {
+		wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_STOP, -2);
+	}
+
 	LT_HEAP_I();
 	return true;
 }
