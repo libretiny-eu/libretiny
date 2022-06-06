@@ -40,6 +40,10 @@ void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 		// Nothing changes in pin mode
 		return;
 
+	if ((g_APinDescription[pinNumber].ulPinAttribute & PIO_GPIO) != PIO_GPIO)
+		// cannot set ADC as I/O
+		return;
+
 	/* if (g_APinDescription[pinNumber].ulPinType == PIO_PWM) {
 		// If this pin has been configured as PWM, then it cannot change to another mode
 		return;

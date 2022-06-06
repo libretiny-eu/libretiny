@@ -100,7 +100,7 @@ Note: this list will probably change with each functionality update.
 --------------------|---------------
 Core functions      | ✔️
 GPIO/PWM/IRQ        | ✔️/✔️/✔️
-Analog input        | ❓
+Analog input        | ✔️
 UART I/O            | ✔️
 Flash I/O           | ✔️
 **CORE LIBRARIES**  |

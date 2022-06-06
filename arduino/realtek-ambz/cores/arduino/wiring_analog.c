@@ -27,10 +27,9 @@ analogin_t adc1;
 analogin_t adc2;
 analogin_t adc3;
 
-static const float ADC_slope1 = (3.12) / (3410.0 - 674.0);
-static const float ADC_slope2 = (3.3 - 3.12) / (3454.0 - 3410.0);
-
 bool g_adc_enabled[] = {false, false, false};
+// from realtek_amebaz_va0_example/example_sources/adc_vbat/src/main.c
+#define AD2MV(ad, offset, gain) (((ad >> 4) - offset) * 1000 / gain)
 
 extern void *gpio_pin_struct[];
 
@@ -39,6 +38,8 @@ extern void pinRemoveMode(pin_size_t pinNumber);
 static int _readResolution	= 10;
 static int _writeResolution = 8;
 static int _writePeriod		= 20000; // 50 Hz
+
+// TODO implement custom ADC calibration
 
 void analogReadResolution(int res) {
 	_readResolution = res;
@@ -56,40 +57,29 @@ void analogWriteResolution(int res) {
 	_writeResolution = res;
 }
 
-static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to) {
-	if (from == to)
-		return value;
-	if (from > to)
-		return value >> (from - to);
-	else
-		return value << (to - from);
-}
-
 uint8_t analog_reference = AR_DEFAULT;
 
 void analogReference(uint8_t mode) {
 	analog_reference = mode;
 }
 
-int analogRead(pin_size_t pinNumber) {
-	uint32_t ulValue = 0;
-	uint32_t ulChannel;
+uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	uint16_t ret = 0;
-	float voltage;
-	float adc_value;
-
 	switch (pinNumber) {
-		case PIN_A0:
-			if (g_adc_enabled[0] == false) {
-				analogin_init(&adc1, AD_1);
-				g_adc_enabled[0] = true;
-			}
 		case PIN_A1:
 			if (g_adc_enabled[1] == false) {
 				analogin_init(&adc2, AD_2);
 				g_adc_enabled[1] = true;
 			}
 			ret = analogin_read_u16(&adc2);
+			// AD_1 - 0.0V-5.0V
+			return AD2MV(ret, 0x496, 0xBA);
+		case PIN_A0:
+			if (g_adc_enabled[0] == false) {
+				analogin_init(&adc1, AD_1);
+				g_adc_enabled[0] = true;
+			}
+			ret = analogin_read_u16(&adc1);
 			break;
 		case PIN_A2:
 			if (g_adc_enabled[2] == false) {
@@ -99,20 +89,21 @@ int analogRead(pin_size_t pinNumber) {
 			ret = analogin_read_u16(&adc3);
 			break;
 		default:
-			printf("%s : pinNumber %d wrong\n", __FUNCTION__, pinNumber);
 			return 0;
 	}
 
-	ret >>= 4;
-	if (ret < 674) {
-		voltage = 0;
-	} else if (ret > 3410) {
-		voltage = (float)(ret - 3410) * ADC_slope2 + 3.12;
-	} else {
-		voltage = (float)(ret - 674) * ADC_slope1;
-	}
+	// AD_0, AD_2 - 0.0V-3.3V
+	return AD2MV(ret, 0x418, 0x342);
+}
 
-	ret = round((1 << _readResolution) * voltage / 3.3);
+int analogRead(pin_size_t pinNumber) {
+	float voltage = analogReadVoltage(pinNumber);
+	uint16_t ret  = 0;
+	if (pinNumber != PIN_A1) {
+		ret = round((1 << _readResolution) * voltage / 3300);
+	} else {
+		ret = round((1 << _readResolution) * voltage / 5000);
+	}
 	if (ret >= (1 << _readResolution))
 		ret = (1 << _readResolution) - 1;
 	return ret;

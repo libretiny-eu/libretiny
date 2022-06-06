@@ -7,6 +7,11 @@ extern "C" {
 #endif
 
 /**
+ * @brief Read voltage from analog input (in millivolts).
+ */
+uint16_t analogReadVoltage(pin_size_t pinNumber);
+
+/**
  * @brief Set resolution of values (in bits) returned by analogRead().
  */
 void analogReadResolution(int res);
