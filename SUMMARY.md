@@ -6,7 +6,8 @@
 * 🔖 Code reference
 	* [LibreTuya API](docs/reference/lt-api.md)
 		* [Class reference](ltapi/class_libre_tuya.md)
-		* [Static functions](ltapi/_libre_tuya_a_p_i_8cpp.md)
+		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
+		* [Family-provided methods](ltapi/_libre_tuya_custom_8h.md)
 		* [Logger](ltapi/lt__logger_8h.md)
 		* [Chip types & UF2 families](ltapi/_chip_type_8h.md)
 		* [POSIX utilities](ltapi/lt__posix__api_8h.md)

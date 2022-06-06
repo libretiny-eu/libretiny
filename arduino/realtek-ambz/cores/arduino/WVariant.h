@@ -50,10 +50,7 @@ extern PinDescription g_APinDescription[];
 // Additional Wiring functions
 extern uint32_t digitalPinToPort(uint32_t pinNumber);
 extern uint32_t digitalPinToBitMask(uint32_t pinNumber);
-extern void analogReadResolution(int res);
-extern void analogWriteResolution(int res);
 extern void analogOutputInit(void);
-extern void analogWritePeriod(int us);
 extern void wait_for_debug();
 
 #ifdef __cplusplus

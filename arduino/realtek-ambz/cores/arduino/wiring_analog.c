@@ -38,18 +38,22 @@ extern void pinRemoveMode(pin_size_t pinNumber);
 
 static int _readResolution	= 10;
 static int _writeResolution = 8;
-static int _writePeriod		= 20000;
+static int _writePeriod		= 20000; // 50 Hz
 
 void analogReadResolution(int res) {
 	_readResolution = res;
 }
 
-void analogWriteResolution(int res) {
-	_writeResolution = res;
+void analogWriteFrequency(int hz) {
+	_writePeriod = 1E6 / hz;
 }
 
 void analogWritePeriod(int us) {
 	_writePeriod = us;
+}
+
+void analogWriteResolution(int res) {
+	_writeResolution = res;
 }
 
 static inline uint32_t mapResolution(uint32_t value, uint32_t from, uint32_t to) {
