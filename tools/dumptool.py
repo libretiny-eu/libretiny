@@ -10,7 +10,7 @@ from binascii import crc32
 from os import makedirs
 from os.path import basename, dirname, join
 
-from tools.util.crypto import crc16
+from tools.util.crc16 import CRC16
 from tools.util.platform import get_board_manifest
 
 if __name__ == "__main__":
@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 cs = crc32(part)
                 cs = cs.to_bytes(length=4, byteorder="big")
             else:
-                cs = crc16(part)
+                cs = CRC16.ARC.calc(part)
                 cs = cs.to_bytes(length=2, byteorder="big")
             filename = f"{offset}_{name}_{cs.hex().upper()}.bin"
         print(f"Writing {filename}")

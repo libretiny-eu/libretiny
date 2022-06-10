@@ -1,12 +1,20 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-31.
 
+import sys
+from os.path import dirname, join
+
+sys.path.append(join(dirname(__file__), ".."))
+
 from argparse import ArgumentParser
 from enum import Enum
 from os import stat, unlink
-from os.path import basename, dirname, getmtime, isfile, join
+from os.path import basename, dirname, isfile, join
 from shutil import copyfile
 from subprocess import PIPE, Popen
 from typing import IO, Dict, List, Tuple
+
+from tools.util.fileio import chext, chname, isnewer, readbin
+from tools.util.intbin import inttole32
 
 
 class SocType(Enum):
@@ -14,7 +22,11 @@ class SocType(Enum):
     AMBZ = (1, "arm-none-eabi-", True)
 
     def cmd(self, cmd: str) -> IO[bytes]:
-        process = Popen(self.value[1] + cmd, stdout=PIPE)
+        try:
+            process = Popen(self.value[1] + cmd, stdout=PIPE)
+        except FileNotFoundError:
+            print(f"Toolchain not found while running: '{self.value[1] + cmd}'")
+            exit(1)
         return process.stdout
 
     @property
@@ -30,28 +42,6 @@ soc: "SocType" = SocType.UNSET
 #  | |  | | __| | | | __| |/ _ \/ __|
 #  | |__| | |_| | | | |_| |  __/\__ \
 #   \____/ \__|_|_|_|\__|_|\___||___/
-def chname(path: str, name: str) -> str:
-    return join(dirname(path), name)
-
-
-def chext(path: str, ext: str) -> str:
-    return path.rpartition(".")[0] + "." + ext
-
-
-def isnewer(what: str, than: str) -> bool:
-    if not isfile(than):
-        return True
-    if not isfile(what):
-        return False
-    return getmtime(what) > getmtime(than)
-
-
-def readbin(file: str) -> bytes:
-    with open(file, "rb") as f:
-        data = f.read()
-    return data
-
-
 def checkfile(path: str):
     if not isfile(path) or stat(path).st_size == 0:
         exit(1)
@@ -97,8 +87,8 @@ def objcopy(
 def elf2bin_ambz(input: str, ota_idx: int = 1) -> Tuple[int, str]:
     def write_header(f: IO[bytes], start: int, end: int):
         f.write(b"81958711")
-        f.write((end - start).to_bytes(length=4, byteorder="little"))
-        f.write(start.to_bytes(length=4, byteorder="little"))
+        f.write(inttole32(end - start))
+        f.write(inttole32(start))
         f.write(b"\xff" * 16)
 
     sections_ram = [
@@ -156,6 +146,12 @@ def elf2bin(input: str, ota_idx: int = 1) -> Tuple[int, str]:
     raise NotImplementedError(f"SoC ELF->BIN not implemented: {soc}")
 
 
+#   _      _       _
+#  | |    (_)     | |
+#  | |     _ _ __ | | _____ _ __
+#  | |    | | '_ \| |/ / _ \ '__|
+#  | |____| | | | |   <  __/ |
+#  |______|_|_| |_|_|\_\___|_|
 def ldargs_parse(
     args: List[str],
     ld_ota1: str,
@@ -178,6 +174,9 @@ def ldargs_parse(
         if arg.endswith(".ld") and ld_ota1:
             # use OTA2 linker script
             args2[i] = arg.replace(ld_ota1, ld_ota2)
+    if not elf1 or not elf2:
+        print("Linker output .elf not found in arguments")
+        return None
     return [(elf1, args1), (elf2, args2)]
 
 
@@ -194,6 +193,9 @@ def link2bin(
         # just get .elf output name for single-OTA chips
         elfs = ldargs_parse(args, None, None)
 
+    if not elfs:
+        return None
+
     ota_idx = 1
     for elf, ldargs in elfs:
         # print graph element
@@ -203,6 +205,7 @@ def link2bin(
         ldargs = " ".join(ldargs)
         soc.cmd(f"gcc {ldargs}").read()
         checkfile(elf)
+        # generate a set of binaries for the SoC
         elf2bin(elf, ota_idx)
         ota_idx += 1
 
@@ -223,5 +226,12 @@ if __name__ == "__main__":
     parser.add_argument("ota2", type=str, help=".LD file OTA2 pattern")
     parser.add_argument("args", type=str, nargs="*", help="Linker arguments")
     args = parser.parse_args()
-    soc = next(soc for soc in SocType if soc.name == args.soc)
+    try:
+        soc = next(soc for soc in SocType if soc.name == args.soc)
+    except StopIteration:
+        print(f"Not a valid SoC: {args.soc}")
+        exit(1)
+    if not args.args:
+        print(f"Linker arguments must not be empty")
+        exit(1)
     link2bin(args.args, args.ota1, args.ota2)
