@@ -1,5 +1,10 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
+from io import FileIO
+from typing import IO, Generator, Union
+
+ByteGenerator = Generator[bytes, None, None]
+
 
 def bswap(data: bytes) -> bytes:
     """Reverse the byte array (big-endian <-> little-endian)."""
@@ -137,3 +142,63 @@ def uint32(val):
 def uintmax(bits: int) -> int:
     """Get maximum integer size for given bit width."""
     return (2**bits) - 1
+
+
+def biniter(data: bytes, size: int) -> ByteGenerator:
+    """Iterate over 'data' in 'size'-bytes long chunks, returning
+    a generator."""
+    if len(data) % size != 0:
+        raise ValueError(
+            f"Data length must be a multiple of block size ({len(data)} % {size})"
+        )
+    for i in range(0, len(data), size):
+        yield data[i : i + size]
+
+
+def geniter(gen: Union[ByteGenerator, bytes, IO], size: int) -> ByteGenerator:
+    """
+    Take data from 'gen' and generate 'size'-bytes long chunks.
+
+    If 'gen' is a bytes or IO object, it is wrapped using
+    biniter() or fileiter().
+    """
+    if isinstance(gen, bytes):
+        yield from biniter(gen, size)
+        return
+    if isinstance(gen, IO):
+        yield from fileiter(gen, size)
+        return
+    buf = b""
+    for part in gen:
+        if not buf and len(part) == size:
+            yield part
+            continue
+        buf += part
+        while len(buf) >= size:
+            yield buf[0:size]
+            buf = buf[size:]
+
+
+def fileiter(
+    f: FileIO, size: int, padding: int = 0x00, count: int = 0
+) -> ByteGenerator:
+    """
+    Read data from 'f' and generate 'size'-bytes long chunks.
+
+    Pad incomplete chunks with 'padding' character.
+
+    Read up to 'count' bytes from 'f', if specified. Data is padded
+    if not on chunk boundary.
+    """
+    read = 0
+    while True:
+        if count and read + size >= count:
+            yield pad_data(f.read(count % size), size, padding)
+            return
+        data = f.read(size)
+        read += len(data)
+        if len(data) < size:
+            # got only part of the block
+            yield pad_data(data, size, padding)
+            return
+        yield data
