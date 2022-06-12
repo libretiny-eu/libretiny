@@ -60,11 +60,13 @@ def get_family(
     for family in get_families():
         if id and family.id == id:
             return family
-        if short_name and family.short_name == short_name:
+        if short_name and family.short_name == short_name.upper():
             return family
-        if name and family.name == name:
+        if name and family.name == name.lower():
             return family
-        if code and family.code == code:
+        if code and family.code == code.lower():
             return family
+    if any:
+        raise ValueError(f"Family not found - {any}")
     text = ", ".join(filter(None, [id, short_name, name, code]))
     raise ValueError(f"Family not found - {text}")

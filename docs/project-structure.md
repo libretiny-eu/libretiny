@@ -2,16 +2,20 @@
 
 ```
 arduino/
-├─ <family name>/               Arduino Core for specific SoC
+├─ <family name>/               Arduino Core for a specific SoC family
 │  ├─ cores/                        Wiring core files
 │  ├─ libraries/                    Supported built-in family libraries
+│  ├─ port/                     External library port units
 ├─ libretuya/
 │  ├─ api/                      Library interfaces
 │  ├─ common/                   Units common to all families
 │  ├─ compat/                   Fixes for compatibility with ESP32 framework
 │  ├─ core/                     LibreTuya API for Arduino cores
 │  ├─ libraries/                Built-in family-independent libraries
+|  ├─ port/                     External library port units
+|  ├─ posix/                    POSIX-like C utility functions
 boards/
+├─ _base/                       Base board manifests
 ├─ <board name>/                Board-specific code
 │  ├─ variant.cpp                   Arduino variant initialization
 │  ├─ variant.h                     Arduino variant pin configs
@@ -20,9 +24,10 @@ builder/
 ├─ frameworks/                  Framework builders for PlatformIO
 │  ├─ <family name>-sdk.py          Vanilla SDK build system
 │  ├─ <family name>-arduino.py      Arduino Core build system
+├─ libs/                        Builders for external libraries
+├─ utils/                       SCons utils used during the build
 ├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
 ├─ main.py                      Main PlatformIO builder
-├─ utils.py                     SCons utils used during the build
 docs/                           Project documentation, guides, tips, etc.
 platform/
 ├─ <family name>/               Family-specific configurations
@@ -31,7 +36,8 @@ platform/
 │  ├─ ld/                           Linker scripts
 │  ├─ openocd/                      OpenOCD configuration files
 tools/
-├─ <tool name>/                 Tools used during the build
+├─ <tool name>/                     Tools used during the build
+├─ util/                            Utilities used by CLI tools and the builders
 families.json                   List of supported device families
 platform.json                   PlatformIO manifest
 platform.py                     Custom PlatformIO script

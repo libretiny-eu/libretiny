@@ -8,58 +8,6 @@ from typing import List
 from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
-platform = env.PioPlatform()
-board = env.BoardConfig()
-
-
-def env_add_defaults(env, family_name: str, sdk_name: str):
-    vars = dict(
-        SDK_DIR=platform.get_package_dir(sdk_name),
-        LT_DIR=platform.get_dir(),
-        # Root dirs
-        BOARD_DIR=join("${LT_DIR}", "boards", "${VARIANT}"),
-        ARDUINO_DIR=join("${LT_DIR}", "arduino", family_name),
-        FAMILY_DIR=join("${LT_DIR}", "platform", family_name),
-        TOOLS_DIR=join("${LT_DIR}", "tools"),
-        # Family-specific dirs
-        BIN_DIR=join("${FAMILY_DIR}", "bin"),
-        FIXUPS_DIR=join("${FAMILY_DIR}", "fixups"),
-        LD_DIR=join("${FAMILY_DIR}", "ld"),
-        OPENOCD_DIR=join("${FAMILY_DIR}", "openocd"),
-        # Board config variables
-        MCU=board.get("build.mcu").upper(),
-        FAMILY=board.get("build.family"),
-        VARIANT=board.get("build.variant"),
-        LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
-        LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
-        # Link2Bin tool
-        LINK2BIN='"${PYTHONEXE}" "${LT_DIR}/tools/link2bin.py"',
-        UF2OTA_PY='"${PYTHONEXE}" "${LT_DIR}/tools/uf2ota/uf2ota.py"',
-        UF2UPLOAD_PY='"${PYTHONEXE}" "${LT_DIR}/tools/upload/uf2upload.py"',
-    )
-    env.Replace(**vars)
-    for k, v in vars.items():
-        if "DIR" in k:
-            assert isdir(env.subst(v)), f"{env.subst(v)} is not a directory"
-    env.Prepend(
-        CPPPATH=[
-            "$BOARD_DIR",
-            "$FIXUPS_DIR",
-            "$FIXUPS_DIR/inc",
-        ],
-        LIBPATH=[
-            "$LD_DIR",
-            "$FIXUPS_DIR",
-        ],
-        CPPDEFINES=[
-            ("LIBRETUYA", "1"),
-            ("LT_VERSION", platform.version),
-            ("LT_BOARD", board.get("build.variant")),
-            ("F_CPU", board.get("build.f_cpu")),
-            ("MCU", board.get("build.mcu").upper()),
-            ("FAMILY", board.get("build.family")),
-        ],
-    )
 
 
 def env_add_library(
@@ -130,6 +78,5 @@ def env_build_libraries(env, safe: bool = True):
         env.Prepend(LIBS=[target])
 
 
-env.AddMethod(env_add_defaults, "AddDefaults")
 env.AddMethod(env_add_library, "AddLibrary")
 env.AddMethod(env_build_libraries, "BuildLibraries")

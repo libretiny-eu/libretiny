@@ -7,8 +7,6 @@ from SCons.Script import Builder, DefaultEnvironment
 env = DefaultEnvironment()
 board = env.BoardConfig()
 
-env.AddDefaults("realtek-ambz", "framework-realtek-amb1")
-
 # Flags
 env.Append(
     CFLAGS=[
@@ -187,8 +185,14 @@ env.AddLibrary(
         "+<component/common/mbed/hal_ext>",
         "+<component/common/mbed/targets/cmsis>",
         "+<component/common/mbed/targets/hal/rtl8711b>",
-        # keep PolarSSL for headers for ROM crypto functions
+        # keep PolarSSL headers for ROM crypto functions
         "+<component/common/network/ssl/polarssl-1.3.8/include>",
+        # includes that are missing in the vanilla SDK makefiles
+        "+<component/common/drivers/sdio/realtek/sdio_host/inc>",
+        "+<component/common/file_system/fatfs>",
+        "+<component/common/file_system/fatfs/r0.10c/include>",
+        "+<component/common/network/mdns>",
+        "+<component/common/network/libwsclient>",
     ],
 )
 
@@ -214,7 +218,7 @@ env.AddLibrary(
 # Sources - family fixups
 env.AddLibrary(
     name="ambz_fixups",
-    base_dir="$FIXUPS_DIR",
+    base_dir="$FAMILY_DIR/fixups",
     srcs=[
         "+<app_start_patch.c>",
         "+<cmsis_ipsr.c>",
@@ -247,11 +251,6 @@ env.Append(
         "_websocket",
         "_http",
         "_mdns",
-    ],
-)
-env.Replace(
-    LDSCRIPT_PATH=[
-        join("$LD_DIR", "$LDSCRIPT_SDK"),
     ],
 )
 

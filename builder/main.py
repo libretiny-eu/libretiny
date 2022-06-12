@@ -5,11 +5,17 @@ import sys
 from SCons.Script import Default, DefaultEnvironment
 
 env = DefaultEnvironment()
+platform = env.PioPlatform()
 board = env.BoardConfig()
 
+# Make tools available
+sys.path.insert(0, platform.get_dir())
+
 # Utilities
-env.SConscript("utils.py", exports="env")
-env.SConscript("uf2.py", exports="env")
+env.SConscript("utils/env.py", exports="env")
+env.SConscript("utils/flash.py", exports="env")
+env.SConscript("utils/libs.py", exports="env")
+env.SConscript("utils/uf2.py", exports="env")
 # Vendor-specific library ports
 env.SConscript("libs/lwip.py", exports="env")
 env.SConscript("libs/flashdb.py", exports="env")
@@ -34,26 +40,12 @@ env.Replace(
     SIZETOOL="arm-none-eabi-size",
 )
 
+# Default environment options
+env.AddDefaults(platform, board)
 # Flash layout defines
-flash_layout: dict = board.get("flash")
-if flash_layout:
-    defines = {}
-    flash_size = 0
-    fal_items = ""
-    for name, layout in flash_layout.items():
-        name = name.upper()
-        (offset, _, length) = layout.partition("+")
-        defines[f"FLASH_{name}_OFFSET"] = offset
-        defines[f"FLASH_{name}_LENGTH"] = length
-        fal_items += f"FAL_PART_TABLE_ITEM({name.lower()}, {name})"
-        flash_size = max(flash_size, int(offset, 16) + int(length, 16))
-    defines["FLASH_LENGTH"] = flash_size
-    defines["FAL_PART_TABLE"] = "{" + fal_items + "}"
-    env.Append(CPPDEFINES=defines.items())
-    env.Replace(**defines)
+env.AddFlashLayout(board)
 
 # Family builders details:
-# - call env.AddDefaults("family name", "sdk name") to add dir paths
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources
 # - call env.BuildLibraries() to build lib targets with safe envs
 # - configure LINK, UF2OTA and UPLOAD_ACTIONS

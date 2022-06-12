@@ -1,7 +1,5 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-22.
 
-from os.path import join
-
 from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
@@ -63,73 +61,6 @@ env.Append(
 )
 # Arduino core uses __libc_init_array
 env["LINKFLAGS"].remove("-nostartfiles")
-
-# Sources - Arduino Core
-env.AddLibrary(
-    name="ambz_arduino_core",
-    base_dir="$ARDUINO_DIR",
-    srcs=[
-        # Wiring core
-        "+<cores/arduino/*.c>",
-        "+<cores/arduino/*.cpp>",
-    ],
-    includes=[
-        # prepend these as the Arduino core is incorrectly picking some includes from SDK
-        "!<cores/arduino>",
-        # includes that are missing in the vanilla SDK makefiles
-        "+<$SDK_DIR/component/common/drivers/sdio/realtek/sdio_host/inc>",
-        "+<$SDK_DIR/component/common/file_system/fatfs>",
-        "+<$SDK_DIR/component/common/file_system/fatfs/r0.10c/include>",
-        "+<$SDK_DIR/component/common/network/mdns>",
-        "+<$SDK_DIR/component/common/network/libwsclient>",
-    ],
-)
-
-# Sources - board variant
-env.AddLibrary(
-    name="ambz_${VARIANT}",
-    base_dir="$BOARD_DIR",
-    srcs=[
-        "+<variant.cpp>",
-    ],
-)
-
-# Sources - Arduino libraries
-env.AddLibrary(
-    name="ambz_arduino_libs",
-    base_dir="$ARDUINO_DIR",
-    srcs=[
-        "+<libraries/*/*.cpp>",
-    ],
-    includes=[
-        "+<libraries/*>",
-    ],
-)
-
-# Sources - external library ports
-env.AddLibrary(
-    name="ambz_arduino_port",
-    base_dir="$ARDUINO_DIR",
-    srcs=[
-        "+<port/**/*.c*>",
-    ],
-    includes=[
-        "+<port/*>",
-    ],
-)
-
-# Libs & linker config
-env.Append(
-    LIBS=[
-        "stdc++",
-        "supc++",
-    ],
-)
-env.Replace(
-    LDSCRIPT_PATH=[
-        join("$LD_DIR", "$LDSCRIPT_ARDUINO"),
-    ],
-)
 
 # Build all libraries
 env.BuildLibraries()
