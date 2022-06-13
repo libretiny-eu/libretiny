@@ -21,6 +21,11 @@
       "tilte": "Realtek AmebaZ - Arduino",
       "package": "framework-realtek-amb1",
       "script": "builder/frameworks/realtek-ambz-arduino.py"
+    },
+    "beken-72xx-sdk": {
+      "title": "Beken 72XX - SDK",
+      "package": "framework-beken-bdk",
+      "script": "builder/frameworks/beken-72xx-sdk.py"
     }
   },
   "packages": {
@@ -31,11 +36,21 @@
       "manifest": {
         "description": "SDK for Ameba1"
       },
+      "toolchain": "gccarmnoneeabi@~1.50401.0",
       "libraries": {
         "lwip": [
           "v2.0.0-amb1"
         ]
       }
+    },
+    "framework-beken-bdk": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/bekencorp/bdk_freertos",
+      "manifest": {
+        "description": "Beken Development Kit for FreeRTOS"
+      },
+      "toolchain": "gccarmnoneeabi@~1.40804.0"
     },
     "framework-arduino-api": {
       "type": "framework",

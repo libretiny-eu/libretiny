@@ -1,0 +1,38 @@
+{
+	"build": {
+		"f_cpu": "120000000L"
+	},
+	"connectivity": [
+		"wifi",
+		"ble"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "bk72xx.cfg"
+	},
+	"frameworks": [
+		"beken-72xx-sdk"
+	],
+	"upload": {
+		"maximum_ram_size": 262144,
+		"flash_size": 2097152
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Beken",
+			"series": "BK72XX",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		},
+		"links": {
+			"General info": "../../docs/platform/beken-72xx/README.md",
+			"Flashing (Tuya manual)": "https://developer.tuya.com/en/docs/iot/burn-and-authorize-wb-series-modules?id=Ka78f4pttsytd",
+			"BkWriter v1.6.0": "https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe"
+		}
+	}
+}

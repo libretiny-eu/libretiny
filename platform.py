@@ -98,20 +98,22 @@ class LibretuyaPlatform(PlatformBase):
             options.get("pioframework")[0] = framework
 
         framework_obj = self.frameworks[framework]
+        package_obj = self.packages[framework_obj["package"]]
 
         # set specific compiler versions
-        if framework.startswith("realtek-ambz"):
-            self.packages["toolchain-gccarmnoneeabi"]["version"] = "~1.50401.0"
+        if "toolchain" in package_obj:
+            (toolchain, version) = package_obj["toolchain"].split("@")
+            self.packages[f"toolchain-{toolchain}"]["version"] = version
 
         # make ArduinoCore-API required
         if "arduino" in framework:
             self.packages["framework-arduino-api"]["optional"] = False
 
         # mark framework SDK as required
-        self.packages[framework_obj["package"]]["optional"] = False
+        package_obj["optional"] = False
 
         # gather library dependencies
-        libraries = framework_obj["libraries"] if "libraries" in framework_obj else {}
+        libraries = package_obj["libraries"] if "libraries" in package_obj else {}
         for name, package in self.packages.items():
             if "optional" in package and package["optional"]:
                 continue

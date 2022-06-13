@@ -4,6 +4,7 @@
 
 [Product page](https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1)
 
+- [General info](../../docs/platform/realtek/README.md)
 - [Debugging](../../docs/platform/realtek/debugging.md)
 - [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
 

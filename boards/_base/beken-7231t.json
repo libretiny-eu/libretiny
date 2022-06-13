@@ -1,0 +1,14 @@
+{
+	"build": {
+		"family": "BK7231T",
+		"ldscript_sdk": "bk7231_bsp.ld",
+		"ldscript_arduino": "bk7231_bsp.ld"
+	},
+	"doc": {
+		"params": {
+			"extra": {
+				"Bluetooth": "BLE v4.2"
+			}
+		}
+	}
+}

@@ -57,6 +57,10 @@ class RBL:
     container_size: int = 0
     has_part_table: bool = False
 
+    @property
+    def container_size_crc(self) -> int:
+        return int(self.container_size + (self.container_size // 32) * 2)
+
     def update(self, data: bytes):
         self.data_crc = crc32(data, self.data_crc)
         for byte in data:
@@ -188,7 +192,7 @@ class BekenBinary:
         crc_total += 2 * (len(buf) // 32)
 
         # pad the entire container with 0xFF, excluding RBL and its CRC16
-        pad_size = pad_up(rbl.data_size + crc_total, rbl.container_size) - 102
+        pad_size = pad_up(rbl.data_size + crc_total, rbl.container_size_crc) - 102
         for _ in range(pad_size):
             yield b"\xff"
 
@@ -230,7 +234,9 @@ if __name__ == "__main__":
         "package", description="Package raw binary files as RBL containers"
     )
     add_common_args(package)
-    package.add_argument("size", type=auto_int, help="RBL total size (dec/hex)")
+    package.add_argument(
+        "size", type=auto_int, help="RBL total size (excl. CRC) (dec/hex)"
+    )
     package.add_argument(
         "-n",
         "--name",
@@ -255,7 +261,9 @@ if __name__ == "__main__":
     unpackage.add_argument(
         "offset", type=auto_int, help="Offset in input file (dec/hex)"
     )
-    unpackage.add_argument("size", type=auto_int, help="RBL total size (dec/hex)")
+    unpackage.add_argument(
+        "size", type=auto_int, help="Container total size (incl. CRC) (dec/hex)"
+    )
 
     args = parser.parse_args()
     bk = BekenBinary(args.coeffs)
@@ -293,7 +301,8 @@ if __name__ == "__main__":
             rbl.has_part_table = True
             print(f" - in bootloader mode; partition table unencrypted")
         rbl.container_size = args.size
-        print(f" - container size: 0x{args.size:X}")
+        print(f" - container size (excl. CRC): 0x{rbl.container_size:X}")
+        print(f" - container size (incl. CRC): 0x{rbl.container_size_crc:X}")
         gen = bk.package(f, args.addr, size, rbl)
 
     if args.action == "unpackage":

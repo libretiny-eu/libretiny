@@ -45,6 +45,7 @@
 	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * Families
 	* [Realtek - notes](docs/platform/realtek/README.md)
+	* [Beken 72xx - notes](docs/platform/beken-72xx/README.md)
 	* Realtek AmebaZ Series
 		* Boards
 			* [WR3](boards/wr3/README.md)
