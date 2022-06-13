@@ -70,6 +70,9 @@ def env_add_defaults(env, platform, board):
             ("MCU", "${MCU}"),
             ("FAMILY", "${FAMILY}"),
         ],
+        LINKFLAGS=[
+            "-Wl,-Map=" + join("$BUILD_DIR", "${PROGNAME}.map"),
+        ],
     )
 
 

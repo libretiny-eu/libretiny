@@ -17,31 +17,8 @@ env.SConscript("../arduino-common.py", exports="env")
 
 # Flags
 env.Append(
-    CXXFLAGS=[
-        # borrowed from RtlDuino/development/rtl87xx/platform.txt
-        "-std=c++11",
-        "-mcpu=cortex-m4",
-        "-mthumb",
-        "-mfloat-abi=hard",
-        "-mfpu=fpv4-sp-d16",
-        "-g2",
-        "-w",
-        "-O2",
-        "-MMD",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fmessage-length=0",
-        "-fno-common",
-        "-fno-exceptions",
-        "-fno-rtti",
-        "-fno-short-enums",
-        "-fomit-frame-pointer",
-        "-fsigned-char",
-    ],
     CPPDEFINES=[
-        ("ARDUINO", 10812),
         "ARDUINO_AMEBA",
-        "ARDUINO_SDK",
         "ARDUINO_ARCH_AMBZ",
         # the SDK declares bool if not defined before
         # which conflicts with C++ built-in bool

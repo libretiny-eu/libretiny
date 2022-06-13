@@ -12,6 +12,14 @@ LT_ARDUINO_DIR = join(platform.get_dir(), "arduino", "libretuya")
 assert isdir(API_DIR)
 assert isdir(LT_ARDUINO_DIR)
 
+# Flags
+env.Append(
+    CPPDEFINES=[
+        ("ARDUINO", 10812),
+        "ARDUINO_SDK",
+    ]
+)
+
 # Sources - ArduinoCore-API
 env.AddLibrary(
     name="arduino_api",
