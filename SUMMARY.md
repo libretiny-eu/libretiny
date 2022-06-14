@@ -9,7 +9,7 @@
 		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
 		* [Family-provided methods](ltapi/_libre_tuya_custom_8h.md)
 		* [Logger](ltapi/lt__logger_8h.md)
-		* [Chip types & UF2 families](ltapi/_chip_type_8h.md)
+		* [Chip & family IDs](ltapi/_chip_type_8h.md)
 		* [POSIX utilities](ltapi/lt__posix__api_8h.md)
 	* Common API
 		* [Flash](ltapi/class_i_flash_class.md)
