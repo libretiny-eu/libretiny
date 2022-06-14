@@ -94,6 +94,7 @@ env.Append(
         "-Wl,-wrap,snprintf",
         "-Wl,-wrap,sprintf",
         "-Wl,-wrap,vsnprintf",
+        "-Wl,-wrap,bk_printf",
     ],
 )
 
@@ -137,6 +138,7 @@ env.AddLibrary(
         "+<arch_main.c>",
         "+<ate_app.c>",
         "+<intc.c>",
+        "+<wrap.c>",
         *srcs_fixups,
     ],
 )
