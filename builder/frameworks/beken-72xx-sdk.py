@@ -97,6 +97,16 @@ env.Append(
     ],
 )
 
+srcs_core = []
+srcs_fixups = []
+
+# Fix for BK7231T's bootloader compatibility
+if board.get("build.bkboot_version") == "1.0.5-bk7231s":
+    env.Append(CPPDEFINES=[("CFG_SUPPORT_BOOTLOADER", "1")])
+    srcs_fixups.append("+<boot_handlers_105_bk7231s.S>")
+else:
+    srcs_core.append("+<driver/entry/boot_handlers.S>")
+
 # Sources - from framework-beken-bdk/beken378/beken_src.mk
 env.AddLibrary(
     name="bdk_core",
@@ -106,15 +116,11 @@ env.AddLibrary(
         "+<app/ate_app.c>",
         "+<app/config/param_config.c>",
         "+<demo/*.c>",
-        "+<driver/driver.c>",
-        "+<driver/entry/arch_main.c>",
-        "+<driver/entry/boot_handlers.S>",
         "+<driver/entry/boot_vectors.S>",
-        "+<driver/intc/intc.c>",
-        "+<func/func.c>",
         "+<func/wlan_ui/bk_peripheral_test.c>",
         "+<func/wlan_ui/wlan_cli.c>",
         "+<func/wlan_ui/wlan_ui.c>",
+        *srcs_core,
     ],
     includes=[
         "+<app>",
@@ -125,6 +131,17 @@ env.AddLibrary(
         "+<driver/intc>",
         "+<release>",
         "+<../release>",
+    ],
+)
+
+# Sources - parent family fixups
+env.AddLibrary(
+    name="${FAMILY_PARENT_CODE}_fixups",
+    base_dir="$PARENT_DIR/fixups",
+    srcs=[
+        "+<arch_main.c>",
+        "+<intc.c>",
+        *srcs_fixups,
     ],
 )
 
@@ -153,6 +170,7 @@ env.AddLibrary(
     name="bdk_driver",
     base_dir=DRIVER_DIR,
     srcs=[
+        "+<driver.c>",
         "+<calendar/*.c>",
         "+<common/*.c>",
         "+<dma/*.c>",
@@ -208,6 +226,7 @@ env.AddLibrary(
     name="bdk_func",
     base_dir=FUNC_DIR,
     srcs=[
+        "+<func.c>",
         "+<airkiss/*.c>",
         "+<base64/*.c>",
         "+<ble_wifi_exchange/*.c>",
