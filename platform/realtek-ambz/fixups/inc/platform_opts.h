@@ -2,6 +2,7 @@
 // - 2022-05-08 change CONFIG_USE_POLARSSL to CONFIG_USE_MBEDTLS
 // - 2022-05-08 use static int errno
 // - 2022-05-18 include lwip/init.h
+// - 2022-06-13 extract errno to common/fixups/errno.h
 
 
 /**
@@ -14,14 +15,6 @@
 #define __PLATFORM_OPTS_H__
 
 #include "platform_autoconf.h"
-
-// There are two different errno's:
-// - first is just an int
-// - second is a macro that calls __errno()
-// Here the first option is ensured in the entire project.
-#include <errno.h> // use system __errno() & error codes
-#undef errno // undefine __errno() macro
-extern int errno; // use a static errno
 
 #include <lwip/init.h>
 

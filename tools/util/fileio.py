@@ -51,3 +51,9 @@ def readjson(file: str) -> Union[dict, list]:
     """Read a JSON file into a dict or list."""
     with open(file, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def writejson(file: str, data: Union[dict, list]):
+    """Write a dict or list to a JSON file."""
+    with open(file, "w", encoding="utf-8") as f:
+        json.dump(data, f)

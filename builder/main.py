@@ -12,6 +12,7 @@ board = env.BoardConfig()
 sys.path.insert(0, platform.get_dir())
 
 # Utilities
+env.SConscript("utils/config.py", exports="env")
 env.SConscript("utils/env.py", exports="env")
 env.SConscript("utils/flash.py", exports="env")
 env.SConscript("utils/libs.py", exports="env")
@@ -72,6 +73,8 @@ elif "IMG_FW" in env:
     target_fw = env.subst("$IMG_FW")
     env.AddPlatformTarget("upload", target_fw, env["UPLOAD_ACTIONS"], "Upload")
 else:
-    sys.stderr.write("Warning! Firmware outputs not specified.\n")
+    sys.stderr.write(
+        "Warning! Firmware outputs not specified. Uploading is not possible.\n"
+    )
 
 Default(targets)

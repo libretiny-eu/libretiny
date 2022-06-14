@@ -1,7 +1,8 @@
 {
 	"build": {
 		"bkcrypt_coeffs": "510fb093a3cbeadc5993a17ec7adeb03",
-		"bkboot_version": "1.0.5-bk7231s"
+		"bkboot_version": "1.0.5-bk7231s",
+		"bkrbl_size_app": "0x107800"
 	},
 	"flash": {
 		"bootloader": "0x000000+0x11000",

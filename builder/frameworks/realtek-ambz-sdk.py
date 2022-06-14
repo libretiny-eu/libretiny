@@ -9,8 +9,7 @@ board = env.BoardConfig()
 
 # Flags
 env.Append(
-    CFLAGS=[
-        "-std=gnu99",
+    CCFLAGS=[
         "-mcpu=cortex-m4",
         "-mthumb",
         "-mfloat-abi=hard",
@@ -18,7 +17,6 @@ env.Append(
         "-g2",
         "-w",
         "-O2",
-        "-Wno-pointer-sign",
         "-fdata-sections",
         "-ffunction-sections",
         "-fmessage-length=0",
@@ -27,26 +25,16 @@ env.Append(
         "-fomit-frame-pointer",
         "-fsigned-char",
     ],
+    CFLAGS=[
+        "-std=gnu99",
+        "-Wno-pointer-sign",
+    ],
     CXXFLAGS=[
         # borrowed from RtlDuino/development/rtl87xx/platform.txt
         "-std=c++11",
-        "-mcpu=cortex-m4",
-        "-mthumb",
-        "-mfloat-abi=hard",
-        "-mfpu=fpv4-sp-d16",
-        "-g2",
-        "-w",
-        "-O2",
         "-MMD",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fmessage-length=0",
-        "-fno-common",
         "-fno-exceptions",
         "-fno-rtti",
-        "-fno-short-enums",
-        "-fomit-frame-pointer",
-        "-fsigned-char",
     ],
     CPPDEFINES=[
         # LibreTuya configuration
@@ -316,7 +304,7 @@ env.BuildLibraries()
 # Main firmware outputs and actions
 env.Replace(
     # linker command (dual .bin outputs)
-    LINK="${LINK2BIN} AMBZ xip1 xip2",
+    LINK="${LINK2BIN} ${VARIANT} xip1 xip2",
     # default output .bin name
     IMG_FW="image_${FLASH_OTA1_OFFSET}.ota1.bin",
     # UF2OTA input list

@@ -13,28 +13,62 @@ from shutil import copyfile
 from subprocess import PIPE, Popen
 from typing import IO, Dict, List, Tuple
 
-from tools.util.fileio import chext, chname, isnewer, readbin
-from tools.util.intbin import inttole32
+from tools.util.fileio import chext, isnewer
+from tools.util.models import Family
+from tools.util.obj import get
+from tools.util.platform import get_board_manifest, get_family
 
 
 class SocType(Enum):
     UNSET = ()
-    AMBZ = (1, "arm-none-eabi-", True)
+    # (index, toolchain prefix, has dual-OTA, argument count)
+    AMBZ = (1, "arm-none-eabi-", True, 0)
+    BK72XX = (2, "arm-none-eabi-", False, 0)
 
     def cmd(self, cmd: str) -> IO[bytes]:
         try:
-            process = Popen(self.value[1] + cmd, stdout=PIPE)
+            process = Popen(self.prefix + cmd, stdout=PIPE)
         except FileNotFoundError:
-            print(f"Toolchain not found while running: '{self.value[1] + cmd}'")
+            print(f"Toolchain not found while running: '{self.prefix + cmd}'")
             exit(1)
         return process.stdout
 
     @property
-    def dual_ota(self):
+    def prefix(self) -> str:
+        return self.value[1]
+
+    @property
+    def dual_ota(self) -> bool:
         return self.value[2]
 
+    @property
+    def soc_argc(self) -> int:
+        return self.value[3]
 
-soc: "SocType" = SocType.UNSET
+    def nm(self, input: str) -> Dict[str, int]:
+        out = {}
+        stdout = self.cmd(f"gcc-nm {input}")
+        for line in stdout.readlines():
+            line = line.decode().strip().split(" ")
+            if len(line) != 3:
+                continue
+            out[line[2]] = int(line[0], 16)
+        return out
+
+    def objcopy(
+        self,
+        input: str,
+        output: str,
+        sections: List[str] = [],
+        fmt: str = "binary",
+    ) -> str:
+        # print graph element
+        print(f"|   |   |-- {basename(output)}")
+        if isnewer(input, output):
+            sections = " ".join(f"-j {section}" for section in sections)
+            self.cmd(f"objcopy {sections} -O {fmt} {input} {output}").read()
+        return output
+
 
 #   _    _ _   _ _ _ _   _
 #  | |  | | | (_) (_) | (_)
@@ -47,102 +81,34 @@ def checkfile(path: str):
         exit(1)
 
 
-#   ____  _             _   _ _
-#  |  _ \(_)           | | (_) |
-#  | |_) |_ _ __  _   _| |_ _| |___
-#  |  _ <| | '_ \| | | | __| | / __|
-#  | |_) | | | | | |_| | |_| | \__ \
-#  |____/|_|_| |_|\__,_|\__|_|_|___/
-def nm(input: str) -> Dict[str, int]:
-    out = {}
-    stdout = soc.cmd(f"gcc-nm {input}")
-    for line in stdout.readlines():
-        line = line.decode().strip().split(" ")
-        if len(line) != 3:
-            continue
-        out[line[2]] = int(line[0], 16)
-    return out
-
-
-def objcopy(
-    input: str,
-    output: str,
-    sections: List[str],
-    fmt: str = "binary",
-) -> str:
-    # print graph element
-    print(f"|   |   |-- {basename(output)}")
-    if isnewer(input, output):
-        sections = " ".join(f"-j {section}" for section in sections)
-        soc.cmd(f"objcopy {sections} -O {fmt} {input} {output}").read()
-    return output
-
-
 #   ______ _      ______   _          ____ _____ _   _
 #  |  ____| |    |  ____| | |        |  _ \_   _| \ | |
 #  | |__  | |    | |__    | |_ ___   | |_) || | |  \| |
 #  |  __| | |    |  __|   | __/ _ \  |  _ < | | | . ` |
 #  | |____| |____| |      | || (_) | | |_) || |_| |\  |
 #  |______|______|_|       \__\___/  |____/_____|_| \_|
-def elf2bin_ambz(input: str, ota_idx: int = 1) -> Tuple[int, str]:
-    def write_header(f: IO[bytes], start: int, end: int):
-        f.write(b"81958711")
-        f.write(inttole32(end - start))
-        f.write(inttole32(start))
-        f.write(b"\xff" * 16)
-
-    sections_ram = [
-        ".ram_image2.entry",
-        ".ram_image2.data",
-        ".ram_image2.bss",
-        ".ram_image2.skb.bss",
-        ".ram_heap.data",
-    ]
-    sections_xip = [".xip_image2.text"]
-    sections_rdp = [".ram_rdp.text"]
-    nmap = nm(input)
-    ram_start = nmap["__ram_image2_text_start__"]
-    ram_end = nmap["__ram_image2_text_end__"]
-    xip_start = nmap["__flash_text_start__"] - 0x8000020
-    # build output name
-    output = chname(input, f"image_0x{xip_start:06X}.ota{ota_idx}.bin")
-    out_ram = chname(input, f"ota{ota_idx}.ram_2.r.bin")
-    out_xip = chname(input, f"ota{ota_idx}.xip_image2.bin")
-    out_rdp = chname(input, f"ota{ota_idx}.rdp.bin")
-    # print graph element
-    print(f"|   |-- {basename(output)}")
-    # objcopy required images
-    ram = objcopy(input, out_ram, sections_ram)
-    xip = objcopy(input, out_xip, sections_xip)
-    objcopy(input, out_rdp, sections_rdp)
-    # return if images are up to date
-    if not isnewer(ram, output) and not isnewer(xip, output):
-        return (xip_start, output)
-
-    # read and trim RAM image
-    ram = readbin(ram).rstrip(b"\x00")
-    # read XIP image
-    xip = readbin(xip)
-    # align images to 4 bytes
-    ram += b"\x00" * (((((len(ram) - 1) // 4) + 1) * 4) - len(ram))
-    xip += b"\x00" * (((((len(xip) - 1) // 4) + 1) * 4) - len(xip))
-    # write output file
-    with open(output, "wb") as f:
-        # write XIP header
-        write_header(f, 0, len(xip))
-        # write XIP image
-        f.write(xip)
-        # write RAM header
-        write_header(f, ram_start, ram_end)
-        # write RAM image
-        f.write(ram)
-    return (xip_start, output)
-
-
-def elf2bin(input: str, ota_idx: int = 1) -> Tuple[int, str]:
+def elf2bin(
+    soc: SocType,
+    family: Family,
+    board: dict,
+    input: str,
+    ota_idx: int = 1,
+    args: List[str] = [],
+) -> Tuple[int, str]:
     checkfile(input)
+    func = None
+
     if soc == SocType.AMBZ:
-        return elf2bin_ambz(input, ota_idx)
+        from tools.soc.link2bin_ambz import elf2bin_ambz
+
+        func = elf2bin_ambz
+    elif soc == SocType.BK72XX:
+        from tools.soc.link2bin_bk72xx import elf2bin_bk72xx
+
+        func = elf2bin_bk72xx
+
+    if func:
+        return func(soc, family, board, input, ota_idx, *args)
     raise NotImplementedError(f"SoC ELF->BIN not implemented: {soc}")
 
 
@@ -181,17 +147,21 @@ def ldargs_parse(
 
 
 def link2bin(
-    args: List[str],
+    soc: SocType,
+    family: Family,
+    board: dict,
+    ld_args: List[str],
     ld_ota1: str = None,
     ld_ota2: str = None,
+    soc_args: List[str] = [],
 ) -> List[str]:
     elfs = []
     if soc.dual_ota:
         # process linker arguments for dual-OTA chips
-        elfs = ldargs_parse(args, ld_ota1, ld_ota2)
+        elfs = ldargs_parse(ld_args, ld_ota1, ld_ota2)
     else:
         # just get .elf output name for single-OTA chips
-        elfs = ldargs_parse(args, None, None)
+        elfs = ldargs_parse(ld_args, None, None)
 
     if not elfs:
         return None
@@ -206,12 +176,12 @@ def link2bin(
         soc.cmd(f"gcc {ldargs}").read()
         checkfile(elf)
         # generate a set of binaries for the SoC
-        elf2bin(elf, ota_idx)
+        elf2bin(soc, family, board, elf, ota_idx, soc_args)
         ota_idx += 1
 
     if soc.dual_ota:
         # copy OTA1 file as firmware.elf to make PIO understand it
-        elf, _ = ldargs_parse(args, None, None)[0]
+        elf, _ = ldargs_parse(ld_args, None, None)[0]
         copyfile(elfs[0][0], elf)
 
 
@@ -221,17 +191,34 @@ if __name__ == "__main__":
         description="Link to BIN format",
         prefix_chars="@",
     )
-    parser.add_argument("soc", type=str, help="SoC name/family short name")
+    parser.add_argument("board", type=str, help="Target board name")
     parser.add_argument("ota1", type=str, help=".LD file OTA1 pattern")
     parser.add_argument("ota2", type=str, help=".LD file OTA2 pattern")
-    parser.add_argument("args", type=str, nargs="*", help="Linker arguments")
+    parser.add_argument("args", type=str, nargs="*", help="SoC+linker arguments")
     args = parser.parse_args()
+
     try:
-        soc = next(soc for soc in SocType if soc.name == args.soc)
-    except StopIteration:
-        print(f"Not a valid SoC: {args.soc}")
+        board = get_board_manifest(args.board)
+    except FileNotFoundError:
+        print(f"Board not found: {args.board}")
         exit(1)
+
+    family = get_family(short_name=get(board, "build.family"))
+    soc_types = {soc.name.lower(): soc for soc in SocType}
+    soc = soc_types.get(family.code, soc_types.get(family.parent_code, None))
+    if not soc:
+        print(f"SoC type not found. Tried {family.code}, {family.parent_code}")
+        exit(1)
+
     if not args.args:
         print(f"Linker arguments must not be empty")
         exit(1)
-    link2bin(args.args, args.ota1, args.ota2)
+    link2bin(
+        soc,
+        family,
+        board,
+        args.args[soc.soc_argc :],
+        args.ota1,
+        args.ota2,
+        args.args[: soc.soc_argc],
+    )

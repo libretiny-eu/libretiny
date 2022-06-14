@@ -1,6 +1,6 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-04.
 
-from os.path import isdir, join
+from os.path import join
 
 from SCons.Script import DefaultEnvironment
 
@@ -43,13 +43,10 @@ def env_add_defaults(env, platform, board):
     env.Replace(**vars)
     # Store family parameters as environment variables
     env.Replace(**dict(family))
-    # Check directories for validity
-    for k, v in vars.items():
-        if k.endswith("_DIR"):
-            assert isdir(env.subst(v)), f"{env.subst(v)} is not a directory"
     # Default build options
     env.Prepend(
         CPPPATH=[
+            "$LT_DIR/platform/common/fixups",
             "$BOARD_DIR",
             "$FAMILY_DIR/fixups",
             "$PARENT_DIR/fixups",
