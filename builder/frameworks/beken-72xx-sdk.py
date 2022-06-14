@@ -48,13 +48,21 @@ env.Append(
         "-fno-strict-aliasing",
         "-fsigned-char",
         "-Wno-comment",
+        "-Werror=implicit-function-declaration",
     ],
     CFLAGS=[
-        "-std=c99",
+        "-std=gnu99",
         "-nostdlib",
         "-Wall",
         "-Wno-format",
         "-Wno-unknown-pragmas",
+    ],
+    CXXFLAGS=[
+        "-std=c++11",
+        "-MMD",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-Wno-literal-suffix",
     ],
     CPPDEFINES=[
         # LibreTuya configuration
@@ -80,6 +88,8 @@ env.Append(
         "-mthumb-interwork",
         "-g",
         "-nostdlib",
+        "-nostartfiles",
+        "--specs=nano.specs",
         "-Wl,--gc-sections",
         "-Wl,-wrap,_free_r",
         "-Wl,-wrap,_malloc_r",
@@ -347,7 +357,10 @@ env.AddLibrary(
         "+<mbedtls-port/inc>",
     ],
     options=dict(
-        CCFLAGS=["-Wno-unused-variable"],
+        CCFLAGS=[
+            "-Wno-unused-variable",
+            "-Wno-implicit-function-declaration",
+        ],
         CFLAGS=["-<-Wall>"],
     ),
 )

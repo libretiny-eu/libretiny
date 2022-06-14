@@ -54,13 +54,50 @@ SECTIONS
 	/* code, instructions.for example: i=i+1; */
 	.text :
 	{
-	    *(.text)
-	    *(.text.*)
-	    *(.stub)
-	    /* .gnu.warning sections are handled specially by elf32.em.  */
-	    *(.gnu.warning)
-	    *(.gnu.linkonce.t*)
-	    *(.glue_7t) *(.glue_7)
+		*(.text)
+		*(.text.*)
+		*(.stub)
+
+		/* https://www.embedded.com/building-bare-metal-arm-systems-with-gnu-part-3/ */
+		KEEP(*crtbegin.o(.ctors))
+		KEEP(*(EXCLUDE_FILE (*ctrend.o) .ctors))
+		KEEP(*(SORT(.ctors.*)))
+		KEEP(*crtend.o(.ctors))
+		KEEP(*crtbegin.o(.dtors))
+		KEEP(*(EXCLUDE_FILE (*crtend.o) .dtors))
+		KEEP(*(SORT(.dtors.*)))
+		KEEP(*crtend.o(.dtors))
+
+		. = ALIGN(4);
+		__preinit_array_start = .;
+		KEEP(*(.preinit_array))
+		__preinit_array_end = .;
+		. = ALIGN(4);
+		__init_array_start = .;
+		KEEP(*(SORT(.init_array.*)))
+		KEEP(*(.init_array))
+		__init_array_end = .;
+		. = ALIGN(4);
+		__fini_array_start = .;
+		KEEP(*(SORT(.fini_array.*)))
+		KEEP(*(.fini_array))
+		__fini_array_end = .;
+
+		. = ALIGN (4);
+		__cmd_table_start__ = .;
+		KEEP(*(.cmd.table.data*))
+		__cmd_table_end__ = .;
+
+		/* https://community.silabs.com/s/article/understand-the-gnu-linker-script-of-cortex-m4?language=en_US */
+		KEEP(*(.init))
+		KEEP(*(.fini))
+		*(.init)
+		*(.fini)
+
+		/* .gnu.warning sections are handled specially by elf32.em.  */
+		*(.gnu.warning)
+		*(.gnu.linkonce.t*)
+		*(.glue_7t) *(.glue_7)
 	} > flash
 
 	/* read only data.for example: const int rom_data[3]={1,2,3}; */
@@ -73,8 +110,10 @@ SECTIONS
 
 	.ARM.exidx :
 	{
-	    *(.ARM.exidx*)
-	    *(.gnu.linkonce.armexidx.*)
+		__exidx_start = .;
+		*(.ARM.exidx*)
+		*(.gnu.linkonce.armexidx.*)
+		__exidx_end = .;
 	} > flash
 
 	/* globals.for example: int ram_data[3]={4,5,6}; */
@@ -85,7 +124,7 @@ SECTIONS
 		*(.data .data.*)
 		*(.sdata)
 		*(.gnu.linkonce.d*)
-    	SORT(CONSTRUCTORS)
+		SORT(CONSTRUCTORS)
 	} >ram
 
 	/* Loader will copy data from _flash_begin to _ram_begin..ram_end */
