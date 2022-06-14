@@ -113,12 +113,8 @@ env.AddLibrary(
     base_dir=ROOT_DIR,
     srcs=[
         "+<app/app.c>",
-        "+<app/ate_app.c>",
         "+<app/config/param_config.c>",
-        "+<demo/*.c>",
         "+<driver/entry/boot_vectors.S>",
-        "+<func/wlan_ui/bk_peripheral_test.c>",
-        "+<func/wlan_ui/wlan_cli.c>",
         "+<func/wlan_ui/wlan_ui.c>",
         *srcs_core,
     ],
@@ -126,7 +122,6 @@ env.AddLibrary(
         "+<app>",
         "+<app/config>",
         "+<common>",
-        "+<demo>",
         "+<driver/entry>",
         "+<driver/intc>",
         "+<release>",
@@ -140,6 +135,7 @@ env.AddLibrary(
     base_dir="$PARENT_DIR/fixups",
     srcs=[
         "+<arch_main.c>",
+        "+<ate_app.c>",
         "+<intc.c>",
         *srcs_fixups,
     ],
@@ -352,22 +348,6 @@ env.AddLibrary(
         CCFLAGS=["-Wno-unused-variable"],
         CFLAGS=["-<-Wall>"],
     ),
-)
-
-# Sources - demos TODO remove this
-env.AddLibrary(
-    name="bdk_demos",
-    base_dir="$SDK_DIR",
-    srcs=[
-        "+<demos/**/*.c>",
-        "-<demos/components/**/*.c>",
-        "-<demos/net/mqtt/*>",
-        "-<demos/wifi/bk_aware/*.c>",
-    ],
-    includes=[
-        "+<demos>",
-        "+<demos/**>",
-    ],
 )
 
 # Sources - chip-specific drivers

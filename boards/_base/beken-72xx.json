@@ -11,7 +11,10 @@
 		"protocols": [
 			"openocd"
 		],
-		"openocd_config": "bk72xx.cfg"
+		"openocd_config": "bk72xx.cfg",
+		"gdb_init": [
+			"mem 0x000000 0x200000 ro"
+		]
 	},
 	"frameworks": [
 		"beken-72xx-sdk"
