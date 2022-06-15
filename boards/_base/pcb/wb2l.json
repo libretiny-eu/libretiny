@@ -1,0 +1,85 @@
+{
+	"pcb": {
+		"templates": [
+			"tuya2l",
+			"rf-15mm-type1",
+			"tuya2l-shield"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_white",
+			"TRACE_COLOR": "#E0E0E0",
+			"SILK_COLOR": "black",
+			"PINTYPE_HORZ": "pin_horz_2mm_cast_hole"
+		},
+		"pinout_hidden": "I2S",
+		"pinout": {
+			"1": {
+				"IC": 24,
+				"ARD": "D0"
+			},
+			"2": {
+				"IC": 23,
+				"ARD": "D1"
+			},
+			"3": {
+				"IC": 22,
+				"ARD": "D2"
+			},
+			"4": {
+				"IC": 15,
+				"ARD": "D3"
+			},
+			"5": {
+				"IC": 16,
+				"ARD": "D4"
+			},
+			"6": {
+				"GND": null
+			},
+			"7": {
+				"PWR": 3.3
+			},
+			"TGND": {
+				"GND": null
+			},
+			"TRST": {
+				"CTRL": "^RST"
+			},
+			"TRX1": {
+				"IC": 26,
+				"ARD": "D5"
+			},
+			"TTX1": {
+				"IC": 27,
+				"ARD": "D6"
+			},
+			"TRX2": {
+				"IC": 28,
+				"ARD": "D7"
+			},
+			"TTX2": {
+				"IC": 29,
+				"ARD": "D8"
+			},
+			"TSCK": {
+				"IC": 20,
+				"ARD": "D9"
+			},
+			"TCSN": {
+				"IC": 19,
+				"ARD": "D10"
+			},
+			"TSO": {
+				"IC": 17,
+				"ARD": [
+					"D11",
+					"A0"
+				]
+			},
+			"TSI": {
+				"IC": 18,
+				"ARD": "D12"
+			}
+		}
+	}
+}
