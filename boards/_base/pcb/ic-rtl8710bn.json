@@ -1,0 +1,166 @@
+{
+	"pcb": {
+		"ic": {
+			"1": {
+				"C_NAME": "PA_30",
+				"GPIO": "PA30",
+				"IRQ": null,
+				"UART": "2_TX",
+				"I2C": "0_SDA",
+				"PWM": 4,
+				"RTC": "OUT"
+			},
+			"2": {
+				"C_NAME": "PA_29",
+				"GPIO": "PA29",
+				"IRQ": null,
+				"UART": "2_RX",
+				"I2C": "0_SCL",
+				"PWM": 4
+			},
+			"12": {
+				"IO": "I",
+				"CTRL": "CEN"
+			},
+			"13": {
+				"C_NAME": "PA_14",
+				"GPIO": "PA14",
+				"IRQ": null,
+				"PWM": 0,
+				"SWD": "CLK"
+			},
+			"14": {
+				"C_NAME": "PA_15",
+				"GPIO": "PA15",
+				"IRQ": null,
+				"PWM": 1,
+				"SWD": "DIO"
+			},
+			"16": {
+				"C_NAME": "PA_0",
+				"GPIO": "PA00",
+				"IRQ": null,
+				"PWM": 2
+			},
+			"17": {
+				"C_NAME": "PA_12",
+				"GPIO": "PA12",
+				"IRQ": null,
+				"PWM": 3
+			},
+			"18": {
+				"C_NAME": "PA_6",
+				"GPIO": "PA06",
+				"IRQ": null,
+				"SPI": "FCS",
+				"SD": "D2"
+			},
+			"19": {
+				"C_NAME": "PA_7",
+				"GPIO": "PA07",
+				"IRQ": null,
+				"SPI": "FD1",
+				"SD": "D3"
+			},
+			"20": {
+				"C_NAME": "PA_8",
+				"GPIO": "PA08",
+				"IRQ": null,
+				"SPI": "FD2",
+				"SD": "CMD"
+			},
+			"21": {
+				"C_NAME": "PA_9",
+				"GPIO": "PA09",
+				"IRQ": null,
+				"SPI": "FD0",
+				"SD": "CLK"
+			},
+			"22": {
+				"C_NAME": "PA_10",
+				"GPIO": "PA10",
+				"IRQ": null,
+				"SPI": "FSCK",
+				"SD": "D0"
+			},
+			"23": {
+				"C_NAME": "PA_11",
+				"GPIO": "PA11",
+				"IRQ": null,
+				"SPI": "FD3",
+				"SD": "D1"
+			},
+			"27": {
+				"C_NAME": "AD_2",
+				"IO": "I",
+				"ADC": 2
+			},
+			"28": {
+				"C_NAME": "PA_5",
+				"GPIO": "PA05",
+				"IRQ": null,
+				"PWM": 4,
+				"WAKE": 1
+			},
+			"29": {
+				"C_NAME": "PA_18",
+				"GPIO": "PA18",
+				"IRQ": null,
+				"UART": "0_RX",
+				"SPI": [
+					"0_SCK",
+					"1_SCK"
+				],
+				"I2C": "1_SCL",
+				"SD": "D2",
+				"TMR": "4_TRIG",
+				"I2S": "0_MCK",
+				"WAKE": 0
+			},
+			"30": {
+				"C_NAME": "PA_19",
+				"GPIO": "PA19",
+				"IRQ": null,
+				"ADC": 1,
+				"UART": "0_CTS",
+				"SPI": [
+					"0_CS",
+					"1_CS"
+				],
+				"I2C": "0_SDA",
+				"SD": "D3",
+				"TMR": "5_TRIG",
+				"I2S": "0_TX"
+			},
+			"31": {
+				"C_NAME": "PA_22",
+				"GPIO": "PA22",
+				"IRQ": null,
+				"UART": "0_RTS",
+				"SPI": [
+					"0_MISO",
+					"1_MISO"
+				],
+				"I2C": "0_SCL",
+				"SD": "D0",
+				"PWM": 5,
+				"I2S": "0_WS",
+				"WAKE": 2
+			},
+			"32": {
+				"C_NAME": "PA_23",
+				"GPIO": "PA23",
+				"IRQ": null,
+				"UART": "0_TX",
+				"SPI": [
+					"0_MOSI",
+					"1_MOSI"
+				],
+				"I2C": "1_SDA",
+				"SD": "D1",
+				"PWM": 0,
+				"WAKE": 3
+			}
+		}
+	}
+}

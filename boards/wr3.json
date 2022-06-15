@@ -2,7 +2,8 @@
 	"_base": [
 		"realtek-ambz",
 		"realtek-ambz-2mb",
-		"realtek-ambz-tuya3"
+		"pcb/ic-rtl8710bn",
+		"pcb/wr3"
 	],
 	"build": {
 		"mcu": "rtl8710bn",
@@ -12,10 +13,6 @@
 	"url": "https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1",
 	"vendor": "Tuya Inc.",
 	"pcb": {
-		"symbol": "WR3",
-		"vars": {
-			"MASK_PRESET": "mask_black",
-			"TRACE_COLOR": "#505050"
-		}
+		"symbol": "WR3"
 	}
 }
