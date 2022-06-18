@@ -26,18 +26,9 @@ env.Append(
         ("bool", "bool"),
     ],
     LINKFLAGS=[
-        "--specs=nosys.specs",
-        "-Wl,--as-needed",
-        "-Wl,--build-id=none",
-        "-Wl,--cref",
-        "-Wl,--no-enum-size-warning",
-        "-Wl,--no-undefined",
         "-Wl,--undefined=InfraStart",
-        "-Wl,--warn-common",
     ],
 )
-# Arduino core uses __libc_init_array
-env["LINKFLAGS"].remove("-nostartfiles")
 
 # Build all libraries
 env.BuildLibraries()

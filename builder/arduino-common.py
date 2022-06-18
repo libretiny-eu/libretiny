@@ -17,8 +17,20 @@ env.Append(
     CPPDEFINES=[
         ("ARDUINO", 10812),
         "ARDUINO_SDK",
-    ]
+    ],
+    LINKFLAGS=[
+        "--specs=nosys.specs",
+        "-Wl,--as-needed",
+        "-Wl,--build-id=none",
+        "-Wl,--cref",
+        "-Wl,--no-enum-size-warning",
+        "-Wl,--no-undefined",
+        "-Wl,--warn-common",
+    ],
 )
+# Arduino core uses __libc_init_array
+if "-nostartfiles" in env["LINKFLAGS"]:
+    env["LINKFLAGS"].remove("-nostartfiles")
 
 # Sources - ArduinoCore-API
 env.AddLibrary(
