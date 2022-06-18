@@ -27,7 +27,7 @@ ChipFamily LibreTuya::getChipFamily() {
  * @brief Get CPU family name as string.
  */
 const char *LibreTuya::getChipFamilyName() {
-	return STRINGIFY_MACRO(FAMILY);
+	return STRINGIFY_MACRO(FAMILY) + 2;
 }
 
 static char *deviceName = NULL;

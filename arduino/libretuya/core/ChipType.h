@@ -1,23 +1,27 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-28. */
 
+#define CHIP_TYPE(family, chip_id)		(((family >> 24) << 8) | chip_id)
+#define CHIP_TYPE_ENUM(family, chip_id) (ChipType) CHIP_TYPE(family, chip_id)
+
 enum ChipFamily {
 	// used in UF2 Family ID
-	RTL8710A = 0x9FFFD543, // Realtek Ameba1
-	RTL8710B = 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
-	RTL8720C = 0xE08F7564, // Realtek AmebaZ2
-	RTL8720D = 0x3379CFE2, // Realtek AmebaD
-	BK7231T	 = 0x675A40B0, // Beken 7231T
-	BK7231N	 = 0x7B3EF230, // Beken 7231N
-	BL602	 = 0xDE1270B7, // Boufallo 602
-	XR809	 = 0x51E903A8, // Xradiotech 809
+	F_RTL8710A = 0x9FFFD543, // Realtek Ameba1
+	F_RTL8710B = 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
+	F_RTL8720C = 0xE08F7564, // Realtek AmebaZ2
+	F_RTL8720D = 0x3379CFE2, // Realtek AmebaD
+	F_BK7231T  = 0x675A40B0, // Beken 7231T
+	F_BK7231N  = 0x7B3EF230, // Beken 7231N
+	F_BL602	   = 0xDE1270B7, // Boufallo 602
+	F_XR809	   = 0x51E903A8, // Xradiotech 809
 };
 
 enum ChipType {
+	// Realtek AmebaZ
 	// IDs copied from rtl8710b_efuse.h
-	RTL8710BL = ((RTL8710B >> 24) << 8) | 0xE0, // ???
-	RTL8710BN = ((RTL8710B >> 24) << 8) | 0xFF, // CHIPID_8710BN / QFN32
-	RTL8710BU = ((RTL8710B >> 24) << 8) | 0xFE, // CHIPID_8710BU / QFN48
-	RTL8710BX = ((RTL8710B >> 24) << 8) | 0xFB, // CHIPID_8710BN_L0 / QFN32
-	RTL8711BN = ((RTL8710B >> 24) << 8) | 0xFD, // CHIPID_8711BN / QFN48
-	RTL8711BU = ((RTL8710B >> 24) << 8) | 0xFC, // CHIPID_8711BG / QFN68
+	RTL8710BL = CHIP_TYPE(F_RTL8710B, 0xE0), // ???
+	RTL8710BN = CHIP_TYPE(F_RTL8710B, 0xFF), // CHIPID_8710BN / QFN32
+	RTL8710BU = CHIP_TYPE(F_RTL8710B, 0xFE), // CHIPID_8710BU / QFN48
+	RTL8710BX = CHIP_TYPE(F_RTL8710B, 0xFB), // CHIPID_8710BN_L0 / QFN32
+	RTL8711BN = CHIP_TYPE(F_RTL8710B, 0xFD), // CHIPID_8711BN / QFN48
+	RTL8711BU = CHIP_TYPE(F_RTL8710B, 0xFC), // CHIPID_8711BG / QFN68
 };

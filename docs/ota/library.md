@@ -5,8 +5,8 @@ uf2ota library allows to write a LibreTuya UF2 file to the flash, while parsing 
 ## Usage example
 
 ```c
-uint8_t target	   = 1;		   // target OTA scheme - 1 or 2
-uint32_t family	   = RTL8710B; // chip's UF2 family ID
+uint8_t target	   = 1;			 // target OTA scheme - 1 or 2
+uint32_t family	   = F_RTL8710B; // chip's UF2 family ID
 uf2_ota_t *ctx	   = uf2_ctx_init(target, family);
 uf2_info_t *info   = uf2_info_init(); // optional, for getting firmware info
 uf2_block_t *block = (uf2_block_t *)malloc(UF2_BLOCK_SIZE);

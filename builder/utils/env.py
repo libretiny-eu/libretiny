@@ -65,7 +65,7 @@ def env_add_defaults(env, platform, board):
             ("LT_BOARD", "${VARIANT}"),
             ("F_CPU", board.get("build.f_cpu")),
             ("MCU", "${MCU}"),
-            ("FAMILY", "${FAMILY}"),
+            ("FAMILY", "F_${FAMILY}"),
         ],
         LINKFLAGS=[
             "-Wl,-Map=" + join("$BUILD_DIR", "${PROGNAME}.map"),
