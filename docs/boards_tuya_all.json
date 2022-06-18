@@ -1,0 +1,634 @@
+{
+	"wb": {
+		"wb1s": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb1s",
+			"datasheet_id": "K9duevbj3ol4x"
+		},
+		"wb2l": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 7,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb2l-datasheet",
+			"datasheet_id": "K9duegc9bualu"
+		},
+		"wb2s": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb2s-module-datasheet",
+			"datasheet_id": "K9ghecl7kc479"
+		},
+		"wb3l": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb3l-module-datasheet",
+			"datasheet_id": "K9duiggw2v8sp"
+		},
+		"wb3s": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb3s-module-datasheet",
+			"datasheet_id": "K9dx20n6hz5n4"
+		},
+		"wb8p": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 10,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wb8p-module-datasheet",
+			"datasheet_id": "K9fwx4f89tvzd"
+		},
+		"wblc5": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 15,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wblc5-module-datasheet",
+			"datasheet_id": "K9duilns1f3gi"
+		},
+		"wblc9": {
+			"mcu": "bk7231t",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 8,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wblc9-module-datasheet",
+			"datasheet_id": "K9hgglry2jp5h"
+		}
+	},
+	"wbr": {
+		"wbr1": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr1d-module-datasheet",
+			"datasheet_id": "K9duko5tg2vjw"
+		},
+		"wbr1d": {
+			"mcu": "rtl8720dn",
+			"flash": 4194304,
+			"ram": 524288,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr1d-module-datasheet",
+			"datasheet_id": "K9duko5tg2vjw"
+		},
+		"wbr2": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr2l-module-datasheet",
+			"datasheet_id": "K9rw73glq0mkp"
+		},
+		"wbr2d": {
+			"mcu": "rtl8720dn",
+			"flash": 4194304,
+			"ram": 524288,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr2d-module-datasheet",
+			"datasheet_id": "K9dujwcg2yr8i"
+		},
+		"wbr2l": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 7,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr2l-module-datasheet",
+			"datasheet_id": "K9rw73glq0mkp"
+		},
+		"wbr3": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3n-datasheet",
+			"datasheet_id": "K9qskxwpcqyaq"
+		},
+		"wbr3d": {
+			"mcu": "rtl8720dn",
+			"flash": 4194304,
+			"ram": 524288,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3d-module-datasheet",
+			"datasheet_id": "K9dukbbnmuw4h"
+		},
+		"wbr3l": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3l-module-datasheet",
+			"datasheet_id": "K9fte9kq2vq6t"
+		},
+		"wbr3n": {
+			"mcu": "rtl8720cs",
+			"flash": 4194304,
+			"ram": 524288,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3n-datasheet",
+			"datasheet_id": "K9qskxwpcqyaq"
+		},
+		"wbr3s": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3s-module-datasheet",
+			"datasheet_id": "K9qrt2je8wqxo"
+		},
+		"wbr3t": {
+			"mcu": "rtl8720dn",
+			"flash": 4194304,
+			"ram": 524288,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbr3t-module-datasheet",
+			"datasheet_id": "K9qs708w94ox8"
+		},
+		"wbrg1": {
+			"mcu": "rtl8720csm",
+			"flash": 8388608,
+			"ram": 4194304,
+			"pins_total": 25,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbrg1-module-datasheet",
+			"datasheet_id": "Ka015vo8tfztz"
+		},
+		"wbru": {
+			"mcu": "rtl8720cf",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wbru-module-datasheet",
+			"datasheet_id": "Kai1h5xb3dp98"
+		}
+	},
+	"cb": {
+		"cb1s": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb1s-module-datasheet",
+			"datasheet_id": "Kaij1abmwyjq2"
+		},
+		"cb2l": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 7,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb2l-module-datasheet",
+			"datasheet_id": "Kai2eku1m3pyl"
+		},
+		"cb2s": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb2s-module-datasheet",
+			"datasheet_id": "Kafgfsa2aaypq"
+		},
+		"cb3l": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb3l-module-datasheet",
+			"datasheet_id": "Kai51ngmrh3qm"
+		},
+		"cb3s": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb3s",
+			"datasheet_id": "Kai94mec0s076"
+		},
+		"cb3s-nl": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "CB3S-NL-module-datasheet",
+			"datasheet_id": "Kbaesan0vyoms"
+		},
+		"cb3se": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "CB3SE-Module-Datasheet",
+			"datasheet_id": "Kanoiluul7nl2"
+		},
+		"cb8p": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 10,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cb8p-module-datasheet",
+			"datasheet_id": "Kahvig14r1yk9"
+		},
+		"cblc5": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 15,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cblc5-module-datasheet",
+			"datasheet_id": "Ka07iqyusq1wm"
+		},
+		"cblc9": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 8,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cblc9-module-datasheet",
+			"datasheet_id": "Ka42cqnj9r0i5"
+		},
+		"cbu": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cbu-module-datasheet",
+			"datasheet_id": "Ka07pykl5dk4u"
+		},
+		"cbu-nl": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "CBU-NL-module-datasheet",
+			"datasheet_id": "Kbaeq6j53y0yg"
+		}
+	},
+	"cr": {
+		"cr2s": {
+			"mcu": "rtl8720cm",
+			"flash": 4194304,
+			"ram": 4194304,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cr2s-module-datasheet",
+			"datasheet_id": "Kaawygkszksio"
+		},
+		"cr3l": {
+			"mcu": "rtl8720cm",
+			"flash": 4194304,
+			"ram": 4194304,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "cr3l-module-datasheet",
+			"datasheet_id": "Ka3gl6ria8f1t"
+		}
+	},
+	"wr": {
+		"wr1": {
+			"mcu": "rtl8710bn",
+			"flash": 1048576,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wifiwr1module",
+			"datasheet_id": "K9605tc0k90t3"
+		},
+		"wr1e": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr1e",
+			"datasheet_id": "K96smbbeycxtf"
+		},
+		"wr2": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wifiwr2lmodule",
+			"datasheet_id": "K9605tnbj7gva"
+		},
+		"wr2e": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr2e",
+			"datasheet_id": "K97scnsjhue4h"
+		},
+		"wr2l": {
+			"mcu": "rtl8710bx",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 7,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wifiwr2lmodule",
+			"datasheet_id": "K9605tnbj7gva"
+		},
+		"wr2le": {
+			"mcu": "rtl8710bx",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 7,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr2le",
+			"datasheet_id": "K9eio9y9e8i8c"
+		},
+		"wr3": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr3le",
+			"datasheet_id": "K986l7a1ha8tm"
+		},
+		"wr3e": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr3e-module-datasheet",
+			"datasheet_id": "K9elwlqbfosbc"
+		},
+		"wr3l": {
+			"mcu": "rtl8710bx",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr3le",
+			"datasheet_id": "K986l7a1ha8tm"
+		},
+		"wr3le": {
+			"mcu": "rtl8710bx",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr3le",
+			"datasheet_id": "K986l7a1ha8tm"
+		},
+		"wr3n": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr3n-datasheet",
+			"datasheet_id": "K98zdx31ztdge"
+		},
+		"wr4": {
+			"mcu": "rtl8710bn",
+			"flash": 1048576,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wifiwr4module",
+			"datasheet_id": "K9605tvu78p3e"
+		},
+		"wr5e": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 15,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr5e",
+			"datasheet_id": "K986r9pxqxa8i"
+		},
+		"wr6": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 14,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr6h-module-datasheet",
+			"datasheet_id": "K9pork8eeowgl"
+		},
+		"wr6-h": {
+			"mcu": "rtl8710bn",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 14,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wr6h-module-datasheet",
+			"datasheet_id": "K9pork8eeowgl"
+		},
+		"wrg1": {
+			"mcu": "rtl8711am",
+			"flash": 4194304,
+			"ram": 2097152,
+			"pins_total": 25,
+			"connectivity": [
+				"wifi"
+			],
+			"datasheet_name": "wrg1-datasheet",
+			"datasheet_id": "K97rig6mscj8e"
+		}
+	},
+	"xr": {
+		"xr1": {
+			"mcu": "xr809",
+			"flash": 2097152,
+			"ram": 393216,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"rfid"
+			],
+			"datasheet_name": "xr1ipex-module-datasheet",
+			"datasheet_id": "K9razqu9gqele"
+		},
+		"xr3": {
+			"mcu": "xr809",
+			"flash": 2097152,
+			"ram": 393216,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"rfid"
+			],
+			"datasheet_name": "xr3-module",
+			"datasheet_id": "Kae2nqhs3ap1z"
+		}
+	}
+}

@@ -1,5 +1,5 @@
 * [Home](README.md)
-* [💻 Family list](docs/families.md)
+* [💻 Boards & CPU list](docs/supported.md)
 * [✔️ Implementation status](docs/implementation-status.md)
 * [🔧 Configuration](docs/config.md)
 * [📁 Project structure](docs/project-structure.md)
@@ -47,11 +47,10 @@
 	* [Realtek - notes](docs/platform/realtek/README.md)
 	* [Beken 72xx - notes](docs/platform/beken-72xx/README.md)
 	* Realtek AmebaZ Series
-		* Boards
-			* [WR3](boards/wr3/README.md)
 		* C library
 			* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
 			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
 		* [Debugging](docs/platform/realtek/debugging.md)
 		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
+	* [All supported boards](boards/)
 * [🔗 Resources](docs/resources.md)

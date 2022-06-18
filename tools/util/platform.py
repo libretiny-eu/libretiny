@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
-from os.path import dirname, isfile, join
+from glob import glob
+from os.path import basename, dirname, isfile, join
 from typing import Dict, List, Union
 
 from tools.util.models import Family
@@ -8,6 +9,11 @@ from tools.util.obj import load_json, merge_dicts
 
 boards_base: Dict[str, dict] = {}
 families: List[Family] = []
+
+
+def get_board_list() -> List[str]:
+    boards_glob = join(dirname(__file__), "..", "..", "boards", "*.json")
+    return [basename(file)[:-5] for file in glob(boards_glob)]
 
 
 def get_board_manifest(board: Union[str, dict]) -> dict:

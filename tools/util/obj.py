@@ -50,3 +50,12 @@ def slice2int(val: SliceLike) -> Tuple[int, int]:
         elif val.isnumeric():
             return (int(val), int(val))
     raise ValueError(f"invalid slice format: {val}")
+
+
+# https://stackoverflow.com/a/1094933/9438331
+def sizeof(num: int, suffix="iB", base=1024.0) -> str:
+    for unit in ["", "K", "M", "G", "T", "P", "E", "Z"]:
+        if abs(num) < base:
+            return f"{num:.1f} {unit}{suffix}".replace(".0 ", " ")
+        num /= base
+    return f"{num:.1f} Y{suffix}".replace(".0 ", " ")

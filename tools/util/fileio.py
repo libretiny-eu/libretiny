@@ -3,7 +3,7 @@
 import json
 from io import BytesIO
 from os.path import dirname, getmtime, isfile, join
-from typing import Union
+from typing import List, Union
 
 
 def chname(path: str, name: str) -> str:
@@ -57,3 +57,22 @@ def writejson(file: str, data: Union[dict, list]):
     """Write a dict or list to a JSON file."""
     with open(file, "w", encoding="utf-8") as f:
         json.dump(data, f)
+
+
+def readtext(file: str) -> str:
+    """Read a text file into a string."""
+    with open(file, "r", encoding="utf-8") as f:
+        data = f.read()
+    return data
+
+
+def writetext(file: str, data: Union[str, bytes, List[str]]):
+    """Write data into a text file."""
+    with open(file, "w", encoding="utf-8") as f:
+        if isinstance(data, bytes):
+            f.write(data.decode())
+        elif isinstance(data, list):
+            f.write("\n".join(data))
+            f.write("\n")
+        else:
+            f.write(data)
