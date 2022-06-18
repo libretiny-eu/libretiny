@@ -32,6 +32,7 @@ When using two different firmware binaries, they need to have the same `offset` 
 "bootloader;boot.bin" "ota1;xip1.bin;ota2;xip2.bin" "config;config1.bin;config;config2.bin"
 ```
 will:
+
 - flash the bootloader in both OTA schemes
 - flash `xip1.bin` or `xip2.bin` to `ota1` or `ota2` partitions
 - flash `config1.bin` or `config2.bin` to `config` partition

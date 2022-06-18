@@ -2,7 +2,8 @@
 
 LibreTuya's OTA updating is based on [Microsoft's UF2 specification](https://microsoft.github.io/uf2/). Some aspects of the process, such as OTA1/2 support and target partition selection, have been customized with extension tags.
 
-Note: just like in UF2, all values in this format are little-endian.
+!!! note
+    Just like in UF2, all values in this format are little-endian.
 
 ## Firmware images
 
@@ -27,16 +28,9 @@ For easier understanding, these update types will be referred to in this documen
 
 ## Custom family IDs
 
-Name       | ID         | Description
------------|------------|----------------
-`RTL8710A` | 0x9FFFD543 | Realtek Ameba1
-`RTL8710B` | 0x22E0D6FC | Realtek AmebaZ
-`RTL8720C` | 0xE08F7564 | Realtek AmebaZ2
-`RTL8720D` | 0x3379CFE2 | Realtek AmebaD
-`BK7231T`  | 0x675A40B0 | Beken 7231T
-`BK7231N`  | 0x7B3EF230 | Beken 7231N
-`BL602`    | 0xDE1270B7 | Boufallo 602
-`XR809`    | 0x51E903A8 | Xradiotech 809
+{%
+   include-markdown "../supported_families.md"
+%}
 
 ## Extension tags
 
