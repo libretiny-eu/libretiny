@@ -11,19 +11,12 @@
 #include <core/LibreTuyaAPI.h>
 #undef PinMode
 
-#ifdef __cplusplus
-extern "C" uint32_t SystemCoreClock;
-#else
-extern uint32_t SystemCoreClock;
-#endif
-#define clockCyclesPerMicrosecond()	 (SystemCoreClock / 1000000L)
-#define clockCyclesToMicroseconds(a) (((a)*1000L) / (SystemCoreClock / 1000L))
-#define microsecondsToClockCycles(a) ((a) * (SystemCoreClock / 1000000L))
-
-#define interrupts()   vPortClearInterruptMask(0)
-#define noInterrupts() ulPortSetInterruptMask()
-
 // Include family-specific code
 #include "WVariant.h"
 // Include board variant
 #include "variant.h"
+
+#ifdef __cplusplus
+#include "LOGUARTClass.h"
+extern LOGUARTClass Serial;
+#endif

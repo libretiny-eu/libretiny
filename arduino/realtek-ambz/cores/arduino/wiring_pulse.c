@@ -36,11 +36,11 @@ extern unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout) 
 
 	uint32_t start_ticks, cur_ticks;
 
-	if (pin < 0 || pin > PINS_COUNT || (g_APinDescription[pin].pinname == NC))
+	if (pin < 0 || pin > PINS_COUNT || (pinTable[pin].gpio == NC))
 		return 0;
 
 	/* Handle */
-	if (g_APinDescription[pin].ulPinType != PIO_GPIO) {
+	if (pinTable[pin].types != PIN_GPIO) {
 		return 0;
 	}
 

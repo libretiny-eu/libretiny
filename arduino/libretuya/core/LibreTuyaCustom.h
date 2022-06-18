@@ -6,6 +6,40 @@
 extern "C" {
 #endif
 
+#define PIN_NONE (1 << 0)
+#define PIN_GPIO (1 << 1)
+#define PIN_IRQ	 (1 << 2)
+#define PIN_PWM	 (1 << 3)
+#define PIN_ADC	 (1 << 4)
+#define PIN_DAC	 (1 << 5)
+#define PIN_I2C	 (1 << 6)
+#define PIN_I2S	 (1 << 7)
+#define PIN_JTAG (1 << 8)
+#define PIN_SPI	 (1 << 9)
+#define PIN_SWD	 (1 << 10)
+#define PIN_UART (1 << 11)
+
+typedef struct {
+	/**
+	 * @brief GPIO name in the family SDK.
+	 */
+	uint32_t gpio;
+	/**
+	 * @brief Supported pin features.
+	 */
+	uint32_t features;
+	/**
+	 * @brief Enabled pin features. Used values are family-specific.
+	 */
+	uint32_t types;
+	/**
+	 * @brief Pin mode (direction, IRQ level, etc.).
+	 */
+	uint32_t mode;
+} PinInfo;
+
+extern PinInfo pinTable[];
+
 /**
  * @brief Read voltage from analog input (in millivolts).
  */

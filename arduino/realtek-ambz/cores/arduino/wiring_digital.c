@@ -7,65 +7,64 @@
 extern void *gpio_pin_struct[PINS_COUNT];
 
 bool pinInvalid(pin_size_t pinNumber) {
-	return pinNumber < 0 || pinNumber >= PINS_COUNT || g_APinDescription[pinNumber].pinname == NC;
+	return pinNumber < 0 || pinNumber >= PINS_COUNT || pinTable[pinNumber].gpio == NC;
 }
 
 void pinRemoveMode(pin_size_t pinNumber) {
 	if (pinInvalid(pinNumber))
 		return;
-	if (g_APinDescription[pinNumber].ulPinType == PIO_PWM) {
+	if (pinTable[pinNumber].types & PIN_PWM) {
 		pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
 		pwmout_free(obj);
 	}
-	if (g_APinDescription[pinNumber].ulPinType == PIO_GPIO) {
+	if (pinTable[pinNumber].types & PIN_GPIO) {
 		gpio_t *obj = (gpio_t *)gpio_pin_struct[pinNumber];
-		gpio_deinit(obj, g_APinDescription[pinNumber].pinname);
+		gpio_deinit(obj, pinTable[pinNumber].gpio);
 		free(obj);
 	}
-	if (g_APinDescription[pinNumber].ulPinType == PIO_GPIO_IRQ) {
+	if (pinTable[pinNumber].types & PIN_IRQ) {
 		gpio_irq_t *obj = (gpio_irq_t *)gpio_pin_struct[pinNumber];
 		gpio_irq_deinit(obj);
 		free(obj);
 	}
-	gpio_pin_struct[pinNumber]			   = NULL;
-	g_APinDescription[pinNumber].ulPinType = NOT_INITIAL;
-	g_APinDescription[pinNumber].ulPinMode = NOT_INITIAL;
+	gpio_pin_struct[pinNumber] = NULL;
+	pinTable[pinNumber].types  = PIN_NONE;
 }
 
 void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 	if (pinInvalid(pinNumber))
 		return;
 
-	if (g_APinDescription[pinNumber].ulPinType == PIO_GPIO && g_APinDescription[pinNumber].ulPinMode == pinMode)
+	if (pinTable[pinNumber].types == PIN_GPIO && pinTable[pinNumber].mode == pinMode)
 		// Nothing changes in pin mode
 		return;
 
-	if ((g_APinDescription[pinNumber].ulPinAttribute & PIO_GPIO) != PIO_GPIO)
+	if ((pinTable[pinNumber].features & PIN_GPIO) != PIN_GPIO)
 		// cannot set ADC as I/O
 		return;
 
-	/* if (g_APinDescription[pinNumber].ulPinType == PIO_PWM) {
+	/* if (pinTable[pinNumber].types == PIN_PWM) {
 		// If this pin has been configured as PWM, then it cannot change to another mode
 		return;
 	} */
 
-	if (g_APinDescription[pinNumber].ulPinType != PIO_GPIO)
+	if (pinTable[pinNumber].types != PIN_GPIO)
 		// pin mode changes; deinit gpio and free memory
 		pinRemoveMode(pinNumber);
 
 	gpio_t *gpio;
 
-	if (g_APinDescription[pinNumber].ulPinType == NOT_INITIAL) {
+	if (pinTable[pinNumber].types == PIN_NONE) {
 		// allocate memory if pin not used before
 		gpio					   = malloc(sizeof(gpio_t));
 		gpio_pin_struct[pinNumber] = gpio;
-		gpio_init(gpio, g_APinDescription[pinNumber].pinname);
-		g_APinDescription[pinNumber].ulPinType = PIO_GPIO;
+		gpio_init(gpio, pinTable[pinNumber].gpio);
+		pinTable[pinNumber].types = PIN_GPIO;
 	} else {
 		// pin already used as gpio
 		gpio = (gpio_t *)gpio_pin_struct[pinNumber];
 	}
-	g_APinDescription[pinNumber].ulPinMode = pinMode;
+	pinTable[pinNumber].mode = pinMode;
 
 	PinDirection dir;
 	PinMode mode;
@@ -102,7 +101,7 @@ void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 	if (pinInvalid(pinNumber))
 		return;
-	if (g_APinDescription[pinNumber].ulPinType != PIO_GPIO)
+	if (pinTable[pinNumber].types != PIN_GPIO)
 		return;
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];
@@ -112,7 +111,7 @@ void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 PinStatus digitalRead(pin_size_t pinNumber) {
 	if (pinInvalid(pinNumber))
 		return;
-	if (g_APinDescription[pinNumber].ulPinType != PIO_GPIO)
+	if (pinTable[pinNumber].types != PIN_GPIO)
 		return;
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];
@@ -125,7 +124,7 @@ uint32_t digitalPinToPort(uint32_t pinNumber) {
 	if (pinInvalid(pinNumber))
 		return 0xFFFFFFFF;
 
-	uint32_t pin_name = HAL_GPIO_GetPinName(g_APinDescription[pinNumber].pinname);
+	uint32_t pin_name = HAL_GPIO_GetPinName(pinTable[pinNumber].gpio);
 	return HAL_GPIO_GET_PORT_BY_NAME(pin_name);
 }
 
@@ -133,6 +132,6 @@ uint32_t digitalPinToBitMask(uint32_t pinNumber) {
 	if (pinInvalid(pinNumber))
 		return 0xFFFFFFFF;
 
-	uint32_t pin_name = HAL_GPIO_GetPinName(g_APinDescription[pinNumber].pinname);
+	uint32_t pin_name = HAL_GPIO_GetPinName(pinTable[pinNumber].gpio);
 	return 1 << (HAL_GPIO_GET_PIN_BY_NAME(pin_name));
 }

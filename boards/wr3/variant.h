@@ -1,66 +1,53 @@
-/* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
+/* This file was auto-generated from wr3.json using boardgen */
 
 #pragma once
 
 #include <WVariant.h>
 
+// clang-format off
+
 // Pins
 // ----
-
-// Number of pins defined in PinDescription array
-#define PINS_COUNT		   12
+#define PINS_COUNT         12
 #define NUM_DIGITAL_PINS   11
 #define NUM_ANALOG_INPUTS  2
 #define NUM_ANALOG_OUTPUTS 0
 
-// Low-level pin register query macros
-// -----------------------------------
-#define portOutputRegister(P) ((volatile uint32_t *)(0x40001000 + (P)*0x0C))
-#define portInputRegister(P)  ((volatile uint32_t *)(0x40001050 + (P)*4))
-#define portModeRegister(P)	  ((volatile uint32_t *)(0x40001004 + (P)*0x0C))
-
-// LEDs
-// ----
-#define PIN_LED		4u		// PA_0
-#define LED_BUILTIN PIN_LED // PA_0
-
 // Analog pins
 // -----------
-#define PIN_A0 1u  // PA_19
-#define PIN_A1 11u // VBAT_MEAS
-#define PIN_A2 0u  // dummy, this is NOT usable
-
-static const uint8_t A0 = PIN_A0;
-static const uint8_t A1 = PIN_A1;
-static const uint8_t A2 = PIN_A2;
+#define PIN_A0 1u     // PA_19
+#define PIN_A1 11u    // AD_2
+#define A0     PIN_A0
+#define A1     PIN_A1
 
 // SPI Interfaces
 // --------------
-#define SPI_INTERFACES_COUNT 0
+#define SPI_INTERFACES_COUNT 2
+#define PIN_SPI0_CS          1u  // PA_19
+#define PIN_SPI0_MISO        0u  // PA_22
+#define PIN_SPI0_MOSI        10u // PA_23
+#define PIN_SPI0_SCK         9u  // PA_18
+#define PIN_SPI1_CS          1u  // PA_19
+#define PIN_SPI1_MISO        0u  // PA_22
+#define PIN_SPI1_MOSI        10u // PA_23
+#define PIN_SPI1_SCK         9u  // PA_18
 
 // Wire Interfaces
 // ---------------
 #define WIRE_INTERFACES_COUNT 2
-#define PIN_WIRE0_SDA		  1u  // PA_19
-#define PIN_WIRE0_SCL		  0u  // PA_22
-#define PIN_WIRE1_SDA		  10u // PA_23
-#define PIN_WIRE1_SCL		  9u  // PA_18
+#define PIN_WIRE0_SCL_0       0u  // PA_22
+#define PIN_WIRE0_SCL_1       5u  // PA_29
+#define PIN_WIRE0_SDA_0       1u  // PA_19
+#define PIN_WIRE0_SDA_1       6u  // PA_30
+#define PIN_WIRE1_SCL         9u  // PA_18
+#define PIN_WIRE1_SDA         10u // PA_23
 
 // Serial ports
 // ------------
-// LOGUARTClass
-#define PIN_SERIAL2_RX 5u // PA_29
-#define PIN_SERIAL2_TX 6u // PA_30
-// UARTClassOne
-#define PIN_SERIAL0_RX 9u  // PA_18
-#define PIN_SERIAL0_TX 10u // PA_23
-
-#define SERIAL_PORT_USBVIRTUAL	  Serial
-#define SERIAL_PORT_MONITOR		  Serial
-#define SERIAL_PORT_HARDWARE	  Serial
-#define SERIAL_PORT_HARDWARE_OPEN Serial
-
-#ifdef __cplusplus
-#include "LOGUARTClass.h"
-extern LOGUARTClass Serial;
-#endif // __cplusplus
+#define SERIAL_INTERFACES_COUNT 2
+#define PIN_SERIAL0_CTS         1u  // PA_19
+#define PIN_SERIAL0_RTS         0u  // PA_22
+#define PIN_SERIAL0_RX          9u  // PA_18
+#define PIN_SERIAL0_TX          10u // PA_23
+#define PIN_SERIAL2_RX          5u  // PA_29
+#define PIN_SERIAL2_TX          6u  // PA_30

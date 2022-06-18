@@ -57,7 +57,7 @@ void analogWriteResolution(int res) {
 	_writeResolution = res;
 }
 
-uint8_t analog_reference = AR_DEFAULT;
+uint8_t analog_reference = 0;
 
 void analogReference(uint8_t mode) {
 	analog_reference = mode;
@@ -66,6 +66,7 @@ void analogReference(uint8_t mode) {
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	uint16_t ret = 0;
 	switch (pinNumber) {
+#ifdef PIN_A1
 		case PIN_A1:
 			if (g_adc_enabled[1] == false) {
 				analogin_init(&adc2, AD_2);
@@ -74,6 +75,8 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 			ret = analogin_read_u16(&adc2);
 			// AD_1 - 0.0V-5.0V
 			return AD2MV(ret, 0x496, 0xBA);
+#endif
+#ifdef PIN_A0
 		case PIN_A0:
 			if (g_adc_enabled[0] == false) {
 				analogin_init(&adc1, AD_1);
@@ -81,6 +84,8 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 			}
 			ret = analogin_read_u16(&adc1);
 			break;
+#endif
+#ifdef PIN_A2
 		case PIN_A2:
 			if (g_adc_enabled[2] == false) {
 				analogin_init(&adc3, AD_3);
@@ -88,6 +93,7 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 			}
 			ret = analogin_read_u16(&adc3);
 			break;
+#endif
 		default:
 			return 0;
 	}
@@ -120,20 +126,18 @@ void analogOutputInit(void) {
 void analogWrite(pin_size_t pinNumber, int value) {
 	pwmout_t *obj;
 
-	if ((g_APinDescription[pinNumber].ulPinAttribute & PIO_PWM) == PIO_PWM) {
+	if ((pinTable[pinNumber].features & PIN_PWM) == PIN_PWM) {
 		float percent = value * 1.0 / (1 << _writeResolution);
-		if (g_APinDescription[pinNumber].ulPinType != PIO_PWM) {
-			if ((g_APinDescription[pinNumber].ulPinType == PIO_GPIO) ||
-				(g_APinDescription[pinNumber].ulPinType == PIO_GPIO_IRQ)) {
+		if (pinTable[pinNumber].types != PIN_PWM) {
+			if ((pinTable[pinNumber].types == PIN_GPIO) || (pinTable[pinNumber].types == PIN_IRQ)) {
 				pinRemoveMode(pinNumber);
 			}
 			gpio_pin_struct[pinNumber] = malloc(sizeof(pwmout_t));
 			pwmout_t *obj			   = (pwmout_t *)gpio_pin_struct[pinNumber];
-			pwmout_init(obj, g_APinDescription[pinNumber].pinname);
+			pwmout_init(obj, pinTable[pinNumber].gpio);
 			pwmout_period_us(obj, _writePeriod);
 			pwmout_write(obj, percent);
-			g_APinDescription[pinNumber].ulPinType = PIO_PWM;
-			g_APinDescription[pinNumber].ulPinMode = PWM_MODE_ENABLED;
+			pinTable[pinNumber].types = PIN_PWM;
 		} else {
 			pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
 			// pwmout_period_us(obj, _writePeriod);
@@ -162,30 +166,26 @@ void _tone_timer_handler(const void *argument) {
 void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
 	pwmout_t *obj;
 
-	if ((g_APinDescription[ulPin].ulPinAttribute & PIO_PWM) != PIO_PWM) {
+	if ((pinTable[ulPin].features & PIN_PWM) != PIN_PWM) {
 		return;
 	}
 
-	if (g_APinDescription[ulPin].ulPinType != PIO_PWM) {
-		if ((g_APinDescription[ulPin].ulPinType == PIO_GPIO) || (g_APinDescription[ulPin].ulPinType == PIO_GPIO_IRQ)) {
+	if (pinTable[ulPin].types != PIN_PWM) {
+		if ((pinTable[ulPin].types == PIN_GPIO) || (pinTable[ulPin].types == PIN_IRQ)) {
 			pinRemoveMode(ulPin);
 		}
 		gpio_pin_struct[ulPin] = malloc(sizeof(pwmout_t));
 		pwmout_t *obj		   = (pwmout_t *)gpio_pin_struct[ulPin];
-		pwmout_init(obj, g_APinDescription[ulPin].pinname);
+		pwmout_init(obj, pinTable[ulPin].gpio);
 		pwmout_period(obj, 1.0 / frequency);
 		pwmout_pulsewidth(obj, 1.0 / (frequency * 2));
-		g_APinDescription[ulPin].ulPinType = PIO_PWM;
-		g_APinDescription[ulPin].ulPinMode = PWM_MODE_ENABLED;
+		pinTable[ulPin].types = PIN_PWM;
 
 	} else {
 		// There is already a PWM configured
 		pwmout_t *obj = (pwmout_t *)gpio_pin_struct[ulPin];
 		pwmout_period(obj, 1.0 / frequency);
 		pwmout_pulsewidth(obj, 1.0 / (frequency * 2));
-		/* if (g_APinDescription[ulPin].ulPinMode == PWM_MODE_DISABLED) {
-			HAL_Pwm_Enable( &obj->pwm_hal_adp );
-		} */
 	}
 
 	if (duration > 0) {
