@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-03. */
 
+#if LT_ARD_HAS_MD5
+
 #include "MD5.h"
 
 #if LT_MD5_USE_POLARSSL
@@ -21,4 +23,6 @@ void MD5Final(unsigned char digest[16], LT_MD5_CTX_T *context) {
 
 } // extern "C"
 
-#endif
+#endif // LT_MD5_USE_POLARSSL
+
+#endif // LT_ARD_HAS_MD5

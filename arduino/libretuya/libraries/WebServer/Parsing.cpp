@@ -19,6 +19,8 @@
   Modified 8 May 2015 by Hristo Gochkov (proper post and file upload handling)
 */
 
+#if LT_ARD_HAS_WIFI
+
 #include <Arduino.h>
 
 #include "WebServer.h"
@@ -603,3 +605,5 @@ bool WebServer::_parseFormUploadAborted() {
 		_currentHandler->upload(*this, _currentUri, *_currentUpload);
 	return false;
 }
+
+#endif // LT_ARD_HAS_WIFI

@@ -25,6 +25,8 @@
  * Adapted in October 2018
  */
 
+#if LT_ARD_HAS_WIFI
+
 #include <Arduino.h>
 
 #ifdef HTTPCLIENT_1_1_COMPATIBLE
@@ -1623,3 +1625,5 @@ bool HTTPClient::generateCookieString(String *cookieString) {
 
 	return found;
 }
+
+#endif // LT_ARD_HAS_WIFI

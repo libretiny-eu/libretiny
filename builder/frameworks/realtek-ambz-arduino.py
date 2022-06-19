@@ -24,6 +24,9 @@ env.Append(
         # which conflicts with C++ built-in bool
         # so it's either -fpermissive or this:
         ("bool", "bool"),
+        # implemented features
+        ("LT_ARD_HAS_WIFI", "1"),
+        ("LT_ARD_HAS_MD5", "1"),
     ],
     LINKFLAGS=[
         "-Wl,--undefined=InfraStart",

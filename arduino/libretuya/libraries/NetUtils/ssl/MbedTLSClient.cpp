@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-30. */
 
+#if LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS
+
 #include "MbedTLSClient.h"
 
 #include <IPAddress.h>
@@ -440,3 +442,5 @@ bool MbedTLSClient::getFingerprintSHA256(uint8_t result[32]) {
 	mbedtls_sha256_finish(&shaCtx, result);
 	return true;
 }
+
+#endif // LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS

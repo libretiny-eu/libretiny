@@ -20,6 +20,8 @@
   Modified 8 May 2015 by Hristo Gochkov (proper post and file upload handling)
 */
 
+#if LT_ARD_HAS_WIFI
+
 #include <Arduino.h>
 
 #include "FS.h"
@@ -715,3 +717,5 @@ String WebServer::_responseCodeToString(int code) {
 			return F("");
 	}
 }
+
+#endif // LT_ARD_HAS_WIFI

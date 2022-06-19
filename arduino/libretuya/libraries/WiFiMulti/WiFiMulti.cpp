@@ -23,6 +23,8 @@
  *
  */
 
+#if LT_ARD_HAS_WIFI
+
 #include "WiFiMulti.h"
 #include <Arduino.h>
 #include <limits.h>
@@ -236,3 +238,5 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 
 	return status;
 }
+
+#endif // LT_ARD_HAS_WIFI
