@@ -5,6 +5,11 @@
 
 using namespace arduino;
 
+extern "C" {
+#include <fal.h>
+fal_partition_t fal_root_part = NULL;
+}
+
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));
@@ -32,6 +37,10 @@ int main(void) {
 	__libc_init_array();
 	// optionally initialize per-variant code
 	initVariant();
+	// initialize FAL
+	fal_init();
+	// provide root partition
+	fal_root_part = (fal_partition_t)fal_partition_find("root");
 	// start the main task and OS kernel
 	startMainTask();
 
