@@ -28,9 +28,14 @@
 // remove previously defined workaround
 #undef boolean
 
-// stdio.h
-#define printf	rtl_printf
-#define sprintf rtl_sprintf
+// undefine ROM stdio in favor of printf() library (wrappers)
+#undef printf
+#undef sprintf
+#undef vsprintf
+#undef snprintf
+#undef vsnprintf
+#undef vprintf
+#include <stdio.h>
 
 // moved from syscalls.h
 #define _close	__rtl_close

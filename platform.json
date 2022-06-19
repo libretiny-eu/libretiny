@@ -62,6 +62,9 @@
       "libraries": {
         "flashdb": [
           "03500fa"
+        ],
+        "printf": [
+          "v6.0.0"
         ]
       }
     },
@@ -79,6 +82,14 @@
       "base_url": "https://github.com/armink/FlashDB",
       "manifest": {
         "description": "An ultra-lightweight database that supports key-value and time series data"
+      }
+    },
+    "library-printf": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/eyalroz/printf",
+      "manifest": {
+        "description": "Tiny, fast(ish), self-contained and fully loaded printf, sprinf etc. implementation, mainly for embedded systems."
       }
     },
     "toolchain-gccarmnoneeabi": {

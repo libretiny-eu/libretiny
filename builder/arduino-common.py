@@ -26,6 +26,9 @@ env.Append(
         "-Wl,--no-enum-size-warning",
         "-Wl,--no-undefined",
         "-Wl,--warn-common",
+        # wrappers from port/printf/
+        "-Wl,-wrap,putchar",
+        "-Wl,-wrap,puts",
     ],
 )
 # Arduino core uses __libc_init_array
@@ -129,6 +132,7 @@ for code, base_dir in env["ARDUINO_DIRS"].items():
 
 # Sources - external library ports
 env.AddLibraryFlashDB(version="03500fa")
+env.AddLibraryPrintf(version="6.0.0")
 
 # Libs & linker config
 env.Append(

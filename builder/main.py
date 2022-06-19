@@ -18,8 +18,9 @@ env.SConscript("utils/flash.py", exports="env")
 env.SConscript("utils/libs.py", exports="env")
 env.SConscript("utils/uf2.py", exports="env")
 # Vendor-specific library ports
-env.SConscript("libs/lwip.py", exports="env")
 env.SConscript("libs/flashdb.py", exports="env")
+env.SConscript("libs/lwip.py", exports="env")
+env.SConscript("libs/printf.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":
