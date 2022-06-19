@@ -32,7 +32,13 @@ class Family:
     def has_arduino_core(self) -> bool:
         if not self.name:
             return False
-        return isdir(join(dirname(__file__), "..", "..", "arduino", self.name))
+        if isdir(join(dirname(__file__), "..", "..", "arduino", self.name)):
+            return True
+        if not self.parent:
+            return False
+        if isdir(join(dirname(__file__), "..", "..", "arduino", self.parent)):
+            return True
+        return False
 
     def dict(self) -> dict:
         return dict(

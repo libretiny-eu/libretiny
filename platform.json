@@ -26,6 +26,11 @@
       "title": "Beken 72XX - SDK",
       "package": "framework-beken-bdk",
       "script": "builder/frameworks/beken-72xx-sdk.py"
+    },
+    "beken-72xx-arduino": {
+      "title": "Beken 72XX - Arduino",
+      "package": "framework-beken-bdk",
+      "script": "builder/frameworks/beken-72xx-arduino.py"
     }
   },
   "packages": {

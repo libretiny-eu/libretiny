@@ -17,7 +17,8 @@
 		]
 	},
 	"frameworks": [
-		"beken-72xx-sdk"
+		"beken-72xx-sdk",
+		"beken-72xx-arduino"
 	],
 	"upload": {
 		"maximum_ram_size": 262144,

@@ -12,6 +12,7 @@
 [![PlatformIO Registry](https://badges.registry.platformio.org/packages/kuba2k2/platform/libretuya.svg)](https://registry.platformio.org/platforms/kuba2k2/libretuya)
 
 ![RTL8710BN](https://img.shields.io/badge/-rtl8710bn-blue)
+![BK7231](https://img.shields.io/badge/-bk7231-blue)
 
 </div>
 
@@ -40,33 +41,33 @@ See [Boards & CPU list](https://kuba2k2.github.io/libretuya/docs/supported/).
 
 Note: this list will probably change with each functionality update.
 
-&nbsp;              | `realtek-ambz`
---------------------|---------------
-Core functions      | ✔️
-GPIO/PWM/IRQ        | ✔️/✔️/✔️
-Analog input        | ✔️
-UART I/O            | ✔️
-Flash I/O           | ✔️
-**CORE LIBRARIES**  |
-SoftwareSerial      | ❌
-SPI                 | ❌
-Wire                | ❗
-**OTHER LIBRARIES** |
-Wi-Fi STA/AP/Mixed  | ✔️
-Wi-Fi Events        | ✔️
-TCP Client (SSL)    | ✔️ (✔️)
-TCP Server          | ✔️
-IPv6                | ❌
-HTTP Client (SSL)   | ✔️ (✔️)
-HTTP Server         | ✔️
-NVS / Preferences   | ❌
-SPIFFS              | ❌
-BLE                 | -
-NTP                 | ❌
-OTA                 | ✔️
-MDNS                | ✔️
-MQTT                | ✅
-SD                  | ❌
+&nbsp;              | `realtek-ambz` | `beken-72xx`
+--------------------|----------------|-------------
+Core functions      | ✔️             | ✔️
+GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ❌/❌/❌
+Analog input        | ✔️             | ❌
+UART I/O            | ✔️             | ❌
+Flash I/O           | ✔️             | ✔️
+**CORE LIBRARIES**  |                |
+SoftwareSerial      | ❌              | ❌
+SPI                 | ❌              | ❌
+Wire                | ❗              | ❌
+**OTHER LIBRARIES** |                |
+Wi-Fi STA/AP/Mixed  | ✔️             | ❌
+Wi-Fi Events        | ✔️             | ❌
+TCP Client (SSL)    | ✔️ (✔️)        | ❌
+TCP Server          | ✔️             | ❌
+IPv6                | ❌              | ❌
+HTTP Client (SSL)   | ✔️ (✔️)        | ❌
+HTTP Server         | ✔️             | ❌
+NVS / Preferences   | ❌              | ❌
+SPIFFS              | ❌              | ❌
+BLE                 | -              | ❌
+NTP                 | ❌              | ❌
+OTA                 | ✔️             | ❌
+MDNS                | ✔️             | ❌
+MQTT                | ✅              | ❌
+SD                  | ❌              | ❌
 
 Symbols:
 

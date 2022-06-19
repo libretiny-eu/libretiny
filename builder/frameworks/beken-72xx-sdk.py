@@ -87,7 +87,6 @@ env.Append(
         "-marm",
         "-mthumb-interwork",
         "-g",
-        "-nostdlib",
         "-nostartfiles",
         "--specs=nano.specs",
         "-Wl,--gc-sections",
@@ -104,6 +103,7 @@ env.Append(
         "-Wl,-wrap,snprintf",
         "-Wl,-wrap,sprintf",
         "-Wl,-wrap,vsnprintf",
+        # for disabling os_printf() output
         "-Wl,-wrap,bk_printf",
     ],
 )
