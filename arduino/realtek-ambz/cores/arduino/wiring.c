@@ -33,10 +33,6 @@ static __inline uint32_t __get_ipsr__(void) {
 
 void *gpio_pin_struct[PINS_COUNT] = {NULL};
 
-__attribute__((weak)) void init(void) {
-	// nop
-}
-
 void delay(uint32_t ms) {
 	/* osStatus ret; */
 

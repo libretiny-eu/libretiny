@@ -10,6 +10,10 @@ extern "C" {
 fal_partition_t fal_root_part = NULL;
 }
 
+// Arduino framework initialization.
+// May be redefined by family files.
+void init() __attribute__((weak));
+
 // Weak empty variant initialization function.
 // May be redefined by variant files.
 void initVariant() __attribute__((weak));

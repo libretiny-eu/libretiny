@@ -118,12 +118,12 @@ uf2_err_t uf2_update_parts(uf2_ota_t *ctx, char *part1, char *part2) {
 	ctx->erased_length = 0;
 
 	if (part1[0]) {
-		ctx->part1 = fal_partition_find(part1);
+		ctx->part1 = (fal_partition_t)fal_partition_find(part1);
 		if (!ctx->part1)
 			return UF2_ERR_PART_404;
 	}
 	if (part2[0]) {
-		ctx->part2 = fal_partition_find(part2);
+		ctx->part2 = (fal_partition_t)fal_partition_find(part2);
 		if (!ctx->part2)
 			return UF2_ERR_PART_404;
 	}
