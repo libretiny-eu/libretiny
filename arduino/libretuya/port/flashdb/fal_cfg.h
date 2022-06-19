@@ -2,6 +2,11 @@
 
 #pragma once
 
+inline void printf_nop(const char *fmt, ...) {}
+
+#define FAL_PRINTF printf_nop
+#define FAL_DEBUG  0
+
 // Flash device configuration
 extern const struct fal_flash_dev flash0;
 
