@@ -7,7 +7,14 @@
 #include "LibreTuyaAPI.h"
 #include <core/ChipType.h>
 
-#include <Flash.h> // for flash inline methods
+/**
+ * @brief Flash chip ID structure.
+ */
+typedef struct {
+	uint8_t manufacturerId;
+	uint8_t chipId;
+	uint8_t chipSizeId;
+} FlashId;
 
 /**
  * @brief Main LibreTuya API class.
@@ -25,22 +32,11 @@ class LibreTuya {
 	const char *getChipFamilyName();
 	const char *getDeviceName();
 	uint32_t getCpuFreqMHz();
+	uint32_t getFlashChipSize();
 	uint8_t otaGetRunning();
 	uint8_t otaGetTarget();
 	bool otaRollback();
 	bool otaCanRollback();
-
-  public: /* Inline methods */
-	inline uint32_t getFlashChipSize() {
-		return Flash.getSize();
-	}
-
-	// inline bool flashEraseSector(uint32_t sector) {}
-	// inline bool flashWrite(uint32_t offset, uint32_t *data, size_t size) {}
-	// inline bool flashRead(uint32_t offset, uint32_t *data, size_t size) {}
-	// inline bool partitionEraseRange(const esp_partition_t *partition, uint32_t offset, size_t size) {}
-	// inline bool partitionWrite(const esp_partition_t *partition, uint32_t offset, uint32_t *data, size_t size) {}
-	// inline bool partitionRead(const esp_partition_t *partition, uint32_t offset, uint32_t *data, size_t size) {}
 
   public: /* Family-defined methods */
 	/**
@@ -64,6 +60,7 @@ class LibreTuya {
 	const char *getChipModel();
 	/**
 	 * @brief Get CPU unique ID. This may be based on MAC, eFuse, etc.
+	 * Note: the number should be 24-bit (with most significant byte being zero).
 	 */
 	uint32_t getChipId();
 	/**
@@ -82,6 +79,12 @@ class LibreTuya {
 	 * @brief Get CPU cycle count.
 	 */
 	uint32_t getCycleCount();
+
+  public: /* Flash memory utilities */
+	/**
+	 * @brief Read flash chip ID and return a FlashId struct.
+	 */
+	FlashId getFlashChipId();
 
   public: /* Memory management */
 	/**

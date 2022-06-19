@@ -5,6 +5,11 @@
 
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 
+static int init() {
+	flash_get_status(NULL);
+	return 0;
+}
+
 static int read(long offset, uint8_t *buf, size_t size) {
 	return size * flash_stream_read(NULL, offset, size, buf);
 }
@@ -26,6 +31,6 @@ const struct fal_flash_dev flash0 = {
 	.addr		= 0x0,
 	.len		= FLASH_LENGTH,
 	.blk_size	= FLASH_ERASE_MIN_SIZE,
-	.ops		= {NULL, read, write, erase},
+	.ops		= {init, read, write, erase},
 	.write_gran = 1,
 };

@@ -2,20 +2,10 @@
 
 #pragma once
 
-#include "api/Flash.h"
+#include <Arduino.h>
 
-struct flash_s;
-typedef struct flash_s flash_t;
-
-class FlashClass : public IFlashClass {
-  private:
-	flash_t *flash;
-	void initialize();
-
+class FlashClass {
   public:
-	FlashClass();
-	~FlashClass();
-
 	FlashId getChipId();
 	uint32_t getSize();
 

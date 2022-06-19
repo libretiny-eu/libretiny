@@ -57,6 +57,18 @@ uint32_t LibreTuya::getCycleCount() {
 	return microsecondsToClockCycles(micros());
 }
 
+/* Flash memory utilities */
+
+FlashId LibreTuya::getFlashChipId() {
+	FlashId id;
+	uint8_t idBytes[3];
+	flash_read_id(NULL, idBytes, 3);
+	id.manufacturerId = idBytes[0];
+	id.chipId		  = idBytes[1];
+	id.chipSizeId	  = idBytes[2];
+	return id;
+}
+
 /* Memory management */
 
 uint32_t LibreTuya::getRamSize() {

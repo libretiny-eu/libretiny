@@ -23,7 +23,7 @@
 #include "LibreTuyaClass.h"	 // global LT class
 #include "LibreTuyaCompat.h" // compatibility methods
 #include "LibreTuyaConfig.h" // configuration macros
-#include "LibreTuyaCustom.h" // family-defined methods
+#include "LibreTuyaCustom.h" // family-defined methods (Wiring custom)
 #include <Arduino.h>
 
 // C includes

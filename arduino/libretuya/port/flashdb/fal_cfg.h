@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <fal_def.h>
-
 // Flash device configuration
 extern const struct fal_flash_dev flash0;
 
@@ -25,6 +23,9 @@ extern const struct fal_flash_dev flash0;
 		.offset		= FLASH_##part_upper##_OFFSET, /* partition offset macro as uppercase string */                    \
 		.len		= FLASH_##part_upper##_LENGTH, /* partition length macro as uppercase string */                    \
 	},
+
+// for fal_partition_t
+#include <fal_def.h>
 
 /**
  * @brief Root partition table, representing the entire flash.

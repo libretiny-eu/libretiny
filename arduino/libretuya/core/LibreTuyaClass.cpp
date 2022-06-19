@@ -57,6 +57,23 @@ uint32_t LibreTuya::getCpuFreqMHz() {
 	return getCpuFreq() / 1000000;
 }
 
+/**
+ * @brief Get flash chip total size.
+ * The default implementation uses the least significant
+ * byte of the chip ID to determine the size.
+ */
+__attribute__((weak)) uint32_t LibreTuya::getFlashChipSize() {
+	FlashId id = getFlashChipId();
+	if (id.chipSizeId >= 0x14 && id.chipSizeId <= 0x19) {
+		return (1 << id.chipSizeId);
+	}
+#ifdef FLASH_LENGTH
+	return FLASH_LENGTH;
+#else
+	return 0;
+#endif
+}
+
 static uint8_t otaRunningIndex = 0;
 
 /**
