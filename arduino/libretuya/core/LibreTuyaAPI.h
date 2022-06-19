@@ -2,6 +2,11 @@
 
 #pragma once
 
+// C standard libraries
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+
 // LibreTuya version macros
 #ifndef LT_VERSION
 #define LT_VERSION 1.0.0

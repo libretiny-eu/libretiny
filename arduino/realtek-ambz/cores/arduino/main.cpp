@@ -22,53 +22,13 @@
 #include <Arduino.h>
 #include <cmsis_os.h>
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-
-void initVariant() {}
-
-// Initialize C library
-extern "C" void __libc_init_array(void);
-
 osThreadId main_tid = 0;
 
-void main_task(const void *arg) {
-	setup();
-
-	for (;;) {
-		loop();
-		if (serialEventRun)
-			serialEventRun();
-		yield();
-	}
-}
-
-int main(void) {
-	LT_BANNER();
-	init();
-
-	__libc_init_array();
-
-	initVariant();
-
+bool startMainTask() {
 	osThreadDef(main_task, osPriorityRealtime, 1, 4096 * 4);
 	main_tid = osThreadCreate(osThread(main_task), NULL);
-
 	osKernelStart();
-
-	while (1)
-		;
-
-	return 0;
-}
-
-void serialEvent() __attribute__((weak));
-bool Serial_available() __attribute__((weak));
-
-void serialEventRun(void) {
-	if (Serial_available && serialEvent && Serial_available())
-		serialEvent();
+	return true;
 }
 
 void wait_for_debug() {

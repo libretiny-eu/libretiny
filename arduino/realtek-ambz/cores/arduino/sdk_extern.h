@@ -2,9 +2,8 @@
 
 #pragma once
 
+// va_list is declared by SDK and conflicting
 #include <stdarg.h>
-#include <stddef.h>
-#include <stdint.h>
 
 // disable typedef in basic_types.h
 #define boolean boolean_rtl

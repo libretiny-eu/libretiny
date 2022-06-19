@@ -1,13 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-03. */
 
-// check if impl defines LT_MD5_USE_POLARSSL
-extern "C" {
-#include <MD5Impl.h>
-}
+#include "MD5.h"
 
 #if LT_MD5_USE_POLARSSL
-
-#include "MD5PolarSSLImpl.h"
 
 extern "C" {
 

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include <MD5Impl.h>
 
 // available built-in implementations

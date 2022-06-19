@@ -2,6 +2,4 @@
 
 #pragma once
 
-#include <sdk_extern.h>
-
 #define LT_MD5_USE_POLARSSL 1

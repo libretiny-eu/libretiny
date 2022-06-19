@@ -1,10 +1,23 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-06. */
 
+#pragma once
+
 #include "LibreTuyaAPI.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @brief Run main_task & start OS kernel (family-defined)
+ */
+extern bool startMainTask();
+
+/**
+ * @brief Main setup() and loop() task.
+ * Not to be called directly.
+ */
+extern void main_task(const void *arg);
 
 #define PIN_NONE (1 << 0)
 #define PIN_GPIO (1 << 1)
