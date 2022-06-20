@@ -16,10 +16,11 @@ extern "C" {
 #include <flash_pub.h>
 #include <sys_ctrl.h>
 #include <sys_rtos.h>
+#include <wlan_ui_pub.h>
 }
 
 void LibreTuya::restart() {
-	// TODO
+	bk_reboot();
 }
 
 /* CPU-related */
@@ -49,8 +50,7 @@ const char *LibreTuya::getChipCoreType() {
 }
 
 uint32_t LibreTuya::getCpuFreq() {
-	// TODO
-	return 0;
+	return configCPU_CLOCK_HZ;
 }
 
 uint32_t LibreTuya::getCycleCount() {
