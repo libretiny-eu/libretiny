@@ -22,6 +22,10 @@ env.Append(
         "-Wno-char-subscripts",
         "-Wno-missing-braces",
     ],
+    LINKFLAGS=[
+        # stdio wrappers (port/printf/printf.c)
+        "-Wl,-wrap,bk_printf",
+    ],
 )
 
 # Build all libraries

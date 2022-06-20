@@ -10,9 +10,9 @@
 extern uint32_t flash_ctrl(uint32_t cmd, void *param);
 
 static int init() {
-	__disable_bk_printf = 1;
+	__wrap_bk_printf_disable();
 	flash_init();
-	__disable_bk_printf = 0;
+	__wrap_bk_printf_enable();
 	return 0;
 }
 

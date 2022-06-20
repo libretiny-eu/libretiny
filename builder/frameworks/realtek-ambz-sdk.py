@@ -56,7 +56,6 @@ env.Append(
         ("in_addr_t", "u32_t"),
         ("INT_MAX", "2147483647"),  # for RECV_BUFSIZE_DEFAULT
         ("ERRNO", "1"),  # for LwIP
-        ("vprintf", "rtl_vprintf"),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",  # enable PSK in mbedTLS
         # "MBEDTLS_DEBUG_C",
     ],

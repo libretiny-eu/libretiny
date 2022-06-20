@@ -103,8 +103,6 @@ env.Append(
         "-Wl,-wrap,snprintf",
         "-Wl,-wrap,sprintf",
         "-Wl,-wrap,vsnprintf",
-        # for disabling os_printf() output
-        "-Wl,-wrap,bk_printf",
     ],
 )
 
@@ -148,7 +146,6 @@ env.AddLibrary(
         "+<arch_main.c>",
         "+<ate_app.c>",
         "+<intc.c>",
-        "+<wrap.c>",
         *srcs_fixups,
     ],
 )
