@@ -20,15 +20,21 @@
    end="# Detailed Description\n"
 %}
 
-## Static
-
-### Public Attributes
+## Common methods
 
 {%
    include-markdown "../../ltapi/_libre_tuya_a_p_i_8h.md"
-   start="## Public Attributes\n"
-   end="## Public Attributes Documentation\n"
+   start="## Public Functions\n"
+   end="## Public Functions Documentation\n"
    heading-offset=1
+%}
+
+## Wiring custom methods
+
+{%
+   include-markdown "../../ltapi/_libre_tuya_custom_8h.md"
+   start="## Public Functions\n"
+   end="## Macros\n"
 %}
 
 ## Logger
