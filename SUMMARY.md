@@ -5,14 +5,13 @@
 * [📁 Project structure](docs/project-structure.md)
 * 🔖 Code reference
 	* [LibreTuya API](docs/reference/lt-api.md)
-		* [Class reference](ltapi/class_libre_tuya.md)
+		* [LT class reference](ltapi/class_libre_tuya.md)
 		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
-		* [Family-provided methods](ltapi/_libre_tuya_custom_8h.md)
+		* [Wiring custom methods](ltapi/_libre_tuya_custom_8h.md)
 		* [Logger](ltapi/lt__logger_8h.md)
 		* [Chip & family IDs](ltapi/_chip_type_8h_source.md)
 		* [POSIX utilities](ltapi/lt__posix__api_8h.md)
 	* Common API
-		* [Flash](ltapi/class_i_flash_class.md)
 		* [FS](ltapi/classfs_1_1_f_s.md)
 		* [Preferences](ltapi/class_i_preferences.md)
 		* [WiFi API](ltapi/class_i_wi_fi_generic_class.md)
@@ -24,6 +23,7 @@
 			* [TCP Server](ltapi/class_i_wi_fi_server.md)
 	* [LibreTuya libraries](docs/libs-built-in.md)
 		* [base64](ltapi/classbase64.md)
+		* [Flash](ltapi/class_flash_class.md)
 		* [HTTPClient](ltapi/class_h_t_t_p_client.md)
 		* [mDNS](ltapi/classm_d_n_s.md)
 		* NetUtils

@@ -53,30 +53,34 @@ typedef struct {
 
 extern PinInfo pinTable[];
 
+// Custom Wiring methods
+
+bool pinInvalid(pin_size_t pinNumber);
+PinInfo *pinInfo(pin_size_t pinNumber);
+bool pinHasFeat(PinInfo *pin, uint32_t mask);
+bool pinIsFeat(PinInfo *pin, uint32_t mask);
+bool pinIsOutput(PinInfo *pin);
+bool pinIsInput(PinInfo *pin);
+
+int analogRead(pin_size_t pinNumber);
+void analogReadResolution(int res);
+void analogWriteResolution(int res);
+void analogWriteFrequency(int hz);
+void analogWritePeriod(int us);
+
+extern int _analogReadResolution;
+extern int _analogWriteResolution;
+extern int _analogWritePeriod;
+
 /**
  * @brief Read voltage from analog input (in millivolts).
  */
 uint16_t analogReadVoltage(pin_size_t pinNumber);
 
 /**
- * @brief Set resolution of values (in bits) returned by analogRead().
+ * @brief Get max reading voltage for the specified pin (millivolts).
  */
-void analogReadResolution(int res);
-
-/**
- * @brief Set PWM output frequency (in Hz).
- */
-void analogWriteFrequency(int hz);
-
-/**
- * @brief Set PWM output frequency (cycle period) in microseconds.
- */
-void analogWritePeriod(int us);
-
-/**
- * @brief Set resolution of values (in bits) expected by analogWrite().
- */
-void analogWriteResolution(int res);
+uint16_t analogReadMaxVoltage(pin_size_t pinNumber);
 
 #ifdef __cplusplus
 } // extern "C"

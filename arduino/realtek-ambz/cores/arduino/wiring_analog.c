@@ -35,33 +35,7 @@ extern void *gpio_pin_struct[];
 
 extern void pinRemoveMode(pin_size_t pinNumber);
 
-static int _readResolution	= 10;
-static int _writeResolution = 8;
-static int _writePeriod		= 20000; // 50 Hz
-
 // TODO implement custom ADC calibration
-
-void analogReadResolution(int res) {
-	_readResolution = res;
-}
-
-void analogWriteFrequency(int hz) {
-	_writePeriod = 1E6 / hz;
-}
-
-void analogWritePeriod(int us) {
-	_writePeriod = us;
-}
-
-void analogWriteResolution(int res) {
-	_writeResolution = res;
-}
-
-uint8_t analog_reference = 0;
-
-void analogReference(uint8_t mode) {
-	analog_reference = mode;
-}
 
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	uint16_t ret = 0;
@@ -102,42 +76,30 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	return AD2MV(ret, 0x418, 0x342);
 }
 
-int analogRead(pin_size_t pinNumber) {
-	float voltage = analogReadVoltage(pinNumber);
-	uint16_t ret  = 0;
-	if (pinNumber != PIN_A1) {
-		ret = round((1 << _readResolution) * voltage / 3300);
-	} else {
-		ret = round((1 << _readResolution) * voltage / 5000);
-	}
-	if (ret >= (1 << _readResolution))
-		ret = (1 << _readResolution) - 1;
-	return ret;
+uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
+	if (pinNumber == PIN_A1)
+		return 5000;
+	return 3300;
 }
 
-void analogOutputInit(void) {
-	// nop
-}
-
-// Right now, PWM output only works on the pins with
-// hardware support.  These are defined in the appropriate
-// pins_*.c file.  For the rest of the pins, we default
-// to digital output.
 void analogWrite(pin_size_t pinNumber, int value) {
+	PinInfo *pin = pinInfo(pinNumber);
+	if (!pin)
+		return;
 	pwmout_t *obj;
 
-	if ((pinTable[pinNumber].features & PIN_PWM) == PIN_PWM) {
-		float percent = value * 1.0 / (1 << _writeResolution);
-		if (pinTable[pinNumber].types != PIN_PWM) {
-			if ((pinTable[pinNumber].types == PIN_GPIO) || (pinTable[pinNumber].types == PIN_IRQ)) {
+	if (pinHasFeat(pin, PIN_PWM)) {
+		float percent = value * 1.0 / (1 << _analogWriteResolution);
+		if (pin->types != PIN_PWM) {
+			if ((pin->types == PIN_GPIO) || (pin->types == PIN_IRQ)) {
 				pinRemoveMode(pinNumber);
 			}
 			gpio_pin_struct[pinNumber] = malloc(sizeof(pwmout_t));
 			pwmout_t *obj			   = (pwmout_t *)gpio_pin_struct[pinNumber];
-			pwmout_init(obj, pinTable[pinNumber].gpio);
-			pwmout_period_us(obj, _writePeriod);
+			pwmout_init(obj, pin->gpio);
+			pwmout_period_us(obj, _analogWritePeriod);
 			pwmout_write(obj, percent);
-			pinTable[pinNumber].types = PIN_PWM;
+			pin->types = PIN_PWM;
 		} else {
 			pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
 			// pwmout_period_us(obj, _writePeriod);
