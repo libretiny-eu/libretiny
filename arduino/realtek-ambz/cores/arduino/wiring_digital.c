@@ -10,22 +10,22 @@ void pinRemoveMode(pin_size_t pinNumber) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)
 		return;
-	if (pinIsFeat(pin, PIN_PWM)) {
+	if (pinEnabled(pin, PIN_PWM)) {
 		pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
 		pwmout_free(obj);
 	}
-	if (pinIsFeat(pin, PIN_GPIO)) {
+	if (pinEnabled(pin, PIN_GPIO)) {
 		gpio_t *obj = (gpio_t *)gpio_pin_struct[pinNumber];
 		gpio_deinit(obj, pin->gpio);
 		free(obj);
 	}
-	if (pinIsFeat(pin, PIN_IRQ)) {
+	if (pinEnabled(pin, PIN_IRQ)) {
 		gpio_irq_t *obj = (gpio_irq_t *)gpio_pin_struct[pinNumber];
 		gpio_irq_deinit(obj);
 		free(obj);
 	}
 	gpio_pin_struct[pinNumber] = NULL;
-	pin->types				   = PIN_NONE;
+	pin->enabled			   = PIN_NONE;
 }
 
 void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
@@ -33,31 +33,31 @@ void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
 	if (!pin)
 		return;
 
-	if (pinIsFeat(pin, PIN_GPIO) && pin->mode == pinMode)
+	if (pinEnabled(pin, PIN_GPIO) && pin->mode == pinMode)
 		// Nothing changes in pin mode
 		return;
 
-	if (!pinHasFeat(pin, PIN_GPIO))
+	if (!pinSupported(pin, PIN_GPIO))
 		// cannot set ADC as I/O
 		return;
 
-	/* if (pin->types == PIN_PWM) {
+	/* if (pin->enabled == PIN_PWM) {
 		// If this pin has been configured as PWM, then it cannot change to another mode
 		return;
 	} */
 
-	if (pin->types != PIN_GPIO)
+	if (pin->enabled != PIN_GPIO)
 		// pin mode changes; deinit gpio and free memory
 		pinRemoveMode(pinNumber);
 
 	gpio_t *gpio;
 
-	if (pin->types == PIN_NONE) {
+	if (pin->enabled == PIN_NONE) {
 		// allocate memory if pin not used before
 		gpio					   = malloc(sizeof(gpio_t));
 		gpio_pin_struct[pinNumber] = gpio;
 		gpio_init(gpio, pin->gpio);
-		pin->types = PIN_GPIO;
+		pin->enabled = PIN_GPIO;
 	} else {
 		// pin already used as gpio
 		gpio = (gpio_t *)gpio_pin_struct[pinNumber];
@@ -100,7 +100,7 @@ void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)
 		return;
-	if (pin->types != PIN_GPIO)
+	if (pin->enabled != PIN_GPIO)
 		return;
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];
@@ -111,7 +111,7 @@ PinStatus digitalRead(pin_size_t pinNumber) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)
 		return;
-	if (pin->types != PIN_GPIO)
+	if (pin->enabled != PIN_GPIO)
 		return;
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];

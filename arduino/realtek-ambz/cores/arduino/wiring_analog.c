@@ -88,10 +88,10 @@ void analogWrite(pin_size_t pinNumber, int value) {
 		return;
 	pwmout_t *obj;
 
-	if (pinHasFeat(pin, PIN_PWM)) {
+	if (pinSupported(pin, PIN_PWM)) {
 		float percent = value * 1.0 / (1 << _analogWriteResolution);
-		if (pin->types != PIN_PWM) {
-			if ((pin->types == PIN_GPIO) || (pin->types == PIN_IRQ)) {
+		if (pin->enabled != PIN_PWM) {
+			if ((pin->enabled == PIN_GPIO) || (pin->enabled == PIN_IRQ)) {
 				pinRemoveMode(pinNumber);
 			}
 			gpio_pin_struct[pinNumber] = malloc(sizeof(pwmout_t));
@@ -99,7 +99,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			pwmout_init(obj, pin->gpio);
 			pwmout_period_us(obj, _analogWritePeriod);
 			pwmout_write(obj, percent);
-			pin->types = PIN_PWM;
+			pin->enabled = PIN_PWM;
 		} else {
 			pwmout_t *obj = (pwmout_t *)gpio_pin_struct[pinNumber];
 			// pwmout_period_us(obj, _writePeriod);
@@ -128,12 +128,12 @@ void _tone_timer_handler(const void *argument) {
 void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
 	pwmout_t *obj;
 
-	if ((pinTable[ulPin].features & PIN_PWM) != PIN_PWM) {
+	if ((pinTable[ulPin].supported & PIN_PWM) != PIN_PWM) {
 		return;
 	}
 
-	if (pinTable[ulPin].types != PIN_PWM) {
-		if ((pinTable[ulPin].types == PIN_GPIO) || (pinTable[ulPin].types == PIN_IRQ)) {
+	if (pinTable[ulPin].enabled != PIN_PWM) {
+		if ((pinTable[ulPin].enabled == PIN_GPIO) || (pinTable[ulPin].enabled == PIN_IRQ)) {
 			pinRemoveMode(ulPin);
 		}
 		gpio_pin_struct[ulPin] = malloc(sizeof(pwmout_t));
@@ -141,7 +141,7 @@ void _tone(uint32_t ulPin, unsigned int frequency, unsigned long duration) {
 		pwmout_init(obj, pinTable[ulPin].gpio);
 		pwmout_period(obj, 1.0 / frequency);
 		pwmout_pulsewidth(obj, 1.0 / (frequency * 2));
-		pinTable[ulPin].types = PIN_PWM;
+		pinTable[ulPin].enabled = PIN_PWM;
 
 	} else {
 		// There is already a PWM configured

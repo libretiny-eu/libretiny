@@ -26,15 +26,15 @@ PinInfo *pinInfo(pin_size_t pinNumber) {
 /**
  * @brief Check if pin supports all features represented by 'mask'.
  */
-bool pinHasFeat(PinInfo *pin, uint32_t mask) {
-	return (pin->features & mask) == mask;
+bool pinSupported(PinInfo *pin, uint32_t mask) {
+	return (pin->supported & mask) == mask;
 }
 
 /**
  * @brief Check if pin has all features represented by 'mask' enabled.
  */
-bool pinIsFeat(PinInfo *pin, uint32_t mask) {
-	return (pin->types & mask) == mask;
+bool pinEnabled(PinInfo *pin, uint32_t mask) {
+	return (pin->enabled & mask) == mask;
 }
 
 /**

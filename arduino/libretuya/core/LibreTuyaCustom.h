@@ -38,13 +38,13 @@ typedef struct {
 	 */
 	uint32_t gpio;
 	/**
-	 * @brief Supported pin features.
+	 * @brief Supported pin functions.
 	 */
-	uint32_t features;
+	uint32_t supported;
 	/**
-	 * @brief Enabled pin features. Used values are family-specific.
+	 * @brief Enabled pin functions. Used values are family-specific.
 	 */
-	uint32_t types;
+	uint32_t enabled;
 	/**
 	 * @brief Pin mode (direction, IRQ level, etc.).
 	 */
@@ -57,8 +57,8 @@ extern PinInfo pinTable[];
 
 bool pinInvalid(pin_size_t pinNumber);
 PinInfo *pinInfo(pin_size_t pinNumber);
-bool pinHasFeat(PinInfo *pin, uint32_t mask);
-bool pinIsFeat(PinInfo *pin, uint32_t mask);
+bool pinSupported(PinInfo *pin, uint32_t mask);
+bool pinEnabled(PinInfo *pin, uint32_t mask);
 bool pinIsOutput(PinInfo *pin);
 bool pinIsInput(PinInfo *pin);
 
