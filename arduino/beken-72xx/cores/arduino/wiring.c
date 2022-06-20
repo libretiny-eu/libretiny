@@ -8,10 +8,22 @@ void delayMilliseconds(unsigned long ms) {
 	rtos_delay_milliseconds(ms);
 }
 
-void delayMicroseconds(unsigned int us) {}
+void delayMicroseconds(unsigned int us) {
+	// TODO implement this properly
+	us /= 10;
+	volatile uint32_t i, j;
+	for (i = 0; i < us; i++) {
+		for (j = 0; j < 100; j++) {}
+	}
+}
 
 uint32_t millis() {
 	return xTaskGetTickCount() * portTICK_PERIOD_MS;
+}
+
+uint32_t micros() {
+	// TODO implement this properly
+	return millis() * 1000;
 }
 
 void yield() {

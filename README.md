@@ -44,7 +44,7 @@ Note: this list will probably change with each functionality update.
 &nbsp;              | `realtek-ambz` | `beken-72xx`
 --------------------|----------------|-------------
 Core functions      | ✔️             | ✔️
-GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ❌/❌/❌
+GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ❓/✔️/❌
 Analog input        | ✔️             | ❌
 UART I/O            | ✔️             | ❌
 Flash I/O           | ✔️             | ✔️
