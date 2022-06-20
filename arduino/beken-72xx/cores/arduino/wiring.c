@@ -4,10 +4,9 @@
 #include <rtos_pub.h>
 #include <sys_rtos.h>
 
-// TODO work out this conflicting with func/misc/target_util.c
-/* void delay(unsigned long ms) {
+void delayMilliseconds(unsigned long ms) {
 	rtos_delay_milliseconds(ms);
-} */
+}
 
 void delayMicroseconds(unsigned int us) {}
 
