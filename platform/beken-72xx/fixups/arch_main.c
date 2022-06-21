@@ -26,7 +26,7 @@ void entry_set_world_flag(void) {
 
 extern void main(void);
 
-#ifdef LIBRETUYA
+#ifdef LIBRETUYA_ARDUINO
 // beken-72xx has printf_port.h
 extern void __wrap_bk_printf_disable();
 extern void __wrap_bk_printf_enable();
@@ -38,7 +38,7 @@ void entry_main(void) {
 	entry_set_world_flag();
 #endif
 	// suppress all output during initialization
-#if LIBRETUYA
+#if LIBRETUYA_ARDUINO
 	__wrap_bk_printf_disable();
 #endif
 	// read reboot cause into bk_misc_get_start_type()
@@ -57,7 +57,7 @@ void entry_main(void) {
 	bk_wdg_reload();
 #endif
 	// enable bk_printf output again
-#if LIBRETUYA
+#if LIBRETUYA_ARDUINO
 	__wrap_bk_printf_enable();
 #endif
 	// run the app

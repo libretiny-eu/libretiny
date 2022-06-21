@@ -4,7 +4,7 @@
 
 #include_next "uart_pub.h"
 
-#ifdef LIBRETUYA
+#ifdef LIBRETUYA_ARDUINO
 // make uart.c call __wrap_bk_printf() instead of bk_printf()
 // standard wrapping does not work in this case, as bk_printf()
 // is implemented in the same translation unit

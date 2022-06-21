@@ -15,6 +15,7 @@ assert isdir(LT_ARDUINO_DIR)
 # Flags
 env.Append(
     CPPDEFINES=[
+        ("LIBRETUYA_ARDUINO", "1"),
         ("ARDUINO", 10812),
         "ARDUINO_SDK",
     ],
