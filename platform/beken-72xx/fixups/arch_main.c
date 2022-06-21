@@ -43,7 +43,7 @@ void entry_main(void) {
 #endif
 	// read reboot cause into bk_misc_get_start_type()
 	bk_misc_init_start_type();
-	// clear driver registration arrays
+	// register all sctrl drivers (driver/common/dd.c dd_init_tbl[])
 	driver_init();
 	// reboot the board if start_type == RESET_SOURCE_CRASH_PER_XAT0
 	bk_misc_check_start_type();

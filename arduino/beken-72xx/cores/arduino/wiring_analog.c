@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <pwm_pub.h>
+#include <saradc_pub.h>
 
 static GPIO_INDEX pwmToGpio[] = {
 	GPIO6,	// PWM0
@@ -12,6 +13,17 @@ static GPIO_INDEX pwmToGpio[] = {
 	GPIO26, // PWM5
 };
 
+static GPIO_INDEX adcToGpio[] = {
+	-1,		// ADC0 - VBAT
+	GPIO4,	// ADC1
+	GPIO5,	// ADC2
+	GPIO23, // ADC3
+	GPIO2,	// ADC4
+	GPIO3,	// ADC5
+	GPIO12, // ADC6
+	GPIO13, // ADC7
+};
+
 static uint8_t gpioToPwm(GPIO_INDEX gpio) {
 	for (uint8_t i = 0; i < sizeof(pwmToGpio); i++) {
 		if (pwmToGpio[i] == gpio)
@@ -20,11 +32,42 @@ static uint8_t gpioToPwm(GPIO_INDEX gpio) {
 	return 0;
 }
 
+static uint8_t gpioToAdc(GPIO_INDEX gpio) {
+	for (uint8_t i = 0; i < sizeof(adcToGpio); i++) {
+		if (adcToGpio[i] == gpio)
+			return i;
+	}
+	return 0;
+}
+
 static pwm_param_t pwm;
+static uint16_t adcData[1];
 
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
-	// TODO
-	return 0;
+	PinInfo *pin = pinInfo(pinNumber);
+	if (!pin)
+		return 0;
+	if (!pinSupported(pin, PIN_ADC))
+		return 0;
+
+	UINT32 status;
+	saradc_desc_t adc;
+	DD_HANDLE handle;
+	saradc_config_param_init(&adc);
+	adc.channel		   = gpioToAdc(pin->gpio);
+	adc.mode		   = ADC_CONFIG_MODE_CONTINUE;
+	adc.pData		   = adcData;
+	adc.data_buff_size = 1;
+	handle			   = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)&adc);
+	if (status)
+		return 0;
+	// wait for data
+	while (!adc.has_data || adc.current_sample_data_cnt < 1) {
+		delay(1);
+	}
+	ddev_control(handle, SARADC_CMD_RUN_OR_STOP_ADC, (void *)false);
+	ddev_close(handle);
+	return adcData[0];
 }
 
 uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
