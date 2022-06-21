@@ -67,3 +67,20 @@
 		va_end(va);                                                                                                    \
 		return ret;                                                                                                    \
 	}
+
+#define WRAP_VPRINTF(name)                                                                                             \
+	WRAP_DISABLE_DECL(name)                                                                                            \
+	int __wrap_##name(const char *format, va_list arg) {                                                               \
+		WRAP_DISABLE_CHECK(name);                                                                                      \
+		return vprintf(format, arg);                                                                                   \
+	}
+
+#define WRAP_VSPRINTF(name)                                                                                            \
+	int __wrap_##name(char *s, const char *format, va_list arg) {                                                      \
+		return vsprintf(s, format, arg);                                                                               \
+	}
+
+#define WRAP_VSNPRINTF(name)                                                                                           \
+	int __wrap_##name(char *s, size_t count, const char *format, va_list arg) {                                        \
+		return vsnprintf(s, count, format, arg);                                                                       \
+	}
