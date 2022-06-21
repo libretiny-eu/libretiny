@@ -35,10 +35,10 @@ def elf2bin_bk72xx(
     # build output name
     output = chname(input, f"{mcu}_app_0x{app_offs:06X}.bin")
     fw_bin = chext(input, "bin")
-    # objcopy ELF -> raw BIN
-    soc.objcopy(input, fw_bin)
     # print graph element
     print(f"|   |-- {basename(output)}")
+    # objcopy ELF -> raw BIN
+    soc.objcopy(input, fw_bin)
     # return if images are up to date
     if not isnewer(fw_bin, output):
         return (app_offs, output)

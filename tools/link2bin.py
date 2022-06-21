@@ -10,7 +10,7 @@ from enum import Enum
 from os import stat, unlink
 from os.path import basename, dirname, isfile, join
 from shutil import copyfile
-from subprocess import PIPE, Popen
+from subprocess import PIPE, Popen, list2cmdline
 from typing import IO, Dict, List, Tuple
 
 from tools.util.fileio import chext, isnewer
@@ -25,8 +25,10 @@ class SocType(Enum):
     AMBZ = (1, "arm-none-eabi-", True, 0)
     BK72XX = (2, "arm-none-eabi-", False, 0)
 
-    def cmd(self, cmd: str) -> IO[bytes]:
+    def cmd(self, cmd: str, args: str = []) -> IO[bytes]:
         try:
+            if args:
+                cmd += " " + list2cmdline(args)
             process = Popen(self.prefix + cmd, stdout=PIPE)
         except FileNotFoundError:
             print(f"Toolchain not found while running: '{self.prefix + cmd}'")
@@ -47,7 +49,7 @@ class SocType(Enum):
 
     def nm(self, input: str) -> Dict[str, int]:
         out = {}
-        stdout = self.cmd(f"gcc-nm {input}")
+        stdout = self.cmd(f"gcc-nm", args=[input])
         for line in stdout.readlines():
             line = line.decode().strip().split(" ")
             if len(line) != 3:
@@ -66,7 +68,7 @@ class SocType(Enum):
         print(f"|   |   |-- {basename(output)}")
         if isnewer(input, output):
             sections = " ".join(f"-j {section}" for section in sections)
-            self.cmd(f"objcopy {sections} -O {fmt} {input} {output}").read()
+            self.cmd(f"objcopy {sections} -O {fmt}", args=[input, output]).read()
         return output
 
 
@@ -78,6 +80,7 @@ class SocType(Enum):
 #   \____/ \__|_|_|_|\__|_|\___||___/
 def checkfile(path: str):
     if not isfile(path) or stat(path).st_size == 0:
+        print(f"Generated file not found: {path}")
         exit(1)
 
 
@@ -127,16 +130,13 @@ def ldargs_parse(
     args2 = list(args)
     elf1 = elf2 = None
     for i, arg in enumerate(args):
-        arg = arg.strip('"').strip("'")
         if ".elf" in arg:
             if not ld_ota1:
                 # single-OTA chip, return the output name
                 return [(arg, args)]
             # append OTA index in filename
-            elf1 = chext(arg, "ota1.elf")
-            elf2 = chext(arg, "ota2.elf")
-            args1[i] = '"' + elf1 + '"'
-            args2[i] = '"' + elf2 + '"'
+            args1[i] = elf1 = chext(arg, "ota1.elf")
+            args2[i] = elf2 = chext(arg, "ota2.elf")
         if arg.endswith(".ld") and ld_ota1:
             # use OTA2 linker script
             args2[i] = arg.replace(ld_ota1, ld_ota2)
@@ -172,8 +172,7 @@ def link2bin(
         print(f"|-- Image {ota_idx}: {basename(elf)}")
         if isfile(elf):
             unlink(elf)
-        ldargs = " ".join(ldargs)
-        soc.cmd(f"gcc {ldargs}").read()
+        soc.cmd(f"gcc", args=ldargs).read()
         checkfile(elf)
         # generate a set of binaries for the SoC
         elf2bin(soc, family, board, elf, ota_idx, soc_args)

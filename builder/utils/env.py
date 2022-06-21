@@ -68,7 +68,7 @@ def env_add_defaults(env, platform, board):
             ("FAMILY", "F_${FAMILY}"),
         ],
         LINKFLAGS=[
-            "-Wl,-Map=" + join("$BUILD_DIR", "${PROGNAME}.map"),
+            '"-Wl,-Map=' + join("$BUILD_DIR", "${PROGNAME}.map") + '"',
         ],
     )
 
