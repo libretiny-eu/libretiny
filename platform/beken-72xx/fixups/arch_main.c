@@ -26,11 +26,9 @@ void entry_set_world_flag(void) {
 
 extern void main(void);
 
-#ifdef LIBRETUYA_ARDUINO
-// beken-72xx has printf_port.h
-extern void __wrap_bk_printf_disable();
-extern void __wrap_bk_printf_enable();
-#endif
+// declare as weak to override with Arduino framework
+__attribute__((weak)) void __wrap_bk_printf_disable();
+__attribute__((weak)) void __wrap_bk_printf_enable();
 
 void entry_main(void) {
 	// compatibility with BK7231S_1.0.5
@@ -38,9 +36,7 @@ void entry_main(void) {
 	entry_set_world_flag();
 #endif
 	// suppress all output during initialization
-#if LIBRETUYA_ARDUINO
 	__wrap_bk_printf_disable();
-#endif
 	// read reboot cause into bk_misc_get_start_type()
 	bk_misc_init_start_type();
 	// register all sctrl drivers (driver/common/dd.c dd_init_tbl[])
@@ -57,9 +53,7 @@ void entry_main(void) {
 	bk_wdg_reload();
 #endif
 	// enable bk_printf output again
-#if LIBRETUYA_ARDUINO
 	__wrap_bk_printf_enable();
-#endif
 	// run the app
 	main();
 }
