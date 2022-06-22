@@ -31,6 +31,8 @@ def env_add_printf(
                 "-Wl,-wrap,snprintf",
                 "-Wl,-wrap,vsnprintf",
                 "-Wl,-wrap,vprintf",
+                "-Wl,-wrap,puts",
+                "-Wl,-wrap,putchar",
             ],
         ),
     )

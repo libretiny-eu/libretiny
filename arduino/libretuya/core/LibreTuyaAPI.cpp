@@ -27,6 +27,8 @@ void lt_rand_bytes(uint8_t *buf, size_t len) {
 	}
 }
 
+#undef putchar
+
 /**
  * @brief Print data pointed to by buf in hexdump-like format (hex+ASCII).
  *
@@ -53,9 +55,9 @@ void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 		printf(" |");
 		for (uint8_t i = 0; i < lineWidth; i++) {
 			char c = buf[pos + i];
-			printf("%c", isprint(c) ? c : '.');
+			putchar((c >= 0x20 && c <= 0x7f) ? c : '.');
 		}
-		printf("|\n");
+		puts("|\r");
 		pos += lineWidth;
 	}
 }
