@@ -45,8 +45,9 @@ Note: this list will probably change with each functionality update.
 --------------------|----------------|-------------
 Core functions      | ✔️             | ✔️
 GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ❓/✔️/❌
-Analog input        | ✔️             | ✔️
-UART I/O            | ✔️             | ❌
+Analog input (ADC)  | ✔️             | ✔️
+Serial              | ✔️             | ✔️
+Serial (extra)      | ❌              | 1, 2
 Flash I/O           | ✔️             | ✔️
 **CORE LIBRARIES**  |                |
 SoftwareSerial      | ❌              | ❌
