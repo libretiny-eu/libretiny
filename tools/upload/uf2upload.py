@@ -40,7 +40,12 @@ if __name__ == "__main__":
 
     args = dict(args._get_kwargs())
     if uf2.family.code == "ambz":
-        from uf2_rtltool import upload
+        from tools.soc.uf2_rtltool import upload
+
+        if not upload(ctx, **args):
+            exit(1)
+    elif uf2.family.parent_code == "bk72xx":
+        from tools.soc.uf2_bk72xx import upload
 
         if not upload(ctx, **args):
             exit(1)

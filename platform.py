@@ -109,6 +109,10 @@ class LibretuyaPlatform(PlatformBase):
         if "arduino" in framework:
             self.packages["framework-arduino-api"]["optional"] = False
 
+        # require bk7231tools
+        if "beken-72xx" in framework:
+            self.packages["tool-bk7231tools"]["optional"] = False
+
         # mark framework SDK as required
         package_obj["optional"] = False
 

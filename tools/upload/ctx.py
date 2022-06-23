@@ -53,6 +53,12 @@ class UploadContext:
             return None
         return datetime.fromtimestamp(letoint(self.uf2.tags[Tag.BUILD_DATE]))
 
+    @property
+    def baudrate(self) -> int:
+        if not self.board_manifest:
+            self.board_manifest = get_board_manifest(self.board)
+        return get(self.board_manifest, "upload.speed")
+
     def get_offset(self, part: str, offs: int) -> int:
         if not self.board_manifest:
             self.board_manifest = get_board_manifest(self.board)
@@ -87,7 +93,8 @@ class UploadContext:
             part1 = block.tags.get(Tag.LT_PART_1, None)
             part2 = block.tags.get(Tag.LT_PART_2, None)
 
-            if part1 and part2:
+            if part1 is not None and part2 is not None:
+                # decode empty tags too
                 self.part1 = part1.decode()
                 self.part2 = part2.decode()
             elif part1 or part2:

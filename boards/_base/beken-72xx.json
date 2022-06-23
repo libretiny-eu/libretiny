@@ -22,7 +22,13 @@
 	],
 	"upload": {
 		"maximum_ram_size": 262144,
-		"flash_size": 2097152
+		"flash_size": 2097152,
+		"require_upload_port": true,
+		"speed": 921600,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
 	},
 	"doc": {
 		"params": {

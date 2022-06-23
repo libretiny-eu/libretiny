@@ -61,6 +61,8 @@ def env_uf2upload(env, target):
             "${UF2OUT}",
             "uart",
             "${UPLOAD_PORT}",
+            "-b",
+            "${UPLOAD_SPEED}",
         ]
         actions = [
             env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),

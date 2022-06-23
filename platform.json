@@ -111,6 +111,11 @@
       "optional": true,
       "owner": "platformio",
       "version": "~2.1100.0"
+    },
+    "tool-bk7231tools": {
+      "type": "uploader",
+      "optional": true,
+      "version": "https://github.com/libretuya/bk7231tools"
     }
   }
 }
