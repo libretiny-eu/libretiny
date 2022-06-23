@@ -22,9 +22,9 @@
 
 #pragma once
 
+#include <Arduino.h>
+#include <api/WiFi/WiFiEvents.h>
 #include <functional>
-
-#include "WiFiEvents.h"
 
 typedef enum {
 	ARDUINO_EVENT_WIFI_READY = 0,			/**< ESP32 WiFi ready */

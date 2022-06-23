@@ -1,6 +1,5 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFi.h"
 #include "WiFiPriv.h"
 
 typedef struct {
@@ -127,24 +126,8 @@ IPAddress WiFiClass::softAPIP() {
 	return LwIP_GetIP(NETIF_RTW_AP);
 }
 
-IPAddress WiFiClass::softAPBroadcastIP() {
-	return calculateBroadcast(softAPIP(), LwIP_GetMASK(NETIF_RTW_AP));
-}
-
-IPAddress WiFiClass::softAPNetworkID() {
-	return calculateNetworkID(softAPIP(), LwIP_GetMASK(NETIF_RTW_AP));
-}
-
-uint8_t WiFiClass::softAPSubnetCIDR() {
-	return calculateSubnetCIDR(LwIP_GetMASK(NETIF_RTW_AP));
-}
-
-bool WiFiClass::softAPenableIpV6() {
-	return false;
-}
-
-IPv6Address WiFiClass::softAPIPv6() {
-	return IPv6Address();
+IPAddress WiFiClass::softAPSubnetMask() {
+	return LwIP_GetMASK(NETIF_RTW_AP);
 }
 
 const char *WiFiClass::softAPgetHostname() {

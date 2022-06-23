@@ -1,6 +1,5 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFi.h"
 #include "WiFiPriv.h"
 
 rtw_network_info_t wifi = {0};
@@ -26,54 +25,14 @@ void reset_wifi_struct(void) {
 }
 
 WiFiClass::WiFiClass() {
-	_scanSem = xSemaphoreCreateBinary();
+	data.scanSem = xSemaphoreCreateBinary();
 }
 
 WiFiClass::~WiFiClass() {
-	vSemaphoreDelete(_scanSem);
+	vSemaphoreDelete(data.scanSem);
 }
 
-void WiFiClass::printDiag(Print &dest) {
-	const char *modes[] = {"NULL", "STA", "AP", "STA+AP"};
-	const char *enc[]	= {"Open", "WEP", "WPA PSK", "WPA2 PSK", "WPA/WPA2", "WPA", "WPA2"};
-
-	dest.print("Mode: ");
-	dest.println(modes[getMode()]);
-
-	if (wifi_mode & WIFI_MODE_STA) {
-		dest.println("-- Station --");
-		dest.print("SSID: ");
-		dest.println(SSID());
-		if (isConnected()) {
-			dest.print("BSSID: ");
-			dest.println(BSSIDstr());
-			dest.print("RSSI: ");
-			dest.println(RSSI());
-			dest.print("Encryption: ");
-			dest.println(enc[getEncryption()]);
-			dest.print("IP: ");
-			dest.println(localIP());
-			dest.print("MAC: ");
-			dest.println(macAddress());
-			dest.print("Hostname: ");
-			dest.println(getHostname());
-		}
-	}
-
-	if (wifi_mode & WIFI_MODE_AP) {
-		dest.println("-- Access Point --");
-		dest.print("SSID: ");
-		dest.println(softAPSSID());
-		dest.print("IP: ");
-		dest.println(softAPIP());
-		dest.print("MAC: ");
-		dest.println(softAPmacAddress());
-		dest.print("Hostname: ");
-		dest.println(softAPgetHostname());
-	}
-}
-
-WiFiAuthMode WiFiClass::securityTypeToAuthMode(uint8_t type) {
+WiFiAuthMode securityTypeToAuthMode(uint8_t type) {
 	// the value reported in rtw_scan_result is rtw_encryption_t, even though it's rtw_security_t in the header file
 	switch (type) {
 		case RTW_ENCRYPTION_OPEN:
@@ -91,5 +50,3 @@ WiFiAuthMode WiFiClass::securityTypeToAuthMode(uint8_t type) {
 	}
 	return WIFI_AUTH_INVALID;
 }
-
-WiFiClass WiFi;

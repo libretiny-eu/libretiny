@@ -1,16 +1,12 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFi.h"
 #include "WiFiPriv.h"
 
 int32_t WiFiClass::channel() {
-	int channel;
+	int channel = 0;
 	wifi_get_channel(&channel);
 	return channel;
 }
-
-extern WiFiClass *pWiFi;
-extern void startWifiTask();
 
 bool WiFiClass::mode(WiFiMode mode) {
 	// store a pointer to WiFi for WiFiEvents.cpp
@@ -23,12 +19,12 @@ bool WiFiClass::mode(WiFiMode mode) {
 	LT_HEAP_I();
 	startWifiTask();
 
-	if (!currentMode && mode && !_initialized) {
+	if (!currentMode && mode && !data.initialized) {
 		// initialize wifi first
 		LT_I("Initializing LwIP");
 		LwIP_Init();
 		reset_wifi_struct();
-		_initialized = true;
+		data.initialized = true;
 	}
 	LT_HEAP_I();
 	if (currentMode) {
@@ -62,7 +58,7 @@ bool WiFiClass::mode(WiFiMode mode) {
 }
 
 WiFiMode WiFiClass::getMode() {
-	if (!_initialized)
+	if (!data.initialized)
 		return WIFI_MODE_NULL;
 	return (WiFiMode)wifi_mode;
 }
@@ -75,22 +71,6 @@ WiFiStatus WiFiClass::status() {
 	}
 }
 
-bool WiFiClass::enableSTA(bool enable) {
-	WiFiMode currentMode = getMode();
-	if (((currentMode & WIFI_MODE_STA) != 0) != enable) {
-		return mode((WiFiMode)(currentMode ^ WIFI_MODE_STA));
-	}
-	return true;
-}
-
-bool WiFiClass::enableAP(bool enable) {
-	WiFiMode currentMode = getMode();
-	if (((currentMode & WIFI_MODE_AP) != 0) != enable) {
-		return mode((WiFiMode)(currentMode ^ WIFI_MODE_AP));
-	}
-	return true;
-}
-
 bool WiFiClass::setSleep(bool enable) {
 	LT_D_WG("WiFi sleep mode %u", enable);
 	if (enable)
@@ -98,12 +78,12 @@ bool WiFiClass::setSleep(bool enable) {
 			return false;
 		else if (wifi_disable_powersave() != RTW_SUCCESS)
 			return false;
-	_sleep = enable;
+	data.sleep = enable;
 	return true;
 }
 
 bool WiFiClass::getSleep() {
-	return _sleep;
+	return data.sleep;
 }
 
 bool WiFiClass::setTxPower(int power) {
@@ -124,53 +104,4 @@ IPAddress WiFiClass::hostByName(const char *hostname) {
 		return ip.addr;
 	}
 	return IPAddress();
-}
-
-IPAddress WiFiClass::calculateNetworkID(IPAddress ip, IPAddress subnet) {
-	IPAddress networkID;
-
-	for (size_t i = 0; i < 4; i++)
-		networkID[i] = subnet[i] & ip[i];
-
-	return networkID;
-}
-
-IPAddress WiFiClass::calculateBroadcast(IPAddress ip, IPAddress subnet) {
-	IPAddress broadcastIp;
-
-	for (int i = 0; i < 4; i++)
-		broadcastIp[i] = ~subnet[i] | ip[i];
-
-	return broadcastIp;
-}
-
-uint8_t WiFiClass::calculateSubnetCIDR(IPAddress subnetMask) {
-	uint8_t CIDR = 0;
-
-	for (uint8_t i = 0; i < 4; i++) {
-		if (subnetMask[i] == 0x80) // 128
-			CIDR += 1;
-		else if (subnetMask[i] == 0xC0) // 192
-			CIDR += 2;
-		else if (subnetMask[i] == 0xE0) // 224
-			CIDR += 3;
-		else if (subnetMask[i] == 0xF0) // 242
-			CIDR += 4;
-		else if (subnetMask[i] == 0xF8) // 248
-			CIDR += 5;
-		else if (subnetMask[i] == 0xFC) // 252
-			CIDR += 6;
-		else if (subnetMask[i] == 0xFE) // 254
-			CIDR += 7;
-		else if (subnetMask[i] == 0xFF) // 255
-			CIDR += 8;
-	}
-
-	return CIDR;
-}
-
-String WiFiClass::macToString(uint8_t *mac) {
-	char macStr[ETH_ALEN * 3];
-	sprintf(macStr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-	return macStr;
 }

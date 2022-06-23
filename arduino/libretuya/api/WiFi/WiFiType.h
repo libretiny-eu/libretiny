@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <Arduino.h>
+
 #define WIFI_SCAN_RUNNING (-1)
 #define WIFI_SCAN_FAILED  (-2)
 
@@ -37,6 +39,10 @@
 #define WiFiEvent_t		arduino_event_id_t
 #define WiFiEventInfo_t arduino_event_info_t
 #define WiFiEventId_t	uint16_t
+
+typedef struct {
+	uint8_t addr[6];
+} WiFiMacAddr;
 
 struct esp_ip6_addr {
 	uint32_t addr[4];
@@ -121,3 +127,13 @@ typedef enum {
 	WIFI_REASON_AP_TSF_RESET			 = 206,
 	WIFI_REASON_ROAMING					 = 207,
 } wifi_err_reason_t;
+
+typedef struct {
+	bool running	   = false;
+	uint8_t count	   = 0;
+	char **ssid		   = NULL;
+	WiFiAuthMode *auth = NULL;
+	int32_t *rssi	   = NULL;
+	WiFiMacAddr *bssid = NULL;
+	int32_t *channel   = NULL;
+} WiFiScanData;

@@ -1,11 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFi.h"
 #include "WiFiPriv.h"
-
-WiFiStatus WiFiClass::begin(char *ssid, char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
-	return begin((const char *)ssid, (const char *)passphrase, channel, bssid, connect);
-}
 
 WiFiStatus
 WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
@@ -134,10 +129,6 @@ bool WiFiClass::disconnect(bool wifiOff) {
 	return ret == RTW_SUCCESS;
 }
 
-bool WiFiClass::isConnected() {
-	return status() == WL_CONNECTED;
-}
-
 bool WiFiClass::setAutoReconnect(bool autoReconnect) {
 	return wifi_set_autoreconnect(autoReconnect) == RTW_SUCCESS;
 }
@@ -146,17 +137,6 @@ bool WiFiClass::getAutoReconnect() {
 	bool autoReconnect;
 	wifi_get_autoreconnect((uint8_t *)&autoReconnect);
 	return autoReconnect;
-}
-
-WiFiStatus WiFiClass::waitForConnectResult(unsigned long timeout) {
-	if ((wifi_mode & WIFI_MODE_STA) == 0) {
-		return WL_DISCONNECTED;
-	}
-	unsigned long start = millis();
-	while ((!status() || status() >= WL_DISCONNECTED) && (millis() - start) < timeout) {
-		delay(100);
-	}
-	return status();
 }
 
 IPAddress WiFiClass::localIP() {
@@ -170,12 +150,6 @@ uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	memcpy(mac, macLocal, ETH_ALEN);
 	free(macLocal);
 	return mac;
-}
-
-String WiFiClass::macAddress(void) {
-	uint8_t mac[ETH_ALEN];
-	macAddress(mac);
-	return macToString(mac);
 }
 
 IPAddress WiFiClass::subnetMask() {
@@ -194,22 +168,6 @@ IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
 
 IPAddress WiFiClass::broadcastIP() {
 	return LwIP_GetBC(NETIF_RTW_STA);
-}
-
-IPAddress WiFiClass::networkID() {
-	return calculateNetworkID(gatewayIP(), subnetMask());
-}
-
-uint8_t WiFiClass::subnetCIDR() {
-	return calculateSubnetCIDR(subnetMask());
-}
-
-bool WiFiClass::enableIpV6() {
-	return false;
-}
-
-IPv6Address WiFiClass::localIPv6() {
-	return IPv6Address();
 }
 
 const char *WiFiClass::getHostname() {
@@ -244,10 +202,6 @@ uint8_t *WiFiClass::BSSID() {
 	return bssid;
 }
 
-String WiFiClass::BSSIDstr() {
-	return macToString(BSSID());
-}
-
 int8_t WiFiClass::RSSI() {
 	int rssi = 0;
 	wifi_get_rssi(&rssi);
@@ -256,5 +210,5 @@ int8_t WiFiClass::RSSI() {
 
 WiFiAuthMode WiFiClass::getEncryption() {
 	wifi_get_setting(NETNAME_STA, &wifi_setting);
-	return WiFiClass::securityTypeToAuthMode(wifi_setting.security_type);
+	return securityTypeToAuthMode(wifi_setting.security_type);
 }

@@ -59,7 +59,7 @@ env.AddLibrary(
     name="libretuya_api",
     base_dir=LT_ARDUINO_DIR,
     srcs=[
-        "+<api/*.c*>",
+        "+<api/**/*.c*>",
         "+<common/*.c*>",
         "+<core/*.c*>",
         "+<libraries/**/*.c*>",

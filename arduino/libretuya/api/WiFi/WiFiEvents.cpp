@@ -2,9 +2,9 @@
 
 #include "WiFi.h"
 
-std::vector<EventHandler> IWiFiGenericClass::handlers;
+std::vector<EventHandler> WiFiClass::handlers;
 
-uint16_t IWiFiGenericClass::onEvent(EventCb callback, EventId eventId) {
+uint16_t WiFiClass::onEvent(EventCb callback, EventId eventId) {
 	if (!callback)
 		return 0;
 	EventHandler handler;
@@ -14,7 +14,7 @@ uint16_t IWiFiGenericClass::onEvent(EventCb callback, EventId eventId) {
 	return handler.id;
 }
 
-uint16_t IWiFiGenericClass::onEvent(EventFuncCb callback, EventId eventId) {
+uint16_t WiFiClass::onEvent(EventFuncCb callback, EventId eventId) {
 	if (!callback)
 		return 0;
 	EventHandler handler;
@@ -24,7 +24,7 @@ uint16_t IWiFiGenericClass::onEvent(EventFuncCb callback, EventId eventId) {
 	return handler.id;
 }
 
-uint16_t IWiFiGenericClass::onEvent(EventSysCb callback, EventId eventId) {
+uint16_t WiFiClass::onEvent(EventSysCb callback, EventId eventId) {
 	if (!callback)
 		return 0;
 	EventHandler handler;
@@ -34,7 +34,7 @@ uint16_t IWiFiGenericClass::onEvent(EventSysCb callback, EventId eventId) {
 	return handler.id;
 }
 
-void IWiFiGenericClass::removeEvent(EventCb callback, EventId eventId) {
+void WiFiClass::removeEvent(EventCb callback, EventId eventId) {
 	if (!callback)
 		return;
 	for (uint16_t i = 0; i < handlers.size(); i++) {
@@ -45,7 +45,7 @@ void IWiFiGenericClass::removeEvent(EventCb callback, EventId eventId) {
 	}
 }
 
-void IWiFiGenericClass::removeEvent(EventSysCb callback, EventId eventId) {
+void WiFiClass::removeEvent(EventSysCb callback, EventId eventId) {
 	if (!callback)
 		return;
 	for (uint16_t i = 0; i < handlers.size(); i++) {
@@ -56,7 +56,7 @@ void IWiFiGenericClass::removeEvent(EventSysCb callback, EventId eventId) {
 	}
 }
 
-void IWiFiGenericClass::removeEvent(uint16_t id) {
+void WiFiClass::removeEvent(uint16_t id) {
 	for (uint16_t i = 0; i < handlers.size(); i++) {
 		EventHandler handler = handlers[i];
 		if (handler.id == id) {
@@ -65,7 +65,7 @@ void IWiFiGenericClass::removeEvent(uint16_t id) {
 	}
 }
 
-void IWiFiGenericClass::postEvent(EventId eventId, EventInfo eventInfo) {
+void WiFiClass::postEvent(EventId eventId, EventInfo eventInfo) {
 	for (auto handler : handlers) {
 		if (handler.eventId != ARDUINO_EVENT_MAX && handler.eventId != eventId)
 			continue;

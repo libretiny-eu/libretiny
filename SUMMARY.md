@@ -14,10 +14,7 @@
 	* Common API
 		* [FS](ltapi/classfs_1_1_f_s.md)
 		* [Preferences](ltapi/class_i_preferences.md)
-		* [WiFi API](ltapi/class_i_wi_fi_generic_class.md)
-			* [Station](ltapi/class_i_wi_fi_s_t_a_class.md)
-			* [Access Point](ltapi/class_i_wi_fi_a_p_class.md)
-			* [Scanning](ltapi/class_i_wi_fi_scan_class.md)
+		* [WiFi API](ltapi/class_wi_fi_class.md)
 			* [TCP Client](ltapi/class_i_wi_fi_client.md)
 			* [SSL Client](ltapi/class_i_wi_fi_client_secure.md)
 			* [TCP Server](ltapi/class_i_wi_fi_server.md)

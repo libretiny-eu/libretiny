@@ -1,6 +1,5 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-16. */
 
-#include "WiFi.h"
 #include "WiFiPriv.h"
 
 #include <vector>
@@ -9,8 +8,6 @@
 
 static xQueueHandle wifiEventQueueHandle = NULL;
 static xTaskHandle wifiEventTaskHandle	 = NULL;
-
-WiFiClass *pWiFi = NULL;
 
 // C code to support SDK-defined events (in wifi_conf.c)
 extern "C" {
@@ -86,7 +83,7 @@ void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int fla
 		ev->flags	= flags;
 		xQueueSend(wifiEventQueueHandle, &ev, portMAX_DELAY);
 	} else {
-		WiFiClass::handleRtwEvent(event, buf, buf_len, flags);
+		handleRtwEvent(event, buf, buf_len, flags);
 	}
 }
 
@@ -94,7 +91,7 @@ static void wifiEventTask(void *arg) {
 	rtw_event_t *data = NULL;
 	for (;;) {
 		if (xQueueReceive(wifiEventQueueHandle, &data, portMAX_DELAY) == pdTRUE) {
-			WiFiClass::handleRtwEvent(data->event, data->buf, data->buf_len, data->flags);
+			handleRtwEvent(data->event, data->buf, data->buf_len, data->flags);
 			if (data->buf) {
 				// free memory allocated in wifi_indication
 				free(data->buf);
@@ -117,12 +114,14 @@ void startWifiTask() {
 	}
 }
 
-void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
+void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
+	if (!pWiFi)
+		return; // failsafe
 	if (flags == -2) {
 		// already an Arduino event, just pass it
 		EventId eventId		 = (EventId)len;
 		EventInfo *eventInfo = (EventInfo *)data;
-		postEvent(eventId, *eventInfo);
+		pWiFi->postEvent(eventId, *eventInfo);
 		free(eventInfo);
 		return;
 	}
@@ -165,9 +164,10 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 			break;
 
 		case WIFI_EVENT_SCAN_DONE:
-			eventId							 = ARDUINO_EVENT_WIFI_SCAN_DONE;
-			eventInfo.wifi_scan_done.status	 = 0;
-			eventInfo.wifi_scan_done.number	 = pWiFi->_netCount;
+			eventId							= ARDUINO_EVENT_WIFI_SCAN_DONE;
+			eventInfo.wifi_scan_done.status = 0;
+			if (pWiFi->scan)
+				eventInfo.wifi_scan_done.number = pWiFi->scan->count;
 			eventInfo.wifi_scan_done.scan_id = 0;
 			break;
 
@@ -202,5 +202,5 @@ void WiFiClass::handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 			return;
 	}
 
-	postEvent(eventId, eventInfo);
+	pWiFi->postEvent(eventId, eventInfo);
 }
