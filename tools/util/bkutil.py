@@ -8,12 +8,12 @@ sys.path.append(join(dirname(__file__), "..", ".."))
 from argparse import ArgumentParser, FileType
 from binascii import crc32
 from dataclasses import dataclass, field
-from enum import IntFlag
+from enum import Enum, IntFlag
 from io import SEEK_SET, FileIO
 from os import stat
 from struct import Struct
 from time import time
-from typing import Union
+from typing import Generator, Tuple, Union
 
 from tools.util.bitint import BitInt
 from tools.util.bkcrypto import BekenCrypto
@@ -32,6 +32,17 @@ from tools.util.intbin import (
     pad_data,
     pad_up,
 )
+
+
+class DataType(Enum):
+    BINARY = "BINARY"
+    PADDING_SIZE = "PADDING_SIZE"
+    RBL = "RBL"
+
+
+DataTuple = Tuple[DataType, Union[bytes, int]]
+DataUnion = Union[bytes, DataTuple]
+DataGenerator = Generator[DataUnion, None, None]
 
 
 class OTAAlgorithm(IntFlag):
@@ -125,11 +136,14 @@ class BekenBinary:
             coeffs = list(map(BitInt, map(betoint, biniter(coeffs, 4))))
             self.crypto = BekenCrypto(coeffs)
 
-    def crc(self, data: ByteGenerator) -> ByteGenerator:
+    def crc(self, data: ByteGenerator, type: DataType = None) -> DataGenerator:
         for block in geniter(data, 32):
             crc = CRC16.CMS.calc(block)
-            yield block
-            yield inttobe16(crc)
+            block += inttobe16(crc)
+            if type:
+                yield (type, block)
+            else:
+                yield block
 
     def uncrc(self, data: ByteGenerator, check: bool = True) -> ByteGenerator:
         for block in geniter(data, 34):
@@ -149,10 +163,22 @@ class BekenBinary:
             yield word
             addr += 4
 
-    def package(self, f: FileIO, addr: int, size: int, rbl: RBL) -> ByteGenerator:
+    def package(
+        self,
+        f: FileIO,
+        addr: int,
+        size: int,
+        rbl: RBL,
+        partial: bool = False,
+    ) -> DataGenerator:
         if not rbl.container_size:
             raise ValueError("RBL must have a total size when packaging")
         crc_total = 0
+
+        # yield all data as (type, bytes) tuples, if partial mode enabled
+        type_binary = DataType.BINARY if partial else None
+        type_padding = DataType.PADDING_SIZE if partial else None
+        type_rbl = DataType.RBL if partial else None
 
         # when to stop reading input data
         data_end = size
@@ -169,7 +195,7 @@ class BekenBinary:
         # iterate over encrypted 32-byte blocks
         for block in geniter(data_crypt_gen, 32):
             # add CRC16 and yield
-            yield from self.crc(block)
+            yield from self.crc(block, type_binary)
             crc_total += 2
             rbl.update(block)
 
@@ -188,16 +214,19 @@ class BekenBinary:
         # add last padding with normal values
         buf += b"\xff" * 16
         # yield the temporary buffer
-        yield from self.crc(buf)
+        yield from self.crc(buf, type_binary)
         crc_total += 2 * (len(buf) // 32)
 
         # pad the entire container with 0xFF, excluding RBL and its CRC16
         pad_size = pad_up(rbl.data_size + crc_total, rbl.container_size_crc) - 102
-        for _ in range(pad_size):
-            yield b"\xff"
+        if type_padding:
+            yield (type_padding, pad_size)
+        else:
+            for _ in range(pad_size):
+                yield b"\xff"
 
         # yield RBL with CRC16
-        yield from self.crc(rbl.serialize())
+        yield from self.crc(rbl.serialize(), type_rbl)
 
 
 def auto_int(x):

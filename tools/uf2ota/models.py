@@ -91,19 +91,19 @@ class Input:
         if input[0] and input[1]:
             if "+" in input[0]:
                 (self.ota1_part, self.ota1_offs) = input[0].split("+")
-                self.ota1_offs = int(self.ota1_offs, 16)
+                self.ota1_offs = int(self.ota1_offs, 0)
             else:
                 self.ota1_part = input[0]
             self.ota1_file = input[1]
         if input[2] and input[3]:
             if "+" in input[2]:
                 (self.ota2_part, self.ota2_offs) = input[2].split("+")
-                self.ota2_offs = int(self.ota2_offs, 16)
+                self.ota2_offs = int(self.ota2_offs, 0)
             else:
                 self.ota2_part = input[2]
             self.ota2_file = input[3]
 
-        if self.ota1_offs != self.ota2_offs:
+        if self.ota1_file and self.ota2_file and self.ota1_offs != self.ota2_offs:
             # currently, offsets cannot differ when storing images
             # (this would require to actually store it twice)
             raise ValueError(f"Offsets cannot differ ({self.ota1_file})")

@@ -32,6 +32,7 @@ def env_add_defaults(env, platform, board):
         LDSCRIPT_PATH=["${LDSCRIPT_SDK}"],
         # Board config variables
         MCU=board.get("build.mcu").upper(),
+        MCULC=board.get("build.mcu"),
         VARIANT=board.get("build.variant"),
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),

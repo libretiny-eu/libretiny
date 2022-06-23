@@ -552,6 +552,12 @@ env.Replace(
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
 
+# Calculate RBL header offset
+app_offs = int(env["FLASH_APP_OFFSET"], 16)
+app_size = int(board.get("build.bkrbl_size_app"), 16)
+rbl_offs = int(app_size // 32 * 34) - 102
+env.Replace(FLASH_RBL_OFFSET=f"0x{app_offs + rbl_offs:06X}")
+
 # Build all libraries
 env.BuildLibraries()
 
@@ -559,4 +565,21 @@ env.BuildLibraries()
 env.Replace(
     # linker command (encryption + packaging)
     LINK="${LINK2BIN} ${VARIANT} '' ''",
+    # UF2OTA input list
+    UF2OTA=[
+        # app binary image (enc+crc), OTA1 (uploader) only
+        (
+            "app",
+            "${BUILD_DIR}/${MCULC}_app_${FLASH_APP_OFFSET}.crc",
+            "",
+            "",
+        ),
+        # app RBL header (crc), OTA1 (uploader) only
+        (
+            f"app+{rbl_offs}",
+            "${BUILD_DIR}/${MCULC}_app_${FLASH_RBL_OFFSET}.rblh",
+            "",  # not used for OTA2
+            "",
+        ),
+    ],
 )
