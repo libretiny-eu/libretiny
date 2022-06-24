@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
 import json
+import sys
 from os.path import dirname, join
 from typing import Dict
 
@@ -12,6 +13,11 @@ from platformio.package.exception import MissingPackageManifestError
 from platformio.package.manager.base import BasePackageManager
 from platformio.package.meta import PackageItem, PackageSpec
 from platformio.platform.board import PlatformBoardConfig
+
+# Make tools available
+sys.path.insert(0, dirname(__file__))
+
+from tools.util.platform import get_board_manifest
 
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
@@ -174,25 +180,7 @@ class LibretuyaPlatform(PlatformBase):
     def update_board(self, board: PlatformBoardConfig):
 
         if "_base" in board:
-            base = board.get("_base")
-            if not isinstance(base, list):
-                base = [base]
-
-            result = None
-            for base_name in base:
-                if base_name not in self.boards_base:
-                    file = join(
-                        dirname(__file__), "boards", "_base", f"{base_name}.json"
-                    )
-                    with open(file, encoding="utf-8") as f:
-                        self.boards_base[base_name] = json.load(f)
-
-                if not result:
-                    result = self.boards_base[base_name]
-                else:
-                    util.merge_dicts(result, self.boards_base[base_name])
-            util.merge_dicts(result, board._manifest)
-            board._manifest = result
+            board._manifest = get_board_manifest(board._manifest)
 
         # add "arduino" framework
         has_arduino = any("arduino" in fw for fw in board.manifest["frameworks"])

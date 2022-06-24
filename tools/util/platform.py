@@ -26,15 +26,12 @@ def get_board_manifest(board: Union[str, dict]) -> dict:
         base = board["_base"]
         if not isinstance(base, list):
             base = [base]
-        result = None
+        result = {}
         for base_name in base:
             if base_name not in boards_base:
                 file = join(boards_dir, "_base", f"{base_name}.json")
                 boards_base[base_name] = load_json(file)
-            if not result:
-                result = boards_base[base_name]
-            else:
-                merge_dicts(result, boards_base[base_name])
+            merge_dicts(result, boards_base[base_name])
         merge_dicts(result, board)
         board = result
     return board
