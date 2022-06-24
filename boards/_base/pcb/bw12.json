@@ -1,0 +1,81 @@
+{
+	"pcb": {
+		"templates": [
+			"esp12s",
+			"esp12s-shield",
+			"rf-16mm-type1"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_black",
+			"TRACE_COLOR": "#FAFD9D",
+			"SILK_COLOR": "white",
+			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole"
+		},
+		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
+		"pinout": {
+			"1": {
+				"IC": 14,
+				"ARD": "D8"
+			},
+			"2": {
+				"NC": null
+			},
+			"3": {
+				"IC": 12
+			},
+			"4": {
+				"IC": 28,
+				"ARD": "D0"
+			},
+			"5": {
+				"IC": 2,
+				"ARD": "D1"
+			},
+			"6": {
+				"IC": 16,
+				"ARD": "D2"
+			},
+			"7": {
+				"IC": 30,
+				"ARD": [
+					"D3",
+					"A0"
+				]
+			},
+			"8": {
+				"PWR": 3.3
+			},
+			"9": {
+				"GND": null
+			},
+			"10": {
+				"IC": 31,
+				"ARD": "D4"
+			},
+			"11": {
+				"IC": 1,
+				"ARD": "D5"
+			},
+			"12": {
+				"IC": 13,
+				"ARD": "D6"
+			},
+			"13": {
+				"IC": 17,
+				"ARD": "D7"
+			},
+			"14": {
+				"IC": 14,
+				"ARD": "D8"
+			},
+			"15": {
+				"IC": 29,
+				"ARD": "D9"
+			},
+			"16": {
+				"IC": 32,
+				"ARD": "D10"
+			}
+		}
+	}
+}

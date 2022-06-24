@@ -14,7 +14,8 @@
 		"sdk": "https://github.com/ambiot/amb1_sdk",
 		"framework": "framework-realtek-amb1",
 		"mcus": [
-			"RTL8710BN"
+			"RTL8710BN",
+			"RTL8710BX"
 		]
 	},
 	{
