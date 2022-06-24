@@ -19,6 +19,9 @@ sys.path.insert(0, dirname(__file__))
 
 from tools.util.platform import get_board_manifest
 
+# Remove current dir so it doesn't conflict with PIO
+sys.path.remove(dirname(__file__))
+
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
 
@@ -178,7 +181,6 @@ class LibretuyaPlatform(PlatformBase):
         return result
 
     def update_board(self, board: PlatformBoardConfig):
-
         if "_base" in board:
             board._manifest = get_board_manifest(board._manifest)
 
