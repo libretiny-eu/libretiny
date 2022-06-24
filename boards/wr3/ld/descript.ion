@@ -1,4 +1,0 @@
-rtl8710-symbol-v03-img2_arduino_arduino.ld amb1_arduino/rtl8710
-export-rom_v03.txt amb1_arduino/rtl8710
-export-rom_v04.txt RtlDuino/rtl8710
-rtl8710-symbol-v04-img2_arduino_arduino.ld RtlDuino/rtl8710

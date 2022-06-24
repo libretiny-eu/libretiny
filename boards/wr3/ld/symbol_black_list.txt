@@ -1,1 +1,0 @@
-analogRead RTL8710 do not support ADC
