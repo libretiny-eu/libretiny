@@ -77,8 +77,10 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 }
 
 uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
+#ifdef PIN_A1
 	if (pinNumber == PIN_A1)
 		return 5000;
+#endif
 	return 3300;
 }
 
