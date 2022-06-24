@@ -14,7 +14,7 @@ Parameter    | Value
 MCU          | RTL8710BX
 Manufacturer | Realtek
 Series       | AmebaZ
-Frequency    | 125 MHz
+Frequency    | 62.5 MHz
 Flash size   | 2 MiB
 RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
