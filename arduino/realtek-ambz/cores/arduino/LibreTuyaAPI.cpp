@@ -35,9 +35,14 @@ uint32_t LibreTuya::getChipId() {
 	uint32_t chipId = 0;
 	uint8_t *id		= (uint8_t *)&chipId;
 	// 9902 was extracted from ROM disassembly, probably not needed
-	EFUSE_OneByteReadROM(9902, 0x3B, id + 0, L25EOUTVOLTAGE);
+	/* EFUSE_OneByteReadROM(9902, 0x3B, id + 0, L25EOUTVOLTAGE);
 	EFUSE_OneByteReadROM(9902, 0x3C, id + 1, L25EOUTVOLTAGE);
-	EFUSE_OneByteReadROM(9902, 0x3D, id + 2, L25EOUTVOLTAGE);
+	EFUSE_OneByteReadROM(9902, 0x3D, id + 2, L25EOUTVOLTAGE); */
+	// new method, based on EFUSE logical map
+	uint8_t *efuse = (uint8_t *)malloc(512);
+	// TODO do what EFUSE_LogicalMapRead() does, and read only the used data
+	EFUSE_LogicalMap_Read(efuse);
+	memcpy(id, efuse + 0x11A + 3, 3);
 	return chipId;
 }
 
