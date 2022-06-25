@@ -29,7 +29,7 @@
 
 #include "WiFiType.h"
 // family's data structure
-#include <WiFiData.h>
+#include "WiFiData.h"
 
 class WiFiClass {
   public:
