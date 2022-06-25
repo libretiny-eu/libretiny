@@ -28,13 +28,18 @@
 #include <vector>
 
 #include "WiFiType.h"
+
+#ifdef LT_ARD_HAS_WIFI
 // family's data structure
 #include <WiFiData.h>
+#endif
 
 class WiFiClass {
   public:
+#ifdef LT_ARD_HAS_WIFI
 	// must be public for WiFiEvents & WiFiScan static handlers
 	WiFiData data;
+#endif
 	WiFiScanData *scan = NULL;
 
   public: /* WiFi.cpp */
