@@ -4,9 +4,7 @@
 
 #include "WiFi.h"
 
-#ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
 
 // these are defined in PIO builder (for IDE to understand)
 #define LWIP_TIMEVAL_PRIVATE 0
@@ -40,9 +38,7 @@ extern "C" {
 
 extern struct netif xnetif[NET_IF_NUM];
 
-#ifdef __cplusplus
 } // extern "C"
-#endif
 
 // WiFi.cpp
 extern rtw_network_info_t wifi;

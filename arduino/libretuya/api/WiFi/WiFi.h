@@ -50,6 +50,7 @@ class WiFiClass {
   public: /* WiFiGeneric.cpp */
 	int32_t channel(void);
 	bool mode(WiFiMode mode);
+	bool modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap);
 	WiFiMode getMode();
 	WiFiStatus status();
 

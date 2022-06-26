@@ -8,18 +8,10 @@ int32_t WiFiClass::channel() {
 	return channel;
 }
 
-bool WiFiClass::mode(WiFiMode mode) {
-	// store a pointer to WiFi for WiFiEvents.cpp
-	pWiFi = this;
-
-	WiFiMode currentMode = getMode();
-	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
-	if (mode == currentMode)
-		return true;
-	LT_HEAP_I();
+bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	startWifiTask();
 
-	if (!currentMode && mode && !data.initialized) {
+	if (!data.initialized) {
 		// initialize wifi first
 		LT_I("Initializing LwIP");
 		LwIP_Init();
@@ -27,7 +19,7 @@ bool WiFiClass::mode(WiFiMode mode) {
 		data.initialized = true;
 	}
 	LT_HEAP_I();
-	if (currentMode) {
+	if (getMode()) {
 		// stop wifi to change mode
 		LT_D_WG("Stopping WiFi to change mode");
 		if (wifi_off() != RTW_SUCCESS)
@@ -43,13 +35,12 @@ bool WiFiClass::mode(WiFiMode mode) {
 	}
 
 	// send STA start/stop events and AP stop event (start is handled in softAP())
-	if ((mode & WIFI_MODE_STA) != (currentMode & WIFI_MODE_STA)) {
-		if (mode & WIFI_MODE_STA)
-			wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_START, -2);
-		else
-			wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_STOP, -2);
+	if (sta == WLMODE_ENABLE) {
+		wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_START, -2);
+	} else if (sta == WLMODE_DISABLE) {
+		wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_STA_STOP, -2);
 	}
-	if (!(mode & WIFI_MODE_AP) && (currentMode & WIFI_MODE_AP)) {
+	if (ap == WLMODE_DISABLE) {
 		wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_STOP, -2);
 	}
 

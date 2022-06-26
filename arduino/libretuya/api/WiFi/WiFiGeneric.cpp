@@ -2,6 +2,26 @@
 
 #include "WiFi.h"
 
+bool WiFiClass::mode(WiFiMode mode) {
+	// store a pointer to WiFi for WiFiEvents.cpp
+	pWiFi = this;
+
+	WiFiMode currentMode = getMode();
+	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
+	if (mode == currentMode)
+		return true;
+
+	// get mode changes as 0/1
+	WiFiModeAction sta = WiFiModeAction((mode & WIFI_MODE_STA) != (currentMode & WIFI_MODE_STA));
+	WiFiModeAction ap  = WiFiModeAction((mode & WIFI_MODE_AP) != (currentMode & WIFI_MODE_AP));
+	// change 0/1 to 1/2
+	sta = WiFiModeAction(sta + sta * (mode & WIFI_MODE_STA));
+	ap	= WiFiModeAction(ap + ap * (mode & WIFI_MODE_AP));
+	// actually change the mode
+	LT_HEAP_I();
+	return modePriv(mode, sta, ap);
+}
+
 bool WiFiClass::enableSTA(bool enable) {
 	WiFiMode currentMode = getMode();
 	if (((currentMode & WIFI_MODE_STA) != 0) != enable) {

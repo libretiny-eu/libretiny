@@ -137,3 +137,9 @@ typedef struct {
 	WiFiMacAddr *bssid = NULL;
 	int32_t *channel   = NULL;
 } WiFiScanData;
+
+typedef enum {
+	WLMODE_NONE	   = 0,
+	WLMODE_DISABLE = 1,
+	WLMODE_ENABLE  = 2,
+} WiFiModeAction;
