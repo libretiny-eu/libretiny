@@ -102,8 +102,14 @@ def get_enum_families(code: str) -> Set[str]:
 
 
 def board_sort(tpl):
+    generic = tpl[0].lower().startswith("generic")
+    vendor = get(tpl[1], "vendor")
+    if vendor == "N/A":
+        vendor = "\xff"
+        generic = False
     return (
-        get(tpl[1], "vendor"),
+        not generic,  # reverse
+        vendor,
         get(tpl[1], "build.mcu"),
         get(tpl[1], "mcu"),
         tpl[0],
@@ -148,7 +154,12 @@ def write_boards(boards: List[Tuple[str, dict]]):
             pins_io = sum(1 for pin in pinout if "ARD" in pin)
             pins = f"{pins_total} ({pins_io} I/O)"
         # format row values
-        board_url = f"[{board_name.upper()}](../boards/{board_name}/README.md)"
+        symbol = get(board, "symbol")
+        if not symbol and board_name.startswith("generic-"):
+            symbol = board_name[8:]
+        else:
+            symbol = symbol or board_name.upper()
+        board_url = f"[{symbol}](../boards/{board_name}/README.md)"
         row = [
             board_url,
             get(board, "build.mcu").upper(),
