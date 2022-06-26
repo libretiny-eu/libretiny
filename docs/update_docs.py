@@ -1,11 +1,14 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-31.
 
-import re
 import sys
 from os.path import dirname, join
-from typing import Dict, List, Set, Tuple
 
 sys.path.append(join(dirname(__file__), ".."))
+import re
+from typing import Dict, List, Set, Tuple
+
+import colorama
+from colorama import Fore, Style
 
 from tools.util.fileio import readjson, readtext
 from tools.util.markdown import Markdown
@@ -45,12 +48,18 @@ def check_mcus(boards: List[Tuple[str, dict]]) -> bool:
         mcu_name: str = get(board, "build.mcu")
         family = get_family(short_name=family_name)
         if not family:
-            print(f"Family '{family_name}' of board '{board_name}' does not exist")
+            print(
+                Fore.RED
+                + f"ERROR: Family '{family_name}' of board '{board_name}' does not exist"
+                + Style.RESET_ALL
+            )
             return False
         mcus = [mcu.lower() for mcu in family.mcus]
         if mcu_name not in mcus:
             print(
-                f"MCU '{mcu_name}' of board '{board_name}' is not defined for family '{family_name}'"
+                Fore.RED
+                + f"ERROR: MCU '{mcu_name}' of board '{board_name}' is not defined for family '{family_name}'"
+                + Style.RESET_ALL
             )
             return False
     return True
@@ -215,9 +224,8 @@ def write_families():
             "[{}]({})".format(
                 family.description,
                 family.url,
-                family.name,
             )
-            if family.name
+            if family.url
             else family.description,
             # Name (parent)
             f"`{family.name or '-'}`"
@@ -240,7 +248,7 @@ def write_families():
                 family.sdk_name,
                 family.sdk,
             )
-            if family.name
+            if family.sdk
             else "-",
         ]
         rows.append(row)
@@ -259,27 +267,43 @@ def write_boards_list(boards: List[Tuple[str, dict]]):
 
 
 if __name__ == "__main__":
+    colorama.init()
+
     boards = load_boards()
     boards = sorted(boards.items(), key=board_sort)
     code = load_chip_type_h()
 
     errors = False
 
+    for name, board in boards:
+        variant = get(board, "build.variant")
+        if name != variant:
+            print(
+                Fore.RED
+                + f"ERROR: Invalid build.variant of '{name}': '{variant}'"
+                + Style.RESET_ALL
+            )
+            errors = True
+
     families_json = get_family_names()
     families_enum = get_enum_families(code)
     if families_json != families_enum:
-        print(f"Inconsistent JSON families vs ChipType.h families:")
+        print(Fore.RED + f"ERROR: Inconsistent JSON families vs ChipType.h families:")
         print("- Missing in JSON: " + ", ".join(families_enum - families_json))
         print("- Missing in enum: " + ", ".join(families_json - families_enum))
+        print(Style.RESET_ALL, end="")
         errors = True
 
     mcus_json = get_family_mcus()
     mcus_enum = get_enum_mcus(code)
     mcus_boards = get_board_mcus(boards)
     if mcus_json != mcus_enum:
-        print(f"Inconsistent JSON family MCUs vs ChipType.h MCUs:")
+        print(
+            Fore.YELLOW + f"NOTICE: Inconsistent JSON family MCUs vs ChipType.h MCUs:"
+        )
         print("- Missing in JSON: " + ", ".join(mcus_enum - mcus_json))
         print("- Missing in enum: " + ", ".join(mcus_json - mcus_enum))
+        print(Style.RESET_ALL, end="")
         # this is not considered an error (for now)
         # errors = True
 
