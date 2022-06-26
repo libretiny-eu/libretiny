@@ -89,7 +89,6 @@ class LibretuyaPlatform(PlatformBase):
     custom_opts: Dict[str, object] = {}
 
     def configure_default_packages(self, options, targets):
-        framework = options.get("pioframework")[0]
         # patch find_pkg root to ignore missing manifests and save PackageSpec
         if not hasattr(BasePackageManager, "_find_pkg_root"):
             BasePackageManager._find_pkg_root = BasePackageManager.find_pkg_root
@@ -99,6 +98,11 @@ class LibretuyaPlatform(PlatformBase):
             BasePackageManager._load_manifest = BasePackageManager.load_manifest
             BasePackageManager.load_manifest = load_manifest
 
+        pioframework = options.get("pioframework")
+        if not pioframework:
+            return
+        framework = pioframework[0]
+
         # allow using "arduino" as framework
         if framework == "arduino":
             board = self.get_boards(options.get("board"))
@@ -106,17 +110,20 @@ class LibretuyaPlatform(PlatformBase):
             framework = next(fw for fw in frameworks if framework in fw)
             options.get("pioframework")[0] = framework
 
+        # make ArduinoCore-API required
+        if "arduino" in framework:
+            self.packages["framework-arduino-api"]["optional"] = False
+
         framework_obj = self.frameworks[framework]
-        package_obj = self.packages[framework_obj["package"]]
+        if "package" in framework_obj:
+            package_obj = self.packages[framework_obj["package"]]
+        else:
+            package_obj = {}
 
         # set specific compiler versions
         if "toolchain" in package_obj:
             (toolchain, version) = package_obj["toolchain"].split("@")
             self.packages[f"toolchain-{toolchain}"]["version"] = version
-
-        # make ArduinoCore-API required
-        if "arduino" in framework:
-            self.packages["framework-arduino-api"]["optional"] = False
 
         # require bk7231tools
         if "beken-72xx" in framework:
