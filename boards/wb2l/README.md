@@ -53,10 +53,11 @@ Hex values are in bytes.
 Name            | Start    | Length             | End
 ----------------|----------|--------------------|---------
 Bootloader      | 0x000000 | 68 KiB / 0x11000   | 0x011000
-App Image       | 0x011000 | 1.1 MiB / 0x119000 | 0x12A000
-(reserved)      | 0x12A000 | 32 KiB / 0x8000    | 0x132000
+App Image       | 0x011000 | 1.1 MiB / 0x121000 | 0x132000
 OTA Image       | 0x132000 | 664 KiB / 0xA6000  | 0x1D8000
-Key-Value Store | 0x1D8000 | 24 KiB / 0x6000    | 0x1DE000
-User Data       | 0x1DE000 | 136 KiB / 0x22000  | 0x200000
+Key-Value Store | 0x1D8000 | 32 KiB / 0x8000    | 0x1E0000
+TLV Store       | 0x1E0000 | 4 KiB / 0x1000     | 0x1E1000
+Network Data    | 0x1E1000 | 8 KiB / 0x2000     | 0x1E3000
+User Data       | 0x1E3000 | 116 KiB / 0x1D000  | 0x200000
 
 Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes.

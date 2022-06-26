@@ -6,10 +6,12 @@
 	},
 	"flash": {
 		"bootloader": "0x000000+0x11000",
-		"app": "0x011000+0x119000",
+		"app": "0x011000+0x121000",
 		"download": "0x132000+0xA6000",
-		"kvs": "0x1D8000+0x6000",
-		"userdata": "0x1DE000+0x22000"
+		"kvs": "0x1D8000+0x8000",
+		"tlv": "0x1E0000+0x1000",
+		"net": "0x1E1000+0x2000",
+		"userdata": "0x1E3000+0x1D000"
 	},
 	"upload": {
 		"maximum_size": 1083136
