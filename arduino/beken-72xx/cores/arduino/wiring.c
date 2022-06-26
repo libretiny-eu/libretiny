@@ -17,11 +17,11 @@ void delayMicroseconds(unsigned int us) {
 	}
 }
 
-uint32_t millis() {
+unsigned long millis() {
 	return xTaskGetTickCount() * portTICK_PERIOD_MS;
 }
 
-uint32_t micros() {
+unsigned long micros() {
 	// TODO implement this properly
 	return millis() * 1000;
 }

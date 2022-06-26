@@ -10,6 +10,7 @@ bool WiFiClass::getNetworkInfo(
 	rssi	= RSSI(networkItem);
 	bssid	= BSSID(networkItem);
 	channel = this->channel(networkItem);
+	return true;
 }
 
 int16_t WiFiClass::scanComplete() {

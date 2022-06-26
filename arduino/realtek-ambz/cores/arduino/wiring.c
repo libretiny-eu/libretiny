@@ -59,11 +59,11 @@ void delayMicroseconds(unsigned int us) {
 	}
 }
 
-uint32_t millis(void) {
+unsigned long millis(void) {
 	return (__get_ipsr__() == 0) ? xTaskGetTickCount() : xTaskGetTickCountFromISR();
 }
 
-uint32_t micros(void) {
+unsigned long micros(void) {
 	uint32_t tick1, tick2;
 	uint32_t us;
 	uint32_t tick_per_us = F_CPU / 1000;

@@ -4,7 +4,7 @@
 
 #include <Arduino.h>
 
-#if LT_LOGGER_TASK
+#if LT_LOGGER_TASK && LT_HAS_FREERTOS
 #include <FreeRTOS.h>
 #include <task.h>
 #endif
@@ -57,7 +57,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #endif
 #endif
 
-#if LT_LOGGER_TASK
+#if LT_LOGGER_TASK && LT_HAS_FREERTOS
 	char task_colon	  = ':';
 	TaskHandle_t task = xTaskGetCurrentTaskHandle();
 	char *task_name	  = pcTaskGetTaskName(task);
@@ -90,7 +90,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #if LT_LOGGER_CALLER
 		"%s():%hu: "
 #endif
-#if LT_LOGGER_TASK
+#if LT_LOGGER_TASK && LT_HAS_FREERTOS
 		"%s%c "
 #endif
 		,
@@ -112,7 +112,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		caller,
 		line
 #endif
-#if LT_LOGGER_TASK
+#if LT_LOGGER_TASK && LT_HAS_FREERTOS
 		,
 		task_name,
 		task_colon // printing outside of tasks

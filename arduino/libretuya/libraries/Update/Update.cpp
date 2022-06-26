@@ -127,6 +127,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 			// return on errors
 			return written;
 	}
+	return written;
 }
 
 /**

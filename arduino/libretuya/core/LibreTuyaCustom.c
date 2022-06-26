@@ -10,7 +10,11 @@ int _analogWritePeriod	   = 20000; // 50 Hz
  * @brief Check if pin is invalid (too low or too high).
  */
 bool pinInvalid(pin_size_t pinNumber) {
+#ifdef PINS_COUNT
 	return pinNumber < 0 || pinNumber >= PINS_COUNT;
+#else
+	return false;
+#endif
 }
 
 /**
