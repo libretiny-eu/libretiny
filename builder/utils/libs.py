@@ -54,11 +54,12 @@ def env_add_library(
             srcs.append("-<" + expr + ">")
 
     # queue library for further env clone and build
-    env.Prepend(
-        LIBQUEUE=[
-            (join("$BUILD_DIR", name), base_dir, srcs, options),
-        ]
-    )
+    if srcs:
+        env.Prepend(
+            LIBQUEUE=[
+                (join("$BUILD_DIR", name), base_dir, srcs, options),
+            ]
+        )
 
     # search all include paths
     for dir, expr in iter_expressions(includes):

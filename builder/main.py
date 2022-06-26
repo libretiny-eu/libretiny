@@ -28,18 +28,19 @@ if env.get("PROGNAME", "program") == "program":
 env.Replace(PROGSUFFIX=".elf")
 
 # Toolchain config - TODO multiple arch, specified in board.json
+prefix = board.get("build.prefix", "")
 env.Replace(
-    AR="arm-none-eabi-gcc-ar",
-    AS="arm-none-eabi-gcc",
-    CC="arm-none-eabi-gcc",
-    CXX="arm-none-eabi-g++",
-    GDB="arm-none-eabi-gdb",
-    NM="arm-none-eabi-gcc-nm",
-    LINK="arm-none-eabi-gcc",
-    OBJCOPY="arm-none-eabi-objcopy",
-    OBJDUMP="arm-none-eabi-objdump",
-    # RANLIB="arm-none-eabi-gcc-ranlib",
-    SIZETOOL="arm-none-eabi-size",
+    AR=prefix + "gcc-ar",
+    AS=prefix + "gcc",
+    CC=prefix + "gcc",
+    CXX=prefix + "g++",
+    GDB=prefix + "gdb",
+    NM=prefix + "gcc-nm",
+    LINK=prefix + "gcc",
+    OBJCOPY=prefix + "objcopy",
+    OBJDUMP=prefix + "objdump",
+    # RANLIB=prefix + "gcc-ranlib",
+    SIZETOOL=prefix + "size",
 )
 
 # Default environment options

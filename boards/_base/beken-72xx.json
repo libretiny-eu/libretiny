@@ -1,6 +1,7 @@
 {
 	"build": {
-		"f_cpu": "120000000L"
+		"f_cpu": "120000000L",
+		"prefix": "arm-none-eabi-"
 	},
 	"connectivity": [
 		"wifi",
