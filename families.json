@@ -59,5 +59,15 @@
 		"id": "0x51E903A8",
 		"short_name": "XR809",
 		"description": "Xradiotech 809"
+	},
+	{
+		"id": "0xDEADBEEF",
+		"short_name": "NATIVE",
+		"description": "Native host architecture",
+		"name": "host-native",
+		"code": "native",
+		"mcus": [
+			"NATIVE"
+		]
 	}
 ]

@@ -10,3 +10,4 @@ Realtek AmebaD                                                     | `-`        
 Beken 7231N                                                        | `-`                          | `-`                  | `BK7231N` (0x7B3EF230)  | ❌            | -
 Boufallo 602                                                       | `-`                          | `-`                  | `BL602` (0xDE1270B7)    | ❌            | -
 Xradiotech 809                                                     | `-`                          | `-`                  | `XR809` (0x51E903A8)    | ❌            | -
+Native host architecture                                           | `host-native`                | `native`             | `NATIVE` (0xDEADBEEF)   | ❌            | -

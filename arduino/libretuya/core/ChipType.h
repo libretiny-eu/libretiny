@@ -13,6 +13,7 @@ enum ChipFamily {
 	F_BK7231N  = 0x7B3EF230, // Beken 7231N
 	F_BL602	   = 0xDE1270B7, // Boufallo 602
 	F_XR809	   = 0x51E903A8, // Xradiotech 809
+	F_NATIVE   = 0xDEADBEEF, // Host-native
 };
 
 enum ChipType {
