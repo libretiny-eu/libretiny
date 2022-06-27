@@ -205,11 +205,14 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 				status = WiFi.status();
 			}
 
+			IPAddress ip;
 			switch (status) {
 				case WL_CONNECTED:
 					LT_I("Connecting done");
 					LT_D("SSID: %s", WiFi.SSID().c_str());
-					LT_D("IP: %s", WiFi.localIP().toString().c_str());
+					// TODO fix this after implementing IP format for printf()
+					ip = WiFi.localIP();
+					LT_D("IP: %u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
 					LT_D("MAC: %s", WiFi.BSSIDstr().c_str());
 					LT_D("Channel: %d", WiFi.channel());
 					break;
