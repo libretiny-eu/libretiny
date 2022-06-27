@@ -31,39 +31,45 @@ void WiFiClass::scanDelete() {
 	if (!scan)
 		return;
 	for (uint8_t i = 0; i < scan->count; i++) {
-		free(scan->ssid[i]);
+		free(scan->ap[i].ssid);
 	}
-	free(scan->ssid);
-	free(scan->auth);
-	free(scan->rssi);
-	free(scan->bssid);
-	free(scan->channel);
+	free(scan->ap);
 	free(scan);
 	scan = NULL;
+}
+
+uint8_t WiFiClass::scanAlloc(uint8_t count) {
+	uint8_t last = scan->count;
+	scan->count	 = count;
+	scan->ap	 = (WiFiScanAP *)realloc(scan->ap, count * sizeof(WiFiScanAP));
+	if (!scan->ap)
+		return 255;
+	memset(scan->ap + last, 0, sizeof(WiFiScanAP));
+	return last;
 }
 
 String WiFiClass::SSID(uint8_t networkItem) {
 	if (!scan || networkItem >= scan->count)
 		return "";
-	return scan->ssid[networkItem];
+	return scan->ap[networkItem].ssid;
 }
 
 WiFiAuthMode WiFiClass::encryptionType(uint8_t networkItem) {
 	if (!scan || networkItem >= scan->count)
 		return WIFI_AUTH_INVALID;
-	return scan->auth[networkItem];
+	return scan->ap[networkItem].auth;
 }
 
 int32_t WiFiClass::RSSI(uint8_t networkItem) {
 	if (!scan || networkItem >= scan->count)
 		return 0;
-	return scan->rssi[networkItem];
+	return scan->ap[networkItem].rssi;
 }
 
 uint8_t *WiFiClass::BSSID(uint8_t networkItem) {
 	if (!scan || networkItem >= scan->count)
 		return NULL;
-	return scan->bssid[networkItem].addr;
+	return scan->ap[networkItem].bssid.addr;
 }
 
 String WiFiClass::BSSIDstr(uint8_t networkItem) {
@@ -73,5 +79,5 @@ String WiFiClass::BSSIDstr(uint8_t networkItem) {
 int32_t WiFiClass::channel(uint8_t networkItem) {
 	if (!scan || networkItem >= scan->count)
 		return 0;
-	return scan->channel[networkItem];
+	return scan->ap[networkItem].channel;
 }

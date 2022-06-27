@@ -129,13 +129,17 @@ typedef enum {
 } wifi_err_reason_t;
 
 typedef struct {
-	bool running	   = false;
-	uint8_t count	   = 0;
-	char **ssid		   = NULL;
-	WiFiAuthMode *auth = NULL;
-	int32_t *rssi	   = NULL;
-	WiFiMacAddr *bssid = NULL;
-	int32_t *channel   = NULL;
+	char *ssid;
+	WiFiAuthMode auth;
+	int32_t rssi;
+	WiFiMacAddr bssid;
+	int32_t channel;
+} WiFiScanAP;
+
+typedef struct {
+	bool running   = false;
+	uint8_t count  = 0;
+	WiFiScanAP *ap = NULL;
 } WiFiScanData;
 
 typedef enum {

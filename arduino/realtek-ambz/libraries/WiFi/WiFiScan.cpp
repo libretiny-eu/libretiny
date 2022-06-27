@@ -17,20 +17,13 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 	rtw_scan_result_t *net		 = &result->ap_details;
 	net->SSID.val[net->SSID.len] = '\0';
 
-	uint8_t newSize = scan->count + 1;
-	scan->ssid		= (char **)realloc(scan->ssid, newSize * sizeof(char *));
-	scan->auth		= (WiFiAuthMode *)realloc(scan->auth, newSize * sizeof(WiFiAuthMode));
-	scan->rssi		= (int32_t *)realloc(scan->rssi, newSize * sizeof(int32_t));
-	scan->bssid		= (WiFiMacAddr *)realloc(scan->bssid, newSize * sizeof(WiFiMacAddr));
-	scan->channel	= (int32_t *)realloc(scan->channel, newSize * sizeof(int32_t));
+	uint8_t last = cls->scanAlloc(scan->count + 1);
 
-	scan->ssid[scan->count] = (char *)malloc((net->SSID.len + 1) * sizeof(char));
-	strcpy(scan->ssid[scan->count], (char *)net->SSID.val);
-	scan->auth[scan->count] = securityTypeToAuthMode(net->security);
-	scan->rssi[scan->count] = net->signal_strength;
-	memcpy(scan->bssid[scan->count].addr, net->BSSID.octet, ETH_ALEN);
-	scan->channel[scan->count] = net->channel;
-	scan->count++;
+	scan->ap[last].ssid	   = strdup((char *)net->SSID.val);
+	scan->ap[last].auth	   = securityTypeToAuthMode(net->security);
+	scan->ap[last].rssi	   = net->signal_strength;
+	scan->ap[last].channel = net->channel;
+	memcpy(scan->ap[last].bssid.addr, net->BSSID.octet, ETH_ALEN);
 
 	return RTW_SUCCESS;
 }
