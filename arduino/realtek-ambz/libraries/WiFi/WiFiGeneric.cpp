@@ -9,6 +9,8 @@ int32_t WiFiClass::channel() {
 }
 
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
+	__wrap_rtl_printf_disable();
+	__wrap_DiagPrintf_disable();
 	startWifiTask();
 
 	if (!data.initialized) {
@@ -23,15 +25,15 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		// stop wifi to change mode
 		LT_D_WG("Stopping WiFi to change mode");
 		if (wifi_off() != RTW_SUCCESS)
-			return false;
+			goto error;
 		vTaskDelay(20);
 		if (mode == WIFI_MODE_NULL)
-			return false;
+			goto error;
 	}
 
 	if (wifi_on((rtw_mode_t)mode) != RTW_SUCCESS) {
 		LT_E("Error while changing mode(%u)", mode);
-		return false;
+		goto error;
 	}
 
 	// send STA start/stop events and AP stop event (start is handled in softAP())
@@ -45,7 +47,14 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	LT_HEAP_I();
+	__wrap_rtl_printf_enable();
+	__wrap_DiagPrintf_enable();
 	return true;
+
+error:
+	__wrap_rtl_printf_enable();
+	__wrap_DiagPrintf_enable();
+	return false;
 }
 
 WiFiMode WiFiClass::getMode() {

@@ -24,6 +24,16 @@
 
 osThreadId main_tid = 0;
 
+extern uint32_t GlobalDebugEnable;
+extern uint16_t GlobalDebugLevel;
+extern uint8_t GlobalPrivateLog;
+
+void init() {
+	// make the SDK less verbose by default
+	GlobalDebugEnable = 0;
+	GlobalPrivateLog  = 0;
+}
+
 bool startMainTask() {
 	osThreadDef(main_task, osPriorityRealtime, 1, 4096 * 4);
 	main_tid = osThreadCreate(osThread(main_task), NULL);

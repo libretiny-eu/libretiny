@@ -72,6 +72,8 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	uint8_t dhcpRet;
 
 	LT_I("Connecting to %s", wifi.ssid.val);
+	__wrap_rtl_printf_disable();
+	__wrap_DiagPrintf_disable();
 
 	if (!bssid) {
 		ret = wifi_connect(
@@ -112,13 +114,18 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
 			// free memory as wifi_indication creates a copy
 			free(eventInfo);
+			__wrap_rtl_printf_enable();
+			__wrap_DiagPrintf_enable();
 			return true;
 		}
 		LT_E("DHCP failed; dhcpRet=%d", dhcpRet);
 		wifi_disconnect();
-		return false;
+		goto error;
 	}
 	LT_E("Connection failed; ret=%d", ret);
+error:
+	__wrap_rtl_printf_enable();
+	__wrap_DiagPrintf_enable();
 	return false;
 }
 
