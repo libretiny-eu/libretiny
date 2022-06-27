@@ -17,6 +17,9 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 	rtw_scan_result_t *net		 = &result->ap_details;
 	net->SSID.val[net->SSID.len] = '\0';
 
+	if (!net->SSID.len)
+		return RTW_SUCCESS;
+
 	uint8_t last = cls->scanAlloc(scan->count + 1);
 
 	scan->ap[last].ssid	   = strdup((char *)net->SSID.val);
