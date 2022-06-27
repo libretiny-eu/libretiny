@@ -1,17 +1,30 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-26. */
 
-#include "WiFiServer.h"
-#include "WiFiPriv.h"
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
 
-WiFiServer::WiFiServer(uint32_t addr, uint16_t port, uint8_t maxClients)
+#include "LwIPServer.h"
+
+// disable #defines removing lwip_ prefix
+#undef LWIP_COMPAT_SOCKETS
+#define LWIP_COMPAT_SOCKETS 0
+
+extern "C" {
+#include <lwip/api.h>
+// #include <lwip/dns.h>
+#include <lwip/err.h>
+#include <lwip/sockets.h>
+#include <sys/time.h>
+}
+
+LwIPServer::LwIPServer(uint32_t addr, uint16_t port, uint8_t maxClients)
 	: _sock(-1), _sockAccepted(-1), _addr(addr), _port(port), _maxClients(maxClients), _active(false), _noDelay(false) {
 }
 
-WiFiServer::operator bool() {
+LwIPServer::operator bool() {
 	return _active;
 }
 
-bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
+bool LwIPServer::begin(uint16_t port, bool reuseAddr) {
 	if (_active)
 		return true;
 	if (port)
@@ -50,7 +63,7 @@ bool WiFiServer::begin(uint16_t port, bool reuseAddr) {
 	_sockAccepted = -1;
 }
 
-void WiFiServer::end() {
+void LwIPServer::end() {
 	if (_sock == -1)
 		return;
 	lwip_close(_sock);
@@ -58,7 +71,7 @@ void WiFiServer::end() {
 	_active = -1;
 }
 
-WiFiClient WiFiServer::accept() {
+WiFiClient LwIPServer::accept() {
 	if (!_active)
 		return WiFiClient();
 
@@ -96,7 +109,7 @@ WiFiClient WiFiServer::accept() {
 	return WiFiClient();
 }
 
-int WiFiServer::setTimeout(uint32_t seconds) {
+int LwIPServer::setTimeout(uint32_t seconds) {
 	struct timeval tv;
 	tv.tv_sec  = seconds;
 	tv.tv_usec = 0;
@@ -105,15 +118,15 @@ int WiFiServer::setTimeout(uint32_t seconds) {
 	return lwip_setsockopt(_sock, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv));
 }
 
-void WiFiServer::setNoDelay(bool noDelay) {
+void LwIPServer::setNoDelay(bool noDelay) {
 	_noDelay = noDelay;
 }
 
-bool WiFiServer::getNoDelay() {
+bool LwIPServer::getNoDelay() {
 	return _noDelay;
 }
 
-bool WiFiServer::hasClient() {
+bool LwIPServer::hasClient() {
 	if (_sockAccepted >= 0) {
 		return true;
 	}
@@ -125,3 +138,5 @@ bool WiFiServer::hasClient() {
 	}
 	return false;
 }
+
+#endif

@@ -2,20 +2,17 @@
 
 #pragma once
 
+#include <api/WiFi/WiFi.h>
 #include <api/WiFiClient.h>
 #include <api/WiFiClientSecure.h>
 
 #include <WiFiClient.h> // extend family's WiFiClient impl
 
-#ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
 
 #include <mbedtls/net.h>
 
-#ifdef __cplusplus
 } // extern "C"
-#endif
 
 class MbedTLSClient : public WiFiClient, public IWiFiClientSecure {
   private:

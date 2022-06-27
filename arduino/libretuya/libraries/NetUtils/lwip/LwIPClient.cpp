@@ -1,7 +1,29 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-26. */
 
-#include "WiFiClient.h"
-#include "WiFiPriv.h"
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+
+#include "LwIPClient.h"
+
+#define MAX_SOCK_NUM				4
+#define WIFI_CLIENT_CONNECT_TIMEOUT 3000
+#define WIFI_CLIENT_READ_TIMEOUT	3000
+#define WIFI_CLIENT_WRITE_RETRY		10
+#define WIFI_CLIENT_SELECT_TIMEOUT	1000
+#define WIFI_CLIENT_FLUSH_BUF_SIZE	1024
+
+// disable #defines removing lwip_ prefix
+#undef LWIP_COMPAT_SOCKETS
+#define LWIP_COMPAT_SOCKETS 0
+
+extern "C" {
+
+#include <lwip/api.h>
+#include <lwip/dns.h>
+#include <lwip/err.h>
+#include <lwip/sockets.h>
+#include <sys/time.h>
+
+} // extern "C"
 
 class SocketHandle {
   public:
@@ -14,28 +36,28 @@ class SocketHandle {
 	}
 };
 
-WiFiClient::WiFiClient() {
-	LT_V_WC("WiFiClient()");
+LwIPClient::LwIPClient() {
+	LT_V_WC("LwIPClient()");
 	_connected = false;
 	_sock	   = NULL;
 	_rxBuffer  = NULL;
 	_timeout   = WIFI_CLIENT_CONNECT_TIMEOUT;
 }
 
-WiFiClient::WiFiClient(int sock) {
-	LT_V_WC("WiFiClient(%d)", sock);
+LwIPClient::LwIPClient(int sock) {
+	LT_V_WC("LwIPClient(%d)", sock);
 	_connected = true;
 	_sock	   = std::make_shared<SocketHandle>(sock);
 	_rxBuffer  = std::make_shared<LwIPRxBuffer>(sock);
 	_timeout   = WIFI_CLIENT_CONNECT_TIMEOUT;
 }
 
-WiFiClient::~WiFiClient() {
-	LT_V_WC("~WiFiClient()");
+LwIPClient::~LwIPClient() {
+	LT_V_WC("~LwIPClient()");
 	stop();
 }
 
-WiFiClient &WiFiClient::operator=(const WiFiClient &other) {
+LwIPClient &LwIPClient::operator=(const LwIPClient &other) {
 	stop();
 	_connected = other._connected;
 	_sock	   = other._sock;
@@ -47,22 +69,22 @@ bool IWiFiClient::operator==(const IWiFiClient &other) const {
 	return fd() == other.fd() && remoteIP() == other.remoteIP() && remotePort() == other.remotePort();
 }
 
-int WiFiClient::connect(IPAddress ip, uint16_t port) {
+int LwIPClient::connect(IPAddress ip, uint16_t port) {
 	return connect(ip, port, _timeout);
 }
 
-int WiFiClient::connect(const char *host, uint16_t port) {
+int LwIPClient::connect(const char *host, uint16_t port) {
 	return connect(host, port, _timeout);
 }
 
-int WiFiClient::connect(const char *host, uint16_t port, int32_t timeout) {
+int LwIPClient::connect(const char *host, uint16_t port, int32_t timeout) {
 	IPAddress ip = WiFi.hostByName(host);
 	if (!ip)
 		return 0;
 	return connect(ip, port, timeout);
 }
 
-int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
+int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	int sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0) {
 		return -1;
@@ -128,11 +150,11 @@ int WiFiClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	return 1;
 }
 
-size_t WiFiClient::write(uint8_t data) {
+size_t LwIPClient::write(uint8_t data) {
 	return write(&data, 1);
 }
 
-size_t WiFiClient::write(Stream &stream) {
+size_t LwIPClient::write(Stream &stream) {
 	uint8_t *buf = (uint8_t *)malloc(1360);
 	if (!buf) {
 		return 0;
@@ -149,7 +171,7 @@ size_t WiFiClient::write(Stream &stream) {
 	return written;
 }
 
-size_t WiFiClient::write(const uint8_t *buf, size_t size) {
+size_t LwIPClient::write(const uint8_t *buf, size_t size) {
 	if (_sock < 0 || !_connected || !size) {
 		setWriteError();
 		return 0;
@@ -195,7 +217,7 @@ size_t WiFiClient::write(const uint8_t *buf, size_t size) {
 	return written;
 }
 
-int WiFiClient::available() {
+int LwIPClient::available() {
 	if (!_connected || !_rxBuffer)
 		return 0;
 	int res = _rxBuffer->available();
@@ -205,23 +227,23 @@ int WiFiClient::available() {
 	return res;
 }
 
-int WiFiClient::fd() const {
+int LwIPClient::fd() const {
 	if (!_sock)
 		return -1;
 	return _sock->fd;
 }
 
-int WiFiClient::socket() {
+int LwIPClient::socket() {
 	return fd();
 }
 
-int WiFiClient::setTimeout(uint32_t seconds) {
+int LwIPClient::setTimeout(uint32_t seconds) {
 	Client::setTimeout(seconds * 1000);
 	lwip_setsockopt(fd(), SOL_SOCKET, SO_RCVTIMEO, &_timeout, sizeof(_timeout));
 	return lwip_setsockopt(fd(), SOL_SOCKET, SO_SNDTIMEO, &_timeout, sizeof(_timeout));
 }
 
-int WiFiClient::read() {
+int LwIPClient::read() {
 	uint8_t data;
 	int res = read(&data, 1);
 	if (res < 0)
@@ -231,7 +253,7 @@ int WiFiClient::read() {
 	return data;
 }
 
-int WiFiClient::read(uint8_t *buf, size_t size) {
+int LwIPClient::read(uint8_t *buf, size_t size) {
 	int res = -1;
 	if (_rxBuffer) {
 		res = _rxBuffer->read(buf, size);
@@ -242,7 +264,7 @@ int WiFiClient::read(uint8_t *buf, size_t size) {
 	return res;
 }
 
-int WiFiClient::peek() {
+int LwIPClient::peek() {
 	int res = -1;
 	if (_rxBuffer) {
 		res = _rxBuffer->peek();
@@ -253,7 +275,7 @@ int WiFiClient::peek() {
 	return res;
 }
 
-void WiFiClient::flush() {
+void LwIPClient::flush() {
 	int res;
 	size_t len = available();
 	if (!len)
@@ -272,14 +294,14 @@ void WiFiClient::flush() {
 	free(buf);
 }
 
-void WiFiClient::stop() {
+void LwIPClient::stop() {
 	LT_V_WC("stop()");
 	_connected = false;
 	_sock	   = NULL;
 	_rxBuffer  = NULL;
 }
 
-uint8_t WiFiClient::connected() {
+uint8_t LwIPClient::connected() {
 	if (_connected) {
 		uint8_t dummy;
 		if (lwip_recv(fd(), &dummy, 0, MSG_DONTWAIT) <= 0) {
@@ -323,34 +345,36 @@ uint16_t __attribute__((noinline)) getport(int sock, int (*func)(int, struct soc
 	return ntohs(s->sin_port);
 }
 
-IPAddress WiFiClient::remoteIP() const {
+IPAddress LwIPClient::remoteIP() const {
 	return getaddr(fd(), lwip_getpeername);
 }
 
-IPAddress WiFiClient::remoteIP(int fd) const {
+IPAddress LwIPClient::remoteIP(int fd) const {
 	return getaddr(fd, lwip_getpeername);
 }
 
-uint16_t WiFiClient::remotePort() const {
+uint16_t LwIPClient::remotePort() const {
 	return getport(fd(), lwip_getpeername);
 }
 
-uint16_t WiFiClient::remotePort(int fd) const {
+uint16_t LwIPClient::remotePort(int fd) const {
 	return getport(fd, lwip_getpeername);
 }
 
-IPAddress WiFiClient::localIP() const {
+IPAddress LwIPClient::localIP() const {
 	return getaddr(fd(), lwip_getsockname);
 }
 
-IPAddress WiFiClient::localIP(int fd) const {
+IPAddress LwIPClient::localIP(int fd) const {
 	return getaddr(fd, lwip_getsockname);
 }
 
-uint16_t WiFiClient::localPort() const {
+uint16_t LwIPClient::localPort() const {
 	return getport(fd(), lwip_getsockname);
 }
 
-uint16_t WiFiClient::localPort(int fd) const {
+uint16_t LwIPClient::localPort(int fd) const {
 	return getport(fd, lwip_getsockname);
 }
+
+#endif

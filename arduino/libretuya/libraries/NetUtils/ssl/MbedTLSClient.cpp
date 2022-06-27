@@ -4,22 +4,14 @@
 
 #include "MbedTLSClient.h"
 
-#include <IPAddress.h>
-#include <WiFi.h>
-#include <WiFiClient.h>
-
-#ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
 
 #include <mbedtls/debug.h>
 #include <mbedtls/platform.h>
 #include <mbedtls/sha256.h>
 #include <mbedtls/ssl.h>
 
-#ifdef __cplusplus
 } // extern "C"
-#endif
 
 MbedTLSClient::MbedTLSClient() : WiFiClient() {
 	init(); // ensure the context is zero filled

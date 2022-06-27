@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <WiFi.h>
+#include <api/WiFi/WiFi.h>
 #include <ssl/MbedTLSClient.h>
 
 typedef MbedTLSClient WiFiClientSecure;

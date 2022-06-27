@@ -1,18 +1,16 @@
-#ifdef LT_HAS_LWIP
+#if LT_HAS_LWIP
 
 #include "LwIPRxBuffer.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
+// disable #defines removing lwip_ prefix
 #undef LWIP_COMPAT_SOCKETS
 #define LWIP_COMPAT_SOCKETS 0
+
+extern "C" {
+
 #include <lwip/sockets.h>
 
-#ifdef __cplusplus
 } // extern "C"
-#endif
 
 size_t LwIPRxBuffer::r_available() {
 	if (_sock < 0) {
