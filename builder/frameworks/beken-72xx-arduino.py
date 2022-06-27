@@ -21,6 +21,7 @@ env.Append(
         "-Wno-write-strings",
         "-Wno-char-subscripts",
         "-Wno-missing-braces",
+        "-Wno-attributes",
     ],
     LINKFLAGS=[
         # stdio wrappers (port/printf/printf.c)

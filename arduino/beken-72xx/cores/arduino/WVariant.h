@@ -13,6 +13,9 @@ extern "C" {
 void delayMilliseconds(unsigned long);
 #define delay delayMilliseconds
 
+// from fixups/arch_main.c
+extern unsigned char __bk_rf_is_init;
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

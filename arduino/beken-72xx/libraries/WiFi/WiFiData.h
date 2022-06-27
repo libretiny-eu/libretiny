@@ -1,4 +1,4 @@
-/* Copyright (c) Kuba Szczodrzyński 2022-06-23. */
+/* Copyright (c) Kuba Szczodrzyński 2022-06-26. */
 
 #pragma once
 
@@ -12,7 +12,5 @@ extern "C" {
 } // extern "C"
 
 typedef struct {
-	bool initialized;
-	bool sleep;
 	SemaphoreHandle_t scanSem;
 } WiFiData;

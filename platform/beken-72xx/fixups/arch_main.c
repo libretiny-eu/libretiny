@@ -30,6 +30,8 @@ extern void main(void);
 __attribute__((weak)) void __wrap_bk_printf_disable();
 __attribute__((weak)) void __wrap_bk_printf_enable();
 
+unsigned char __bk_rf_is_init = 0;
+
 void entry_main(void) {
 	// compatibility with BK7231S_1.0.5
 #if CFG_SUPPORT_BOOTLOADER
