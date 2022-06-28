@@ -54,19 +54,19 @@ SoftwareSerial      | ❌              | ❌
 SPI                 | ❌              | ❌
 Wire                | ❗              | ❌
 **OTHER LIBRARIES** |                |
-Wi-Fi STA/AP/Mixed  | ✔️             | ❌
+Wi-Fi STA/AP/Mixed  | ✔️             | ❗/❌/❌
 Wi-Fi Events        | ✔️             | ❌
-TCP Client (SSL)    | ✔️ (✔️)        | ❌
-TCP Server          | ✔️             | ❌
+TCP Client (SSL)    | ✔️ (✔️)        | ❓
+TCP Server          | ✔️             | ❓
 IPv6                | ❌              | ❌
-HTTP Client (SSL)   | ✔️ (✔️)        | ❌
-HTTP Server         | ✔️             | ❌
+HTTP Client (SSL)   | ✔️ (✔️)        | ❓
+HTTP Server         | ✔️             | ❓
 NVS / Preferences   | ❌              | ❌
 SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
 NTP                 | ❌              | ❌
 OTA                 | ✔️             | ❌
-MDNS                | ✔️             | ❌
+MDNS                | ✔️             | ❓
 MQTT                | ✅              | ❌
 SD                  | ❌              | ❌
 

@@ -23,6 +23,10 @@ env.Append(
         "-Wno-missing-braces",
         "-Wno-attributes",
     ],
+    CPPDEFINES=[
+        # LibreTuya configuration
+        ("LT_ARD_HAS_WIFI", "1"),
+    ],
     LINKFLAGS=[
         # stdio wrappers (port/printf/printf.c)
         "-Wl,-wrap,bk_printf",

@@ -48,7 +48,6 @@ class WiFiClass {
 	void printDiag(Print &dest);
 
   public: /* WiFiGeneric.cpp */
-	int32_t channel(void);
 	bool mode(WiFiMode mode);
 	bool modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap);
 	WiFiMode getMode();
@@ -135,6 +134,7 @@ class WiFiClass {
 	const String psk();
 	uint8_t *BSSID();
 	String BSSIDstr();
+	int32_t channel();
 	int8_t RSSI();
 	WiFiAuthMode getEncryption();
 

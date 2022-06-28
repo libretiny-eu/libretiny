@@ -10,6 +10,29 @@ WiFiClass::~WiFiClass() {
 	vSemaphoreDelete(data.scanSem);
 }
 
+WiFiStatus eventTypeToStatus(uint8_t type) {
+	// rw_msg_pub.h:9
+	switch (type) {
+		case RW_EVT_STA_IDLE:
+			return WL_IDLE_STATUS;
+			return WL_NO_SSID_AVAIL;
+		case RW_EVT_STA_CONNECTING:
+		case RW_EVT_STA_CONNECTED:
+			return WL_SCAN_COMPLETED;
+		case RW_EVT_STA_GOT_IP:
+			return WL_CONNECTED;
+		case RW_EVT_STA_PASSWORD_WRONG:
+		case RW_EVT_STA_NO_AP_FOUND:
+		case RW_EVT_STA_ASSOC_FULL:
+		case RW_EVT_STA_CONNECT_FAILED:
+			return WL_CONNECT_FAILED;
+		case RW_EVT_STA_BEACON_LOSE:
+			return WL_CONNECTION_LOST;
+		case RW_EVT_STA_DISCONNECTED:
+			return WL_DISCONNECTED;
+	}
+}
+
 WiFiAuthMode securityTypeToAuthMode(uint8_t type) {
 	// wlan_ui_pub.h:62
 	switch (type) {

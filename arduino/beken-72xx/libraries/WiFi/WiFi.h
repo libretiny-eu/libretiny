@@ -4,3 +4,7 @@
 
 #include <Arduino.h>
 #include <api/WiFi/WiFi.h>
+
+#include "WiFiClient.h"
+#include "WiFiClientSecure.h"
+#include "WiFiServer.h"

@@ -12,5 +12,11 @@ extern "C" {
 } // extern "C"
 
 typedef struct {
+	char ssid[32 + 1];
+	char pass[64 + 1];
+	uint32_t ipSta[4];
+	uint32_t ipAp[4];
 	SemaphoreHandle_t scanSem;
+	void *statusIp;
+	void *statusLink;
 } WiFiData;

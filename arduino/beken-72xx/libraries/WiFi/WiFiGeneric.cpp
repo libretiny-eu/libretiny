@@ -5,6 +5,11 @@
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
 
+	if (mode && !data.statusIp) {
+		data.statusIp	= (IPStatusTypedef *)malloc(sizeof(IPStatusTypedef));
+		data.statusLink = (LinkStatusTypeDef *)malloc(sizeof(LinkStatusTypeDef));
+	}
+
 	if (!__bk_rf_is_init) {
 		LT_D_WG("Initializing func&app");
 		func_init_extended();
@@ -32,6 +37,13 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		bk_wlan_stop(BK_SOFT_AP);
 	}
 
+	if (!mode) {
+		free(data.statusIp);
+		free(data.statusLink);
+		data.statusIp	= NULL;
+		data.statusLink = NULL;
+	}
+
 	LT_HEAP_I();
 
 	__wrap_bk_printf_enable();
@@ -46,10 +58,16 @@ WiFiMode WiFiClass::getMode() {
 }
 
 WiFiStatus WiFiClass::status() {
-	// wpa_suppliant_ctrl_get_wpas()->disconnected;
-	if (wpas_connect_ssid && wpas_connect_ssid->ssid_len) {
-		return WL_CONNECTED;
-	} else {
-		return WL_DISCONNECTED;
+	auto status = mhdr_get_station_status();
+	LT_D_WG("mhdr_get_station_status()=%d", status);
+	return eventTypeToStatus(status);
+}
+
+IPAddress WiFiClass::hostByName(const char *hostname) {
+	ip_addr_t ip;
+	int ret = netconn_gethostbyname(hostname, &ip);
+	if (ret == ERR_OK) {
+		return ip.addr;
 	}
+	return IPAddress();
 }

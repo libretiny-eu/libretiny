@@ -66,7 +66,10 @@ env.Append(
     ],
     CPPDEFINES=[
         # LibreTuya configuration
-        # (reserved)
+        ("LT_HAS_LWIP", "1"),
+        ("LT_HAS_LWIP2", "1"),
+        ("LT_HAS_FREERTOS", "1"),
+        ("LT_HAS_MBEDTLS", "1"),
         # SDK options
         ("CFG_OS_FREERTOS", "1"),
         ("MBEDTLS_CONFIG_FILE", "<tls_config.h>"),
