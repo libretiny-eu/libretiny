@@ -58,9 +58,7 @@ WiFiMode WiFiClass::getMode() {
 }
 
 WiFiStatus WiFiClass::status() {
-	auto status = mhdr_get_station_status();
-	LT_D_WG("mhdr_get_station_status()=%d", status);
-	return eventTypeToStatus(status);
+	return eventTypeToStatus(mhdr_get_station_status());
 }
 
 IPAddress WiFiClass::hostByName(const char *hostname) {

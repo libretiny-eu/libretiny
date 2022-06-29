@@ -134,6 +134,16 @@ void lt_log(const uint8_t level, const char *format, ...);
 		return ret;                                                                                                    \
 	}
 
+#if LT_LOG_ERRNO
+#define LT_ERRNO()                                                                                                     \
+	if (errno) {                                                                                                       \
+		LT_E("errno=%d", errno);                                                                                       \
+		errno = 0;                                                                                                     \
+	}
+#else
+#define LT_ERRNO()
+#endif
+
 // WiFi.cpp
 #define LT_T_WG(...) LT_T_MOD(LT_DEBUG_WIFI, __VA_ARGS__)
 #define LT_V_WG(...) LT_T_MOD(LT_DEBUG_WIFI, __VA_ARGS__)

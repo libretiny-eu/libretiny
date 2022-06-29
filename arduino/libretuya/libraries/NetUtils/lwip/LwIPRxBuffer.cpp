@@ -14,11 +14,13 @@ extern "C" {
 
 size_t LwIPRxBuffer::r_available() {
 	if (_sock < 0) {
+		LT_D_WC("_sock < 0");
 		return 0;
 	}
 	uint16_t count = 0;
 	int res		   = lwip_ioctl(_sock, FIONREAD, &count);
 	if (res < 0) {
+		LT_D_WC("lwip_ioctl()=%d, errno=%d", res, errno);
 		_failed = true;
 		return 0;
 	}
@@ -29,7 +31,7 @@ size_t LwIPRxBuffer::fillBuffer() {
 	if (!_buffer) {
 		_buffer = (uint8_t *)malloc(_size);
 		if (!_buffer) {
-			printf("[e] Not enough memory to allocate buffer\r\n");
+			LT_E("buffer alloc failed");
 			_failed = true;
 			return 0;
 		}
@@ -44,6 +46,7 @@ size_t LwIPRxBuffer::fillBuffer() {
 	int res = lwip_recv(_sock, _buffer + _fill, _size - _fill, MSG_DONTWAIT);
 	if (res < 0) {
 		if (errno != EWOULDBLOCK) {
+			LT_ERRNO();
 			_failed = true;
 		}
 		return 0;

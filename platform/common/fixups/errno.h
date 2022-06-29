@@ -16,3 +16,7 @@
 #include <sys/errno.h> // use system __errno() & error codes
 #undef errno		   // undefine __errno() macro
 extern int errno;	   // use a global errno variable
+#define errno errno	   // for #ifdef errno in lwIP
+
+// make sure lwIP never defines its own error codes
+#undef LWIP_PROVIDE_ERRNO

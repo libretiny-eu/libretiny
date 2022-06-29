@@ -93,7 +93,9 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	}
 
 	LT_D_WG("Starting WiFi...");
+	__wrap_bk_printf_disable();
 	bk_wlan_start_sta(&config);
+	__wrap_bk_printf_enable();
 	LT_D_WG("bk_wlan_start() OK");
 	return true;
 
@@ -172,9 +174,8 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 }
 
 const String WiFiClass::SSID() {
-	if (!isConnected() || !wpas_connect_ssid)
-		return "";
-	return (char *)wpas_connect_ssid->ssid;
+	bk_wlan_get_link_status(LINK_STATUS);
+	return (char *)LINK_STATUS->ssid;
 }
 
 const String WiFiClass::psk() {
@@ -187,8 +188,6 @@ const String WiFiClass::psk() {
 }
 
 uint8_t *WiFiClass::BSSID() {
-	if (!isConnected())
-		return NULL;
 	bk_wlan_get_link_status(LINK_STATUS);
 	return LINK_STATUS->bssid;
 }

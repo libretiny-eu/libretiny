@@ -49,6 +49,11 @@
 #define LT_LOG_HEAP 0
 #endif
 
+// Debug errno values using LT_ERRNO()
+#ifndef LT_LOG_ERRNO
+#define LT_LOG_ERRNO 0
+#endif
+
 // Per-module debugging
 #ifndef LT_DEBUG_WIFI
 #define LT_DEBUG_WIFI 0

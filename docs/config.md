@@ -40,6 +40,7 @@ build_flags =
 - `LT_LOGGER_COLOR` - output ANSI terminal colors
 - `LT_PRINTF_BROKEN` - whether printf outputs "0." for floats with value 0
 - `LT_LOG_HEAP` - print free heap size using `LT_HEAP_I()`
+- `LT_LOG_ERRNO` - print and clear errno value (if set) using `LT_ERRNO()`
 
 ### Debug logging
 

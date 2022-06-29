@@ -75,6 +75,8 @@ env.Append(
         ("MBEDTLS_CONFIG_FILE", "<tls_config.h>"),
         ("WIFI_BLE_COEXIST", "1"),
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
+        # LwIP options
+        ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",

@@ -87,6 +87,7 @@ int LwIPClient::connect(const char *host, uint16_t port, int32_t timeout) {
 int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	int sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0) {
+		LT_D_WC("socket failed");
 		return -1;
 	}
 
@@ -94,6 +95,8 @@ int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 		timeout = _timeout; // use default when -1 passed as timeout
 
 	lwip_fcntl(sock, F_SETFL, lwip_fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
+
+	LT_ERRNO();
 
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -142,7 +145,11 @@ int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	lwip_setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &enable, sizeof(enable));
 	lwip_setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable));
 
+	LT_ERRNO();
+
 	lwip_fcntl(sock, F_SETFL, lwip_fcntl(sock, F_GETFL, 0) & ~O_NONBLOCK);
+
+	LT_ERRNO();
 
 	_connected = true;
 	_sock	   = std::make_shared<SocketHandle>(sock);
@@ -214,6 +221,7 @@ size_t LwIPClient::write(const uint8_t *buf, size_t size) {
 			}
 		}
 	}
+	LT_D_WC("wrote %d bytes", written);
 	return written;
 }
 
@@ -222,6 +230,7 @@ int LwIPClient::available() {
 		return 0;
 	int res = _rxBuffer->available();
 	if (_rxBuffer->failed()) {
+		LT_ERRNO();
 		stop();
 	}
 	return res;

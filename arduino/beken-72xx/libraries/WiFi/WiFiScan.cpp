@@ -15,33 +15,25 @@ static void scanHandler(void *ctx, uint8_t param) {
 		return;
 	}
 
-	struct sta_scan_res *result;
-	uint8_t count = bk_wlan_get_scan_ap_result_numbers();
-	if (count == 0) {
-		LT_D_WG("No APs found");
+	ScanResult_adv result;
+	if (wlan_sta_scan_result(&result)) {
+		LT_E("Failed to get scan result");
 		goto end;
 	}
-	LT_D_WG("Found %d APs", count);
+	LT_D_WG("Found %d APs", result.ApNum);
 
-	result = (struct sta_scan_res *)malloc(sizeof(struct sta_scan_res) * count);
-	if (!result) {
-		LT_W("sta_scan_res alloc failed");
-		goto end;
-	}
-	bk_wlan_get_scan_ap_result(result, count);
-
-	cls->scanAlloc(count);
+	cls->scanAlloc(result.ApNum);
 	if (!scan->ap) {
 		LT_W("scan->ap alloc failed");
 		goto end;
 	}
 
-	for (uint8_t i = 0; i < count; i++) {
-		scan->ap[i].ssid	= strdup(result[i].ssid);
-		scan->ap[i].auth	= securityTypeToAuthMode(result[i].security);
-		scan->ap[i].rssi	= result[i].level;
-		scan->ap[i].channel = result[i].channel;
-		memcpy(scan->ap[i].bssid.addr, result[i].bssid, 6);
+	for (uint8_t i = 0; i < result.ApNum; i++) {
+		scan->ap[i].ssid	= strdup(result.ApList[i].ssid);
+		scan->ap[i].auth	= securityTypeToAuthMode(result.ApList[i].security);
+		scan->ap[i].rssi	= result.ApList[i].ApPower;
+		scan->ap[i].channel = result.ApList[i].channel;
+		memcpy(scan->ap[i].bssid.addr, result.ApList[i].bssid, 6);
 	}
 
 end:
