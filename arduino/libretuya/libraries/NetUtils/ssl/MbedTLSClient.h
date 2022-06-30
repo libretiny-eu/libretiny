@@ -50,6 +50,7 @@ class MbedTLSClient : public WiFiClient, public IWiFiClientSecure {
   public:
 	MbedTLSClient();
 	MbedTLSClient(int sock);
+	~MbedTLSClient();
 
 	int connect(IPAddress ip, uint16_t port, int32_t timeout);
 	int connect(const char *host, uint16_t port, int32_t timeout);

@@ -85,6 +85,8 @@ int LwIPClient::connect(const char *host, uint16_t port, int32_t timeout) {
 }
 
 int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
+	if (_connected)
+		stop();
 	int sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0) {
 		LT_D_WC("socket failed");
@@ -304,7 +306,7 @@ void LwIPClient::flush() {
 }
 
 void LwIPClient::stop() {
-	LT_V_WC("stop()");
+	LT_V_WC("Stopping TCP");
 	_connected = false;
 	_sock	   = NULL;
 	_rxBuffer  = NULL;

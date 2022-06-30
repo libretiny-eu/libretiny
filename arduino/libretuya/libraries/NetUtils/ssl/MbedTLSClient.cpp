@@ -21,9 +21,13 @@ MbedTLSClient::MbedTLSClient(int sock) : WiFiClient(sock) {
 	init(); // ensure the context is zero filled
 }
 
+MbedTLSClient::~MbedTLSClient() {
+	LT_V_WC("~MbedTLSClient()");
+	stop();
+}
+
 void MbedTLSClient::stop() {
-	WiFiClient::stop();
-	LT_V_SSL("Closing SSL connection");
+	LT_V_SSL("Stopping SSL");
 
 	if (_sslCfg.ca_chain) {
 		mbedtls_x509_crt_free(&_caCert);
