@@ -17,8 +17,8 @@ size_t LwIPRxBuffer::r_available() {
 		LT_D_WC("_sock < 0");
 		return 0;
 	}
-	uint16_t count = 0;
-	int res		   = lwip_ioctl(_sock, FIONREAD, &count);
+	int count = 0; // must be of same size as in lwip_ioctl()
+	int res	  = lwip_ioctl(_sock, FIONREAD, &count);
 	if (res < 0) {
 		LT_D_WC("lwip_ioctl()=%d, errno=%d", res, errno);
 		_failed = true;
