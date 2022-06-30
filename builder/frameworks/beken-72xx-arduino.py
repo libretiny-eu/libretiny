@@ -26,6 +26,8 @@ env.Append(
     CPPDEFINES=[
         # LibreTuya configuration
         ("LT_ARD_HAS_WIFI", "1"),
+        # macros
+        ("mbedtls_net_set_nonblock", "net_set_nonblock"),  # mbedtls_net_set_nonblock is commented out in tls_net.c
     ],
     LINKFLAGS=[
         # stdio wrappers (port/printf/printf.c)

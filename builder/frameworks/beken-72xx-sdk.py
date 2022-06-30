@@ -77,6 +77,7 @@ env.Append(
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         # LwIP options
         ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
+        "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
