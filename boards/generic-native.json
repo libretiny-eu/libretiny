@@ -39,5 +39,6 @@
 	},
 	"name": "Generic - Host-native",
 	"vendor": "N/A",
+	"url": "https://kuba2k2.github.io/libretuya/",
 	"symbol": "Native"
 }
