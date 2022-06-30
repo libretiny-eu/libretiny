@@ -38,6 +38,7 @@ void MbedTLSClient::stop() {
 	}
 	mbedtls_ssl_free(&_sslCtx);
 	mbedtls_ssl_config_free(&_sslCfg);
+	LT_HEAP_I();
 }
 
 void MbedTLSClient::init() {
@@ -83,7 +84,11 @@ static int ssl_random(void *data, unsigned char *output, size_t len) {
 }
 
 void debug_cb(void *ctx, int level, const char *file, int line, const char *str) {
-	LT_I("%04d: |%d| %s", line, level, str);
+	// do not print the trailing \n
+	uint16_t len = strlen(str);
+	char *msg	 = (char *)str;
+	msg[len - 1] = '\0';
+	LT_I("%04d: |%d| %s", line, level, msg);
 }
 
 int MbedTLSClient::connect(
@@ -96,7 +101,7 @@ int MbedTLSClient::connect(
 	const char *pskIdent,
 	const char *psk
 ) {
-	LT_D_SSL("Free heap before TLS: TODO");
+	LT_HEAP_I();
 
 	if (!rootCABuf && !pskIdent && !psk && !_insecure && !_useRootCA)
 		return -1;
@@ -118,6 +123,7 @@ int MbedTLSClient::connect(
 
 	LT_V_SSL("Init SSL");
 	init();
+	LT_HEAP_I();
 
 	// mbedtls_debug_set_threshold(4);
 	// mbedtls_ssl_conf_dbg(&_sslCfg, debug_cb, NULL);
@@ -206,6 +212,8 @@ int MbedTLSClient::connect(
 	mbedtls_ssl_set_bio(&_sslCtx, &_sockTls, mbedtls_net_send, mbedtls_net_recv, NULL);
 	mbedtls_net_set_nonblock((mbedtls_net_context *)&_sockTls);
 
+	LT_HEAP_I();
+
 	LT_V_SSL("SSL handshake");
 	if (_handshakeTimeout == 0)
 		_handshakeTimeout = timeout;
@@ -220,6 +228,8 @@ int MbedTLSClient::connect(
 		}
 		delay(2);
 	}
+
+	LT_HEAP_I();
 
 	if (clientCert && clientKey) {
 		LT_D_SSL(
