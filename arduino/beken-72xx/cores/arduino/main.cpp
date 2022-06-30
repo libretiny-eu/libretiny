@@ -15,7 +15,7 @@ bool startMainTask() {
 		THD_APPLICATION_PRIORITY,
 		"main",
 		(beken_thread_function_t)main_task,
-		4096,
+		8192,
 		NULL
 	);
 	if (ret != kNoErr)
