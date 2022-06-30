@@ -36,6 +36,8 @@ static void scanHandler(void *ctx, uint8_t param) {
 		memcpy(scan->ap[i].bssid.addr, result.ApList[i].bssid, 6);
 	}
 
+	cls->data.scannedAt = millis();
+
 end:
 	scan->running = false;
 	xSemaphoreGive(cls->data.scanSem);

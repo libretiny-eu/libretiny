@@ -56,7 +56,11 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		goto error;
 	}
 
-	LT_D_WG("Connecting to " MACSTR, MAC2STR(bssid));
+	if (bssid) {
+		LT_D_WG("Connecting to " MACSTR, MAC2STR(bssid));
+	} else {
+		LT_D_WG("Connecting to %s", data.ssid);
+	}
 
 	network_InitTypeDef_st config;
 	memset(&config, 0, sizeof(network_InitTypeDef_st));
@@ -90,6 +94,13 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	if (ADDR_STA_DNS) {
 		sprintf(config.dns_server_ip_addr, "%u.%u.%u.%u", ADDR_STA_DNS);
 		LT_D_WG("Static DNS: %s", config.dns_server_ip_addr);
+	}
+
+	if (!data.scannedAt || millis() - data.scannedAt > 10000) {
+		LT_D_WG("Scan needed");
+		// apparently a scan must be performed first,
+		// else it hangs at "[sa_sta]MM_START_REQ"
+		scanNetworks(false);
 	}
 
 	LT_D_WG("Starting WiFi...");
