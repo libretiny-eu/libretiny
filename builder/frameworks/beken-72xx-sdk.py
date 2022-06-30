@@ -331,11 +331,15 @@ env.AddLibrary(
         "+<lwip-2.0.2/port/*.c>",
         "+<lwip-2.0.2/src/api/*.c>",
         "+<lwip-2.0.2/src/apps/ping/*.c>",
+        "+<lwip-2.0.2/src/apps/mdns/*.c>",
         "+<lwip-2.0.2/src/core/*.c>",
         "+<lwip-2.0.2/src/core/ipv4/*.c>",
         "+<lwip-2.0.2/src/core/ipv6/*.c>",
         "+<lwip-2.0.2/src/netif/ethernet.c>",
         "+<dhcpd/*.c>",
+        # use ethernetif.c from AliOS since it enables netif IGMP flag
+        "-<lwip-2.0.2/port/ethernetif.c>",
+        "+<$SDK_DIR/beken378/alios/lwip-2.0.2/port/ethernetif.c>",
     ],
     includes=[
         "+<lwip-2.0.2/port>",

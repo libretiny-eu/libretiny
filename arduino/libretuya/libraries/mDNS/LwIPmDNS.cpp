@@ -59,15 +59,16 @@ mDNS::~mDNS() {}
 bool mDNS::begin(const char *hostname) {
 	mdns_resp_init();
 	struct netif *netif = netif_list;
+	uint8_t enabled		= 0;
 	while (netif != NULL) {
 		// TODO: detect mdns_netif_client_id by checking netif_get_client_data()
 		// and finding the requested hostname in struct mdns_host
-		if (netif_is_up(netif) && mdns_resp_add_netif(netif, hostname, 255) != ERR_OK) {
-			return false;
+		if (netif_is_up(netif) && mdns_resp_add_netif(netif, hostname, 255) == ERR_OK) {
+			enabled++;
 		}
 		netif = netif->next;
 	}
-	return true;
+	return enabled > 0;
 }
 
 void mDNS::end() {

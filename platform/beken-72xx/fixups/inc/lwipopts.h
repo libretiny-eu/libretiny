@@ -4,4 +4,5 @@
 
 #include_next "lwipopts.h"
 
-#define LWIP_MDNS_RESPONDER 1
+#define LWIP_MDNS_RESPONDER		   1
+#define LWIP_NUM_NETIF_CLIENT_DATA 1

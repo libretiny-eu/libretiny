@@ -57,16 +57,16 @@ Wire                | ❗              | ❌
 Wi-Fi STA/AP/Mixed  | ✔️             | ✔️/❌/❌
 Wi-Fi Events        | ✔️             | ❌
 TCP Client (SSL)    | ✔️ (✔️)        | ✔️ (❗)
-TCP Server          | ✔️             | ❓
+TCP Server          | ✔️             | ✔️
 IPv6                | ❌              | ❌
 HTTP Client (SSL)   | ✔️ (✔️)        | ❓
-HTTP Server         | ✔️             | ❓
+HTTP Server         | ✔️             | ✔️
 NVS / Preferences   | ❌              | ❌
 SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
 NTP                 | ❌              | ❌
 OTA                 | ✔️             | ❌
-MDNS                | ✔️             | ❓
+MDNS                | ✔️             | ✔️
 MQTT                | ✅              | ❌
 SD                  | ❌              | ❌
 
