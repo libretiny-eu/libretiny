@@ -156,7 +156,19 @@ uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 }
 
 bool WiFiClass::setMacAddress(const uint8_t *mac) {
-	wifi_set_mac_address((char *)mac);
+	if (mac[0] & 0x01) {
+		LT_E("Invalid MAC address");
+		return false;
+	}
+	// ensure "mac_inited" is true
+	wifi_get_mac_address((char *)system_mac, BK_STATION);
+	// store the MAC globally
+	memcpy(system_mac, mac, 6);
+	WiFiMode previousMode = getMode();
+	if (previousMode) {
+		mode(WIFI_MODE_NULL);
+		mode(previousMode);
+	}
 	return true;
 }
 

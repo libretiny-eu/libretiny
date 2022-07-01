@@ -2,6 +2,8 @@
 
 *by N/A*
 
+[Product page](https://kuba2k2.github.io/libretuya/)
+
 Parameter    | Value
 -------------|-------
 MCU          | NATIVE

@@ -54,7 +54,7 @@ SoftwareSerial      | ❌              | ❌
 SPI                 | ❌              | ❌
 Wire                | ❗              | ❌
 **OTHER LIBRARIES** |                |
-Wi-Fi STA/AP/Mixed  | ✔️             | ✔️/❌/❌
+Wi-Fi STA/AP/Mixed  | ✔️             | ✔️
 Wi-Fi Events        | ✔️             | ❌
 TCP Client (SSL)    | ✔️ (✔️)        | ✔️ (❗)
 TCP Server          | ✔️             | ✔️
