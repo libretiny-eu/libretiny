@@ -79,14 +79,6 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		LT_D_WG("Using DHCP");
 	}
 
-	if (!data.scannedAt || millis() - data.scannedAt > 10000) {
-		LT_D_WG("Scan needed");
-		// apparently a scan must be performed first,
-		// else it hangs at "[sa_sta]MM_START_REQ"
-		// TODO check if this applies with pre-set bssid
-		scanNetworks(false);
-	}
-
 	LT_D_WG("Starting WiFi...");
 
 	__wrap_bk_printf_disable();
