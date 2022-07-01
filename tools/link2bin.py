@@ -10,7 +10,7 @@ from enum import Enum
 from os import stat, unlink
 from os.path import basename, dirname, isfile, join
 from shutil import copyfile
-from subprocess import PIPE, Popen, list2cmdline
+from subprocess import PIPE, Popen
 from typing import IO, Dict, List, Tuple
 
 from tools.util.fileio import chext, isnewer
@@ -25,13 +25,15 @@ class SocType(Enum):
     AMBZ = (1, "arm-none-eabi-", True, 0)
     BK72XX = (2, "arm-none-eabi-", False, 0)
 
-    def cmd(self, cmd: str, args: str = []) -> IO[bytes]:
+    def cmd(self, program: str, args: List[str] = []) -> IO[bytes]:
+        program = self.prefix + program
+        cmd = [program] + args
         try:
-            if args:
-                cmd += " " + list2cmdline(args)
-            process = Popen(self.prefix + cmd, stdout=PIPE)
+            process = Popen(cmd, stdout=PIPE)
         except FileNotFoundError:
-            print(f"Toolchain not found while running: '{self.prefix + cmd}'")
+            if isinstance(cmd, list):
+                cmd = " ".join(cmd)
+            print(f"Toolchain not found while running: '{cmd}'")
             exit(1)
         return process.stdout
 
@@ -49,7 +51,7 @@ class SocType(Enum):
 
     def nm(self, input: str) -> Dict[str, int]:
         out = {}
-        stdout = self.cmd(f"gcc-nm", args=[input])
+        stdout = self.cmd("gcc-nm", [input])
         for line in stdout.readlines():
             line = line.decode().strip().split(" ")
             if len(line) != 3:
@@ -67,8 +69,12 @@ class SocType(Enum):
         # print graph element
         print(f"|   |   |-- {basename(output)}")
         if isnewer(input, output):
-            sections = " ".join(f"-j {section}" for section in sections)
-            self.cmd(f"objcopy {sections} -O {fmt}", args=[input, output]).read()
+            args = []
+            for section in sections:
+                args += ["-j", section]
+            args += ["-O", fmt]
+            args += [input, output]
+            self.cmd("objcopy", args).read()
         return output
 
 

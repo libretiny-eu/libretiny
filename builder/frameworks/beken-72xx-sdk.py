@@ -72,7 +72,7 @@ env.Append(
         ("LT_HAS_MBEDTLS", "1"),
         # SDK options
         ("CFG_OS_FREERTOS", "1"),
-        ("MBEDTLS_CONFIG_FILE", "<tls_config.h>"),
+        ("MBEDTLS_CONFIG_FILE", r"\"tls_config.h\""),
         ("WIFI_BLE_COEXIST", "1"),
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         # LwIP options
