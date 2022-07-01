@@ -8,14 +8,18 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 		return WL_CONNECT_FAILED;
 	if (!validate(ssid, passphrase))
 		return WL_CONNECT_FAILED;
+
+	LT_HEAP_I();
+
+	strcpy(STA_CFG->ap_info.ssid, ssid);
+	if (passphrase) {
+		strcpy(STA_CFG->key, passphrase);
+		STA_CFG->key_len = strlen(passphrase);
+	} else {
+		STA_CFG->key_len = 0;
 	}
 
-	// store the network data for later
-	strcpy(data.ssid, ssid);
-	if (passphrase)
-		strcpy(data.pass, passphrase);
-	else
-		data.pass[0] = 0;
+	STA_CFG->ap_info.channel = channel;
 
 	if (reconnect(bssid))
 		return WL_CONNECTED;
@@ -24,28 +28,33 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 }
 
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
-	ADDR_STA_IP	  = (uint32_t)localIP;
-	ADDR_STA_GW	  = (uint32_t)gateway;
-	ADDR_STA_MASK = (uint32_t)subnet;
-	ADDR_STA_DNS  = (uint32_t)dns1;
-
-	if (status() == WL_CONNECTED) {
-		IPStatusTypedef config;
-		config.dhcp = !localIP[0];
-		if (localIP) {
-			sprintf(config.ip, "%u.%u.%u.%u", ADDR_STA_IP);
-			sprintf(config.mask, "%u.%u.%u.%u", ADDR_STA_MASK);
-			sprintf(config.gate, "%u.%u.%u.%u", ADDR_STA_GW);
+	STA_CFG->dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
+	if (localIP) {
+		sprintf(STA_CFG->local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
+		sprintf(STA_CFG->net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
+		sprintf(STA_CFG->gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
+		if (dns1) {
+			sprintf(STA_CFG->dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 		}
-		if (dns1)
-			sprintf(config.dns, "%u.%u.%u.%u", ADDR_STA_DNS);
-		bk_wlan_set_ip_status(&config, BK_STATION);
+	}
+	// from wlan_ui.c:1370
+	if (sta_ip_is_start()) {
+		sta_ip_down();
+		ip_address_set(
+			BK_STATION,
+			STA_CFG->dhcp_mode,
+			STA_CFG->local_ip_addr,
+			STA_CFG->net_mask,
+			STA_CFG->gateway_ip_addr,
+			STA_CFG->dns_server_ip_addr
+		);
+		sta_ip_start();
 	}
 	return true;
 }
 
 bool WiFiClass::reconnect(const uint8_t *bssid) {
-	if (!bssid && !data.ssid[0]) {
+	if (!bssid && !STA_CFG->ap_info.ssid[0]) {
 		LT_E("(B)SSID not specified");
 		goto error;
 	}
@@ -53,55 +62,38 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	if (bssid) {
 		LT_D_WG("Connecting to " MACSTR, MAC2STR(bssid));
 	} else {
-		LT_D_WG("Connecting to %s", data.ssid);
+		LT_D_WG("Connecting to %s", STA_CFG->ap_info.ssid);
 	}
 
-	network_InitTypeDef_st config;
-	memset(&config, 0, sizeof(network_InitTypeDef_st));
-	// network_InitTypeDef_adv_st config;
-	// memset(&config, 0, sizeof(network_InitTypeDef_adv_st));
-
-	config.wifi_mode		   = BK_STATION;
-	config.wifi_retry_interval = 100;
-	// config.ap_info.security	   = BK_SECURITY_TYPE_WPA2_MIXED;
-	// config.ap_info.channel	   = 6;
-	strcpy(config.wifi_ssid, data.ssid);
-	// strcpy(config.ap_info.ssid, data.ssid);
-	strcpy(config.wifi_key, data.pass);
-	// strcpy(config.key, data.pass);
-	// config.key_len = strlen(data.pass);
+	STA_CFG->wifi_retry_interval = 100;
+	STA_CFG->ap_info.security	 = BK_SECURITY_TYPE_AUTO;
 	if (bssid)
-		memcpy(config.wifi_bssid, bssid, 6);
-	// memcpy(config.ap_info.bssid, bssid, 6);
+		memcpy(STA_CFG->ap_info.bssid, bssid, 6);
+	else
+		memset(STA_CFG->ap_info.bssid, 0x00, 6);
 
-	if (ADDR_STA_IP && ADDR_STA_MASK && ADDR_STA_GW) {
-		config.dhcp_mode = DHCP_DISABLE;
-		sprintf(config.local_ip_addr, "%u.%u.%u.%u", ADDR_STA_IP);
-		sprintf(config.net_mask, "%u.%u.%u.%u", ADDR_STA_MASK);
-		sprintf(config.gateway_ip_addr, "%u.%u.%u.%u", ADDR_STA_GW);
-		LT_D_WG("Static IP: %s / %s / %s", config.local_ip_addr, config.net_mask, config.gateway_ip_addr);
+	if (STA_CFG->dhcp_mode == DHCP_DISABLE) {
+		LT_D_WG("Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
+		LT_D_WG("Static DNS: %s", STA_CFG->dns_server_ip_addr);
 	} else {
-		config.dhcp_mode = DHCP_CLIENT;
 		LT_D_WG("Using DHCP");
-	}
-
-	if (ADDR_STA_DNS) {
-		sprintf(config.dns_server_ip_addr, "%u.%u.%u.%u", ADDR_STA_DNS);
-		LT_D_WG("Static DNS: %s", config.dns_server_ip_addr);
 	}
 
 	if (!data.scannedAt || millis() - data.scannedAt > 10000) {
 		LT_D_WG("Scan needed");
 		// apparently a scan must be performed first,
 		// else it hangs at "[sa_sta]MM_START_REQ"
+		// TODO check if this applies with pre-set bssid
 		scanNetworks(false);
 	}
 
 	LT_D_WG("Starting WiFi...");
+
 	__wrap_bk_printf_disable();
-	bk_wlan_start_sta(&config);
+	bk_wlan_start_sta_adv(STA_CFG);
 	__wrap_bk_printf_enable();
-	LT_D_WG("bk_wlan_start() OK");
+
+	LT_D_WG("Start OK");
 	return true;
 
 error:
@@ -110,6 +102,8 @@ error:
 
 bool WiFiClass::disconnect(bool wifiOff) {
 	bk_wlan_connection_loss();
+	if (wifiOff)
+		enableSTA(false);
 	return true;
 }
 
@@ -122,34 +116,30 @@ bool WiFiClass::getAutoReconnect() {
 }
 
 IPAddress WiFiClass::localIP() {
-	IPStatusTypedef config;
-	bk_wlan_get_ip_status(&config, BK_STATION);
+	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
 	IPAddress ip;
-	ip.fromString(config.ip);
+	ip.fromString(IP_STATUS->ip);
 	return ip;
 }
 
 IPAddress WiFiClass::subnetMask() {
-	IPStatusTypedef config;
-	bk_wlan_get_ip_status(&config, BK_STATION);
+	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
 	IPAddress ip;
-	ip.fromString(config.mask);
+	ip.fromString(IP_STATUS->mask);
 	return ip;
 }
 
 IPAddress WiFiClass::gatewayIP() {
-	IPStatusTypedef config;
-	bk_wlan_get_ip_status(&config, BK_STATION);
+	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
 	IPAddress ip;
-	ip.fromString(config.gate);
+	ip.fromString(IP_STATUS->gate);
 	return ip;
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
-	IPStatusTypedef config;
-	bk_wlan_get_ip_status(&config, BK_STATION);
+	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
 	IPAddress ip;
-	ip.fromString(config.dns);
+	ip.fromString(IP_STATUS->dns);
 	return ip;
 }
 
@@ -158,12 +148,12 @@ IPAddress WiFiClass::broadcastIP() {
 }
 
 const char *WiFiClass::getHostname() {
-	struct netif *ifs = net_get_sta_handle();
+	struct netif *ifs = (struct netif *)net_get_sta_handle();
 	return netif_get_hostname(ifs);
 }
 
 bool WiFiClass::setHostname(const char *hostname) {
-	struct netif *ifs = net_get_sta_handle();
+	struct netif *ifs = (struct netif *)net_get_sta_handle();
 	netif_set_hostname(ifs, (char *)hostname);
 	return true;
 }

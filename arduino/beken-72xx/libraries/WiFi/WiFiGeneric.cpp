@@ -6,8 +6,10 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
 
 	if (mode && !data.statusIp) {
-		data.statusIp	= (IPStatusTypedef *)malloc(sizeof(IPStatusTypedef));
-		data.statusLink = (LinkStatusTypeDef *)malloc(sizeof(LinkStatusTypeDef));
+		data.configSta	= zalloc(sizeof(network_InitTypeDef_adv_st));
+		data.configAp	= zalloc(sizeof(network_InitTypeDef_ap_st));
+		data.statusIp	= malloc(sizeof(IPStatusTypedef));
+		data.statusLink = malloc(sizeof(LinkStatusTypeDef));
 	}
 
 	if (!__bk_rf_is_init) {
@@ -38,8 +40,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	if (!mode) {
+		free(data.configSta);
+		free(data.configAp);
 		free(data.statusIp);
 		free(data.statusLink);
+		data.configSta	= NULL;
+		data.configAp	= NULL;
 		data.statusIp	= NULL;
 		data.statusLink = NULL;
 	}
