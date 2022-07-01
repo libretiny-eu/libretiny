@@ -42,7 +42,7 @@ WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 
 #define IP_FMT "%u.%u.%u.%u"
 
-#define STA_CFG		((network_InitTypeDef_adv_st *)data.configSta)
+#define STA_CFG		((network_InitTypeDef_st *)data.configSta)
 #define AP_CFG		((network_InitTypeDef_ap_st *)data.configAp)
 #define IP_STATUS	((IPStatusTypedef *)data.statusIp)
 #define LINK_STATUS ((LinkStatusTypeDef *)data.statusLink)

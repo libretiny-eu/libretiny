@@ -11,15 +11,12 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 
 	LT_HEAP_I();
 
-	strcpy(STA_CFG->ap_info.ssid, ssid);
+	strcpy(STA_CFG->wifi_ssid, ssid);
 	if (passphrase) {
-		strcpy(STA_CFG->key, passphrase);
-		STA_CFG->key_len = strlen(passphrase);
+		strcpy(STA_CFG->wifi_key, passphrase);
 	} else {
-		STA_CFG->key_len = 0;
+		STA_CFG->wifi_bssid[0] = '\0';
 	}
-
-	STA_CFG->ap_info.channel = channel;
 
 	if (reconnect(bssid))
 		return WL_CONNECTED;
@@ -54,7 +51,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 }
 
 bool WiFiClass::reconnect(const uint8_t *bssid) {
-	if (!bssid && !STA_CFG->ap_info.ssid[0]) {
+	if (!bssid && !STA_CFG->wifi_ssid[0]) {
 		LT_E("(B)SSID not specified");
 		goto error;
 	}
@@ -62,17 +59,17 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	if (bssid) {
 		LT_D_WG("Connecting to " MACSTR, MAC2STR(bssid));
 	} else {
-		LT_D_WG("Connecting to %s", STA_CFG->ap_info.ssid);
+		LT_D_WG("Connecting to %s", STA_CFG->wifi_ssid);
 	}
 
+	STA_CFG->wifi_mode			 = BK_STATION;
 	STA_CFG->wifi_retry_interval = 100;
-	STA_CFG->ap_info.security	 = BK_SECURITY_TYPE_AUTO;
 	if (bssid)
-		memcpy(STA_CFG->ap_info.bssid, bssid, 6);
+		memcpy(STA_CFG->wifi_bssid, bssid, 6);
 	else
-		memset(STA_CFG->ap_info.bssid, 0x00, 6);
+		memset(STA_CFG->wifi_bssid, 0x00, 6);
 
-	if (STA_CFG->dhcp_mode == DHCP_DISABLE) {
+	if (STA_CFG->dhcp_mode != DHCP_DISABLE) {
 		LT_D_WG("Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
 		LT_D_WG("Static DNS: %s", STA_CFG->dns_server_ip_addr);
 	} else {
@@ -90,7 +87,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	LT_D_WG("Starting WiFi...");
 
 	__wrap_bk_printf_disable();
-	bk_wlan_start_sta_adv(STA_CFG);
+	bk_wlan_start_sta(STA_CFG);
 	__wrap_bk_printf_enable();
 
 	LT_D_WG("Start OK");
