@@ -15,6 +15,7 @@ WiFiStatus eventTypeToStatus(uint8_t type) {
 	switch (type) {
 		case RW_EVT_STA_IDLE:
 			return WL_IDLE_STATUS;
+		case RW_EVT_STA_NO_AP_FOUND:
 			return WL_NO_SSID_AVAIL;
 		case RW_EVT_STA_CONNECTING:
 		case RW_EVT_STA_CONNECTED:
@@ -22,7 +23,6 @@ WiFiStatus eventTypeToStatus(uint8_t type) {
 		case RW_EVT_STA_GOT_IP:
 			return WL_CONNECTED;
 		case RW_EVT_STA_PASSWORD_WRONG:
-		case RW_EVT_STA_NO_AP_FOUND:
 		case RW_EVT_STA_ASSOC_FULL:
 		case RW_EVT_STA_CONNECT_FAILED:
 			return WL_CONNECT_FAILED;

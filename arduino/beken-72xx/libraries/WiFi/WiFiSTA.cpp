@@ -25,6 +25,9 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 }
 
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
+	// need to initialize data struct first
+	enableSTA(true);
+
 	STA_CFG->dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	if (localIP) {
 		sprintf(STA_CFG->local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);

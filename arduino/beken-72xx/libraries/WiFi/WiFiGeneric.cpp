@@ -71,7 +71,10 @@ WiFiMode WiFiClass::getMode() {
 }
 
 WiFiStatus WiFiClass::status() {
-	return eventTypeToStatus(mhdr_get_station_status());
+	rw_evt_type status = mhdr_get_station_status();
+	if (status == RW_EVT_STA_CONNECTED && STA_CFG->dhcp_mode == DHCP_DISABLE)
+		status = RW_EVT_STA_GOT_IP;
+	return eventTypeToStatus(status);
 }
 
 IPAddress WiFiClass::hostByName(const char *hostname) {
