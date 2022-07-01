@@ -57,17 +57,26 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	__wrap_bk_printf_disable();
 	mhdr_scanu_reg_cb(scanHandler, this);
 	bk_wlan_start_scan();
-	__wrap_bk_printf_enable();
 
 	LT_HEAP_I();
 
 	scan->running = true;
 
+	int16_t ret = WIFI_SCAN_RUNNING;
 	if (!async) {
 		LT_I("Waiting for results");
 		xSemaphoreTake(data.scanSem, 1); // reset the semaphore quickly
 		xSemaphoreTake(data.scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
-		return scan->count;
+		if (scan->running) {
+			scanDelete();
+			ret = WIFI_SCAN_FAILED;
+			goto exit;
+		}
+		ret = scan->count;
+		goto exit;
 	}
-	return WIFI_SCAN_RUNNING;
+
+exit:
+	__wrap_bk_printf_enable();
+	return ret;
 }

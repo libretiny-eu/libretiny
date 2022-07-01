@@ -78,6 +78,8 @@ env.Append(
         # LwIP options
         ("LWIP_SO_RCVBUF", "1"),  # for ioctl(FIONREAD)
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
+        # FreeRTOS options
+        ("INCLUDE_xTaskGetHandle", "1"),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",

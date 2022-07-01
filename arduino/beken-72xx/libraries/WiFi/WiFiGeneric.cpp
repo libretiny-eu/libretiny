@@ -16,6 +16,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		LT_D_WG("Initializing func&app");
 		func_init_extended();
 		app_pre_start();
+		// wait for the init_thread to finish its job
+		while (xTaskGetHandle("init_thread")) {
+			LT_V_WG("Waiting for init_thread");
+			delay(10);
+		}
+		LT_D_WG("Success");
 		__bk_rf_is_init = true;
 	}
 
