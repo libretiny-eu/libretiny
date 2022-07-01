@@ -47,6 +47,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	LT_HEAP_I();
 
 	__wrap_bk_printf_enable();
+	return true;
 }
 
 WiFiMode WiFiClass::getMode() {

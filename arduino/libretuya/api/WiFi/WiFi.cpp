@@ -14,6 +14,8 @@ void WiFiClass::printDiag(Print &dest) {
 		dest.print("SSID: ");
 		dest.println(SSID());
 		if (isConnected()) {
+			dest.print("Channel: ");
+			dest.println(channel());
 			dest.print("BSSID: ");
 			dest.println(BSSIDstr());
 			dest.print("RSSI: ");
@@ -40,6 +42,25 @@ void WiFiClass::printDiag(Print &dest) {
 		dest.print("Hostname: ");
 		dest.println(softAPgetHostname());
 	}
+}
+
+bool WiFiClass::validate(const char *ssid, const char *passphrase) {
+	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
+		LT_W("SSID not specified or too long");
+		return false;
+	}
+	if (passphrase) {
+		uint16_t length = strlen(passphrase);
+		if (length < 8) {
+			LT_W("Passphrase too short (%u)", length);
+			return false;
+		}
+		if (length > 63) {
+			LT_W("Passphrase too long (%u)", length);
+			return false;
+		}
+	}
+	return true;
 }
 
 WiFiClass WiFi;

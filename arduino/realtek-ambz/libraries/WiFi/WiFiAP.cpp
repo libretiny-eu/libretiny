@@ -9,21 +9,13 @@ typedef struct {
 
 bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bool ssidHidden, int maxClients) {
 	if (!enableAP(true))
-		return false;
+		return WL_CONNECT_FAILED;
+	if (!validate(ssid, passphrase))
+		return WL_CONNECT_FAILED;
 
 	LT_HEAP_I();
 
 	vTaskDelay(20);
-
-	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
-		LT_W("SSID not specified or too long");
-		return false;
-	}
-
-	if (passphrase && strlen(passphrase) < 8) {
-		LT_W("Passphrase too short");
-		return false;
-	}
 
 	strcpy((char *)ap.ssid.val, ssid);
 	ap.ssid.len = strlen(ssid);

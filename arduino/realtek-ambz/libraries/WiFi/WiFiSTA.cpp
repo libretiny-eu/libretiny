@@ -6,18 +6,10 @@ WiFiStatus
 WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
 	if (!enableSTA(true))
 		return WL_CONNECT_FAILED;
+	if (!validate(ssid, passphrase))
+		return WL_CONNECT_FAILED;
 
 	LT_HEAP_I();
-
-	if (!ssid || *ssid == 0x00 || strlen(ssid) > 32) {
-		LT_W("SSID not specified or too long");
-		return WL_CONNECT_FAILED;
-	}
-
-	if (passphrase && strlen(passphrase) > 64) {
-		LT_W("Passphrase too long");
-		return WL_CONNECT_FAILED;
-	}
 
 	memset(wifi.bssid.octet, 0, ETH_ALEN);
 	strcpy((char *)wifi.ssid.val, ssid);
