@@ -7,10 +7,17 @@
 #include <stdint.h>
 #include <stdio.h>
 
-extern void LOGUART_PutChar(char c);
+#define LOG_UART_REG_BASE 0x40003000
+#define UART0_REG_BASE	  0x40040000
+#define UART1_REG_BASE	  0x40040400
+#define UART2_REG_BASE	  LOG_UART_REG_BASE
+
+extern uint32_t UART_Writable(void *UARTx);
+extern void UART_CharPut(void *UARTx, uint8_t TxData);
 
 void putchar_(char c) {
-	LOGUART_PutChar(c);
+	while (UART_Writable(LOG_UART_REG_BASE) == 0) {}
+	UART_CharPut(LOG_UART_REG_BASE, c);
 }
 
 WRAP_PRINTF(rtl_printf);

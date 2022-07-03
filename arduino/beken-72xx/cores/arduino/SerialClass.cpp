@@ -3,17 +3,19 @@
 #include "SerialClass.h"
 
 extern "C" {
+
 #include <uart_pub.h>
 
 extern void bk_send_byte(uint8_t uport, uint8_t data);
 extern void uart_hw_set_change(uint8_t uport, bk_uart_config_t *uart_config);
 extern int uart_rx_callback_set(int uport, uart_callback callback, void *param);
-}
 
-#ifdef PIN_SERIAL1_RX
+} // extern "C"
+
+#ifdef PIN_SERIAL1_TX
 SerialClass Serial1(UART1_PORT);
 #endif
-#ifdef PIN_SERIAL2_RX
+#ifdef PIN_SERIAL2_TX
 SerialClass Serial2(UART2_PORT);
 #endif
 
@@ -39,11 +41,13 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		.stop_bits	  = (uart_stop_bits_t)stopBits,
 		.flow_control = FLOW_CTRL_DISABLED,
 	};
+
 	if (this->buf) {
 		this->buf->clear();
 	} else {
 		this->buf = new RingBuffer();
 	}
+
 	uart_hw_set_change(port, &cfg);
 	uart_rx_callback_set(port, callback, this->buf);
 }
