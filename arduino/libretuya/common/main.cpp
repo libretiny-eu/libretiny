@@ -12,7 +12,7 @@ fal_partition_t fal_root_part = NULL;
 
 // Arduino framework initialization.
 // May be redefined by family files.
-void init() __attribute__((weak));
+void initArduino() __attribute__((weak));
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
@@ -36,7 +36,7 @@ int main(void) {
 	// print a startup banner
 	LT_BANNER();
 	// initialize Arduino framework
-	init();
+	initArduino();
 	// initialize C library
 	__libc_init_array();
 	// optionally initialize per-variant code

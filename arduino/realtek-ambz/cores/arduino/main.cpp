@@ -28,7 +28,7 @@ extern uint32_t GlobalDebugEnable;
 extern uint16_t GlobalDebugLevel;
 extern uint8_t GlobalPrivateLog;
 
-void init() {
+void initArduino() {
 	// make the SDK less verbose by default
 	GlobalDebugEnable = 0;
 	GlobalPrivateLog  = 0;
