@@ -14,6 +14,7 @@
 	* Common API
 		* [FS](ltapi/classfs_1_1_f_s.md)
 		* [Preferences](ltapi/class_i_preferences.md)
+		* [SoftwareSerial](ltapi/class_software_serial.md)
 		* [WiFi API](ltapi/class_wi_fi_class.md)
 			* [TCP Client](ltapi/class_i_wi_fi_client.md)
 			* [SSL Client](ltapi/class_i_wi_fi_client_secure.md)

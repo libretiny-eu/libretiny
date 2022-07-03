@@ -47,10 +47,10 @@ Core functions      | ✔️             | ✔️
 GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ❓/✔️/❌
 Analog input (ADC)  | ✔️             | ✔️
 Serial              | ✔️             | ✔️
-Serial (extra)      | ❌              | 1, 2
+Serial (extra)      | 0, 1, 2        | 1, 2
 Flash I/O           | ✔️             | ✔️
 **CORE LIBRARIES**  |                |
-SoftwareSerial      | ❌              | ❌
+SoftwareSerial      | ✔️             | ❌
 SPI                 | ❌              | ❌
 Wire                | ❗              | ❌
 **OTHER LIBRARIES** |                |
