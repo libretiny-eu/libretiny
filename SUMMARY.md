@@ -50,4 +50,5 @@
 		* [Debugging](docs/platform/realtek/debugging.md)
 		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
 	* [All supported boards](boards/)
+* [📓 TODO](TODO.md)
 * [🔗 Resources](docs/resources.md)
