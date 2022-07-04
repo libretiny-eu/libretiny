@@ -12,7 +12,7 @@ custom_fw_name = my_firmware
 custom_fw_version = 1.2.0
 ```
 
-## LibreTuya API
+## LibreTuya options
 
 !!! note
     See [LibreTuyaConfig.h](../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
@@ -24,9 +24,12 @@ build_flags =
   -D LT_LOGLEVEL=LT_LEVEL_DEBUG
 ```
 
-### Logging
+!!! hint
+    Values in parentheses represent the defaults for the config options.
 
-- `LT_LOGGER` - enable/disable LibreTuya logger globally. Enabled by default.
+### Logger
+
+- `LT_LOGGER` (1) - enable/disable LibreTuya logger globally. Enabled by default.
 - `LT_LOGLEVEL` - global LT loglevel:
   - `LT_LEVEL_TRACE` (same as LT_LEVEL_VERBOSE)
   - `LT_LEVEL_DEBUG`
@@ -34,28 +37,35 @@ build_flags =
   - `LT_LEVEL_WARN`
   - `LT_LEVEL_ERROR`
   - `LT_LEVEL_FATAL`
-- `LT_LOGGER_TIMESTAMP` - print program runtime in printk-like format
-- `LT_LOGGER_CALLER` - print calling method name
-- `LT_LOGGER_TASK` - print calling FreeRTOS task (if available)
-- `LT_LOGGER_COLOR` - output ANSI terminal colors
-- `LT_PRINTF_BROKEN` - whether printf outputs "0." for floats with value 0
-- `LT_LOG_HEAP` - print free heap size using `LT_HEAP_I()`
-- `LT_LOG_ERRNO` - print and clear errno value (if set) using `LT_ERRNO()`
+- `LT_LOGGER_TIMESTAMP` (1) - print program runtime in printk-like format
+- `LT_LOGGER_CALLER` (1) - print calling method name
+- `LT_LOGGER_TASK` (1) - print calling FreeRTOS task (if available)
+- `LT_LOGGER_COLOR` (0) - output ANSI terminal colors
+- `LT_PRINTF_BROKEN` (0) - whether printf outputs "0." for floats with value 0
+- `LT_LOG_HEAP` (0) - print free heap size using `LT_HEAP_I()`
+- `LT_LOG_ERRNO` (0) - print and clear errno value (if set) using `LT_ERRNO()`
 
-### Debug logging
+#### Debug logging
 
 The following options enable library-specific debugging messages. They are only effective if `LT_LOGLEVEL` is set below INFO. All of them are disabled by default.
 
 Families should generally call i.e. WiFiClient debugging for client-related code, even if the `WiFiClient.cpp` file is physically absent.
 
-- `LT_DEBUG_WIFI` - `WiFi.cpp`
-- `LT_DEBUG_WIFI_CLIENT` - `WiFiClient.cpp`
-- `LT_DEBUG_WIFI_SERVER` - `WiFiServer.cpp`
-- `LT_DEBUG_WIFI_STA` - `WiFiSTA.cpp`
-- `LT_DEBUG_WIFI_AP` - `WiFiAP.cpp`
-- `LT_DEBUG_SSL` - `WiFiClientSecure`
+- `LT_DEBUG_WIFI` - WiFi
+- `LT_DEBUG_WIFI_CLIENT` - WiFiClient
+- `LT_DEBUG_WIFI_SERVER` - WiFiServer
+- `LT_DEBUG_WIFI_STA` - WiFiSTA
+- `LT_DEBUG_WIFI_AP` - WiFiAP
+- `LT_DEBUG_SSL` - WiFiClientSecure
 
-### Family options
+### Serial output
+
+Options for controlling default UART log output.
+
+- `LT_UART_SILENT_ENABLED` (1) - enable auto-silencing of SDK "loggers"; this makes the serial output much more readable, but can hide some error messages
+- `LT_UART_SILENT_ALL` (0) - disable all SDK output (LT output and logger still work)
+
+### Family feature config
 
 These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it.
 

@@ -54,6 +54,15 @@
 #define LT_LOG_ERRNO 0
 #endif
 
+// Serial output options
+#ifndef LT_UART_SILENT_ENABLED
+#define LT_UART_SILENT_ENABLED 1
+#endif
+
+#ifndef LT_UART_SILENT_ALL
+#define LT_UART_SILENT_ALL 0
+#endif
+
 // Per-module debugging
 #ifndef LT_DEBUG_WIFI
 #define LT_DEBUG_WIFI 0

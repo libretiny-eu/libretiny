@@ -21,9 +21,8 @@
 
 - allow selecting default output port for LT logger, as well as for `Serial` class (without a number)
 - choose output port during runtime, too
-- enable/disable auto-silencing of SDK output, as well as an option to disable it entirely (compile-time? run-time?)
 - configuration of RX/TX pins
-- SoftwareSerial library
+- SoftwareSerial library - receiving + Beken family
 
 ### Other
 
