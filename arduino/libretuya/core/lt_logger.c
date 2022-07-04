@@ -3,6 +3,7 @@
 #include "lt_logger.h"
 
 #include <Arduino.h>
+#include <printf/printf.h>
 
 #if LT_LOGGER_TASK && LT_HAS_FREERTOS
 #include <FreeRTOS.h>
@@ -27,10 +28,11 @@
 #define COLOR_BRIGHT_CYAN	 0x16
 #define COLOR_BRIGHT_WHITE	 0x17
 
-const char levels[] = {'V', 'D', 'I', 'W', 'E', 'F'};
+static uint8_t uart_port   = LT_UART_DEFAULT_LOGGER;
+static const char levels[] = {'V', 'D', 'I', 'W', 'E', 'F'};
 
 #if LT_LOGGER_COLOR
-const uint8_t colors[] = {
+static const uint8_t colors[] = {
 	COLOR_BRIGHT_CYAN,
 	COLOR_BRIGHT_BLUE,
 	COLOR_BRIGHT_GREEN,
@@ -72,7 +74,10 @@ void lt_log(const uint8_t level, const char *format, ...) {
 	char c_value  = '0' + (colors[level] & 0x7);
 #endif
 
-	printf(
+	fctprintf(
+		putchar_p,
+		uart_port,
+	// format:
 #if LT_LOGGER_COLOR
 		"\e[%c;3%cm"
 #endif
@@ -94,6 +99,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		"%s%c "
 #endif
 		,
+	// arguments:
 #if LT_LOGGER_COLOR
 		c_bright, // whether text is bright
 		c_value,  // text color
@@ -121,7 +127,12 @@ void lt_log(const uint8_t level, const char *format, ...) {
 
 	va_list va_args;
 	va_start(va_args, format);
-	vprintf(format, va_args);
+	vfctprintf(putchar_p, uart_port, format, va_args);
 	va_end(va_args);
-	printf("\r\n");
+	putchar_p('\r', uart_port);
+	putchar_p('\n', uart_port);
+}
+
+void lt_log_set_port(uint8_t port) {
+	uart_port = port;
 }

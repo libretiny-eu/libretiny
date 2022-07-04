@@ -13,6 +13,13 @@ void lt_log(const uint8_t level, const char *caller, const unsigned short line, 
 void lt_log(const uint8_t level, const char *format, ...);
 #endif
 
+/**
+ * @brief Change log output port.
+ *
+ * @param port UART port index - can be 0, 1 or 2
+ */
+void lt_log_set_port(uint8_t port);
+
 #if LT_LEVEL_TRACE >= LT_LOGLEVEL
 #define LT_T(...) LT_LOG(LT_LEVEL_TRACE, __FUNCTION__, __LINE__, __VA_ARGS__)
 #define LT_V(...) LT_LOG(LT_LEVEL_TRACE, __FUNCTION__, __LINE__, __VA_ARGS__)

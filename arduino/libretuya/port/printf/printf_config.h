@@ -14,6 +14,9 @@
 #define vsnprintf_ __wrap_vsnprintf
 #define vprintf_   __wrap_vprintf
 
+// declare putchar() method with custom output port
+void putchar_p(char c, unsigned long port);
+
 #define WRAP_DISABLE_DEF(name)                                                                                         \
 	extern void __wrap_##name##_disable();                                                                             \
 	extern void __wrap_##name##_enable();                                                                              \

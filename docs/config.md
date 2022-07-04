@@ -62,8 +62,18 @@ Families should generally call i.e. WiFiClient debugging for client-related code
 
 Options for controlling default UART log output.
 
+- `LT_UART_DEFAULT_PORT` (unset) - default output port for all messages (SDK, LT logger, Serial class); can be 0, 1 or 2
+- `LT_UART_DEFAULT_LOGGER` (unset) - override default output port for LT logger only
+- `LT_UART_DEFAULT_SERIAL` (unset) - override default output port for `Serial` class (without a number)
 - `LT_UART_SILENT_ENABLED` (1) - enable auto-silencing of SDK "loggers"; this makes the serial output much more readable, but can hide some error messages
 - `LT_UART_SILENT_ALL` (0) - disable all SDK output (LT output and logger still work)
+
+!!! info
+    Values 0, 1 and 2 correspond to physical UART port numbers (refer to board pinout for the available ports).
+
+    Serial class instances (`Serial0`, `Serial1`, `Serial2`) use the respective port numbers for printing.
+
+    If `LT_UART_DEFAULT_LOGGER` is not set, it is chosen by the family code - whichever port is most appropriate (i.e. LOG_UART (2) on Realtek, RX2/TX2 on Beken).
 
 ### Family feature config
 

@@ -63,6 +63,14 @@
 #define LT_UART_SILENT_ALL 0
 #endif
 
+#ifndef LT_UART_DEFAULT_LOGGER
+#define LT_UART_DEFAULT_LOGGER LT_UART_DEFAULT_PORT
+#endif
+
+#ifndef LT_UART_DEFAULT_SERIAL
+#define LT_UART_DEFAULT_SERIAL LT_UART_DEFAULT_PORT
+#endif
+
 // Per-module debugging
 #ifndef LT_DEBUG_WIFI
 #define LT_DEBUG_WIFI 0

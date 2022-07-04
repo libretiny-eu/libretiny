@@ -14,4 +14,8 @@ void putchar_(char c) {
 	bk_send_byte(uart_print_port, c);
 }
 
+void putchar_p(char c, unsigned long port) {
+	bk_send_byte(port & 0xFF, c);
+}
+
 WRAP_PRINTF(bk_printf);
