@@ -5,6 +5,7 @@ from os.path import dirname, join
 
 sys.path.append(join(dirname(__file__), ".."))
 
+import shlex
 from argparse import ArgumentParser
 from enum import Enum
 from os import stat, unlink
@@ -13,7 +14,7 @@ from shutil import copyfile
 from subprocess import PIPE, Popen
 from typing import IO, Dict, List, Tuple
 
-from tools.util.fileio import chext, isnewer
+from tools.util.fileio import chext, isnewer, readtext
 from tools.util.models import Family
 from tools.util.obj import get
 from tools.util.platform import get_board_manifest, get_family
@@ -194,7 +195,7 @@ if __name__ == "__main__":
     parser = ArgumentParser(
         prog="link2bin",
         description="Link to BIN format",
-        prefix_chars="@",
+        prefix_chars="#",
     )
     parser.add_argument("board", type=str, help="Target board name")
     parser.add_argument("ota1", type=str, help=".LD file OTA1 pattern")
@@ -218,6 +219,17 @@ if __name__ == "__main__":
     if not args.args:
         print(f"Linker arguments must not be empty")
         exit(1)
+
+    try:
+        while True:
+            i = next(i for i, a in enumerate(args.args) if a.startswith("@"))
+            arg = args.args.pop(i)
+            argv = readtext(arg[1:])
+            argv = shlex.split(argv)
+            args.args = args.args[0:i] + argv + args.args[i:]
+    except StopIteration:
+        pass
+
     link2bin(
         soc,
         family,

@@ -40,6 +40,9 @@ def env_add_defaults(env, platform, board):
         LINK2BIN='"${PYTHONEXE}" "${LT_DIR}/tools/link2bin.py"',
         UF2OTA_PY='"${PYTHONEXE}" "${LT_DIR}/tools/uf2ota/uf2ota.py"',
         UF2UPLOAD_PY='"${PYTHONEXE}" "${LT_DIR}/tools/upload/uf2upload.py"',
+        # Fix for link2bin to get tmpfile name in argv
+        LINKCOM="${LINK} ${LINKARGS}",
+        LINKARGS="${TEMPFILE('-o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS', '$LINKCOMSTR')}",
     )
     env.Replace(**vars)
     # Store family parameters as environment variables
