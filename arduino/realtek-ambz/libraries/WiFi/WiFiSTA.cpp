@@ -145,9 +145,14 @@ IPAddress WiFiClass::localIP() {
 }
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
-	uint8_t *macLocal = LwIP_GetMAC(NETIF_RTW_STA);
-	memcpy(mac, macLocal, ETH_ALEN);
-	free(macLocal);
+	if (getMode() == WIFI_MODE_NULL) {
+		uint8_t *efuse = (uint8_t *)malloc(512);
+		EFUSE_LogicalMap_Read(efuse);
+		memcpy(mac, efuse + 0x11A, ETH_ALEN);
+		free(efuse);
+		return mac;
+	}
+	memcpy(mac, LwIP_GetMAC(NETIF_RTW_STA), ETH_ALEN);
 	return mac;
 }
 

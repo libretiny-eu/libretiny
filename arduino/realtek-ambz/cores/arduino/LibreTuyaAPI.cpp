@@ -43,6 +43,7 @@ uint32_t LibreTuya::getChipId() {
 	// TODO do what EFUSE_LogicalMapRead() does, and read only the used data
 	EFUSE_LogicalMap_Read(efuse);
 	memcpy(id, efuse + 0x11A + 3, 3);
+	free(efuse);
 	return chipId;
 }
 
