@@ -111,6 +111,10 @@ env.Append(
         "-Wl,-wrap,snprintf",
         "-Wl,-wrap,sprintf",
         "-Wl,-wrap,vsnprintf",
+        "-Wl,-wrap,bk_flash_get_info",
+        "-Wl,-wrap,bk_flash_erase",
+        "-Wl,-wrap,bk_flash_write",
+        "-Wl,-wrap,bk_flash_read",
     ],
 )
 
@@ -154,6 +158,7 @@ env.AddLibrary(
         "+<arch_main.c>",
         "+<ate_app.c>",
         "+<intc.c>",
+        "+<wrap_BkDriverFlash.c>",
         *srcs_fixups,
     ],
 )
