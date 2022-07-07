@@ -6,10 +6,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
 
 	if (mode && !data.statusIp) {
-		data.configSta	= zalloc(sizeof(network_InitTypeDef_st));
-		data.configAp	= zalloc(sizeof(network_InitTypeDef_ap_st));
-		data.statusIp	= malloc(sizeof(IPStatusTypedef));
-		data.statusLink = malloc(sizeof(LinkStatusTypeDef));
+		data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
+		data.configAp	   = zalloc(sizeof(network_InitTypeDef_ap_st));
+		data.statusIp	   = malloc(sizeof(IPStatusTypedef));
+		data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
+		STA_CFG->dhcp_mode = DHCP_CLIENT;
 	}
 
 	if (!__bk_rf_is_init) {

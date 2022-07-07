@@ -72,7 +72,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	else
 		memset(STA_CFG->wifi_bssid, 0x00, 6);
 
-	if (STA_CFG->dhcp_mode != DHCP_DISABLE) {
+	if (STA_CFG->dhcp_mode == DHCP_DISABLE) {
 		LT_D_WG("Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
 		LT_D_WG("Static DNS: %s", STA_CFG->dns_server_ip_addr);
 	} else {
