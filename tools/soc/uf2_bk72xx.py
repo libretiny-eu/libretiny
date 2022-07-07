@@ -47,6 +47,8 @@ def upload_uart(
         except ValueError as e:
             print(prefix, f"Writing failed: {e.args[0]}")
             return False
+    # reboot the chip
+    bk.reboot_chip()
     return True
 
 

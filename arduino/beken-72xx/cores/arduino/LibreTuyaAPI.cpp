@@ -13,11 +13,16 @@
 #define FLASH_OP_RDID		 20
 
 extern "C" {
+
 #include <flash_pub.h>
+#include <param_config.h>
 #include <sys_ctrl.h>
 #include <sys_rtos.h>
 #include <wlan_ui_pub.h>
-}
+
+extern uint8_t system_mac[];
+
+} // extern "C"
 
 void LibreTuya::restart() {
 	bk_reboot();
@@ -35,10 +40,9 @@ const char *LibreTuya::getChipModel() {
 }
 
 uint32_t LibreTuya::getChipId() {
-	// TODO determine if this really is unique
-	uint32_t chipId = REG_READ(SCTRL_DEVICE_ID);
-	chipId &= 0xFFFFFF;
-	return chipId;
+	uint8_t mac[6];
+	cfg_load_mac(mac); // force loading MAC from TLV (ignore user-set WiFi MAC)
+	return (mac[3]) | (mac[4] << 8) | (mac[5] << 16);
 }
 
 uint8_t LibreTuya::getChipCores() {
