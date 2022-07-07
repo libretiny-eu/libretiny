@@ -13,6 +13,18 @@ static GPIO_INDEX pwmToGpio[] = {
 	GPIO26, // PWM5
 };
 
+#if CFG_SOC_NAME == SOC_BK7231N
+static GPIO_INDEX adcToGpio[] = {
+	-1,		 // ADC0 - VBAT
+	GPIONUM, // ADC1
+	GPIONUM, // ADC2
+	GPIO23,	 // ADC3
+	GPIONUM, // ADC4
+	GPIONUM, // ADC5
+	GPIONUM, // ADC6
+	GPIONUM, // ADC7
+};
+#else
 static GPIO_INDEX adcToGpio[] = {
 	-1,		// ADC0 - VBAT
 	GPIO4,	// ADC1
@@ -23,6 +35,7 @@ static GPIO_INDEX adcToGpio[] = {
 	GPIO12, // ADC6
 	GPIO13, // ADC7
 };
+#endif
 
 static uint8_t gpioToPwm(GPIO_INDEX gpio) {
 	for (uint8_t i = 0; i < sizeof(pwmToGpio); i++) {
@@ -84,7 +97,13 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	float percent	   = value * 1.0 / (1 << _analogWriteResolution);
 	uint32_t dutyCycle = percent * _analogWritePeriod * 26 - 1;
 	pwm.channel		   = gpioToPwm(pin->gpio);
-	pwm.duty_cycle	   = dutyCycle;
+#if CFG_SOC_NAME != SOC_BK7231N
+	pwm.duty_cycle = dutyCycle;
+#else
+	pwm.duty_cycle1 = dutyCycle;
+	pwm.duty_cycle2 = dutyCycle;
+	pwm.duty_cycle3 = dutyCycle;
+#endif
 
 	if (!pinEnabled(pin, PIN_PWM)) {
 		// enable PWM and set its value

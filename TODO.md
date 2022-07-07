@@ -19,8 +19,6 @@
 
 ### Serial
 
-- allow selecting default output port for LT logger, as well as for `Serial` class (without a number)
-- choose output port during runtime, too
 - configuration of RX/TX pins
 - SoftwareSerial library - receiving + Beken family
 
@@ -35,7 +33,7 @@
 
 - WiFi events
 - implement OTA
-- test & add support for BK7231N
+- fix WiFi on BK7231N, test other functionality
 - add generic board definition
 - fix SSL (mbedTLS)
 - I2C (Wire)

@@ -40,7 +40,6 @@
 #define CFG_SUPPORT_BKREG				1
 #define CFG_SUPPORT_BLE					1
 #define CFG_SUPPORT_BLE_MESH			0
-#define CFG_SUPPORT_BOOTLOADER			1
 #define CFG_SUPPORT_BSSID_CONNECT		0
 #define CFG_SUPPORT_CALIBRATION			1
 #define CFG_SUPPORT_MANUAL_CALI			1
@@ -100,6 +99,7 @@
 #define SOC_BK7231						1
 #define SOC_BK7231N						5
 #define SOC_BK7231U						2
+#define SOC_BK7271						4
 #define SOC_PLATFORM					1
 #define THD_APPLICATION_PRIORITY		3
 #define THD_CORE_PRIORITY				2

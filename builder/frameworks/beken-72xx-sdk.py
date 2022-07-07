@@ -158,6 +158,15 @@ env.AddLibrary(
     ],
 )
 
+# Sources - family fixups
+env.AddLibrary(
+    name="${FAMILY_CODE}_fixups",
+    base_dir="$FAMILY_DIR/fixups",
+    srcs=[
+        "+<temp_detect.c>",
+    ],
+)
+
 # Sources - app module
 env.AddLibrary(
     name="bdk_app",

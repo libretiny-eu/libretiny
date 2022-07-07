@@ -28,7 +28,7 @@
 #define COLOR_BRIGHT_CYAN	 0x16
 #define COLOR_BRIGHT_WHITE	 0x17
 
-static uint8_t uart_port   = LT_UART_DEFAULT_LOGGER;
+static uint32_t uart_port  = LT_UART_DEFAULT_LOGGER;
 static const char levels[] = {'V', 'D', 'I', 'W', 'E', 'F'};
 
 #if LT_LOGGER_COLOR
@@ -75,8 +75,8 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #endif
 
 	fctprintf(
-		putchar_p,
-		uart_port,
+		(void (*)(char, void *))putchar_p,
+		(void *)uart_port,
 	// format:
 #if LT_LOGGER_COLOR
 		"\e[%c;3%cm"
@@ -127,7 +127,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 
 	va_list va_args;
 	va_start(va_args, format);
-	vfctprintf(putchar_p, uart_port, format, va_args);
+	vfctprintf((void (*)(char, void *))putchar_p, (void *)uart_port, format, va_args);
 	va_end(va_args);
 	putchar_p('\r', uart_port);
 	putchar_p('\n', uart_port);

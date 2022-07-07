@@ -4,6 +4,9 @@
 		"ldscript_sdk": "bk7231_bsp.ld",
 		"ldscript_arduino": "bk7231_bsp.ld"
 	},
+	"upload": {
+		"speed": 921600
+	},
 	"doc": {
 		"params": {
 			"extra": {
