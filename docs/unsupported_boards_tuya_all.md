@@ -5,7 +5,6 @@ Name           | MCU        | Flash | RAM     | Pins | Wi-Fi | BLE | ZigBee
 **CB Series**  |            |       |         |      |       |     |
 CB1S           | BK7231N    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
 CB2L           | BK7231N    | 2 MiB | 256 KiB | 7    | ✔️    | ✔️  | ❌
-CB2S           | BK7231N    | 2 MiB | 256 KiB | 11   | ✔️    | ✔️  | ❌
 CB3L           | BK7231N    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
 CB3S           | BK7231N    | 2 MiB | 256 KiB | 22   | ✔️    | ✔️  | ❌
 CB3S-NL        | BK7231N    | 2 MiB | 256 KiB | 22   | ✔️    | ✔️  | ❌

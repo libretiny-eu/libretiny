@@ -1,0 +1,24 @@
+{
+	"build": {
+		"bkcrypt_coeffs": "510fb093a3cbeadc5993a17ec7adeb03",
+		"bkboot_version": "1.0.1-bk7231n",
+		"bkrbl_size_app": "0x107800"
+	},
+	"flash": {
+		"bootloader": "0x000000+0x11000",
+		"app": "0x011000+0x119000",
+		"download": "0x12A000+0xA6000",
+		"tlv": "0x1D0000+0x1000",
+		"net": "0x1D1000+0x2000",
+		"kvs": "0x1D3000+0x8000",
+		"userdata": "0x1DB000+0x25000"
+	},
+	"upload": {
+		"maximum_size": 1083136
+	},
+	"doc": {
+		"extra": [
+			"Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes."
+		]
+	}
+}

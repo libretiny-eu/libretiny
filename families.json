@@ -48,7 +48,17 @@
 	{
 		"id": "0x7B3EF230",
 		"short_name": "BK7231N",
-		"description": "Beken 7231N"
+		"description": "Beken 7231N",
+		"name": "beken-7231n",
+		"parent": "beken-72xx",
+		"code": "bk7231n",
+		"parent_code": "bk72xx",
+		"url": "http://www.bekencorp.com/en/goods/detail/cid/39.html",
+		"sdk": "https://github.com/bekencorp/bdk_freertos",
+		"framework": "framework-beken-bdk",
+		"mcus": [
+			"BK7231N"
+		]
 	},
 	{
 		"id": "0xDE1270B7",

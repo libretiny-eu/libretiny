@@ -1,0 +1,14 @@
+{
+	"build": {
+		"family": "BK7231N",
+		"ldscript_sdk": "TBD.ld",
+		"ldscript_arduino": "TBD.ld"
+	},
+	"doc": {
+		"params": {
+			"extra": {
+				"Bluetooth": "BLE v5.1"
+			}
+		}
+	}
+}

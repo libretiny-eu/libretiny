@@ -1,0 +1,60 @@
+{
+	"pcb": {
+		"scale": 11,
+		"test_pads": {
+			"TTX2": "cb2s.back.u2_txd.anchor",
+			"TRX2": "cb2s.back.u2_rxd.anchor",
+			"TCSN": "cb2s.back.csn.anchor"
+		},
+		"back": [
+			{
+				"type": "rect",
+				"pos": "6.0,8.9",
+				"size": "2.9,2.9",
+				"preset": "copper1"
+			},
+			{
+				"id": "u2_txd",
+				"name": "label_line_2mm_up",
+				"pos": "6.7,6.1",
+				"vars": {
+					"DIR": "left",
+					"W": 2.5,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "7.5,6.0"
+			},
+			{
+				"id": "u2_rxd",
+				"name": "label_line_2mm_up",
+				"pos": "6.2,8.1",
+				"vars": {
+					"DIR": "left",
+					"W": 2.0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "7.0,8.0"
+			},
+			{
+				"id": "csn",
+				"name": "label_line_2mm_up",
+				"pos": "4.2,11.1",
+				"vars": {
+					"DIR": "left",
+					"W": 0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "5.0,11.0"
+			}
+		]
+	}
+}
