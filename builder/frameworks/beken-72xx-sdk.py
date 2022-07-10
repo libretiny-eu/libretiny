@@ -58,7 +58,7 @@ env.Append(
         "-Wno-unknown-pragmas",
     ],
     CXXFLAGS=[
-        "-std=c++11",
+        "-std=gnu++11",
         "-MMD",
         "-fno-exceptions",
         "-fno-rtti",

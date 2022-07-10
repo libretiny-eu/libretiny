@@ -43,4 +43,5 @@
 ## RTL8710B
 
 - add generic board definition
+- move to GNU++11 (and verify that it works) - take all stdio functions from stdio.h
 - rewrite most of Wiring (it was copied from `ambd_arduino`, and is ugly)
