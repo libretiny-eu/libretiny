@@ -38,6 +38,8 @@ static void scanHandler(void *ctx, uint8_t param) {
 
 	cls->data.scannedAt = millis();
 
+	wifiEventSendArduino(ARDUINO_EVENT_WIFI_SCAN_DONE);
+
 end:
 	scan->running = false;
 	xSemaphoreGive(cls->data.scanSem);

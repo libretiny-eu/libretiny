@@ -63,6 +63,9 @@ void wifi_unreg_event_handler(unsigned int event_cmds, rtw_event_handler_t handl
 }
 } // extern "C"
 
+// TODO queue handling is apparently done all wrong here
+// (passing pointers to pointers in xQueueSend/xQueueReceive)
+
 // function called by wext_wlan_indicate
 void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int flags) {
 	LT_HEAP_I();
@@ -104,7 +107,7 @@ static void wifiEventTask(void *arg) {
 void startWifiTask() {
 	if (!wifiEventQueueHandle) {
 		LT_HEAP_I();
-		wifiEventQueueHandle = xQueueCreate(32, sizeof(Event_t *));
+		wifiEventQueueHandle = xQueueCreate(32, sizeof(rtw_event_t *));
 		LT_HEAP_I();
 	}
 	if (!wifiEventTaskHandle) {

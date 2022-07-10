@@ -4,6 +4,7 @@
 
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
+	startWifiTask();
 
 	if (mode && !data.statusIp) {
 		data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
@@ -31,9 +32,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (sta == WLMODE_ENABLE) {
 		LT_D_WG("Enabling STA");
 		bk_wlan_sta_init(NULL);
+		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
 	} else if (sta == WLMODE_DISABLE) {
 		LT_D_WG("Disabling STA");
 		bk_wlan_stop(BK_STATION);
+		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_STOP);
 	}
 
 	LT_HEAP_I();
@@ -41,9 +44,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (ap == WLMODE_ENABLE) {
 		LT_D_WG("Enabling AP");
 		bk_wlan_ap_init(NULL);
+		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
 		LT_D_WG("Disabling AP");
 		bk_wlan_stop(BK_SOFT_AP);
+		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_STOP);
 	}
 
 	if (!mode) {

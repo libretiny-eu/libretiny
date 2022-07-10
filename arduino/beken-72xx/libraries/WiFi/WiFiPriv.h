@@ -40,6 +40,13 @@ extern uint8_t system_mac[6];
 WiFiStatus eventTypeToStatus(uint8_t type);
 WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 
+// WiFiEvents.cpp
+extern void wifiEventSendArduino(EventId event);
+extern void startWifiTask();
+extern void wifiEventHandler(rw_evt_type event);
+
+#define RW_EVT_ARDUINO (1 << 7)
+
 #define IP_FMT "%u.%u.%u.%u"
 
 #define STA_CFG		((network_InitTypeDef_st *)data.configSta)
