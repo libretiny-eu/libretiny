@@ -1,4 +1,5 @@
 * [Home](README.md)
+* [Getting started](docs/getting-started.md)
 * [💻 Boards & CPU list](docs/supported.md)
 * [✔️ Implementation status](docs/implementation-status.md)
 * [🔧 Configuration](docs/config.md)
