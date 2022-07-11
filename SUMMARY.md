@@ -43,14 +43,17 @@
 	* [uf2ota.h library](docs/ota/library.md)
 	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * Families
-	* [Realtek - notes](docs/platform/realtek/README.md)
-	* [Beken 72xx - notes](docs/platform/beken-72xx/README.md)
+	* Beken BK72xx
+		* [General info](docs/platform/beken-72xx/README.md)
+		* [Flashing](docs/platform/beken-72xx/flashing.md)
 	* Realtek AmebaZ Series
+		* [General info](docs/platform/realtek/README.md)
+		* [Flashing (AmebaZ)](docs/platform/realtek-ambz/flashing.md)
+		* [Debugging](docs/platform/realtek/debugging.md)
+		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
 		* C library
 			* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
 			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
-		* [Debugging](docs/platform/realtek/debugging.md)
-		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
 	* [All supported boards](boards/)
 * [📓 TODO](TODO.md)
 * [🔗 Resources](docs/resources.md)

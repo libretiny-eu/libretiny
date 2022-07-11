@@ -1,5 +1,13 @@
 # Supported boards, modules and CPUs
 
+## Board list
+
+{%
+   include-markdown "supported_boards.md"
+%}
+
+\* I/O count includes GPIOs, ADCs, PWM outputs and UART, but doesn't count CEN/RST and power pins.
+
 ## CPU list
 
 Chips currently supported by the project:
@@ -10,14 +18,6 @@ Chips currently supported by the project:
 
 This list is not exhaustive, i.e. a similar chip (but different package) might work just fine, but there's no board definition for it yet.
 If you have an unsupported chip, feel free to reach out using Issues or on the Discord server.
-
-## Board list
-
-{%
-   include-markdown "supported_boards.md"
-%}
-
-\* I/O count includes GPIOs, ADCs, PWM outputs and UART, but doesn't count CEN/RST and power pins.
 
 ## Families
 

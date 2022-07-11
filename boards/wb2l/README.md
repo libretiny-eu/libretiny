@@ -5,7 +5,7 @@
 [Product page](https://developer.tuya.com/en/docs/iot/wb2l-datasheet?id=K9duegc9bualu)
 
 - [General info](../../docs/platform/beken-72xx/README.md)
-- [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wb-series-modules?id=Ka78f4pttsytd)
+- [Flashing guide](../../docs/platform/beken-72xx/flashing.md)
 - [BkWriter v1.6.0](https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe)
 
 Parameter    | Value

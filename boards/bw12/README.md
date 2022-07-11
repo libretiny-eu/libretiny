@@ -6,7 +6,8 @@
 
 - [General info](../../docs/platform/realtek/README.md)
 - [Debugging](../../docs/platform/realtek/debugging.md)
-- [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
+- [Flashing guide](../../docs/platform/realtek-ambz/flashing.md)
+- [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
 - [Vendor datasheet](https://docs.ai-thinker.com/_media/rtl8710/hardware/bw12_datasheet_en.pdf)
 
 Parameter    | Value
