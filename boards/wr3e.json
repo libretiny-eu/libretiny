@@ -4,16 +4,16 @@
 		"realtek-ambz-2mb-large",
 		"pcb/ic-rtl8710bn",
 		"pcb/wr3-base",
-		"pcb/wr3"
+		"pcb/wr3e"
 	],
 	"build": {
 		"mcu": "rtl8710bn",
-		"variant": "wr3"
+		"variant": "wr3e"
 	},
-	"name": "WR3 Wi-Fi Module",
-	"url": "https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1",
+	"name": "WR3E Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wr3e-module-datasheet?id=K9elwlqbfosbc",
 	"vendor": "Tuya Inc.",
 	"pcb": {
-		"symbol": "WR3"
+		"symbol": "WR3E"
 	}
 }

@@ -116,6 +116,15 @@ def board_sort(tpl):
     )
 
 
+def get_board_symbol(board_name: str, board: dict) -> str:
+    symbol = get(board, "symbol")
+    if not symbol and board_name.startswith("generic-"):
+        symbol = board_name[8:]
+    else:
+        symbol = symbol or board_name.upper()
+    return symbol
+
+
 def write_chips(mcus: List[str]):
     md = Markdown(dirname(__file__), "supported_chips")
     md.add_list(*mcus)
@@ -154,11 +163,7 @@ def write_boards(boards: List[Tuple[str, dict]]):
             pins_io = sum(1 for pin in pinout if "ARD" in pin)
             pins = f"{pins_total} ({pins_io} I/O)"
         # format row values
-        symbol = get(board, "symbol")
-        if not symbol and board_name.startswith("generic-"):
-            symbol = board_name[8:]
-        else:
-            symbol = symbol or board_name.upper()
+        symbol = get_board_symbol(board_name, board)
         board_url = f"[{symbol}](../boards/{board_name}/README.md)"
         row = [
             board_url,
@@ -271,8 +276,10 @@ def write_boards_list(boards: List[Tuple[str, dict]]):
     md = Markdown(dirname(__file__), join("..", "boards", "SUMMARY"))
     items = []
     for board_name, board in boards:
-        title = get(board, "name")
-        items.append(f"[{title}](../boards/{board_name}/README.md)")
+        symbol = get_board_symbol(board_name, board)
+        if board_name.startswith("generic-"):
+            symbol = get(board, "name")
+        items.append(f"[{symbol}](../boards/{board_name}/README.md)")
     md.add_list(*items)
     md.write()
 

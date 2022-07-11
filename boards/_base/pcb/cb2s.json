@@ -8,8 +8,7 @@
 		"vars": {
 			"MASK_PRESET": "mask_blue_light",
 			"TRACE_COLOR": "#58839B",
-			"SILK_COLOR": "white",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_hole"
+			"SILK_COLOR": "white"
 		},
 		"pinout_hidden": "I2S,JTAG,FLASH",
 		"pinout": {

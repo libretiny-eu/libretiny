@@ -42,18 +42,10 @@ WBR3T          | RTL8720DN  | 4 MiB | 512 KiB | 16   | ✔️    | ✔️  | ❌
 **WR Series**  |            |       |         |      |       |     |
 WR1            | RTL8710BN  | 1 MiB | 256 KiB | 18   | ✔️    | ❌   | ❌
 WR1E           | RTL8710BN  | 2 MiB | 256 KiB | 18   | ✔️    | ❌   | ❌
-WR2            | RTL8710BN  | 2 MiB | 256 KiB | 11   | ✔️    | ❌   | ❌
-WR2E           | RTL8710BN  | 2 MiB | 256 KiB | 11   | ✔️    | ❌   | ❌
-WR3E           | RTL8710BN  | 2 MiB | 256 KiB | 16   | ✔️    | ❌   | ❌
-WR3N           | RTL8710BN  | 2 MiB | 256 KiB | 16   | ✔️    | ❌   | ❌
 WR4            | RTL8710BN  | 1 MiB | 256 KiB | 16   | ✔️    | ❌   | ❌
 WR5E           | RTL8710BN  | 2 MiB | 256 KiB | 15   | ✔️    | ❌   | ❌
 WR6            | RTL8710BN  | 2 MiB | 256 KiB | 14   | ✔️    | ❌   | ❌
 WR6-H          | RTL8710BN  | 2 MiB | 256 KiB | 14   | ✔️    | ❌   | ❌
-WR2L           | RTL8710BX  | 2 MiB | 256 KiB | 7    | ✔️    | ❌   | ❌
-WR2LE          | RTL8710BX  | 2 MiB | 256 KiB | 7    | ✔️    | ❌   | ❌
-WR3L           | RTL8710BX  | 2 MiB | 256 KiB | 18   | ✔️    | ❌   | ❌
-WR3LE          | RTL8710BX  | 2 MiB | 256 KiB | 18   | ✔️    | ❌   | ❌
 WRG1           | RTL8711AM  | 4 MiB | 2 MiB   | 25   | ✔️    | ❌   | ❌
 **XR Series**  |            |       |         |      |       |     |
 XR1            | XR809      | 2 MiB | 384 KiB | 18   | ✔️    | ❌   | ❌

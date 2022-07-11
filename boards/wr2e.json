@@ -1,0 +1,19 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-large",
+		"pcb/ic-rtl8710bn",
+		"pcb/wr2-base",
+		"pcb/wr2e"
+	],
+	"build": {
+		"mcu": "rtl8710bn",
+		"variant": "wr2e"
+	},
+	"name": "WR2E Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wr2e?id=K97scnsjhue4h",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WR2E"
+	}
+}

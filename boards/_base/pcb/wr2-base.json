@@ -1,0 +1,14 @@
+{
+	"pcb": {
+		"templates": [
+			"tuya2",
+			"rf-15mm-type1",
+			"tuya2-shield"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_blue_light",
+			"TRACE_COLOR": "#58839B",
+			"SILK_COLOR": "white"
+		}
+	}
+}

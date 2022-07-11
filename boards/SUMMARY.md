@@ -1,7 +1,15 @@
 <!-- This file is auto-generated -->
 
 - [BW12](../boards/bw12/README.md)
-- [CB2S Wi-Fi Module](../boards/cb2s/README.md)
-- [WB2L Wi-Fi Module](../boards/wb2l/README.md)
-- [WR3 Wi-Fi Module](../boards/wr3/README.md)
+- [CB2S](../boards/cb2s/README.md)
+- [WB2L](../boards/wb2l/README.md)
+- [WR2](../boards/wr2/README.md)
+- [WR2E](../boards/wr2e/README.md)
+- [WR3](../boards/wr3/README.md)
+- [WR3E](../boards/wr3e/README.md)
+- [WR3N](../boards/wr3n/README.md)
+- [WR2L](../boards/wr2l/README.md)
+- [WR2LE](../boards/wr2le/README.md)
+- [WR3L](../boards/wr3l/README.md)
+- [WR3LE](../boards/wr3le/README.md)
 - [Generic - Host-native](../boards/generic-native/README.md)

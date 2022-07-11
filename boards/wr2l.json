@@ -1,0 +1,20 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-large",
+		"realtek-ambz-bx",
+		"pcb/ic-rtl8710bn",
+		"pcb/wr2l-base",
+		"pcb/wr2l"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "wr2l"
+	},
+	"name": "WR2L Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wifiwr2lmodule?id=K9605tnbj7gva",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WR2L"
+	}
+}

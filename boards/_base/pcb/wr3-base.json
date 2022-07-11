@@ -1,0 +1,16 @@
+{
+	"pcb": {
+		"templates": [
+			"esp12s",
+			"esp12s-shield",
+			"tuya-16x24",
+			"rf-16mm-type1"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_black",
+			"TRACE_COLOR": "#505050",
+			"SILK_COLOR": "white",
+			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole"
+		}
+	}
+}
