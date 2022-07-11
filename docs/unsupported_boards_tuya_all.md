@@ -19,9 +19,6 @@ CR2S           | RTL8720CM  | 4 MiB | 4 MiB   | 11   | ✔️    | ✔️  | ❌
 CR3L           | RTL8720CM  | 4 MiB | 4 MiB   | 18   | ✔️    | ✔️  | ❌
 **WB Series**  |            |       |         |      |       |     |
 WB1S           | BK7231T    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
-WB2S           | BK7231T    | 2 MiB | 256 KiB | 11   | ✔️    | ✔️  | ❌
-WB3L           | BK7231T    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
-WB3S           | BK7231T    | 2 MiB | 256 KiB | 22   | ✔️    | ✔️  | ❌
 WB8P           | BK7231T    | 2 MiB | 256 KiB | 10   | ✔️    | ✔️  | ❌
 WBLC5          | BK7231T    | 2 MiB | 256 KiB | 15   | ✔️    | ✔️  | ❌
 WBLC9          | BK7231T    | 2 MiB | 256 KiB | 8    | ✔️    | ✔️  | ❌

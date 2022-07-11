@@ -7,6 +7,9 @@ Name                                         | MCU       | Flash | RAM     | Pin
 **Tuya Inc.**                                |           |       |         |             |       |     |        |
 [CB2S](../boards/cb2s/README.md)             | BK7231N   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231n`
 [WB2L](../boards/wb2l/README.md)             | BK7231T   | 2 MiB | 256 KiB | 7 (5 I/O)   | ✔️    | ✔️  | ❌      | `beken-7231t`
+[WB2S](../boards/wb2s/README.md)             | BK7231T   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231t`
+[WB3L](../boards/wb3l/README.md)             | BK7231T   | 2 MiB | 256 KiB | 21 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
+[WB3S](../boards/wb3s/README.md)             | BK7231T   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
 [WR2](../boards/wr2/README.md)               | RTL8710BN | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ❌   | ❌      | `realtek-ambz`
 [WR2E](../boards/wr2e/README.md)             | RTL8710BN | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ❌   | ❌      | `realtek-ambz`
 [WR3](../boards/wr3/README.md)               | RTL8710BN | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`

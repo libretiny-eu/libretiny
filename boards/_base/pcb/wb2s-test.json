@@ -1,0 +1,158 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TRST": "wb2s.back.cen.anchor",
+			"TRX2": "wb2s.back.2rx.anchor",
+			"TTX2": "wb2s.back.2tx.anchor",
+			"TGND": "wb2s.back.gnd.anchor",
+			"TSCK": "wb2s.back.sck.anchor",
+			"TCSN": "wb2s.back.csn.anchor",
+			"TSI": "wb2s.back.si.anchor",
+			"TSO": "wb2s.back.adc_so.anchor",
+			"TPWM3": "wb2s.back.pwm3.anchor",
+			"TVCC": "wb2s.back.vbat.anchor"
+		},
+		"back": [
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.6,6.2"
+			},
+			{
+				"id": "sck",
+				"name": "label_line_2mm_up",
+				"pos": "2.6,5.4",
+				"vars": {
+					"DIR": "left",
+					"W": 1.3,
+					"H": 2
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "4.6,6.2"
+			},
+			{
+				"id": "pwm3",
+				"name": "label_line_2mm_up",
+				"pos": "4.6,5.4",
+				"vars": {
+					"DIR": "left",
+					"W": 3.3,
+					"H": 4
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "7.0,6.2"
+			},
+			{
+				"id": "2rx",
+				"name": "label_line_2mm_up",
+				"pos": "7.0,5.4",
+				"vars": {
+					"DIR": "right",
+					"W": 2,
+					"H": 4
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "9.0,6.2"
+			},
+			{
+				"id": "2tx",
+				"name": "label_line_2mm_up",
+				"pos": "9.0,5.4",
+				"vars": {
+					"DIR": "right",
+					"W": 0,
+					"H": 2
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "3.0,8.3"
+			},
+			{
+				"id": "csn",
+				"name": "label_line_2mm_up",
+				"pos": "2.2,8.4",
+				"vars": {
+					"DIR": "left",
+					"W": 0.9,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "5.2,8.8"
+			},
+			{
+				"id": "si",
+				"name": "label_line_2mm_up",
+				"pos": "6.0,8.9",
+				"vars": {
+					"DIR": "right",
+					"W": 3,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.1,11.6"
+			},
+			{
+				"id": "adc_so",
+				"name": "label_line_2mm_up",
+				"pos": "1.3,11.7",
+				"vars": {
+					"DIR": "left",
+					"W": 0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "4.3,11.6"
+			},
+			{
+				"id": "cen",
+				"name": "label_line_2mm_up",
+				"pos": "5.1,11.7",
+				"vars": {
+					"DIR": "right",
+					"W": 3.9,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.5,14.5"
+			},
+			{
+				"id": "vbat",
+				"name": "label_line_2mm_up",
+				"pos": "1.7,14.6",
+				"vars": {
+					"DIR": "left",
+					"W": 0.4,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "4.8,14.5"
+			},
+			{
+				"id": "gnd",
+				"name": "label_line_2mm_up",
+				"pos": "5.6,14.6",
+				"vars": {
+					"DIR": "right",
+					"W": 3.4,
+					"H": 0
+				}
+			}
+		]
+	}
+}

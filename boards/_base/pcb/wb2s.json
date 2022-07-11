@@ -1,0 +1,102 @@
+{
+	"pcb": {
+		"scale": 10.5,
+		"templates": [
+			"tuya2",
+			"rf-15mm-type1",
+			"tuya2-shield"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_blue_light",
+			"TRACE_COLOR": "#58839B",
+			"SILK_COLOR": "white"
+		},
+		"pinout_hidden": "I2S,FLASH",
+		"pinout": {
+			"1": {
+				"PWR": 3.3
+			},
+			"2": {
+				"IC": 24,
+				"ARD": "D0"
+			},
+			"3": {
+				"GND": null
+			},
+			"4": {
+				"IC": 23,
+				"ARD": "D1"
+			},
+			"5": {
+				"IC": 26,
+				"ARD": "D4"
+			},
+			"6": {
+				"IC": 22,
+				"ARD": "D2"
+			},
+			"7": {
+				"IC": 27,
+				"ARD": "D5"
+			},
+			"8": {
+				"IC": 17,
+				"ARD": [
+					"D3",
+					"A0"
+				]
+			},
+			"9": {
+				"IC": 16,
+				"ARD": "D6"
+			},
+			"10": {
+				"IC": 21
+			},
+			"11": {
+				"IC": 15,
+				"ARD": "D7"
+			},
+			"TSCK": {
+				"IC": 20,
+				"ARD": "D8"
+			},
+			"TPWM3": {
+				"IC": 25,
+				"ARD": "D9"
+			},
+			"TRX2": {
+				"IC": 28,
+				"ARD": "D10"
+			},
+			"TTX2": {
+				"IC": 29,
+				"ARD": "D11"
+			},
+			"TCSN": {
+				"IC": 19,
+				"ARD": "D12"
+			},
+			"TSI": {
+				"IC": 18,
+				"ARD": "D13"
+			},
+			"TSO": {
+				"IC": 17,
+				"ARD": [
+					"D3",
+					"A0"
+				]
+			},
+			"TRST": {
+				"CTRL": "^RST"
+			},
+			"TVCC": {
+				"PWR": 3.3
+			},
+			"TGND": {
+				"GND": null
+			}
+		}
+	}
+}
