@@ -6,3 +6,6 @@
 
 #define LWIP_MDNS_RESPONDER		   1
 #define LWIP_NUM_NETIF_CLIENT_DATA 1
+
+#define ip_addr	  ip4_addr
+#define ip_addr_t ip4_addr_t
