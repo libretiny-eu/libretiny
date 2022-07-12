@@ -3,9 +3,26 @@
 #pragma once
 
 // C standard libraries
+#include <inttypes.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// C++ standard libraries
+#ifdef __cplusplus
+#include <algorithm>
+#include <cmath>
+using ::round;
+using std::abs;
+using std::isinf;
+using std::isnan;
+using std::max;
+using std::min;
+#endif
 
 // LibreTuya version macros
 #ifndef LT_VERSION
