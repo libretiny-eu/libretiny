@@ -38,6 +38,22 @@ bool WiFiClass::enableAP(bool enable) {
 	return true;
 }
 
+__attribute__((weak)) bool WiFiClass::setSleep(bool enable) {
+	return false;
+}
+
+__attribute__((weak)) bool WiFiClass::getSleep() {
+	return false;
+}
+
+__attribute__((weak)) bool WiFiClass::setTxPower(int power) {
+	return false;
+}
+
+__attribute__((weak)) int WiFiClass::getTxPower() {
+	return 0;
+}
+
 int WiFiClass::hostByName(const char *hostname, IPAddress &aResult) {
 	aResult = hostByName(hostname);
 	return true;
