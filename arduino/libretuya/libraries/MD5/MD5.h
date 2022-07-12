@@ -9,6 +9,9 @@
 #if LT_MD5_USE_POLARSSL
 #include "MD5PolarSSLImpl.h"
 #endif
+#if LT_MD5_USE_MBEDTLS
+#include "MD5MbedTLSImpl.h"
+#endif
 
 // common API
 #ifdef __cplusplus
