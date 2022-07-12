@@ -2,4 +2,4 @@
 
 #pragma once
 
-#define LT_MD5_USE_MBEDTLS 1
+#define LT_MD5_USE_HOSTAPD 1

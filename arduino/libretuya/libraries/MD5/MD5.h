@@ -12,6 +12,9 @@
 #if LT_MD5_USE_MBEDTLS
 #include "MD5MbedTLSImpl.h"
 #endif
+#if LT_MD5_USE_HOSTAPD
+#include "MD5HostapdImpl.h"
+#endif
 
 // common API
 #ifdef __cplusplus
