@@ -53,6 +53,8 @@ def env_add_defaults(env, platform, board):
             "$LT_DIR/platform/common/fixups",
             "$LT_DIR/platform/common/fixups/lib_inc",
             "$BOARD_DIR",
+            "$FAMILY_DIR/config",
+            "$PARENT_DIR/config",
             "$FAMILY_DIR/fixups",
             "$PARENT_DIR/fixups",
             "$FAMILY_DIR/fixups/inc",
