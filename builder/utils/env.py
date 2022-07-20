@@ -51,6 +51,7 @@ def env_add_defaults(env, platform, board):
     env.Prepend(
         CPPPATH=[
             "$LT_DIR/platform/common/fixups",
+            "$LT_DIR/platform/common/fixups/lib_inc",
             "$BOARD_DIR",
             "$FAMILY_DIR/fixups",
             "$PARENT_DIR/fixups",
