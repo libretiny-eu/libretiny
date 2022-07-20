@@ -5,6 +5,12 @@
 		"prefix": "arm-none-eabi-",
 		"amb_flash_addr": "0x08000000"
 	},
+	"flash": {
+		"boot_xip": "0x000000+0x4000",
+		"boot_ram": "0x004000+0x4000",
+		"system": "0x009000+0x1000",
+		"calibration": "0x00A000+0x1000"
+	},
 	"connectivity": [
 		"wifi"
 	],
