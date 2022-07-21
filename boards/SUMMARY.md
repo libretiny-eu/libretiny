@@ -1,6 +1,7 @@
 <!-- This file is auto-generated -->
 
 - [BW12](../boards/bw12/README.md)
+- [BW15](../boards/bw15/README.md)
 - [CB2S](../boards/cb2s/README.md)
 - [WB2L](../boards/wb2l/README.md)
 - [WB2S](../boards/wb2s/README.md)
