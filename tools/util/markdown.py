@@ -1,12 +1,13 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-18.
 
 from os.path import join
+from typing import List
 
 from tools.util.fileio import writetext
 
 
 class Markdown:
-    items: list[str]
+    items: List[str]
     output: str
 
     def __init__(self, dir: str, name: str) -> None:
@@ -49,7 +50,7 @@ class Markdown:
         self.items.append("- " + "\n- ".join(items))
         return self
 
-    def add_table(self, header: list[str], *rows: list[str]) -> "Markdown":
+    def add_table(self, header: List[str], *rows: List[str]) -> "Markdown":
         maxlen = [len(h) for h in header]
         for row in rows:
             for i, col in enumerate(row):
