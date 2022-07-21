@@ -22,6 +22,11 @@
       "package": "framework-realtek-amb1",
       "script": "builder/frameworks/realtek-ambz-arduino.py"
     },
+    "realtek-ambz2-sdk": {
+      "tilte": "Realtek AmebaZ2 - SDK",
+      "package": "framework-realtek-ambz2",
+      "script": "builder/frameworks/realtek-ambz2-sdk.py"
+    },
     "beken-72xx-sdk": {
       "title": "Beken 72XX - SDK",
       "package": "framework-beken-bdk",
@@ -47,6 +52,15 @@
           "v2.0.0-amb1"
         ]
       }
+    },
+    "framework-realtek-ambz2": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/ambiot/ambz2_sdk",
+      "manifest": {
+        "description": "SDK for AmebaZ2"
+      },
+      "toolchain": "gccarmnoneeabi@~1.100301.0"
     },
     "framework-beken-bdk": {
       "type": "framework",
