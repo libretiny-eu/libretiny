@@ -1,7 +1,7 @@
 {
 	"_base": [
 		"realtek-ambz",
-		"realtek-ambz-2mb-large",
+		"realtek-ambz-2mb-788k",
 		"pcb/ic-rtl8710bn",
 		"pcb/wr3-base",
 		"pcb/wr3e"
