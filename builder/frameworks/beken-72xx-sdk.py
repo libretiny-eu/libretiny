@@ -13,7 +13,7 @@ DRIVER_DIR = join(ROOT_DIR, "driver")
 FUNC_DIR = join(ROOT_DIR, "func")
 
 # Load sys_config.h into env
-env.LoadConfig(join("$FAMILY_DIR", "fixups", "sys_config.h"))
+env.LoadConfig(join("$FAMILY_DIR", "config", "sys_config.h"))
 
 # Define vars used during build
 SOC_BK7231 = 1

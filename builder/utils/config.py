@@ -10,7 +10,7 @@ env = DefaultEnvironment()
 def env_load_config(env, path):
     path = env.subst(path)
     if not isfile(path):
-        raise FileNotFoundError("Config file not found")
+        raise FileNotFoundError(f"Config file not found ({path})")
     STRIP_CHARS = "\t "
     config = {}
     f = open(path, "r", encoding="utf-8")
