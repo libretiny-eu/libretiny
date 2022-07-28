@@ -41,15 +41,3 @@ long random(long howsmall, long howbig) {
 
 	return random(diff) + howsmall;
 }
-
-extern long map(long x, long in_min, long in_max, long out_min, long out_max) {
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-extern uint16_t makeWord(uint16_t w) {
-	return w;
-}
-
-extern uint16_t makeWord(uint8_t h, uint8_t l) {
-	return (h << 8) | l;
-}
