@@ -66,7 +66,7 @@ SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
 NTP                 | ❌              | ❌
 OTA                 | ✔️             | ❌
-MDNS                | ✔️             | ✔️
+MDNS                | ✔️             | ❗
 MQTT                | ✅              | ❌
 SD                  | ❌              | ❌
 

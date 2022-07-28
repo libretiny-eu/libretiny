@@ -61,6 +61,7 @@ bool mDNS::begin(const char *hostname) {
 	struct netif *netif = netif_list;
 	uint8_t enabled		= 0;
 	while (netif != NULL) {
+		netif->flags |= NETIF_FLAG_IGMP;
 		// TODO: detect mdns_netif_client_id by checking netif_get_client_data()
 		// and finding the requested hostname in struct mdns_host
 		if (netif_is_up(netif) && mdns_resp_add_netif(netif, hostname, 255) == ERR_OK) {
@@ -100,7 +101,7 @@ bool mDNS::addService(char *service, char *proto, uint16_t port) {
 	struct netif *netif = netif_list;
 	while (netif != NULL) {
 		if (netif_is_up(netif)) {
-			mdns_resp_add_service(netif, mdnsInstanceName.c_str(), service, protocol, port, 255, NULL, NULL);
+			mdns_resp_add_service(netif, mdnsInstanceName.c_str(), _service, protocol, port, 255, NULL, NULL);
 		}
 		netif = netif->next;
 	}
