@@ -23,7 +23,7 @@ bool startMainTask() {
 		&mainThread,
 		THD_APPLICATION_PRIORITY,
 		"main",
-		(beken_thread_function_t)main_task,
+		(beken_thread_function_t)mainTask,
 		8192,
 		NULL
 	);

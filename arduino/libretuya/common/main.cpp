@@ -21,7 +21,7 @@ void initVariant() __attribute__((weak));
 // Initialize C library
 extern "C" void __libc_init_array(void);
 
-void main_task(const void *arg) {
+void mainTask(const void *arg) {
 	setup();
 
 	for (;;) {
@@ -46,7 +46,9 @@ int main(void) {
 	// provide root partition
 	fal_root_part = (fal_partition_t)fal_partition_find("root");
 	// start the main task and OS kernel
-	startMainTask();
+	if (!startMainTask()) {
+		LT_E("Couldn't start the main task");
+	}
 
 	while (1) {}
 	return 0;

@@ -9,7 +9,9 @@ extern "C" {
 #endif
 
 /**
- * @brief Run main_task & start OS kernel (family-defined)
+ * @brief Run mainTask & start OS kernel (family-defined).
+ * Return false if an error occured; else do not return and
+ * and keep the OS kernel running.
  */
 extern bool startMainTask();
 
@@ -17,7 +19,7 @@ extern bool startMainTask();
  * @brief Main setup() and loop() task.
  * Not to be called directly.
  */
-extern void main_task(const void *arg);
+extern void mainTask(const void *arg);
 
 #define PIN_NONE (1 << 0)
 #define PIN_GPIO (1 << 1)
