@@ -1,0 +1,102 @@
+{
+	"pcb": {
+		"templates": [
+			"custom-20x24-22",
+			"rf-20mm-type1"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_blue_light",
+			"TRACE_COLOR": "#58839B",
+			"SILK_COLOR": "white",
+			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole",
+			"PINTYPE_HORZ": "pin_horz_2mm_cast_nohole"
+		},
+		"pinout_hidden": "I2S,JTAG,FLASH,SD,SPI,SDA1",
+		"pinout": {
+			"1": {
+				"PWR": 3.3
+			},
+			"2": {
+				"IC": 15,
+				"ARD": "D0"
+			},
+			"3": {
+				"IC": 11,
+				"ARD": "D1"
+			},
+			"4": {
+				"IC": 12,
+				"ARD": "D2"
+			},
+			"5": {
+				"IC": 16,
+				"ARD": "D3"
+			},
+			"6": {
+				"GND": null
+			},
+			"7": {
+				"IC": 18,
+				"ARD": "D4"
+			},
+			"8": {
+				"IC": 29,
+				"ARD": "D5"
+			},
+			"9": {
+				"IC": 17,
+				"ARD": [
+					"D6",
+					"A0"
+				]
+			},
+			"10": {
+				"CTRL": "?"
+			},
+			"11": {
+				"GND": null
+			},
+			"12": {
+				"IC": 24,
+				"ARD": "D7"
+			},
+			"13": {
+				"IC": 25,
+				"ARD": "D8"
+			},
+			"14": {
+				"GND": null
+			},
+			"15": {
+				"IC": 19,
+				"ARD": "D9"
+			},
+			"16": {
+				"IC": 22,
+				"ARD": "D10"
+			},
+			"17": {
+				"IC": 23,
+				"ARD": "D11"
+			},
+			"18": {
+				"IC": 26,
+				"ARD": "D12"
+			},
+			"19": {
+				"GND": null
+			},
+			"20": {
+				"IC": 27,
+				"ARD": "D13"
+			},
+			"21": {
+				"CTRL": "?"
+			},
+			"22": {
+				"IC": 28,
+				"ARD": "D14"
+			}
+		}
+	}
+}
