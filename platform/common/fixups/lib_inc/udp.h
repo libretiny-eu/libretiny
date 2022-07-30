@@ -7,6 +7,4 @@
 // this is included only by wifi_simple_config.c
 // which uses lwip_ntohl without parentheses
 // so the #define from lwip/def.h doesn't work
-#ifndef lwip_ntohl
 #define lwip_ntohl lwip_htonl
-#endif

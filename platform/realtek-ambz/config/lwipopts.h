@@ -31,6 +31,8 @@
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
 
+#include_next "lwipopts.h"
+
 #include <platform/platform_stdlib.h>
 #include "platform_opts.h"
 #define WIFI_LOGO_CERTIFICATION_CONFIG 0    //for ping 10k test buffer setting
