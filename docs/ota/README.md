@@ -29,7 +29,7 @@ For easier understanding, these update types will be referred to in this documen
 ## Custom family IDs
 
 {%
-   include-markdown "../supported_families.md"
+   include-markdown "../status/supported_families.md"
 %}
 
 ## Extension tags

@@ -10,6 +10,14 @@ Downloading is done using UART. For best experience, you should have two USB<->U
 
 	If you're not using auto-reset, you'll have to reset the chip manually when upload starts (you have 10 seconds to do that).
 
+- UART1 is used for uploading the code. This adapter will be used by PlatformIO.
+- UART2 allows for log output. You can have a terminal session continuously open on this adapter.
+
+!!! hint
+	If you only have a single adapter, or just want to use the UART1 (upload) port only, you can change the logging port.
+
+	Refer to [Options & config](../../reference/config.md) (`Serial output` section). Set `LT_UART_DEFAULT_PORT` to `1`, which will use UART1 for all output.
+
 ## Automatically - using PlatformIO (recommended)
 
 LibreTuya has built-in firmware uploaders. Pressing `Upload` in PlatformIO IDE does all the work for you.
@@ -30,7 +38,7 @@ upload_port = COM96
 ## Manually - using `uf2upload`
 
 {%
-   include-markdown "../../flashing-uf2ota.md"
+   include-markdown "../../ota/flashing.md"
 %}
 
 ## Manually - using raw binaries/BkWriter

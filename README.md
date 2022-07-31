@@ -35,7 +35,7 @@ LibreTuya also provides a common interface for all family implementations. The i
 
 ## Board List
 
-See [Boards & CPU list](https://kuba2k2.github.io/libretuya/docs/supported/).
+See [Boards & CPU list](https://kuba2k2.github.io/libretuya/docs/status/supported/).
 
 ## Arduino Core support status
 

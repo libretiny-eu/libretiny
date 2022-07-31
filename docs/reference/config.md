@@ -15,7 +15,7 @@ custom_fw_version = 1.2.0
 ## LibreTuya options
 
 !!! note
-    See [LibreTuyaConfig.h](../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
+    See [LibreTuyaConfig.h](../../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
 
 All options are configurable via C++ defines in PlatformIO project file. For example:
 ```ini

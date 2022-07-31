@@ -20,6 +20,8 @@ from tools.util.platform import (
     get_family,
 )
 
+OUTPUT = join(dirname(__file__), "status")
+
 
 def load_boards() -> Dict[str, dict]:
     return {board: get_board_manifest(board) for board in get_board_list()}
@@ -126,13 +128,13 @@ def get_board_symbol(board_name: str, board: dict) -> str:
 
 
 def write_chips(mcus: List[str]):
-    md = Markdown(dirname(__file__), "supported_chips")
+    md = Markdown(OUTPUT, "supported_chips")
     md.add_list(*mcus)
     md.write()
 
 
 def write_boards(boards: List[Tuple[str, dict]]):
-    md = Markdown(dirname(__file__), "supported_boards")
+    md = Markdown(OUTPUT, "supported_boards")
     header = [
         "Name",
         "MCU",
@@ -164,7 +166,7 @@ def write_boards(boards: List[Tuple[str, dict]]):
             pins = f"{pins_total} ({pins_io} I/O)"
         # format row values
         symbol = get_board_symbol(board_name, board)
-        board_url = f"[{symbol}](../boards/{board_name}/README.md)"
+        board_url = f"[{symbol}](../../boards/{board_name}/README.md)"
         row = [
             board_url,
             get(board, "build.mcu").upper(),
@@ -186,7 +188,7 @@ def write_unsupported_boards(
     name: str,
     supported: List[str],
 ):
-    md = Markdown(dirname(__file__), name)
+    md = Markdown(OUTPUT, name)
     header = [
         "Name",
         "MCU",
@@ -223,7 +225,7 @@ def write_unsupported_boards(
 
 
 def write_families():
-    md = Markdown(dirname(__file__), "supported_families")
+    md = Markdown(OUTPUT, "supported_families")
     header = [
         "Title",
         "Name (parent)",

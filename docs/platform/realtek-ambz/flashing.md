@@ -3,7 +3,10 @@
 - [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
 - [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
 
-Downloading is done using UART. It is required to put the chip into download mode, prior to flashing. This can be done by resetting the chip, while pulling UART2_TX to GND. If successful, the chip should print few garbage characters every second.
+Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins.
+
+!!! important
+	It is required to put the chip into download mode, prior to flashing. This can be done by resetting the chip, while pulling UART2_TX to GND. If successful, the chip should print few garbage characters every second.
 
 ## Automatically - using PlatformIO (recommended)
 
@@ -20,7 +23,7 @@ upload_port = COM60
 ## Manually - using `uf2upload`
 
 {%
-   include-markdown "../../flashing-uf2ota.md"
+   include-markdown "../../ota/flashing.md"
 %}
 
 ## Manually - using raw binaries/BkWriter

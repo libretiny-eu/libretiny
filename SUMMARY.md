@@ -1,10 +1,26 @@
 * [Home](README.md)
-* [Getting started](docs/getting-started.md)
-* [💻 Boards & CPU list](docs/supported.md)
-* [✔️ Implementation status](docs/implementation-status.md)
-* [🔧 Configuration](docs/config.md)
-* [📁 Project structure](docs/project-structure.md)
-* 🔖 Code reference
+* 😊 Getting started
+	* [Start here](docs/getting-started/README.md)
+	* [Uploading](docs/getting-started/uploading.md)
+	* [Options & config](docs/reference/config.md)
+	* [ESPHome port](docs/projects/esphome.md)
+* [💻 Boards & CPU list](docs/status/supported.md)
+* [✔️ Implementation status](docs/status/arduino.md)
+* Supported chip families
+	* Beken BK72xx
+		* [General info](docs/platform/beken-72xx/README.md)
+		* [Flashing](docs/platform/beken-72xx/flashing.md)
+	* Realtek AmebaZ Series
+		* [General info](docs/platform/realtek/README.md)
+		* [Flashing (AmebaZ)](docs/platform/realtek-ambz/flashing.md)
+		* [Debugging](docs/platform/realtek/debugging.md)
+		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
+		* C library
+			* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
+			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
+	* [All supported boards](boards/)
+* API & libraries
+	* [Options & config](docs/reference/config.md)
 	* [LibreTuya API](docs/reference/lt-api.md)
 		* [LT class reference](ltapi/class_libre_tuya.md)
 		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
@@ -38,22 +54,10 @@
 		* [Functions](ltapi/functions.md)
 		* [Macros](ltapi/macros.md)
 		* [File list](ltapi/files.md)
-* [✈️ OTA format](docs/ota/README.md)
-	* [uf2ota.py tool](docs/ota/uf2ota.md)
-	* [uf2ota.h library](docs/ota/library.md)
-	* [uf2ota.h reference](ltapi/uf2ota_8h.md)
-* Families
-	* Beken BK72xx
-		* [General info](docs/platform/beken-72xx/README.md)
-		* [Flashing](docs/platform/beken-72xx/flashing.md)
-	* Realtek AmebaZ Series
-		* [General info](docs/platform/realtek/README.md)
-		* [Flashing (AmebaZ)](docs/platform/realtek-ambz/flashing.md)
-		* [Debugging](docs/platform/realtek/debugging.md)
-		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
-		* C library
-			* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
-			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
-	* [All supported boards](boards/)
+	* [📁 Project structure](docs/reference/project-structure.md)
+	* [✈️ OTA format](docs/ota/README.md)
+		* [uf2ota.py tool](docs/ota/uf2ota.md)
+		* [uf2ota.h library](docs/ota/library.md)
+		* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * [📓 TODO](TODO.md)
 * [🔗 Resources](docs/resources.md)
