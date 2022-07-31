@@ -26,7 +26,10 @@ SerialClass::SerialClass(uint8_t port) {
 
 static void callback(int port, void *param) {
 	RingBuffer *buf = (RingBuffer *)param;
-	buf->store_char(uart_read_byte(port));
+	int ch;
+	while ((ch = uart_read_byte(port)) != -1) {
+		buf->store_char(ch);
+	}
 }
 
 void SerialClass::begin(unsigned long baudrate, uint16_t config) {
