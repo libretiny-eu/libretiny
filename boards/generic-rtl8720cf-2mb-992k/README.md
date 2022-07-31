@@ -7,7 +7,8 @@
 - [General info](../../docs/platform/realtek/README.md)
 
 Parameter    | Value
--------------|--------------------------
+-------------|-----------------------------
+Board code   | `generic-rtl8720cf-2mb-992k`
 MCU          | RTL8720CF
 Manufacturer | Realtek
 Series       | AmebaZ2
@@ -18,6 +19,19 @@ Voltage      | 3.0V - 3.6V
 I/O          | 20x GPIO, 8x PWM, 3x UART
 Wi-Fi        | 802.11 b/g/n
 BLE          | v4.2
+
+## Usage
+
+**Board code:** `generic-rtl8720cf-2mb-992k`
+
+In `platformio.ini`:
+
+```ini
+[env:generic-rtl8720cf-2mb-992k]
+platform = libretuya
+board = generic-rtl8720cf-2mb-992k
+framework = arduino
+```
 
 ## Flash memory map
 

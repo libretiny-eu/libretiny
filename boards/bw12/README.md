@@ -12,6 +12,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `bw12`
 MCU          | RTL8710BX
 Manufacturer | Realtek
 Series       | AmebaZ
@@ -21,6 +22,19 @@ RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
 I/O          | 11x GPIO, 6x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
+
+## Usage
+
+**Board code:** `bw12`
+
+In `platformio.ini`:
+
+```ini
+[env:bw12]
+platform = libretuya
+board = bw12
+framework = arduino
+```
 
 ## Pinout
 

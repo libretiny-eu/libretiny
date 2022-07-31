@@ -5,7 +5,8 @@
 [Product page](https://kuba2k2.github.io/libretuya/)
 
 Parameter    | Value
--------------|-------
+-------------|-----------------
+Board code   | `generic-native`
 MCU          | NATIVE
 Manufacturer | N/A
 Series       | N/A
@@ -13,6 +14,19 @@ Frequency    | 1 GHz
 Flash size   | 4 MiB
 RAM size     | 4 MiB
 Voltage      | 5V
+
+## Usage
+
+**Board code:** `generic-native`
+
+In `platformio.ini`:
+
+```ini
+[env:generic-native]
+platform = libretuya
+board = generic-native
+framework = arduino
+```
 
 ## Flash memory map
 

@@ -10,6 +10,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `generic-bk7231n-qfn32-tuya`
 MCU          | BK7231N
 Manufacturer | Beken
 Series       | BK72XX
@@ -20,6 +21,19 @@ Voltage      | 3.0V - 3.6V
 I/O          | 19x GPIO, 6x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
 Bluetooth    | BLE v5.1
+
+## Usage
+
+**Board code:** `generic-bk7231n-qfn32-tuya`
+
+In `platformio.ini`:
+
+```ini
+[env:generic-bk7231n-qfn32-tuya]
+platform = libretuya
+board = generic-bk7231n-qfn32-tuya
+framework = arduino
+```
 
 ## Arduino Core pin mapping
 

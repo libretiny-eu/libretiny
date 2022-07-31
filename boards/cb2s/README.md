@@ -10,6 +10,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `cb2s`
 MCU          | BK7231N
 Manufacturer | Beken
 Series       | BK72XX
@@ -20,6 +21,19 @@ Voltage      | 3.0V - 3.6V
 I/O          | 11x GPIO, 5x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
 Bluetooth    | BLE v5.1
+
+## Usage
+
+**Board code:** `cb2s`
+
+In `platformio.ini`:
+
+```ini
+[env:cb2s]
+platform = libretuya
+board = cb2s
+framework = arduino
+```
 
 ## Pinout
 

@@ -11,6 +11,7 @@
 
 Parameter    | Value
 -------------|---------------------------------
+Board code   | `wr2l`
 MCU          | RTL8710BX
 Manufacturer | Realtek
 Series       | AmebaZ
@@ -20,6 +21,19 @@ RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
 I/O          | 5x GPIO, 4x PWM, 1x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
+
+## Usage
+
+**Board code:** `wr2l`
+
+In `platformio.ini`:
+
+```ini
+[env:wr2l]
+platform = libretuya
+board = wr2l
+framework = arduino
+```
 
 ## Pinout
 

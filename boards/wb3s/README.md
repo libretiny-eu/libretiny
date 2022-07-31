@@ -10,6 +10,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `wb3s`
 MCU          | BK7231T
 Manufacturer | Beken
 Series       | BK72XX
@@ -20,6 +21,19 @@ Voltage      | 3.0V - 3.6V
 I/O          | 15x GPIO, 6x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
 Bluetooth    | BLE v4.2
+
+## Usage
+
+**Board code:** `wb3s`
+
+In `platformio.ini`:
+
+```ini
+[env:wb3s]
+platform = libretuya
+board = wb3s
+framework = arduino
+```
 
 ## Pinout
 

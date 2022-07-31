@@ -11,6 +11,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `wr3`
 MCU          | RTL8710BN
 Manufacturer | Realtek
 Series       | AmebaZ
@@ -20,6 +21,19 @@ RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
 I/O          | 11x GPIO, 6x PWM, 2x UART, 2x ADC
 Wi-Fi        | 802.11 b/g/n
+
+## Usage
+
+**Board code:** `wr3`
+
+In `platformio.ini`:
+
+```ini
+[env:wr3]
+platform = libretuya
+board = wr3
+framework = arduino
+```
 
 ## Pinout
 

@@ -10,6 +10,7 @@
 
 Parameter    | Value
 -------------|----------------------------------
+Board code   | `lsc-lma35`
 MCU          | BK7231N
 Manufacturer | Beken
 Series       | BK72XX
@@ -20,6 +21,19 @@ Voltage      | 3.0V - 3.6V
 I/O          | 15x GPIO, 6x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
 Bluetooth    | BLE v5.1
+
+## Usage
+
+**Board code:** `lsc-lma35`
+
+In `platformio.ini`:
+
+```ini
+[env:lsc-lma35]
+platform = libretuya
+board = lsc-lma35
+framework = arduino
+```
 
 ## Pinout
 
