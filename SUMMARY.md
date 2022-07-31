@@ -3,6 +3,8 @@
 	* [Start here](docs/getting-started/README.md)
 	* [Uploading](docs/getting-started/uploading.md)
 	* [Options & config](docs/reference/config.md)
+	* Examples
+		* [PinScan](examples/PinScan/README.md)
 	* [ESPHome port](docs/projects/esphome.md)
 * [💻 Boards & CPU list](docs/status/supported.md)
 * [✔️ Implementation status](docs/status/arduino.md)
