@@ -69,6 +69,8 @@ void detachInterrupt(pin_size_t interruptNumber) {
 		return;
 	if (!pinSupported(pin, PIN_IRQ))
 		return;
+	irqHandlerList[interruptNumber] = NULL;
+	irqHandlerArgs[interruptNumber] = NULL;
 	gpio_int_disable(pin->gpio);
 	pin->enabled &= ~PIN_IRQ;
 }
