@@ -10,9 +10,9 @@ static void *gpio_irq_handler_args[PINS_COUNT] = {NULL};
 extern bool pinInvalid(pin_size_t pinNumber);
 extern void pinRemoveMode(pin_size_t pinNumber);
 
-void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
+static void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
 	if (gpio_irq_handler_list[id] != NULL) {
-		if (gpio_irq_handler_args[id] != NULL)
+		if (gpio_irq_handler_args[id] == NULL)
 			((voidFuncPtr)gpio_irq_handler_list[id])();
 		else
 			((voidFuncPtrParam)gpio_irq_handler_list[id])(gpio_irq_handler_args[id]);
