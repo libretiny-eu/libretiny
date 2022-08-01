@@ -32,7 +32,9 @@ void printHelp(uint8_t mode) {
 				TAB "d - Check digital pins" EOL
 				TAB "a - Check analog pins" EOL
 				// TAB "p - Check PWM outputs" EOL
+#if !USE_WIFI
 				TAB "s - Select UART port" EOL
+#endif
 				TAB "t - Toggle ANSI control codes" EOL
 				TAB "r - Reboot (for uploading)" EOL
 				TAB "q - Go back to menu, at any time" EOL

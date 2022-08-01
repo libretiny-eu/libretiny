@@ -11,10 +11,10 @@ static WiFiServer server(23);
 static WiFiClient client;
 #endif
 
-Stream *stream = NULL;
-uint8_t mode[] = {'q', '\0', '\0', '\0'};
-pin_size_t pinSkip[2];
-int output = -1;
+Stream *stream		  = NULL;
+uint8_t mode[]		  = {'?', '\0', '\0', '\0'};
+pin_size_t pinSkip[2] = {255, 255};
+int output			  = -1;
 
 static void parseMode();
 
@@ -54,7 +54,6 @@ void loop() {
 	}
 	if (!stream) {
 		client = server.accept();
-		delay(500);
 		if (client) {
 			stream = &client;
 			printHelp();
@@ -105,7 +104,8 @@ void loop() {
 		}
 	}
 
-	parseMode();
+	if (stream)
+		parseMode();
 }
 
 static void parseMode() {

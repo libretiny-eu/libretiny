@@ -56,17 +56,22 @@ static void irqHandler(void *ptr) {
 }
 
 static void digitalAllIrq() {
+#if USE_WIFI
+	LT_I("Disabling logger");
+	lt_log_disable();
+	Serial.end();
+#endif
 	for (pin_size_t i = 0; i < NUM_DIGITAL_PINS; i++) {
 		if (pinSkip[0] == i || pinSkip[1] == i) {
 			used[i] = false;
 			continue;
 		}
 		pinMode(i, INPUT);
-		// choose interrupt level according to current state
-		PinStatus status = digitalRead(i) ? FALLING : RISING;
-		attachInterruptParam(i, irqHandler, status, pins + i);
-		used[i] = true;
 		pins[i] = digitalRead(i);
+		used[i] = true;
+		// choose interrupt level according to current state
+		PinStatus status = pins[i] ? FALLING : RISING;
+		attachInterruptParam(i, irqHandler, status, pins + i);
 	}
 	active = true;
 }
@@ -112,6 +117,11 @@ void digitalDetach() {
 	}
 	active = false;
 	pin	   = -1;
+#if USE_WIFI
+	lt_log_set_port(LT_UART_DEFAULT_LOGGER);
+	Serial.begin(115200);
+	LT_I("Logger enabled");
+#endif
 }
 
 void runDigital() {
