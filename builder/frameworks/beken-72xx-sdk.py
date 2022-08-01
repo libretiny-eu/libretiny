@@ -7,6 +7,12 @@ from SCons.Script import Builder, DefaultEnvironment
 env = DefaultEnvironment()
 board = env.BoardConfig()
 
+# Install PyCryptodome for OTA packaging with AES
+try:
+    import Cryptodome
+except ImportError:
+    env.Execute("$PYTHONEXE -m pip install pycryptodomex")
+
 ROOT_DIR = join("$SDK_DIR", "beken378")
 APP_DIR = join(ROOT_DIR, "app")
 DRIVER_DIR = join(ROOT_DIR, "driver")
