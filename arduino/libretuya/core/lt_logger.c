@@ -50,6 +50,9 @@ void lt_log(const uint8_t level, const char *caller, const unsigned short line, 
 void lt_log(const uint8_t level, const char *format, ...) {
 #endif
 
+	if (uart_port == 0xFF)
+		return;
+
 #if LT_LOGGER_TIMESTAMP
 	float seconds = millis() / 1000.0f;
 #if LT_PRINTF_BROKEN
@@ -135,4 +138,8 @@ void lt_log(const uint8_t level, const char *format, ...) {
 
 void lt_log_set_port(uint8_t port) {
 	uart_port = port;
+}
+
+void lt_log_disable() {
+	uart_port = 0xFF;
 }

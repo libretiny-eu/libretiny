@@ -20,6 +20,11 @@ void lt_log(const uint8_t level, const char *format, ...);
  */
 void lt_log_set_port(uint8_t port);
 
+/**
+ * @brief Disable LT logger. Enable it back using lt_log_set_port(LT_UART_DEFAULT_LOGGER).
+ */
+void lt_log_disable();
+
 #if LT_LEVEL_TRACE >= LT_LOGLEVEL
 #define LT_T(...) LT_LOG(LT_LEVEL_TRACE, __FUNCTION__, __LINE__, __VA_ARGS__)
 #define LT_V(...) LT_LOG(LT_LEVEL_TRACE, __FUNCTION__, __LINE__, __VA_ARGS__)
