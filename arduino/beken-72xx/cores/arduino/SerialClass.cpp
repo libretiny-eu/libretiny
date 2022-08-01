@@ -57,6 +57,14 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 
 void SerialClass::end() {
 	uart_rx_callback_set(port, NULL, NULL);
+	switch (port) {
+		case 1:
+			uart1_exit();
+			break;
+		case 2:
+			uart2_exit();
+			break;
+	}
 	delete this->buf;
 }
 
