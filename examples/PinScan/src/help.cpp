@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-31. */
 
-#include "main.h"
+#include "pinscan.h"
 
 void printHelp(uint8_t mode) {
 	printAnsiErase();
