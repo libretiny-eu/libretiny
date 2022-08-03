@@ -607,5 +607,12 @@ env.Replace(
             "",  # not used for OTA2
             "",
         ),
+        # OTA RBL package, OTA2 (uf2ota lib) only
+        (
+            "",  # not used for OTA1
+            "",
+            "download",
+            "${BUILD_DIR}/${MCULC}_app.ota.rbl",
+        ),
     ],
 )
