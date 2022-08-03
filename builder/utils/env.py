@@ -2,16 +2,15 @@
 
 from os.path import join
 
+from ltchiptool import Family
 from SCons.Script import DefaultEnvironment
-
-from tools.util.platform import get_family
 
 env = DefaultEnvironment()
 
 
 def env_add_defaults(env, platform, board):
     # Get Family object for this board
-    family = get_family(short_name=board.get("build.family"))
+    family = Family.get(short_name=board.get("build.family"))
     # Default environment variables
     vars = dict(
         SDK_DIR=platform.get_package_dir(family.framework),
@@ -36,10 +35,8 @@ def env_add_defaults(env, platform, board):
         VARIANT=board.get("build.variant"),
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
-        # Link2Bin tool
-        LINK2BIN='"${PYTHONEXE}" "${LT_DIR}/tools/link2bin.py"',
-        UF2OTA_PY='"${PYTHONEXE}" "${LT_DIR}/tools/uf2ota/uf2ota.py"',
-        UF2UPLOAD_PY='"${PYTHONEXE}" "${LT_DIR}/tools/upload/uf2upload.py"',
+        # ltchiptool variables
+        LTCHIPTOOL='"${PYTHONEXE}" -m ltchiptool',
         # Fix for link2bin to get tmpfile name in argv
         LINKCOM="${LINK} ${LINKARGS}",
         LINKARGS="${TEMPFILE('-o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS', '$LINKCOMSTR')}",

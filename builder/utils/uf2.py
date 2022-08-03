@@ -35,14 +35,13 @@ def env_uf2ota(env, *args, **kwargs):
     env["UF2OUT_BASE"] = basename(output)
 
     cmd = [
-        "@${UF2OTA_PY}",
+        "@${LTCHIPTOOL} uf2 write",
         f'--output "{output}"',
         "--family ${FAMILY}",
         "--board ${VARIANT}",
         f"--version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
-        "write",
         inputs,
     ]
 
@@ -76,7 +75,10 @@ def env_uf2upload(env, target):
         return
 
     # add main upload target
-    env.Replace(UPLOADER="${UF2UPLOAD_PY}", UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS}")
+    env.Replace(
+        UPLOADER="${LTCHIPTOOL} uf2 upload",
+        UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS}",
+    )
     actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
     env.AddPlatformTarget("upload", target, actions, "Upload")
 

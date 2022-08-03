@@ -3,8 +3,6 @@
 from os.path import join
 from typing import List
 
-from tools.util.fileio import writetext
-
 
 class Markdown:
     items: List[str]
@@ -15,7 +13,9 @@ class Markdown:
         self.output = join(dir, f"{name}.md")
 
     def write(self):
-        writetext(self.output, self.items)
+        with open(self.output, "w", encoding="utf-8") as f:
+            f.write("\n".join(self.items))
+            f.write("\n")
 
     def pad(self, s: str, i: int) -> str:
         return s + " " * (i - len(s))

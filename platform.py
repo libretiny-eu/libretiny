@@ -1,26 +1,48 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
+import importlib
 import json
 import sys
+from os import system
 from os.path import dirname, join
 from typing import Dict
 
-from platformio import util
 from platformio.debug.config.base import DebugConfigBase
 from platformio.debug.exception import DebugInvalidOptionsError
-from platformio.managers.platform import PlatformBase
 from platformio.package.exception import MissingPackageManifestError
 from platformio.package.manager.base import BasePackageManager
 from platformio.package.meta import PackageItem, PackageSpec
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
+from semantic_version import Version
 
-# Make tools available
-sys.path.insert(0, dirname(__file__))
 
-from tools.util.platform import get_board_manifest
+# Install & import tools
+def check_ltchiptool():
+    global ltchiptool
+    import ltchiptool
+
+    importlib.reload(ltchiptool)
+    if Version(ltchiptool.get_version()) < Version("1.3.1"):
+        raise ImportError("Version too old")
+
+
+try:
+    check_ltchiptool()
+except (ImportError, AttributeError):
+    print("Installing/updating ltchiptool")
+    system(" ".join([sys.executable, "-m", "pip install -U ltchiptool"]))
+    try:
+        check_ltchiptool()
+    except (ImportError, AttributeError) as e:
+        print(
+            f"!!! Installing ltchiptool failed, or version outdated. Cannot continue: {e}"
+        )
+        raise e
 
 # Remove current dir so it doesn't conflict with PIO
-sys.path.remove(dirname(__file__))
+if dirname(__file__) in sys.path:
+    sys.path.remove(dirname(__file__))
 
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
@@ -189,7 +211,7 @@ class LibretuyaPlatform(PlatformBase):
 
     def update_board(self, board: PlatformBoardConfig):
         if "_base" in board:
-            board._manifest = get_board_manifest(board._manifest)
+            board._manifest = ltchiptool.Board.get_data(board._manifest)
 
         # add "arduino" framework
         has_arduino = any("arduino" in fw for fw in board.manifest["frameworks"])

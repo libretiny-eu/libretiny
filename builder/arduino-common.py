@@ -76,6 +76,19 @@ env.AddLibrary(
     ],
 )
 
+# Sources - uf2ota library
+ltchiptool_dir = platform.get_package_dir(f"tool-ltchiptool")
+env.AddLibrary(
+    name="uf2ota",
+    base_dir=ltchiptool_dir,
+    srcs=[
+        "+<uf2ota/*.c>",
+    ],
+    includes=[
+        "+<.>",
+    ],
+)
+
 # Sources - board variant
 env.AddLibrary(
     name="board_${VARIANT}",

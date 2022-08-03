@@ -294,7 +294,7 @@ env.BuildLibraries()
 # Main firmware outputs and actions
 env.Replace(
     # linker command (dual .bin outputs)
-    LINK="${LINK2BIN} ${VARIANT} xip1 xip2",
+    LINK="${LTCHIPTOOL} link2bin ${VARIANT} xip1 xip2",
     # default output .bin name
     IMG_FW="image_${FLASH_OTA1_OFFSET}.ota1.bin",
     # UF2OTA input list

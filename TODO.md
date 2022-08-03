@@ -14,8 +14,7 @@
 
 ### Tools
 
-- move all UF2 assembling/uploading/processing tools (as well as `uf2ota` C library) to a separate repository, possibly rewriting parts of it again. Make these tools CLI-usable
-- write OpenOCD flashers, using uf2ota library + FAL for partitions (same repo as above)
+- write OpenOCD flashers, using uf2ota library + FAL for partitions (in ltchiptool repository)
 
 ### Serial
 
@@ -31,10 +30,8 @@
 
 ## BK7231
 
-- WiFi events
 - implement OTA
 - fix WiFi on BK7231N, test other functionality
-- add generic board definition
 - fix SSL (mbedTLS)
 - I2C (Wire)
 - SPI
@@ -42,6 +39,5 @@
 
 ## RTL8710B
 
-- add generic board definition
 - move to GNU++11 (and verify that it works) - take all stdio functions from stdio.h
 - rewrite most of Wiring (it was copied from `ambd_arduino`, and is ugly)

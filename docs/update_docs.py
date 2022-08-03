@@ -4,27 +4,17 @@ import sys
 from os.path import dirname, join
 
 sys.path.append(join(dirname(__file__), ".."))
+
 import re
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set
 
 import colorama
 from colorama import Fore, Style
-
-from tools.util.fileio import readjson, readtext
-from tools.util.markdown import Markdown
-from tools.util.obj import get, sizeof
-from tools.util.platform import (
-    get_board_list,
-    get_board_manifest,
-    get_families,
-    get_family,
-)
+from ltchiptool import Board, Family
+from ltchiptool.util import readjson, readtext, sizeof
+from markdown import Markdown
 
 OUTPUT = join(dirname(__file__), "status")
-
-
-def load_boards() -> Dict[str, dict]:
-    return {board: get_board_manifest(board) for board in get_board_list()}
 
 
 def load_chip_type_h() -> str:
@@ -43,24 +33,15 @@ def load_chip_type_h() -> str:
     return code
 
 
-def check_mcus(boards: List[Tuple[str, dict]]) -> bool:
-    for board_name, board in boards:
+def check_mcus(boards: List[Board]) -> bool:
+    for board in boards:
         # check if all boards' MCUs are defined in families.json
-        family_name: str = get(board, "build.family")
-        mcu_name: str = get(board, "build.mcu")
-        family = get_family(short_name=family_name)
-        if not family:
-            print(
-                Fore.RED
-                + f"ERROR: Family '{family_name}' of board '{board_name}' does not exist"
-                + Style.RESET_ALL
-            )
-            return False
-        mcus = [mcu.lower() for mcu in family.mcus]
+        mcu_name: str = board["build.mcu"]
+        mcus = [mcu.lower() for mcu in board.family.mcus]
         if mcu_name not in mcus:
             print(
                 Fore.RED
-                + f"ERROR: MCU '{mcu_name}' of board '{board_name}' is not defined for family '{family_name}'"
+                + f"ERROR: MCU '{mcu_name}' of board '{board.name}' is not defined for family '{board.family.name}'"
                 + Style.RESET_ALL
             )
             return False
@@ -69,19 +50,19 @@ def check_mcus(boards: List[Tuple[str, dict]]) -> bool:
 
 def get_family_mcus() -> Set[str]:
     out = []
-    for family in get_families():
+    for family in Family.get_all():
         out += family.mcus
     return set(out)
 
 
 def get_family_names() -> Set[str]:
-    return set(family.short_name for family in get_families())
+    return set(family.short_name for family in Family.get_all())
 
 
-def get_board_mcus(boards: List[Tuple[str, dict]]) -> Set[str]:
+def get_board_mcus(boards: List[Board]) -> Set[str]:
     out = set()
-    for _, board in boards:
-        mcu_name: str = get(board, "build.mcu")
+    for board in boards:
+        mcu_name: str = board["build.mcu"]
         out.add(mcu_name.upper())
     return out
 
@@ -103,28 +84,27 @@ def get_enum_families(code: str) -> Set[str]:
     return set(family[2:] for family in get_enum_keys(code, "ChipFamily"))
 
 
-def board_sort(tpl):
-    generic = tpl[0].lower().startswith("generic")
-    vendor = get(tpl[1], "vendor")
+def board_json_sort(tpl):
+    return tpl[1]["mcu"], tpl[0]
+
+
+def board_obj_sort(board: Board):
+    generic = board.is_generic
+    vendor = board.vendor
     if vendor == "N/A":
         vendor = "\xff"
         generic = False
     return (
         not generic,  # reverse
         vendor,
-        get(tpl[1], "build.mcu"),
-        get(tpl[1], "mcu"),
-        tpl[0],
+        board["build.mcu"],
+        board["mcu"],
+        board.name,
     )
 
 
-def get_board_symbol(board_name: str, board: dict) -> str:
-    symbol = get(board, "symbol")
-    if not symbol and board_name.startswith("generic-"):
-        symbol = board_name[8:]
-    else:
-        symbol = symbol or board_name.upper()
-    return symbol
+def get_board_symbol(board: Board) -> str:
+    return board.symbol or board.generic_name or board.name.upper()
 
 
 def write_chips(mcus: List[str]):
@@ -133,7 +113,7 @@ def write_chips(mcus: List[str]):
     md.write()
 
 
-def write_boards(boards: List[Tuple[str, dict]]):
+def write_boards(boards: List[Board]):
     md = Markdown(OUTPUT, "supported_boards")
     header = [
         "Name",
@@ -149,34 +129,33 @@ def write_boards(boards: List[Tuple[str, dict]]):
     rows = []
 
     vendor_prev = ""
-    for board_name, board in boards:
-        family = get_family(short_name=get(board, "build.family"))
+    for board in boards:
         # add board vendor as a row
-        vendor = get(board, "vendor")
+        vendor = board["vendor"]
         if vendor_prev != vendor:
             rows.append([f"**{vendor}**"])
             vendor_prev = vendor
         # count total pin count & IO count
         pins = "-"
-        pinout: Dict[str, dict] = get(board, "pcb.pinout")
+        pinout: Dict[str, dict] = board["pcb.pinout"]
         if pinout:
             pinout = [pin for name, pin in pinout.items() if name.isnumeric()]
             pins_total = len(pinout)
             pins_io = sum(1 for pin in pinout if "ARD" in pin)
             pins = f"{pins_total} ({pins_io} I/O)"
         # format row values
-        symbol = get_board_symbol(board_name, board)
-        board_url = f"[{symbol}](../../boards/{board_name}/README.md)"
+        symbol = get_board_symbol(board)
+        board_url = f"[{symbol}](../../boards/{board.name}/README.md)"
         row = [
             board_url,
-            get(board, "build.mcu").upper(),
-            sizeof(get(board, "upload.flash_size")),
-            sizeof(get(board, "upload.maximum_ram_size")),
+            board["build.mcu"].upper(),
+            sizeof(board["upload.flash_size"]),
+            sizeof(board["upload.maximum_ram_size"]),
             pins,
-            "✔️" if "wifi" in get(board, "connectivity") else "❌",
-            "✔️" if "ble" in get(board, "connectivity") else "❌",
-            "✔️" if "zigbee" in get(board, "connectivity") else "❌",
-            f"`{family.name}`",
+            "✔️" if "wifi" in board["connectivity"] else "❌",
+            "✔️" if "ble" in board["connectivity"] else "❌",
+            "✔️" if "zigbee" in board["connectivity"] else "❌",
+            f"`{board.family.name}`",
         ]
         rows.append(row)
     md.add_table(header, *rows)
@@ -204,7 +183,7 @@ def write_unsupported_boards(
         series_rows = []
         series_rows.append([f"**{series_name.upper()} Series**"])
         boards = series[series_name]
-        for board_name, board in sorted(boards.items(), key=board_sort):
+        for board_name, board in sorted(boards.items(), key=board_json_sort):
             if board_name in supported:
                 continue
             row = [
@@ -236,7 +215,7 @@ def write_families():
     ]
     rows = []
 
-    for family in get_families():
+    for family in Family.get_all():
         row = [
             # Title
             "[{}]({})".format(
@@ -274,14 +253,14 @@ def write_families():
     md.write()
 
 
-def write_boards_list(boards: List[Tuple[str, dict]]):
+def write_boards_list(boards: List[Board]):
     md = Markdown(dirname(__file__), join("..", "boards", "SUMMARY"))
     items = []
-    for board_name, board in boards:
-        symbol = get_board_symbol(board_name, board)
-        if board_name.startswith("generic-"):
-            symbol = get(board, "name")
-        items.append(f"[{symbol}](../boards/{board_name}/README.md)")
+    for board in boards:
+        symbol = get_board_symbol(board)
+        if board.is_generic:
+            symbol = board["name"]
+        items.append(f"[{symbol}](../boards/{board.name}/README.md)")
     md.add_list(*items)
     md.write()
 
@@ -289,18 +268,17 @@ def write_boards_list(boards: List[Tuple[str, dict]]):
 if __name__ == "__main__":
     colorama.init()
 
-    boards = load_boards()
-    boards = sorted(boards.items(), key=board_sort)
+    boards = map(Board, Board.get_list())
+    boards = sorted(boards, key=board_obj_sort)
     code = load_chip_type_h()
 
     errors = False
 
-    for name, board in boards:
-        variant = get(board, "build.variant")
-        if name != variant:
+    for board in boards:
+        if board.name != board["source"]:
             print(
                 Fore.RED
-                + f"ERROR: Invalid build.variant of '{name}': '{variant}'"
+                + f"ERROR: Invalid build.variant of '{board['source']}': '{board.name}'"
                 + Style.RESET_ALL
             )
             errors = True
@@ -347,5 +325,5 @@ if __name__ == "__main__":
         write_unsupported_boards(
             series=data,
             name=f"unsupported_{name}",
-            supported=[tpl[0] for tpl in boards],
+            supported=[board.name for board in boards],
         )

@@ -120,6 +120,11 @@
         "~1.100301.0"
       ]
     },
+    "tool-ltchiptool": {
+      "type": "uploader",
+      "version": "https://github.com/libretuya/ltchiptool#v1.2.1",
+      "note": "This is used only for C/C++ code from ltchiptool."
+    },
     "tool-openocd": {
       "type": "uploader",
       "optional": true,

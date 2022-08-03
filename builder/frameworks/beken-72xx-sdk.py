@@ -590,7 +590,7 @@ env.BuildLibraries()
 # Main firmware outputs and actions
 env.Replace(
     # linker command (encryption + packaging)
-    LINK="${LINK2BIN} ${VARIANT} '' ''",
+    LINK="${LTCHIPTOOL} link2bin ${VARIANT} '' ''",
     # UF2OTA input list
     UF2OTA=[
         # app binary image (enc+crc), OTA1 (uploader) only
