@@ -23,7 +23,7 @@ def check_ltchiptool():
     import ltchiptool
 
     importlib.reload(ltchiptool)
-    if Version(ltchiptool.get_version()) < Version("1.3.1"):
+    if Version(ltchiptool.get_version()) < Version("1.4.0"):
         raise ImportError("Version too old")
 
 
