@@ -30,7 +30,10 @@ def env_uf2ota(env, *args, **kwargs):
         "${FAMILY}",
         f"lt{lt_version}",
     ]
-    output = join("${BUILD_DIR}", "_".join(output)) + ".uf2"
+    output = "_".join(output) + ".uf2"
+    if platform.custom("fw_output"):
+        output = platform.custom("fw_output")
+    output = join("${BUILD_DIR}", output)
     env["UF2OUT"] = output
     env["UF2OUT_BASE"] = basename(output)
 
