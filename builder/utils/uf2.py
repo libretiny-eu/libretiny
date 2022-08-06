@@ -56,7 +56,7 @@ def env_uf2upload(env, target):
     # from platform-espressif32/builder/main.py
     if protocol == "uart":
         # upload via UART
-        env["UPLOADERFLAGS"] = [
+        env["UPLOADERFLAGS_UF2"] = [
             "${UF2OUT}",
             "uart",
             "${UPLOAD_PORT}",
@@ -77,7 +77,7 @@ def env_uf2upload(env, target):
     # add main upload target
     env.Replace(
         UPLOADER="${LTCHIPTOOL} uf2 upload",
-        UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS}",
+        UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS_UF2} ${UPLOADERFLAGS}",
     )
     actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
     env.AddPlatformTarget("upload", target, actions, "Upload")
