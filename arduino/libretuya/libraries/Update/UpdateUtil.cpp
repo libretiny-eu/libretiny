@@ -52,6 +52,8 @@ void UpdateClass::cleanup() {
  * @return true if err is not OK, false otherwise
  */
 bool UpdateClass::errorUf2(uf2_err_t err) {
+	if (err)
+		LT_D_OTA("[%4d] errorUf2(%d)", ctx ? ctx->seq : 0, err);
 	if (err <= UF2_ERR_IGNORE)
 		return false;
 	cleanup();
@@ -67,6 +69,8 @@ bool UpdateClass::errorUf2(uf2_err_t err) {
  * @return false - always
  */
 bool UpdateClass::errorArd(uint8_t err) {
+	if (err)
+		LT_D_OTA("[%4d] errorArd(%d)", ctx ? ctx->seq : 0, err);
 	cleanup();
 	errUf2 = UF2_ERR_OK;
 	errArd = err;
@@ -77,6 +81,7 @@ bool UpdateClass::errorArd(uint8_t err) {
  * @brief Abort the update with UPDATE_ERROR_ABORT reason.
  */
 void UpdateClass::abort() {
+	LT_D_OTA("Aborting update");
 	errorArd(UPDATE_ERROR_ABORT);
 }
 
@@ -105,7 +110,7 @@ void UpdateClass::printError(Print &out) {
  * "ard=..,uf2=..". Returns "" if no error.
  */
 const char *UpdateClass::errorString() {
-	if (!errArd)
+	if (!errArd && !errUf2)
 		return "";
 	sprintf(errorStr, "ard=%u,uf2=%u", errArd, errUf2);
 	return errorStr;

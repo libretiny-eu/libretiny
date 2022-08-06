@@ -95,3 +95,7 @@
 #ifndef LT_DEBUG_SSL
 #define LT_DEBUG_SSL 0
 #endif
+
+#ifndef LT_DEBUG_OTA
+#define LT_DEBUG_OTA 0
+#endif

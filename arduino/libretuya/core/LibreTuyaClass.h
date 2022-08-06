@@ -114,7 +114,9 @@ class LibreTuya {
 	 */
 	uint8_t otaGetStoredIndex();
 	/**
-	 * @brief Check if the chip supports dual-OTA.
+	 * @brief Check if the chip supports dual-OTA (i.e. OTA is flashed to a different partition).
+	 *
+	 * TODO: make this work for actual dual-OTA chips; remove checking this in otaGetTarget() etc.
 	 */
 	bool otaSupportsDual();
 	/**

@@ -185,3 +185,8 @@ void lt_log_disable();
 #define LT_T_SSL(...) LT_T_MOD(LT_DEBUG_SSL, __VA_ARGS__)
 #define LT_V_SSL(...) LT_T_MOD(LT_DEBUG_SSL, __VA_ARGS__)
 #define LT_D_SSL(...) LT_D_MOD(LT_DEBUG_SSL, __VA_ARGS__)
+
+// Update.cpp
+#define LT_T_OTA(...) LT_T_MOD(LT_DEBUG_OTA, __VA_ARGS__)
+#define LT_V_OTA(...) LT_T_MOD(LT_DEBUG_OTA, __VA_ARGS__)
+#define LT_D_OTA(...) LT_D_MOD(LT_DEBUG_OTA, __VA_ARGS__)

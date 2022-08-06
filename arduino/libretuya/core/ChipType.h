@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-28. */
 
+#pragma once
+
 #define CHIP_TYPE(family, chip_id)		(((family >> 24) << 8) | chip_id)
 #define CHIP_TYPE_ENUM(family, chip_id) (ChipType) CHIP_TYPE(family, chip_id)
 

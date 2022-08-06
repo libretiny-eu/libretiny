@@ -98,7 +98,8 @@ uint8_t LibreTuya::otaGetTarget() {
 }
 
 /**
- * @brief Perform OTA rollback.
+ * @brief Perform OTA rollback: switch to the previous image, or abort current
+ * switched OTA update, if not rebooted yet.
  *
  * @return false if no second image to run, writing failed or dual-OTA not supported
  */

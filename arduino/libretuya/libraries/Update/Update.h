@@ -118,7 +118,7 @@ class UpdateClass {
 	}
 
 	void clearError() {
-		errorUf2(UF2_ERR_OK);
+		errorArd(UPDATE_ERROR_OK);
 	}
 
 	bool hasError() {

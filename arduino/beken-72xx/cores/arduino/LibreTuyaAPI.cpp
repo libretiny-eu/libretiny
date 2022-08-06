@@ -1,6 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
 #include <LibreTuyaAPI.h>
+#include <libraries/Flash/Flash.h>
 
 // can't include <flash.h> as it collides with <Flash.h> on Windows -_-
 #define REG_FLASH_BASE		 0x00803000
@@ -109,12 +110,14 @@ uint32_t LibreTuya::getMaxAllocHeap() {
 
 /* OTA-related */
 
+static int8_t otaImage2Valid = -1;
+
 uint8_t LibreTuya::otaGetStoredIndex() {
-	return 1;
+	return otaHasImage2() ? 2 : 1;
 }
 
 bool LibreTuya::otaSupportsDual() {
-	return false;
+	return true;
 }
 
 bool LibreTuya::otaHasImage1() {
@@ -122,11 +125,28 @@ bool LibreTuya::otaHasImage1() {
 }
 
 bool LibreTuya::otaHasImage2() {
-	return false;
+	if (otaImage2Valid != -1)
+		return otaImage2Valid;
+	// check download RBL
+	// TODO: maybe check header CRC or even binary hashes
+	uint32_t magic;
+	Flash.readBlock(FLASH_DOWNLOAD_OFFSET, (uint8_t *)&magic, 4);
+	otaImage2Valid = magic == 0x004C4252; // "RBL\0", little-endian
+	return otaImage2Valid;
 }
 
 bool LibreTuya::otaSwitch(bool force) {
-	return true;
+	// no need to check otaGetStoredIndex() as it does the same as otaHasImage2()
+
+	// force checking validity again
+	otaImage2Valid = -1;
+
+	if (otaHasImage2() && force) {
+		// "rollback" - abort bootloader upgrade operation by wiping first sector
+		return Flash.eraseSector(FLASH_DOWNLOAD_OFFSET);
+	}
+
+	return otaHasImage2(); // false if second image is not valid
 }
 
 /* Global instance */
