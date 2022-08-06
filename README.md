@@ -65,8 +65,8 @@ NVS / Preferences   | ❌              | ❌
 SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
 NTP                 | ❌              | ❌
-OTA                 | ✔️             | ❌
-MDNS                | ✔️             | ❗
+OTA                 | ✔️             | ✔️
+MDNS                | ✔️             | BK7231T only
 MQTT                | ✅              | ❌
 SD                  | ❌              | ❌
 

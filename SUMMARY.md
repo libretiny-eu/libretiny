@@ -6,6 +6,7 @@
 	* Examples
 		* [PinScan](examples/PinScan/README.md)
 	* [ESPHome port](docs/projects/esphome.md)
+	* [Using tuya-cloudcutter](docs/cloudcutter.md)
 * [💻 Boards & CPU list](docs/status/supported.md)
 * [✔️ Implementation status](docs/status/arduino.md)
 * Supported chip families
