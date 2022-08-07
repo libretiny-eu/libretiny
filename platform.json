@@ -42,7 +42,7 @@
     "framework-realtek-amb1": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/ambiot/amb1_sdk",
+      "version": "https://github.com/ambiot/amb1_sdk#750b0bc",
       "manifest": {
         "description": "SDK for Ameba1"
       },
@@ -56,7 +56,7 @@
     "framework-realtek-ambz2": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/ambiot/ambz2_sdk",
+      "version": "https://github.com/ambiot/ambz2_sdk#f009272",
       "manifest": {
         "description": "SDK for AmebaZ2"
       },
@@ -65,7 +65,7 @@
     "framework-beken-bdk": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/bekencorp/bdk_freertos",
+      "version": "https://github.com/bekencorp/bdk_freertos#c3533e8",
       "manifest": {
         "description": "Beken Development Kit for FreeRTOS"
       },
@@ -74,7 +74,7 @@
     "framework-arduino-api": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/arduino/ArduinoCore-API",
+      "version": "https://github.com/arduino/ArduinoCore-API#ee040ed",
       "manifest": {
         "description": "Hardware independent layer of the Arduino cores"
       },
@@ -134,7 +134,7 @@
     "tool-bk7231tools": {
       "type": "uploader",
       "optional": true,
-      "version": "https://github.com/libretuya/bk7231tools"
+      "version": "https://github.com/notkmhn/bk7231tools#1eea4c3"
     }
   }
 }
