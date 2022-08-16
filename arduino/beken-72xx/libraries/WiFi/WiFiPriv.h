@@ -20,6 +20,7 @@ extern "C" {
 #include <main_none.h>
 #include <param_config.h>
 #include <rw_msg_rx.h>
+#include <vif_mgmt.h>
 #include <wlan_ui_pub.h>
 #include <wpa_supplicant_i.h>
 

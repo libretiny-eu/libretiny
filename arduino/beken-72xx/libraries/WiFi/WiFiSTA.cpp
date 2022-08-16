@@ -11,6 +11,8 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 
 	LT_HEAP_I();
 
+	disconnect(false);
+
 	strcpy(STA_CFG->wifi_ssid, ssid);
 	if (passphrase) {
 		strcpy(STA_CFG->wifi_key, passphrase);
@@ -35,8 +37,16 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 		sprintf(STA_CFG->gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
 		if (dns1) {
 			sprintf(STA_CFG->dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
+		} else {
+			STA_CFG->dns_server_ip_addr[0] = '\0';
 		}
+	} else {
+		STA_CFG->local_ip_addr[0]	   = '\0';
+		STA_CFG->net_mask[0]		   = '\0';
+		STA_CFG->gateway_ip_addr[0]	   = '\0';
+		STA_CFG->dns_server_ip_addr[0] = '\0';
 	}
+
 	// from wlan_ui.c:1370
 	if (sta_ip_is_start()) {
 		sta_ip_down();
@@ -64,6 +74,8 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	} else {
 		LT_D_WG("Connecting to %s", STA_CFG->wifi_ssid);
 	}
+
+	LT_D_WG("data status = %p", data.configSta);
 
 	STA_CFG->wifi_mode			 = BK_STATION;
 	STA_CFG->wifi_retry_interval = 100;
@@ -93,6 +105,10 @@ error:
 }
 
 bool WiFiClass::disconnect(bool wifiOff) {
+#if LT_DEBUG_WIFI
+	bk_wlan_get_link_status(LINK_STATUS);
+	LT_D_WG("Disconnecting from %s", LINK_STATUS ? LINK_STATUS->ssid : NULL);
+#endif
 	bk_wlan_connection_loss();
 	if (wifiOff)
 		enableSTA(false);

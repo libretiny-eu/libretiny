@@ -3,6 +3,7 @@
 #include "WiFiPriv.h"
 
 WiFiClass::WiFiClass() {
+	memset(&data, 0x00, sizeof(WiFiData));
 	data.scanSem = xSemaphoreCreateBinary();
 }
 

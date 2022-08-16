@@ -7,11 +7,13 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	startWifiTask();
 
 	if (mode && !data.statusIp) {
+		LT_D_WG("Init data struct");
 		data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
 		data.configAp	   = zalloc(sizeof(network_InitTypeDef_ap_st));
 		data.statusIp	   = malloc(sizeof(IPStatusTypedef));
 		data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
 		STA_CFG->dhcp_mode = DHCP_CLIENT;
+		LT_D_WG("data status = %p", data.configSta);
 	}
 
 	if (!__bk_rf_is_init) {
@@ -32,6 +34,9 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (sta == WLMODE_ENABLE) {
 		LT_D_WG("Enabling STA");
 		bk_wlan_sta_init(NULL);
+#if CFG_WPA_CTRL_IFACE
+		wlan_sta_enable();
+#endif
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
 	} else if (sta == WLMODE_DISABLE) {
 		LT_D_WG("Disabling STA");
@@ -44,6 +49,9 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (ap == WLMODE_ENABLE) {
 		LT_D_WG("Enabling AP");
 		bk_wlan_ap_init(NULL);
+#if CFG_WPA_CTRL_IFACE
+		wlan_ap_enable();
+#endif
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
 		LT_D_WG("Disabling AP");
@@ -51,7 +59,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_STOP);
 	}
 
+	// force checking actual mode again
+	mode = getMode();
+
 	if (!mode) {
+		LT_D_WG("Free data struct");
 		free(data.configSta);
 		free(data.configAp);
 		free(data.statusIp);
@@ -69,15 +81,13 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 }
 
 WiFiMode WiFiClass::getMode() {
-	if (!g_wlan_general_param)
-		return WIFI_MODE_NULL;
-	uint8_t role = g_wlan_general_param->role;
-	// change 1->2, 2->1
-	return (WiFiMode)(role + (role == 1) - (role == 2));
+	uint8_t sta = !!bk_wlan_has_role(VIF_STA) * WIFI_MODE_STA;
+	uint8_t ap	= !!bk_wlan_has_role(VIF_AP) * WIFI_MODE_AP;
+	return (WiFiMode)(sta | ap);
 }
 
 WiFiStatus WiFiClass::status() {
-	rw_evt_type status = mhdr_get_station_status();
+	rw_evt_type status = data.lastEvent;
 	if (status == RW_EVT_STA_CONNECTED && STA_CFG->dhcp_mode == DHCP_DISABLE)
 		status = RW_EVT_STA_GOT_IP;
 	return eventTypeToStatus(status);

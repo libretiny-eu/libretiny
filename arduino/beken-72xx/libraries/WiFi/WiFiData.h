@@ -7,6 +7,7 @@
 extern "C" {
 
 #include <FreeRTOS.h>
+#include <rw_msg_pub.h>
 #include <semphr.h>
 
 } // extern "C"
@@ -18,4 +19,5 @@ typedef struct {
 	SemaphoreHandle_t scanSem;
 	void *statusIp;
 	void *statusLink;
+	rw_evt_type lastEvent;
 } WiFiData;
