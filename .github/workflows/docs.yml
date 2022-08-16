@@ -20,3 +20,4 @@ jobs:
           CONFIG_FILE: mkdocs.yml
           EXTRA_PACKAGES: build-base doxygen
           REQUIREMENTS: docs/requirements.txt
+          CUSTOM_DOMAIN: docs.libretuya.ml
