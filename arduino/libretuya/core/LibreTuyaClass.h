@@ -33,7 +33,6 @@ class LibreTuya {
 	const char *getDeviceName();
 	uint32_t getCpuFreqMHz();
 	uint32_t getFlashChipSize();
-	uint8_t otaGetRunning();
 	uint8_t otaGetTarget();
 	bool otaRollback();
 	bool otaCanRollback();
@@ -109,6 +108,10 @@ class LibreTuya {
 	uint32_t getMaxAllocHeap();
 
   public: /* OTA-related */
+	/**
+	 * @brief Get the currently running firmware OTA index.
+	 */
+	uint8_t otaGetRunning();
 	/**
 	 * @brief Read the currently active OTA index, i.e. the one that will boot upon restart.
 	 */

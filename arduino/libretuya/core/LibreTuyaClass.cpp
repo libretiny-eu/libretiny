@@ -74,18 +74,6 @@ __attribute__((weak)) uint32_t LibreTuya::getFlashChipSize() {
 #endif
 }
 
-static uint8_t otaRunningIndex = 0;
-
-/**
- * @brief Get the currently running firmware OTA index.
- */
-uint8_t LibreTuya::otaGetRunning() {
-	if (otaRunningIndex)
-		return otaRunningIndex;
-	// otaRunningIndex will be correct even after switchOta()
-	return otaRunningIndex = otaGetStoredIndex();
-}
-
 /**
  * @brief Get the OTA index for updated firmware.
  *

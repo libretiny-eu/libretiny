@@ -99,6 +99,13 @@ uint32_t LibreTuya::getMaxAllocHeap() {
 
 /* OTA-related */
 
+uint8_t LibreTuya::otaGetRunning() {
+	// RTL8710B is XIP, so check the code offset in flash
+	uint32_t addr = (uint32_t)lt_log;
+	uint32_t offs = addr - SPI_FLASH_BASE;
+	return offs > FLASH_OTA2_OFFSET ? 2 : 1;
+}
+
 uint8_t LibreTuya::otaGetStoredIndex() {
 	uint32_t *otaAddress = (uint32_t *)0x8009000;
 	if (*otaAddress == 0xFFFFFFFF)

@@ -112,6 +112,11 @@ uint32_t LibreTuya::getMaxAllocHeap() {
 
 static int8_t otaImage2Valid = -1;
 
+uint8_t LibreTuya::otaGetRunning() {
+	// Beken has bootloader-based OTA, running app is always index 1
+	return 1;
+}
+
 uint8_t LibreTuya::otaGetStoredIndex() {
 	return otaHasImage2() ? 2 : 1;
 }
