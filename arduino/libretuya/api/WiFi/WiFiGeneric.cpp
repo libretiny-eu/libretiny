@@ -15,8 +15,8 @@ bool WiFiClass::mode(WiFiMode mode) {
 	WiFiModeAction sta = WiFiModeAction((mode & WIFI_MODE_STA) != (currentMode & WIFI_MODE_STA));
 	WiFiModeAction ap  = WiFiModeAction((mode & WIFI_MODE_AP) != (currentMode & WIFI_MODE_AP));
 	// change 0/1 to 1/2
-	sta = WiFiModeAction(sta + sta * (mode & WIFI_MODE_STA));
-	ap	= WiFiModeAction(ap + ap * (mode & WIFI_MODE_AP));
+	sta = WiFiModeAction(sta + sta * !!(mode & WIFI_MODE_STA));
+	ap	= WiFiModeAction(ap + ap * !!(mode & WIFI_MODE_AP));
 	// initialize data structures if wifi is enabled
 	if (mode)
 		dataInitialize();
