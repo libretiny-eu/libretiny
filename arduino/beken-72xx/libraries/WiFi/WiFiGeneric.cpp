@@ -6,16 +6,6 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
 	startWifiTask();
 
-	if (mode && !data.statusIp) {
-		LT_D_WG("Init data struct");
-		data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
-		data.configAp	   = zalloc(sizeof(network_InitTypeDef_ap_st));
-		data.statusIp	   = malloc(sizeof(IPStatusTypedef));
-		data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
-		STA_CFG->dhcp_mode = DHCP_CLIENT;
-		LT_D_WG("data status = %p", data.configSta);
-	}
-
 	if (!__bk_rf_is_init) {
 		LT_D_WG("Initializing func&app");
 		func_init_extended();
@@ -62,17 +52,8 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	// force checking actual mode again
 	mode = getMode();
 
-	if (!mode) {
-		LT_D_WG("Free data struct");
-		free(data.configSta);
-		free(data.configAp);
-		free(data.statusIp);
-		free(data.statusLink);
-		data.configSta	= NULL;
-		data.configAp	= NULL;
-		data.statusIp	= NULL;
-		data.statusLink = NULL;
-	}
+	if (!mode)
+		dataFree();
 
 	LT_HEAP_I();
 

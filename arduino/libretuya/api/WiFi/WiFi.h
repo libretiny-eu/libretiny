@@ -47,6 +47,8 @@ class WiFiClass {
 	~WiFiClass();
 	void printDiag(Print &dest);
 	bool validate(const char *ssid, const char *passphrase);
+	void dataInitialize();
+	void dataFree();
 
   public: /* WiFiGeneric.cpp */
 	bool mode(WiFiMode mode);

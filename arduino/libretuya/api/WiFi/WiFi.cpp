@@ -63,5 +63,9 @@ bool WiFiClass::validate(const char *ssid, const char *passphrase) {
 	return true;
 }
 
+__attribute__((weak)) void WiFiClass::dataInitialize() {}
+
+__attribute__((weak)) void WiFiClass::dataFree() {}
+
 WiFiClass WiFi;
 WiFiClass *pWiFi = NULL;

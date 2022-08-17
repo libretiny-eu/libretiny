@@ -55,4 +55,20 @@ extern void wifiEventHandler(rw_evt_type event);
 #define IP_STATUS	((IPStatusTypedef *)data.statusIp)
 #define LINK_STATUS ((LinkStatusTypeDef *)data.statusLink)
 
+#define GET_LINK_STATUS_RETURN(ret)                                                                                    \
+	{                                                                                                                  \
+		if (!isConnected())                                                                                            \
+			return ret;                                                                                                \
+		memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));                                                          \
+		bk_wlan_get_link_status(LINK_STATUS);                                                                          \
+	}
+
+#define GET_IP_STATUS_RETURN(ret, iface)                                                                               \
+	{                                                                                                                  \
+		if (!isConnected())                                                                                            \
+			return ret;                                                                                                \
+		memset(IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                              \
+		bk_wlan_get_ip_status(IP_STATUS, iface);                                                                       \
+	}
+
 } // extern "C"

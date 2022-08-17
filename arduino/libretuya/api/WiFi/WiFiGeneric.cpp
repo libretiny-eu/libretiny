@@ -17,6 +17,9 @@ bool WiFiClass::mode(WiFiMode mode) {
 	// change 0/1 to 1/2
 	sta = WiFiModeAction(sta + sta * (mode & WIFI_MODE_STA));
 	ap	= WiFiModeAction(ap + ap * (mode & WIFI_MODE_AP));
+	// initialize data structures if wifi is enabled
+	if (mode)
+		dataInitialize();
 	// actually change the mode
 	LT_HEAP_I();
 	return modePriv(mode, sta, ap);

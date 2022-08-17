@@ -27,8 +27,7 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 }
 
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
-	// need to initialize data struct first
-	enableSTA(true);
+	dataInitialize();
 
 	STA_CFG->dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	if (localIP) {
@@ -64,6 +63,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 }
 
 bool WiFiClass::reconnect(const uint8_t *bssid) {
+	dataInitialize();
 	if (!bssid && !STA_CFG->wifi_ssid[0]) {
 		LT_E("(B)SSID not specified");
 		goto error;
@@ -106,8 +106,9 @@ error:
 
 bool WiFiClass::disconnect(bool wifiOff) {
 #if LT_DEBUG_WIFI
+	memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));
 	bk_wlan_get_link_status(LINK_STATUS);
-	LT_D_WG("Disconnecting from %s", LINK_STATUS ? LINK_STATUS->ssid : NULL);
+	LT_D_WG("Disconnecting from %s (wifiOff=%d)", LINK_STATUS ? LINK_STATUS->ssid : NULL, wifiOff);
 #endif
 	bk_wlan_connection_loss();
 	if (wifiOff)
@@ -124,28 +125,28 @@ bool WiFiClass::getAutoReconnect() {
 }
 
 IPAddress WiFiClass::localIP() {
-	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
+	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->ip);
 	return ip;
 }
 
 IPAddress WiFiClass::subnetMask() {
-	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
+	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->mask);
 	return ip;
 }
 
 IPAddress WiFiClass::gatewayIP() {
-	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
+	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->gate);
 	return ip;
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
-	bk_wlan_get_ip_status(IP_STATUS, BK_STATION);
+	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->dns);
 	return ip;
@@ -189,7 +190,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 }
 
 const String WiFiClass::SSID() {
-	bk_wlan_get_link_status(LINK_STATUS);
+	GET_LINK_STATUS_RETURN("");
 	return (char *)LINK_STATUS->ssid;
 }
 
@@ -203,21 +204,21 @@ const String WiFiClass::psk() {
 }
 
 uint8_t *WiFiClass::BSSID() {
-	bk_wlan_get_link_status(LINK_STATUS);
+	GET_LINK_STATUS_RETURN(NULL);
 	return LINK_STATUS->bssid;
 }
 
 int32_t WiFiClass::channel() {
-	bk_wlan_get_link_status(LINK_STATUS);
+	GET_LINK_STATUS_RETURN(0);
 	return LINK_STATUS->channel;
 }
 
 int8_t WiFiClass::RSSI() {
-	bk_wlan_get_link_status(LINK_STATUS);
+	GET_LINK_STATUS_RETURN(0);
 	return LINK_STATUS->wifi_strength;
 }
 
 WiFiAuthMode WiFiClass::getEncryption() {
-	bk_wlan_get_link_status(LINK_STATUS);
+	GET_LINK_STATUS_RETURN(WIFI_AUTH_INVALID);
 	return securityTypeToAuthMode(LINK_STATUS->security);
 }
