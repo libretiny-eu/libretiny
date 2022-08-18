@@ -12,8 +12,8 @@ void WiFiClass::printDiag(Print &dest) {
 	if (getMode() & WIFI_MODE_STA) {
 		dest.println("-- Station --");
 		dest.print("SSID: ");
-		dest.println(SSID());
 		if (isConnected()) {
+			dest.println(SSID());
 			dest.print("Channel: ");
 			dest.println(channel());
 			dest.print("BSSID: ");
@@ -28,19 +28,25 @@ void WiFiClass::printDiag(Print &dest) {
 			dest.println(macAddress());
 			dest.print("Hostname: ");
 			dest.println(getHostname());
+		} else {
+			dest.println("disconnected");
 		}
 	}
 
 	if (getMode() & WIFI_MODE_AP) {
 		dest.println("-- Access Point --");
 		dest.print("SSID: ");
-		dest.println(softAPSSID());
-		dest.print("IP: ");
-		dest.println(softAPIP());
-		dest.print("MAC: ");
-		dest.println(softAPmacAddress());
-		dest.print("Hostname: ");
-		dest.println(softAPgetHostname());
+		if (softAPSSID().length()) {
+			dest.println(softAPSSID());
+			dest.print("IP: ");
+			dest.println(softAPIP());
+			dest.print("MAC: ");
+			dest.println(softAPmacAddress());
+			dest.print("Hostname: ");
+			dest.println(softAPgetHostname());
+		} else {
+			dest.println("disconnected");
+		}
 	}
 }
 

@@ -22,7 +22,14 @@ bool WiFiClass::mode(WiFiMode mode) {
 		dataInitialize();
 	// actually change the mode
 	LT_HEAP_I();
-	return modePriv(mode, sta, ap);
+	if (!modePriv(mode, sta, ap))
+		return false;
+#if LT_LEVEL_DEBUG >= LT_LOGLEVEL
+	if (getMode() != mode) {
+		LT_W("Mode changed to %d (requested %d)", getMode(), mode);
+	}
+#endif
+	return true;
 }
 
 bool WiFiClass::enableSTA(bool enable) {
