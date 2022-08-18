@@ -20,6 +20,8 @@ extern "C" {
 #include <main_none.h>
 #include <param_config.h>
 #include <rw_msg_rx.h>
+#include <sa_ap.h>
+#include <sys_ctrl_pub.h>
 #include <vif_mgmt.h>
 #include <wlan_ui_pub.h>
 #include <wpa_supplicant_i.h>
@@ -55,20 +57,34 @@ extern void wifiEventHandler(rw_evt_type event);
 #define IP_STATUS	((IPStatusTypedef *)data.statusIp)
 #define LINK_STATUS ((LinkStatusTypeDef *)data.statusLink)
 
-#define GET_LINK_STATUS_RETURN(ret)                                                                                    \
+#define STA_GET_LINK_STATUS_RETURN(ret)                                                                                \
 	{                                                                                                                  \
-		if (!isConnected())                                                                                            \
+		if (!sta_ip_is_start())                                                                                        \
 			return ret;                                                                                                \
 		memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));                                                          \
 		bk_wlan_get_link_status(LINK_STATUS);                                                                          \
 	}
 
-#define GET_IP_STATUS_RETURN(ret, iface)                                                                               \
+#define STA_GET_IP_STATUS_RETURN(ret)                                                                                  \
 	{                                                                                                                  \
-		if (!isConnected())                                                                                            \
+		if (!sta_ip_is_start())                                                                                        \
 			return ret;                                                                                                \
 		memset(IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                              \
-		bk_wlan_get_ip_status(IP_STATUS, iface);                                                                       \
+		bk_wlan_get_ip_status(IP_STATUS, BK_STATION);                                                                  \
+	}
+
+#define AP_GET_LINK_STATUS_RETURN(ret)                                                                                 \
+	{                                                                                                                  \
+		if (!uap_ip_is_start())                                                                                        \
+			return ret;                                                                                                \
+	}
+
+#define AP_GET_IP_STATUS_RETURN(ret)                                                                                   \
+	{                                                                                                                  \
+		if (!uap_ip_is_start())                                                                                        \
+			return ret;                                                                                                \
+		memset(IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                              \
+		bk_wlan_get_ip_status(IP_STATUS, BK_SOFT_AP);                                                                  \
 	}
 
 } // extern "C"

@@ -51,7 +51,11 @@ void wifiEventHandler(rw_evt_type event) {
 		return; // failsafe
 
 	LT_D_WG("WiFi event %u", event);
-	pWiFi->data.lastEvent = event;
+
+	if (event <= RW_EVT_STA_GOT_IP)
+		pWiFi->data.lastStaEvent = event;
+	else
+		pWiFi->data.lastApEvent = event;
 
 	EventId eventId;
 	EventInfo eventInfo;

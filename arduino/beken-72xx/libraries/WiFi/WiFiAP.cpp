@@ -73,14 +73,14 @@ uint8_t WiFiClass::softAPgetStationNum() {
 }
 
 IPAddress WiFiClass::softAPIP() {
-	bk_wlan_get_ip_status(IP_STATUS, BK_SOFT_AP);
+	AP_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->ip);
 	return ip;
 }
 
 IPAddress WiFiClass::softAPSubnetMask() {
-	bk_wlan_get_ip_status(IP_STATUS, BK_SOFT_AP);
+	AP_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->mask);
 	return ip;
@@ -109,5 +109,6 @@ String WiFiClass::softAPmacAddress(void) {
 }
 
 const String WiFiClass::softAPSSID(void) {
+	AP_GET_LINK_STATUS_RETURN("");
 	return AP_CFG->wifi_ssid;
 }

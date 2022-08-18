@@ -19,5 +19,6 @@ typedef struct {
 	SemaphoreHandle_t scanSem;
 	void *statusIp;
 	void *statusLink;
-	rw_evt_type lastEvent;
+	rw_evt_type lastStaEvent;
+	rw_evt_type lastApEvent;
 } WiFiData;

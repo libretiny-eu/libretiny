@@ -21,6 +21,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 	LT_HEAP_I();
 
+	if (mode) {
+		LT_D_WG("Wakeup RF");
+		uint32_t reg = 1; // this is only checked for being true-ish
+		sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
+	}
+
 	if (sta == WLMODE_ENABLE) {
 		LT_D_WG("Enabling STA");
 		bk_wlan_sta_init(NULL);
@@ -41,6 +47,8 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		bk_wlan_ap_init(NULL);
 #if CFG_WPA_CTRL_IFACE
 		wlan_ap_enable();
+		wlan_ap_reload();
+		uap_ip_down();
 #endif
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
@@ -68,7 +76,7 @@ WiFiMode WiFiClass::getMode() {
 }
 
 WiFiStatus WiFiClass::status() {
-	rw_evt_type status = data.lastEvent;
+	rw_evt_type status = data.lastStaEvent;
 	if (status == RW_EVT_STA_CONNECTED && STA_CFG->dhcp_mode == DHCP_DISABLE)
 		status = RW_EVT_STA_GOT_IP;
 	return eventTypeToStatus(status);

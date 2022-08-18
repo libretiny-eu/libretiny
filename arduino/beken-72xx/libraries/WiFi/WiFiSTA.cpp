@@ -125,28 +125,28 @@ bool WiFiClass::getAutoReconnect() {
 }
 
 IPAddress WiFiClass::localIP() {
-	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
+	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->ip);
 	return ip;
 }
 
 IPAddress WiFiClass::subnetMask() {
-	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
+	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->mask);
 	return ip;
 }
 
 IPAddress WiFiClass::gatewayIP() {
-	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
+	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->gate);
 	return ip;
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
-	GET_IP_STATUS_RETURN((uint32_t)0, BK_STATION);
+	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
 	ip.fromString(IP_STATUS->dns);
 	return ip;
@@ -190,7 +190,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 }
 
 const String WiFiClass::SSID() {
-	GET_LINK_STATUS_RETURN("");
+	STA_GET_LINK_STATUS_RETURN("");
 	return (char *)LINK_STATUS->ssid;
 }
 
@@ -204,21 +204,21 @@ const String WiFiClass::psk() {
 }
 
 uint8_t *WiFiClass::BSSID() {
-	GET_LINK_STATUS_RETURN(NULL);
+	STA_GET_LINK_STATUS_RETURN(NULL);
 	return LINK_STATUS->bssid;
 }
 
 int32_t WiFiClass::channel() {
-	GET_LINK_STATUS_RETURN(0);
+	STA_GET_LINK_STATUS_RETURN(0);
 	return LINK_STATUS->channel;
 }
 
 int8_t WiFiClass::RSSI() {
-	GET_LINK_STATUS_RETURN(0);
+	STA_GET_LINK_STATUS_RETURN(0);
 	return LINK_STATUS->wifi_strength;
 }
 
 WiFiAuthMode WiFiClass::getEncryption() {
-	GET_LINK_STATUS_RETURN(WIFI_AUTH_INVALID);
+	STA_GET_LINK_STATUS_RETURN(WIFI_AUTH_INVALID);
 	return securityTypeToAuthMode(LINK_STATUS->security);
 }
