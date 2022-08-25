@@ -2,7 +2,9 @@
 
 #pragma once
 
-#include_next "lwipopts.h"
+#include "lwip-2.0.2/port/lwipopts.h"
+
+#include <sys/time.h>
 
 #define LWIP_MDNS_RESPONDER		   1
 #define LWIP_NUM_NETIF_CLIENT_DATA 1

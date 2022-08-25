@@ -249,6 +249,7 @@ env.AddLibrary(
         "+<usb>",
         "+<../ip/**>",
     ],
+    options=dict(CCFLAGS=["-Wno-unused-variable"]),
 )
 
 # Sources - functional components
@@ -263,6 +264,7 @@ env.AddLibrary(
         "+<camera_intf/*.c>",
         "+<hostapd_intf/*.c>",
         "+<joint_up/*.c>",
+        "+<lwip_intf/dhcpd/*.c>",
         "+<misc/*.c>",
         "+<net_param_intf/*.c>",
         "+<power_save/*.c>",
@@ -288,6 +290,7 @@ env.AddLibrary(
         "+<ethernet_intf>",
         "+<include>",
         "+<joint_up>",
+        "+<lwip_intf>",  # for config/lwipopts.h
         "+<power_save>",
         "+<rf_test>",
         "+<rf_use>",
@@ -343,27 +346,7 @@ env.AddLibrary(
 )
 
 # Sources - lwIP 2.0.2
-env.AddLibrary(
-    name="bdk_lwip",
-    base_dir=join(FUNC_DIR, "lwip_intf"),
-    srcs=[
-        "+<lwip-2.0.2/port/*.c>",
-        "+<lwip-2.0.2/src/api/*.c>",
-        "+<lwip-2.0.2/src/apps/ping/*.c>",
-        "+<lwip-2.0.2/src/apps/mdns/*.c>",
-        "+<lwip-2.0.2/src/core/*.c>",
-        "+<lwip-2.0.2/src/core/ipv4/*.c>",
-        "+<lwip-2.0.2/src/core/ipv6/*.c>",
-        "+<lwip-2.0.2/src/netif/ethernet.c>",
-        "+<dhcpd/*.c>",
-    ],
-    includes=[
-        "+<lwip-2.0.2/port>",
-        "+<lwip-2.0.2/src/include>",
-        "+<lwip-2.0.2/src/include/netif>",
-    ],
-    options=dict(CCFLAGS=["-Wno-missing-braces"]),
-)
+env.AddLibraryLwIP(version="2.0.2", port="bdk")
 
 # Sources - mbedTLS 2.6.0
 env.AddLibrary(

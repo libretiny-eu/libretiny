@@ -25,6 +25,13 @@ def env_add_lwip(
             "+<port/realtek>",
             "+<port/realtek/freertos>",
         ]
+    elif port in ["bdk"]:
+        port_srcs = [
+            "+<port/*.c>",
+        ]
+        port_includes = [
+            "+<port>",
+        ]
 
     env.AddLibrary(
         name=f"lwip{version}_{port}",

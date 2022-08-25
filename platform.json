@@ -69,7 +69,12 @@
       "manifest": {
         "description": "Beken Development Kit for FreeRTOS"
       },
-      "toolchain": "gccarmnoneeabi@~1.40804.0"
+      "toolchain": "gccarmnoneeabi@~1.40804.0",
+      "libraries": {
+        "lwip": [
+          "v2.0.2-bdk"
+        ]
+      }
     },
     "framework-arduino-api": {
       "type": "framework",
