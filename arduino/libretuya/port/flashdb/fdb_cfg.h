@@ -36,10 +36,14 @@
 /* MCU Endian Configuration, default is Little Endian Order. */
 // #define FDB_BIG_ENDIAN
 
-/* log print macro. default EF_PRINT macro is printf() */
-#define FDB_PRINT(...)
+#include <printf_config.h>
 
-/* print debug information */
-// #define FDB_DEBUG_ENABLE
+#if LT_DEBUG_FDB
+#include <printf/printf.h>
+#define FDB_PRINT(...) __wrap_printf(__VA_ARGS__)
+#define FDB_DEBUG_ENABLE
+#else
+#define FDB_PRINT(...)
+#endif
 
 #endif /* _FDB_CFG_H_ */
