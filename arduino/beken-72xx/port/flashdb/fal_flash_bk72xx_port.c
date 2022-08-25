@@ -8,10 +8,15 @@
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 
 extern uint32_t flash_ctrl(uint32_t cmd, void *param);
+extern void flash_protection_op(uint8_t mode, PROTECT_TYPE type);
 
 static int init() {
 	__wrap_bk_printf_disable();
 	flash_init();
+#if CFG_SOC_NAME == SOC_BK7231N
+	flash_ctrl(CMD_FLASH_WRITE_ENABLE, NULL);
+	flash_protection_op(0, FLASH_PROTECT_NONE);
+#endif
 	__wrap_bk_printf_enable();
 	return 0;
 }
