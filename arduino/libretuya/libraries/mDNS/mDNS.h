@@ -44,7 +44,16 @@ License (MIT license):
 #include <Arduino.h>
 #include <api/IPv6Address.h>
 
+#define MDNS_UDP 0
+#define MDNS_TCP 1
+
 class mDNS {
+  private:
+	bool addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port);
+	bool addServiceTxtImpl(const char *service, uint8_t proto, const char *item);
+
+	char *instanceName = NULL;
+
   public:
 	mDNS();
 	~mDNS();
@@ -52,9 +61,9 @@ class mDNS {
 	bool begin(const char *hostname);
 	void end();
 
-	void setInstanceName(String name);
+	void setInstanceName(const char *name);
 	bool addService(char *service, char *proto, uint16_t port);
-	bool addServiceTxt(char *name, char *proto, char *key, char *value);
+	bool addServiceTxt(char *service, char *proto, char *key, char *value);
 	// void enableArduino(uint16_t port = 3232, bool auth = false);
 	// void disableArduino();
 	// void enableWorkstation(esp_interface_t interface = ESP_IF_WIFI_STA);
@@ -73,12 +82,12 @@ class mDNS {
 	String txt(int idx, int txtIdx);
 	String txtKey(int idx, int txtIdx);
 
-	void setInstanceName(const char *name) {
-		setInstanceName(String(name));
+	void setInstanceName(String name) {
+		setInstanceName(name.c_str());
 	}
 
 	void setInstanceName(char *name) {
-		setInstanceName(String(name));
+		setInstanceName((const char *)name);
 	}
 
 	bool addService(const char *service, const char *proto, uint16_t port) {
@@ -89,12 +98,12 @@ class mDNS {
 		return addService(service.c_str(), proto.c_str(), port);
 	}
 
-	void addServiceTxt(const char *name, const char *proto, const char *key, const char *value) {
-		addServiceTxt((char *)name, (char *)proto, (char *)key, (char *)value);
+	void addServiceTxt(const char *service, const char *proto, const char *key, const char *value) {
+		addServiceTxt((char *)service, (char *)proto, (char *)key, (char *)value);
 	}
 
-	void addServiceTxt(String name, String proto, String key, String value) {
-		addServiceTxt(name.c_str(), proto.c_str(), key.c_str(), value.c_str());
+	void addServiceTxt(String service, String proto, String key, String value) {
+		addServiceTxt(service.c_str(), proto.c_str(), key.c_str(), value.c_str());
 	}
 
 	IPAddress queryHost(const char *host, uint32_t timeout = 2000) {

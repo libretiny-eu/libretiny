@@ -6,9 +6,10 @@
 
 #include <sys/time.h>
 
-#define LWIP_MDNS_RESPONDER		   1
+// mDNS support
+#undef MEMP_NUM_UDP_PCB
 #define LWIP_NUM_NETIF_CLIENT_DATA 1
-#define LWIP_SO_RCVBUF			   1 // for ioctl(FIONREAD)
+#define MEMP_NUM_UDP_PCB		   (MAX_SOCKETS_UDP + 2 + 1)
 
 #define ip_addr	  ip4_addr
 #define ip_addr_t ip4_addr_t

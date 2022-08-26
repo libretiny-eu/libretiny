@@ -47,6 +47,7 @@ def env_add_defaults(env, platform, board):
     # Default build options
     env.Prepend(
         CPPPATH=[
+            "$LT_DIR/platform/common/config",
             "$LT_DIR/platform/common/fixups",
             "$LT_DIR/platform/common/fixups/lib_inc",
             "$BOARD_DIR",

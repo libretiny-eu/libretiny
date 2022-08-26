@@ -2,10 +2,6 @@
 
 #pragma once
 
-#define LWIP_TIMEVAL_PRIVATE 0
-#define LWIP_NETIF_HOSTNAME	 1 // to support hostname changing
-#define LWIP_SO_RCVBUF		 1 // for ioctl(FIONREAD)
-
 #include_next "lwipopts.h"
 
 #define ip_addr			  ip4_addr	 // LwIP 2.0.x compatibility
