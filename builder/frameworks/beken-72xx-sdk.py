@@ -345,8 +345,8 @@ env.AddLibrary(
     ),
 )
 
-# Sources - lwIP 2.0.2
-env.AddLibraryLwIP(version="2.0.2", port="bdk")
+# Sources - lwIP 2.1.3
+env.AddLibraryLwIP(version="2.1.3", port="bdk")
 
 # Sources - mbedTLS 2.6.0
 env.AddLibrary(

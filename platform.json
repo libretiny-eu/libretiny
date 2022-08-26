@@ -72,7 +72,7 @@
       "toolchain": "gccarmnoneeabi@~1.40804.0",
       "libraries": {
         "lwip": [
-          "v2.0.2-bdk"
+          "v2.1.3-bdk"
         ]
       }
     },
