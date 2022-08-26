@@ -25,13 +25,8 @@
 
 size_t StreamString::write(const uint8_t *data, size_t size) {
     if(size && data) {
-        const unsigned int newlen = len + size;
-        if(reserve(newlen + 1)) {
-            memcpy((void *) (buffer + len), (const void *) data, size);
-            changeBuffer(newlen);
-            *(buffer + newlen) = 0x00; // add null for string end
-            return size;
-        }
+        concat(data, size);
+        return size;
     }
     return 0;
 }
