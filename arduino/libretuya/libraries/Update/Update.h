@@ -117,6 +117,10 @@ class UpdateClass {
 		return errUf2;
 	}
 
+	uint16_t getErrorCode() {
+		return (errArd << 8) | errUf2;
+	}
+
 	void clearError() {
 		errorArd(UPDATE_ERROR_OK);
 	}
