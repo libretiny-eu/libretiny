@@ -103,3 +103,7 @@
 #ifndef LT_DEBUG_FDB
 #define LT_DEBUG_FDB 0
 #endif
+
+#ifndef LT_DEBUG_MDNS
+#define LT_DEBUG_MDNS 0
+#endif
