@@ -66,7 +66,7 @@ SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
 NTP                 | ❌              | ❌
 OTA                 | ✔️             | ✔️
-MDNS                | ✔️             | BK7231T only
+MDNS                | ✔️             | ✔️
 MQTT                | ✅              | ❌
 SD                  | ❌              | ❌
 
