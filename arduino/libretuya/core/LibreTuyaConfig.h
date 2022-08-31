@@ -107,3 +107,11 @@
 #ifndef LT_DEBUG_MDNS
 #define LT_DEBUG_MDNS 0
 #endif
+
+#ifndef LT_DEBUG_LWIP
+#define LT_DEBUG_LWIP 0
+#endif
+
+#ifndef LT_DEBUG_LWIP_ASSERT
+#define LT_DEBUG_LWIP_ASSERT 0
+#endif
