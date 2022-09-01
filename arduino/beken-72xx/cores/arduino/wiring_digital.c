@@ -55,7 +55,7 @@ PinStatus digitalRead(pin_size_t pinNumber) {
 	if (!pin)
 		return 0;
 	// pin is not GPIO yet or not INPUT; change the mode
-	if (!pinEnabled(pin, PIN_GPIO) || !pinIsOutput(pin))
+	if (!pinEnabled(pin, PIN_GPIO) || !pinIsInput(pin))
 		pinMode(pinNumber, INPUT);
 	// read the value
 	return gpio_input(pin->gpio);
