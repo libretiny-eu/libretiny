@@ -63,7 +63,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	int ret;
 	uint8_t dhcpRet;
 
-	LT_I("Connecting to %s", wifi.ssid.val);
+	LT_IM(WIFI, "Connecting to %s", wifi.ssid.val);
 	__wrap_rtl_printf_disable();
 	__wrap_DiagPrintf_disable();
 
@@ -110,11 +110,11 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			__wrap_DiagPrintf_enable();
 			return true;
 		}
-		LT_E("DHCP failed; dhcpRet=%d", dhcpRet);
+		LT_EM(WIFI, "DHCP failed; dhcpRet=%d", dhcpRet);
 		wifi_disconnect();
 		goto error;
 	}
-	LT_E("Connection failed; ret=%d", ret);
+	LT_EM(WIFI, "Connection failed; ret=%d", ret);
 error:
 	__wrap_rtl_printf_enable();
 	__wrap_DiagPrintf_enable();

@@ -6,25 +6,25 @@ static void scanHandler(void *ctx, uint8_t param) {
 	LT_HEAP_I();
 	WiFiClass *cls = (WiFiClass *)ctx;
 	if (!cls) {
-		LT_W("Called without ctx");
+		LT_WM(WIFI, "Called without ctx");
 		return;
 	}
 	WiFiScanData *scan = cls->scan;
 	if (!scan) {
-		LT_W("Called without cls->scan");
+		LT_WM(WIFI, "Called without cls->scan");
 		return;
 	}
 
 	ScanResult_adv result;
 	if (wlan_sta_scan_result(&result)) {
-		LT_E("Failed to get scan result");
+		LT_EM(WIFI, "Failed to get scan result");
 		goto end;
 	}
-	LT_DM(WIFI, "Found %d APs", result.ApNum);
+	LT_IM(WIFI, "Found %d APs", result.ApNum);
 
 	cls->scanAlloc(result.ApNum);
 	if (!scan->ap) {
-		LT_W("scan->ap alloc failed");
+		LT_WM(WIFI, "scan->ap alloc failed");
 		goto end;
 	}
 
@@ -54,7 +54,7 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	scanDelete();
 	scanInit();
 
-	LT_I("Starting WiFi scan");
+	LT_IM(WIFI, "Starting WiFi scan");
 
 	__wrap_bk_printf_disable();
 	mhdr_scanu_reg_cb(scanHandler, this);
@@ -66,7 +66,7 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 
 	int16_t ret = WIFI_SCAN_RUNNING;
 	if (!async) {
-		LT_I("Waiting for results");
+		LT_IM(WIFI, "Waiting for results");
 		xSemaphoreTake(data.scanSem, 1); // reset the semaphore quickly
 		xSemaphoreTake(data.scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
 		if (scan->running) {

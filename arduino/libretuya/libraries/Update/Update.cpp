@@ -178,7 +178,7 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 				// header is invalid
 				return 0;
 
-			LT_I("OTA: %s v%s - LT v%s @ %s", info->fw_name, info->fw_version, info->lt_version, info->board);
+			LT_IM(OTA, "%s v%s - LT v%s @ %s", info->fw_name, info->fw_version, info->lt_version, info->board);
 
 			if (bytesTotal == UPDATE_SIZE_UNKNOWN) {
 				// set total update size from block count info

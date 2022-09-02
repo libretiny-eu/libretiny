@@ -65,7 +65,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 bool WiFiClass::reconnect(const uint8_t *bssid) {
 	dataInitialize();
 	if (!bssid && !STA_CFG->wifi_ssid[0]) {
-		LT_E("(B)SSID not specified");
+		LT_EM(WIFI, "(B)SSID not specified");
 		goto error;
 	}
 
@@ -174,7 +174,7 @@ uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 
 bool WiFiClass::setMacAddress(const uint8_t *mac) {
 	if (mac[0] & 0x01) {
-		LT_E("Invalid MAC address");
+		LT_EM(WIFI, "Invalid MAC address");
 		return false;
 	}
 	// ensure "mac_inited" is true

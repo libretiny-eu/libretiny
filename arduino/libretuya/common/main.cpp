@@ -47,7 +47,7 @@ int main(void) {
 	fal_root_part = (fal_partition_t)fal_partition_find("root");
 	// start the main task and OS kernel
 	if (!startMainTask()) {
-		LT_E("Couldn't start the main task");
+		LT_F("Couldn't start the main task");
 	}
 
 	while (1) {}

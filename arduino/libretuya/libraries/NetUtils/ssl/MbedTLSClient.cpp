@@ -88,7 +88,7 @@ void debug_cb(void *ctx, int level, const char *file, int line, const char *str)
 	uint16_t len = strlen(str);
 	char *msg	 = (char *)str;
 	msg[len - 1] = '\0';
-	LT_I("%04d: |%d| %s", line, level, msg);
+	LT_IM(SSL, "%04d: |%d| %s", line, level, msg);
 }
 
 int MbedTLSClient::connect(
@@ -115,7 +115,7 @@ int MbedTLSClient::connect(
 
 	int ret = WiFiClient::connect(addr, port, timeout);
 	if (ret < 0) {
-		LT_E("SSL socket failed");
+		LT_EM(SSL, "SSL socket failed");
 		return ret;
 	}
 
@@ -160,7 +160,7 @@ int MbedTLSClient::connect(
 #ifdef MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED
 		uint16_t len = strlen(psk);
 		if ((len & 1) != 0 || len > 2 * MBEDTLS_PSK_MAX_LEN) {
-			LT_E("PSK length invalid");
+			LT_EM(SSL, "PSK length invalid");
 			return -1;
 		}
 		unsigned char pskBin[MBEDTLS_PSK_MAX_LEN] = {};
@@ -223,7 +223,7 @@ int MbedTLSClient::connect(
 			LT_RET(ret);
 		}
 		if ((millis() - start) > _handshakeTimeout) {
-			LT_E("SSL handshake timeout");
+			LT_EM(SSL, "SSL handshake timeout");
 			return -1;
 		}
 		delay(2);
@@ -242,7 +242,7 @@ int MbedTLSClient::connect(
 		if (ret >= 0)
 			LT_DM(SSL, "Record expansion: %d", ret);
 		else {
-			LT_W("Record expansion unknown");
+			LT_WM(SSL, "Record expansion unknown");
 		}
 	}
 
@@ -252,7 +252,7 @@ int MbedTLSClient::connect(
 		char buf[512];
 		memset(buf, 0, sizeof(buf));
 		mbedtls_x509_crt_verify_info(buf, sizeof(buf), "  ! ", ret);
-		LT_E("Failed to verify peer certificate! Verification info: %s", buf);
+		LT_EM(SSL, "Failed to verify peer certificate! Verification info: %s", buf);
 		return ret;
 	}
 
@@ -439,7 +439,7 @@ void MbedTLSClient::setAlpnProtocols(const char **alpnProtocols) {
 bool MbedTLSClient::getFingerprintSHA256(uint8_t result[32]) {
 	const mbedtls_x509_crt *cert = mbedtls_ssl_get_peer_cert(&_sslCtx);
 	if (!cert) {
-		LT_E("Failed to get peer certificate");
+		LT_EM(SSL, "Failed to get peer certificate");
 		return false;
 	}
 	mbedtls_sha256_context shaCtx;

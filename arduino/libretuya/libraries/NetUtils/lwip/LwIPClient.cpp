@@ -114,19 +114,19 @@ int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 
 	int res = lwip_connect(sock, (struct sockaddr *)&addr, sizeof(addr));
 	if (res < 0 && errno != EINPROGRESS) {
-		LT_E("Connect failed; errno=%d", errno);
+		LT_EM(CLIENT, "Connect failed; errno=%d", errno);
 		lwip_close(sock);
 		return -1;
 	}
 
 	res = lwip_select(sock + 1, NULL, &fdset, NULL, timeout < 0 ? NULL : &tv);
 	if (res < 0) {
-		LT_E("Select failed; errno=%d", errno);
+		LT_EM(CLIENT, "Select failed; errno=%d", errno);
 		lwip_close(sock);
 		return 0;
 	}
 	if (res == 0) {
-		LT_E("Select timeout; errno=%d", errno);
+		LT_EM(CLIENT, "Select timeout; errno=%d", errno);
 		lwip_close(sock);
 		return 0;
 	}
@@ -136,7 +136,7 @@ int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 	res			  = lwip_getsockopt(sock, SOL_SOCKET, SO_ERROR, &sockerr, &len);
 
 	if (res < 0 || sockerr != 0) {
-		LT_E("Socket error; res=%d, sockerr=%d", res, sockerr);
+		LT_EM(CLIENT, "Socket error; res=%d, sockerr=%d", res, sockerr);
 		lwip_close(sock);
 		return 0;
 	}
@@ -198,7 +198,7 @@ size_t LwIPClient::write(const uint8_t *buf, size_t size) {
 		retry--;
 
 		if (lwip_select(fd() + 1, NULL, &fdset, NULL, &tv) < 0) {
-			LT_W("Select failed; errno=%d", errno);
+			LT_WM(CLIENT, "Select failed; errno=%d", errno);
 			return 0;
 		}
 
@@ -214,7 +214,7 @@ size_t LwIPClient::write(const uint8_t *buf, size_t size) {
 					retry = WIFI_CLIENT_WRITE_RETRY;
 				}
 			} else if (res < 0 && errno != EAGAIN) {
-				LT_W("Send failed; errno=%d", errno);
+				LT_WM(CLIENT, "Send failed; errno=%d", errno);
 				setWriteError(res);
 				_connected = false;
 				retry	   = 0;
@@ -327,11 +327,11 @@ uint8_t LwIPClient::connected() {
 				case ECONNRESET:
 				case ECONNREFUSED:
 				case ECONNABORTED:
-					LT_W("Connection closed; errno=%d", errno);
+					LT_IM(CLIENT, "Connection closed; errno=%d", errno);
 					_connected = false;
 					break;
 				default:
-					LT_I("Connection status unknown; errno=%d", errno);
+					LT_WM(CLIENT, "Connection status unknown; errno=%d", errno);
 					_connected = true;
 					break;
 			}

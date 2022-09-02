@@ -15,7 +15,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 	if (!data.initialized) {
 		// initialize wifi first
-		LT_I("Initializing LwIP");
+		LT_IM(WIFI, "Initializing LwIP");
 		LwIP_Init();
 		reset_wifi_struct();
 		data.initialized = true;
@@ -32,7 +32,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	if (wifi_on((rtw_mode_t)mode) != RTW_SUCCESS) {
-		LT_E("Error while changing mode(%u)", mode);
+		LT_EM(WIFI, "Error while changing mode(%u)", mode);
 		goto error;
 	}
 

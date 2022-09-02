@@ -34,7 +34,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	dhcps_deinit();
 
-	LT_I("Creating SoftAP %s", ssid);
+	LT_IM(WIFI, "Creating SoftAP %s", ssid);
 
 	int ret;
 	if (!ssidHidden) {
@@ -60,7 +60,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 	wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_START, -2);
 
 	if (ret < 0) {
-		LT_E("SoftAP failed; ret=%d", ret);
+		LT_EM(WIFI, "SoftAP failed; ret=%d", ret);
 		return false;
 	}
 

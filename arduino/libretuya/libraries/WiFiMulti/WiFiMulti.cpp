@@ -50,27 +50,27 @@ bool WiFiMulti::addAP(const char *ssid, const char *passphrase) {
 
 	if (!ssid || *ssid == 0x00 || strlen(ssid) > 31) {
 		// fail SSID too long or missing!
-		LT_E("SSID missing or too long");
+		LT_EM(WIFI, "SSID missing or too long");
 		return false;
 	}
 
 	if (passphrase && strlen(passphrase) > 64) {
 		// fail passphrase too long!
-		LT_E("Passphrase too long");
+		LT_EM(WIFI, "Passphrase too long");
 		return false;
 	}
 
 	newAP.ssid = strdup(ssid);
 
 	if (!newAP.ssid) {
-		LT_E("Fail newAP.ssid == 0");
+		LT_EM(WIFI, "Fail newAP.ssid == 0");
 		return false;
 	}
 
 	if (passphrase && *passphrase != 0x00) {
 		newAP.passphrase = strdup(passphrase);
 		if (!newAP.passphrase) {
-			LT_E("Fail newAP.passphrase == 0");
+			LT_EM(WIFI, "Fail newAP.passphrase == 0");
 			free(newAP.ssid);
 			return false;
 		}
@@ -79,7 +79,7 @@ bool WiFiMulti::addAP(const char *ssid, const char *passphrase) {
 	}
 
 	APlist.push_back(newAP);
-	LT_V("Add SSID: %s", newAP.ssid);
+	LT_VM(WIFI, "Add SSID: %s", newAP.ssid);
 	return true;
 }
 
@@ -108,12 +108,12 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 		uint8_t bestBSSID[6];
 		int32_t bestChannel = 0;
 
-		LT_I("Scan finished");
+		LT_IM(WIFI, "Scan finished");
 
 		if (scanResult == 0) {
-			LT_I("No networks found");
+			LT_IM(WIFI, "No networks found");
 		} else {
-			LT_I("%d networks found", scanResult);
+			LT_IM(WIFI, "%d networks found", scanResult);
 			for (int8_t i = 0; i < scanResult; ++i) {
 
 				String ssid_scan;
@@ -144,7 +144,8 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 				}
 
 				if (known) {
-					LT_D(
+					LT_DM(
+						WIFI,
 						" --->   %d: [%d][%02X:%02X:%02X:%02X:%02X:%02X] %s (%d) %c",
 						i,
 						chan_scan,
@@ -159,7 +160,8 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 						(sec_scan == WIFI_AUTH_OPEN) ? ' ' : '*'
 					);
 				} else {
-					LT_D(
+					LT_DM(
+						WIFI,
 						"       %d: [%d][%02X:%02X:%02X:%02X:%02X:%02X] %s (%d) %c",
 						i,
 						chan_scan,
@@ -181,7 +183,8 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 		WiFi.scanDelete();
 
 		if (bestNetwork.ssid) {
-			LT_I(
+			LT_IM(
+				WIFI,
 				"Connecting to BSSID: %02X:%02X:%02X:%02X:%02X:%02X SSID: %s Channel: %d (%d)",
 				bestBSSID[0],
 				bestBSSID[1],
@@ -208,33 +211,33 @@ uint8_t WiFiMulti::run(uint32_t connectTimeout) {
 			IPAddress ip;
 			switch (status) {
 				case WL_CONNECTED:
-					LT_I("Connecting done");
-					LT_D("SSID: %s", WiFi.SSID().c_str());
+					LT_IM(WIFI, "Connecting done");
+					LT_DM(WIFI, "SSID: %s", WiFi.SSID().c_str());
 					// TODO fix this after implementing IP format for printf()
 					ip = WiFi.localIP();
-					LT_D("IP: %u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
-					LT_D("MAC: %s", WiFi.BSSIDstr().c_str());
-					LT_D("Channel: %d", WiFi.channel());
+					LT_DM(WIFI, "IP: %u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
+					LT_DM(WIFI, "MAC: %s", WiFi.BSSIDstr().c_str());
+					LT_DM(WIFI, "Channel: %d", WiFi.channel());
 					break;
 				case WL_NO_SSID_AVAIL:
-					LT_E("Connecting failed; AP not found");
+					LT_EM(WIFI, "Connecting failed; AP not found");
 					break;
 				case WL_CONNECT_FAILED:
-					LT_E("Connecting failed");
+					LT_EM(WIFI, "Connecting failed");
 					break;
 				default:
-					LT_E("Connecting failed (%d)", status);
+					LT_EM(WIFI, "Connecting failed (%d)", status);
 					break;
 			}
 		} else {
-			LT_E("No matching network found!");
+			LT_EM(WIFI, "No matching network found!");
 		}
 	} else {
 		// start scan
-		LT_V("Delete old wifi config...");
+		LT_VM(WIFI, "Delete old wifi config...");
 		WiFi.disconnect();
 
-		LT_D("Start scan");
+		LT_DM(WIFI, "Start scan");
 		// scan wifi async mode
 		WiFi.scanNetworks(true);
 	}

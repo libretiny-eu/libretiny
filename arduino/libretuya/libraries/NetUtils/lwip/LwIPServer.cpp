@@ -32,7 +32,7 @@ bool LwIPServer::begin(uint16_t port, bool reuseAddr) {
 
 	_sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (_sock < 0) {
-		LT_E("Socket failed; errno=%d", errno);
+		LT_EM(SERVER, "Socket failed; errno=%d", errno);
 		return false;
 	}
 
@@ -45,17 +45,17 @@ bool LwIPServer::begin(uint16_t port, bool reuseAddr) {
 	addr.sin_port		 = htons(_port);
 
 	if (lwip_bind(_sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-		LT_E("Bind failed; errno=%d", errno);
+		LT_EM(SERVER, "Bind failed; errno=%d", errno);
 		return false;
 	}
 
 	if (lwip_listen(_sock, _maxClients) < 0) {
-		LT_E("Bind failed; errno=%d", errno);
+		LT_EM(SERVER, "Bind failed; errno=%d", errno);
 		return false;
 	}
 
 	uint8_t *addrB = (uint8_t *)&_addr;
-	LT_I("Server running on %hhu.%hhu.%hhu.%hhu:%hu", addrB[0], addrB[1], addrB[2], addrB[3], _port);
+	LT_IM(SERVER, "Server running on %hhu.%hhu.%hhu.%hhu:%hu", addrB[0], addrB[1], addrB[2], addrB[3], _port);
 
 	lwip_fcntl(_sock, F_SETFL, O_NONBLOCK);
 	_active		  = true;

@@ -25,14 +25,14 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 	AP_CFG->dhcp_mode			= DHCP_SERVER;
 	AP_CFG->wifi_retry_interval = 100;
 
-	LT_I("Creating SoftAP %s", ssid);
+	LT_IM(WIFI, "Creating SoftAP %s", ssid);
 
 	__wrap_bk_printf_disable();
 	OSStatus ret = bk_wlan_start_ap_adv(AP_CFG);
 	__wrap_bk_printf_enable();
 
 	if (ret != 0) {
-		LT_E("SoftAP failed; ret=%d", ret);
+		LT_EM(WIFI, "SoftAP failed; ret=%d", ret);
 		return false;
 	}
 	LT_DM(WIFI, "AP start OK");

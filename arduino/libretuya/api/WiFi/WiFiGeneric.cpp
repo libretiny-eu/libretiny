@@ -24,11 +24,9 @@ bool WiFiClass::mode(WiFiMode mode) {
 	LT_HEAP_I();
 	if (!modePriv(mode, sta, ap))
 		return false;
-#if LT_LEVEL_DEBUG >= LT_LOGLEVEL
 	if (getMode() != mode) {
-		LT_W("Mode changed to %d (requested %d)", getMode(), mode);
+		LT_WM(WIFI, "Mode changed to %d (requested %d)", getMode(), mode);
 	}
-#endif
 	return true;
 }
 
