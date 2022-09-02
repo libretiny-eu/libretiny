@@ -20,7 +20,7 @@ static void scanHandler(void *ctx, uint8_t param) {
 		LT_E("Failed to get scan result");
 		goto end;
 	}
-	LT_D_WG("Found %d APs", result.ApNum);
+	LT_DM(WIFI, "Found %d APs", result.ApNum);
 
 	cls->scanAlloc(result.ApNum);
 	if (!scan->ap) {

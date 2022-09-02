@@ -22,12 +22,12 @@ MbedTLSClient::MbedTLSClient(int sock) : WiFiClient(sock) {
 }
 
 MbedTLSClient::~MbedTLSClient() {
-	LT_V_WC("~MbedTLSClient()");
+	LT_VM(CLIENT, "~MbedTLSClient()");
 	stop();
 }
 
 void MbedTLSClient::stop() {
-	LT_V_SSL("Stopping SSL");
+	LT_VM(SSL, "Stopping SSL");
 
 	if (_sslCfg.ca_chain) {
 		mbedtls_x509_crt_free(&_caCert);
@@ -121,7 +121,7 @@ int MbedTLSClient::connect(
 
 	char *uid = "lt-ssl"; // TODO
 
-	LT_V_SSL("Init SSL");
+	LT_VM(SSL, "Init SSL");
 	init();
 	LT_HEAP_I();
 
@@ -185,13 +185,13 @@ int MbedTLSClient::connect(
 	if (!_insecure && clientCert && clientKey) {
 		mbedtls_x509_crt_init(&_clientCert);
 		mbedtls_pk_init(&_clientKey);
-		LT_V_SSL("Loading client cert");
+		LT_VM(SSL, "Loading client cert");
 		ret = mbedtls_x509_crt_parse(&_clientCert, (const unsigned char *)clientCert, strlen(clientCert) + 1);
 		if (ret < 0) {
 			mbedtls_x509_crt_free(&_clientCert);
 			LT_RET(ret);
 		}
-		LT_V_SSL("Loading private key");
+		LT_VM(SSL, "Loading private key");
 		ret = mbedtls_pk_parse_key(&_clientKey, (const unsigned char *)clientKey, strlen(clientKey) + 1, NULL, 0);
 		if (ret < 0) {
 			mbedtls_x509_crt_free(&_clientCert);
@@ -200,7 +200,7 @@ int MbedTLSClient::connect(
 		mbedtls_ssl_conf_own_cert(&_sslCfg, &_clientCert, &_clientKey);
 	}
 
-	LT_V_SSL("Setting TLS hostname");
+	LT_VM(SSL, "Setting TLS hostname");
 	ret = mbedtls_ssl_set_hostname(&_sslCtx, host);
 	LT_RET_NZ(ret);
 
@@ -214,7 +214,7 @@ int MbedTLSClient::connect(
 
 	LT_HEAP_I();
 
-	LT_V_SSL("SSL handshake");
+	LT_VM(SSL, "SSL handshake");
 	if (_handshakeTimeout == 0)
 		_handshakeTimeout = timeout;
 	unsigned long start = millis();
@@ -232,20 +232,21 @@ int MbedTLSClient::connect(
 	LT_HEAP_I();
 
 	if (clientCert && clientKey) {
-		LT_D_SSL(
+		LT_DM(
+			SSL,
 			"Protocol %s, ciphersuite %s",
 			mbedtls_ssl_get_version(&_sslCtx),
 			mbedtls_ssl_get_ciphersuite(&_sslCtx)
 		);
 		ret = mbedtls_ssl_get_record_expansion(&_sslCtx);
 		if (ret >= 0)
-			LT_D_SSL("Record expansion: %d", ret);
+			LT_DM(SSL, "Record expansion: %d", ret);
 		else {
 			LT_W("Record expansion unknown");
 		}
 	}
 
-	LT_V_SSL("Verifying certificate");
+	LT_VM(SSL, "Verifying certificate");
 	ret = mbedtls_ssl_get_verify_result(&_sslCtx);
 	if (ret) {
 		char buf[512];
@@ -417,7 +418,7 @@ bool MbedTLSClient::verify(const char *fingerprint, const char *domainName) {
 		return false;
 
 	if (memcmp(fpLocal, fpRemote, 32)) {
-		LT_D_SSL("Fingerprints don't match");
+		LT_DM(SSL, "Fingerprints don't match");
 		return false;
 	}
 

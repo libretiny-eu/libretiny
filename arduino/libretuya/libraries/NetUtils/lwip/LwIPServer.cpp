@@ -99,7 +99,7 @@ WiFiClient LwIPServer::accept() {
 				// and receive data, so LwIP still sees a connected client that sends nothing. At least
 				// that's what I understand. And any loop that doesn't call delay() seems to block the TCP
 				// stack completely and prevents it from even being pinged.
-				LT_D_WS("Got client");
+				LT_DM(SERVER, "Got client");
 				delay(5);
 				return WiFiClient(sock);
 			}

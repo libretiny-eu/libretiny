@@ -18,7 +18,7 @@ bool UpdateClass::begin(size_t size, int command, int unused2, uint8_t unused3, 
 		return false;
 	cleanup();
 
-	LT_D_OTA("begin(%u, ...) / OTA curr: %u, trgt: %u", size, LT.otaGetRunning(), LT.otaGetTarget());
+	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, trgt: %u", size, LT.otaGetRunning(), LT.otaGetTarget());
 
 	ctx	 = uf2_ctx_init(LT.otaGetTarget(), FAMILY);
 	info = uf2_info_init();
@@ -72,7 +72,7 @@ size_t UpdateClass::write(uint8_t *data, size_t len) {
 		// 0 if not running
 		return 0;
 
-	LT_D_OTA("write(%u) / buf %u/512", len, bufSize());
+	LT_VM(OTA, "write(%u) / buf %u/512", len, bufSize());
 
 	/* while (buf == bufPos && len >= UF2_BLOCK_SIZE) {
 		// buffer empty and entire block is in data
@@ -145,7 +145,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 	uf2_block_t *block = NULL;
 
-	LT_V_OTA("Writing %u to buffer (%u/512)", len, bufSize());
+	LT_VM(OTA, "Writing %u to buffer (%u/512)", len, bufSize());
 
 	if (len == UF2_BLOCK_SIZE) {
 		// data has a complete block
@@ -185,7 +185,7 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 				bytesTotal = block->block_count * UF2_BLOCK_SIZE;
 			} else if (bytesTotal != block->block_count * UF2_BLOCK_SIZE) {
 				// given update size does not match the block count
-				LT_D_OTA("Image size wrong; got %u, calculated %u", bytesTotal, block->block_count * UF2_BLOCK_SIZE);
+				LT_DM(OTA, "Image size wrong; got %u, calculated %u", bytesTotal, block->block_count * UF2_BLOCK_SIZE);
 				return errorArd(UPDATE_ERROR_SIZE);
 			}
 		} else {

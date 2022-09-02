@@ -37,7 +37,7 @@ class SocketHandle {
 };
 
 LwIPClient::LwIPClient() {
-	LT_V_WC("LwIPClient()");
+	LT_VM(CLIENT, "LwIPClient()");
 	_connected = false;
 	_sock	   = NULL;
 	_rxBuffer  = NULL;
@@ -45,7 +45,7 @@ LwIPClient::LwIPClient() {
 }
 
 LwIPClient::LwIPClient(int sock) {
-	LT_V_WC("LwIPClient(%d)", sock);
+	LT_VM(CLIENT, "LwIPClient(%d)", sock);
 	_connected = true;
 	_sock	   = std::make_shared<SocketHandle>(sock);
 	_rxBuffer  = std::make_shared<LwIPRxBuffer>(sock);
@@ -53,7 +53,7 @@ LwIPClient::LwIPClient(int sock) {
 }
 
 LwIPClient::~LwIPClient() {
-	LT_V_WC("~LwIPClient()");
+	LT_VM(CLIENT, "~LwIPClient()");
 	stop();
 }
 
@@ -89,7 +89,7 @@ int LwIPClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
 		stop();
 	int sock = lwip_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0) {
-		LT_D_WC("socket failed");
+		LT_DM(CLIENT, "socket failed");
 		return -1;
 	}
 
@@ -223,7 +223,7 @@ size_t LwIPClient::write(const uint8_t *buf, size_t size) {
 			}
 		}
 	}
-	LT_D_WC("wrote %d bytes", written);
+	LT_DM(CLIENT, "wrote %d bytes", written);
 	return written;
 }
 
@@ -306,7 +306,7 @@ void LwIPClient::flush() {
 }
 
 void LwIPClient::stop() {
-	LT_V_WC("Stopping TCP");
+	LT_VM(CLIENT, "Stopping TCP");
 	_connected = false;
 	_sock	   = NULL;
 	_rxBuffer  = NULL;

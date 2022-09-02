@@ -32,11 +32,11 @@ static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 }
 
 static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
-	LT_D_MDNS("mdns status: netif %u, status %u", netif->num, result);
+	LT_DM(MDNS, "Status: netif %u, status %u", netif->num, result);
 }
 
 bool mDNS::begin(const char *hostname) {
-	LT_D_MDNS("Starting mDNS (%s)", hostname);
+	LT_DM(MDNS, "Starting (%s)", hostname);
 	mdns_resp_register_name_result_cb(mdnsStatusCallback);
 	mdns_resp_init();
 	uint8_t enabled = 0;
@@ -46,9 +46,9 @@ bool mDNS::begin(const char *hostname) {
 		if (!netif_is_up(netif))
 			continue;
 
-		LT_D_MDNS("Adding netif %u", netif->num);
+		LT_DM(MDNS, "Adding netif %u", netif->num);
 		if ((netif->flags & NETIF_FLAG_IGMP) == 0) {
-			LT_D_MDNS("Enabling IGMP");
+			LT_DM(MDNS, "Enabling IGMP");
 			netif->flags |= NETIF_FLAG_IGMP;
 			igmp_start(netif);
 		}
@@ -57,7 +57,7 @@ bool mDNS::begin(const char *hostname) {
 		if (ret == ERR_OK)
 			enabled++;
 		else
-			LT_D_MDNS("Cannot add mDNS netif %u; ret=%d, errno=%d", netif->num, ret, errno);
+			LT_DM(MDNS, "Cannot add netif %u; ret=%d, errno=%d", netif->num, ret, errno);
 	}
 	return enabled > 0;
 }
@@ -78,7 +78,7 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 		if (netif_is_up(netif)) {
 			// register TXT callback;
 			// pass service index as userdata parameter
-			LT_D_MDNS("mDNS add service: netif %u / %s / %s / %u / %u", netif->num, name, service, proto, port);
+			LT_DM(MDNS, "Add service: netif %u / %s / %s / %u / %u", netif->num, name, service, proto, port);
 			mdns_resp_add_service(
 				netif,
 				name,

@@ -76,20 +76,12 @@
 #define LT_DEBUG_WIFI 0
 #endif
 
-#ifndef LT_DEBUG_WIFI_CLIENT
-#define LT_DEBUG_WIFI_CLIENT 0
+#ifndef LT_DEBUG_CLIENT
+#define LT_DEBUG_CLIENT 0
 #endif
 
-#ifndef LT_DEBUG_WIFI_SERVER
-#define LT_DEBUG_WIFI_SERVER 0
-#endif
-
-#ifndef LT_DEBUG_WIFI_STA
-#define LT_DEBUG_WIFI_STA 0
-#endif
-
-#ifndef LT_DEBUG_WIFI_AP
-#define LT_DEBUG_WIFI_AP 0
+#ifndef LT_DEBUG_SERVER
+#define LT_DEBUG_SERVER 0
 #endif
 
 #ifndef LT_DEBUG_SSL

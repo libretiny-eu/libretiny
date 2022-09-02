@@ -7,7 +7,7 @@ bool WiFiClass::mode(WiFiMode mode) {
 	pWiFi = this;
 
 	WiFiMode currentMode = getMode();
-	LT_D_WG("Mode changing %u -> %u", currentMode, mode);
+	LT_DM(WIFI, "Mode changing %u -> %u", currentMode, mode);
 	if (mode == currentMode)
 		return true;
 

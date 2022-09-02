@@ -70,12 +70,12 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	}
 
 	if (bssid) {
-		LT_D_WG("Connecting to " MACSTR, MAC2STR(bssid));
+		LT_IM(WIFI, "Connecting to " MACSTR, MAC2STR(bssid));
 	} else {
-		LT_D_WG("Connecting to %s", STA_CFG->wifi_ssid);
+		LT_IM(WIFI, "Connecting to %s", STA_CFG->wifi_ssid);
 	}
 
-	LT_D_WG("data status = %p", data.configSta);
+	LT_DM(WIFI, "Data = %p", data.configSta);
 
 	STA_CFG->wifi_mode			 = BK_STATION;
 	STA_CFG->wifi_retry_interval = 100;
@@ -85,19 +85,19 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		memset(STA_CFG->wifi_bssid, 0x00, 6);
 
 	if (STA_CFG->dhcp_mode == DHCP_DISABLE) {
-		LT_D_WG("Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
-		LT_D_WG("Static DNS: %s", STA_CFG->dns_server_ip_addr);
+		LT_DM(WIFI, "Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
+		LT_DM(WIFI, "Static DNS: %s", STA_CFG->dns_server_ip_addr);
 	} else {
-		LT_D_WG("Using DHCP");
+		LT_DM(WIFI, "Using DHCP");
 	}
 
-	LT_D_WG("Starting WiFi...");
+	LT_DM(WIFI, "Starting WiFi...");
 
 	__wrap_bk_printf_disable();
 	bk_wlan_start_sta(STA_CFG);
 	__wrap_bk_printf_enable();
 
-	LT_D_WG("Start OK");
+	LT_DM(WIFI, "Start OK");
 	return true;
 
 error:
@@ -108,7 +108,7 @@ bool WiFiClass::disconnect(bool wifiOff) {
 #if LT_DEBUG_WIFI
 	memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));
 	bk_wlan_get_link_status(LINK_STATUS);
-	LT_D_WG("Disconnecting from %s (wifiOff=%d)", LINK_STATUS ? LINK_STATUS->ssid : NULL, wifiOff);
+	LT_DM(WIFI, "Disconnecting from %s (wifiOff=%d)", LINK_STATUS ? LINK_STATUS->ssid : NULL, wifiOff);
 #endif
 	bk_wlan_connection_loss();
 	if (wifiOff)

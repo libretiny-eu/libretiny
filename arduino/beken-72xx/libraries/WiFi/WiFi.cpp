@@ -14,17 +14,17 @@ WiFiClass::~WiFiClass() {
 void WiFiClass::dataInitialize() {
 	if (data.statusIp)
 		return;
-	LT_D_WG("Init data struct");
+	LT_DM(WIFI, "Data init");
 	data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
 	data.configAp	   = zalloc(sizeof(network_InitTypeDef_ap_st));
 	data.statusIp	   = malloc(sizeof(IPStatusTypedef));
 	data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
 	STA_CFG->dhcp_mode = DHCP_CLIENT;
-	LT_D_WG("data status = %p", data.configSta);
+	LT_DM(WIFI, "Data = %p", data.configSta);
 }
 
 void WiFiClass::dataFree() {
-	LT_D_WG("Free data struct");
+	LT_DM(WIFI, "Data free");
 	free(data.configSta);
 	free(data.configAp);
 	free(data.statusIp);

@@ -50,7 +50,7 @@ void wifiEventHandler(rw_evt_type event) {
 	if (!pWiFi)
 		return; // failsafe
 
-	LT_D_WG("WiFi event %u", event);
+	LT_DM(WIFI, "BK event %u", event);
 
 	if (event <= RW_EVT_STA_GOT_IP)
 		pWiFi->data.lastStaEvent = event;

@@ -14,13 +14,13 @@ extern "C" {
 
 size_t LwIPRxBuffer::r_available() {
 	if (_sock < 0) {
-		LT_D_WC("_sock < 0");
+		LT_DM(CLIENT, "_sock < 0");
 		return 0;
 	}
 	int count = 0; // must be of same size as in lwip_ioctl()
 	int res	  = lwip_ioctl(_sock, FIONREAD, &count);
 	if (res < 0) {
-		LT_D_WC("lwip_ioctl()=%d, errno=%d", res, errno);
+		LT_DM(CLIENT, "lwip_ioctl()=%d, errno=%d", res, errno);
 		_failed = true;
 		return 0;
 	}

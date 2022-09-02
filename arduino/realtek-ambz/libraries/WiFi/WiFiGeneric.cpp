@@ -23,7 +23,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	LT_HEAP_I();
 	if (getMode()) {
 		// stop wifi to change mode
-		LT_D_WG("Stopping WiFi to change mode");
+		LT_DM(WIFI, "Stopping WiFi to change mode");
 		if (wifi_off() != RTW_SUCCESS)
 			goto error;
 		vTaskDelay(20);
@@ -72,12 +72,14 @@ WiFiStatus WiFiClass::status() {
 }
 
 bool WiFiClass::setSleep(bool enable) {
-	LT_D_WG("WiFi sleep mode %u", enable);
-	if (enable)
+	LT_DM(WIFI, "WiFi sleep mode %u", enable);
+	if (enable) {
 		if (wifi_enable_powersave() != RTW_SUCCESS)
 			return false;
-		else if (wifi_disable_powersave() != RTW_SUCCESS)
+	} else {
+		if (wifi_disable_powersave() != RTW_SUCCESS)
 			return false;
+	}
 	data.sleep = enable;
 	return true;
 }

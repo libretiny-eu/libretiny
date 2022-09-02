@@ -35,7 +35,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 		LT_E("SoftAP failed; ret=%d", ret);
 		return false;
 	}
-	LT_D_WG("Start OK");
+	LT_DM(WIFI, "AP start OK");
 	return true;
 }
 

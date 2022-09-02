@@ -7,35 +7,35 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	startWifiTask();
 
 	if (!__bk_rf_is_init) {
-		LT_D_WG("Initializing func&app");
+		LT_DM(WIFI, "Initializing func&app");
 		func_init_extended();
 		app_pre_start();
 		// wait for the init_thread to finish its job
 		while (xTaskGetHandle("init_thread")) {
-			LT_V_WG("Waiting for init_thread");
+			LT_VM(WIFI, "Waiting for init_thread");
 			delay(10);
 		}
-		LT_D_WG("Success");
+		LT_DM(WIFI, "Init OK");
 		__bk_rf_is_init = true;
 	}
 
 	LT_HEAP_I();
 
 	if (mode) {
-		LT_D_WG("Wakeup RF");
+		LT_DM(WIFI, "Wakeup RF");
 		uint32_t reg = 1; // this is only checked for being true-ish
 		sddev_control(SCTRL_DEV_NAME, CMD_RF_HOLD_BIT_SET, &reg);
 	}
 
 	if (sta == WLMODE_ENABLE) {
-		LT_D_WG("Enabling STA");
+		LT_DM(WIFI, "Enabling STA");
 		bk_wlan_sta_init(NULL);
 #if CFG_WPA_CTRL_IFACE
 		wlan_sta_enable();
 #endif
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
 	} else if (sta == WLMODE_DISABLE) {
-		LT_D_WG("Disabling STA");
+		LT_DM(WIFI, "Disabling STA");
 		bk_wlan_stop(BK_STATION);
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_STOP);
 	}
@@ -43,7 +43,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	LT_HEAP_I();
 
 	if (ap == WLMODE_ENABLE) {
-		LT_D_WG("Enabling AP");
+		LT_DM(WIFI, "Enabling AP");
 		bk_wlan_ap_init(NULL);
 #if CFG_WPA_CTRL_IFACE
 		wlan_ap_enable();
@@ -52,7 +52,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 #endif
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
-		LT_D_WG("Disabling AP");
+		LT_DM(WIFI, "Disabling AP");
 		bk_wlan_stop(BK_SOFT_AP);
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_STOP);
 	}
