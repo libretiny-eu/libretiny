@@ -38,7 +38,7 @@ static GPIO_INDEX adcToGpio[] = {
 #endif
 
 static uint8_t gpioToPwm(GPIO_INDEX gpio) {
-	for (uint8_t i = 0; i < sizeof(pwmToGpio); i++) {
+	for (uint8_t i = 0; i < sizeof(pwmToGpio) / sizeof(GPIO_INDEX); i++) {
 		if (pwmToGpio[i] == gpio)
 			return i;
 	}
@@ -46,7 +46,7 @@ static uint8_t gpioToPwm(GPIO_INDEX gpio) {
 }
 
 static uint8_t gpioToAdc(GPIO_INDEX gpio) {
-	for (uint8_t i = 0; i < sizeof(adcToGpio); i++) {
+	for (uint8_t i = 0; i < sizeof(adcToGpio) / sizeof(GPIO_INDEX); i++) {
 		if (adcToGpio[i] == gpio)
 			return i;
 	}
@@ -95,14 +95,15 @@ void analogWrite(pin_size_t pinNumber, int value) {
 		return;
 
 	float percent	   = value * 1.0 / (1 << _analogWriteResolution);
-	uint32_t dutyCycle = percent * _analogWritePeriod * 26 - 1;
+	uint32_t frequency = 26 * _analogWritePeriod - 1;
+	uint32_t dutyCycle = percent * frequency;
 	pwm.channel		   = gpioToPwm(pin->gpio);
 #if CFG_SOC_NAME != SOC_BK7231N
 	pwm.duty_cycle = dutyCycle;
 #else
 	pwm.duty_cycle1 = dutyCycle;
-	pwm.duty_cycle2 = dutyCycle;
-	pwm.duty_cycle3 = dutyCycle;
+	pwm.duty_cycle2 = 0;
+	pwm.duty_cycle3 = 0;
 #endif
 
 	if (!pinEnabled(pin, PIN_PWM)) {
@@ -111,10 +112,12 @@ void analogWrite(pin_size_t pinNumber, int value) {
 		pwm.cfg.bits.int_en = PWM_INT_DIS;
 		pwm.cfg.bits.mode	= PWM_PWM_MODE;
 		pwm.cfg.bits.clk	= PWM_CLK_26M;
-		pwm.end_value		= 26 * _analogWritePeriod - 1;
+		pwm.end_value		= frequency;
 		pwm.p_Int_Handler	= NULL;
 		__wrap_bk_printf_disable();
 		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &pwm);
+		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
+		sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
 		__wrap_bk_printf_enable();
 		pin->enabled &= ~PIN_GPIO;
 		pin->enabled |= PIN_PWM;
