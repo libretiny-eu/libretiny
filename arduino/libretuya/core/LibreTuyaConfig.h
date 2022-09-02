@@ -12,6 +12,7 @@
 #define LT_LEVEL_WARN	 3
 #define LT_LEVEL_ERROR	 4
 #define LT_LEVEL_FATAL	 5
+#define LT_LEVEL_NONE	 6
 
 // Logger enabled/disabled
 #ifndef LT_LOGGER
@@ -24,11 +25,11 @@
 #endif
 
 #ifndef LT_LOGGER_CALLER
-#define LT_LOGGER_CALLER 1
+#define LT_LOGGER_CALLER 0
 #endif
 
 #ifndef LT_LOGGER_TASK
-#define LT_LOGGER_TASK 1
+#define LT_LOGGER_TASK 0
 #endif
 
 #ifndef LT_LOGGER_COLOR
@@ -42,6 +43,11 @@
 // Global loglevel
 #ifndef LT_LOGLEVEL
 #define LT_LOGLEVEL LT_LEVEL_INFO
+#endif
+
+#if !LT_LOGGER
+#undef LT_LOGLEVEL
+#define LT_LOGLEVEL LT_LEVEL_NONE
 #endif
 
 // Free heap size debugging
@@ -71,25 +77,29 @@
 #define LT_UART_DEFAULT_SERIAL LT_UART_DEFAULT_PORT
 #endif
 
-// Per-module debugging
+// Per-module logging output - applies to all loglevels
+#ifndef LT_DEBUG_ALL
+#define LT_DEBUG_ALL 0
+#endif
+
 #ifndef LT_DEBUG_WIFI
-#define LT_DEBUG_WIFI 0
+#define LT_DEBUG_WIFI 1
 #endif
 
 #ifndef LT_DEBUG_CLIENT
-#define LT_DEBUG_CLIENT 0
+#define LT_DEBUG_CLIENT LT_DEBUG_ALL
 #endif
 
 #ifndef LT_DEBUG_SERVER
-#define LT_DEBUG_SERVER 0
+#define LT_DEBUG_SERVER LT_DEBUG_ALL
 #endif
 
 #ifndef LT_DEBUG_SSL
-#define LT_DEBUG_SSL 0
+#define LT_DEBUG_SSL LT_DEBUG_ALL
 #endif
 
 #ifndef LT_DEBUG_OTA
-#define LT_DEBUG_OTA 0
+#define LT_DEBUG_OTA 1
 #endif
 
 #ifndef LT_DEBUG_FDB
@@ -97,7 +107,7 @@
 #endif
 
 #ifndef LT_DEBUG_MDNS
-#define LT_DEBUG_MDNS 0
+#define LT_DEBUG_MDNS LT_DEBUG_ALL
 #endif
 
 #ifndef LT_DEBUG_LWIP

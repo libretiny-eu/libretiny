@@ -29,34 +29,51 @@ build_flags =
 
 ### Logger
 
-- `LT_LOGGER` (1) - enable/disable LibreTuya logger globally. Enabled by default.
+- `LT_LOGGER` (1) - enable/disable LibreTuya logger globally; disabling this sets the loglevel to `LT_LEVEL_NONE` - the logger can't be enabled even by using `lt_log_set_port()`
 - `LT_LOGLEVEL` - global LT loglevel:
-  - `LT_LEVEL_TRACE` (same as LT_LEVEL_VERBOSE)
+  - `LT_LEVEL_VERBOSE`
+  - `LT_LEVEL_TRACE` - same as `LT_LEVEL_VERBOSE`
   - `LT_LEVEL_DEBUG`
   - `LT_LEVEL_INFO` - default
   - `LT_LEVEL_WARN`
   - `LT_LEVEL_ERROR`
   - `LT_LEVEL_FATAL`
+  - `LT_LEVEL_NONE` - disables everything
 - `LT_LOGGER_TIMESTAMP` (1) - print program runtime in printk-like format
 - `LT_LOGGER_CALLER` (1) - print calling method name
 - `LT_LOGGER_TASK` (1) - print calling FreeRTOS task (if available)
 - `LT_LOGGER_COLOR` (0) - output ANSI terminal colors
 - `LT_PRINTF_BROKEN` (0) - whether printf outputs "0." for floats with value 0
-- `LT_LOG_HEAP` (0) - print free heap size using `LT_HEAP_I()`
+- `LT_LOG_HEAP` (0) - print free heap size using `LT_HEAP_I()`, and periodically every 1000 ms
 - `LT_LOG_ERRNO` (0) - print and clear errno value (if set) using `LT_ERRNO()`
 
-#### Debug logging
+#### Per-module logging & debugging
 
-The following options enable library-specific debugging messages. They are only effective if `LT_LOGLEVEL` is set below INFO. All of them are disabled by default.
+The following options enable library-specific logging output. They are effective **for all loglevels** - i.e. disabling `LT_DEBUG_WIFI` will disable WiFi debug messages, as well as errors.
 
-Families should generally call i.e. WiFiClient debugging for client-related code, even if the `WiFiClient.cpp` file is physically absent.
+To see debug messages from i.e. OTA, loglevel must also be changed.
 
-- `LT_DEBUG_WIFI` - WiFi
-- `LT_DEBUG_WIFI_CLIENT` - WiFiClient
-- `LT_DEBUG_WIFI_SERVER` - WiFiServer
-- `LT_DEBUG_WIFI_STA` - WiFiSTA
-- `LT_DEBUG_WIFI_AP` - WiFiAP
-- `LT_DEBUG_SSL` - WiFiClientSecure
+- `LT_DEBUG_ALL` (0) - enable all following options by default (except for FDB and LWIP)
+- `LT_DEBUG_WIFI` (1) - WiFi (generic, STA, AP, scan, events, etc.)
+- `LT_DEBUG_CLIENT` (0) - TCP client
+- `LT_DEBUG_SERVER` (0) - TCP server
+- `LT_DEBUG_SSL` (0) - SSL clients
+- `LT_DEBUG_OTA` (1) - OTA updates (`Update` library)
+- `LT_DEBUG_FDB` (0) - FlashDB debugging (macros within the library)
+- `LT_DEBUG_MDNS` (0) - mDNS client library
+- `LT_DEBUG_LWIP` (0) - enables `LWIP_DEBUG`, provides `LWIP_PLATFORM_DIAG`; per-module options (i.e. `TCP_DEBUG`) are off by default and need to be enabled separately
+- `LT_DEBUG_LWIP_ASSERT` (0) - enables assertions within lwIP (doesn't need `LT_DEBUG_LWIP`)
+
+!!! hint
+    Enabling `LT_DEBUG_ALL` doesn't mean that *every* debugging message will be printed. If loglevel is i.e. `WARN`, debug messages won't be visible anyway.
+
+    This can be used, for example, to enable only "important" messages:
+    ```ini
+    [env:my_board]
+    build_flags =
+      -D LT_LOGLEVEL=LT_LEVEL_WARN
+      -D LT_DEBUG_ALL=1 # will print only warnings and errors from all modules
+    ```
 
 ### Serial output
 
