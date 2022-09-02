@@ -6,8 +6,10 @@
 #include <vector>
 
 extern "C" {
+#include <errno.h>
 #include <lwip/apps/mdns.h>
 #include <lwip/igmp.h>
+#include <lwip/init.h>
 #include <lwip/netif.h>
 }
 
@@ -37,7 +39,9 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 
 bool mDNS::begin(const char *hostname) {
 	LT_DM(MDNS, "Starting (%s)", hostname);
+#if LWIP_VERSION_MAJOR >= 2 && LWIP_VERSION_MINOR >= 1
 	mdns_resp_register_name_result_cb(mdnsStatusCallback);
+#endif
 	mdns_resp_init();
 	uint8_t enabled = 0;
 
