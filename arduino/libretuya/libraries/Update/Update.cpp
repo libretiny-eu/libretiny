@@ -23,11 +23,15 @@ bool UpdateClass::begin(size_t size, int command, int unused2, uint8_t unused3, 
 	ctx	 = uf2_ctx_init(LT.otaGetTarget(), FAMILY);
 	info = uf2_info_init();
 
-	if (!size)
-		return errorArd(UPDATE_ERROR_SIZE);
+	if (!size) {
+		cleanup(UPDATE_ERROR_SIZE);
+		return false;
+	}
 
-	if (command != U_FLASH)
-		return errorArd(UPDATE_ERROR_BAD_ARGUMENT);
+	if (command != U_FLASH) {
+		cleanup(UPDATE_ERROR_BAD_ARGUMENT);
+		return false;
+	}
 
 	bytesTotal = size;
 	return true;
@@ -46,12 +50,15 @@ bool UpdateClass::end(bool evenIfRemaining) {
 
 	if (!isFinished() && !evenIfRemaining) {
 		// abort if not finished
-		return errorArd(UPDATE_ERROR_ABORT);
+		cleanup(UPDATE_ERROR_ABORT);
+		return false;
 	}
 	// TODO what is evenIfRemaining for?
-	if (!LT.otaSwitch())
+	if (!LT.otaSwitch()) {
 		// try to activate the second OTA
-		return errorArd(UPDATE_ERROR_ACTIVATE);
+		cleanup(UPDATE_ERROR_ACTIVATE);
+		return false;
+	}
 
 	cleanup();
 	return true;
@@ -89,9 +96,11 @@ size_t UpdateClass::write(uint8_t *data, size_t len) {
 	uint16_t toWrite; // 1..512
 	while (len && (toWrite = min(len, bufLeft()))) {
 		tryWriteData(data, toWrite);
-		if (hasError())
+		if (hasError()) {
 			// return on errors
+			printErrorContext2(data, toWrite);
 			return written;
+		}
 		data += toWrite;
 		len -= toWrite;
 		written += toWrite;
@@ -113,7 +122,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 		if (available <= 0) {
 			if (millis() - lastData > UPDATE_TIMEOUT_MS) {
 				// waited for data too long; abort with error
-				errorArd(UPDATE_ERROR_STREAM);
+				cleanup(UPDATE_ERROR_STREAM);
 				return written;
 			}
 			continue;
@@ -127,9 +136,11 @@ size_t UpdateClass::writeStream(Stream &data) {
 		bufPos += read;
 		written += read;
 		tryWriteData();
-		if (hasError())
+		if (hasError()) {
 			// return on errors
+			printErrorContext2(NULL, read); // buf is not valid anymore
 			return written;
+		}
 	}
 	return written;
 }
@@ -164,7 +175,7 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 
 	// a complete block has been found
 	if (block) {
-		if (errorUf2(uf2_check_block(ctx, block)))
+		if (checkUf2Error(uf2_check_block(ctx, block)))
 			// block is invalid
 			return 0;
 
@@ -174,7 +185,7 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 
 		if (!bytesWritten) {
 			// parse header block to allow retrieving firmware info
-			if (errorUf2(uf2_parse_header(ctx, block, info)))
+			if (checkUf2Error(uf2_parse_header(ctx, block, info)))
 				// header is invalid
 				return 0;
 
@@ -185,12 +196,13 @@ size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
 				bytesTotal = block->block_count * UF2_BLOCK_SIZE;
 			} else if (bytesTotal != block->block_count * UF2_BLOCK_SIZE) {
 				// given update size does not match the block count
-				LT_DM(OTA, "Image size wrong; got %u, calculated %u", bytesTotal, block->block_count * UF2_BLOCK_SIZE);
-				return errorArd(UPDATE_ERROR_SIZE);
+				LT_EM(OTA, "Image size wrong; got %u, calculated %u", bytesTotal, block->block_count * UF2_BLOCK_SIZE);
+				cleanup(UPDATE_ERROR_SIZE);
+				return 0;
 			}
 		} else {
 			// write data blocks normally
-			if (errorUf2(uf2_write(ctx, block)))
+			if (checkUf2Error(uf2_write(ctx, block)))
 				// block writing failed
 				return 0;
 		}

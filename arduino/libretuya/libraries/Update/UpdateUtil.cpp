@@ -30,7 +30,15 @@ UpdateClass &UpdateClass::onProgress(THandlerFunction_Progress callback) {
 	return *this;
 }
 
-void UpdateClass::cleanup() {
+void UpdateClass::cleanup(uint8_t ardErr, uf2_err_t uf2Err) {
+	errUf2 = uf2Err;
+	errArd = ardErr;
+
+#if LT_DEBUG_OTA
+	if (hasError())
+		printErrorContext1();
+#endif
+
 	free(ctx); // NULL in constructor
 	ctx = NULL;
 	uf2_info_free(info); // NULL in constructor
@@ -40,8 +48,6 @@ void UpdateClass::cleanup() {
 
 	bytesWritten = 0;
 	bytesTotal	 = 0;
-	errUf2		 = UF2_ERR_OK;
-	errArd		 = UPDATE_ERROR_OK;
 }
 
 /**
@@ -51,30 +57,11 @@ void UpdateClass::cleanup() {
  * Use like: "if (errorUf2(...)) return false;"
  * @return true if err is not OK, false otherwise
  */
-bool UpdateClass::errorUf2(uf2_err_t err) {
-	if (err)
-		LT_DM(OTA, "[%4d] errorUf2(%d)", ctx ? ctx->seq : 0, err);
+bool UpdateClass::checkUf2Error(uf2_err_t err) {
 	if (err <= UF2_ERR_IGNORE)
 		return false;
-	cleanup();
-	errUf2 = err;
-	errArd = errorMap[err];
+	cleanup(errorMap[err], err);
 	return true;
-}
-
-/**
- * @brief Set errUf2 and errArd according to given Arduino error code.
- * Abort the update.
- * Use like: "return errorArd(...);"
- * @return false - always
- */
-bool UpdateClass::errorArd(uint8_t err) {
-	if (err)
-		LT_DM(OTA, "[%4d] errorArd(%d)", ctx ? ctx->seq : 0, err);
-	cleanup();
-	errUf2 = UF2_ERR_OK;
-	errArd = err;
-	return false;
 }
 
 /**
@@ -82,7 +69,7 @@ bool UpdateClass::errorArd(uint8_t err) {
  */
 void UpdateClass::abort() {
 	LT_DM(OTA, "Aborting update");
-	errorArd(UPDATE_ERROR_ABORT);
+	cleanup(UPDATE_ERROR_ABORT);
 }
 
 void UpdateClass::bufAlloc() {
@@ -103,6 +90,42 @@ uint16_t UpdateClass::bufSize() {
  */
 void UpdateClass::printError(Print &out) {
 	out.println(errorString());
+}
+
+/**
+ * @brief Print details about the error and current OTA state.
+ */
+void UpdateClass::printErrorContext1() {
+#if LT_DEBUG_OTA
+	LT_EM(OTA, "Error: %s", errorString());
+	if (errArd == UPDATE_ERROR_ABORT)
+		return;
+
+	LT_EM(OTA, "- written: %u of %u", bytesWritten, bytesTotal);
+	LT_EM(OTA, "- buf: size=%u, left=%u", bufSize(), bufLeft());
+	hexdump(buf, bufSize());
+
+	if (ctx)
+		LT_EM(
+			OTA,
+			"- ctx: seq=%u, part1=%s, part2=%s",
+			ctx->seq - 1, // print last parsed block seq
+			ctx->part1 ? ctx->part1->name : NULL,
+			ctx->part2 ? ctx->part2->name : NULL
+		);
+
+	uf2_block_t *block = (uf2_block_t *)buf;
+	if (buf)
+		LT_EM(OTA, "- buf: seq=%u/%u, addr=%u, len=%u", block->block_seq, block->block_count, block->addr, block->len);
+#endif
+}
+
+void UpdateClass::printErrorContext2(const uint8_t *data, size_t len) {
+#if LT_DEBUG_OTA
+	LT_EM(OTA, "- while writing %u bytes", len);
+	if (data)
+		hexdump(data, len);
+#endif
 }
 
 /**

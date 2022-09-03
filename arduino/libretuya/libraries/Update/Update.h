@@ -75,10 +75,11 @@ class UpdateClass {
 	const char *getBoardName();
 
   private: /* UpdateUtil.cpp */
-	void cleanup();
-	bool errorUf2(uf2_err_t err);
-	bool errorArd(uint8_t err);
+	void cleanup(uint8_t ardErr = UPDATE_ERROR_OK, uf2_err_t uf2Err = UF2_ERR_OK);
+	bool checkUf2Error(uf2_err_t err);
 	void bufAlloc();
+	void printErrorContext1();
+	void printErrorContext2(const uint8_t *data, size_t len);
 	uint16_t bufLeft();
 	uint16_t bufSize();
 
@@ -122,7 +123,7 @@ class UpdateClass {
 	}
 
 	void clearError() {
-		errorArd(UPDATE_ERROR_OK);
+		cleanup(UPDATE_ERROR_OK);
 	}
 
 	bool hasError() {
