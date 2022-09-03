@@ -94,7 +94,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	if (!pinSupported(pin, PIN_PWM))
 		return;
 
-	float percent	   = value * 1.0 / (1 << _analogWriteResolution);
+	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	uint32_t frequency = 26 * _analogWritePeriod - 1;
 	uint32_t dutyCycle = percent * frequency;
 	pwm.channel		   = gpioToPwm(pin->gpio);
@@ -106,30 +106,38 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	pwm.duty_cycle3 = 0;
 #endif
 
-	if (!pinEnabled(pin, PIN_PWM)) {
-		// enable PWM and set its value
-		pwm.cfg.bits.en		= PWM_ENABLE;
-		pwm.cfg.bits.int_en = PWM_INT_DIS;
-		pwm.cfg.bits.mode	= PWM_PWM_MODE;
-		pwm.cfg.bits.clk	= PWM_CLK_26M;
-		pwm.end_value		= frequency;
-		pwm.p_Int_Handler	= NULL;
-		__wrap_bk_printf_disable();
-		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &pwm);
-		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
-		sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
-		__wrap_bk_printf_enable();
-		pin->enabled &= ~PIN_GPIO;
-		pin->enabled |= PIN_PWM;
-	} else if (value == 0) {
-		// disable PWM
-		pwm.cfg.bits.en = PWM_DISABLE;
-		__wrap_bk_printf_disable();
-		sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, &pwm);
-		__wrap_bk_printf_enable();
-		pin->enabled &= ~PIN_PWM;
+	if (value) {
+		if (!pinEnabled(pin, PIN_PWM)) {
+			// enable PWM and set its value
+			pwm.cfg.bits.en		= PWM_ENABLE;
+			pwm.cfg.bits.int_en = PWM_INT_DIS;
+			pwm.cfg.bits.mode	= PWM_PWM_MODE;
+			pwm.cfg.bits.clk	= PWM_CLK_26M;
+			pwm.end_value		= frequency;
+			pwm.p_Int_Handler	= NULL;
+			__wrap_bk_printf_disable();
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &pwm);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
+			__wrap_bk_printf_enable();
+			pin->enabled &= ~PIN_GPIO;
+			pin->enabled |= PIN_PWM;
+		} else {
+			// update duty cycle
+			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
+		}
 	} else {
-		// update duty cycle
-		sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
+		if (pinEnabled(pin, PIN_PWM)) {
+			// disable PWM
+			pwm.cfg.bits.en = PWM_DISABLE;
+			__wrap_bk_printf_disable();
+			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, &pwm);
+			__wrap_bk_printf_enable();
+			pin->enabled &= ~PIN_PWM;
+		}
+		// force level as LOW
+		pinMode(pinNumber, OUTPUT);
+		digitalWrite(pinNumber, LOW);
 	}
 }
