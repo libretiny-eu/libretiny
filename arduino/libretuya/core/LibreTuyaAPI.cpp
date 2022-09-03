@@ -14,6 +14,7 @@ String ipToString(const IPAddress &ip) {
  * @param buf destination pointer
  * @param len how many bytes to generate
  */
+extern "C" {
 void lt_rand_bytes(uint8_t *buf, size_t len) {
 	int *data = (int *)buf;
 	size_t i;
@@ -37,7 +38,7 @@ void lt_rand_bytes(uint8_t *buf, size_t len) {
  * @param offset increment printed offset by this value
  * @param width how many bytes on a line
  */
-void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
+void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 	uint16_t pos = 0;
 	while (pos < len) {
 		// print hex offset
@@ -60,4 +61,5 @@ void hexdump(uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 		puts("|\r");
 		pos += lineWidth;
 	}
+}
 }
