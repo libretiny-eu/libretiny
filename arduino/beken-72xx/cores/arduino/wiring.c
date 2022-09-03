@@ -26,15 +26,8 @@ unsigned long micros() {
 	return millis() * 1000;
 }
 
-static unsigned long lastHeapLog = 0;
-
 void yield() {
-#if LT_LOG_HEAP
-	if (millis() - lastHeapLog > 1000) {
-		LT_HEAP_I();
-		lastHeapLog = millis();
-	}
-#endif
+	runPeriodicTasks();
 	vTaskDelay(1);
 	taskYIELD();
 }

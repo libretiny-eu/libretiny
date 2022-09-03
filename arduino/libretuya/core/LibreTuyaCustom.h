@@ -21,6 +21,13 @@ extern bool startMainTask();
  */
 extern void mainTask(const void *arg);
 
+/**
+ * @brief Run periodic tasks, like printing free heap or checking millis() overflow.
+ *
+ * This is called during delaying operations, like yield() or delay().
+ */
+extern void runPeriodicTasks();
+
 #define PIN_NONE (1 << 0)
 #define PIN_GPIO (1 << 1)
 #define PIN_IRQ	 (1 << 2)

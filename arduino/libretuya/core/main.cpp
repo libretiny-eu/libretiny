@@ -32,6 +32,17 @@ void mainTask(const void *arg) {
 	}
 }
 
+static unsigned long periodicTasks[] = {0, 0};
+
+void runPeriodicTasks() {
+#if LT_LOG_HEAP
+	if (millis() - periodicTasks[0] > 1000) {
+		LT_HEAP_I();
+		periodicTasks[0] = millis();
+	}
+#endif
+}
+
 int main(void) {
 	// print a startup banner
 	LT_BANNER();
