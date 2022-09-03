@@ -107,3 +107,7 @@ The meaning of most flags is as follows:
 - `LT_ARD_HAS_MD5` - MD5 library implemented, `MD5Impl.h` available
 - `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
 - `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)
+
+### Misc options
+
+- `LT_USE_TIME` - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically

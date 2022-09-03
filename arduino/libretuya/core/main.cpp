@@ -41,6 +41,12 @@ void runPeriodicTasks() {
 		periodicTasks[0] = millis();
 	}
 #endif
+#if LT_USE_TIME
+	if (millis() - periodicTasks[1] > 10000) {
+		gettimeofday(NULL, NULL);
+		periodicTasks[1] = millis();
+	}
+#endif
 }
 
 int main(void) {

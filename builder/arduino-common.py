@@ -30,6 +30,9 @@ env.Append(
         # wrappers from port/printf/
         "-Wl,-wrap,putchar",
         "-Wl,-wrap,puts",
+        # wrappers from posix/time.c
+        "-Wl,-wrap,gettimeofday",
+        "-Wl,-wrap,settimeofday",
     ],
 )
 # Arduino core uses __libc_init_array

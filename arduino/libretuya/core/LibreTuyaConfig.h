@@ -77,6 +77,11 @@
 #define LT_UART_DEFAULT_SERIAL LT_UART_DEFAULT_PORT
 #endif
 
+// Misc options
+#ifndef LT_USE_TIME
+#define LT_USE_TIME 0
+#endif
+
 // Per-module logging output - applies to all loglevels
 #ifndef LT_DEBUG_ALL
 #define LT_DEBUG_ALL 0
