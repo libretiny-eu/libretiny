@@ -41,15 +41,25 @@ static void scanHandler(void *ctx, uint8_t param) {
 	wifiEventSendArduino(ARDUINO_EVENT_WIFI_SCAN_DONE);
 
 end:
-	scan->running = false;
-	xSemaphoreGive(cls->data.scanSem);
+	scan->timeout = 0;
+	if (scan->running) {
+		// running == false means it was discarded (timeout)
+		scan->running = false;
+		xSemaphoreGive(cls->data.scanSem);
+	}
 	LT_HEAP_I();
 	return;
 }
 
 int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint32_t maxMsPerChannel, uint8_t channel) {
-	if (scan && scan->running)
-		return WIFI_SCAN_RUNNING;
+	if (scan && scan->running) {
+		if (scan->timeout && millis() > scan->timeout) {
+			LT_WM(WIFI, "Scan timeout, discarding");
+			scan->running = false;
+		} else {
+			return WIFI_SCAN_RUNNING;
+		}
+	}
 	enableSTA(true);
 	scanDelete();
 	scanInit();
@@ -63,6 +73,7 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	LT_HEAP_I();
 
 	scan->running = true;
+	scan->timeout = millis() + maxMsPerChannel * 20 + 1000;
 
 	int16_t ret = WIFI_SCAN_RUNNING;
 	if (!async) {

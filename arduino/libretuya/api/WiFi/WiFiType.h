@@ -137,9 +137,10 @@ typedef struct {
 } WiFiScanAP;
 
 typedef struct {
-	bool running   = false;
-	uint8_t count  = 0;
-	WiFiScanAP *ap = NULL;
+	bool running		  = false;
+	unsigned long timeout = 0;
+	uint8_t count		  = 0;
+	WiFiScanAP *ap		  = NULL;
 } WiFiScanData;
 
 typedef enum {
