@@ -13,7 +13,8 @@
 			lt_log(level, caller, line, #module ": " __VA_ARGS__);                                                     \
 		}                                                                                                              \
 	} while (0)
-void lt_log(const uint8_t level, const char *caller, const unsigned short line, const char *format, ...);
+void lt_log(const uint8_t level, const char *caller, const unsigned short line, const char *format, ...)
+	__attribute__((format(printf, 4, 5)));
 #else
 #define LT_LOG(level, caller, line, ...) lt_log(level, __VA_ARGS__)
 #define LT_LOGM(level, module, caller, line, ...)                                                                      \
@@ -22,7 +23,7 @@ void lt_log(const uint8_t level, const char *caller, const unsigned short line, 
 			lt_log(level, #module ": " __VA_ARGS__);                                                                   \
 		}                                                                                                              \
 	} while (0)
-void lt_log(const uint8_t level, const char *format, ...);
+void lt_log(const uint8_t level, const char *format, ...) __attribute__((format(printf, 2, 3)));
 #endif
 
 /**
