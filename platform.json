@@ -79,7 +79,7 @@
     "framework-arduino-api": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/arduino/ArduinoCore-API#ee040ed",
+      "version": "https://github.com/libretuya/ArduinoCore-API#3a4cbfc",
       "manifest": {
         "description": "Hardware independent layer of the Arduino cores"
       },
