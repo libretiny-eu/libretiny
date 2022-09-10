@@ -13,9 +13,11 @@
 	* Beken BK72xx
 		* [General info](docs/platform/beken-72xx/README.md)
 		* [Flashing](docs/platform/beken-72xx/flashing.md)
+		* [Dumping](docs/platform/beken-72xx/dumping.md)
 	* Realtek AmebaZ Series
 		* [General info](docs/platform/realtek/README.md)
 		* [Flashing (AmebaZ)](docs/platform/realtek-ambz/flashing.md)
+		* [Dumping (AmebaZ)](docs/platform/realtek-ambz/dumping.md)
 		* [Debugging](docs/platform/realtek/debugging.md)
 		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
 		* C library
