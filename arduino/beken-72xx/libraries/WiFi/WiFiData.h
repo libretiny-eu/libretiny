@@ -21,4 +21,5 @@ typedef struct {
 	void *statusLink;
 	rw_evt_type lastStaEvent;
 	rw_evt_type lastApEvent;
+	bool apEnabled;
 } WiFiData;

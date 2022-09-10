@@ -44,16 +44,13 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 	if (ap == WLMODE_ENABLE) {
 		LT_DM(WIFI, "Enabling AP");
-		bk_wlan_ap_init(NULL);
-#if CFG_WPA_CTRL_IFACE
-		wlan_ap_enable();
-		wlan_ap_reload();
-		uap_ip_down();
-#endif
+		// fake it - on BK7231, enabling the AP without starting it breaks all connection attempts
+		data.apEnabled = true;
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
 		LT_DM(WIFI, "Disabling AP");
 		bk_wlan_stop(BK_SOFT_AP);
+		data.apEnabled = false;
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_STOP);
 	}
 
@@ -71,7 +68,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 WiFiMode WiFiClass::getMode() {
 	uint8_t sta = !!bk_wlan_has_role(VIF_STA) * WIFI_MODE_STA;
-	uint8_t ap	= !!bk_wlan_has_role(VIF_AP) * WIFI_MODE_AP;
+	uint8_t ap	= data.apEnabled * WIFI_MODE_AP; // report the faked value
 	return (WiFiMode)(sta | ap);
 }
 

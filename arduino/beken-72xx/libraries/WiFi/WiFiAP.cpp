@@ -27,6 +27,13 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	LT_IM(WIFI, "Creating SoftAP %s", ssid);
 
+	if (!AP_CFG->local_ip_addr[0]) {
+		LT_DM(WIFI, "Setting default IP config");
+		softAPConfig((uint32_t)0, (uint32_t)0, (uint32_t)0);
+	}
+
+	LT_DM(WIFI, "Static IP: %s / %s / %s", AP_CFG->local_ip_addr, AP_CFG->net_mask, AP_CFG->gateway_ip_addr);
+
 	__wrap_bk_printf_disable();
 	OSStatus ret = bk_wlan_start_ap_adv(AP_CFG);
 	__wrap_bk_printf_enable();
