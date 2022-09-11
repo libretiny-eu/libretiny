@@ -1,0 +1,120 @@
+{
+	"pcb": {
+		"scale": 11,
+		"test_pads": {
+			"TRST": "cb2l.back.rst.anchor",
+			"TRX1": "cb2l.back.u1_rxd.anchor",
+			"TTX1": "cb2l.back.u1_txd.anchor",
+			"TTX2": "cb2l.back.u2_txd.anchor",
+			"TGND": "cb2l.back.gnd.anchor",
+			"TCSN": "cb2l.back.f_csn.anchor"
+		},
+		"back": [
+			{
+				"type": "rect",
+				"pos": "0,0",
+				"size": "15,17.3",
+				"preset": "${MASK_PRESET}"
+			},
+			{
+				"name": "pins_horz7_2mm_0.7mm",
+				"pos": "1.15,17.3",
+				"vars": {
+					"PINTYPE": "${PINTYPE_HORZ}",
+					"PINDIR": "down"
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "1.5,7.5"
+			},
+			{
+				"name": "label_line_2mm_down",
+				"pos": "0.4,4.7",
+				"vars": {
+					"DIR": "right",
+					"W": 0.2,
+					"H": 2.7
+				}
+			},
+			{
+				"id": "u1_rxd.anchor",
+				"type": "rect",
+				"pos": "0.9,5.0",
+				"size": "0,0",
+				"label_dir": "left",
+				"label_size": 2
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.2,5.9"
+			},
+			{
+				"id": "u2_txd",
+				"name": "label_line_2mm_up",
+				"pos": "2.2,5.1",
+				"vars": {
+					"DIR": "left",
+					"W": 1.5,
+					"H": 2
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "4.0,5.9"
+			},
+			{
+				"id": "u1_txd",
+				"name": "label_line_2mm_up",
+				"pos": "4.0,5.1",
+				"vars": {
+					"DIR": "left",
+					"W": 3.3,
+					"H": 4
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "9.2,5.9"
+			},
+			{
+				"id": "gnd",
+				"name": "label_line_2mm_up",
+				"pos": "9.2,5.1",
+				"vars": {
+					"DIR": "left",
+					"W": 8.5,
+					"H": 6
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.2,10.7"
+			},
+			{
+				"id": "rst",
+				"name": "label_line_2mm_up",
+				"pos": "2.2,9.9",
+				"vars": {
+					"DIR": "left",
+					"W": 1.5,
+					"H": 1.0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "2.2,12.0"
+			},
+			{
+				"id": "f_csn",
+				"name": "label_line_2mm_down",
+				"pos": "2.2,12.8",
+				"vars": {
+					"DIR": "left",
+					"W": 1.5,
+					"H": 1.0
+				}
+			}
+		]
+	}
+}

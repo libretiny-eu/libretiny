@@ -9,7 +9,6 @@ AXY3S          | ECR6600    | 2 MiB | 512 KiB | 22   | ✔️    | ✔️  | ❌
 AXYU           | ECR6600    | 2 MiB | 512 KiB | 21   | ✔️    | ✔️  | ❌
 **CB Series**  |            |       |         |      |       |     |
 CB1S           | BK7231N    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
-CB2L           | BK7231N    | 2 MiB | 256 KiB | 7    | ✔️    | ✔️  | ❌
 CB8P           | BK7231N    | 2 MiB | 256 KiB | 10   | ✔️    | ✔️  | ❌
 CBLC5          | BK7231N    | 2 MiB | 256 KiB | 15   | ✔️    | ✔️  | ❌
 CBLC9          | BK7231N    | 2 MiB | 256 KiB | 8    | ✔️    | ✔️  | ❌

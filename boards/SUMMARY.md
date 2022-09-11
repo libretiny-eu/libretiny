@@ -7,6 +7,7 @@
 - [Generic - RTL8720CF (2M/992k)](../boards/generic-rtl8720cf-2mb-992k/README.md)
 - [BW12](../boards/bw12/README.md)
 - [BW15](../boards/bw15/README.md)
+- [CB2L](../boards/cb2l/README.md)
 - [CB2S](../boards/cb2s/README.md)
 - [CB3L](../boards/cb3l/README.md)
 - [CB3S](../boards/cb3s/README.md)

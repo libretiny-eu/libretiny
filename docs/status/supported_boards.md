@@ -12,6 +12,7 @@ Name                                                                      | MCU 
 [BW12](../../boards/bw12/README.md)                                       | RTL8710BX | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [BW15](../../boards/bw15/README.md)                                       | RTL8720CF | 2 MiB | 256 KiB | 16 (13 I/O) | ✔️    | ✔️  | ❌      | `realtek-ambz2`
 **Tuya Inc.**                                                             |           |       |         |             |       |     |        |
+[CB2L](../../boards/cb2l/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 7 (5 I/O)   | ✔️    | ✔️  | ❌      | `beken-7231n`
 [CB2S](../../boards/cb2s/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231n`
 [CB3L](../../boards/cb3l/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
 [CB3S](../../boards/cb3s/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
