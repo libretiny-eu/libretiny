@@ -13,6 +13,9 @@
 	"name": "WR3 Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wr3-module-datasheet?id=K9g3ainzbj9z1",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR3"
+	},
 	"pcb": {
 		"symbol": "WR3"
 	}

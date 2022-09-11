@@ -13,6 +13,9 @@
 	"name": "CB3S Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/cb3s?id=Kai94mec0s076",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB3S"
+	},
 	"pcb": {
 		"symbol": "CB3S"
 	}

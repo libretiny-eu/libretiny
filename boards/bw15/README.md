@@ -8,7 +8,7 @@
 - [Vendor datasheet](https://docs.ai-thinker.com/_media/rtl8710/docs/bw15_datasheet_en.pdf)
 
 Parameter    | Value
--------------|--------------------------
+-------------|------------------------------------------
 Board code   | `bw15`
 MCU          | RTL8720CF
 Manufacturer | Realtek
@@ -20,6 +20,7 @@ Voltage      | 3.0V - 3.6V
 I/O          | 13x GPIO, 8x PWM, 3x UART
 Wi-Fi        | 802.11 b/g/n
 BLE          | v4.2
+FCC ID       | [2AXVG-BW15](https://fccid.io/2AXVG-BW15)
 
 ## Usage
 

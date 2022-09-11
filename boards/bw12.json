@@ -17,6 +17,7 @@
 		"symbol": "BW12"
 	},
 	"doc": {
+		"fccid": "2ARI3-BW1X",
 		"links": {
 			"Vendor datasheet": "https://docs.ai-thinker.com/_media/rtl8710/hardware/bw12_datasheet_en.pdf"
 		}

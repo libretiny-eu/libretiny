@@ -14,6 +14,9 @@
 	"name": "WR3LE Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wr3le?id=K986l7a1ha8tm",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR3LE"
+	},
 	"pcb": {
 		"symbol": "WR3LE"
 	}

@@ -9,7 +9,7 @@
 - [BkWriter v1.6.0](https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe)
 
 Parameter    | Value
--------------|----------------------------------
+-------------|------------------------------------------
 Board code   | `wb2l`
 MCU          | BK7231T
 Manufacturer | Beken
@@ -21,6 +21,7 @@ Voltage      | 3.0V - 3.6V
 I/O          | 13x GPIO, 5x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
 Bluetooth    | BLE v4.2
+FCC ID       | [2ANDL-WB2L](https://fccid.io/2ANDL-WB2L)
 
 ## Usage
 

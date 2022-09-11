@@ -14,6 +14,9 @@
 	"name": "CB2S Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/cb2s-module-datasheet?id=Kafgfsa2aaypq",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB2S"
+	},
 	"pcb": {
 		"symbol": "CB2S"
 	}

@@ -14,6 +14,9 @@
 	"name": "WR2L Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wifiwr2lmodule?id=K9605tnbj7gva",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR2L"
+	},
 	"pcb": {
 		"symbol": "WR2L"
 	}

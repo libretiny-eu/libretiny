@@ -10,7 +10,7 @@
 - [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
 
 Parameter    | Value
--------------|---------------------------------
+-------------|----------------------------------------
 Board code   | `wr2`
 MCU          | RTL8710BN
 Manufacturer | Realtek
@@ -21,6 +21,7 @@ RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
 I/O          | 7x GPIO, 5x PWM, 1x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
+FCC ID       | [2ANDL-WR2](https://fccid.io/2ANDL-WR2)
 
 ## Usage
 

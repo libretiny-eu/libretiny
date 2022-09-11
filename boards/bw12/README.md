@@ -11,7 +11,7 @@
 - [Vendor datasheet](https://docs.ai-thinker.com/_media/rtl8710/hardware/bw12_datasheet_en.pdf)
 
 Parameter    | Value
--------------|----------------------------------
+-------------|------------------------------------------
 Board code   | `bw12`
 MCU          | RTL8710BX
 Manufacturer | Realtek
@@ -22,6 +22,7 @@ RAM size     | 256 KiB
 Voltage      | 3.0V - 3.6V
 I/O          | 11x GPIO, 6x PWM, 2x UART, 1x ADC
 Wi-Fi        | 802.11 b/g/n
+FCC ID       | [2ARI3-BW1X](https://fccid.io/2ARI3-BW1X)
 
 ## Usage
 

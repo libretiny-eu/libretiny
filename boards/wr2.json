@@ -13,6 +13,9 @@
 	"name": "WR2 Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wifiwr2module?id=K9605tko0juc3",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR2"
+	},
 	"pcb": {
 		"symbol": "WR2"
 	}

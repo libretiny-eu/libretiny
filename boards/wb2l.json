@@ -14,6 +14,9 @@
 	"name": "WB2L Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wb2l-datasheet?id=K9duegc9bualu",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WB2L"
+	},
 	"pcb": {
 		"symbol": "WB2L"
 	}

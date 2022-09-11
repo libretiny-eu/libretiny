@@ -13,6 +13,9 @@
 	"name": "CB3SE Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/CB3SE-Module-Datasheet?id=Kanoiluul7nl2",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB3SE"
+	},
 	"pcb": {
 		"symbol": "CB3SE"
 	}

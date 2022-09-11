@@ -14,6 +14,9 @@
 	"name": "WR3L Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/wifiwr3lmodule?id=K9605tt0kveqm",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR3L"
+	},
 	"pcb": {
 		"symbol": "WR3L"
 	}

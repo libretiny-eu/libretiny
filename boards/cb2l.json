@@ -14,6 +14,9 @@
 	"name": "CB2L Wi-Fi Module",
 	"url": "https://developer.tuya.com/en/docs/iot/cb2l-module-datasheet?id=Kai2eku1m3pyl",
 	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB2L"
+	},
 	"pcb": {
 		"symbol": "CB2L"
 	}
