@@ -316,18 +316,6 @@
 			"datasheet_name": "cb3s",
 			"datasheet_id": "Kai94mec0s076"
 		},
-		"cb3s-nl": {
-			"mcu": "bk7231n",
-			"flash": 2097152,
-			"ram": 262144,
-			"pins_total": 22,
-			"connectivity": [
-				"wifi",
-				"ble"
-			],
-			"datasheet_name": "CB3S-NL-module-datasheet",
-			"datasheet_id": "Kbaesan0vyoms"
-		},
 		"cb3se": {
 			"mcu": "bk7231n",
 			"flash": 2097152,
@@ -387,18 +375,6 @@
 			],
 			"datasheet_name": "cbu-module-datasheet",
 			"datasheet_id": "Ka07pykl5dk4u"
-		},
-		"cbu-nl": {
-			"mcu": "bk7231n",
-			"flash": 2097152,
-			"ram": 262144,
-			"pins_total": 21,
-			"connectivity": [
-				"wifi",
-				"ble"
-			],
-			"datasheet_name": "CBU-NL-module-datasheet",
-			"datasheet_id": "Kbaeq6j53y0yg"
 		}
 	},
 	"cr": {
@@ -425,6 +401,96 @@
 			],
 			"datasheet_name": "cr3l-module-datasheet",
 			"datasheet_id": "Ka3gl6ria8f1t"
+		},
+		"crg1": {
+			"mcu": "rtl8720cm",
+			"flash": 4194304,
+			"ram": 4194304,
+			"pins_total": 25,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "CRG1-Module-Datasheet",
+			"datasheet_id": "Kbtesqh678sbe"
+		}
+	},
+	"axy": {
+		"axy2s": {
+			"mcu": "ecr6600",
+			"flash": 2097152,
+			"ram": 524288,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "AXY2S",
+			"datasheet_id": "Kb1aztk507fxf"
+		},
+		"axy3l": {
+			"mcu": "ecr6600",
+			"flash": 2097152,
+			"ram": 524288,
+			"pins_total": 18,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "AXY3L",
+			"datasheet_id": "Kb1ald9k8myha"
+		},
+		"axy3s": {
+			"mcu": "ecr6600",
+			"flash": 2097152,
+			"ram": 524288,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "AXY3S",
+			"datasheet_id": "Kb19flkv2adcc"
+		},
+		"axyu": {
+			"mcu": "ecr6600",
+			"flash": 2097152,
+			"ram": 524288,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "AXYU",
+			"datasheet_id": "Kb0rwbv5b7aiy"
+		}
+	},
+	"wt": {
+		"wt3": {
+			"mcu": "t2",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 16,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "WT3-Module-Datasheet",
+			"datasheet_id": "Kbogc3ps2rn8i"
+		}
+	},
+	"wl": {
+		"wl2h-u": {
+			"mcu": "ln882h",
+			"flash": 0,
+			"ram": 303104,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "WL2H-U-Module-Datasheet",
+			"datasheet_id": "Kbohlj8eg19u5"
 		}
 	},
 	"wr": {
@@ -627,8 +693,8 @@
 				"wifi",
 				"rfid"
 			],
-			"datasheet_name": "xr3-module",
-			"datasheet_id": "Kae2nqhs3ap1z"
+			"datasheet_name": "xr3-datasheet",
+			"datasheet_id": "K98s9168qi49g"
 		}
 	}
 }

@@ -189,8 +189,8 @@ def write_unsupported_boards(
             row = [
                 board_name.upper(),
                 board["mcu"].upper(),
-                sizeof(board["flash"]),
-                sizeof(board["ram"]),
+                sizeof(board["flash"]) if board["flash"] else "?",
+                sizeof(board["ram"]) if board["ram"] else "?",
                 str(board["pins_total"]),
                 "✔️" if "wifi" in board["connectivity"] else "❌",
                 "✔️" if "ble" in board["connectivity"] else "❌",
