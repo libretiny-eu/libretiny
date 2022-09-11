@@ -10,9 +10,6 @@ AXYU           | ECR6600    | 2 MiB | 512 KiB | 21   | ✔️    | ✔️  | ❌
 **CB Series**  |            |       |         |      |       |     |
 CB1S           | BK7231N    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
 CB2L           | BK7231N    | 2 MiB | 256 KiB | 7    | ✔️    | ✔️  | ❌
-CB3L           | BK7231N    | 2 MiB | 256 KiB | 18   | ✔️    | ✔️  | ❌
-CB3S           | BK7231N    | 2 MiB | 256 KiB | 22   | ✔️    | ✔️  | ❌
-CB3SE          | BK7231N    | 2 MiB | 256 KiB | 22   | ✔️    | ✔️  | ❌
 CB8P           | BK7231N    | 2 MiB | 256 KiB | 10   | ✔️    | ✔️  | ❌
 CBLC5          | BK7231N    | 2 MiB | 256 KiB | 15   | ✔️    | ✔️  | ❌
 CBLC9          | BK7231N    | 2 MiB | 256 KiB | 8    | ✔️    | ✔️  | ❌

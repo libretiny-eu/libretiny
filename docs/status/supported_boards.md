@@ -13,6 +13,9 @@ Name                                                                      | MCU 
 [BW15](../../boards/bw15/README.md)                                       | RTL8720CF | 2 MiB | 256 KiB | 16 (13 I/O) | ✔️    | ✔️  | ❌      | `realtek-ambz2`
 **Tuya Inc.**                                                             |           |       |         |             |       |     |        |
 [CB2S](../../boards/cb2s/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231n`
+[CB3L](../../boards/cb3l/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
+[CB3S](../../boards/cb3s/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
+[CB3SE](../../boards/cb3se/README.md)                                     | BK7231N   | 2 MiB | 256 KiB | 22 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
 [WB2L](../../boards/wb2l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 7 (5 I/O)   | ✔️    | ✔️  | ❌      | `beken-7231t`
 [WB2S](../../boards/wb2s/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231t`
 [WB3L](../../boards/wb3l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 21 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`

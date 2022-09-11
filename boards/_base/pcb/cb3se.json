@@ -1,0 +1,106 @@
+{
+	"pcb": {
+		"templates": [
+			"esp12e-22",
+			"esp12e-shield-nohole",
+			"tuya-16x24",
+			"rf-16mm-type1"
+		],
+		"vars": {
+			"MASK_PRESET": "mask_blue_light",
+			"TRACE_COLOR": "#58839B",
+			"SILK_COLOR": "white",
+			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole",
+			"PINTYPE_HORZ": "pin_horz_2mm_cast_nohole"
+		},
+		"pinout_hidden": "I2S,SD,JTAG,FLASH,SCL1",
+		"pinout": {
+			"1": {
+				"IC": 21
+			},
+			"2": {
+				"IC": 17,
+				"ARD": [
+					"D0",
+					"A0"
+				]
+			},
+			"3": {
+				"IC": 21
+			},
+			"4": {
+				"IC": 11,
+				"ARD": "D1"
+			},
+			"5": {
+				"IC": 15,
+				"ARD": "D2"
+			},
+			"6": {
+				"IC": 16,
+				"ARD": "D3"
+			},
+			"7": {
+				"IC": 22,
+				"ARD": "D4"
+			},
+			"8": {
+				"PWR": 3.3
+			},
+			"9": {
+				"GND": null
+			},
+			"10": {
+				"IC": 25,
+				"ARD": "D5"
+			},
+			"11": {
+				"IC": 29,
+				"ARD": "D6"
+			},
+			"12": {
+				"IC": 28,
+				"ARD": "D7"
+			},
+			"13": {
+				"IC": 24,
+				"ARD": "D8"
+			},
+			"14": {
+				"IC": 23,
+				"ARD": "D9"
+			},
+			"15": {
+				"IC": 26,
+				"ARD": "D10"
+			},
+			"16": {
+				"IC": 27,
+				"ARD": "D11"
+			},
+			"17": {
+				"IC": 13,
+				"ARD": "D12"
+			},
+			"18": {
+				"IC": 18,
+				"ARD": "D13"
+			},
+			"19": {
+				"GND": null
+			},
+			"20": {
+				"IC": 20,
+				"ARD": "D14"
+			},
+			"21": {
+				"IC": 14,
+				"ARD": "D15"
+			},
+			"22": {
+				"IC": 12,
+				"ARD": "D16"
+			}
+		}
+	}
+}
