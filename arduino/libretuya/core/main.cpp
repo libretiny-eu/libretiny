@@ -52,6 +52,8 @@ void runPeriodicTasks() {
 int main(void) {
 	// print a startup banner
 	LT_BANNER();
+	// inform about the reset reason
+	LT_I("Reset reason: %u", LT.getResetReason());
 	// initialize Arduino framework
 	initArduino();
 	// initialize C library

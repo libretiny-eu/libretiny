@@ -7,6 +7,17 @@
 #include "LibreTuyaAPI.h"
 #include <core/ChipType.h>
 
+typedef enum {
+	RESET_REASON_UNKNOWN  = 0,
+	RESET_REASON_POWER	  = 1,
+	RESET_REASON_BROWNOUT = 2,
+	RESET_REASON_HARDWARE = 3,
+	RESET_REASON_SOFTWARE = 4,
+	RESET_REASON_WATCHDOG = 5,
+	RESET_REASON_CRASH	  = 6,
+	RESET_REASON_SLEEP	  = 7,
+} ResetReason;
+
 /**
  * @brief Flash chip ID structure.
  */
@@ -42,6 +53,10 @@ class LibreTuya {
 	 * @brief Reboot the CPU.
 	 */
 	void restart();
+	/**
+	 * @brief Get the reason of last chip reset.
+	 */
+	ResetReason getResetReason();
 	/**
 	 * @brief Reconfigure GPIO pins used for debugging
 	 * (SWD/JTAG), so that they can be used as normal I/O.
@@ -139,6 +154,23 @@ class LibreTuya {
 	 * @return false if writing failed; true otherwise
 	 */
 	bool otaSwitch(bool force = false);
+
+  public: /* Watchdog */
+	/**
+	 * @brief Enable the hardware watchdog.
+	 *
+	 * @param timeout watchdog timeout, milliseconds (defaults to 10s)
+	 * @return whether the chip has a hardware watchdog
+	 */
+	bool wdtEnable(uint32_t timeout = 10000);
+	/**
+	 * @brief Disable the hardware watchdog.
+	 */
+	void wdtDisable();
+	/**
+	 * @brief Feed/reset the hardware watchdog timer.
+	 */
+	void wdtFeed();
 };
 
 extern LibreTuya LT;

@@ -17,16 +17,45 @@ extern "C" {
 
 #include <flash_pub.h>
 #include <param_config.h>
+#include <start_type_pub.h>
 #include <sys_ctrl.h>
 #include <sys_rtos.h>
+#include <wdt_pub.h>
 #include <wlan_ui_pub.h>
 
 extern uint8_t system_mac[];
+extern uint32_t wdt_ctrl(uint32_t cmd, void *param);
 
 } // extern "C"
 
 void LibreTuya::restart() {
 	bk_reboot();
+}
+
+ResetReason LibreTuya::getResetReason() {
+	switch (bk_misc_get_start_type()) {
+		case RESET_SOURCE_POWERON:
+			return RESET_REASON_POWER;
+
+		case RESET_SOURCE_REBOOT:
+			return RESET_REASON_SOFTWARE;
+
+		case RESET_SOURCE_WATCHDOG:
+			return RESET_REASON_WATCHDOG;
+
+		case RESET_SOURCE_CRASH_XAT0:
+		case RESET_SOURCE_CRASH_UNDEFINED:
+		case RESET_SOURCE_CRASH_PREFETCH_ABORT:
+		case RESET_SOURCE_CRASH_DATA_ABORT:
+		case RESET_SOURCE_CRASH_UNUSED:
+		case RESET_SOURCE_CRASH_PER_XAT0:
+			return RESET_REASON_CRASH;
+
+		case RESET_SOURCE_DEEPPS_GPIO:
+		case RESET_SOURCE_DEEPPS_RTC:
+			return RESET_REASON_SLEEP;
+	}
+	return RESET_REASON_UNKNOWN;
 }
 
 /* CPU-related */
@@ -152,6 +181,21 @@ bool LibreTuya::otaSwitch(bool force) {
 	}
 
 	return otaHasImage2(); // false if second image is not valid
+}
+
+/* Watchdog */
+
+bool LibreTuya::wdtEnable(uint32_t timeout) {
+	wdt_ctrl(WCMD_SET_PERIOD, &timeout);
+	wdt_ctrl(WCMD_POWER_UP, NULL);
+}
+
+void LibreTuya::wdtDisable() {
+	wdt_ctrl(WCMD_POWER_DOWN, NULL);
+}
+
+void LibreTuya::wdtFeed() {
+	wdt_ctrl(WCMD_RELOAD_PERIOD, NULL);
 }
 
 /* Global instance */
