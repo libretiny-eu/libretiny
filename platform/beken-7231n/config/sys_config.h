@@ -27,7 +27,7 @@
 #define CFG_GENERAL_DMA				  1
 #define CFG_IEEE80211N				  1
 #define CFG_IEEE80211W				  0
-#define CFG_INT_WDG_ENABLED			  1
+#define CFG_INT_WDG_ENABLED			  0
 #define CFG_INT_WDG_PERIOD_MS		  10000
 #define CFG_IPERF_TEST				  0
 #define CFG_JTAG_ENABLE				  0
@@ -60,7 +60,7 @@
 #define CFG_SUPPORT_TIANZHIHENG_DRONE 0
 #define CFG_SUPPORT_TPC_PA_MAP		  1
 #define CFG_SYS_REDUCE_NORMAL_POWER	  0
-#define CFG_TASK_WDG_ENABLED		  1
+#define CFG_TASK_WDG_ENABLED		  0
 #define CFG_TASK_WDG_PERIOD_MS		  60000
 #define CFG_TCP_SERVER_TEST			  0
 #define CFG_TX_EVM_TEST				  1
