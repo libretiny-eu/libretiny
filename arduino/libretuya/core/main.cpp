@@ -52,12 +52,12 @@ void runPeriodicTasks() {
 int main(void) {
 	// print a startup banner
 	LT_BANNER();
+	// initialize C library
+	__libc_init_array();
 	// inform about the reset reason
 	LT_I("Reset reason: %u", LT.getResetReason());
 	// initialize Arduino framework
 	initArduino();
-	// initialize C library
-	__libc_init_array();
 	// optionally initialize per-variant code
 	initVariant();
 	// initialize FAL

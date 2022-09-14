@@ -24,10 +24,29 @@ SerialClass::SerialClass(uint8_t port) {
 	this->buf  = NULL;
 }
 
+#if LT_AUTO_DOWNLOAD_REBOOT
+static uint8_t adrState		  = 0;
+static const uint8_t adrCmd[] = {0x01, 0xE0, 0xFC, 0x01, 0x00};
+
+static void adrParse(uint8_t c) {
+	// parse and respond to link check command (CMD_LinkCheck=0)
+	adrState = (adrState + 1) * (c == adrCmd[adrState]);
+	if (adrState == 5) {
+		LT_I("Auto download mode: rebooting");
+		LT.restart();
+	}
+}
+#endif
+
 static void callback(int port, void *param) {
 	RingBuffer *buf = (RingBuffer *)param;
 	int ch;
 	while ((ch = uart_read_byte(port)) != -1) {
+#if LT_AUTO_DOWNLOAD_REBOOT && defined(PIN_SERIAL1_RX)
+		// parse UART protocol commands on UART1
+		if (port == UART1_PORT)
+			adrParse(ch);
+#endif
 		buf->store_char(ch);
 	}
 }

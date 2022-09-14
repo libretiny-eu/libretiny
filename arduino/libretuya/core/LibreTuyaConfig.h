@@ -86,6 +86,10 @@
 #define LT_MICROS_HIGH_RES 1
 #endif
 
+#ifndef LT_AUTO_DOWNLOAD_REBOOT
+#define LT_AUTO_DOWNLOAD_REBOOT 1
+#endif
+
 // Per-module logging output - applies to all loglevels
 #ifndef LT_DEBUG_ALL
 #define LT_DEBUG_ALL 0
