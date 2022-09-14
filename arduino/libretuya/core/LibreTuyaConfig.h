@@ -82,6 +82,10 @@
 #define LT_USE_TIME 0
 #endif
 
+#ifndef LT_MICROS_HIGH_RES // NOTE: this is also defined in fixups/clock_rtos.c
+#define LT_MICROS_HIGH_RES 1
+#endif
+
 // Per-module logging output - applies to all loglevels
 #ifndef LT_DEBUG_ALL
 #define LT_DEBUG_ALL 0
