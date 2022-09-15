@@ -1,11 +1,50 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-04.
 
-from os.path import join
+import sys
+from os.path import isdir, join
+from subprocess import PIPE, Popen
 
 from ltchiptool import Family
 from SCons.Script import DefaultEnvironment
 
 env = DefaultEnvironment()
+
+
+def read_version(platform_dir: str, version: str):
+    if not isdir(join(platform_dir, ".git")):
+        sys.stderr.write("Warning! Non-Git installations are NOT SUPPORTED.\n")
+        return version
+    try:
+        p = Popen(
+            ["git", "rev-parse", "--short", "HEAD"], stdout=PIPE, cwd=platform_dir
+        )
+        if p.wait() != 0:
+            sys.stderr.write(
+                f"Warning! Non-zero return code received from Git: {p.returncode}\n"
+            )
+            return version
+        sha = p.stdout.read().decode().strip()
+
+        p = Popen(["git", "status", "--short"], stdout=PIPE, cwd=platform_dir)
+        if p.wait() != 0:
+            sys.stderr.write(
+                f"Warning! Non-zero return code received from Git: {p.returncode}\n"
+            )
+            return version
+        dirty = p.stdout.read().strip()
+    except (FileNotFoundError, IndexError):
+        sys.stderr.write(
+            "Warning! Git executable not found, or unreadable data received. Cannot read version information.\n"
+        )
+        return version
+
+    ids = [
+        sha and "sha",
+        sha[:7] or None,
+        "dirty" if dirty else None,
+    ]
+    build_str = ".".join(filter(None, ids))
+    return f"{version}+{build_str}" if build_str else version
 
 
 def env_add_defaults(env, platform, board):
@@ -66,7 +105,7 @@ def env_add_defaults(env, platform, board):
         ],
         CPPDEFINES=[
             ("LIBRETUYA", "1"),
-            ("LT_VERSION", platform.version),
+            ("LT_VERSION", read_version(platform.get_dir(), platform.version)),
             ("LT_BOARD", "${VARIANT}"),
             ("F_CPU", board.get("build.f_cpu")),
             ("MCU", "${MCU}"),
