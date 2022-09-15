@@ -16,6 +16,7 @@ typedef enum {
 	RESET_REASON_WATCHDOG = 5,
 	RESET_REASON_CRASH	  = 6,
 	RESET_REASON_SLEEP	  = 7,
+	RESET_REASON_MAX	  = 8,
 } ResetReason;
 
 /**
@@ -42,11 +43,20 @@ class LibreTuya {
 	ChipFamily getChipFamily();
 	const char *getChipFamilyName();
 	const char *getDeviceName();
+	const char *getResetReasonName(int32_t reason = -1);
 	uint32_t getCpuFreqMHz();
 	uint32_t getFlashChipSize();
 	uint8_t otaGetTarget();
 	bool otaRollback();
 	bool otaCanRollback();
+
+  public: /* Compatibility methods */
+	/**
+	 * @brief Alias of getMaxAllocHeap().
+	 */
+	inline uint32_t getMaxFreeBlockSize() {
+		return getMaxAllocHeap();
+	}
 
   public: /* Family-defined methods */
 	/**

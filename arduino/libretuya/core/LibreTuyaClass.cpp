@@ -51,6 +51,33 @@ const char *LibreTuya::getDeviceName() {
 }
 
 /**
+ * @brief Get a textual representation of a reset reason.
+ *
+ * @param reason value to convert to text, uses getResetReason() by default
+ */
+const char *LibreTuya::getResetReasonName(ResetReason reason) {
+	if (reason >= RESET_REASON_MAX)
+		reason = getResetReason();
+	switch (reason) {
+		case RESET_REASON_POWER:
+			return "Power-On";
+		case RESET_REASON_BROWNOUT:
+			return "Brownout";
+		case RESET_REASON_HARDWARE:
+			return "HW Reboot";
+		case RESET_REASON_SOFTWARE:
+			return "SW Reboot";
+		case RESET_REASON_WATCHDOG:
+			return "WDT Reset";
+		case RESET_REASON_CRASH:
+			return "Crash";
+		case RESET_REASON_SLEEP:
+			return "Sleep Wakeup";
+	}
+	return "Unknown";
+}
+
+/**
  * @brief Get CPU frequency in MHz.
  */
 uint32_t LibreTuya::getCpuFreqMHz() {
