@@ -201,3 +201,4 @@ void LibreTuya::wdtFeed() {
 /* Global instance */
 
 LibreTuya LT;
+LibreTuya ESP = LT;

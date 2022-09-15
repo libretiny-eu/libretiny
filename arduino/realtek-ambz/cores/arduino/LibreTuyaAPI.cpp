@@ -175,3 +175,4 @@ bool LibreTuya::otaSwitch(bool force) {
 /* Global instance */
 
 LibreTuya LT;
+LibreTuya ESP = LT;
