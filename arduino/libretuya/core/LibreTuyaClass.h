@@ -43,7 +43,7 @@ class LibreTuya {
 	ChipFamily getChipFamily();
 	const char *getChipFamilyName();
 	const char *getDeviceName();
-	const char *getResetReasonName(int32_t reason = -1);
+	const char *getResetReasonName(ResetReason reason = RESET_REASON_MAX);
 	uint32_t getCpuFreqMHz();
 	uint32_t getFlashChipSize();
 	uint8_t otaGetTarget();
