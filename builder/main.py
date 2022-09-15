@@ -39,7 +39,7 @@ env.Replace(
     LINK=prefix + "gcc",
     OBJCOPY=prefix + "objcopy",
     OBJDUMP=prefix + "objdump",
-    # RANLIB=prefix + "gcc-ranlib",
+    RANLIB=prefix + "gcc-ranlib",
     SIZETOOL=prefix + "size",
 )
 
