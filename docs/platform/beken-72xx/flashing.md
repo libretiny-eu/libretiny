@@ -2,6 +2,7 @@
 
 - [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wb-series-modules?id=Ka78f4pttsytd)
 - [BkWriter v1.6.0](https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe)
+- [hid_download_py](https://github.com/OpenBekenIOT/hid_download_py)
 
 Downloading is done using UART. For best experience, you should have two USB<->UART adapters plugged in (for UART1 and UART2).
 
@@ -9,6 +10,8 @@ Downloading is done using UART. For best experience, you should have two USB<->U
 	The adapter connected to UART1 (for uploading) can have RTS connected to chip's RESET or CEN - to provide auto-reset during uploading.
 
 	If you're not using auto-reset, you'll have to reset the chip manually when upload starts (you have 10 seconds to do that).
+
+	If you have a recent version of LibreTuya installed on the chip, you can use [Auto-download-reboot](../../getting-started/adr.md) to reboot the chip automatically.
 
 - UART1 is used for uploading the code. This adapter will be used by PlatformIO.
 - UART2 allows for log output. You can have a terminal session continuously open on this adapter.

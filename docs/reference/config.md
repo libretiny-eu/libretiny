@@ -92,6 +92,12 @@ Options for controlling default UART log output.
 
     If `LT_UART_DEFAULT_LOGGER` is not set, it is chosen by the family code - whichever port is most appropriate (i.e. LOG_UART (2) on Realtek, RX2/TX2 on Beken).
 
+### Misc options
+
+- `LT_USE_TIME` (0) - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically
+- `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer; disable if your application doesn't need `micros()`
+- `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../getting-started/adr.md)
+
 ### Family feature config
 
 These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it.
@@ -107,7 +113,3 @@ The meaning of most flags is as follows:
 - `LT_ARD_HAS_MD5` - MD5 library implemented, `MD5Impl.h` available
 - `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
 - `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)
-
-### Misc options
-
-- `LT_USE_TIME` - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically

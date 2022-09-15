@@ -1,7 +1,9 @@
 # ESPHome
 
-!!! note
+!!! important
 	Read [Getting started](../getting-started/README.md) first.
+
+	**It is very important that you have the latest version of LibreTuya installed** (not `libretuya-esphome`) **so that you don't face issues that are already resolved**.
 
 ## Install ESPHome
 
@@ -93,4 +95,4 @@ libretuya:
 
 	Refer to your board README to find appropriate flashing instructions.
 
-	Or [flash with `tuya-cloudcutter`](../cloudcutter.md).
+	Or [flash with `tuya-cloudcutter`](../getting-started/cloudcutter.md).

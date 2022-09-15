@@ -3,7 +3,7 @@
 Using LibreTuya is simple, just like every other PlatformIO development platform.
 
 1. [Install PlatformIO](https://platformio.org/platformio-ide)
-2. `platformio platform install https://github.com/kuba2k2/libretuya`
+2. `platformio platform install -f https://github.com/kuba2k2/libretuya`
 
 ## Board selection
 

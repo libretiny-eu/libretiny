@@ -20,7 +20,7 @@ If your device doesn't have a profile yet, it will probably not work. You can co
 
 ### Firmware building
 
-1. [Compile ESPHome](projects/esphome.md), or your custom firmware based on LibreTuya.
+1. [Compile ESPHome](../projects/esphome.md), or your custom firmware based on LibreTuya.
 2. Get the firmware binary, named `bk7231x_app.ota.ug.bin` from the build directory (`.pio/build/<board>/` or `.esphome/build/<board>/.pioenvs/<board>/`).
 3. Put the file to `custom-firmware` of tuya-cloudcutter.
 
