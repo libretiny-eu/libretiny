@@ -268,7 +268,7 @@ env.AddLibrary(
         "+<joint_up/*.c>",
         "+<lwip_intf/dhcpd/*.c>",
         "+<misc/*.c>",
-        "-<misc/fake_clock.c>", # fixups
+        "-<misc/fake_clock.c>",  # fixups
         "+<net_param_intf/*.c>",
         "+<power_save/*.c>",
         "+<rwnx_intf/*.c>",
