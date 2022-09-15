@@ -46,7 +46,7 @@
       "manifest": {
         "description": "SDK for Ameba1"
       },
-      "toolchain": "gccarmnoneeabi@~1.50401.0",
+      "toolchain": "gccarmnoneeabi@~1.50201.0",
       "libraries": {
         "lwip": [
           "v2.0.0-amb1"
