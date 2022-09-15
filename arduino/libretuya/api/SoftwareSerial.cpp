@@ -2,6 +2,8 @@
 
 #include "SoftwareSerial.h"
 
+#ifdef LT_ARD_HAS_SOFTSERIAL
+
 SoftwareSerial::SoftwareSerial(pin_size_t receivePin, pin_size_t transmitPin, bool inverted) {
 	data.rx.buf = NULL;
 	data.tx.buf = NULL;
@@ -39,3 +41,5 @@ size_t SoftwareSerial::write(uint8_t c) {
 	}
 	return 1;
 }
+
+#endif

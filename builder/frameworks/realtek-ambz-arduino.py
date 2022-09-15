@@ -27,6 +27,7 @@ env.Append(
         # LibreTuya configuration
         ("LT_ARD_HAS_WIFI", "1"),
         ("LT_ARD_HAS_MD5", "1"),
+        ("LT_ARD_HAS_SOFTSERIAL", "1"),
         # not broken anymore with printf() library
         ("LT_PRINTF_BROKEN", "0"),
     ],

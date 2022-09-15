@@ -2,6 +2,8 @@
 
 #pragma once
 
+#ifdef LT_ARD_HAS_SOFTSERIAL
+
 #include <Arduino.h>
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>
@@ -71,4 +73,4 @@ class SoftwareSerial : public HardwareSerial {
 	using Print::write;
 };
 
-#define HAS_SERIAL_CLASS 1
+#endif
