@@ -6,6 +6,7 @@ extern "C" {
 #include <flash_api.h>
 #include <rtl8710b.h>
 #include <sys_api.h>
+#include <wdt_api.h>
 }
 
 void LibreTuya::restart() {
@@ -170,6 +171,21 @@ bool LibreTuya::otaSwitch(bool force) {
 	// write OTA switch to flash
 	flash_write_word(NULL, FLASH_SYSTEM_OFFSET + 4, value);
 	return true;
+}
+
+/* Watchdog */
+
+bool LibreTuya::wdtEnable(uint32_t timeout) {
+	watchdog_init(timeout);
+	watchdog_start();
+}
+
+void LibreTuya::wdtDisable() {
+	watchdog_stop();
+}
+
+void LibreTuya::wdtFeed() {
+	watchdog_refresh();
 }
 
 /* Global instance */
