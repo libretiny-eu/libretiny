@@ -23,7 +23,7 @@ def check_ltchiptool():
     import ltchiptool
 
     importlib.reload(ltchiptool)
-    if Version(ltchiptool.get_version()) < Version("1.5.1"):
+    if Version(ltchiptool.get_version()) < Version("1.5.4"):
         raise ImportError("Version too old")
 
 
@@ -146,10 +146,6 @@ class LibretuyaPlatform(PlatformBase):
         if "toolchain" in package_obj:
             (toolchain, version) = package_obj["toolchain"].split("@")
             self.packages[f"toolchain-{toolchain}"]["version"] = version
-
-        # require bk7231tools
-        if "beken-72xx" in framework:
-            self.packages["tool-bk7231tools"]["optional"] = False
 
         # mark framework SDK as required
         package_obj["optional"] = False

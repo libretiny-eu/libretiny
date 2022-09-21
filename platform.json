@@ -127,7 +127,7 @@
     },
     "tool-ltchiptool": {
       "type": "uploader",
-      "version": "https://github.com/libretuya/ltchiptool#v1.5.2",
+      "version": "https://github.com/libretuya/ltchiptool#v1.5.4",
       "note": "This is used only for C/C++ code from ltchiptool."
     },
     "tool-openocd": {
@@ -135,11 +135,6 @@
       "optional": true,
       "owner": "platformio",
       "version": "~2.1100.0"
-    },
-    "tool-bk7231tools": {
-      "type": "uploader",
-      "optional": true,
-      "version": "https://github.com/notkmhn/bk7231tools#1eea4c3"
     }
   }
 }
