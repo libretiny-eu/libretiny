@@ -7,6 +7,7 @@ Name                                                                      | MCU 
 [BK7231T (Tuya QFN32)](../../boards/generic-bk7231t-qfn32-tuya/README.md) | BK7231T   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
 [RTL8710BN (2M/468k)](../../boards/generic-rtl8710bn-2mb-468k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8710BN (2M/788k)](../../boards/generic-rtl8710bn-2mb-788k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
+[RTL8710BX (4M/980k)](../../boards/generic-rtl8710bx-4mb-980k/README.md)  | RTL8710BX | 4 MiB | 256 KiB | 17 (17 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8720CF (2M/992k)](../../boards/generic-rtl8720cf-2mb-992k/README.md)  | RTL8720CF | 2 MiB | 256 KiB | 20 (20 I/O) | ✔️    | ✔️  | ❌      | `realtek-ambz2`
 **Ai-Thinker Co., Ltd.**                                                  |           |       |         |             |       |     |        |
 [BW12](../../boards/bw12/README.md)                                       | RTL8710BX | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`

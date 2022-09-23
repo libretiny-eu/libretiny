@@ -51,7 +51,7 @@ UM0201 | [Ameba Common BT Application User Manual EN](https://raw.githubusercont
 AN0400 | [Ameba-D Application Note_v3_watermark](https://files.seeedstudio.com/products/102110419/Basic%20documents/AN0400%20Ameba-D%20Application%20Note_v3_watermark.pdf)
 AN0500 | [Realtek Ameba-ZII application note](https://www.e-paper-display.com/99IOT/00015797-AN0500-Realtek-Ameba-ZII-application-note.en_233850.pdf)
 &nbsp; | [Realtek Ameba-ZII datasheet v0.8](https://www.e-paper-display.com/Ameba-Z_II_DataSheet_v0r8_RTL8720Cx_20190424%29.pdf)
-UM0114 | [Realtek Ameba-Z datasheet v3.4](https://adelectronicsru.files.wordpress.com/2018/10/um0114-realtek-ameba-z-data-sheet-v3-4.pdf)
+UM0114 | [Realtek Ameba-Z datasheet v3.4](https://web.archive.org/web/20211203124711if_/https://adelectronicsru.files.wordpress.com/2018/10/um0114-realtek-ameba-z-data-sheet-v3-4.pdf)
 &nbsp; | [Product pages / realtek.com](https://www.realtek.com/en/products/communications-network-ics/category/802-11b-g-n)
 
 ## Beken Flash Chip List
