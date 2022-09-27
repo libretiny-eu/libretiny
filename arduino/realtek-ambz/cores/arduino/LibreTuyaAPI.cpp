@@ -10,7 +10,13 @@ extern "C" {
 }
 
 void LibreTuya::restart() {
+	sys_cpu_reset();
 	sys_reset();
+	while (1) {}
+}
+
+ResetReason LibreTuya::getResetReason() {
+	return RESET_REASON_UNKNOWN;
 }
 
 void LibreTuya::gpioRecover() {
