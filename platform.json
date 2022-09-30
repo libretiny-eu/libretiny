@@ -127,7 +127,7 @@
     },
     "tool-ltchiptool": {
       "type": "uploader",
-      "version": "https://github.com/libretuya/ltchiptool#v1.5.4",
+      "version": "https://github.com/libretuya/ltchiptool#v1.6.0",
       "note": "This is used only for C/C++ code from ltchiptool."
     },
     "tool-openocd": {
