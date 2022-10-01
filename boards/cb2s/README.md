@@ -68,8 +68,9 @@ Name            | Start    | Length             | End
 Bootloader      | 0x000000 | 68 KiB / 0x11000   | 0x011000
 App Image       | 0x011000 | 1.1 MiB / 0x119000 | 0x12A000
 OTA Image       | 0x12A000 | 664 KiB / 0xA6000  | 0x1D0000
-TLV Store       | 0x1D0000 | 4 KiB / 0x1000     | 0x1D1000
-Network Data    | 0x1D1000 | 8 KiB / 0x2000     | 0x1D3000
+Calibration     | 0x1D0000 | 4 KiB / 0x1000     | 0x1D1000
+Network Data    | 0x1D1000 | 4 KiB / 0x1000     | 0x1D2000
+TLV Store       | 0x1D2000 | 4 KiB / 0x1000     | 0x1D3000
 Key-Value Store | 0x1D3000 | 32 KiB / 0x8000    | 0x1DB000
 User Data       | 0x1DB000 | 148 KiB / 0x25000  | 0x200000
 
