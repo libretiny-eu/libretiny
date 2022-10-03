@@ -9,9 +9,10 @@ extern "C" {
 #include "sdk_extern.h"
 #include "sdk_mem.h"
 
-// allow BDK use its own delay() and let Arduino code use delayMilliseconds()
-void delayMilliseconds(unsigned long);
-#define delay delayMilliseconds
+// define an inline delay() which overrides BDK's delay()
+static inline __attribute__((always_inline)) void delay(unsigned long ms) {
+	delayMilliseconds(ms);
+}
 
 // from fixups/arch_main.c
 extern unsigned char __bk_rf_is_init;
