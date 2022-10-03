@@ -71,12 +71,11 @@ unsigned long micros() {
 	uint32_t micros = millis() * 1000 + getTicksCount() / (CFG_XTAL_FREQUENCE / 1000 / 1000);
 	while (micros < lastMicros) {
 		/*
-			This happens if micros is called from within a interruptLock block (interrupts disabled).
-			In this case, if the tick counter rolls over, millis() won't be updated, and micros will
-			be lag by 1 rollover.
-			The workaround only works as long as micros() calls happen within 2ms of eachother.
-			WARNING: if interrupts are disabled for more than 2ms, micros() and millis() will temporarily get out of
-		   sync.
+		This happens if micros is called from within a interruptLock block (interrupts disabled).
+		In this case, if the tick counter rolls over, millis() won't be updated, and micros will
+		be lag by 1 rollover.
+		The workaround only works as long as micros() calls happen within 2ms of eachother.
+		WARNING: if interrupts are disabled for more than 2ms, micros() and millis() will temporarily get out of sync.
 		*/
 		micros += US_PER_OVERFLOW;
 	}
