@@ -8,8 +8,8 @@
 #include <sys_rtos.h>
 
 #define TICKS_PER_US	   (CFG_XTAL_FREQUENCE / 1000 / 1000)
-#define TIMER0_US_OVERFLOW (portTICK_PERIOD_MS * 1000)
-#define TICKS_PER_OVERFLOW (TICKS_PER_US * TIMER0_US_OVERFLOW)
+#define US_PER_OVERFLOW	   (portTICK_PERIOD_MS * 1000)
+#define TICKS_PER_OVERFLOW (TICKS_PER_US * US_PER_OVERFLOW)
 
 void delayMilliseconds(unsigned long ms) {
 	rtos_delay_milliseconds(ms);
@@ -66,7 +66,22 @@ unsigned long micros() {
 #endif
 
 #if LT_MICROS_HIGH_RES
-	return millis() * 1000 + getTicksCount() / (CFG_XTAL_FREQUENCE / 1000 / 1000);
+	static uint32_t lastMicros = 0;
+
+	uint32_t micros = millis() * 1000 + getTicksCount() / (CFG_XTAL_FREQUENCE / 1000 / 1000);
+	while (micros < lastMicros) {
+		/*
+			This happens if micros is called from within a interruptLock block (interrupts disabled).
+			In this case, if the tick counter rolls over, millis() won't be updated, and micros will
+			be lag by 1 rollover.
+			The workaround only works as long as micros() calls happen within 2ms of eachother.
+			WARNING: if interrupts are disabled for more than 2ms, micros() and millis() will temporarily get out of
+		   sync.
+		*/
+		micros += US_PER_OVERFLOW;
+	}
+	lastMicros = micros;
+	return micros;
 #else
 #if 0
 	REG_WRITE(TIMER3_5_READ_CTL, (BKTIMER3 << 2) | 1);
