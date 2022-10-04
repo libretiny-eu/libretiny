@@ -66,21 +66,29 @@ unsigned long micros() {
 #endif
 
 #if LT_MICROS_HIGH_RES
-	static uint32_t lastMicros = 0;
-
-	uint32_t micros = millis() * 1000 + getTicksCount() / (CFG_XTAL_FREQUENCE / 1000 / 1000);
-	while (micros < lastMicros) {
+	static uint32_t lastMillis		  = 0;
+	static uint32_t lastUpdatedMillis = 0;
+	static uint32_t lastTicks		  = 0;
+	uint32_t nowMillis				  = millis();
+	uint32_t nowTicks				  = getTicksCount();
+	bool tickOverflow				  = nowTicks < lastTicks;
+	bool millisUpdated				  = nowMillis != lastMillis;
+	if (millisUpdated) {
+		/* reset artificially updated millis */
+		lastUpdatedMillis = nowMillis;
+	} else if (tickOverflow) {
 		/*
-		This happens if micros is called from within a interruptLock block (interrupts disabled).
+		This can happen if micros is called from within a interruptLock block (interrupts disabled).
 		In this case, if the tick counter rolls over, millis() won't be updated, and micros will
-		be lag by 1 rollover.
+		lag by US_PER_OVERFLOW milliseconds (one rollover).
 		The workaround only works as long as micros() calls happen within 2ms of eachother.
 		WARNING: if interrupts are disabled for more than 2ms, micros() and millis() will temporarily get out of sync.
 		*/
-		micros += US_PER_OVERFLOW;
+		lastUpdatedMillis += portTICK_PERIOD_MS;
 	}
-	lastMicros = micros;
-	return micros;
+	lastMillis = nowMillis;
+	lastTicks  = nowTicks;
+	return lastUpdatedMillis * 1000 + nowTicks / (CFG_XTAL_FREQUENCE / 1000 / 1000);
 #else
 #if 0
 	REG_WRITE(TIMER3_5_READ_CTL, (BKTIMER3 << 2) | 1);
