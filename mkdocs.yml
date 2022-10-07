@@ -2,7 +2,7 @@ site_name: LibreTuya
 docs_dir: .
 
 site_url: https://docs.libretuya.ml
-repo_url: https://github.com/kuba2k2/libretuya/docs
+repo_url: https://github.com/kuba2k2/libretuya
 
 theme:
   name: material
