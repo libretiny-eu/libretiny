@@ -10,6 +10,9 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	LT_HEAP_I();
 
+	// Beken SDK bug: bk_wlan_ap_init_adv() doesn't null-terminate the passphrase
+	memset(g_ap_param_ptr->key, '\0', 65);
+
 	strcpy(AP_CFG->wifi_ssid, ssid);
 	if (passphrase) {
 		strcpy(AP_CFG->wifi_key, passphrase);
@@ -72,6 +75,9 @@ bool WiFiClass::softAPConfig(IPAddress localIP, IPAddress gateway, IPAddress sub
 }
 
 bool WiFiClass::softAPdisconnect(bool wifiOff) {
+	if (!(getMode() & WIFI_MODE_AP))
+		// do not call SDK methods before even initializing WiFi first
+		return true;
 	return bk_wlan_stop(BK_SOFT_AP) == kNoErr;
 }
 

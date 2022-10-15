@@ -6,8 +6,10 @@
 #include "WCharacterFixup.h"
 #endif
 
+#define delay delayMilliseconds // change delay()'s signature - it's defined as static inline in WVariant.h
 #include <api/ArduinoAPI.h>
 #include <core/LibreTuyaAPI.h>
+#undef delay
 
 // Include family-specific code
 #include "WVariant.h"
