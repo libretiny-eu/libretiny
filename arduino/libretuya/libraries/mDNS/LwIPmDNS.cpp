@@ -38,6 +38,7 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 }
 
 bool mDNS::begin(const char *hostname) {
+	setInstanceName(hostname);
 	LT_DM(MDNS, "Starting (%s)", hostname);
 #if LWIP_VERSION_MAJOR >= 2 && LWIP_VERSION_MINOR >= 1
 	mdns_resp_register_name_result_cb(mdnsStatusCallback);
