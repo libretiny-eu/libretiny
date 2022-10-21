@@ -73,7 +73,6 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 			event	= GPIO_INT_LEVEL_FALLING;
 			modeNew = INPUT_PULLUP;
 			change	= true;
-
 			break;
 		default:
 			return;
