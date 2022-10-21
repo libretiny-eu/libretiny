@@ -4,7 +4,7 @@
 
 static void *irqHandlerList[PINS_COUNT] = {NULL};
 static void *irqHandlerArgs[PINS_COUNT] = {NULL};
-static void *irqChangeList[PINS_COUNT]	= {NULL};
+static bool irqChangeList[PINS_COUNT];
 
 static void irqHandler(unsigned char gpio) {
 	int pin = -1;
@@ -18,7 +18,7 @@ static void irqHandler(unsigned char gpio) {
 		return;
 	if (!irqHandlerList[pin])
 		return;
-	if (irqChangeList[pin] != NULL) {
+	if (irqChangeList[pin]) {
 		if (pinTable[pin].mode == INPUT_PULLDOWN) {
 			pinTable[pin].mode = INPUT_PULLUP;
 			gpio_int_enable(pinTable[pin].gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
@@ -46,32 +46,33 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		return;
 	uint32_t event	= 0;
 	PinMode modeNew = 0;
-	int *change		= 0;
+	bool change		= 0;
+
 	switch (mode) {
 		case LOW:
 			event	= GPIO_INT_LEVEL_LOW;
 			modeNew = INPUT_PULLUP;
-			change	= NULL;
+			change	= false;
 			break;
 		case HIGH:
 			event	= GPIO_INT_LEVEL_HIGH;
 			modeNew = INPUT_PULLDOWN;
-			change	= NULL;
+			change	= false;
 			break;
 		case FALLING:
 			event	= GPIO_INT_LEVEL_FALLING;
 			modeNew = INPUT_PULLUP;
-			change	= NULL;
+			change	= false;
 			break;
 		case RISING:
 			event	= GPIO_INT_LEVEL_RISING;
 			modeNew = INPUT_PULLDOWN;
-			change	= NULL;
+			change	= false;
 			break;
 		case CHANGE:
 			event	= GPIO_INT_LEVEL_FALLING;
 			modeNew = INPUT_PULLUP;
-			change	= param;
+			change	= true;
 
 			break;
 		default:
@@ -93,7 +94,7 @@ void detachInterrupt(pin_size_t interruptNumber) {
 		return;
 	irqHandlerList[interruptNumber] = NULL;
 	irqHandlerArgs[interruptNumber] = NULL;
-	irqChangeList[interruptNumber]	= NULL;
+	irqChangeList[interruptNumber]	= false;
 	gpio_int_disable(pin->gpio);
 	pin->enabled &= ~PIN_IRQ;
 }
