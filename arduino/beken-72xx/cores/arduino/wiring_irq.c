@@ -4,7 +4,7 @@
 
 static void *irqHandlerList[PINS_COUNT] = {NULL};
 static void *irqHandlerArgs[PINS_COUNT] = {NULL};
-static void *irqChangeList[PINS_COUNT] = {NULL};
+static void *irqChangeList[PINS_COUNT]	= {NULL};
 
 static void irqHandler(unsigned char gpio) {
 	int pin = -1;
@@ -22,7 +22,7 @@ static void irqHandler(unsigned char gpio) {
 		if (pinTable[pin].mode == INPUT_PULLDOWN) {
 			pinTable[pin].mode = INPUT_PULLUP;
 			gpio_int_enable(pinTable[pin].gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
-		} else if (pinTable[pin].mode == INPUT_PULLUP){
+		} else if (pinTable[pin].mode == INPUT_PULLUP) {
 			pinTable[pin].mode = INPUT_PULLDOWN;
 			gpio_int_enable(pinTable[pin].gpio, GPIO_INT_LEVEL_RISING, irqHandler);
 		}
@@ -46,33 +46,40 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		return;
 	uint32_t event	= 0;
 	PinMode modeNew = 0;
+	int *change		= 0;
 	switch (mode) {
 		case LOW:
 			event	= GPIO_INT_LEVEL_LOW;
 			modeNew = INPUT_PULLUP;
+			change	= NULL;
 			break;
 		case HIGH:
 			event	= GPIO_INT_LEVEL_HIGH;
 			modeNew = INPUT_PULLDOWN;
+			change	= NULL;
 			break;
 		case FALLING:
 			event	= GPIO_INT_LEVEL_FALLING;
 			modeNew = INPUT_PULLUP;
+			change	= NULL;
 			break;
 		case RISING:
 			event	= GPIO_INT_LEVEL_RISING;
 			modeNew = INPUT_PULLDOWN;
+			change	= NULL;
 			break;
 		case CHANGE:
 			event	= GPIO_INT_LEVEL_FALLING;
 			modeNew = INPUT_PULLUP;
-			irqChangeList[interruptNumber] = param;
+			change	= param;
+
 			break;
 		default:
 			return;
 	}
 	irqHandlerList[interruptNumber] = callback;
 	irqHandlerArgs[interruptNumber] = param;
+	irqChangeList[interruptNumber]	= change;
 	gpio_int_enable(pin->gpio, event, irqHandler);
 	pin->enabled |= PIN_IRQ | PIN_GPIO;
 	pin->mode = modeNew;
@@ -86,7 +93,7 @@ void detachInterrupt(pin_size_t interruptNumber) {
 		return;
 	irqHandlerList[interruptNumber] = NULL;
 	irqHandlerArgs[interruptNumber] = NULL;
-	irqChangeList[interruptNumber] = NULL;
+	irqChangeList[interruptNumber]	= NULL;
 	gpio_int_disable(pin->gpio);
 	pin->enabled &= ~PIN_IRQ;
 }
