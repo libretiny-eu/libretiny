@@ -27,7 +27,6 @@ if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 env.Replace(PROGSUFFIX=".elf")
 
-# Toolchain config - TODO multiple arch, specified in board.json
 prefix = board.get("build.prefix", "")
 env.Replace(
     AR=prefix + "gcc-ar",
