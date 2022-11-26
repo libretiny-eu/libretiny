@@ -10,8 +10,8 @@ extern "C" {
 }
 
 void LibreTuya::restart() {
-	sys_cpu_reset();
-	sys_reset();
+	// The Watchdog Way
+	wdtEnable(1L);
 	while (1) {}
 }
 
