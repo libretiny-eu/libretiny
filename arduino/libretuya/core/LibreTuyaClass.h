@@ -64,6 +64,10 @@ class LibreTuya {
 	 */
 	void restart();
 	/**
+	 * @brief Reboot the CPU and stay in download mode (if possible).
+	 */
+	void restartDownloadMode();
+	/**
 	 * @brief Get the reason of last chip reset.
 	 */
 	ResetReason getResetReason();

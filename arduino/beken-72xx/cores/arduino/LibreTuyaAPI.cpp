@@ -32,6 +32,10 @@ void LibreTuya::restart() {
 	bk_reboot();
 }
 
+void LibreTuya::restartDownloadMode() {
+	bk_reboot();
+}
+
 ResetReason LibreTuya::getResetReason() {
 	switch (bk_misc_get_start_type()) {
 		case RESET_SOURCE_POWERON:

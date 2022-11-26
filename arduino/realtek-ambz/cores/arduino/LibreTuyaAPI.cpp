@@ -15,6 +15,14 @@ void LibreTuya::restart() {
 	while (1) {}
 }
 
+void LibreTuya::restartDownloadMode() {
+	// mww 0x40000138 0x8
+	HAL_WRITE32(SYSTEM_CTRL_BASE, REG_SYS_NORESET_FF, 0x08);
+	// reboot it the ugly way
+	sys_reset();
+	while (1) {}
+}
+
 ResetReason LibreTuya::getResetReason() {
 	return RESET_REASON_UNKNOWN;
 }
