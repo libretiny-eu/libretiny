@@ -63,3 +63,25 @@
 #undef DNS_DEBUG
 #undef IP6_DEBUG
 #undef MDNS_DEBUG
+
+
+/** Set this to 1 to support DNS names (or IP address strings) to set sntp servers
+ * One server address/name can be defined as default if SNTP_SERVER_DNS == 1:
+ * \#define SNTP_SERVER_ADDRESS "pool.ntp.org"
+ */
+#define SNTP_SERVER_DNS            1
+
+#define SNTP_SET_SYSTEM_TIME_US(sec, us)  \
+    do { \
+        struct timeval tv = { .tv_sec = sec, .tv_usec = us }; \
+        settimeofday(&tv, NULL); \
+    } while (0);
+
+#define SNTP_GET_SYSTEM_TIME(sec, us) \
+    do { \
+        struct timeval tv = { .tv_sec = 0, .tv_usec = 0 }; \
+        gettimeofday(&tv, NULL); \
+        (sec) = tv.tv_sec;  \
+        (us) = tv.tv_usec; \
+    } while (0);
+
