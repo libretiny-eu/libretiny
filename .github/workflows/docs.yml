@@ -22,7 +22,10 @@ jobs:
         run: pip install ltchiptool
 
       - name: Generate static JSON files
-        run: python docs/build_json.py
+        run: |
+          mkdir -p site/
+          python docs/build_json.py
+          cp *.json site/
 
       - name: Set custom domain
         run: |
