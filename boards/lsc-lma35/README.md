@@ -35,6 +35,15 @@ board = lsc-lma35
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: lsc-lma35
+  framework:
+    version: dev
+```
+
 ## Pinout
 
 ![Pinout](pinout_lsc-lma35.svg)

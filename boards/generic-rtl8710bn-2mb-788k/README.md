@@ -35,6 +35,15 @@ board = generic-rtl8710bn-2mb-788k
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: generic-rtl8710bn-2mb-788k
+  framework:
+    version: dev
+```
+
 ## Arduino Core pin mapping
 
 No. | Pin        | UART      | I²C      | SPI                  | PWM  | Other

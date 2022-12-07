@@ -51,3 +51,33 @@
 #define PIN_SERIAL0_TX          10u // PA_23
 #define PIN_SERIAL2_RX          5u  // PA_29
 #define PIN_SERIAL2_TX          6u  // PA_30
+
+// Pin function macros
+// -------------------
+#define PIN_FUNCTION_ADC1  1u  // PA_19
+#define PIN_FUNCTION_ADC2  11u // AD_2
+#define PIN_FUNCTION_CS0   1u  // PA_19
+#define PIN_FUNCTION_CS1   1u  // PA_19
+#define PIN_FUNCTION_CTS0  1u  // PA_19
+#define PIN_FUNCTION_MISO0 0u  // PA_22
+#define PIN_FUNCTION_MISO1 0u  // PA_22
+#define PIN_FUNCTION_MOSI0 10u // PA_23
+#define PIN_FUNCTION_MOSI1 10u // PA_23
+#define PIN_FUNCTION_PA00  4u  // PA_0
+#define PIN_FUNCTION_PA05  7u  // PA_5
+#define PIN_FUNCTION_PA12  8u  // PA_12
+#define PIN_FUNCTION_PA14  2u  // PA_14
+#define PIN_FUNCTION_PA15  3u  // PA_15
+#define PIN_FUNCTION_PA18  9u  // PA_18
+#define PIN_FUNCTION_PA19  1u  // PA_19
+#define PIN_FUNCTION_PA22  0u  // PA_22
+#define PIN_FUNCTION_PA23  10u // PA_23
+#define PIN_FUNCTION_PA29  5u  // PA_29
+#define PIN_FUNCTION_PA30  6u  // PA_30
+#define PIN_FUNCTION_RTS0  0u  // PA_22
+#define PIN_FUNCTION_RX0   9u  // PA_18
+#define PIN_FUNCTION_RX2   5u  // PA_29
+#define PIN_FUNCTION_SCK0  9u  // PA_18
+#define PIN_FUNCTION_SCK1  9u  // PA_18
+#define PIN_FUNCTION_TX0   10u // PA_23
+#define PIN_FUNCTION_TX2   6u  // PA_30

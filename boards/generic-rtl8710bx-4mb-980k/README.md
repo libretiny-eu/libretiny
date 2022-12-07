@@ -35,6 +35,15 @@ board = generic-rtl8710bx-4mb-980k
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: generic-rtl8710bx-4mb-980k
+  framework:
+    version: dev
+```
+
 ## Arduino Core pin mapping
 
 No. | Pin        | UART      | I²C      | SPI                  | PWM  | Other

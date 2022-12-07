@@ -28,6 +28,15 @@ board = generic-native
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: generic-native
+  framework:
+    version: dev
+```
+
 ## Flash memory map
 
 Flash size: 4 MiB / 4,194,304 B / 0x400000

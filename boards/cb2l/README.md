@@ -36,6 +36,15 @@ board = cb2l
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: cb2l
+  framework:
+    version: dev
+```
+
 ## Pinout
 
 ![Pinout](pinout_cb2l.svg)

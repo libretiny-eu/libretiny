@@ -33,6 +33,15 @@ board = generic-rtl8720cf-2mb-992k
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: generic-rtl8720cf-2mb-992k
+  framework:
+    version: dev
+```
+
 ## Flash memory map
 
 Flash size: 2 MiB / 2,097,152 B / 0x200000

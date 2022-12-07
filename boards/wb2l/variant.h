@@ -37,3 +37,33 @@
 #define PIN_SERIAL1_TX          6u // GPIO11
 #define PIN_SERIAL2_RX          7u // GPIO1
 #define PIN_SERIAL2_TX          8u // GPIO0
+
+// Pin function macros
+// -------------------
+#define PIN_FUNCTION_ADC3 11u // GPIO23
+#define PIN_FUNCTION_P0   8u  // GPIO0
+#define PIN_FUNCTION_P1   7u  // GPIO1
+#define PIN_FUNCTION_P6   2u  // GPIO6
+#define PIN_FUNCTION_P7   1u  // GPIO7
+#define PIN_FUNCTION_P8   0u  // GPIO8
+#define PIN_FUNCTION_P10  5u  // GPIO10
+#define PIN_FUNCTION_P11  6u  // GPIO11
+#define PIN_FUNCTION_P20  9u  // GPIO20
+#define PIN_FUNCTION_P21  10u // GPIO21
+#define PIN_FUNCTION_P22  12u // GPIO22
+#define PIN_FUNCTION_P23  11u // GPIO23
+#define PIN_FUNCTION_P24  4u  // GPIO24
+#define PIN_FUNCTION_P26  3u  // GPIO26
+#define PIN_FUNCTION_PWM0 2u  // GPIO6
+#define PIN_FUNCTION_PWM1 1u  // GPIO7
+#define PIN_FUNCTION_PWM2 0u  // GPIO8
+#define PIN_FUNCTION_PWM4 4u  // GPIO24
+#define PIN_FUNCTION_PWM5 3u  // GPIO26
+#define PIN_FUNCTION_RX1  5u  // GPIO10
+#define PIN_FUNCTION_RX2  7u  // GPIO1
+#define PIN_FUNCTION_SCL1 9u  // GPIO20
+#define PIN_FUNCTION_SCL2 8u  // GPIO0
+#define PIN_FUNCTION_SDA1 10u // GPIO21
+#define PIN_FUNCTION_SDA2 7u  // GPIO1
+#define PIN_FUNCTION_TX1  6u  // GPIO11
+#define PIN_FUNCTION_TX2  8u  // GPIO0

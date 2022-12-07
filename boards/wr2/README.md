@@ -36,6 +36,15 @@ board = wr2
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: wr2
+  framework:
+    version: dev
+```
+
 ## Pinout
 
 ![Pinout](pinout_wr2.svg)

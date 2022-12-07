@@ -36,6 +36,15 @@ board = cb3s
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: cb3s
+  framework:
+    version: dev
+```
+
 ## Pinout
 
 ![Pinout](pinout_cb3s.svg)

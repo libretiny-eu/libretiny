@@ -35,6 +35,15 @@ board = generic-bk7231t-qfn32-tuya
 framework = arduino
 ```
 
+In ESPHome YAML:
+
+```yaml
+libretuya:
+  board: generic-bk7231t-qfn32-tuya
+  framework:
+    version: dev
+```
+
 ## Arduino Core pin mapping
 
 No. | Pin       | UART     | I²C      | SPI  | PWM  | Other
