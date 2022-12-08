@@ -3,7 +3,7 @@
 		"realtek-ambz",
 		"realtek-ambz-2mb-468k",
 		"realtek-ambz-bx",
-		"pcb/ic-rtl8710bn",
+		"ic/rtl8710bn",
 		"pcb/bw12"
 	],
 	"build": {

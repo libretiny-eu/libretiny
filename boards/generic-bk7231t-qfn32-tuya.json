@@ -4,7 +4,7 @@
 		"beken-72xx",
 		"beken-7231u",
 		"beken-7231t-tuya",
-		"pcb/ic-bk7231-qfn32"
+		"ic/bk7231-qfn32"
 	],
 	"build": {
 		"mcu": "bk7231t",

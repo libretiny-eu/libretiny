@@ -3,7 +3,7 @@
 		"realtek-ambz2",
 		"realtek-ambz2-8720",
 		"realtek-ambz2-2mb-992k",
-		"pcb/ic-rtl8720cf",
+		"ic/rtl8720cf",
 		"pcb/bw15"
 	],
 	"build": {
