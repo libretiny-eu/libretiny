@@ -4,7 +4,7 @@ Name                                                                      | MCU 
 --------------------------------------------------------------------------|-----------|-------|---------|-------------|-------|-----|--------|----------------
 **Generic**                                                               |           |       |         |             |       |     |        |
 [BK7231N (Tuya QFN32)](../../boards/generic-bk7231n-qfn32-tuya/README.md) | BK7231N   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
-[BK7231T (Tuya QFN32)](../../boards/generic-bk7231t-qfn32-tuya/README.md) | BK7231T   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
+[BK7231T (Tuya QFN32)](../../boards/generic-bk7231t-qfn32-tuya/README.md) | BK7231T   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231u`
 [RTL8710BN (2M/468k)](../../boards/generic-rtl8710bn-2mb-468k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8710BN (2M/788k)](../../boards/generic-rtl8710bn-2mb-788k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8710BX (4M/980k)](../../boards/generic-rtl8710bx-4mb-980k/README.md)  | RTL8710BX | 4 MiB | 256 KiB | 17 (17 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
@@ -18,10 +18,10 @@ Name                                                                      | MCU 
 [CB3L](../../boards/cb3l/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
 [CB3S](../../boards/cb3s/README.md)                                       | BK7231N   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
 [CB3SE](../../boards/cb3se/README.md)                                     | BK7231N   | 2 MiB | 256 KiB | 22 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
-[WB2L](../../boards/wb2l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 7 (5 I/O)   | ✔️    | ✔️  | ❌      | `beken-7231t`
-[WB2S](../../boards/wb2s/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231t`
-[WB3L](../../boards/wb3l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 21 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
-[WB3S](../../boards/wb3s/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231t`
+[WB2L](../../boards/wb2l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 7 (5 I/O)   | ✔️    | ✔️  | ❌      | `beken-7231u`
+[WB2S](../../boards/wb2s/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ✔️  | ❌      | `beken-7231u`
+[WB3L](../../boards/wb3l/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 21 (17 I/O) | ✔️    | ✔️  | ❌      | `beken-7231u`
+[WB3S](../../boards/wb3s/README.md)                                       | BK7231T   | 2 MiB | 256 KiB | 22 (16 I/O) | ✔️    | ✔️  | ❌      | `beken-7231u`
 [WR2](../../boards/wr2/README.md)                                         | RTL8710BN | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ❌   | ❌      | `realtek-ambz`
 [WR2E](../../boards/wr2e/README.md)                                       | RTL8710BN | 2 MiB | 256 KiB | 11 (8 I/O)  | ✔️    | ❌   | ❌      | `realtek-ambz`
 [WR3](../../boards/wr3/README.md)                                         | RTL8710BN | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`

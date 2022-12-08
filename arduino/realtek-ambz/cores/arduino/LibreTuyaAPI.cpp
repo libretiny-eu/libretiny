@@ -39,7 +39,7 @@ void LibreTuya::gpioRecover() {
 ChipType LibreTuya::getChipType() {
 	uint8_t chipId;
 	EFUSE_OneByteReadROM(9902, 0xF8, &chipId, L25EOUTVOLTAGE);
-	return CHIP_TYPE_ENUM(F_RTL8710B, chipId);
+	return CHIP_TYPE_ENUM(FAMILY, chipId);
 }
 
 const char *LibreTuya::getChipModel() {

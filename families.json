@@ -42,13 +42,13 @@
 	},
 	{
 		"id": "0x675A40B0",
-		"short_name": "BK7231T",
-		"description": "Beken 7231T",
-		"name": "beken-7231t",
+		"short_name": "BK7231U",
+		"description": "Beken 7231U/7231T",
+		"name": "beken-7231u",
 		"parent": "beken-72xx",
-		"code": "bk7231t",
+		"code": "bk7231u",
 		"parent_code": "bk72xx",
-		"url": "http://www.bekencorp.com/en/goods/detail/cid/7.html",
+		"url": "http://www.bekencorp.com/en/goods/detail/cid/13.html",
 		"sdk": "https://github.com/bekencorp/bdk_freertos",
 		"framework": "framework-beken-bdk",
 		"mcus": [
