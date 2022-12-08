@@ -16,6 +16,7 @@ void delayMilliseconds(unsigned long ms) {
 }
 
 static uint32_t getTicksCount() {
+	// copied from bk_timer_ctrl(), for speeds
 	uint32_t timeout = 0;
 	REG_WRITE(TIMER0_2_READ_CTL, (BKTIMER0 << 2) | 1);
 	while (REG_READ(TIMER0_2_READ_CTL) & 1) {
@@ -58,9 +59,6 @@ unsigned long millis() {
 }
 
 unsigned long micros() {
-	// copied from bk_timer_ctrl(), for speeds
-	uint32_t timeout = 0;
-
 #if (CFG_SOC_NAME == SOC_BK7231)
 #error "Not implemented"
 #endif
@@ -91,6 +89,7 @@ unsigned long micros() {
 	return correctedMillis * 1000 + nowTicks / (CFG_XTAL_FREQUENCE / 1000 / 1000);
 #else
 #if 0
+	uint32_t timeout = 0;
 	REG_WRITE(TIMER3_5_READ_CTL, (BKTIMER3 << 2) | 1);
 	while (REG_READ(TIMER3_5_READ_CTL) & 1) {
 		timeout++;

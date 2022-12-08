@@ -32,7 +32,7 @@ SOC_BK7236 = 6
 SOC_NAMES = {
     SOC_BK7231: "bk7231",
     SOC_BK7231U: "bk7231u",
-    SOC_BK7221U: "bk7221u",
+    SOC_BK7251: "bk7251",
     SOC_BK7271: "bk7271",
     SOC_BK7231N: "bk7231n",
     SOC_BK7236: "bk7236",
@@ -517,7 +517,7 @@ if env.Cfg("ATSVR_CFG"):
             "+<*>",
         ],
     )
-if env.Cfg("CFG_USB"):
+if env.Cfg("CFG_USB") or env.Cfg("CFG_USE_SDCARD_HOST"):
     env.AddLibrary(
         name="bdk_driver_usb",
         base_dir=ROOT_DIR,
