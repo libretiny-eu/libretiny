@@ -69,7 +69,8 @@
 		"sdk": "https://github.com/bekencorp/bdk_freertos",
 		"framework": "framework-beken-bdk",
 		"mcus": [
-			"BK7231N"
+			"BK7231N",
+			"BL2028N"
 		]
 	},
 	{
