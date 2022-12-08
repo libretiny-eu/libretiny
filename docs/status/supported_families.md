@@ -8,6 +8,7 @@ Realtek Ameba1                                                            | `-` 
 Realtek AmebaD                                                            | `-`                             | `-`                  | `RTL8720D` (0x3379CFE2) | ❌            | -
 [Beken 7231U/7231T](http://www.bekencorp.com/en/goods/detail/cid/13.html) | `beken-7231u` (`beken-72xx`)    | `bk7231u` (`bk72xx`) | `BK7231U` (0x675A40B0)  | ✔️           | `framework-beken-bdk` ([bdk_freertos](https://github.com/bekencorp/bdk_freertos))
 [Beken 7231N](http://www.bekencorp.com/en/goods/detail/cid/39.html)       | `beken-7231n` (`beken-72xx`)    | `bk7231n` (`bk72xx`) | `BK7231N` (0x7B3EF230)  | ✔️           | `framework-beken-bdk` ([bdk_freertos](https://github.com/bekencorp/bdk_freertos))
+[Beken 7251/7252](http://www.bekencorp.com/en/goods/detail/cid/21.html)   | `beken-7251` (`beken-72xx`)     | `bk7251` (`bk72xx`)  | `BK7251` (0x6A82CC42)   | ✔️           | `framework-beken-bdk` ([bdk_freertos](https://github.com/bekencorp/bdk_freertos))
 Boufallo 602                                                              | `-`                             | `-`                  | `BL602` (0xDE1270B7)    | ❌            | -
 Xradiotech 809                                                            | `-`                             | `-`                  | `XR809` (0x51E903A8)    | ❌            | -
 Native host architecture                                                  | `host-native`                   | `native`             | `NATIVE` (0xDEADBEEF)   | ❌            | -

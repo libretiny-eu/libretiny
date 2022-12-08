@@ -5,6 +5,7 @@ Name                                                                      | MCU 
 **Generic**                                                               |           |       |         |             |       |     |        |
 [BK7231N (Tuya QFN32)](../../boards/generic-bk7231n-qfn32-tuya/README.md) | BK7231N   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
 [BK7231T (Tuya QFN32)](../../boards/generic-bk7231t-qfn32-tuya/README.md) | BK7231T   | 2 MiB | 256 KiB | 19 (19 I/O) | ✔️    | ✔️  | ❌      | `beken-7231u`
+[BK7252](../../boards/generic-bk7252/README.md)                           | BK7252    | 4 MiB | 512 KiB | 38 (38 I/O) | ✔️    | ✔️  | ❌      | `beken-7251`
 [RTL8710BN (2M/468k)](../../boards/generic-rtl8710bn-2mb-468k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8710BN (2M/788k)](../../boards/generic-rtl8710bn-2mb-788k/README.md)  | RTL8710BN | 2 MiB | 256 KiB | 18 (18 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 [RTL8710BX (4M/980k)](../../boards/generic-rtl8710bx-4mb-980k/README.md)  | RTL8710BX | 4 MiB | 256 KiB | 17 (17 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`

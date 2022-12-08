@@ -74,6 +74,22 @@
 		]
 	},
 	{
+		"id": "0x6A82CC42",
+		"short_name": "BK7251",
+		"description": "Beken 7251/7252",
+		"name": "beken-7251",
+		"parent": "beken-72xx",
+		"code": "bk7251",
+		"parent_code": "bk72xx",
+		"url": "http://www.bekencorp.com/en/goods/detail/cid/21.html",
+		"sdk": "https://github.com/bekencorp/bdk_freertos",
+		"framework": "framework-beken-bdk",
+		"mcus": [
+			"BK7251",
+			"BK7252"
+		]
+	},
+	{
 		"id": "0xDE1270B7",
 		"short_name": "BL602",
 		"description": "Boufallo 602"

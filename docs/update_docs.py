@@ -68,6 +68,7 @@ def get_board_mcus(boards: List[Board]) -> Set[str]:
 
 
 def get_enum_keys(code: str, name: str) -> Set[str]:
+    code = code.replace("\t", " ")
     code = code.partition(f"enum {name}")[2]
     code = code.partition(";")[0]
     code = code.strip().strip("{}").strip()

@@ -2,6 +2,7 @@
 
 - [Generic - BK7231N (Tuya QFN32)](../boards/generic-bk7231n-qfn32-tuya/README.md)
 - [Generic - BK7231T (Tuya QFN32)](../boards/generic-bk7231t-qfn32-tuya/README.md)
+- [Generic - BK7252](../boards/generic-bk7252/README.md)
 - [Generic - RTL8710BN (2M/468k)](../boards/generic-rtl8710bn-2mb-468k/README.md)
 - [Generic - RTL8710BN (2M/788k)](../boards/generic-rtl8710bn-2mb-788k/README.md)
 - [Generic - RTL8710BX (4M/980k)](../boards/generic-rtl8710bx-4mb-980k/README.md)
