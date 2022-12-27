@@ -25,13 +25,12 @@ MEMORY
 
 	/* External PSRAM for text, rodata & data */
 	PSRAM (rwx)				: ORIGIN = 0x60000000, LENGTH = 0x60400000 - 0x60000000
-	BTRACE (rx)				: ORIGIN = 0x00800000, LENGTH = 0x00C00000 - 0x00800000 /* Bluetooth Trace */
 	/* Flash memory for XIP */
 	/* XIP image must start with 64K(0x10000) aligned address */
 	/* XIP Chiper section: TEXT/RODATA in this section can be encrypted (decrypt by SCE) */
-	XIP_FLASH_C (rx)		: ORIGIN = 0x9B000000, LENGTH = 0x9B800000 - 0x9B000000
+	XIP_FLASH_C (rx)		: ORIGIN = 0x9B000140, LENGTH = 0x9B800000 - 0x9B000000
 	/* XIP Plantext section: RODATA in this section will not be encrypted */
-	XIP_FLASH_P (rx)		: ORIGIN = 0x9B800000, LENGTH = 0x9BFF0000 - 0x9B800000
+	XIP_FLASH_P (rx)		: ORIGIN = 0x9B800140, LENGTH = 0x9BFF0000 - 0x9B800000
 }
 
 /* Library configurations */
@@ -69,15 +68,14 @@ GROUP(libgcc.a libc.a libm.a libnosys.a)
  *   __Vectors_End
  *   __Vectors_Size
  */
-_start_addr = 0x1000;
-ENTRY(_start_addr)
+ENTRY(__ram_start_table_start__)
 __eram_end__ = ORIGIN(PSRAM) + LENGTH(PSRAM);
 __psram_start__ = ORIGIN(PSRAM);
 __psram_end__ = ORIGIN(PSRAM) + LENGTH(PSRAM);
 
 SECTIONS
 {
-	.ram.vector :
+	.ram.vector (NOLOAD):
 	{
 		. = ALIGN(256);
 		__ram_vector_start__ = .;
@@ -112,13 +110,6 @@ SECTIONS
 		__psram_data_end__ = .;
 
 	} > PSRAM
-
-	.bluetooth_trace.text :
-	{
-		__btrace_start__ = .;
-		*(.BTTRACE)
-		__btrace_end__ = .;
-	} > BTRACE
 
 	.data :
 	{
@@ -155,22 +146,6 @@ SECTIONS
 		/* All data end */
 		__data_end__ = .;
 	} > DTCM_RAM
-
-	.xip_c_reserved :
-	{
-		/* XIP image section must start with 64K aligned address, reserve 0x140 for image header */
-		. += 0x140;
-		/* If the XIP is the 1st sub-image, then we should reserve 0xE0 bytes meore for OTA Sign. and 6 Public Key */
-		/*. += 0xE0; */
-	} > XIP_FLASH_C
-
-	.xip_p_reserved :
-	{
-		/* XIP image section must start with 64K aligned address, reserve 0x140 for image header */
-		. += 0x140;
-		/* If the XIP is the 1st sub-image, then we should reserve 0xE0 bytes meore for OTA Sign. and 6 Public Key */
-		/*. += 0xE0; */
-	} > XIP_FLASH_P
 
 	.psram.code_text :
 	{
