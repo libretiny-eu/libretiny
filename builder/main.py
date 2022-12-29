@@ -16,7 +16,7 @@ env.SConscript("utils/config.py", exports="env")
 env.SConscript("utils/env.py", exports="env")
 env.SConscript("utils/flash.py", exports="env")
 env.SConscript("utils/libs.py", exports="env")
-env.SConscript("utils/uf2.py", exports="env")
+env.SConscript("utils/ltchiptool.py", exports="env")
 # Vendor-specific library ports
 env.SConscript("libs/flashdb.py", exports="env")
 env.SConscript("libs/lwip.py", exports="env")
@@ -69,7 +69,7 @@ targets = [target_elf]
 if "UF2OTA" in env:
     target_uf2 = env.BuildUF2OTA(target_elf)
     targets.append(target_uf2)
-    env.AddUF2Uploader(target_uf2)
+    env.AddFlashWriter(target_uf2)
 elif "IMG_FW" in env:
     target_fw = env.subst("$IMG_FW")
     env.AddPlatformTarget("upload", target_fw, env["UPLOAD_ACTIONS"], "Upload")

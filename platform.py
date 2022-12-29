@@ -23,7 +23,7 @@ def check_ltchiptool():
     import ltchiptool
 
     importlib.reload(ltchiptool)
-    if Version(ltchiptool.get_version()) < Version("1.6.0"):
+    if Version(ltchiptool.get_version()) < Version("2.0.2"):
         raise ImportError("Version too old")
 
 
@@ -43,6 +43,9 @@ except (ImportError, AttributeError):
 # Remove current dir so it doesn't conflict with PIO
 if dirname(__file__) in sys.path:
     sys.path.remove(dirname(__file__))
+
+# Let ltchiptool know about LT's location
+ltchiptool.util.lt_set_path(dirname(__file__))
 
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}

@@ -74,8 +74,10 @@ def env_add_defaults(env, platform, board):
         VARIANT=board.get("build.variant"),
         LDSCRIPT_SDK=board.get("build.ldscript_sdk"),
         LDSCRIPT_ARDUINO=board.get("build.ldscript_arduino"),
-        # ltchiptool variables
-        LTCHIPTOOL='"${PYTHONEXE}" -m ltchiptool',
+        # ltchiptool config:
+        # -r    output raw log messages
+        # -i 1  indent log messages
+        LTCHIPTOOL='"${PYTHONEXE}" -m ltchiptool -r -i 1',
         # Fix for link2bin to get tmpfile name in argv
         LINKCOM="${LINK} ${LINKARGS}",
         LINKARGS="${TEMPFILE('-o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS', '$LINKCOMSTR')}",

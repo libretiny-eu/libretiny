@@ -53,7 +53,7 @@ def env_uf2ota(env, *args, **kwargs):
     env.Execute(" ".join(cmd))
 
 
-def env_uf2upload(env, target):
+def env_flash_write(env, target):
     protocol = env.subst("${UPLOAD_PROTOCOL}")
     actions = []
     # from platform-espressif32/builder/main.py
@@ -61,7 +61,7 @@ def env_uf2upload(env, target):
         # upload via UART
         env["UPLOADERFLAGS_UF2"] = [
             "${UF2OUT}",
-            "uart",
+            "-d",
             "${UPLOAD_PORT}",
             "-b",
             "${UPLOAD_SPEED}",
@@ -79,7 +79,7 @@ def env_uf2upload(env, target):
 
     # add main upload target
     env.Replace(
-        UPLOADER="${LTCHIPTOOL} uf2 upload",
+        UPLOADER="${LTCHIPTOOL} flash write",
         UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS_UF2} ${UPLOADERFLAGS}",
     )
     actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
@@ -93,4 +93,4 @@ env.Append(
         )
     )
 )
-env.AddMethod(env_uf2upload, "AddUF2Uploader")
+env.AddMethod(env_flash_write, "AddFlashWriter")
