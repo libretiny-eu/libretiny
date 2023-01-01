@@ -22,7 +22,7 @@ Assuming you have PlatformIO, git and Python installed:
 
 ## Create your device config
 
-1. Go to [Boards & CPU list](https://kuba2k2.github.io/libretuya/docs/supported/), click on your board and remember your board code.
+1. Go to [Boards & CPU list](../status/supported/), click on your board and remember your board code.
 2. Create a YAML config file for your device. You can either:
 	- use `python -m esphome wizard yourdevice.yml` - type answers to the six questions the wizard asks, OR:
 	- if your board isn't available in the wizard yet, use the manual YAML method below
