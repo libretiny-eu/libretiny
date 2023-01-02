@@ -20,27 +20,30 @@ LTCHIPTOOL_VERSION = "^2.0.2"
 
 # Install & import tools
 def check_ltchiptool(install: bool):
+    if install:
+        # update ltchiptool to a supported version
+        print("Installing/updating ltchiptool")
+        system(f"{sys.executable} -m pip install -U ltchiptool=={LTCHIPTOOL_VERSION}")
+
+        # unload all modules from the old version
+        for name, module in list(sorted(sys.modules.items())):
+            if not name.startswith("ltchiptool"):
+                continue
+            del sys.modules[name]
+            del module
+
+    # try to import it
     ltchiptool = importlib.import_module("ltchiptool")
 
+    # check if the version is known
     if Version(ltchiptool.get_version()) in SimpleSpec(LTCHIPTOOL_VERSION):
         return
     if not install:
         raise ImportError("Version too old")
 
-    # update ltchiptool to a supported version
-    print("Installing/updating ltchiptool")
-    system(f"{sys.executable} -m pip install -U ltchiptool=={LTCHIPTOOL_VERSION}")
-
-    # unload all modules from the old version
-    for name, module in list(sorted(sys.modules.items())):
-        if not name.startswith("ltchiptool"):
-            continue
-        del sys.modules[name]
-        del module
-
 
 def try_check_ltchiptool():
-    install_modes = [True, False]
+    install_modes = [False, True]
     exception = None
     for install in install_modes:
         try:
@@ -51,7 +54,7 @@ def try_check_ltchiptool():
     print(
         "!!! Installing ltchiptool failed, or version outdated. "
         "Please install ltchiptool manually using pip. "
-        f"Cannot continue: {exception}"
+        f"Cannot continue. {type(exception).name}: {exception}"
     )
     raise exception
 
