@@ -14,31 +14,50 @@ from platformio.package.manager.base import BasePackageManager
 from platformio.package.meta import PackageItem, PackageSpec
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
-from semantic_version import Version
+from semantic_version import SimpleSpec, Version
 
+LTCHIPTOOL_VERSION = "^2.0.2"
 
 # Install & import tools
-def check_ltchiptool():
-    global ltchiptool
-    import ltchiptool
+def check_ltchiptool(install: bool):
+    ltchiptool = importlib.import_module("ltchiptool")
 
-    importlib.reload(ltchiptool)
-    if Version(ltchiptool.get_version()) < Version("2.0.2"):
+    if Version(ltchiptool.get_version()) in SimpleSpec(LTCHIPTOOL_VERSION):
+        return
+    if not install:
         raise ImportError("Version too old")
 
-
-try:
-    check_ltchiptool()
-except (ImportError, AttributeError):
+    # update ltchiptool to a supported version
     print("Installing/updating ltchiptool")
-    system(" ".join([sys.executable, "-m", "pip install -U ltchiptool"]))
-    try:
-        check_ltchiptool()
-    except (ImportError, AttributeError) as e:
-        print(
-            f"!!! Installing ltchiptool failed, or version outdated. Cannot continue: {e}"
-        )
-        raise e
+    system(f"{sys.executable} -m pip install -U ltchiptool=={LTCHIPTOOL_VERSION}")
+
+    # unload all modules from the old version
+    for name, module in list(sorted(sys.modules.items())):
+        if not name.startswith("ltchiptool"):
+            continue
+        del sys.modules[name]
+        del module
+
+
+def try_check_ltchiptool():
+    install_modes = [True, False]
+    exception = None
+    for install in install_modes:
+        try:
+            check_ltchiptool(install)
+            return
+        except (ImportError, AttributeError) as ex:
+            exception = ex
+    print(
+        "!!! Installing ltchiptool failed, or version outdated. "
+        "Please install ltchiptool manually using pip. "
+        f"Cannot continue: {exception}"
+    )
+    raise exception
+
+
+try_check_ltchiptool()
+import ltchiptool
 
 # Remove current dir so it doesn't conflict with PIO
 if dirname(__file__) in sys.path:
