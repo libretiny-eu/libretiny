@@ -83,6 +83,8 @@ void SoftwareSerial::begin(unsigned long baudrate, uint16_t config) {
 }
 
 void SoftwareSerial::end() {
+	if (!(bool)this)
+		return;
 	gtimer_stop(OBJ);
 	gtimer_deinit(OBJ);
 	free(OBJ);
