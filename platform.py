@@ -23,7 +23,9 @@ def check_ltchiptool(install: bool):
     if install:
         # update ltchiptool to a supported version
         print("Installing/updating ltchiptool")
-        system(f"{sys.executable} -m pip install -U ltchiptool=={LTCHIPTOOL_VERSION}")
+        system(
+            f'{sys.executable} -m pip install -U "ltchiptool >= {LTCHIPTOOL_VERSION}, < 3.0"'
+        )
 
         # unload all modules from the old version
         for name, module in list(sorted(sys.modules.items())):
