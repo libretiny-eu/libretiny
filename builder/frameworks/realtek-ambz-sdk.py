@@ -31,7 +31,7 @@ env.Append(
     ],
     CXXFLAGS=[
         # borrowed from RtlDuino/development/rtl87xx/platform.txt
-        "-std=c++11",
+        "-std=gnu++11",
         "-MMD",
         "-fno-exceptions",
         "-fno-rtti",
@@ -100,7 +100,6 @@ env.AddLibrary(
         "+<component/common/api/lwip_netconf.c>",
         "+<component/common/drivers/wlan/realtek/src/osdep/lwip_intf.c>",
         "+<component/common/network/dhcp/dhcps.c>",
-        "+<component/common/network/sntp/sntp.c>",
         "+<component/common/network/ssl/ssl_ram_map/ssl_ram_map.c>",
         "+<component/os/freertos/freertos_v8.1.2/Source/portable/MemMang/heap_5.c>",
         "+<component/os/freertos/freertos_v8.1.2/Source/portable/GCC/ARM_CM4F/port.c>",

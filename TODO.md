@@ -2,6 +2,16 @@
 
 ## General
 
+### Environment stability
+
+Do not publish *any* SDK functions, macros, defines and includes. Define only what's needed in LT's public headers (like `Arduino.h`). Everything else is taken from `sdk_extern.h` or `WVariant.h` (TODO decide whether to keep WV public / make both private / get rid of WV and use sdk_extern only). Private headers are included by LT's .cpp units (maybe a dedicated private header that would include sdk_extern + Arduino.h).
+
+Developers wanting to use SDK functions need to include them.
+
+Explicit is better than implicit.
+
+- consider moving to C++17 (GNU)? or any newer than C++11
+
 ### New families
 
 - BL602
@@ -10,6 +20,7 @@
 - RTL8720D
 - W600 and/or W800
 - LN8825
+- BK7231Q
 - host-native family
 
 ### Tools
@@ -30,7 +41,6 @@
 
 ## BK7231
 
-- implement OTA
 - fix WiFi on BK7231N, test other functionality
 - fix SSL (mbedTLS)
 - I2C (Wire)
@@ -39,5 +49,5 @@
 
 ## RTL8710B
 
-- move to GNU++11 (and verify that it works) - take all stdio functions from stdio.h
+- take all stdio functions from stdio.h
 - rewrite most of Wiring (it was copied from `ambd_arduino`, and is ugly)
