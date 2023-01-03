@@ -46,7 +46,11 @@
       "manifest": {
         "description": "SDK for Ameba1"
       },
-      "toolchain": "gccarmnoneeabi@~1.50201.0",
+      "toolchains": {
+		"x86_64": "gccarmnoneeabi@~1.50201.0",
+		"arm": "gccarmnoneeabi@~1.50401.211104",
+		"arm64": "gccarmnoneeabi@~1.50401.210715"
+	  },
       "libraries": {
         "lwip": [
           "v2.1.3-amb1"
@@ -60,7 +64,11 @@
       "manifest": {
         "description": "SDK for AmebaZ2"
       },
-      "toolchain": "gccarmnoneeabi@~1.100301.0"
+      "toolchains": {
+		"x86_64": "gccarmnoneeabi@~1.100301.0",
+		"arm": "gccarmnoneeabi@~1.100301.0",
+		"arm64": "gccarmnoneeabi@~1.100301.0"
+	  }
     },
     "framework-beken-bdk": {
       "type": "framework",
@@ -69,7 +77,11 @@
       "manifest": {
         "description": "Beken Development Kit for FreeRTOS"
       },
-      "toolchain": "gccarmnoneeabi@~1.40804.0",
+	  "toolchains": {
+		"x86_64":"gccarmnoneeabi@~1.40804.0",
+		"arm": "gccarmnoneeabi@~1.40803.0",
+		"arm64": "gccarmnoneeabi@~1.40803.0"
+	  },
       "libraries": {
         "lwip": [
           "v2.1.3-bdk"
