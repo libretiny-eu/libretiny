@@ -179,7 +179,7 @@ class LibretuyaPlatform(PlatformBase):
                 (toolchain, version) = toolchains["arm64"].split("@")
             else:
                 (toolchain, version) = toolchains["x86_64"].split("@")
-        self.packages[f"toolchain-{toolchain}"]["version"] = version
+            self.packages[f"toolchain-{toolchain}"]["version"] = version
 
         # mark framework SDK as required
         package_obj["optional"] = False
