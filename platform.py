@@ -2,6 +2,7 @@
 
 import importlib
 import json
+import platform
 import sys
 from os import system
 from os.path import dirname, join
@@ -170,9 +171,14 @@ class LibretuyaPlatform(PlatformBase):
             package_obj = {}
 
         # set specific compiler versions
-        if "toolchain" in package_obj:
-            (toolchain, version) = package_obj["toolchain"].split("@")
-            self.packages[f"toolchain-{toolchain}"]["version"] = version
+        if "toolchains" in package_obj:
+            toolchains = package_obj["toolchains"]
+            if platform.machine() in [ "arm", "armv8b", "armv8l", "armv7l" ]:
+                (toolchain, version) = toolchains["arm"].split("@")
+            elif platform.machine() in [ "aarch64_be", "aarch64" ]:
+                (toolchain, version) = toolchains["arm64"].split("@")
+            else:
+                (toolchain, version) = toolchains["x86_64"].split("@")
 
         # mark framework SDK as required
         package_obj["optional"] = False
