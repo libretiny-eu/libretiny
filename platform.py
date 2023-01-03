@@ -173,9 +173,9 @@ class LibretuyaPlatform(PlatformBase):
         # set specific compiler versions
         if "toolchains" in package_obj:
             toolchains = package_obj["toolchains"]
-            if platform.machine() in [ "arm", "armv8b", "armv8l", "armv7l" ]:
+            if platform.machine() in ["arm", "armv8b", "armv8l", "armv7l"]:
                 (toolchain, version) = toolchains["arm"].split("@")
-            elif platform.machine() in [ "aarch64_be", "aarch64" ]:
+            elif platform.machine() in ["aarch64_be", "aarch64"]:
                 (toolchain, version) = toolchains["arm64"].split("@")
             else:
                 (toolchain, version) = toolchains["x86_64"].split("@")
