@@ -65,9 +65,9 @@
         "description": "SDK for AmebaZ2"
       },
       "toolchains": {
-		"x86_64": "gccarmnoneeabi@~1.100301.220327",
-		"arm": "gccarmnoneeabi@~1.100301.220327",
-		"arm64": "gccarmnoneeabi@~1.100301.220327"
+		"x86_64": "gccarmnoneeabi@~1.100301.0",
+		"arm": "gccarmnoneeabi@~1.100301.0",
+		"arm64": "gccarmnoneeabi@~1.100301.0"
 	  }
     },
     "framework-beken-bdk": {

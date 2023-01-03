@@ -173,12 +173,13 @@ class LibretuyaPlatform(PlatformBase):
         # set specific compiler versions
         if "toolchains" in package_obj:
             toolchains = package_obj["toolchains"]
-            if platform.machine() in ["arm", "armv8b", "armv8l", "armv7l"]:
+            if "arm" in platform.machine():
                 (toolchain, version) = toolchains["arm"].split("@")
-            elif platform.machine() in ["aarch64_be", "aarch64"]:
+            elif "aarch64" in platform.machine():
                 (toolchain, version) = toolchains["arm64"].split("@")
             else:
                 (toolchain, version) = toolchains["x86_64"].split("@")
+        self.packages[f"toolchain-{toolchain}"]["version"] = version
 
         # mark framework SDK as required
         package_obj["optional"] = False
