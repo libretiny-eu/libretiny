@@ -25,6 +25,7 @@ MEMORY
 
 	/* External PSRAM for text, rodata & data */
 	PSRAM (rwx)				: ORIGIN = 0x60000000, LENGTH = 0x60400000 - 0x60000000
+	BTRACE (rx)				: ORIGIN = 0x00800000, LENGTH = 0x00C00000 - 0x00800000 /* Bluetooth Trace */
 	/* Flash memory for XIP */
 	/* XIP image must start with 64K(0x10000) aligned address */
 	/* XIP Chiper section: TEXT/RODATA in this section can be encrypted (decrypt by SCE) */
@@ -110,6 +111,13 @@ SECTIONS
 		__psram_data_end__ = .;
 
 	} > PSRAM
+
+	.bluetooth_trace.text :
+	{
+		__btrace_start__ = .;
+		*(.BTTRACE)
+		__btrace_end__ = .;
+	} > BTRACE
 
 	.data :
 	{
