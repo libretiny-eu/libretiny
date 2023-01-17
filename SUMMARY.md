@@ -1,5 +1,6 @@
 * [Home](README.md)
 * [😊 Getting started](docs/getting-started/README.md)
+	* [ESPHome](docs/projects/esphome.md)
 * [📲 Flashing/dumping](docs/flashing/)
 * [💻 Supported boards & chips](docs/status/supported.md)
 * 📖 Reference
@@ -53,6 +54,5 @@
 	* [✈️ OTA format](docs/ota/README.md)
 		* [uf2ota.py tool](docs/ota/uf2ota.md)
 		* [uf2ota.h library](docs/ota/library.md)
-		* [uf2ota.h reference](ltapi/uf2ota_8h.md)
 * [📓 TODO](TODO.md)
 * [🔗 Resources](docs/resources.md)

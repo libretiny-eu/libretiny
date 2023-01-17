@@ -1,6 +1,6 @@
 # ltchiptool
 
-ltchiptool is a universal, easy-to-use GUI flashing/dumping tool for BK7231, RTL8710B and RTL8720C. It also contains some CLI utilities for binary firmware manipulation.
+[ltchiptool](https://github.com/libretuya/ltchiptool) is a universal, easy-to-use GUI flashing/dumping tool for BK7231, RTL8710B and RTL8720C. It also contains some CLI utilities for binary firmware manipulation.
 
 ## Installation
 

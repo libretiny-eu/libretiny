@@ -1,4 +1,4 @@
-# Flashing with tuya-cloudcutter
+# Converting with tuya-cloudcutter
 
 !!! note
 	This currently applies to BK7231T and BK7231N only. `tuya-cloudcutter` can't be used for other chips.

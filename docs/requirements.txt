@@ -1,6 +1,6 @@
 mkdocs-material
 mkdocs-same-dir
-mkdocs-literate-nav
+mkdocs-literate-nav==0.5.0
 mkdocs-section-index
 mkdocs-include-markdown-plugin
 -e git+https://github.com/kuba2k2/mkdoxy#egg=mkdoxy
