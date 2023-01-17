@@ -28,13 +28,13 @@ Check out [RPi BCM2711 GPIOs](https://elinux.org/RPi_BCM2711_GPIOs) to read more
 TL;DR: Install OpenOCD. Conenct A14 to BCM GPIO#11, A15 to BCM GPIO#25. Remember to join GND together. Refer to [boards/](../../../boards/) for pinouts.
 
 !!! note
-    On Raspberry Pi 4, additional config might be needed:
-    ```
-    bcm2835gpio peripheral_base 0xFE000000
-    bcm2835gpio speed_coeffs 236181 60
-    ```
-    Save the lines to a .cfg file, and pass it to OpenOCD using `-f file.cfg`.
-    Read more [here](https://forums.raspberrypi.com/viewtopic.php?p=1541631&sid=915e8d039f24301b85c060318a44b7f0#p1541631).
+	On Raspberry Pi 4, additional config might be needed:
+	```
+	bcm2835gpio peripheral_base 0xFE000000
+	bcm2835gpio speed_coeffs 236181 60
+	```
+	Save the lines to a .cfg file, and pass it to OpenOCD using `-f file.cfg`.
+	Read more [here](https://forums.raspberrypi.com/viewtopic.php?p=1541631&sid=915e8d039f24301b85c060318a44b7f0#p1541631).
 
 Start OpenOCD like this (you also need your config file in the working directory):
 ```shell

@@ -1,10 +1,12 @@
 # Flashing with tuya-cloudcutter
 
-[`tuya-cloudcutter`](https://github.com/tuya-cloudcutter/tuya-cloudcutter) is a tool that disconnects IoT devices from the Tuya cloud, while also allowing **remote firmware flashing**. This means you can flash ESPHome without even connecting USB-UART to the device.
+!!! note
+	This currently applies to BK7231T and BK7231N only. `tuya-cloudcutter` can't be used for other chips.
 
-This is an unofficial guide, that worked for me during testing. The steps may not work for every device; you should also refer to the cloudcutter's manual pages.
+[`tuya-cloudcutter`](https://github.com/tuya-cloudcutter/tuya-cloudcutter) is a tool that disconnects IoT devices from the Tuya cloud, while also allowing **remote firmware flashing**. This means you can flash ESPHome without even disassembling it.
 
-**Currently, `tuya-cloudcutter` works for BK7231T and BK7231N only.**
+!!! warning
+	This guide might be outdated. For an up-to-date guide, always refer to [tuya-cloudcutter/INSTRUCTIONS.md](https://github.com/tuya-cloudcutter/tuya-cloudcutter/blob/main/INSTRUCTIONS.md).
 
 If your device doesn't have a profile yet, it will probably not work. You can contribute by [taking a device dump](https://github.com/tuya-cloudcutter/tuya-cloudcutter#device-dumps) and posting it on cloudcutter's issues page.
 
@@ -22,11 +24,11 @@ If your device doesn't have a profile yet, it will probably not work. You can co
 
 1. [Compile ESPHome](../projects/esphome.md), or your custom firmware based on LibreTuya.
 2. Get the firmware binary, named `bk7231x_app.ota.ug.bin` from the build directory (`.pio/build/<board>/` or `.esphome/build/<board>/.pioenvs/<board>/`).
-3. Put the file to `custom-firmware` of tuya-cloudcutter.
+3. Put it in the `custom-firmware` directory of tuya-cloudcutter.
 
 ### Pairing and flashing
 
-1. Run `./run_flash.sh` from the cloudcutter directory.
+1. Run `./tuya-cloudcutter.sh` from the cloudcutter directory.
 2. Answer questions about the desired firmware file, the device vendor and profile.
 3. Put the device to AP mode: (**)
 	- Bulbs (devices without buttons) usually need to be power-cycled a few times, until they start blinking slowly.

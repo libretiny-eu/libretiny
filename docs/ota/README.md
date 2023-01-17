@@ -3,7 +3,7 @@
 LibreTuya's OTA updating is based on [Microsoft's UF2 specification](https://microsoft.github.io/uf2/). Some aspects of the process, such as OTA1/2 support and target partition selection, have been customized with extension tags.
 
 !!! note
-    Just like in UF2, all values in this format are little-endian.
+	Just like in UF2, all values in this format are little-endian.
 
 ## Firmware images
 
@@ -29,7 +29,7 @@ For easier understanding, these update types will be referred to in this documen
 ## Custom family IDs
 
 {%
-   include-markdown "../status/supported_families.md"
+	include-markdown "../status/supported_families.md"
 %}
 
 ## Extension tags
@@ -84,17 +84,12 @@ OTA2 images are not stored directly, as that would needlessly double the UF2 fil
 There can be at most one binpatch tag in a UF2 block. It has the following format:
 
 - opcode (1 byte) - operation type:
-
-  - `DIFF32` (0xFE) - difference between 32-bit values
-
+	- `DIFF32` (0xFE) - difference between 32-bit values
 - length (1 byte) - data length
 - data (`length` bytes)
-
-  - for `DIFF32`:
-
-    - difference value (signed int 32-bit)
-
-	- offset table (`length-4` bytes)
+	- for `DIFF32`:
+		- difference value (signed int 32-bit)
+		- offset table (`length-4` bytes)
 
 The presented structure can be repeated in a single binpatch tag.
 

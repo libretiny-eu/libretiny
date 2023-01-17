@@ -36,7 +36,7 @@ Switching to another UART port is possible (for example if the default port is o
 
 By setting `USE_WIFI` in `main.h` to 1, a Telnet server is enabled on port 23. This allows to test I/O pins without having physical, wired access to the device (i.e. using OTA). Make sure to specify correct WiFi credentials.
 
-!!! hint
+!!! tip
 	If your board isn't supported by LT yet, use one of the generic boards.
 
 	If your board doesn't even have a known pinout, use `d`/`s` commands of PinScan to ease the mapping of all board pins.
@@ -65,7 +65,7 @@ Commands:
 
 Screen contents will update when voltage on one of the pins changes. Pins marked with `--` mean the currently used UART port (which can be changed using `s` command; after reboot).
 
-!!! tldr
+!!! abstract "TL;DR"
 	Try pressing a button to see which pin changes.
 
 ### Read one pin continuously
@@ -81,7 +81,7 @@ Enter the pin number, it will be probed until you press `q`.
 
 A pin will be toggled every 500ms, starting with D0. Type `n` to move to the next pin.
 
-!!! tldr
+!!! abstract "TL;DR"
 	Go through the pins to see which lights up an LED.
 
 ### Write HIGH/LOW to a pin
@@ -94,7 +94,7 @@ Outputs can be toggled by using internal pull-up/pull-down resistors, or by simp
 
 This affects scan and write high/low commands.
 
-!!! tldr
+!!! abstract "TL;DR"
 	Use `write` output mode (carefully) if there's an LED which doesn't light up with default pull mode.
 
 ## Analog pins

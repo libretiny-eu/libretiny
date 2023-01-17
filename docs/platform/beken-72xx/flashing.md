@@ -41,7 +41,7 @@ upload_port = COM96
 ## Manually - using `uf2upload`
 
 {%
-   include-markdown "../../ota/flashing.md"
+	include-markdown "../../ota/flashing.md"
 %}
 
 ## Manually - using raw binaries/BkWriter
