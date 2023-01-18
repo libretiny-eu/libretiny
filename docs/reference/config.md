@@ -2,7 +2,7 @@
 
 ## Project options
 
-```ini
+```ini title="platformio.ini"
 [env:my_board]
 # custom firmware name, present in UF2 output files
 # - default: project directory name
@@ -18,7 +18,7 @@ custom_fw_version = 1.2.0
 	See [LibreTuyaConfig.h](../../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
 
 All options are configurable via C++ defines in PlatformIO project file. For example:
-```ini
+```ini title="platformio.ini"
 [env:my_board]
 build_flags =
   -D LT_LOGLEVEL=LT_LEVEL_DEBUG
@@ -68,7 +68,7 @@ To see debug messages from i.e. OTA, loglevel must also be changed.
 	Enabling `LT_DEBUG_ALL` doesn't mean that *every* debugging message will be printed. If loglevel is i.e. `WARN`, debug messages won't be visible anyway.
 
 	This can be used, for example, to enable only "important" messages:
-	```ini
+	```ini title="platformio.ini"
 	[env:my_board]
 	build_flags =
 	  -D LT_LOGLEVEL=LT_LEVEL_WARN

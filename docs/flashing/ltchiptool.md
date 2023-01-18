@@ -46,7 +46,7 @@ The main window is somewhat similar to [NodeMCU PyFlasher](https://github.com/ma
 
 	The content below serves as a short documentation page for [`ltchiptool`](https://github.com/libretuya/ltchiptool) and is mostly meant for advanced users.
 
-```shell
+```console
 $ ltchiptool --help
 Usage: ltchiptool [OPTIONS] COMMAND [ARGS]...
 
@@ -89,7 +89,7 @@ If you want to flash unrecognized/raw binaries (or fine-tune the flashing parame
 
 ### UF2 Example
 
-```shell
+```console
 $ ltchiptool uf2 info ./arduinotest_22.08.01_wb2l_BK7231T_lt0.8.0.uf2
 Family: BK7231T / Beken 7231T
 Tags:

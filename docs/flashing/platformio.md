@@ -6,9 +6,9 @@ PlatformIO projects developed with LibreTuya can be flashed just like any other 
 
 LibreTuya has a built-in firmware uploader, based on [ltchiptool](ltchiptool.md). Pressing `Upload` in PlatformIO IDE does all the work for you.
 
-If you have more than one COM port,configure your PIO project first:
+If you have more than one COM port, configure your PIO project first:
 
-```ini
+```ini title="platformio.ini"
 [env:my_board]
 monitor_port = COM96
 upload_port = COM96

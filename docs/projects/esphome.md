@@ -28,7 +28,7 @@ Assuming you have PlatformIO, git and Python installed:
 2. Create a YAML config file for your device. You can either:
 	- use `python -m esphome wizard yourdevice.yml` - type answers to the six questions the wizard asks, OR:
 	- write a config file manually:
-		```yaml
+		```yaml title="yourdevice.yml"
 		esphome:
 		  name: yourdevice
 
@@ -73,7 +73,7 @@ You probably want to refer to the [flashing guide](../flashing/esphome.md) to le
 
 All options from [Options & config](../reference/config.md) can be customized in the `libretuya:` block:
 
-```yaml
+```yaml title="yourdevice.yml"
 libretuya:
   framework:
     version: latest
@@ -86,7 +86,7 @@ libretuya:
 
 Additionally, few options have their dedicated keys:
 
-```yaml
+```yaml title="yourdevice.yml"
 libretuya:
   framework:
     version: latest

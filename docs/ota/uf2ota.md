@@ -2,7 +2,7 @@
 
 This is a tool for converting LibreTuya firmware images to UF2 format for OTA updates.
 
-```bash
+```console
 $ python uf2ota.py
 usage: uf2ota [-h] [--output OUTPUT] [--family FAMILY] [--board BOARD] [--version VERSION] [--fw FW] {info,dump,write} inputs [inputs ...]
 uf2ota: error: the following arguments are required: action, inputs
@@ -12,7 +12,7 @@ uf2ota: error: the following arguments are required: action, inputs
 
 Generate a UF2 file from a firmware image or several images.
 
-```bash
+```console
 $ python uf2ota.py write --family RTL8710B --board wr3 --version 0.4.0 --fw esphome:2022.6.0-dev "ota1;xip1.bin;ota2;xip2.bin"
 
 $ ls -l out.uf2
@@ -28,7 +28,7 @@ Partition name can be suffixed by `+offset`, which causes writing the image file
 When using two different firmware binaries, they need to have the same `offset` and be of the same size.
 
 `inputs` parameter can be repeated in order to embed multiple files in the UF2. For example:
-```bash
+```console
 "bootloader;boot.bin" "ota1;xip1.bin;ota2;xip2.bin" "config;config1.bin;config;config2.bin"
 ```
 will:
@@ -41,7 +41,7 @@ will:
 
 This command shows some basic parameters of a UF2 image.
 
-```bash
+```console
 $ python uf2ota.py info out.uf2
 Family: RTL8710B
 Tags:
@@ -65,7 +65,7 @@ Total binary size: 302448
 
 Dump UF2 file (only LibreTuya format) into separate firmware binaries.
 
-```bash
+```console
 $ python uf2ota.py dump out.uf2
 
 $ ls -1 out.uf2_dump/

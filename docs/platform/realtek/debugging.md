@@ -37,7 +37,7 @@ TL;DR: Install OpenOCD. Conenct A14 to BCM GPIO#11, A15 to BCM GPIO#25. Remember
 	Read more [here](https://forums.raspberrypi.com/viewtopic.php?p=1541631&sid=915e8d039f24301b85c060318a44b7f0#p1541631).
 
 Start OpenOCD like this (you also need your config file in the working directory):
-```shell
+```console
 sudo openocd -f interface/raspberrypi2-native.cfg -f amebaz.cfg -c "bindto 0.0.0.0"
 ```
 The bindto line is important, as it will allow remote connections.
