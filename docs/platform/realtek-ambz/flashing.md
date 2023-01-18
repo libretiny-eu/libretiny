@@ -2,7 +2,7 @@
 
 Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins. You need a good USB<->UART adapter (preferably a real FT232RL) for the process.
 
-**Read [Using ltchiptool](../../flashing/ltchiptool.md) to learn the flashing procedure**
+**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
 
 !!! success "Wiring"
 	Connect UART2 of the Realtek chip to the USB-TTL adapter:

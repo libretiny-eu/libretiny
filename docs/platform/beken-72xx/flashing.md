@@ -5,7 +5,7 @@ Downloading is done using UART. For best experience, you should have two USB<->U
 - One for flashing, preferably a real FT232RL or a good alternative. This connects to UART1 of the chip.
 - One for log output - BK72xx outputs messages on a separate port. You can have a terminal session continuously open on this adapter. This connects to UART2 of the chip - but it's not necessary for flashing.
 
-**Read [Using ltchiptool](../../flashing/ltchiptool.md) to learn the flashing procedure**
+**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
 
 !!! success "Wiring"
 	Connect UART1 of the BK7231 to the USB-TTL adapter:
@@ -36,7 +36,7 @@ Note that the download mode can only be activated when the flasher is running (t
 
 ## Auto-download-reboot
 
-If you have a recent version of LibreTuya installed on the chip, you can use [Auto-download-reboot](../../flashing/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
+If you have a recent version of LibreTuya installed on the chip, you can use [Auto-download-reboot](../../flashing/tools/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
 
 ## Single-adapter usage
 
