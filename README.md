@@ -22,7 +22,7 @@ The main goal of this project is to provide a usable build environment for IoT d
 the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,
 which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd party) modules.
 
-LibreTuya also provides a common interface for all family implementations. The interface is based on ESP32 official libraries.
+**There's an [ESPHome port](https://docs.libretuya.ml/docs/projects/esphome/) based on LibreTuya, which supports BK7231 and RTL8710B chips.**
 
 **Note:** this project is work-in-progress.
 
@@ -31,11 +31,7 @@ LibreTuya also provides a common interface for all family implementations. The i
 1. [Install PlatformIO](https://platformio.org/platformio-ide)
 2. `platformio platform install https://github.com/kuba2k2/libretuya`
 3. Create a project, build it and upload!
-4. See the [docs](https://kuba2k2.github.io/libretuya/) for any questions/problems.
-
-## Board List
-
-See [Boards & CPU list](https://kuba2k2.github.io/libretuya/docs/status/supported/).
+4. See the [docs](https://docs.libretuya.ml/) for any questions/problems.
 
 ## Arduino Core support status
 

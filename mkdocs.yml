@@ -38,6 +38,9 @@ plugins:
       exclude:
         - ltapi/*
 
+extra_css:
+  - docs/style.css
+
 markdown_extensions:
   - md_in_html
   - admonition
