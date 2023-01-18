@@ -8,6 +8,13 @@ theme:
   name: material
   features:
     - content.code.copy
+    - navigation.instant
+    - navigation.tracking
+    - navigation.path
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   - same-dir
@@ -29,6 +36,13 @@ plugins:
       nav_file: SUMMARY.md
   - section-index
   - include-markdown
+  - search
+  - git-revision-date-localized:
+      type: timeago
+      enable_creation_date: true
+      exclude:
+        - ltapi/*
+        - ltambz/*
 
 markdown_extensions:
   - md_in_html
