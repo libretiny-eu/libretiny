@@ -2,14 +2,14 @@
 
 [ltchiptool](https://github.com/libretuya/ltchiptool) is a universal, easy-to-use GUI flashing/dumping tool for BK7231, RTL8710B and RTL8720C. It also contains some CLI utilities for binary firmware manipulation.
 
-<div align="center">
+<div align="center" markdown>
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI](https://img.shields.io/pypi/v/ltchiptool)](https://pypi.org/project/ltchiptool/)
 
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/libretuya/ltchiptool?include_prereleases&label=GUI%20release)](https://github.com/libretuya/ltchiptool/releases/latest)
 
-<img src="https://raw.githubusercontent.com/libretuya/ltchiptool/master/.github/screenshot.png" height="500px">
+<img src="https://raw.githubusercontent.com/libretuya/ltchiptool/master/.github/screenshot.png" style="height:500px">
 </div>
 
 ## Installation
