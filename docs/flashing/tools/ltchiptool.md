@@ -14,6 +14,11 @@
 
 ## Installation
 
+<div align="center" markdown>
+
+[:material-download-outline: Download GUI](https://github.com/libretuya/ltchiptool/releases/latest){ .md-button }
+</div>
+
 ### GUI package (Windows only)
 
 Download the latest release .EXE from the [GitHub Releases page](https://github.com/libretuya/ltchiptool/releases/latest). Open the file, and you're ready to go!
