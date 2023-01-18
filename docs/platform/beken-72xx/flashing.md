@@ -1,5 +1,10 @@
 # Download mode - Beken 72xx
 
+<div align="center" markdown>
+
+[Read chip docs](README.md){ .md-button }
+</div>
+
 Downloading is done using UART. For best experience, you should have two USB<->UART adapters plugged in:
 
 - One for flashing, preferably a real FT232RL or a good alternative. This connects to UART1 of the chip.

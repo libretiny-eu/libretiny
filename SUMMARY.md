@@ -4,19 +4,19 @@
 * [📲 Flashing/dumping](docs/flashing/)
 * [💻 Supported boards & chips](docs/status/supported.md)
 * 📖 Reference
+	* Chip families
+		* [Beken BK72xx](docs/platform/beken-72xx/README.md)
+		* [Realtek Ameba - info](docs/platform/realtek-amb/README.md)
+		* [Realtek AmebaZ](docs/platform/realtek-ambz/README.md)
+			* [Debugging](docs/platform/realtek-ambz/debugging.md)
+			* [Exception decoder](docs/platform/realtek-ambz/exception-decoder.md)
+			* C library
+				* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
+				* [Memory management](docs/platform/realtek-ambz/memory-management.md)
 	* [🔧 LT configuration](docs/reference/config.md)
 	* [✔️ Implementation status](docs/status/arduino.md)
 	* [🔌 Boards documentation](boards/)
 	* [🔋 Examples](examples/)
-	* Chip families
-		* [Beken BK72xx](docs/platform/beken-72xx/README.md)
-		* Realtek AmebaZ Series
-			* [General info](docs/platform/realtek/README.md)
-			* [Debugging](docs/platform/realtek/debugging.md)
-			* [Exception decoder](docs/platform/realtek/exception-decoder.md)
-			* C library
-				* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
-				* [Memory management](docs/platform/realtek-ambz/memory-management.md)
 	* [📖 LibreTuya API](docs/reference/lt-api.md)
 		* [LT class reference](ltapi/class_libre_tuya.md)
 		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
@@ -54,5 +54,5 @@
 	* [✈️ OTA format](docs/ota/README.md)
 		* [uf2ota.py tool](docs/ota/uf2ota.md)
 		* [uf2ota.h library](docs/ota/library.md)
-* [📓 TODO](TODO.md)
-* [🔗 Resources](docs/resources.md)
+	* [📓 TODO](TODO.md)
+* [🔗 Resources](docs/resources/)

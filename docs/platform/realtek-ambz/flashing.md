@@ -1,5 +1,10 @@
 # Download mode - Realtek AmebaZ
 
+<div align="center" markdown>
+
+[Read chip docs](README.md){ .md-button }
+</div>
+
 Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins. You need a good USB<->UART adapter (preferably a real FT232RL) for the process.
 
 **Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
