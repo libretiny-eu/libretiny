@@ -256,6 +256,5 @@ cython_debug/
 # mkdocs
 xml/
 ltapi/
-ltambz/
 hashChanges.yaml
 .piopm
