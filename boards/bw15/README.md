@@ -4,7 +4,7 @@
 
 [Product page](https://docs.ai-thinker.com/_media/rtl8710/docs/bw15_datasheet_en.pdf)
 
-- [General info](../../docs/platform/realtek/README.md)
+- [General info](../../docs/platform/realtek-amb/README.md)
 - [Vendor datasheet](https://docs.ai-thinker.com/_media/rtl8710/docs/bw15_datasheet_en.pdf)
 
 Parameter    | Value

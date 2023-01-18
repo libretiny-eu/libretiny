@@ -2,7 +2,7 @@
 
 ## Project options
 
-```ini
+```ini title="platformio.ini"
 [env:my_board]
 # custom firmware name, present in UF2 output files
 # - default: project directory name
@@ -15,17 +15,17 @@ custom_fw_version = 1.2.0
 ## LibreTuya options
 
 !!! note
-    See [LibreTuyaConfig.h](../../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
+	See [LibreTuyaConfig.h](../../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
 
 All options are configurable via C++ defines in PlatformIO project file. For example:
-```ini
+```ini title="platformio.ini"
 [env:my_board]
 build_flags =
   -D LT_LOGLEVEL=LT_LEVEL_DEBUG
 ```
 
-!!! hint
-    Values in parentheses represent the defaults for the config options.
+!!! tip
+	Values in parentheses represent the defaults for the config options.
 
 ### Logger
 
@@ -64,16 +64,16 @@ To see debug messages from i.e. OTA, loglevel must also be changed.
 - `LT_DEBUG_LWIP` (0) - enables `LWIP_DEBUG`, provides `LWIP_PLATFORM_DIAG`; per-module options (i.e. `TCP_DEBUG`) are off by default and need to be enabled separately
 - `LT_DEBUG_LWIP_ASSERT` (0) - enables assertions within lwIP (doesn't need `LT_DEBUG_LWIP`)
 
-!!! hint
-    Enabling `LT_DEBUG_ALL` doesn't mean that *every* debugging message will be printed. If loglevel is i.e. `WARN`, debug messages won't be visible anyway.
+!!! tip
+	Enabling `LT_DEBUG_ALL` doesn't mean that *every* debugging message will be printed. If loglevel is i.e. `WARN`, debug messages won't be visible anyway.
 
-    This can be used, for example, to enable only "important" messages:
-    ```ini
-    [env:my_board]
-    build_flags =
-      -D LT_LOGLEVEL=LT_LEVEL_WARN
-      -D LT_DEBUG_ALL=1 # will print only warnings and errors from all modules
-    ```
+	This can be used, for example, to enable only "important" messages:
+	```ini title="platformio.ini"
+	[env:my_board]
+	build_flags =
+	  -D LT_LOGLEVEL=LT_LEVEL_WARN
+	  -D LT_DEBUG_ALL=1 # will print only warnings and errors from all modules
+	```
 
 ### Serial output
 
@@ -86,19 +86,22 @@ Options for controlling default UART log output.
 - `LT_UART_SILENT_ALL` (0) - disable all SDK output (LT output and logger still work)
 
 !!! info
-    Values 0, 1 and 2 correspond to physical UART port numbers (refer to board pinout for the available ports).
+	Values 0, 1 and 2 correspond to physical UART port numbers (refer to board pinout for the available ports).
 
-    Serial class instances (`Serial0`, `Serial1`, `Serial2`) use the respective port numbers for printing.
+	Serial class instances (`Serial0`, `Serial1`, `Serial2`) use the respective port numbers for printing.
 
-    If `LT_UART_DEFAULT_LOGGER` is not set, it is chosen by the family code - whichever port is most appropriate (i.e. LOG_UART (2) on Realtek, RX2/TX2 on Beken).
+	If `LT_UART_DEFAULT_LOGGER` is not set, it is chosen by the family code - whichever port is most appropriate (i.e. LOG_UART (2) on Realtek, RX2/TX2 on Beken).
 
 ### Misc options
 
 - `LT_USE_TIME` (0) - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically
 - `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer; disable if your application doesn't need `micros()`
-- `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../getting-started/adr.md)
+- `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../flashing/tools/adr.md)
 
 ### Family feature config
+
+!!! bug "Warning"
+	These options are not meant for end-users. They're provided here as a reference for developers.
 
 These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it.
 

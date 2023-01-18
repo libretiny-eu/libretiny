@@ -26,15 +26,15 @@ Utilities and common classes related to network.
 - [Source](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer/src): ESP32 Arduino Core
 - [Reference](../ltapi/class_web_server.md)
 - Examples:
-    - [HelloServer](https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/HelloServer/HelloServer.ino)
-    - [MultiHomedServers](https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/MultiHomedServers/MultiHomedServers.ino)
+	- [HelloServer](https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/HelloServer/HelloServer.ino)
+	- [MultiHomedServers](https://github.com/espressif/arduino-esp32/blob/master/libraries/WebServer/examples/MultiHomedServers/MultiHomedServers.ino)
 
 ## WiFiMulti
 - [Source](https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi/src): ESP32 Arduino Core
 - [Reference](../ltapi/class_wi_fi_multi.md)
 - [Docs](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html#wifimulti)
 - Examples:
-    - [WiFiMulti](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiMulti/WiFiMulti.ino)
-    - [WiFiClientBasic](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiClientBasic/WiFiClientBasic.ino)
+	- [WiFiMulti](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiMulti/WiFiMulti.ino)
+	- [WiFiClientBasic](https://github.com/espressif/arduino-esp32/blob/master/libraries/WiFi/examples/WiFiClientBasic/WiFiClientBasic.ino)
 
 Class for selecting best available AP from a list of several ones.

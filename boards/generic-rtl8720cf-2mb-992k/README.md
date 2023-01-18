@@ -4,7 +4,7 @@
 
 [Product page](https://kuba2k2.github.io/libretuya/boards/generic-rtl8720cf-2mb-992k/)
 
-- [General info](../../docs/platform/realtek/README.md)
+- [General info](../../docs/platform/realtek-amb/README.md)
 
 Parameter    | Value
 -------------|-----------------------------

@@ -1,40 +1,30 @@
 * [Home](README.md)
-* 😊 Getting started
-	* [Start here](docs/getting-started/README.md)
-	* [Uploading](docs/getting-started/uploading.md)
-	* [Options & config](docs/reference/config.md)
-	* Examples
-		* [PinScan](examples/PinScan/README.md)
-	* [ESPHome port](docs/projects/esphome.md)
-	* [Using tuya-cloudcutter](docs/getting-started/cloudcutter.md)
-	* [Auto-download-reboot](docs/getting-started/adr.md)
-* [💻 Boards & CPU list](docs/status/supported.md)
-* [✔️ Implementation status](docs/status/arduino.md)
-* Supported chip families
-	* Beken BK72xx
-		* [General info](docs/platform/beken-72xx/README.md)
-		* [Flashing](docs/platform/beken-72xx/flashing.md)
-		* [Dumping](docs/platform/beken-72xx/dumping.md)
-	* Realtek AmebaZ Series
-		* [General info](docs/platform/realtek/README.md)
-		* [Flashing (AmebaZ)](docs/platform/realtek-ambz/flashing.md)
-		* [Dumping (AmebaZ)](docs/platform/realtek-ambz/dumping.md)
-		* [Debugging](docs/platform/realtek/debugging.md)
-		* [Exception decoder](docs/platform/realtek/exception-decoder.md)
-		* C library
-			* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
-			* [Memory management](docs/platform/realtek-ambz/memory-management.md)
-	* [All supported boards](boards/)
-* API & libraries
-	* [Options & config](docs/reference/config.md)
-	* [LibreTuya API](docs/reference/lt-api.md)
+* [😊 Getting started](docs/getting-started/README.md)
+	* [ESPHome](docs/projects/esphome.md)
+* [📲 Flashing/dumping](docs/flashing/)
+* [💻 Supported boards & chips](docs/status/supported.md)
+* 📖 Reference
+	* Chip families
+		* [Beken BK72xx](docs/platform/beken-72xx/README.md)
+		* [Realtek Ameba - info](docs/platform/realtek-amb/README.md)
+		* [Realtek AmebaZ](docs/platform/realtek-ambz/README.md)
+			* [Debugging](docs/platform/realtek-ambz/debugging.md)
+			* [Exception decoder](docs/platform/realtek-ambz/exception-decoder.md)
+			* C library
+				* [Built-in functions](docs/platform/realtek-ambz/stdlib.md)
+				* [Memory management](docs/platform/realtek-ambz/memory-management.md)
+	* [🔧 LT configuration](docs/reference/config.md)
+	* [✔️ Implementation status](docs/status/arduino.md)
+	* [🔌 Boards documentation](boards/)
+	* [🔋 Examples](examples/)
+	* [📖 LibreTuya API](docs/reference/lt-api.md)
 		* [LT class reference](ltapi/class_libre_tuya.md)
 		* [Common methods](ltapi/_libre_tuya_a_p_i_8h.md)
 		* [Wiring custom methods](ltapi/_libre_tuya_custom_8h.md)
 		* [Logger](ltapi/lt__logger_8h.md)
 		* [Chip & family IDs](ltapi/_chip_type_8h_source.md)
 		* [POSIX utilities](ltapi/lt__posix__api_8h.md)
-	* Common API
+	* 📖 Common API
 		* [FS](ltapi/classfs_1_1_f_s.md)
 		* [Preferences](ltapi/class_i_preferences.md)
 		* [SoftwareSerial](ltapi/class_software_serial.md)
@@ -42,7 +32,7 @@
 			* [TCP Client](ltapi/class_i_wi_fi_client.md)
 			* [SSL Client](ltapi/class_i_wi_fi_client_secure.md)
 			* [TCP Server](ltapi/class_i_wi_fi_server.md)
-	* [LibreTuya libraries](docs/libs-built-in.md)
+	* [📖 LibreTuya libraries](docs/libs-built-in.md)
 		* [base64](ltapi/classbase64.md)
 		* [Flash](ltapi/class_flash_class.md)
 		* [HTTPClient](ltapi/class_h_t_t_p_client.md)
@@ -64,6 +54,5 @@
 	* [✈️ OTA format](docs/ota/README.md)
 		* [uf2ota.py tool](docs/ota/uf2ota.md)
 		* [uf2ota.h library](docs/ota/library.md)
-		* [uf2ota.h reference](ltapi/uf2ota_8h.md)
-* [📓 TODO](TODO.md)
-* [🔗 Resources](docs/resources.md)
+	* [📓 TODO](TODO.md)
+* [🔗 Resources](docs/resources/)

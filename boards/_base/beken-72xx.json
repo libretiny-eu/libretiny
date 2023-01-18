@@ -46,8 +46,7 @@
 		},
 		"links": {
 			"General info": "../../docs/platform/beken-72xx/README.md",
-			"Flashing guide": "../../docs/platform/beken-72xx/flashing.md",
-			"BkWriter v1.6.0": "https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe"
+			"Flashing guide": "../../docs/platform/beken-72xx/flashing.md"
 		},
 		"extra": [
 			"Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes."

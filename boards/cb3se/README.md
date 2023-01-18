@@ -6,7 +6,6 @@
 
 - [General info](../../docs/platform/beken-72xx/README.md)
 - [Flashing guide](../../docs/platform/beken-72xx/flashing.md)
-- [BkWriter v1.6.0](https://images.tuyacn.com/smart/bk_writer1.60/bk_writer1.60.exe)
 
 Parameter    | Value
 -------------|--------------------------------------------

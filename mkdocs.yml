@@ -6,6 +6,15 @@ repo_url: https://github.com/kuba2k2/libretuya
 
 theme:
   name: material
+  features:
+    - content.code.copy
+    - navigation.instant
+    - navigation.tracking
+    - navigation.path
+    - search.suggest
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   - same-dir
@@ -17,20 +26,25 @@ plugins:
           doxy-cfg:
             PREDEFINED: __cplusplus
             CASE_SENSE_NAMES: NO
-        ltambz:
-          src-dirs: arduino/realtek-ambz/
-          doxy-cfg:
-            PREDEFINED: __cplusplus
-            CASE_SENSE_NAMES: NO
       save-api: .
   - literate-nav:
       nav_file: SUMMARY.md
   - section-index
   - include-markdown
+  - search
+  - git-revision-date-localized:
+      type: timeago
+      enable_creation_date: true
+      exclude:
+        - ltapi/*
 
 markdown_extensions:
   - md_in_html
   - admonition
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
