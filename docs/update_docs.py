@@ -11,7 +11,8 @@ from typing import Dict, List, Set
 import colorama
 from colorama import Fore, Style
 from ltchiptool import Board, Family
-from ltchiptool.util import readjson, readtext, sizeof
+from ltchiptool.util.fileio import readjson, readtext
+from ltchiptool.util.misc import sizeof
 from markdown import Markdown
 
 OUTPUT = join(dirname(__file__), "status")

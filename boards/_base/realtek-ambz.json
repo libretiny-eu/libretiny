@@ -47,10 +47,9 @@
 			}
 		},
 		"links": {
-			"General info": "../../docs/platform/realtek/README.md",
-			"Debugging": "../../docs/platform/realtek/debugging.md",
+			"General info": "../../docs/platform/realtek-amb/README.md",
 			"Flashing guide": "../../docs/platform/realtek-ambz/flashing.md",
-			"ImageTool (AmebaZ/AmebaD)": "https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip"
+			"Debugging": "../../docs/platform/realtek-ambz/debugging.md"
 		},
 		"extra": [
 			"RDP is most likely not used in Tuya firmwares, as the System Data partition contains an incorrect offset 0xFF000 for RDP, which is in the middle of OTA2 image.",

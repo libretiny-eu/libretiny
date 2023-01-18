@@ -4,10 +4,9 @@
 
 [Product page](https://developer.tuya.com/en/docs/iot/wifiwr2lmodule?id=K9605tnbj7gva)
 
-- [General info](../../docs/platform/realtek/README.md)
-- [Debugging](../../docs/platform/realtek/debugging.md)
+- [General info](../../docs/platform/realtek-amb/README.md)
 - [Flashing guide](../../docs/platform/realtek-ambz/flashing.md)
-- [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
+- [Debugging](../../docs/platform/realtek-ambz/debugging.md)
 
 Parameter    | Value
 -------------|------------------------------------------

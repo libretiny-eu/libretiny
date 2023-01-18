@@ -4,10 +4,9 @@
 
 [Product page](http://www.ai-thinker.com/pro_view-13.html)
 
-- [General info](../../docs/platform/realtek/README.md)
-- [Debugging](../../docs/platform/realtek/debugging.md)
+- [General info](../../docs/platform/realtek-amb/README.md)
 - [Flashing guide](../../docs/platform/realtek-ambz/flashing.md)
-- [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
+- [Debugging](../../docs/platform/realtek-ambz/debugging.md)
 - [Vendor datasheet](https://docs.ai-thinker.com/_media/rtl8710/hardware/bw12_datasheet_en.pdf)
 
 Parameter    | Value

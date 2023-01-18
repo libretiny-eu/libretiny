@@ -29,7 +29,7 @@
 			"voltage": "3.0V - 3.6V"
 		},
 		"links": {
-			"General info": "../../docs/platform/realtek/README.md"
+			"General info": "../../docs/platform/realtek-amb/README.md"
 		}
 	}
 }
