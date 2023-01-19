@@ -201,9 +201,8 @@ const String WiFiClass::psk() {
 }
 
 uint8_t *WiFiClass::BSSID() {
-	uint8_t bssid[ETH_ALEN];
-	wext_get_bssid(NETNAME_STA, bssid);
-	return bssid;
+	wext_get_bssid(NETNAME_STA, wifi.bssid.octet);
+	return wifi.bssid.octet;
 }
 
 int8_t WiFiClass::RSSI() {
