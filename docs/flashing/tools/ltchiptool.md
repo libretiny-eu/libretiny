@@ -16,20 +16,32 @@
 
 <div align="center" markdown>
 
-[:material-download-outline: Download GUI](https://github.com/libretuya/ltchiptool/releases/latest){ .md-button }
+[:material-download-outline: Download Windows GUI](https://github.com/libretuya/ltchiptool/releases/latest){ .md-button }
 </div>
 
-### GUI package (Windows only)
+### CLI program
 
-Download the latest release .EXE from the [GitHub Releases page](https://github.com/libretuya/ltchiptool/releases/latest). Open the file, and you're ready to go!
+Install the package from PyPI, using `pip install ltchiptool`. Run the CLI using `python -m ltchiptool` or just `ltchiptool`.
 
-The GUI executable works on Windows 7 and newer.
+### GUI application
 
-### GUI or CLI (Windows/Linux/etc.)
+???+ quote "Windows 7 and newer"
+	Download the latest release .EXE from the [GitHub Releases page](https://github.com/libretuya/ltchiptool/releases/latest). Open the file, and you're ready to go!
 
-Install the package from PyPI, using `pip install ltchiptool`.
+??? quote "Windows (manual installation)"
+	Install the package from PyPI (**including GUI extras**), using `pip install ltchiptool[gui]`. Note that Python 3.10 or newer is required for the GUI. I recommend Python 3.10 since it has [prebuilt wheels](https://pypi.org/project/wxPython/4.2.0/#files) of wxPython, which doesn't require C++ build dependencies.
 
-This will install `ltchiptool` and `uf2tool` packages. You can start the GUI by typing `python -m ltchiptool gui`.
+??? quote "Linux (Ubuntu)"
+	Install the package from PyPI, using `pip install ltchiptool`. Python 3.10 or newer is required.
+
+	Make sure you have wxPython installed. Install it from PyPI (if you have the necessary build dependencies), or refer to the [wxPython Downloads](https://wxpython.org/pages/downloads/index.html) page to install prebuilt wheels (recommended).
+
+	Next, open a terminal and run `ltchiptool gui` (or `python -m ltchiptool gui`).
+
+??? quote "MacOS (untested)"
+	Install the package from PyPI, using `pip install ltchiptool`. Python 3.10 or newer is required.
+
+	Install wxPython from PyPI as well. Version 4.2.0 (latest at the time of writing) has some wheels for MacOS, so that should work.
 
 ## GUI Usage
 
