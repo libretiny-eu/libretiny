@@ -2,6 +2,8 @@
 
 #include <LibreTuyaAPI.h>
 
+#include <Flash.h>
+
 extern "C" {
 #include <flash_api.h>
 #include <rtl8710b.h>
@@ -155,25 +157,24 @@ bool LibreTuya::otaSwitch(bool force) {
 	if (!force && otaGetRunning() != otaGetStoredIndex())
 		// OTA has already been switched
 		return true;
-	// this function does:
-	// - read OTA1 firmware magic from 0xB000
-	// - read OTA2 address from 0x9000
-	// - read OTA2 firmware magic from that address
 	// - read current OTA switch value from 0x9004
-	// - reset OTA switch to 0xFFFFFFFF if it's 0x0
-	// - check first non-zero bit of OTA switch
+	// - reset OTA switch to 0xFFFFFFFE if it's 0x0
+	// - else check first non-zero bit of OTA switch
 	// - write OTA switch with first non-zero bit cleared
-	// sys_clear_ota_signature();
-	// ok, this function is broken (crashes with HardFault)
 
 	if (!otaHasImage1() || !otaHasImage2())
 		return false;
 
 	uint32_t value = HAL_READ32(SPI_FLASH_BASE, FLASH_SYSTEM_OFFSET + 4);
 	if (value == 0) {
-		// TODO does this work at all?
-		FLASH_EreaseDwordsXIP(FLASH_SYSTEM_OFFSET + 4, 1);
+		uint8_t *system = (uint8_t *)malloc(64);
+		Flash.readBlock(FLASH_SYSTEM_OFFSET, system, 64);
+		// reset OTA switch
+		((uint32_t *)system)[1] = -2;
+		Flash.eraseSector(FLASH_SYSTEM_OFFSET);
+		return Flash.writeBlock(FLASH_SYSTEM_OFFSET, system, 64);
 	}
+
 	uint8_t i;
 	// find first non-zero bit
 	for (i = 0; i < 32; i++) {
