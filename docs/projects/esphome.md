@@ -1,55 +1,111 @@
 # ESPHome
 
-!!! important
-	Read [Getting started](../getting-started/README.md) first - most importantly, the first part about installation.
+Because ESPHome does not natively support running on non-ESP chips, you need to use a fork of the project.
 
-	**It is very important that you have the latest version of LibreTuya installed** (not `libretuya-esphome` - this is a different thing!) **so that you don't face issues that are already resolved**.
+There are two basic ways to install and use LibreTuya-ESPHome. You can choose the option that best suits you:
+
+- command line (CLI) - for more experienced users; compilation using CLI commands, somewhat easier to troubleshoot
+- ESPHome Dashboard (GUI) - for new users, might be an easy way to go; config management & compilation using web-based dashboard
+
+!!! tip
+	You can use LibreTuya-ESPHome for ESP32/ESP8266 compilation as well - the forked version *extends* the base, and doesn't remove any existing features. Keep in mind that you might not have latest ESPHome updates until the fork gets updated (which usually happens at most every few weeks).
+
+## Find your device's board
+
+Go to [Boards & CPU list](../status/supported/), find your board (chip model), click on it and remember the **`Board code`**. This will be used later, during config creation.
+
+If your board isn't listed, use one of the **Generic** boards, depending on the chip type of your device.
 
 ## Download ESPHome
 
-Because ESPHome does not natively support running on non-ESP chips, you need to use a fork of the project.
+=== "CLI"
 
-Assuming you have PlatformIO, git and Python installed:
+	!!! important
+		Read [Getting started](../getting-started/README.md) first - most importantly, the first part about installation.
 
-1. Open a terminal/cmd.exe, create `esphome` directory and `cd` into it.
-2. `git clone https://github.com/kuba2k2/libretuya-esphome`
-3. `cd` into the newly created `libretuya-esphome` directory.
-4. Check if it works by typing `python -m esphome`
+		**It is very important that you have the latest version of LibreTuya installed** (not `libretuya-esphome` - this is a different thing!) **so that you don't face issues that are already resolved**.
 
-!!! tip
-	For Linux users (or if `python -m esphome` doesn't work for you):
+	Assuming you have PlatformIO, git and Python installed:
 
-	- uninstall ESPHome first: `pip uninstall esphome`
-	- install the forked version: `pip install -e .`
+	1. Open a terminal/cmd.exe, create `esphome` directory and `cd` into it.
+	2. `git clone https://github.com/kuba2k2/libretuya-esphome`
+	3. `cd` into the newly created `libretuya-esphome` directory.
+	4. Check if it works by typing `python -m esphome`
+
+	!!! tip
+		For Linux users (or if `python -m esphome` doesn't work for you):
+
+		- uninstall ESPHome first: `pip uninstall esphome`
+		- install the forked version: `pip install -e .`
+
+=== "GUI"
+
+	For this, you need Docker, Docker Compose and Python installed. After running the commands, you'll have a running ESPHome Dashboard interface that you can connect to.
+
+	1. `git clone https://github.com/kuba2k2/libretuya-esphome` (or download the .ZIP and unpack it, not recommended)
+	2. Open a terminal/cmd.exe in the cloned directory (`libretuya-esphome`).
+	3. `python docker/build.py --tag libretuya --arch amd64 --build-type docker build` - this will build the Docker image of ESPHome. Change `amd64` to something else if you're using a Raspberry Pi.
+	4. Create a `docker-compose.yml` file in the same directory:
+
+		```yaml title="docker-compose.yml"
+		version: "3"
+		services:
+		  esphome:
+		    container_name: esphome-libretuya
+		    image: esphome/esphome-amd64:libretuya # (2)!
+		    volumes:
+		      - ./configs:/config:rw # (1)!
+		      - /etc/localtime:/etc/localtime:ro
+		    restart: always
+		    privileged: false
+		    network_mode: host
+		```
+
+		1. You can change `./configs` to another path, in which your ESPHome configs will be stored.
+		2. Ensure the architecture (`amd64`) matches the one you selected in step 3.
+	5. Start the container - `docker-compose up`. You should be able to open the GUI on [http://localhost:6052/](http://localhost:6052/).
 
 ## Create your device config
 
-1. Go to [Boards & CPU list](../status/supported/), click on your board and remember the **`Board code`**.
-2. Create a YAML config file for your device. You can either:
-	- use `python -m esphome wizard yourdevice.yml` - type answers to the six questions the wizard asks, OR:
-	- write a config file manually:
-		```yaml title="yourdevice.yml"
-		esphome:
-		  name: yourdevice
+=== "CLI"
 
-		libretuya:
-		  board: wr3  # THIS IS YOUR BOARD CODE
-		  framework:
-		  	version: latest
+	1. Create a YAML config file for your device. You can either:
+		- use `python -m esphome wizard yourdevice.yml` - type answers to the six questions the wizard asks, OR:
+		- write a config file manually:
+			```yaml title="yourdevice.yml"
+			esphome:
+			name: yourdevice
 
-		logger:
-		api:
-		  password: ""
-		ota:
-		  password: ""
+			libretuya:
+			board: wr3  # THIS IS YOUR BOARD CODE
+			framework:
+				version: latest
 
-		wifi:
-		  ssid: "YourWiFiSSID"
-		  password: "SecretPa$$w0rd"
-		  ap:
-		    ssid: "Yourdevice Fallback Hotspot"
-		    password: "Dv2hZMGZRUvy"
-		```
+			logger:
+			api:
+			password: ""
+			ota:
+			password: ""
+
+			wifi:
+			ssid: "YourWiFiSSID"
+			password: "SecretPa$$w0rd"
+			ap:
+				ssid: "Yourdevice Fallback Hotspot"
+				password: "Dv2hZMGZRUvy"
+			```
+
+=== "GUI"
+
+	1. Open the GUI on [http://localhost:6052/](http://localhost:6052/) (or a different IP address if you're running on a Pi).
+	2. Go through the wizard steps:
+		- `New Device`
+		- `Continue`
+		- enter name and WiFi details
+		- choose `LibreTuya`
+		- choose the board that you found before
+		- select `Skip`
+	3. A new config file will be added. Press `Edit` and proceed to the next section.
 
 ## Add components
 
@@ -62,9 +118,15 @@ Now, just like with standard ESPHome on ESP32/ESP8266, you need to add component
 
 ## Build & upload
 
-The command `python -m esphome compile yourdevice.yml` will compile ESPHome.
+=== "CLI"
 
-You probably want to refer to the [flashing guide](../flashing/esphome.md) to learn how to upload ESPHome to your device. There's also info on using `tuya-cloudcutter` in that guide.
+	The command `python -m esphome compile yourdevice.yml` will compile ESPHome.
+
+=== "GUI"
+
+	Close the config editor. Press the three dots icon and select `Install`. Choose `Manual download` and `Modern format`. The firmware will be compiled and a UF2 file will be downloaded automatically.
+
+Now, refer to the [flashing guide](../flashing/esphome.md) to learn how to upload ESPHome to your device. There's also info on using `tuya-cloudcutter` in that guide.
 
 ## Advanced: LT configuration
 

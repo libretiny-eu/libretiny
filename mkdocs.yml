@@ -7,7 +7,9 @@ repo_url: https://github.com/kuba2k2/libretuya
 theme:
   name: material
   features:
+    - content.code.annotate
     - content.code.copy
+    - content.tabs.link
     - navigation.instant
     - navigation.tracking
     - navigation.path
@@ -50,6 +52,8 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.inlinehilite
   - pymdownx.details
   - pymdownx.superfences
