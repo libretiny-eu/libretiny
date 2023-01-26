@@ -25,7 +25,8 @@ def check_ltchiptool(install: bool):
         # update ltchiptool to a supported version
         print("Installing/updating ltchiptool")
         system(
-            f'{sys.executable} -m pip install -U "ltchiptool >= {LTCHIPTOOL_VERSION}, < 3.0"'
+            f"{sys.executable} -m pip install -U --force-reinstall "
+            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 3.0"'
         )
 
         # unload all modules from the old version
@@ -39,10 +40,11 @@ def check_ltchiptool(install: bool):
     ltchiptool = importlib.import_module("ltchiptool")
 
     # check if the version is known
-    if Version(ltchiptool.get_version()) in SimpleSpec(LTCHIPTOOL_VERSION):
+    version = Version.coerce(ltchiptool.get_version()).truncate()
+    if version in SimpleSpec(LTCHIPTOOL_VERSION):
         return
     if not install:
-        raise ImportError("Version too old")
+        raise ImportError(f"Version incompatible: {version}")
 
 
 def try_check_ltchiptool():
