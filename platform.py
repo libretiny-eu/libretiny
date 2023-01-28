@@ -17,7 +17,7 @@ from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from semantic_version import SimpleSpec, Version
 
-LTCHIPTOOL_VERSION = "^2.0.2"
+LTCHIPTOOL_VERSION = "^3.0.0"
 
 # Install & import tools
 def check_ltchiptool(install: bool):
@@ -26,7 +26,7 @@ def check_ltchiptool(install: bool):
         print("Installing/updating ltchiptool")
         system(
             f"{sys.executable} -m pip install -U --force-reinstall "
-            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 3.0"'
+            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 4.0"'
         )
 
         # unload all modules from the old version
@@ -72,7 +72,7 @@ if dirname(__file__) in sys.path:
     sys.path.remove(dirname(__file__))
 
 # Let ltchiptool know about LT's location
-ltchiptool.util.lt_set_path(dirname(__file__))
+ltchiptool.lt_set_path(dirname(__file__))
 
 libretuya_packages = None
 manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
