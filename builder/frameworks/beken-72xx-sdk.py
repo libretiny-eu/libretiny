@@ -562,8 +562,8 @@ env.Replace(
 # Calculate RBL header offset
 app_offs = int(env["FLASH_APP_OFFSET"], 16)
 app_size = int(board.get("build.bkrbl_size_app"), 16)
-rbl_offs = app_offs + to_offset(app_size) - 102
-env.Replace(FLASH_RBL_OFFSET=f"0x{rbl_offs:06X}")
+rbl_offs = to_offset(app_size) - 102
+env.Replace(FLASH_RBL_OFFSET=f"0x{app_offs + rbl_offs:06X}")
 
 # Build all libraries
 env.BuildLibraries()
