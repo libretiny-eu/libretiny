@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kuba2k2/platformio-libretuya"
   },
-  "version": "0.12.4",
+  "version": "0.12.5",
   "frameworks": {
     "arduino": {
       "title": "Generic Arduino framework",
