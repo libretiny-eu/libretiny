@@ -106,7 +106,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	pwm.duty_cycle3 = 0;
 #endif
 
-	if (value) {
+	if (dutyCycle) {
 		if (!pinEnabled(pin, PIN_PWM)) {
 			// enable PWM and set its value
 			pwm.cfg.bits.en		= PWM_ENABLE;
@@ -131,7 +131,6 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			// disable PWM
 			pwm.cfg.bits.en = PWM_DISABLE;
 			__wrap_bk_printf_disable();
-			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
 			sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, &pwm);
 			__wrap_bk_printf_enable();
 			pin->enabled &= ~PIN_PWM;
