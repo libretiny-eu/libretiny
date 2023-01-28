@@ -2,16 +2,11 @@
 
 from os.path import join
 
+from ltchiptool.soc.bk72xx.binary import to_offset
 from SCons.Script import Builder, DefaultEnvironment
 
 env = DefaultEnvironment()
 board = env.BoardConfig()
-
-# Install PyCryptodome for OTA packaging with AES
-try:
-    import Cryptodome
-except ImportError:
-    env.Execute("$PYTHONEXE -m pip install pycryptodomex")
 
 ROOT_DIR = join("$SDK_DIR", "beken378")
 APP_DIR = join(ROOT_DIR, "app")
@@ -567,8 +562,8 @@ env.Replace(
 # Calculate RBL header offset
 app_offs = int(env["FLASH_APP_OFFSET"], 16)
 app_size = int(board.get("build.bkrbl_size_app"), 16)
-rbl_offs = int(app_size // 32 * 34) - 102
-env.Replace(FLASH_RBL_OFFSET=f"0x{app_offs + rbl_offs:06X}")
+rbl_offs = app_offs + to_offset(app_size) - 102
+env.Replace(FLASH_RBL_OFFSET=f"0x{rbl_offs:06X}")
 
 # Build all libraries
 env.BuildLibraries()
