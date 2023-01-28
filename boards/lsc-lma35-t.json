@@ -1,0 +1,29 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231u",
+		"beken-7231t-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/lsc-lma35"
+	],
+	"build": {
+		"mcu": "bk7231t",
+		"variant": "lsc-lma35-t"
+	},
+	"name": "LSC LMA35 BK7231T",
+	"symbol": "LSC LMA35 T",
+	"url": "https://www.action.com/de-at/p/lsc-smart-connect-outdoor-led-streifen/",
+	"vendor": "Unknown",
+	"pcb": {
+		"symbol": "LMA35"
+	},
+	"doc": {
+		"extra": [
+			"## Information",
+			"This board has no marking on the front side, only something that looks like PCB manufacturing info on the back; thus it was named based on these symbols.",
+			"It can be found in 'LSC Smart Connect Outdoor LED Strip', and is likely custom-made for this product.",
+			"The pinout was established by writing to and probing consecutive GPIOs, using the generic board definition.",
+			"Pins marked with '?' are currently unknown, with a possibility of being CEN. Pin 22 (P1/D14) is also not confirmed."
+		]
+	}
+}

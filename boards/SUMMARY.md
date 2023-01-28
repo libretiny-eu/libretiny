@@ -28,4 +28,5 @@
 - [WR3L](../boards/wr3l/README.md)
 - [WR3LE](../boards/wr3le/README.md)
 - [LSC LMA35](../boards/lsc-lma35/README.md)
+- [LSC LMA35 T](../boards/lsc-lma35-t/README.md)
 - [Generic - Host-native](../boards/generic-native/README.md)

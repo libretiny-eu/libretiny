@@ -34,5 +34,6 @@ Name                                                                      | MCU 
 [WR3LE](../../boards/wr3le/README.md)                                     | RTL8710BX | 2 MiB | 256 KiB | 16 (12 I/O) | ✔️    | ❌   | ❌      | `realtek-ambz`
 **Unknown**                                                               |           |       |         |             |       |     |        |
 [LSC LMA35](../../boards/lsc-lma35/README.md)                             | BK7231N   | 2 MiB | 256 KiB | 22 (15 I/O) | ✔️    | ✔️  | ❌      | `beken-7231n`
+[LSC LMA35 T](../../boards/lsc-lma35-t/README.md)                         | BK7231T   | 2 MiB | 256 KiB | 22 (15 I/O) | ✔️    | ✔️  | ❌      | `beken-7231u`
 **N/A**                                                                   |           |       |         |             |       |     |        |
 [Native](../../boards/generic-native/README.md)                           | NATIVE    | 4 MiB | 4 MiB   | -           | ✔️    | ❌   | ❌      | `host-native`
