@@ -19,6 +19,7 @@ from semantic_version import SimpleSpec, Version
 
 LTCHIPTOOL_VERSION = "^3.0.0"
 
+
 # Install & import tools
 def check_ltchiptool(install: bool):
     if install:
