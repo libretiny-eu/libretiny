@@ -42,15 +42,12 @@
     "framework-realtek-amb1": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/ambiot/amb1_sdk#750b0bc",
-      "manifest": {
-        "description": "SDK for Ameba1"
-      },
+      "version": "https://github.com/libretuya/framework-realtek-amb1#v2022.06.21",
       "toolchains": {
-		"x86_64": "gccarmnoneeabi@~1.50201.0",
-		"arm": "gccarmnoneeabi@~1.50401.211104",
-		"arm64": "gccarmnoneeabi@~1.50401.210715"
-	  },
+        "x86_64": "gccarmnoneeabi@~1.50201.0",
+        "arm": "gccarmnoneeabi@~1.50401.211104",
+        "arm64": "gccarmnoneeabi@~1.50401.210715"
+      },
       "libraries": {
         "lwip": [
           "v2.1.3-amb1"
@@ -60,28 +57,22 @@
     "framework-realtek-ambz2": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/ambiot/ambz2_sdk#f009272",
-      "manifest": {
-        "description": "SDK for AmebaZ2"
-      },
+      "version": "https://github.com/libretuya/framework-realtek-ambz2#v2022.11.17",
       "toolchains": {
-		"x86_64": "gccarmnoneeabi@~1.100301.0",
-		"arm": "gccarmnoneeabi@~1.100301.0",
-		"arm64": "gccarmnoneeabi@~1.100301.0"
-	  }
+        "x86_64": "gccarmnoneeabi@~1.100301.0",
+        "arm": "gccarmnoneeabi@~1.100301.0",
+        "arm64": "gccarmnoneeabi@~1.100301.0"
+      }
     },
     "framework-beken-bdk": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/bekencorp/bdk_freertos#c3533e8",
-      "manifest": {
-        "description": "Beken Development Kit for FreeRTOS"
+      "version": "https://github.com/libretuya/framework-beken-bdk#v2021.06.07",
+      "toolchains": {
+        "x86_64":"gccarmnoneeabi@~1.40804.0",
+        "arm": "gccarmnoneeabi@~1.40803.0",
+        "arm64": "gccarmnoneeabi@~1.40803.0"
       },
-	  "toolchains": {
-		"x86_64":"gccarmnoneeabi@~1.40804.0",
-		"arm": "gccarmnoneeabi@~1.40803.0",
-		"arm64": "gccarmnoneeabi@~1.40803.0"
-	  },
       "libraries": {
         "lwip": [
           "v2.1.3-bdk"
