@@ -74,25 +74,25 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 		- write a config file manually:
 			```yaml title="yourdevice.yml"
 			esphome:
-			name: yourdevice
+			  name: yourdevice
 
 			libretuya:
-			board: wr3  # THIS IS YOUR BOARD CODE
-			framework:
-				version: latest
+			  board: wr3  # THIS IS YOUR BOARD CODE
+			  framework:
+			    version: latest
 
 			logger:
 			api:
-			password: ""
+			  password: ""
 			ota:
-			password: ""
+			  password: ""
 
 			wifi:
-			ssid: "YourWiFiSSID"
-			password: "SecretPa$$w0rd"
-			ap:
-				ssid: "Yourdevice Fallback Hotspot"
-				password: "Dv2hZMGZRUvy"
+			  ssid: "YourWiFiSSID"
+			  password: "SecretPa$$w0rd"
+			  ap:
+			    ssid: "Yourdevice Fallback Hotspot"
+			    password: "Dv2hZMGZRUvy"
 			```
 
 === "GUI"
@@ -141,8 +141,8 @@ libretuya:
     version: latest
   lt_config:
     LT_LOG_HEAP: 1
-	LT_UART_DEFAULT_PORT: 2
-	LT_UART_SILENT_ALL: 0
+    LT_UART_DEFAULT_PORT: 2
+    LT_UART_SILENT_ALL: 0
 ```
 (this is only an example)
 
