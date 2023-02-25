@@ -1,0 +1,50 @@
+{
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		}
+	},
+	"patternProperties": {
+		"^[a-z0-9-]+$": {
+			"properties": {
+				"parent": {
+					"type": [
+						"string",
+						"null"
+					],
+					"pattern": "^[a-z0-9-]+$"
+				},
+				"code": {
+					"type": "string",
+					"pattern": "^[a-z0-9]+$"
+				},
+				"description": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string",
+					"pattern": "^0x[0-9A-F]{8}$"
+				},
+				"short_name": {
+					"type": "string",
+					"pattern": "^[A-Z0-9]+$"
+				},
+				"mcus": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^[A-Z0-9]+$"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"parent",
+				"code",
+				"description"
+			]
+		}
+	},
+	"additionalProperties": false
+}

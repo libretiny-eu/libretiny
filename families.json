@@ -1,117 +1,112 @@
-[
-	{
+{
+	"$schema": "./families.schema.json",
+	"realtek-amb": {
+		"parent": null,
+		"code": "amb",
+		"description": "Realtek Ameba"
+	},
+	"realtek-amb1": {
+		"parent": "realtek-amb",
+		"code": "amb1",
+		"description": "Realtek Ameba1",
 		"id": "0x9FFFD543",
 		"short_name": "RTL8710A",
-		"description": "Realtek Ameba1"
+		"mcus": []
 	},
-	{
-		"id": "0x22E0D6FC",
-		"short_name": "RTL8710B",
-		"description": "Realtek AmebaZ",
-		"parent_description": "Realtek Ameba",
-		"name": "realtek-ambz",
+	"realtek-ambz": {
 		"parent": "realtek-amb",
 		"code": "ambz",
-		"parent_code": "amb",
-		"url": "https://www.amebaiot.com/en/amebaz/",
-		"sdk": "https://github.com/ambiot/amb1_sdk",
-		"framework": "framework-realtek-amb1",
+		"description": "Realtek AmebaZ",
+		"id": "0x22E0D6FC",
+		"short_name": "RTL8710B",
 		"mcus": [
 			"RTL8710BN",
 			"RTL8710BX"
 		]
 	},
-	{
-		"id": "0xE08F7564",
-		"short_name": "RTL8720C",
-		"description": "Realtek AmebaZ2",
-		"parent_description": "Realtek Ameba",
-		"name": "realtek-ambz2",
+	"realtek-ambz2": {
 		"parent": "realtek-amb",
 		"code": "ambz2",
-		"parent_code": "amb",
-		"url": "https://www.amebaiot.com/en/amebaz2/",
-		"sdk": "https://github.com/ambiot/ambz2_sdk",
-		"framework": "framework-realtek-ambz2",
+		"description": "Realtek AmebaZ2",
+		"id": "0xE08F7564",
+		"short_name": "RTL8720C",
 		"mcus": [
 			"RTL8720CF"
 		]
 	},
-	{
+	"realtek-ambd": {
+		"parent": "realtek-amb",
+		"code": "ambd",
+		"description": "Realtek AmebaD",
 		"id": "0x3379CFE2",
 		"short_name": "RTL8720D",
-		"description": "Realtek AmebaD"
+		"mcus": []
 	},
-	{
+	"beken-72xx": {
+		"parent": null,
+		"code": "bk72xx",
+		"description": "Beken 72xx"
+	},
+	"beken-72xx-gen1": {
+		"parent": "beken-72xx",
+		"code": "bk72xxgen1",
+		"description": "Beken 72xx (ARM)"
+	},
+	"beken-72xx-gen2": {
+		"parent": "beken-72xx",
+		"code": "bk72xxgen2",
+		"description": "Beken 72xx (RISC-V & ARM)"
+	},
+	"beken-7231u": {
+		"parent": "beken-72xx-gen1",
+		"code": "bk7231u",
+		"description": "Beken 7231U/7231T",
 		"id": "0x675A40B0",
 		"short_name": "BK7231U",
-		"description": "Beken 7231U/7231T",
-		"parent_description": "Beken 72xx",
-		"name": "beken-7231u",
-		"parent": "beken-72xx",
-		"code": "bk7231u",
-		"parent_code": "bk72xx",
-		"url": "http://www.bekencorp.com/en/goods/detail/cid/13.html",
-		"sdk": "https://github.com/bekencorp/bdk_freertos",
-		"framework": "framework-beken-bdk",
 		"mcus": [
 			"BK7231T",
 			"BK7231S",
 			"BK7231U"
 		]
 	},
-	{
+	"beken-7231n": {
+		"parent": "beken-72xx-gen1",
+		"description": "Beken 7231N",
+		"code": "bk7231n",
 		"id": "0x7B3EF230",
 		"short_name": "BK7231N",
-		"description": "Beken 7231N",
-		"parent_description": "Beken 72xx",
-		"name": "beken-7231n",
-		"parent": "beken-72xx",
-		"code": "bk7231n",
-		"parent_code": "bk72xx",
-		"url": "http://www.bekencorp.com/en/goods/detail/cid/39.html",
-		"sdk": "https://github.com/bekencorp/bdk_freertos",
-		"framework": "framework-beken-bdk",
 		"mcus": [
 			"BK7231N",
 			"BL2028N"
 		]
 	},
-	{
+	"beken-7251": {
+		"parent": "beken-72xx-gen1",
+		"code": "bk7251",
+		"description": "Beken 7251/7252",
 		"id": "0x6A82CC42",
 		"short_name": "BK7251",
-		"description": "Beken 7251/7252",
-		"parent_description": "Beken 72xx",
-		"name": "beken-7251",
-		"parent": "beken-72xx",
-		"code": "bk7251",
-		"parent_code": "bk72xx",
-		"url": "http://www.bekencorp.com/en/goods/detail/cid/21.html",
-		"sdk": "https://github.com/bekencorp/bdk_freertos",
-		"framework": "framework-beken-bdk",
 		"mcus": [
 			"BK7251",
 			"BK7252"
 		]
 	},
-	{
+	"boufallo-bl678": {
+		"parent": null,
+		"code": "bl678",
+		"description": "Boufallo BL6xx/BL7xx/BL8xx"
+	},
+	"boufallo-bl60x": {
+		"parent": "boufallo-bl678",
+		"code": "bl60x",
+		"description": "Boufallo BL602/BL604",
 		"id": "0xDE1270B7",
-		"short_name": "BL602",
-		"description": "Boufallo 602"
+		"short_name": "BL60X",
+		"mcus": []
 	},
-	{
-		"id": "0x51E903A8",
-		"short_name": "XR809",
-		"description": "Xradiotech 809"
-	},
-	{
-		"id": "0xDEADBEEF",
-		"short_name": "NATIVE",
-		"description": "Native host architecture",
-		"name": "host-native",
-		"code": "native",
-		"mcus": [
-			"NATIVE"
-		]
+	"winnermicro-iot": {
+		"parent": null,
+		"code": "wmiot",
+		"description": "WinnerMicro W60x/W800x"
 	}
-]
+}

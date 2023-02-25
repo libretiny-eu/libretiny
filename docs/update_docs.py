@@ -1,7 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-31.
 
 import sys
-from os.path import dirname, join
+from os.path import dirname, isfile, join
 
 sys.path.append(join(dirname(__file__), ".."))
 
@@ -23,10 +23,10 @@ def load_chip_type_h() -> str:
         join(
             dirname(__file__),
             "..",
-            "arduino",
-            "libretuya",
-            "core",
-            "ChipType.h",
+            "cores",
+            "common",
+            "base",
+            "lt_chip.h",
         )
     )
     code = re.sub(r"//.+", "", code)
@@ -57,7 +57,7 @@ def get_family_mcus() -> Set[str]:
 
 
 def get_family_names() -> Set[str]:
-    return set(family.short_name for family in Family.get_all())
+    return set(family.short_name for family in Family.get_all() if family.is_chip)
 
 
 def get_board_mcus(boards: List[Board]) -> Set[str]:
@@ -70,8 +70,8 @@ def get_board_mcus(boards: List[Board]) -> Set[str]:
 
 def get_enum_keys(code: str, name: str) -> Set[str]:
     code = code.replace("\t", " ")
-    code = code.partition(f"enum {name}")[2]
-    code = code.partition(";")[0]
+    code = code.partition(f"{name};")[0]
+    code = code.rpartition("{")[2]
     code = code.strip().strip("{}").strip()
     code = [line.strip().strip(",").strip() for line in code.split("\n")]
     code = filter(None, code)
@@ -218,36 +218,51 @@ def write_families():
     rows = []
 
     for family in Family.get_all():
+        # TODO update the table to support parent-child relationship
+        if not family.is_chip:
+            continue
+        docs = None
+        for f in family.inheritance:
+            readme = join(dirname(__file__), "platform", f.name, "README.md")
+            if isfile(readme):
+                docs = f"../{f.name}/"
         row = [
             # Title
             "[{}]({})".format(
                 family.description,
-                family.url,
+                docs,
             )
-            if family.url
+            if docs
             else family.description,
             # Name (parent)
-            f"`{family.name or '-'}`"
-            if not family.parent
-            else f"`{family.name}` (`{family.parent}`)",
+            family.is_supported
+            and (
+                f"`{family.name}`"
+                if not family.parent
+                else f"`{family.name}` (`{family.parent_name}`)"
+            )
+            or "`-`",
             # Code
-            f"`{family.code or '-'}`"
-            if not family.parent
-            else f"`{family.code}` (`{family.parent_code}`)",
+            family.is_supported
+            and (
+                f"`{family.code}`"
+                if not family.parent
+                else f"`{family.code}` (`{family.parent_code}`)"
+            )
+            or "`-`",
             # Short name & ID
             "`{}` (0x{:X})".format(
                 family.short_name,
                 family.id,
             ),
             # Arduino Core
-            "✔️" if family.has_arduino_core else "❌",
+            "✔️" if family.is_supported and family.has_arduino_core else "❌",
             # Source SDK
-            "`{}` ([{}]({}))".format(
-                family.framework,
-                family.sdk_name,
-                family.sdk,
+            "[`{}`]({})".format(
+                family.target_package,
+                f"https://github.com/libretuya/{family.target_package}",
             )
-            if family.sdk
+            if family.target_package
             else "-",
         ]
         rows.append(row)
