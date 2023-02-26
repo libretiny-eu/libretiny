@@ -1,7 +1,6 @@
 {
 	"build": {
-		"ldscript_sdk": "rlx8711B-symbol-v02-img2_xip1_2M_468k_cpp.ld",
-		"ldscript_arduino": "rlx8711B-symbol-v02-img2_xip1_2M_468k_cpp.ld",
+		"ldscript": "rlx8711B-symbol-v02-img2_xip1_2M_468k_cpp.ld",
 		"amb_boot_all": "boot_all_77F7.bin"
 	},
 	"flash": {

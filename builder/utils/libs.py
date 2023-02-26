@@ -5,14 +5,22 @@ from glob import glob
 from os.path import isdir, join
 from typing import Dict, Generator, List, Tuple
 
-from SCons.Script import DefaultEnvironment
+from SCons.Script import DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
+env: Environment = DefaultEnvironment()
 
 
-def add_base_dir(env, base_dir: str, expressions: List[str], subst: bool = False):
+def add_base_dir(
+    env: Environment,
+    base_dir: str,
+    expressions: List[str],
+    subst: bool = False,
+):
     out = []
     for expr in expressions:
+        if expr == False:
+            # support '[cond] and [path]' logical expressions
+            continue
         if expr[1] != "<" or expr[-1] != ">":
             raise ValueError(f"Not a valid glob: {expr}")
         if expr[2] == "$":
@@ -35,7 +43,7 @@ def iter_expressions(expressions: List[str]) -> Generator[Tuple[str, str], None,
 
 
 def env_add_library(
-    env,
+    env: Environment,
     name: str,
     base_dir: str,
     srcs: List[str],
@@ -77,7 +85,7 @@ def env_add_library(
                     env.Append(CPPPATH=[item])
 
 
-def env_build_libraries(env, safe: bool = True):
+def env_build_libraries(env: Environment, safe: bool = True):
     # add lib targets and clone safe envs
     if not "LIBQUEUE" in env:
         return

@@ -2,10 +2,11 @@
 
 from os.path import join
 
-from SCons.Script import Builder, DefaultEnvironment
+from platformio.platform.board import PlatformBoardConfig
+from SCons.Script import DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-board = env.BoardConfig()
+env: Environment = DefaultEnvironment()
+board: PlatformBoardConfig = env.BoardConfig()
 
 COMPONENT_DIR = join("$SDK_DIR", "component")
 
@@ -44,11 +45,6 @@ env.Append(
         "-fno-use-cxa-atexit",
     ],
     CPPDEFINES=[
-        # LibreTuya configuration
-        ("LT_HAS_LWIP", "1"),
-        ("LT_HAS_LWIP2", "1"),
-        ("LT_HAS_FREERTOS", "1"),
-        ("LT_HAS_MBEDTLS", "1"),
         # other options
         "__thumb2__",
         "CONFIG_PLATFORM_8710C",

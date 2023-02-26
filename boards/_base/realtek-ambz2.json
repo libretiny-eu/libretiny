@@ -3,8 +3,7 @@
 		"family": "RTL8720C",
 		"f_cpu": "100000000L",
 		"prefix": "arm-none-eabi-",
-		"ldscript_sdk": "rtl8710c_ram.ld",
-		"ldscript_arduino": "rtl8710c_ram.ld"
+		"ldscript": "rtl8710c_ram.ld"
 	},
 	"flash": {
 		"part_table": "0x000000+0x1000",
@@ -16,9 +15,6 @@
 		"protocol": "openocd",
 		"protocols": []
 	},
-	"frameworks": [
-		"realtek-ambz2-sdk"
-	],
 	"upload": {
 		"maximum_ram_size": 262144
 	},

@@ -3,10 +3,11 @@
 from os.path import join
 
 from ltchiptool.soc.bk72xx.binary import to_offset
-from SCons.Script import Builder, DefaultEnvironment
+from platformio.platform.board import PlatformBoardConfig
+from SCons.Script import DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-board = env.BoardConfig()
+env: Environment = DefaultEnvironment()
+board: PlatformBoardConfig = env.BoardConfig()
 
 ROOT_DIR = join("$SDK_DIR", "beken378")
 APP_DIR = join(ROOT_DIR, "app")
@@ -14,7 +15,7 @@ DRIVER_DIR = join(ROOT_DIR, "driver")
 FUNC_DIR = join(ROOT_DIR, "func")
 
 # Load sys_config.h into env
-env.LoadConfig(join("$FAMILY_DIR", "config", "sys_config.h"))
+env.LoadConfig(join("$FAMILY_DIR", "base", "config", "sys_config.h"))
 
 # Define vars used during build
 SOC_BK7231 = 1
@@ -50,6 +51,10 @@ env.Append(
         "-fsigned-char",
         "-Wno-comment",
         "-Werror=implicit-function-declaration",
+        "-Wno-write-strings",
+        "-Wno-char-subscripts",
+        "-Wno-missing-braces",
+        "-Wno-attributes",
     ],
     CFLAGS=[
         "-std=gnu99",
@@ -66,11 +71,6 @@ env.Append(
         "-Wno-literal-suffix",
     ],
     CPPDEFINES=[
-        # LibreTuya configuration
-        ("LT_HAS_LWIP", "1"),
-        ("LT_HAS_LWIP2", "1"),
-        ("LT_HAS_FREERTOS", "1"),
-        ("LT_HAS_MBEDTLS", "1"),
         # SDK options
         ("CFG_OS_FREERTOS", "1"),
         ("MBEDTLS_CONFIG_FILE", r"\"tls_config.h\""),
@@ -78,6 +78,8 @@ env.Append(
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
         ("INCLUDE_xTaskGetHandle", "1"),
+        # mbedtls_net_set_nonblock is commented out in tls_net.c
+        ("mbedtls_net_set_nonblock", "net_set_nonblock"),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
@@ -113,16 +115,21 @@ env.Append(
         "-Wl,-wrap,bk_flash_erase",
         "-Wl,-wrap,bk_flash_write",
         "-Wl,-wrap,bk_flash_read",
+        # stdio wrappers (base/port/printf.c)
+        "-Wl,-wrap,bk_printf",
     ],
 )
 
 srcs_core = []
-srcs_fixups = []
 
 # Fix for BK7231T's bootloader compatibility
 if board.get("build.bkboot_version") == "1.0.5-bk7231s":
     env.Append(CPPDEFINES=[("CFG_SUPPORT_BOOTLOADER", "1")])
-    srcs_fixups.append("+<boot_handlers_105_bk7231s.S>")
+    env.AddLibrary(
+        name="bdk_boot",
+        base_dir="$FAMILY_DIR/base/fixups",
+        srcs=["+<boot_handlers_105_bk7231s.S>"],
+    )
 else:
     srcs_core.append("+<driver/entry/boot_handlers.S>")
 
@@ -145,30 +152,6 @@ env.AddLibrary(
         "+<driver/intc>",
         "+<release>",
         "+<../release>",
-    ],
-)
-
-# Sources - parent family fixups
-env.AddLibrary(
-    name="${FAMILY_PARENT_CODE}_fixups",
-    base_dir="$PARENT_DIR/fixups",
-    srcs=[
-        "+<arch_main.c>",
-        "+<ate_app.c>",
-        "+<clock_cal.c>",
-        "+<clock_rtos.c>",
-        "+<intc.c>",
-        "+<wrap_BkDriverFlash.c>",
-        *srcs_fixups,
-    ],
-)
-
-# Sources - family fixups
-env.AddLibrary(
-    name="${FAMILY_CODE}_fixups",
-    base_dir="$FAMILY_DIR/fixups",
-    srcs=[
-        "+<temp_detect.c>",
     ],
 )
 
@@ -223,6 +206,7 @@ env.AddLibrary(
         "+<sys_ctrl/*.c>",
         "+<uart/*.c>",
         "+<wdt/*.c>",
+        "ARDUINO" in env and "-<uart/printf.c>",
     ],
     includes=[
         "+<common>",
@@ -343,8 +327,8 @@ env.AddLibrary(
     ),
 )
 
-# Sources - lwIP 2.1.3
-env.AddLibraryLwIP(version="2.1.3", port="bdk")
+# Sources - lwIP
+env.AddExternalLibrary("lwip", port="bdk")
 
 # Sources - mbedTLS 2.6.0
 env.AddLibrary(

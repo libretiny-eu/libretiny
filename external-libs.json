@@ -1,0 +1,101 @@
+{
+	"$schema": "./external-libs.schema.json",
+	"flashdb": {
+		"package": "library-flashdb",
+		"sources": [
+			"+<src/*.c>",
+			"+<port/fal/src/*.c>"
+		],
+		"includes": [
+			"+<inc>",
+			"+<port/fal/inc>"
+		]
+	},
+	"printf": {
+		"package": "library-printf",
+		"sources": [
+			"+<src/printf/printf.c>"
+		],
+		"includes": [
+			"+<src>"
+		],
+		"flags": [
+			"-Wno-maybe-uninitialized"
+		],
+		"linkflags": [
+			"-Wl,-wrap,printf",
+			"-Wl,-wrap,sprintf",
+			"-Wl,-wrap,vsprintf",
+			"-Wl,-wrap,snprintf",
+			"-Wl,-wrap,vsnprintf",
+			"-Wl,-wrap,vprintf",
+			"-Wl,-wrap,puts",
+			"-Wl,-wrap,putchar"
+		],
+		"defines": {
+			"PRINTF_INCLUDE_CONFIG_H": "1"
+		}
+	},
+	"ltchiptool": {
+		"package": "tool-ltchiptool",
+		"sources": [
+			"+<uf2ota/*.c>"
+		],
+		"includes": [
+			"+<.>"
+		]
+	},
+	"arduino_api": {
+		"package": "framework-arduino-api",
+		"sources": [
+			"+<api/Common.cpp>",
+			"+<api/IPAddress.cpp>",
+			"+<api/PluggableUSB.cpp>",
+			"+<api/Print.cpp>",
+			"+<api/Stream.cpp>",
+			"+<api/String.cpp>"
+		],
+		"includes": [
+			"+<.>",
+			"+<api/deprecated>"
+		]
+	},
+	"lwip-amb1": {
+		"package": "library-lwip",
+		"sources": [
+			"+<src/api/*.c>",
+			"+<src/core/*.c>",
+			"+<src/core/ipv4/*.c>",
+			"+<src/netif/ethernet.c>",
+			"+<src/netif/etharp.c>",
+			"+<src/apps/mdns/mdns.c>",
+			"+<src/apps/sntp/sntp.c>",
+			"+<port/realtek/freertos/ethernetif.c>",
+			"+<port/realtek/freertos/sys_arch.c>"
+		],
+		"includes": [
+			"+<src/include>",
+			"+<src/include/ipv4>",
+			"+<port/realtek>",
+			"+<port/realtek/freertos>"
+		]
+	},
+	"lwip-bdk": {
+		"package": "library-lwip",
+		"sources": [
+			"+<src/api/*.c>",
+			"+<src/core/*.c>",
+			"+<src/core/ipv4/*.c>",
+			"+<src/netif/ethernet.c>",
+			"+<src/netif/etharp.c>",
+			"+<src/apps/mdns/mdns.c>",
+			"+<src/apps/sntp/sntp.c>",
+			"+<port/*.c>"
+		],
+		"includes": [
+			"+<src/include>",
+			"+<src/include/ipv4>",
+			"+<port>"
+		]
+	}
+}

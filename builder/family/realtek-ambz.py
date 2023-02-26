@@ -2,10 +2,11 @@
 
 from os.path import join
 
-from SCons.Script import Builder, DefaultEnvironment
+from platformio.platform.board import PlatformBoardConfig
+from SCons.Script import Builder, DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-board = env.BoardConfig()
+env: Environment = DefaultEnvironment()
+board: PlatformBoardConfig = env.BoardConfig()
 
 # Flags
 env.Append(
@@ -37,12 +38,6 @@ env.Append(
         "-fno-rtti",
     ],
     CPPDEFINES=[
-        # LibreTuya configuration
-        ("LT_HAS_LWIP", "1"),
-        ("LT_HAS_LWIP2", "1"),
-        ("LT_HAS_FREERTOS", "1"),
-        ("LT_HAS_MBEDTLS", "1"),
-        ("LT_PRINTF_BROKEN", "1"),  # printf does not handle %.3f properly
         # other options
         "M3",
         "CONFIG_PLATFORM_8711B",
@@ -74,6 +69,24 @@ env.Append(
         "-Wl,-wrap,aes_80211_encrypt",
         "-Wl,-wrap,aes_80211_decrypt",
         "-Wl,-wrap,DecGTK",
+        # TODO what is this and is this needed?
+        "-Wl,--undefined=InfraStart",
+        # stdio wrappers (base/port/printf.c)
+        "-Wl,-wrap,rtl_printf",
+        "-Wl,-wrap,rtl_sprintf",
+        "-Wl,-wrap,rtl_snprintf",
+        "-Wl,-wrap,rtl_vsnprintf",
+        "-Wl,-wrap,rtl_vsnprintf_r",
+        "-Wl,-wrap,rtl_vprintf",
+        "-Wl,-wrap,rtl_vfprintf",
+        "-Wl,-wrap,DiagPrintf",
+        "-Wl,-wrap,DiagSPrintf",
+        "-Wl,-wrap,DiagSnPrintf",
+        "-Wl,-wrap,prvDiagPrintf",
+        "-Wl,-wrap,prvDiagSPrintf",
+        "-Wl,-wrap,VSprintf",
+        "-Wl,-wrap,LOG_PRINTF",
+        "-Wl,-wrap,__rtl_vfprintf_r_v1_00",
     ],
 )
 
@@ -93,7 +106,7 @@ env.AddLibrary(
         "+<component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wifi_p2p_config.c>",
         "+<component/common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/wifi_wps_config.c>",
         "+<component/common/api/wifi/wifi_conf.c>",
-        "+<component/common/api/wifi/wifi_ind.c>",
+        "ARDUINO" not in "ENV" and "+<component/common/api/wifi/wifi_ind.c>",
         "+<component/common/api/wifi/wifi_promisc.c>",
         "+<component/common/api/wifi/wifi_simple_config.c>",
         "+<component/common/api/wifi/wifi_util.c>",
@@ -193,8 +206,8 @@ env.AddLibrary(
     ],
 )
 
-# Sources - lwIP 2.1.3
-env.AddLibraryLwIP(version="2.1.3", port="amb1")
+# Sources - lwIP
+env.AddExternalLibrary("lwip", port="amb1")
 
 # Sources - mbedTLS
 env.AddLibrary(
@@ -209,20 +222,6 @@ env.AddLibrary(
     ],
     includes=[
         "+<component/common/network/ssl/mbedtls-2.4.0/include>",
-    ],
-)
-
-# Sources - family fixups
-env.AddLibrary(
-    name="ambz_fixups",
-    base_dir="$FAMILY_DIR/fixups",
-    srcs=[
-        "+<app_start_patch.c>",
-        "+<cmsis_ipsr.c>",
-        "+<log_uart.c>",
-        "+<net_sockets.c>",  # fix non-blocking sockets (Realtek disabled this for unknown reason)
-        "+<ssl_tls.c>",  # rtl sdk defines S1 and S2 which conflicts here
-        "+<wifi_mode.c>",
     ],
 )
 

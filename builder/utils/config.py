@@ -2,12 +2,32 @@
 
 from os.path import isfile
 
-from SCons.Script import DefaultEnvironment
+from SCons.Script import DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
+env: Environment = DefaultEnvironment()
 
 
-def env_load_config(env, path):
+def env_load_defines(env: Environment, path: str):
+    path = env.subst(path)
+    if not isfile(path):
+        raise FileNotFoundError(f"Defines file not found ({path})")
+    f = open(path, "r", encoding="utf-8")
+    for line in f:
+        line: str
+        if not line.startswith("#define"):
+            continue
+        line = line[7:].strip()
+        line = line.split(None, 2)
+        if len(line) == 1:
+            env.Append(CPPDEFINES=[(line[0], "1")])
+        elif len(line) == 2:
+            env.Append(CPPDEFINES=[(line[0], line[1])])
+        else:
+            raise ValueError(f"Unknown directive: {line}")
+    f.close()
+
+
+def env_load_config(env: Environment, path: str):
     path = env.subst(path)
     if not isfile(path):
         raise FileNotFoundError(f"Config file not found ({path})")
@@ -35,7 +55,7 @@ def env_load_config(env, path):
     f.close()
 
 
-def env_get_config(env, key):
+def env_get_config(env: Environment, key: str):
     config: dict = env["CONFIG"]
     if not config:
         return None
@@ -45,6 +65,7 @@ def env_get_config(env, key):
     return value
 
 
+env.AddMethod(env_load_defines, "LoadDefines")
 env.AddMethod(env_load_config, "LoadConfig")
 env.AddMethod(env_get_config, "Cfg")
 env.AddMethod(env_get_config, "GetConfig")

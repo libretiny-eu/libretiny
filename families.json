@@ -19,6 +19,7 @@
 		"description": "Realtek AmebaZ",
 		"id": "0x22E0D6FC",
 		"short_name": "RTL8710B",
+		"package": "framework-realtek-amb1",
 		"mcus": [
 			"RTL8710BN",
 			"RTL8710BX"
@@ -30,6 +31,7 @@
 		"description": "Realtek AmebaZ2",
 		"id": "0xE08F7564",
 		"short_name": "RTL8720C",
+		"package": "framework-realtek-ambz2",
 		"mcus": [
 			"RTL8720CF"
 		]
@@ -50,7 +52,8 @@
 	"beken-72xx-gen1": {
 		"parent": "beken-72xx",
 		"code": "bk72xxgen1",
-		"description": "Beken 72xx (ARM)"
+		"description": "Beken 72xx (ARM)",
+		"package": "framework-beken-bdk"
 	},
 	"beken-72xx-gen2": {
 		"parent": "beken-72xx",

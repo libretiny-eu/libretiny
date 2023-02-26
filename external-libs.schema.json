@@ -1,0 +1,65 @@
+{
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		}
+	},
+	"patternProperties": {
+		"^[a-z0-9-_]+$": {
+			"type": "object",
+			"properties": {
+				"package": {
+					"type": "string",
+					"pattern": "^(tool|library|framework)-[a-z0-9-]+$"
+				},
+				"sources": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^[!+-]<[\\w/*.]+>$"
+					}
+				},
+				"includes": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^[!+-]<[\\w/*.]+>$"
+					}
+				},
+				"flags": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^[^\\s]+$"
+					}
+				},
+				"linkflags": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"pattern": "^[^\\s]+$"
+					}
+				},
+				"defines": {
+					"type": "object",
+					"patternProperties": {
+						"^[A-Za-z0-9_]+$": {
+							"type": [
+								"string",
+								"number"
+							]
+						}
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"package",
+				"sources",
+				"includes"
+			]
+		}
+	},
+	"additionalProperties": false
+}

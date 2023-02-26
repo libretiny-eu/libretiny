@@ -8,34 +8,13 @@
   },
   "version": "0.12.6",
   "frameworks": {
+    "base": {
+      "title": "Base Framework (SDK only)",
+      "script": "builder/frameworks/base.py"
+    },
     "arduino": {
-      "title": "Generic Arduino framework",
+      "title": "Arduino Framework",
       "script": "builder/frameworks/arduino.py"
-    },
-    "realtek-ambz-sdk": {
-      "tilte": "Realtek AmebaZ - SDK",
-      "package": "framework-realtek-amb1",
-      "script": "builder/frameworks/realtek-ambz-sdk.py"
-    },
-    "realtek-ambz-arduino": {
-      "tilte": "Realtek AmebaZ - Arduino",
-      "package": "framework-realtek-amb1",
-      "script": "builder/frameworks/realtek-ambz-arduino.py"
-    },
-    "realtek-ambz2-sdk": {
-      "tilte": "Realtek AmebaZ2 - SDK",
-      "package": "framework-realtek-ambz2",
-      "script": "builder/frameworks/realtek-ambz2-sdk.py"
-    },
-    "beken-72xx-sdk": {
-      "title": "Beken 72XX - SDK",
-      "package": "framework-beken-bdk",
-      "script": "builder/frameworks/beken-72xx-sdk.py"
-    },
-    "beken-72xx-arduino": {
-      "title": "Beken 72XX - Arduino",
-      "package": "framework-beken-bdk",
-      "script": "builder/frameworks/beken-72xx-arduino.py"
     }
   },
   "packages": {
@@ -43,21 +22,26 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/libretuya/framework-realtek-amb1#v2022.06.21",
+      "version_prefix": true,
       "toolchains": {
         "x86_64": "gccarmnoneeabi@~1.50201.0",
         "arm": "gccarmnoneeabi@~1.50401.211104",
         "arm64": "gccarmnoneeabi@~1.50401.210715"
       },
       "libraries": {
-        "lwip": [
-          "v2.1.3-amb1"
-        ]
+        "lwip": {
+          "1.4.1": "1.4.1-amb1",
+          "2.0.0": "2.0.0-amb1",
+          "2.1.3": "2.1.3-amb1",
+          "default": "2.1.3-amb1"
+        }
       }
     },
     "framework-realtek-ambz2": {
       "type": "framework",
       "optional": true,
       "version": "https://github.com/libretuya/framework-realtek-ambz2#v2022.11.17",
+      "version_prefix": true,
       "toolchains": {
         "x86_64": "gccarmnoneeabi@~1.100301.0",
         "arm": "gccarmnoneeabi@~1.100301.0",
@@ -68,56 +52,39 @@
       "type": "framework",
       "optional": true,
       "version": "https://github.com/libretuya/framework-beken-bdk#v2021.06.07",
+      "version_prefix": true,
       "toolchains": {
-        "x86_64":"gccarmnoneeabi@~1.40804.0",
+        "x86_64": "gccarmnoneeabi@~1.40804.0",
         "arm": "gccarmnoneeabi@~1.40803.0",
         "arm64": "gccarmnoneeabi@~1.40803.0"
       },
       "libraries": {
-        "lwip": [
-          "v2.1.3-bdk"
-        ]
+        "lwip": {
+          "2.0.2": "2.0.2-bdk",
+          "2.1.0": "2.1.0-bdk",
+          "2.1.3": "2.1.3-bdk",
+          "default": "2.1.3-bdk"
+        }
       }
     },
     "framework-arduino-api": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretuya/ArduinoCore-API#3a4cbfc",
-      "manifest": {
-        "description": "Hardware independent layer of the Arduino cores"
-      },
-      "libraries": {
-        "flashdb": [
-          "03500fa"
-        ],
-        "printf": [
-          "v6.0.0"
-        ]
-      }
+      "version": "https://github.com/libretuya/ArduinoCore-API#2022.08.24"
     },
     "library-lwip": {
       "type": "framework",
       "optional": true,
       "base_url": "https://github.com/libretuya/lwip",
-      "manifest": {
-        "description": "lwIP - A Lightweight TCPIP stack"
-      }
+      "version_prefix": true
     },
     "library-flashdb": {
       "type": "framework",
-      "optional": true,
-      "base_url": "https://github.com/armink/FlashDB",
-      "manifest": {
-        "description": "An ultra-lightweight database that supports key-value and time series data"
-      }
+      "version": "https://github.com/libretuya/library-flashdb#1.2.0"
     },
     "library-printf": {
       "type": "framework",
-      "optional": true,
-      "base_url": "https://github.com/eyalroz/printf",
-      "manifest": {
-        "description": "Tiny, fast(ish), self-contained and fully loaded printf, sprinf etc. implementation, mainly for embedded systems."
-      }
+      "version": "https://github.com/libretuya/library-printf#6.1.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
@@ -131,6 +98,7 @@
     "tool-ltchiptool": {
       "type": "uploader",
       "version": "https://github.com/libretuya/ltchiptool#v2.0.2",
+      "version_prefix": true,
       "note": "This is used only for C/C++ code from ltchiptool."
     },
     "tool-openocd": {

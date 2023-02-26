@@ -1,8 +1,7 @@
 {
 	"build": {
 		"family": "BK7231N",
-		"ldscript_sdk": "bk7231n_bsp.ld",
-		"ldscript_arduino": "bk7231n_bsp.ld",
+		"ldscript": "bk7231n_bsp.ld",
 		"bkboot_version": "1.0.1-bk7231n",
 		"bkrbl_size_app": "0x108700"
 	},

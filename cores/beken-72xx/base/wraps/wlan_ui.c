@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-01. */
 
+#if 0
+
 #include <param_config.h>
 #include <wlan_ui_pub.h>
 
@@ -26,3 +28,5 @@ void __wrap_bk_wlan_sta_init_adv(network_InitTypeDef_adv_st *inNetworkInitParaAd
 	}
 	g_sta_param_ptr->fast_connect_set = fast_connect;
 }
+
+#endif

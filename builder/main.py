@@ -2,31 +2,27 @@
 
 import sys
 
-from SCons.Script import Default, DefaultEnvironment
+from platformio.platform.board import PlatformBoardConfig
+from SCons.Script import Default, DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-platform = env.PioPlatform()
-board = env.BoardConfig()
-
-# Make tools available
-sys.path.insert(0, platform.get_dir())
+env: Environment = DefaultEnvironment()
+board: PlatformBoardConfig = env.BoardConfig()
 
 # Utilities
 env.SConscript("utils/config.py", exports="env")
+env.SConscript("utils/cores.py", exports="env")
 env.SConscript("utils/env.py", exports="env")
 env.SConscript("utils/flash.py", exports="env")
+env.SConscript("utils/libs-external.py", exports="env")
 env.SConscript("utils/libs.py", exports="env")
 env.SConscript("utils/ltchiptool.py", exports="env")
-# Vendor-specific library ports
-env.SConscript("libs/flashdb.py", exports="env")
-env.SConscript("libs/lwip.py", exports="env")
-env.SConscript("libs/printf.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":
     env.Replace(PROGNAME="firmware")
 env.Replace(PROGSUFFIX=".elf")
 
+# Configure the toolchain
 prefix = board.get("build.prefix", "")
 env.Replace(
     AR=prefix + "gcc-ar",
@@ -41,11 +37,6 @@ env.Replace(
     RANLIB=prefix + "gcc-ranlib",
     SIZETOOL=prefix + "size",
 )
-
-# Default environment options
-env.AddDefaults(platform, board)
-# Flash layout defines
-env.AddFlashLayout(board)
 
 # Family builders details:
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources
@@ -63,6 +54,7 @@ env.AddFlashLayout(board)
 #   - env.BuildLibraries()
 #   - # Main firmware outputs and actions
 
+# Framework builder (base.py/arduino.py) is executed in BuildProgram()
 target_elf = env.BuildProgram()
 targets = [target_elf]
 

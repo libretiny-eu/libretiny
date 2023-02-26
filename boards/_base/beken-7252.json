@@ -2,8 +2,7 @@
 	"build": {
 		"family": "BK7251",
 		"f_cpu": "180000000L",
-		"ldscript_sdk": "bk7231_bsp.ld",
-		"ldscript_arduino": "bk7231_bsp.ld",
+		"ldscript": "bk7231_bsp.ld",
 		"bkboot_version": "0.1.3-bk7252",
 		"bkrbl_size_app": "0x1A0000"
 	},

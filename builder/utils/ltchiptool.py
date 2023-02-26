@@ -4,13 +4,14 @@ import sys
 from datetime import datetime
 from os.path import basename, join, normpath
 
-from SCons.Script import Builder, DefaultEnvironment
+from platformio.platform.base import PlatformBase
+from SCons.Script import Builder, DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-platform = env.PioPlatform()
+env: Environment = DefaultEnvironment()
+platform: PlatformBase = env.PioPlatform()
 
 
-def env_uf2ota(env, *args, **kwargs):
+def env_uf2ota(env: Environment, *args, **kwargs):
     now = datetime.now()
     project_dir = env.subst("$PROJECT_DIR")
     project_name = basename(normpath(project_dir))
@@ -53,7 +54,7 @@ def env_uf2ota(env, *args, **kwargs):
     env.Execute(" ".join(cmd))
 
 
-def env_flash_write(env, target):
+def env_flash_write(env: Environment, target):
     protocol = env.subst("${UPLOAD_PROTOCOL}")
     actions = []
     # from platform-espressif32/builder/main.py

@@ -20,10 +20,6 @@
 			"mem 0x000000 0x200000 ro"
 		]
 	},
-	"frameworks": [
-		"beken-72xx-sdk",
-		"beken-72xx-arduino"
-	],
 	"upload": {
 		"maximum_ram_size": 262144,
 		"flash_size": 2097152,

@@ -1,11 +1,11 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-12.
 
-from SCons.Script import DefaultEnvironment
+from SCons.Script import DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
+env: Environment = DefaultEnvironment()
 
 
-def env_add_flash_layout(env, board):
+def env_add_flash_layout(env: Environment, board):
     flash_layout: dict = board.get("flash")
     if flash_layout:
         defines = {}
