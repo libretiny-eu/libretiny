@@ -83,6 +83,14 @@ class LibretuyaPlatform(PlatformBase):
         self.custom_opts = {}
         self.versions = {}
 
+    def get_package_spec(self, name, version=None):
+        # make PlatformIO detach existing package versions instead of overwriting
+        # TODO this is an ugly hack, it moves old packages to dirs like "library-lwip@src-21d717f2feaca73533f129ce05c9f4d4"
+        # it should be fixed properly at some point. Maybe ask PIO to allow controlling that somehow?
+        spec = super().get_package_spec(name, version)
+        spec._name_is_custom = False
+        return spec
+
     def configure_default_packages(self, options, targets):
         from ltchiptool.util.dict import RecursiveDict
 
