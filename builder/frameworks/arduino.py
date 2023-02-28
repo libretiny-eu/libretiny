@@ -9,17 +9,67 @@ from SCons.Script import DefaultEnvironment, Environment
 # Let everyone know we're using the Arduino framework
 env: Environment = DefaultEnvironment()
 env["ARDUINO"] = True
+family: Family = env["FAMILY_OBJ"]
 
 # Add base cores' sources first
 env.SConscript("base.py")
 
+# Build a safe environment for this script
+queue = env.AddLibraryQueue("arduino", prepend_includes=True)
+
+# Add sources common among all families
+env.AddCoreSources(
+    queue=queue,
+    name="common_arduino",
+    path=join("$COMMON_DIR", "arduino", "src"),
+)
+env.AddArduinoLibraries(
+    queue=queue,
+    name="common_arduino",
+    path=join("$COMMON_DIR", "arduino", "libraries"),
+)
+# Add sources for this family and each parent
+found = False
+for f in family.inheritance:
+    code = f"{f.code}_arduino"
+    path = join("$CORES_DIR", f.name, "arduino")
+
+    found = found or env.AddCoreSources(queue, name=code, path=join(path, "src"))
+    env.AddArduinoLibraries(queue, name=code, path=join(path, "libraries"))
+
+    if f.short_name:
+        env.Prepend(CPPDEFINES=[(f"ARDUINO_ARCH_{f.short_name}", "1")])
+    if f.code:
+        env.Prepend(CPPDEFINES=[(f"ARDUINO_ARCH_{f.code.upper()}", "1")])
+
+# Fail if Arduino core wasn't found
+if not found:
+    click.secho(
+        f"Platform '{family.name}' doesn't support Arduino framework - "
+        "the Arduino core source files are absent.",
+        fg="red",
+    )
+    exit(1)
+
+# Sources - ArduinoCore-API
+queue.AddExternalLibrary("arduino_api")
+
+# Sources - board variant
+queue.AddLibrary(
+    name="board_${VARIANT}",
+    base_dir="$BOARD_DIR",
+    srcs=[
+        "+<variant.cpp>",
+    ],
+    # not adding includes since they're added with the base core
+)
+
 # Flags & linker options
-env.Append(
+queue.AppendPublic(
     CPPDEFINES=[
         ("LIBRETUYA_ARDUINO", 1),
         ("ARDUINO", 10812),
         ("ARDUINO_SDK", 1),
-        ("ARDUINO_ARCH_${FAMILY_CODE}", 1),
     ],
     LINKFLAGS=[
         "--specs=nosys.specs",
@@ -35,47 +85,5 @@ env.Append(
     ],
 )
 
-family: Family = env["FAMILY_OBJ"]
-
-# Add common sources among all families
-env.AddCoreSources(
-    name="common_arduino",
-    path=join("$COMMON_DIR", "arduino", "src"),
-)
-env.AddArduinoLibraries(
-    name="common_arduino",
-    path=join("$COMMON_DIR", "arduino", "libraries"),
-)
-# Add sources for this family and each parent
-found = False
-for f in family.inheritance:
-    code = f"{f.code}_arduino"
-    path = join("$CORES_DIR", f.name, "arduino")
-    # Add libraries first, to put the include paths after core sources
-    env.AddArduinoLibraries(name=code, path=join(path, "libraries"))
-    found = found or env.AddCoreSources(name=code, path=join(path, "src"))
-
-# Fail if Arduino core wasn't found
-if not found:
-    click.secho(
-        f"Platform '{family.name}' doesn't support Arduino framework - "
-        "the Arduino core source files are absent.",
-        fg="red",
-    )
-    exit(1)
-
-# Sources - ArduinoCore-API
-env.AddExternalLibrary("arduino_api")
-
-# Sources - board variant
-env.AddLibrary(
-    name="board_${VARIANT}",
-    base_dir="$BOARD_DIR",
-    srcs=[
-        "+<variant.cpp>",
-    ],
-    # not adding includes since they're added in base.py
-)
-
 # Build all libraries
-env.BuildLibraries()
+queue.BuildLibraries()

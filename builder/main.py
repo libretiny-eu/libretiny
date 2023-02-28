@@ -2,10 +2,12 @@
 
 import sys
 
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Default, DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
+platform: PlatformBase = env.PioPlatform()
 board: PlatformBoardConfig = env.BoardConfig()
 
 # Utilities
@@ -14,7 +16,7 @@ env.SConscript("utils/cores.py", exports="env")
 env.SConscript("utils/env.py", exports="env")
 env.SConscript("utils/flash.py", exports="env")
 env.SConscript("utils/libs-external.py", exports="env")
-env.SConscript("utils/libs.py", exports="env")
+env.SConscript("utils/libs-queue.py", exports="env")
 env.SConscript("utils/ltchiptool.py", exports="env")
 
 # Firmware name
@@ -37,6 +39,11 @@ env.Replace(
     RANLIB=prefix + "gcc-ranlib",
     SIZETOOL=prefix + "size",
 )
+
+# Environment variables, include paths, etc.
+env.ConfigureEnvironment(platform, board)
+# Flash layout defines
+env.AddFlashLayout(board)
 
 # Family builders details:
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources

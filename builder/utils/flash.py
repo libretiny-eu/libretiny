@@ -12,22 +12,22 @@ def env_add_flash_layout(env: Environment, board):
         flash_size = 0
         fal_items = ""
         # add "root" partition
-        fal_items += "FAL_PART_TABLE_ITEM(root, ROOT)"
+        fal_items += "FAL_PART_TABLE_ITEM(root,ROOT)"
         # add all partitions
         for name, layout in flash_layout.items():
             name = name.upper()
             (offset, _, length) = layout.partition("+")
             defines[f"FLASH_{name}_OFFSET"] = offset
             defines[f"FLASH_{name}_LENGTH"] = length
-            fal_items += f"FAL_PART_TABLE_ITEM({name.lower()}, {name})"
+            fal_items += f"FAL_PART_TABLE_ITEM({name.lower()},{name})"
             flash_size = max(flash_size, int(offset, 16) + int(length, 16))
-        defines["FLASH_LENGTH"] = flash_size
+        defines["FLASH_LENGTH"] = f"0x{flash_size:06X}"
         # for "root" partition
-        defines["FLASH_ROOT_OFFSET"] = 0
-        defines["FLASH_ROOT_LENGTH"] = flash_size
+        defines["FLASH_ROOT_OFFSET"] = "0x000000"
+        defines["FLASH_ROOT_LENGTH"] = f"0x{flash_size:06X}"
         # add partition table array
         defines["FAL_PART_TABLE"] = "{" + fal_items + "}"
-        env.Append(CPPDEFINES=list(defines.items()))
+        env.Replace(FLASH_DEFINES=defines)
         env.Replace(**defines)
 
 

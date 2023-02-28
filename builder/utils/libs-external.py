@@ -12,7 +12,7 @@ platform: PlatformBase = env.PioPlatform()
 
 
 @dataclass
-class Library:
+class ExternalLibrary:
     package: str
     sources: List[str]
     includes: List[str]
@@ -28,13 +28,14 @@ class Library:
 
 def env_add_external_library(
     env: Environment,
+    queue,
     name: str,
     port: Optional[str] = None,
 ):
     if port:
         name += f"-{port}"
     external_libs = env["EXTERNAL_LIBS"]
-    lib = Library(**external_libs[name])
+    lib = ExternalLibrary(**external_libs[name])
     version = platform.versions.get(lib.package, None)
 
     package: PackageItem = platform.pm.get_package(
@@ -45,7 +46,7 @@ def env_add_external_library(
             f"Version '{version}' of library '{name}' ({lib.package}) is not installed"
         )
 
-    env.AddLibrary(
+    queue.AddLibrary(
         name=name.replace("-", "_"),
         base_dir=package.path,
         srcs=lib.sources,

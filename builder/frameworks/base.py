@@ -12,53 +12,10 @@ from SCons.Script import DefaultEnvironment, Environment
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
 platform: PlatformBase = env.PioPlatform()
-
-# Environment variables, include paths, etc.
-family: Family = env.ConfigureEnvironment(platform, board)
-# Flash layout defines
-env.AddFlashLayout(board)
-
-# Flags & linker options
-env.Append(
-    CFLAGS=[
-        "-Werror=implicit-function-declaration",
-    ],
-    CPPDEFINES=[
-        ("LIBRETUYA", 1),
-        ("LT_VERSION", env.ReadLTVersion(platform.get_dir(), platform.version)),
-        ("LT_BOARD", "${VARIANT}"),
-        ("F_CPU", board.get("build.f_cpu")),
-        ("MCU", "${MCU}"),
-        ("FAMILY", "F_${FAMILY}"),
-    ],
-    CPPPATH=[
-        "$BOARD_DIR",
-    ],
-    LINKFLAGS=[
-        '"-Wl,-Map=' + join("$BUILD_DIR", "${PROGNAME}.map") + '"',
-    ],
-    LIBS=[
-        "stdc++",
-        "supc++",
-    ],
-)
-
-# Build a core list to add sources, flags, etc.
-cores = {
-    "common": "$COMMON_DIR",
-}
-# Configure each family first (add CPP defines)
-for f in family.inheritance:
-    cores[f.code] = env.AddFamily(f)
-
-# Add fixups & config for each core
-for name, path in cores.items():
-    env.AddCoreConfig(path=join(path, "base"))
-    if "ARDUINO" in env:
-        env.AddCoreConfig(path=join(path, "arduino", "src"))
+family: Family = env["FAMILY_OBJ"]
 
 # Include SDK builder scripts
-# The script will call BuildLibraries(safe=True) to secure the include paths
+# No environment options that follow later will be considered
 found = False
 for f in family.inheritance:
     try:
@@ -75,14 +32,50 @@ if not found:
     )
     exit(1)
 
+# Build a safe environment for this script
+queue = env.AddLibraryQueue("base", prepend_includes=True)
 # Add sources & include paths for each core
-for name, path in cores.items():
-    env.AddCoreSources(name=name, path=join(path, "base"))
+env.AddCoreSources(queue, name="common", path=join("$COMMON_DIR", "base"))
+for f in family.inheritance:
+    env.AddCoreSources(queue, name=f.code, path=join("$CORES_DIR", f.name, "base"))
+
+    if f.short_name:
+        env.Prepend(CPPDEFINES=[(f"LT_{f.short_name}", "1")])
+    if f.code:
+        env.Prepend(CPPDEFINES=[(f"LT_{f.code.upper()}", "1")])
+    env.Prepend(LIBPATH=[join("$CORES_DIR", f.name, "misc")])
 
 # Sources - external libraries
-env.AddExternalLibrary("ltchiptool")  # uf2ota source code
-env.AddExternalLibrary("flashdb")
-env.AddExternalLibrary("printf")
+queue.AddExternalLibrary("ltchiptool")  # uf2ota source code
+queue.AddExternalLibrary("flashdb")
+queue.AddExternalLibrary("printf")
+
+# Flags & linker options
+queue.AppendPublic(
+    CFLAGS=[
+        "-Werror=implicit-function-declaration",
+    ],
+    CPPDEFINES=[
+        ("LIBRETUYA", 1),
+        ("LT_VERSION", env.ReadLTVersion(platform.get_dir(), platform.version)),
+        ("LT_BOARD", "${VARIANT}"),
+        ("F_CPU", board.get("build.f_cpu")),
+        ("MCU", "${MCU}"),
+        ("FAMILY", "F_${FAMILY}"),
+        # Add flash layout defines created in env.AddFlashLayout()
+        *env["FLASH_DEFINES"].items(),
+    ],
+    CPPPATH=[
+        "$BOARD_DIR",
+    ],
+    LINKFLAGS=[
+        '"-Wl,-Map=' + join("$BUILD_DIR", "${PROGNAME}.map") + '"',
+    ],
+    LIBS=[
+        "stdc++",
+        "supc++",
+    ],
+)
 
 # Build everything from the base core
-env.BuildLibraries()
+queue.BuildLibraries()

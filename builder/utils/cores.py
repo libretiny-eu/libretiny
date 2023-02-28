@@ -8,44 +8,40 @@ from SCons.Script import DefaultEnvironment, Environment
 env: Environment = DefaultEnvironment()
 
 
-def env_add_family(env: Environment, family: Family) -> str:
-    if family.short_name:
-        env.Prepend(CPPDEFINES=[(f"LT_{family.short_name}", "1")])
-    if family.code:
-        env.Prepend(CPPDEFINES=[(f"LT_{family.code.upper()}", "1")])
-    path = join("$CORES_DIR", family.name)
-    if not isdir(env.subst(path)):
-        return path
-    env.Prepend(
-        LIBPATH=[join(path, "misc")],
-    )
-    return path
-
-
-def env_add_core_config(env: Environment, path: str) -> bool:
-    if not isdir(env.subst(path)):
-        return False
+def env_configure_family(env: Environment):
     env.Prepend(
         CPPPATH=[
-            join(path, "compat"),
-            join(path, "config"),
-            join(path, "fixups"),
-        ],
-        LIBPATH=[
-            join(path, "fixups"),
+            join("$COMMON_DIR", "base", "fixups"),
+            join("$COMMON_DIR", "base", "config"),
+            join("$COMMON_DIR", "base", "compat"),
         ],
     )
+
+    family: Family = env["FAMILY_OBJ"]
+    for f in family.inheritance:
+        path = join("$CORES_DIR", f.name, "base")
+        if not isdir(env.subst(path)):
+            continue
+        env.Prepend(
+            CPPPATH=[
+                join(path, "fixups"),
+                join(path, "config"),
+                join(path, "compat"),
+            ],
+            LIBPATH=[
+                join(path, "fixups"),
+            ],
+        )
+
+
+def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
+    if not isdir(env.subst(path)):
+        return False
     try:
         env.LoadDefines(join(path, "lt_defs.h"))
     except FileNotFoundError:
         pass
-    return True
-
-
-def env_add_core_sources(env: Environment, name: str, path: str) -> bool:
-    if not isdir(env.subst(path)):
-        return False
-    env.AddLibrary(
+    queue.AddLibrary(
         name=f"core_{name}",
         base_dir=path,
         srcs=[
@@ -69,10 +65,10 @@ def env_add_core_sources(env: Environment, name: str, path: str) -> bool:
     return True
 
 
-def env_add_arduino_libraries(env: Environment, name: str, path: str) -> bool:
+def env_add_arduino_libraries(env: Environment, queue, name: str, path: str) -> bool:
     if not isdir(env.subst(path)):
         return False
-    env.AddLibrary(
+    queue.AddLibrary(
         name=f"core_{name}_libraries",
         base_dir=path,
         srcs=[
@@ -85,7 +81,6 @@ def env_add_arduino_libraries(env: Environment, name: str, path: str) -> bool:
     return True
 
 
-env.AddMethod(env_add_family, "AddFamily")
-env.AddMethod(env_add_core_config, "AddCoreConfig")
+env.AddMethod(env_configure_family, "ConfigureFamily")
 env.AddMethod(env_add_core_sources, "AddCoreSources")
 env.AddMethod(env_add_arduino_libraries, "AddArduinoLibraries")

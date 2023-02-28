@@ -7,6 +7,8 @@ from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
+queue = env.AddLibraryQueue("beken-72xx")
+env.ConfigureFamily()
 
 ROOT_DIR = join("$SDK_DIR", "beken378")
 APP_DIR = join(ROOT_DIR, "app")
@@ -36,7 +38,7 @@ SOC = env.Cfg("CFG_SOC_NAME")
 WPA_VERSION = "wpa_supplicant_2_9" if env.Cfg("CFG_USE_WPA_29") else "hostapd-2.5"
 
 # Flags
-env.Append(
+queue.AppendPublic(
     CCFLAGS=[
         "-mcpu=arm968e-s",
         "-march=armv5te",
@@ -119,8 +121,9 @@ srcs_core = []
 
 # Fix for BK7231T's bootloader compatibility
 if board.get("build.bkboot_version") == "1.0.5-bk7231s":
-    env.Append(CPPDEFINES=[("CFG_SUPPORT_BOOTLOADER", "1")])
-    env.AddLibrary(
+    # this has to be public, so that fixups/intc.c sees it
+    queue.AppendPublic(CPPDEFINES=[("CFG_SUPPORT_BOOTLOADER", "1")])
+    queue.AddLibrary(
         name="bdk_boot",
         base_dir="$FAMILY_DIR/base/fixups",
         srcs=["+<boot_handlers_105_bk7231s.S>"],
@@ -129,7 +132,7 @@ else:
     srcs_core.append("+<driver/entry/boot_handlers.S>")
 
 # Sources - from framework-beken-bdk/beken378/beken_src.mk
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_core",
     base_dir=ROOT_DIR,
     srcs=[
@@ -151,7 +154,7 @@ env.AddLibrary(
 )
 
 # Sources - app module
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_app",
     base_dir=APP_DIR,
     srcs=[
@@ -171,7 +174,7 @@ env.AddLibrary(
 )
 
 # Sources - drivers
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_driver",
     base_dir=DRIVER_DIR,
     srcs=[
@@ -228,7 +231,7 @@ env.AddLibrary(
 )
 
 # Sources - functional components
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_func",
     base_dir=FUNC_DIR,
     srcs=[
@@ -292,7 +295,7 @@ env.AddLibrary(
 )
 
 # Sources - FreeRTOS
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_freertos_thumb",
     base_dir=ROOT_DIR,
     srcs=[
@@ -302,7 +305,7 @@ env.AddLibrary(
         "+<os/*>",
     ],
 )
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_freertos_arm",
     base_dir="$SDK_DIR",
     srcs=[
@@ -322,10 +325,10 @@ env.AddLibrary(
 )
 
 # Sources - lwIP
-env.AddExternalLibrary("lwip", port="bdk")
+queue.AddExternalLibrary("lwip", port="bdk")
 
 # Sources - mbedTLS 2.6.0
-env.AddLibrary(
+queue.AddLibrary(
     name="bdk_mbedtls",
     base_dir=join(FUNC_DIR, "mbedtls"),
     srcs=[
@@ -349,7 +352,7 @@ env.AddLibrary(
 
 # Sources - chip-specific drivers
 if SOC in [SOC_BK7231U, SOC_BK7251]:
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_driver_spi",
         base_dir=join(DRIVER_DIR, "spi"),
         srcs=[
@@ -359,7 +362,7 @@ if SOC in [SOC_BK7231U, SOC_BK7251]:
         ],
     )
 if SOC in [SOC_BK7231N]:
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_driver_spi",
         base_dir=join(DRIVER_DIR, "spi"),
         srcs=[
@@ -369,7 +372,7 @@ if SOC in [SOC_BK7231N]:
         ],
     )
 if SOC in [SOC_BK7251]:
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_bk7251",
         base_dir=ROOT_DIR,
         srcs=[
@@ -386,7 +389,7 @@ if SOC in [SOC_BK7251]:
 
 # Sources - enabled through config
 if env.Cfg("CFG_SDIO"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_driver_sdio",
         base_dir=ROOT_DIR,
         srcs=[
@@ -395,7 +398,7 @@ if env.Cfg("CFG_SDIO"):
         ],
     )
 if env.Cfg("CFG_BK_AWARE"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_driver_sdio",
         base_dir="$SDK_DIR",
         srcs=[
@@ -407,7 +410,7 @@ if env.Cfg("CFG_BK_AWARE"):
         ],
     )
 if env.Cfg("CFG_USE_SDCARD_HOST"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_func_fatfs",
         base_dir=join(FUNC_DIR, "fatfs"),
         srcs=[
@@ -419,7 +422,7 @@ if env.Cfg("CFG_USE_SDCARD_HOST"):
         ],
     )
 if env.Cfg("CFG_WPA3"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_wolfssl",
         base_dir=join(FUNC_DIR, "wolfssl"),
         srcs=[
@@ -437,7 +440,7 @@ if env.Cfg("CFG_WPA3"):
 if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
     "BLE_VERSION_4_2"
 ):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_ble_4_2",
         base_dir=join(DRIVER_DIR, "ble"),
         srcs=[
@@ -457,7 +460,7 @@ if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
 if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
     "BLE_VERSION_5_x"
 ):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_ble_5_x",
         base_dir=join(DRIVER_DIR, "ble_5_x_rw"),
         srcs=[
@@ -479,7 +482,7 @@ if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
         ],
     )
 if env.Cfg("ATSVR_CFG"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_atsvr",
         base_dir=join(FUNC_DIR, "at_server"),
         srcs=[
@@ -491,7 +494,7 @@ if env.Cfg("ATSVR_CFG"):
         ],
     )
 if env.Cfg("CFG_USB") or env.Cfg("CFG_USE_SDCARD_HOST"):
-    env.AddLibrary(
+    queue.AddLibrary(
         name="bdk_driver_usb",
         base_dir=ROOT_DIR,
         srcs=[
@@ -504,7 +507,7 @@ if env.Cfg("CFG_USB") or env.Cfg("CFG_USE_SDCARD_HOST"):
     )
 
 # Libs & linker config
-env.Append(
+queue.AppendPublic(
     LIBPATH=[
         join("$SDK_DIR", "beken378", "lib"),
         join("$SDK_DIR", "beken378", "func", "airkiss"),
@@ -549,7 +552,7 @@ rbl_offs = to_offset(app_size) - 102
 env.Replace(FLASH_RBL_OFFSET=f"0x{app_offs + rbl_offs:06X}")
 
 # Build all libraries
-env.BuildLibraries()
+queue.BuildLibraries()
 
 # Main firmware outputs and actions
 env.Replace(

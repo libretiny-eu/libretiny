@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <variant.h>
+
 // Choose the main UART output port
 #ifndef LT_UART_DEFAULT_PORT
 #if HAS_SERIAL2
