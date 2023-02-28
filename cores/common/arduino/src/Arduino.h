@@ -39,15 +39,13 @@ extern int startMainTask(void);
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
 #include <SerialClass.h>
 
-#ifdef PIN_SERIAL0_TX
+#if HAS_SERIAL0
 extern SerialClass Serial0;
 #endif
-
-#ifdef PIN_SERIAL1_TX
+#if HAS_SERIAL1
 extern SerialClass Serial1;
 #endif
-
-#ifdef PIN_SERIAL2_TX
+#if HAS_SERIAL2
 extern SerialClass Serial2;
 #endif
 

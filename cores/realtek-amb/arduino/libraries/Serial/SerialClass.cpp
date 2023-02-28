@@ -2,13 +2,13 @@
 
 #include "SerialClass.h"
 
-#ifdef PIN_SERIAL0_TX
+#if HAS_SERIAL0
 SerialClass Serial0(UART0_DEV, UART0_IRQ, PIN_SERIAL0_RX, PIN_SERIAL0_TX);
 #endif
-#ifdef PIN_SERIAL1_TX
+#if HAS_SERIAL1
 SerialClass Serial1(UART1_DEV, UART1_IRQ, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
 #endif
-#ifdef PIN_SERIAL2_TX
+#if HAS_SERIAL2
 SerialClass Serial2(UART2_DEV, UART_LOG_IRQ, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
 #endif
 

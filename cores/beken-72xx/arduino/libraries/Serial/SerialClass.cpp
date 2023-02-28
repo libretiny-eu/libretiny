@@ -12,10 +12,10 @@ extern int uart_rx_callback_set(int uport, uart_callback callback, void *param);
 
 } // extern "C"
 
-#ifdef PIN_SERIAL1_TX
+#if HAS_SERIAL1
 SerialClass Serial1(UART1_PORT);
 #endif
-#ifdef PIN_SERIAL2_TX
+#if HAS_SERIAL2
 SerialClass Serial2(UART2_PORT);
 #endif
 
