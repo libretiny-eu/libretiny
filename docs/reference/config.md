@@ -113,7 +113,6 @@ The meaning of most flags is as follows:
 - `LT_HAS_LWIP2` - LwIP v2.0.0 or newer
 - `LT_HAS_FREERTOS` - FreeRTOS supported and used
 - `LT_HAS_MBEDTLS` - mbedTLS in SDK
-- `LT_ARD_HAS_MD5` - MD5 library implemented, `MD5Impl.h` available
 - `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
 - `LT_ARD_HAS_SOFTSERIAL` - SoftwareSerial library implemented, `SoftwareSerial.h` available
 - `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)

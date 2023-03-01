@@ -2,10 +2,9 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
-#include <api/WiFiServer.h>
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
 
-#include <WiFiClient.h>
+#include "WiFiServer.h"
 
 class LwIPServer : public IWiFiServer<WiFiClient> {
   private:
@@ -45,3 +44,7 @@ class LwIPServer : public IWiFiServer<WiFiClient> {
 	bool getNoDelay();
 	bool hasClient();
 };
+
+typedef LwIPServer WiFiServer;
+
+#endif

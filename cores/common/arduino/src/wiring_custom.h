@@ -44,6 +44,13 @@ extern PinInfo pinTable[];
 
 // Custom Wiring methods
 
+/**
+ * @brief Run mainTask & start OS kernel (family-defined).
+ * Return false if an error occured; else do not return and
+ * and keep the OS kernel running.
+ */
+bool startMainTask(void);
+
 void mainTask(const void *arg); // implemented in main.cpp
 void runPeriodicTasks();		// implemented in wiring_custom.c
 

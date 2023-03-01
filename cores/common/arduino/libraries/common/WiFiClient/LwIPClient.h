@@ -2,9 +2,11 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
-#include <api/WiFiClient.h>
-#include <lwip/LwIPRxBuffer.h>
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+
+#include "WiFiClient.h"
+
+#include "LwIPRxBuffer.h"
 #include <memory>
 
 class SocketHandle;
@@ -54,3 +56,7 @@ class LwIPClient : public IWiFiClient {
 
 	using Print::write;
 };
+
+typedef LwIPClient WiFiClient;
+
+#endif

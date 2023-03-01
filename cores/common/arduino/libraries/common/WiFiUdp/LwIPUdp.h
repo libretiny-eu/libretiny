@@ -2,8 +2,10 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
-#include <api/WiFiUdp.h>
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+
+#include "WiFiUdp.h"
+
 #include <cbuf.h>
 
 class LwIPUDP : public IWiFiUDP {
@@ -41,3 +43,7 @@ class LwIPUDP : public IWiFiUDP {
 	IPAddress remoteIP();
 	uint16_t remotePort();
 };
+
+typedef LwIPUDP WiFiUDP;
+
+#endif

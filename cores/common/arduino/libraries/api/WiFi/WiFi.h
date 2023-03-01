@@ -22,7 +22,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <api/Events.h>
+#include <Events.h>
 #include <api/IPAddress.h>
 #include <api/IPv6Address.h>
 #include <vector>
@@ -33,6 +33,11 @@
 // family's data structure
 #include <WiFiData.h>
 #endif
+
+#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
+#include <WiFiServer.h>
+#include <WiFiUdp.h>
 
 class WiFiClass {
   public:

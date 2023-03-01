@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include <gpio_pub.h>
+
 void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)

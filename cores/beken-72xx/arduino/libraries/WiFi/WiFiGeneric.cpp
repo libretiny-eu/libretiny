@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-26. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_bk_printf_disable();
@@ -73,7 +73,8 @@ WiFiMode WiFiClass::getMode() {
 }
 
 WiFiStatus WiFiClass::status() {
-	rw_evt_type status = data.lastStaEvent;
+	// TODO remove the cast
+	rw_evt_type status = (rw_evt_type)data.lastStaEvent;
 	if (status == RW_EVT_STA_CONNECTED && STA_CFG->dhcp_mode == DHCP_DISABLE)
 		status = RW_EVT_STA_GOT_IP;
 	return eventTypeToStatus(status);

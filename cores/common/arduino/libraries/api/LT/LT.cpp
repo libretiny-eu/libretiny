@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-06. */
 
-#include "LibreTuyaClass.h"
+#include "LT.h"
 
 /**
  * @brief Get LibreTuya version string.

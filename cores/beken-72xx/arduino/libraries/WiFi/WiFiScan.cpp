@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-27. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 static void scanHandler(void *ctx, uint8_t param) {
 	LT_HEAP_I();

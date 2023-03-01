@@ -5,11 +5,14 @@
 #include <Arduino.h>
 
 extern "C" {
-
+#define _ARCH_H_
+#define _GENERIC_H_
 #include <FreeRTOS.h>
+#include <include.h>
 #include <rw_msg_pub.h>
 #include <semphr.h>
-
+#undef _ARCH_H_
+#undef _GENERIC_H_
 } // extern "C"
 
 typedef struct {
@@ -19,7 +22,7 @@ typedef struct {
 	SemaphoreHandle_t scanSem;
 	void *statusIp;
 	void *statusLink;
-	rw_evt_type lastStaEvent;
-	rw_evt_type lastApEvent;
+	uint32_t lastStaEvent; // TODO revert this type back to rw_evt_type
+	uint32_t lastApEvent;
 	bool apEnabled;
 } WiFiData;

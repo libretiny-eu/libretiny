@@ -42,5 +42,3 @@ class SerialClass : public HardwareSerial {
 
 	using Print::write;
 };
-
-#define HAS_SERIAL_CLASS 1

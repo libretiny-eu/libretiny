@@ -3,23 +3,22 @@
 #pragma once
 
 #include <Arduino.h>
-#include <MD5Impl.h>
 
 // available built-in implementations
-#if LT_MD5_USE_POLARSSL
+#if LT_ARD_MD5_POLARSSL
 #include "MD5PolarSSLImpl.h"
 #endif
-#if LT_MD5_USE_MBEDTLS
+#if LT_ARD_MD5_MBEDTLS
 #include "MD5MbedTLSImpl.h"
 #endif
-#if LT_MD5_USE_HOSTAPD
+#if LT_ARD_MD5_HOSTAPD
 #include "MD5HostapdImpl.h"
 #endif
 
 // common API
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // __cplusplus
 
 #ifndef LT_MD5_CTX_T
 #define LT_MD5_CTX_T void
@@ -33,5 +32,5 @@ void MD5Update(LT_MD5_CTX_T *context, const unsigned char *buf, unsigned len);
 void MD5Final(unsigned char digest[16], LT_MD5_CTX_T *context);
 
 #ifdef __cplusplus
-}
+} // extern "C"
 #endif

@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-08-26. */
 
+#pragma once
+
 #define LWIP_TIMEVAL_PRIVATE 0
 #define LWIP_NETIF_HOSTNAME	 1 // to support hostname changing
 #define LWIP_SO_RCVBUF		 1 // for ioctl(FIONREAD)
@@ -8,6 +10,8 @@
 #define MDNS_MAX_SERVICES	10
 
 #include_next "lwipopts.h"
+
+#include <sys/time.h>
 
 // set lwIP debugging options according to LT config
 #if LT_DEBUG_LWIP
@@ -64,24 +68,24 @@
 #undef IP6_DEBUG
 #undef MDNS_DEBUG
 
+#undef LWIP_DONT_PROVIDE_BYTEORDER_FUNCTIONS
 
 /** Set this to 1 to support DNS names (or IP address strings) to set sntp servers
  * One server address/name can be defined as default if SNTP_SERVER_DNS == 1:
  * \#define SNTP_SERVER_ADDRESS "pool.ntp.org"
  */
-#define SNTP_SERVER_DNS            1
+#define SNTP_SERVER_DNS 1
 
-#define SNTP_SET_SYSTEM_TIME_US(sec, us)  \
-    do { \
-        struct timeval tv = { .tv_sec = sec, .tv_usec = us }; \
-        settimeofday(&tv, NULL); \
-    } while (0);
+#define SNTP_SET_SYSTEM_TIME_US(sec, us)                                                                               \
+	do {                                                                                                               \
+		struct timeval tv = {.tv_sec = sec, .tv_usec = us};                                                            \
+		settimeofday(&tv, NULL);                                                                                       \
+	} while (0);
 
-#define SNTP_GET_SYSTEM_TIME(sec, us) \
-    do { \
-        struct timeval tv = { .tv_sec = 0, .tv_usec = 0 }; \
-        gettimeofday(&tv, NULL); \
-        (sec) = tv.tv_sec;  \
-        (us) = tv.tv_usec; \
-    } while (0);
-
+#define SNTP_GET_SYSTEM_TIME(sec, us)                                                                                  \
+	do {                                                                                                               \
+		struct timeval tv = {.tv_sec = 0, .tv_usec = 0};                                                               \
+		gettimeofday(&tv, NULL);                                                                                       \
+		(sec) = tv.tv_sec;                                                                                             \
+		(us)  = tv.tv_usec;                                                                                            \
+	} while (0);

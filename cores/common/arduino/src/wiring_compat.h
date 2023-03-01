@@ -4,9 +4,16 @@
 
 #include <Arduino.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 #if LT_HAS_FREERTOS
+// dirty hack to avoid including BDK's arch.h (from FreeRTOS/portable.h)
+#define _ARCH_H_
 #include <FreeRTOS.h>
 #include <task.h>
+#undef _ARCH_H_
 #endif
 
 // Definitions for error constants.
@@ -43,4 +50,8 @@ BaseType_t xTaskCreateUniversal(
 
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
+#endif
+
+#ifdef __cplusplus
+} // extern "C"
 #endif

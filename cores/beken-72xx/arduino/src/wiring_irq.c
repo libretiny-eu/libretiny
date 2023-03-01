@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include <gpio_pub.h>
+
 static void *irqHandlerList[PINS_COUNT] = {NULL};
 static void *irqHandlerArgs[PINS_COUNT] = {NULL};
 static bool irqChangeList[PINS_COUNT];

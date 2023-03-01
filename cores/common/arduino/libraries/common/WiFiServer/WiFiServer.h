@@ -70,3 +70,7 @@ class IWiFiServer : public Print { // arduino::Server is useless anyway
 
 	using Print::write;
 };
+
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+#include "LwIPServer.h"
+#endif

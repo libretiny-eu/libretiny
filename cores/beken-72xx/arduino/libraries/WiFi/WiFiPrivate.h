@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
+#include <WiFi.h>
+#include <sdk_private.h>
 
 extern "C" {
 

@@ -4,6 +4,8 @@
 
 #include "LwIPClient.h"
 
+#include <WiFi.h>
+
 #define MAX_SOCK_NUM				4
 #define WIFI_CLIENT_CONNECT_TIMEOUT 3000
 #define WIFI_CLIENT_READ_TIMEOUT	3000

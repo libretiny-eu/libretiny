@@ -24,7 +24,7 @@ int16_t WiFiClass::scanComplete() {
 void WiFiClass::scanInit() {
 	if (scan)
 		return;
-	scan = (WiFiScanData *)zalloc(sizeof(WiFiScanData));
+	scan = (WiFiScanData *)calloc(1, sizeof(WiFiScanData));
 }
 
 void WiFiClass::scanDelete() {

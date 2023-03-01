@@ -23,7 +23,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <api/WiFi/WiFiEvents.h>
+#include <WiFiEvents.h>
 #include <functional>
 
 typedef enum {

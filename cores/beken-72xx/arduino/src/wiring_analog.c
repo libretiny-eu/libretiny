@@ -1,6 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
 #include <Arduino.h>
+
+#include <gpio_pub.h>
 #include <pwm_pub.h>
 #include <saradc_pub.h>
 

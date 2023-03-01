@@ -2,7 +2,7 @@
 
 #include <api/Stream.h>
 
-class ITwoWire : public Stream {
+class HardwareI2C : public Stream {
   protected:
 	int8_t _sda	   = -1;
 	int8_t _scl	   = -1;

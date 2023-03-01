@@ -2,6 +2,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 // most stuff is here
 #include <include.h>
 // other includes
@@ -22,3 +26,10 @@
 #define os_printf	printf
 #define warning_prf printf
 #define fatal_prf	printf
+
+// from fixups/arch_main.c
+extern unsigned char __bk_rf_is_init;
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

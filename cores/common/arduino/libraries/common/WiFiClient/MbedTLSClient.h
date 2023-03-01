@@ -2,25 +2,21 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
-#include <api/WiFiClient.h>
-#include <api/WiFiClientSecure.h>
+#if LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS
 
-#include <WiFiClient.h> // extend family's WiFiClient impl
+#include "WiFiClientSecure.h"
 
-extern "C" {
-
-#include <mbedtls/net.h>
-
-} // extern "C"
+struct mbedtls_ssl_context;
+struct mbedtls_ssl_config;
+struct mbedtls_x509_crt;
 
 class MbedTLSClient : public WiFiClient, public IWiFiClientSecure {
   private:
-	mbedtls_ssl_context _sslCtx;
-	mbedtls_ssl_config _sslCfg;
-	mbedtls_x509_crt _caCert;
-	mbedtls_x509_crt _clientCert;
-	mbedtls_pk_context _clientKey;
+	mbedtls_ssl_context *_sslCtx = NULL;
+	mbedtls_ssl_config *_sslCfg;
+	mbedtls_x509_crt *_caCert;
+	mbedtls_x509_crt *_clientCert;
+	void *_clientKey;
 	uint32_t _handshakeTimeout = 0;
 
 	void init();
@@ -86,3 +82,7 @@ class MbedTLSClient : public WiFiClient, public IWiFiClientSecure {
 	using WiFiClient::connect;
 	using WiFiClient::read;
 };
+
+typedef MbedTLSClient WiFiClientSecure;
+
+#endif

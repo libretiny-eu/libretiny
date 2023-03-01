@@ -72,3 +72,7 @@ class IWiFiClient : public Client {
 
 	using Print::write;
 };
+
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+#include "LwIPClient.h"
+#endif

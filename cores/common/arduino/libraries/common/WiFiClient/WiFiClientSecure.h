@@ -47,3 +47,7 @@ class IWiFiClientSecure {
 	virtual void setAlpnProtocols(const char **alpnProtocols)			 = 0;
 	virtual bool getFingerprintSHA256(uint8_t result[32])				 = 0;
 };
+
+#if LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS
+#include "MbedTLSClient.h"
+#endif

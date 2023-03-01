@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-27. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 WiFiStatus
 WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {

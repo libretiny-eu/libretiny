@@ -333,12 +333,10 @@ queue.AddLibrary(
     base_dir=join(FUNC_DIR, "mbedtls"),
     srcs=[
         "+<mbedtls/library/*.c>",
-        "+<mbedtls_ui/*.c>",
         "+<mbedtls-port/src/*.c>",
     ],
     includes=[
         "+<mbedtls/include>",
-        "+<mbedtls_ui>",
         "+<mbedtls-port/inc>",
     ],
     options=dict(

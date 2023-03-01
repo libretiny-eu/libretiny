@@ -2,10 +2,9 @@
 
 #pragma once
 
-#ifdef __cplusplus
+#include <Arduino.h>
 
-#include "LibreTuyaAPI.h"
-#include <core/ChipType.h>
+#ifdef __cplusplus
 
 /**
  * @brief Flash chip ID structure.

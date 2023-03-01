@@ -25,19 +25,14 @@ using std::min;
 
 // Include family-specific code
 #include <ArduinoFamily.h>
-// Include board variant
-#include "variant.h"
 
-/**
- * @brief Run mainTask & start OS kernel (family-defined).
- * Return false if an error occured; else do not return and
- * and keep the OS kernel running.
- */
-extern int startMainTask(void);
+// Additional Wiring headers
+#include "wiring_compat.h"
+#include "wiring_custom.h"
 
 // Define available serial ports
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
-#include <SerialClass.h>
+#include <Serial.h>
 
 #if HAS_SERIAL0
 extern SerialClass Serial0;

@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-26. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 WiFiClass::WiFiClass() {
 	memset(&data, 0x00, sizeof(WiFiData));
@@ -15,8 +15,8 @@ void WiFiClass::dataInitialize() {
 	if (data.statusIp)
 		return;
 	LT_DM(WIFI, "Data init");
-	data.configSta	   = zalloc(sizeof(network_InitTypeDef_st));
-	data.configAp	   = zalloc(sizeof(network_InitTypeDef_ap_st));
+	data.configSta	   = calloc(1, sizeof(network_InitTypeDef_st));
+	data.configAp	   = calloc(1, sizeof(network_InitTypeDef_ap_st));
 	data.statusIp	   = malloc(sizeof(IPStatusTypedef));
 	data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
 	STA_CFG->dhcp_mode = DHCP_CLIENT;

@@ -14,6 +14,10 @@ board: PlatformBoardConfig = env.BoardConfig()
 platform: PlatformBase = env.PioPlatform()
 family: Family = env["FAMILY_OBJ"]
 
+# TODO remove include path prepending ("!<...>")
+# Move common core sources (env.AddCoreSources()) and Arduino libs
+# below per-family sources (to maintain child families taking precedence)
+
 # Include SDK builder scripts
 # No environment options that follow later will be considered
 found = False

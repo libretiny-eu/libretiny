@@ -1,9 +1,10 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <LibreTuyaAPI.h>
-#include <libraries/Flash/Flash.h>
+#include <LT.h>
 
 // can't include <flash.h> as it collides with <Flash.h> on Windows -_-
+#include <Flash/Flash.h>
+
 #define REG_FLASH_BASE		 0x00803000
 #define REG_FLASH_OPERATE_SW (REG_FLASH_BASE + 0 * 4)
 #define REG_FLASH_RDID		 (REG_FLASH_BASE + 4 * 4)
@@ -14,6 +15,8 @@
 #define FLASH_OP_RDID		 20
 
 extern "C" {
+
+#include <include.h>
 
 #include <flash_pub.h>
 #include <param_config.h>

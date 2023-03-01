@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-01. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bool ssidHidden, int maxClients) {
 	if (!enableAP(true))

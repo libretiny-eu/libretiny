@@ -3,7 +3,9 @@
 #pragma once
 
 // C standard libraries
+#include <errno.h>
 #include <inttypes.h>
+#include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -35,7 +37,7 @@
 
 // Types & macros
 #include "lt_chip.h"   // ChipType enum
-#include "lt_config.h" // configuration macros
+#include "lt_config.h" // platform configuration options
 #include "lt_types.h"  // other types & enums
 // Family-specific macros
 #include <lt_family.h>

@@ -42,10 +42,6 @@
 /// Cookie jar support
 #include <time.h>
 
-extern "C" {
-#include "strptime.h"
-}
-
 #ifdef HTTPCLIENT_1_1_COMPATIBLE
 class TransportTraits {
   public:

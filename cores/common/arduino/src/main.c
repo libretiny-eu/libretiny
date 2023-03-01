@@ -2,19 +2,9 @@
 
 #include <Arduino.h>
 
-// Arduino framework initialization.
-// May be redefined by family files.
-void initArduino() __attribute__((weak));
-
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-
 int main() {
 	// initialize Arduino framework
-	initArduino();
-	// optionally initialize per-variant code
-	initVariant();
+	lt_init_arduino();
 	// start the main task and OS kernel
 	if (!startMainTask()) {
 		LT_F("Couldn't start the main task");
@@ -32,8 +22,6 @@ void mainTask(const void *arg) {
 
 	for (;;) {
 		loop();
-		if (serialEventRun)
-			serialEventRun();
 		yield();
 	}
 }

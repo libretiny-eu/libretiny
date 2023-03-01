@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <Arduino.h>
+#include <api/ArduinoAPI.h>
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>
 
@@ -34,5 +34,3 @@ class SerialClass : public HardwareSerial {
 
 	using Print::write;
 };
-
-#define HAS_SERIAL_CLASS 1

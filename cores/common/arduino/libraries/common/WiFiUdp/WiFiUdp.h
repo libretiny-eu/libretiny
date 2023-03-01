@@ -30,3 +30,7 @@ class IWiFiUDP : public UDP {
 	virtual IPAddress remoteIP()								= 0;
 	virtual uint16_t remotePort()								= 0;
 };
+
+#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+#include "LwIPUdp.h"
+#endif

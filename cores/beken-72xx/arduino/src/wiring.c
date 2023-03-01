@@ -1,6 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
 #include <Arduino.h>
+#include <include.h>
+
 #include <arm_arch.h>
 #include <bk_timer.h>
 #include <bk_timer_pub.h>

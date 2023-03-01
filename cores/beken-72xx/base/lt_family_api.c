@@ -4,6 +4,13 @@
 
 #include <start_type_pub.h>
 
+extern int uart_print_port;
+
+void lt_init_family() {
+	// set default UART output port
+	uart_print_port = LT_UART_DEFAULT_PORT - 1;
+}
+
 ResetReason lt_get_reset_reason() {
 	switch (bk_misc_get_start_type()) {
 		case RESET_SOURCE_POWERON:

@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "lwip-2.0.2/port/lwipopts.h"
-
-#include <sys/time.h>
+#include_next "lwipopts.h"
 
 // mDNS support
 #undef MEMP_NUM_UDP_PCB

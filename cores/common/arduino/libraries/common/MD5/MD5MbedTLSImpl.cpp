@@ -1,10 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-11. */
 
-#if LT_ARD_HAS_MD5
+#if LT_ARD_MD5_MBEDTLS
 
 #include "MD5.h"
-
-#if LT_MD5_USE_MBEDTLS
 
 extern "C" {
 
@@ -23,6 +21,4 @@ void MD5Final(unsigned char digest[16], LT_MD5_CTX_T *context) {
 
 } // extern "C"
 
-#endif // LT_MD5_USE_MBEDTLS
-
-#endif // LT_ARD_HAS_MD5
+#endif // LT_ARD_MD5_MBEDTLS

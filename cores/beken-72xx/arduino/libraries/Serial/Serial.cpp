@@ -1,6 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-23. */
 
-#include "SerialClass.h"
+#include "Serial.h"
+
+#include <Arduino.h>
 
 extern "C" {
 

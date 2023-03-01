@@ -17,7 +17,6 @@
 #if LT_ARD_HAS_WIFI && LT_HAS_LWIP
 
 #include "LwIPUdp.h"
-#include <errno.h>
 
 extern "C" {
 

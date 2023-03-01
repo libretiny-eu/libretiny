@@ -4,14 +4,20 @@
 
 #include "MbedTLSClient.h"
 
+#include <WiFi.h>
+
 extern "C" {
 
 #include <mbedtls/debug.h>
+#include <mbedtls/net.h>
+#include <mbedtls/pk.h>
 #include <mbedtls/platform.h>
 #include <mbedtls/sha256.h>
 #include <mbedtls/ssl.h>
 
 } // extern "C"
+
+#define _clientKeyC ((mbedtls_pk_context *)_clientKey)
 
 MbedTLSClient::MbedTLSClient() : WiFiClient() {
 	init(); // ensure the context is zero filled
@@ -27,25 +33,42 @@ MbedTLSClient::~MbedTLSClient() {
 }
 
 void MbedTLSClient::stop() {
+	if (!_sslCtx)
+		return;
 	LT_VM(SSL, "Stopping SSL");
 
-	if (_sslCfg.ca_chain) {
-		mbedtls_x509_crt_free(&_caCert);
+	if (_sslCfg->ca_chain) {
+		mbedtls_x509_crt_free(_caCert);
 	}
-	if (_sslCfg.key_cert) {
-		mbedtls_x509_crt_free(&_clientCert);
-		mbedtls_pk_free(&_clientKey);
+	if (_sslCfg->key_cert) {
+		mbedtls_x509_crt_free(_clientCert);
+		mbedtls_pk_free(_clientKeyC);
 	}
-	mbedtls_ssl_free(&_sslCtx);
-	mbedtls_ssl_config_free(&_sslCfg);
+	mbedtls_ssl_free(_sslCtx);
+	mbedtls_ssl_config_free(_sslCfg);
+
+	free(_sslCtx);
+	free(_sslCfg);
+	free(_caCert);
+	free(_clientCert);
+	free(_clientKey);
+	_sslCtx = NULL;
+
 	LT_HEAP_I();
 }
 
 void MbedTLSClient::init() {
+	if (!_sslCtx) {
+		_sslCtx		= (mbedtls_ssl_context *)malloc(sizeof(mbedtls_ssl_context));
+		_sslCfg		= (mbedtls_ssl_config *)malloc(sizeof(mbedtls_ssl_config));
+		_caCert		= (mbedtls_x509_crt *)malloc(sizeof(mbedtls_x509_crt));
+		_clientCert = (mbedtls_x509_crt *)malloc(sizeof(mbedtls_x509_crt));
+		_clientKey	= (mbedtls_pk_context *)malloc(sizeof(mbedtls_pk_context));
+	}
 	// Realtek AmbZ: init platform here to ensure HW crypto is initialized in ssl_init
 	mbedtls_platform_set_calloc_free(calloc, free);
-	mbedtls_ssl_init(&_sslCtx);
-	mbedtls_ssl_config_init(&_sslCfg);
+	mbedtls_ssl_init(_sslCtx);
+	mbedtls_ssl_config_init(_sslCfg);
 }
 
 int MbedTLSClient::connect(IPAddress ip, uint16_t port, int32_t timeout) {
@@ -129,7 +152,7 @@ int MbedTLSClient::connect(
 	// mbedtls_ssl_conf_dbg(&_sslCfg, debug_cb, NULL);
 
 	ret = mbedtls_ssl_config_defaults(
-		&_sslCfg,
+		_sslCfg,
 		MBEDTLS_SSL_IS_CLIENT,
 		MBEDTLS_SSL_TRANSPORT_STREAM,
 		MBEDTLS_SSL_PRESET_DEFAULT
@@ -144,14 +167,14 @@ int MbedTLSClient::connect(
 #endif
 
 	if (_insecure) {
-		mbedtls_ssl_conf_authmode(&_sslCfg, MBEDTLS_SSL_VERIFY_NONE);
+		mbedtls_ssl_conf_authmode(_sslCfg, MBEDTLS_SSL_VERIFY_NONE);
 	} else if (rootCABuf) {
-		mbedtls_x509_crt_init(&_caCert);
-		mbedtls_ssl_conf_authmode(&_sslCfg, MBEDTLS_SSL_VERIFY_REQUIRED);
-		ret = mbedtls_x509_crt_parse(&_caCert, (const unsigned char *)rootCABuf, strlen(rootCABuf) + 1);
-		mbedtls_ssl_conf_ca_chain(&_sslCfg, &_caCert, NULL);
+		mbedtls_x509_crt_init(_caCert);
+		mbedtls_ssl_conf_authmode(_sslCfg, MBEDTLS_SSL_VERIFY_REQUIRED);
+		ret = mbedtls_x509_crt_parse(_caCert, (const unsigned char *)rootCABuf, strlen(rootCABuf) + 1);
+		mbedtls_ssl_conf_ca_chain(_sslCfg, _caCert, NULL);
 		if (ret < 0) {
-			mbedtls_x509_crt_free(&_caCert);
+			mbedtls_x509_crt_free(_caCert);
 			LT_RET(ret);
 		}
 	} else if (_useRootCA) {
@@ -173,7 +196,7 @@ int MbedTLSClient::connect(
 				return -1;
 			pskBin[i / 2] |= c << (4 * ((i & 1) ^ 1));
 		}
-		ret = mbedtls_ssl_conf_psk(&_sslCfg, pskBin, len / 2, (const unsigned char *)pskIdent, strlen(pskIdent));
+		ret = mbedtls_ssl_conf_psk(_sslCfg, pskBin, len / 2, (const unsigned char *)pskIdent, strlen(pskIdent));
 		LT_RET_NZ(ret);
 #else
 		return -1;
@@ -183,33 +206,33 @@ int MbedTLSClient::connect(
 	}
 
 	if (!_insecure && clientCert && clientKey) {
-		mbedtls_x509_crt_init(&_clientCert);
-		mbedtls_pk_init(&_clientKey);
+		mbedtls_x509_crt_init(_clientCert);
+		mbedtls_pk_init(_clientKeyC);
 		LT_VM(SSL, "Loading client cert");
-		ret = mbedtls_x509_crt_parse(&_clientCert, (const unsigned char *)clientCert, strlen(clientCert) + 1);
+		ret = mbedtls_x509_crt_parse(_clientCert, (const unsigned char *)clientCert, strlen(clientCert) + 1);
 		if (ret < 0) {
-			mbedtls_x509_crt_free(&_clientCert);
+			mbedtls_x509_crt_free(_clientCert);
 			LT_RET(ret);
 		}
 		LT_VM(SSL, "Loading private key");
-		ret = mbedtls_pk_parse_key(&_clientKey, (const unsigned char *)clientKey, strlen(clientKey) + 1, NULL, 0);
+		ret = mbedtls_pk_parse_key(_clientKeyC, (const unsigned char *)clientKey, strlen(clientKey) + 1, NULL, 0);
 		if (ret < 0) {
-			mbedtls_x509_crt_free(&_clientCert);
+			mbedtls_x509_crt_free(_clientCert);
 			LT_RET(ret);
 		}
-		mbedtls_ssl_conf_own_cert(&_sslCfg, &_clientCert, &_clientKey);
+		mbedtls_ssl_conf_own_cert(_sslCfg, _clientCert, _clientKeyC);
 	}
 
 	LT_VM(SSL, "Setting TLS hostname");
-	ret = mbedtls_ssl_set_hostname(&_sslCtx, host);
+	ret = mbedtls_ssl_set_hostname(_sslCtx, host);
 	LT_RET_NZ(ret);
 
-	mbedtls_ssl_conf_rng(&_sslCfg, ssl_random, NULL);
-	ret = mbedtls_ssl_setup(&_sslCtx, &_sslCfg);
+	mbedtls_ssl_conf_rng(_sslCfg, ssl_random, NULL);
+	ret = mbedtls_ssl_setup(_sslCtx, _sslCfg);
 	LT_RET_NZ(ret);
 
 	_sockTls = fd();
-	mbedtls_ssl_set_bio(&_sslCtx, &_sockTls, mbedtls_net_send, mbedtls_net_recv, NULL);
+	mbedtls_ssl_set_bio(_sslCtx, &_sockTls, mbedtls_net_send, mbedtls_net_recv, NULL);
 	mbedtls_net_set_nonblock((mbedtls_net_context *)&_sockTls);
 
 	LT_HEAP_I();
@@ -218,7 +241,7 @@ int MbedTLSClient::connect(
 	if (_handshakeTimeout == 0)
 		_handshakeTimeout = timeout;
 	unsigned long start = millis();
-	while (ret = mbedtls_ssl_handshake(&_sslCtx)) {
+	while (ret = mbedtls_ssl_handshake(_sslCtx)) {
 		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
 			LT_RET(ret);
 		}
@@ -235,10 +258,10 @@ int MbedTLSClient::connect(
 		LT_DM(
 			SSL,
 			"Protocol %s, ciphersuite %s",
-			mbedtls_ssl_get_version(&_sslCtx),
-			mbedtls_ssl_get_ciphersuite(&_sslCtx)
+			mbedtls_ssl_get_version(_sslCtx),
+			mbedtls_ssl_get_ciphersuite(_sslCtx)
 		);
-		ret = mbedtls_ssl_get_record_expansion(&_sslCtx);
+		ret = mbedtls_ssl_get_record_expansion(_sslCtx);
 		if (ret >= 0)
 			LT_DM(SSL, "Record expansion: %d", ret);
 		else {
@@ -247,7 +270,7 @@ int MbedTLSClient::connect(
 	}
 
 	LT_VM(SSL, "Verifying certificate");
-	ret = mbedtls_ssl_get_verify_result(&_sslCtx);
+	ret = mbedtls_ssl_get_verify_result(_sslCtx);
 	if (ret) {
 		char buf[512];
 		memset(buf, 0, sizeof(buf));
@@ -257,17 +280,17 @@ int MbedTLSClient::connect(
 	}
 
 	if (rootCABuf)
-		mbedtls_x509_crt_free(&_caCert);
+		mbedtls_x509_crt_free(_caCert);
 	if (clientCert)
-		mbedtls_x509_crt_free(&_clientCert);
+		mbedtls_x509_crt_free(_clientCert);
 	if (clientKey != NULL)
-		mbedtls_pk_free(&_clientKey);
+		mbedtls_pk_free(_clientKeyC);
 	return 0; // OK
 }
 
 size_t MbedTLSClient::write(const uint8_t *buf, size_t size) {
 	int ret = -1;
-	while ((ret = mbedtls_ssl_write(&_sslCtx, buf, size)) <= 0) {
+	while ((ret = mbedtls_ssl_write(_sslCtx, buf, size)) <= 0) {
 		if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE && ret < 0) {
 			LT_RET(ret);
 		}
@@ -281,12 +304,12 @@ int MbedTLSClient::available() {
 	if (!connected())
 		return peeked;
 
-	int ret = mbedtls_ssl_read(&_sslCtx, NULL, 0);
+	int ret = mbedtls_ssl_read(_sslCtx, NULL, 0);
 	if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE && ret < 0) {
 		stop();
 		return peeked ? peeked : ret;
 	}
-	return mbedtls_ssl_get_bytes_avail(&_sslCtx) + peeked;
+	return mbedtls_ssl_get_bytes_avail(_sslCtx) + peeked;
 }
 
 int MbedTLSClient::read(uint8_t *buf, size_t size) {
@@ -307,7 +330,7 @@ int MbedTLSClient::read(uint8_t *buf, size_t size) {
 		peeked = true;
 	}
 
-	int ret = mbedtls_ssl_read(&_sslCtx, buf, size);
+	int ret = mbedtls_ssl_read(_sslCtx, buf, size);
 	if (ret < 0) {
 		stop();
 		return peeked ? peeked : ret;
@@ -336,6 +359,9 @@ void MbedTLSClient::setInsecure() {
 	_pskStr		   = NULL;
 	_insecure	   = true;
 }
+
+// TODO only allocate _caCert, _clientCert and _clientKey when one
+// of the following functions is used
 
 void MbedTLSClient::setPreSharedKey(const char *pskIdent, const char *psk) {
 	_pskIdentStr = pskIdent;
@@ -437,7 +463,7 @@ void MbedTLSClient::setAlpnProtocols(const char **alpnProtocols) {
 }
 
 bool MbedTLSClient::getFingerprintSHA256(uint8_t result[32]) {
-	const mbedtls_x509_crt *cert = mbedtls_ssl_get_peer_cert(&_sslCtx);
+	const mbedtls_x509_crt *cert = mbedtls_ssl_get_peer_cert(_sslCtx);
 	if (!cert) {
 		LT_EM(SSL, "Failed to get peer certificate");
 		return false;
