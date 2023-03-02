@@ -5,6 +5,10 @@
 // LibreTuya C API (with C standard libraries)
 #include <libretuya.h>
 
+// Additional C libraries
+#include <sys/time.h>
+#include <time.h>
+
 // C++ standard libraries
 #ifdef __cplusplus
 #include <algorithm>

@@ -29,6 +29,10 @@ extern "C" {
 #define attachInterruptArg	attachInterruptParam
 #define voidFuncPtrArg		voidFuncPtrParam
 
+// Additional Arduino compatibility macros
+#define round(x)				   ((x) >= 0 ? (long)((x) + 0.5) : (long)((x)-0.5))
+#define digitalPinToInterrupt(pin) (pin)
+
 // FreeRTOS utilities
 #if LT_HAS_FREERTOS
 // if xCoreID < 0 or CPU is unicore, it will use xTaskCreate, else xTaskCreatePinnedToCore
