@@ -7,9 +7,11 @@ from SCons.Script import Builder, DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
+queue = env.AddLibraryQueue("realtek-ambz")
+env.ConfigureFamily()
 
 # Flags
-env.Append(
+queue.AppendPublic(
     CCFLAGS=[
         "-mcpu=cortex-m4",
         "-mthumb",
@@ -55,7 +57,10 @@ env.Append(
         "-Os",
         "-Wl,--gc-sections",
         "-Wl,--cref",
+        # the entrypoint in ROM (?)
         "-Wl,--entry=Reset_Handler",
+        # start function table in startup.c
+        "-Wl,--undefined=gImage2EntryFun0",
         "-Wl,--no-enum-size-warning",
         "-Wl,--no-wchar-size-warning",
         "-Wl,-wrap,malloc",
@@ -68,8 +73,6 @@ env.Append(
         "-Wl,-wrap,aes_80211_encrypt",
         "-Wl,-wrap,aes_80211_decrypt",
         "-Wl,-wrap,DecGTK",
-        # TODO what is this and is this needed?
-        "-Wl,--undefined=InfraStart",
         # stdio wrappers (base/port/printf.c)
         "-Wl,-wrap,rtl_printf",
         "-Wl,-wrap,rtl_sprintf",
@@ -92,7 +95,7 @@ env.Append(
 # Sources - from SDK project/realtek_amebaz_va0_example/GCC-RELEASE/application.mk
 # - "console" is disabled as it introduces build error, and is generally useless
 # - "utilities example" are also not really needed
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz_sdk",
     base_dir="$SDK_DIR",
     srcs=[
@@ -206,10 +209,10 @@ env.AddLibrary(
 )
 
 # Sources - lwIP
-env.AddExternalLibrary("lwip", port="amb1")
+queue.AddExternalLibrary("lwip", port="amb1")
 
 # Sources - mbedTLS
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz_mbedtls",
     base_dir="$SDK_DIR",
     srcs=[
@@ -225,7 +228,7 @@ env.AddLibrary(
 )
 
 # Libs & linker config
-env.Append(
+queue.AppendPublic(
     LIBPATH=[
         # fmt: off
         join("$SDK_DIR", "component", "soc", "realtek", "8711b", "misc", "bsp", "lib", "common", "GCC"),
@@ -280,13 +283,13 @@ target_boot = env.StaticLibrary(
     join("$BUILD_DIR", "boot_all"),
     env.BinToObj(
         join("$BUILD_DIR", "boot_all.o"),
-        join("$BIN_DIR", boot_all),
+        join("$MISC_DIR", boot_all),
     ),
 )
 env.Prepend(LIBS=[target_boot])
 
 # Build all libraries
-env.BuildLibraries()
+queue.BuildLibraries()
 
 # Main firmware outputs and actions
 env.Replace(

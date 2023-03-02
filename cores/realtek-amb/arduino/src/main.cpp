@@ -6,21 +6,7 @@ extern "C" {
 
 #include <cmsis_os.h>
 
-extern uint32_t GlobalDebugEnable;
-extern uint16_t GlobalDebugLevel;
-extern uint8_t GlobalPrivateLog;
-extern uint8_t lt_uart_port;
-
-} // extern "C"
-
 osThreadId main_tid = 0;
-
-void initArduino() {
-	// make the SDK less verbose by default
-	GlobalDebugEnable = 0;
-	GlobalPrivateLog  = 0;
-	lt_uart_port	  = LT_UART_DEFAULT_PORT;
-}
 
 bool startMainTask() {
 	osThreadDef(mainTask, osPriorityRealtime, 1, 4096 * 4);
@@ -35,3 +21,5 @@ void wait_for_debug() {
 	}
 	delay(1000);
 }
+
+} // extern "C"

@@ -69,6 +69,7 @@
 #undef MDNS_DEBUG
 
 #undef LWIP_DONT_PROVIDE_BYTEORDER_FUNCTIONS
+#undef LWIP_PROVIDE_ERRNO
 
 /** Set this to 1 to support DNS names (or IP address strings) to set sntp servers
  * One server address/name can be defined as default if SNTP_SERVER_DNS == 1:

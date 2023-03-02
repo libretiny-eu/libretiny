@@ -2,6 +2,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 // va_list is declared by SDK and conflicting
 #include <stdarg.h>
 
@@ -56,3 +60,7 @@ extern void DumpForOneBytes(void *addr, int cnt); // cnt max 0x70!
 extern void SystemCoreClockUpdate(void);
 
 extern int _sscanf_patch(const char *buf, const char *fmt, ...);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
