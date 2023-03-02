@@ -20,6 +20,7 @@ extern "C" {
 #include <config.h>
 #include <main_none.h>
 #include <param_config.h>
+#include <rw_msg_pub.h>
 #include <rw_msg_rx.h>
 #include <sa_ap.h>
 #include <sys_ctrl_pub.h>
@@ -53,25 +54,41 @@ extern void wifiEventHandler(rw_evt_type event);
 
 #define IP_FMT "%u.%u.%u.%u"
 
-#define STA_CFG		((network_InitTypeDef_st *)data.configSta)
-#define AP_CFG		((network_InitTypeDef_ap_st *)data.configAp)
-#define IP_STATUS	((IPStatusTypedef *)data.statusIp)
-#define LINK_STATUS ((LinkStatusTypeDef *)data.statusLink)
+typedef struct {
+	network_InitTypeDef_st configSta;
+	network_InitTypeDef_ap_st configAp;
+	unsigned long scannedAt;
+	SemaphoreHandle_t scanSem;
+	IPStatusTypedef statusIp;
+	LinkStatusTypeDef statusLink;
+	rw_evt_type lastStaEvent;
+	rw_evt_type lastApEvent;
+	bool apEnabled;
+} WiFiData;
+
+#define DATA  ((WiFiData *)data)
+#define pDATA ((WiFiData *)pWiFi->data)
+#define cDATA ((WiFiData *)cls->data)
+
+#define STA_CFG		(DATA->configSta)
+#define AP_CFG		(DATA->configAp)
+#define IP_STATUS	(DATA->statusIp)
+#define LINK_STATUS (DATA->statusLink)
 
 #define STA_GET_LINK_STATUS_RETURN(ret)                                                                                \
 	{                                                                                                                  \
 		if (!sta_ip_is_start())                                                                                        \
 			return ret;                                                                                                \
-		memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));                                                          \
-		bk_wlan_get_link_status(LINK_STATUS);                                                                          \
+		memset(&LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));                                                         \
+		bk_wlan_get_link_status(&LINK_STATUS);                                                                         \
 	}
 
 #define STA_GET_IP_STATUS_RETURN(ret)                                                                                  \
 	{                                                                                                                  \
 		if (!sta_ip_is_start())                                                                                        \
 			return ret;                                                                                                \
-		memset(IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                              \
-		bk_wlan_get_ip_status(IP_STATUS, BK_STATION);                                                                  \
+		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                             \
+		bk_wlan_get_ip_status(&IP_STATUS, BK_STATION);                                                                 \
 	}
 
 #define AP_GET_LINK_STATUS_RETURN(ret)                                                                                 \
@@ -84,8 +101,8 @@ extern void wifiEventHandler(rw_evt_type event);
 	{                                                                                                                  \
 		if (!uap_ip_is_start())                                                                                        \
 			return ret;                                                                                                \
-		memset(IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                              \
-		bk_wlan_get_ip_status(IP_STATUS, BK_SOFT_AP);                                                                  \
+		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                             \
+		bk_wlan_get_ip_status(&IP_STATUS, BK_SOFT_AP);                                                                 \
 	}
 
 } // extern "C"

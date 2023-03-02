@@ -53,9 +53,9 @@ void wifiEventHandler(rw_evt_type event) {
 	LT_DM(WIFI, "BK event %u", event);
 
 	if (event <= RW_EVT_STA_GOT_IP)
-		pWiFi->data.lastStaEvent = event;
+		pDATA->lastStaEvent = event;
 	else
-		pWiFi->data.lastApEvent = event;
+		pDATA->lastApEvent = event;
 
 	EventId eventId;
 	EventInfo eventInfo;

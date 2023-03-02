@@ -45,20 +45,17 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (ap == WLMODE_ENABLE) {
 		LT_DM(WIFI, "Enabling AP");
 		// fake it - on BK7231, enabling the AP without starting it breaks all connection attempts
-		data.apEnabled = true;
+		DATA->apEnabled = true;
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
 	} else if (ap == WLMODE_DISABLE) {
 		LT_DM(WIFI, "Disabling AP");
 		bk_wlan_stop(BK_SOFT_AP);
-		data.apEnabled = false;
+		DATA->apEnabled = false;
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_STOP);
 	}
 
 	// force checking actual mode again
 	mode = getMode();
-
-	if (!mode)
-		dataFree();
 
 	LT_HEAP_I();
 
@@ -68,14 +65,13 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 WiFiMode WiFiClass::getMode() {
 	uint8_t sta = !!bk_wlan_has_role(VIF_STA) * WIFI_MODE_STA;
-	uint8_t ap	= data.apEnabled * WIFI_MODE_AP; // report the faked value
+	uint8_t ap	= DATA->apEnabled * WIFI_MODE_AP; // report the faked value
 	return (WiFiMode)(sta | ap);
 }
 
 WiFiStatus WiFiClass::status() {
-	// TODO remove the cast
-	rw_evt_type status = (rw_evt_type)data.lastStaEvent;
-	if (status == RW_EVT_STA_CONNECTED && STA_CFG->dhcp_mode == DHCP_DISABLE)
+	rw_evt_type status = DATA->lastStaEvent;
+	if (status == RW_EVT_STA_CONNECTED && STA_CFG.dhcp_mode == DHCP_DISABLE)
 		status = RW_EVT_STA_GOT_IP;
 	return eventTypeToStatus(status);
 }

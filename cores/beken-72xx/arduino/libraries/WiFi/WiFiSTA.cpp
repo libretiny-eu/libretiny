@@ -13,11 +13,11 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 
 	disconnect(false);
 
-	strcpy(STA_CFG->wifi_ssid, ssid);
+	strcpy(STA_CFG.wifi_ssid, ssid);
 	if (passphrase) {
-		strcpy(STA_CFG->wifi_key, passphrase);
+		strcpy(STA_CFG.wifi_key, passphrase);
 	} else {
-		STA_CFG->wifi_bssid[0] = '\0';
+		STA_CFG.wifi_bssid[0] = '\0';
 	}
 
 	if (reconnect(bssid))
@@ -27,23 +27,21 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 }
 
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
-	dataInitialize();
-
-	STA_CFG->dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
+	STA_CFG.dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	if (localIP) {
-		sprintf(STA_CFG->local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
-		sprintf(STA_CFG->net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
-		sprintf(STA_CFG->gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
+		sprintf(STA_CFG.local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
+		sprintf(STA_CFG.net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
+		sprintf(STA_CFG.gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
 		if (dns1) {
-			sprintf(STA_CFG->dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
+			sprintf(STA_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 		} else {
-			STA_CFG->dns_server_ip_addr[0] = '\0';
+			STA_CFG.dns_server_ip_addr[0] = '\0';
 		}
 	} else {
-		STA_CFG->local_ip_addr[0]	   = '\0';
-		STA_CFG->net_mask[0]		   = '\0';
-		STA_CFG->gateway_ip_addr[0]	   = '\0';
-		STA_CFG->dns_server_ip_addr[0] = '\0';
+		STA_CFG.local_ip_addr[0]	  = '\0';
+		STA_CFG.net_mask[0]			  = '\0';
+		STA_CFG.gateway_ip_addr[0]	  = '\0';
+		STA_CFG.dns_server_ip_addr[0] = '\0';
 	}
 
 	// from wlan_ui.c:1370
@@ -51,11 +49,11 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 		sta_ip_down();
 		ip_address_set(
 			BK_STATION,
-			STA_CFG->dhcp_mode,
-			STA_CFG->local_ip_addr,
-			STA_CFG->net_mask,
-			STA_CFG->gateway_ip_addr,
-			STA_CFG->dns_server_ip_addr
+			STA_CFG.dhcp_mode,
+			STA_CFG.local_ip_addr,
+			STA_CFG.net_mask,
+			STA_CFG.gateway_ip_addr,
+			STA_CFG.dns_server_ip_addr
 		);
 		sta_ip_start();
 	}
@@ -63,8 +61,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 }
 
 bool WiFiClass::reconnect(const uint8_t *bssid) {
-	dataInitialize();
-	if (!bssid && !STA_CFG->wifi_ssid[0]) {
+	if (!bssid && !STA_CFG.wifi_ssid[0]) {
 		LT_EM(WIFI, "(B)SSID not specified");
 		goto error;
 	}
@@ -72,21 +69,21 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	if (bssid) {
 		LT_IM(WIFI, "Connecting to " MACSTR, MAC2STR(bssid));
 	} else {
-		LT_IM(WIFI, "Connecting to %s", STA_CFG->wifi_ssid);
+		LT_IM(WIFI, "Connecting to %s", STA_CFG.wifi_ssid);
 	}
 
-	LT_DM(WIFI, "Data = %p", data.configSta);
+	LT_DM(WIFI, "Data = %p", DATA->configSta);
 
-	STA_CFG->wifi_mode			 = BK_STATION;
-	STA_CFG->wifi_retry_interval = 100;
+	STA_CFG.wifi_mode			= BK_STATION;
+	STA_CFG.wifi_retry_interval = 100;
 	if (bssid)
-		memcpy(STA_CFG->wifi_bssid, bssid, 6);
+		memcpy(STA_CFG.wifi_bssid, bssid, 6);
 	else
-		memset(STA_CFG->wifi_bssid, 0x00, 6);
+		memset(STA_CFG.wifi_bssid, 0x00, 6);
 
-	if (STA_CFG->dhcp_mode == DHCP_DISABLE) {
-		LT_DM(WIFI, "Static IP: %s / %s / %s", STA_CFG->local_ip_addr, STA_CFG->net_mask, STA_CFG->gateway_ip_addr);
-		LT_DM(WIFI, "Static DNS: %s", STA_CFG->dns_server_ip_addr);
+	if (STA_CFG.dhcp_mode == DHCP_DISABLE) {
+		LT_DM(WIFI, "Static IP: %s / %s / %s", STA_CFG.local_ip_addr, STA_CFG.net_mask, STA_CFG.gateway_ip_addr);
+		LT_DM(WIFI, "Static DNS: %s", STA_CFG.dns_server_ip_addr);
 	} else {
 		LT_DM(WIFI, "Using DHCP");
 	}
@@ -94,7 +91,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	LT_DM(WIFI, "Starting WiFi...");
 
 	__wrap_bk_printf_disable();
-	bk_wlan_start_sta(STA_CFG);
+	bk_wlan_start_sta(&STA_CFG);
 	__wrap_bk_printf_enable();
 
 	LT_DM(WIFI, "Start OK");
@@ -106,9 +103,9 @@ error:
 
 bool WiFiClass::disconnect(bool wifiOff) {
 #if LT_DEBUG_WIFI
-	memset(LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));
-	bk_wlan_get_link_status(LINK_STATUS);
-	LT_DM(WIFI, "Disconnecting from %s (wifiOff=%d)", LINK_STATUS ? LINK_STATUS->ssid : NULL, wifiOff);
+	memset(&LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));
+	bk_wlan_get_link_status(&LINK_STATUS);
+	LT_DM(WIFI, "Disconnecting from %s (wifiOff=%d)", LINK_STATUS.ssid, wifiOff);
 #endif
 	bk_wlan_connection_loss();
 	if (wifiOff)
@@ -127,28 +124,28 @@ bool WiFiClass::getAutoReconnect() {
 IPAddress WiFiClass::localIP() {
 	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
-	ip.fromString(IP_STATUS->ip);
+	ip.fromString(IP_STATUS.ip);
 	return ip;
 }
 
 IPAddress WiFiClass::subnetMask() {
 	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
-	ip.fromString(IP_STATUS->mask);
+	ip.fromString(IP_STATUS.mask);
 	return ip;
 }
 
 IPAddress WiFiClass::gatewayIP() {
 	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
-	ip.fromString(IP_STATUS->gate);
+	ip.fromString(IP_STATUS.gate);
 	return ip;
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
 	STA_GET_IP_STATUS_RETURN((uint32_t)0);
 	IPAddress ip;
-	ip.fromString(IP_STATUS->dns);
+	ip.fromString(IP_STATUS.dns);
 	return ip;
 }
 
@@ -191,7 +188,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 
 const String WiFiClass::SSID() {
 	STA_GET_LINK_STATUS_RETURN("");
-	return (char *)LINK_STATUS->ssid;
+	return (char *)LINK_STATUS.ssid;
 }
 
 const String WiFiClass::psk() {
@@ -205,20 +202,20 @@ const String WiFiClass::psk() {
 
 uint8_t *WiFiClass::BSSID() {
 	STA_GET_LINK_STATUS_RETURN(NULL);
-	return LINK_STATUS->bssid;
+	return LINK_STATUS.bssid;
 }
 
 int32_t WiFiClass::channel() {
 	STA_GET_LINK_STATUS_RETURN(0);
-	return LINK_STATUS->channel;
+	return LINK_STATUS.channel;
 }
 
 int8_t WiFiClass::RSSI() {
 	STA_GET_LINK_STATUS_RETURN(0);
-	return LINK_STATUS->wifi_strength;
+	return LINK_STATUS.wifi_strength;
 }
 
 WiFiAuthMode WiFiClass::getEncryption() {
 	STA_GET_LINK_STATUS_RETURN(WIFI_AUTH_INVALID);
-	return securityTypeToAuthMode(LINK_STATUS->security);
+	return securityTypeToAuthMode(LINK_STATUS.security);
 }

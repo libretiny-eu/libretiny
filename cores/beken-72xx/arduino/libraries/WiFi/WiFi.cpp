@@ -3,36 +3,16 @@
 #include "WiFiPrivate.h"
 
 WiFiClass::WiFiClass() {
-	memset(&data, 0x00, sizeof(WiFiData));
-	data.scanSem = xSemaphoreCreateBinary();
+	data = (WiFiData *)calloc(1, sizeof(WiFiData));
+
+	DATA->scanSem	  = xSemaphoreCreateBinary();
+	STA_CFG.dhcp_mode = DHCP_CLIENT;
 }
 
 WiFiClass::~WiFiClass() {
-	vSemaphoreDelete(data.scanSem);
-}
-
-void WiFiClass::dataInitialize() {
-	if (data.statusIp)
-		return;
-	LT_DM(WIFI, "Data init");
-	data.configSta	   = calloc(1, sizeof(network_InitTypeDef_st));
-	data.configAp	   = calloc(1, sizeof(network_InitTypeDef_ap_st));
-	data.statusIp	   = malloc(sizeof(IPStatusTypedef));
-	data.statusLink	   = malloc(sizeof(LinkStatusTypeDef));
-	STA_CFG->dhcp_mode = DHCP_CLIENT;
-	LT_DM(WIFI, "Data = %p", data.configSta);
-}
-
-void WiFiClass::dataFree() {
-	LT_DM(WIFI, "Data free");
-	free(data.configSta);
-	free(data.configAp);
-	free(data.statusIp);
-	free(data.statusLink);
-	data.configSta	= NULL;
-	data.configAp	= NULL;
-	data.statusIp	= NULL;
-	data.statusLink = NULL;
+	vSemaphoreDelete(DATA->scanSem);
+	free(data);
+	data = NULL;
 }
 
 WiFiStatus eventTypeToStatus(uint8_t type) {

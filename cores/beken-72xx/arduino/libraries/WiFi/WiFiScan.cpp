@@ -36,7 +36,7 @@ static void scanHandler(void *ctx, uint8_t param) {
 		memcpy(scan->ap[i].bssid.addr, result.ApList[i].bssid, 6);
 	}
 
-	cls->data.scannedAt = millis();
+	cDATA->scannedAt = millis();
 
 	wifiEventSendArduino(ARDUINO_EVENT_WIFI_SCAN_DONE);
 
@@ -45,7 +45,7 @@ end:
 	if (scan->running) {
 		// running == false means it was discarded (timeout)
 		scan->running = false;
-		xSemaphoreGive(cls->data.scanSem);
+		xSemaphoreGive(cDATA->scanSem);
 	}
 	LT_HEAP_I();
 	return;
@@ -78,8 +78,8 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	int16_t ret = WIFI_SCAN_RUNNING;
 	if (!async) {
 		LT_IM(WIFI, "Waiting for results");
-		xSemaphoreTake(data.scanSem, 1); // reset the semaphore quickly
-		xSemaphoreTake(data.scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
+		xSemaphoreTake(DATA->scanSem, 1); // reset the semaphore quickly
+		xSemaphoreTake(DATA->scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
 		if (scan->running) {
 			scanDelete();
 			ret = WIFI_SCAN_FAILED;

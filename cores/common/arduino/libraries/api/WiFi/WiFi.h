@@ -29,11 +29,6 @@
 
 #include "WiFiType.h"
 
-#ifdef LT_ARD_HAS_WIFI
-// family's data structure
-#include <WiFiData.h>
-#endif
-
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 #include <WiFiServer.h>
@@ -41,10 +36,8 @@
 
 class WiFiClass {
   public:
-#ifdef LT_ARD_HAS_WIFI
 	// must be public for WiFiEvents & WiFiScan static handlers
-	WiFiData data;
-#endif
+	void *data;
 	WiFiScanData *scan = NULL;
 
   public: /* WiFi.cpp */
