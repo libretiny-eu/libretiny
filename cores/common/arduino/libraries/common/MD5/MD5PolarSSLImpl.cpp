@@ -2,20 +2,20 @@
 
 #if LT_ARD_MD5_POLARSSL
 
-#include "MD5.h"
-
 extern "C" {
 
-void MD5Init(LT_MD5_CTX_T *context) {
+#include <polarssl/md5.h>
+
+void MD5Init(md5_context *context) {
 	md5_init(context);
 	md5_starts(context);
 }
 
-void MD5Update(LT_MD5_CTX_T *context, const unsigned char *buf, unsigned len) {
+void MD5Update(md5_context *context, const unsigned char *buf, unsigned len) {
 	md5_update(context, buf, len);
 }
 
-void MD5Final(unsigned char digest[16], LT_MD5_CTX_T *context) {
+void MD5Final(unsigned char digest[16], md5_context *context) {
 	md5_finish(context, digest);
 }
 
