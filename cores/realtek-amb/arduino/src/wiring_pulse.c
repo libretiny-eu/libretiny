@@ -17,10 +17,7 @@
 */
 
 #include <Arduino.h>
-#include <PinNames.h>
-#include <gpio_api.h>
-#include <objects.h>
-#include <us_ticker_api.h>
+#include <sdk_private.h>
 
 extern void *gpio_pin_struct[];
 

@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 	WiFiClass *cls	   = (WiFiClass *)result->user_data;
@@ -10,7 +10,7 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 
 	if (result->scan_complete == RTW_TRUE) {
 		scan->running = false;
-		xSemaphoreGive(cls->data.scanSem);
+		xSemaphoreGive(cDATA->scanSem);
 		return RTW_SUCCESS;
 	}
 
@@ -48,8 +48,8 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 
 	if (!async) {
 		LT_IM(WIFI, "Waiting for results");
-		xSemaphoreTake(data.scanSem, 1); // reset the semaphore quickly
-		xSemaphoreTake(data.scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
+		xSemaphoreTake(DATA->scanSem, 1); // reset the semaphore quickly
+		xSemaphoreTake(DATA->scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
 		return scan->count;
 	}
 	return WIFI_SCAN_RUNNING;

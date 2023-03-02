@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-16. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 #include <vector>
 

@@ -1,7 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
+// TODO move these to WiFiData
 rtw_network_info_t wifi = {0};
 rtw_ap_info_t ap		= {0};
 rtw_wifi_setting_t wifi_setting;
@@ -25,11 +26,15 @@ void reset_wifi_struct(void) {
 }
 
 WiFiClass::WiFiClass() {
-	data.scanSem = xSemaphoreCreateBinary();
+	data = (WiFiData *)calloc(1, sizeof(WiFiData));
+
+	DATA->scanSem = xSemaphoreCreateBinary();
 }
 
 WiFiClass::~WiFiClass() {
-	vSemaphoreDelete(data.scanSem);
+	vSemaphoreDelete(DATA->scanSem);
+	free(data);
+	data = NULL;
 }
 
 WiFiAuthMode securityTypeToAuthMode(uint8_t type) {

@@ -17,17 +17,14 @@
  */
 
 #include <Arduino.h>
-#include <analogin_api.h>
-#include <analogout_api.h>
-#include <gpio_ex_api.h>
-#include <pwmout_api.h>
+#include <sdk_private.h>
 
 /* ADC */
-analogin_t adc1;
-analogin_t adc2;
-analogin_t adc3;
+static analogin_t adc1;
+static analogin_t adc2;
+static analogin_t adc3;
 
-bool g_adc_enabled[] = {false, false, false};
+static bool g_adc_enabled[] = {false, false, false};
 // from realtek_amebaz_va0_example/example_sources/adc_vbat/src/main.c
 #define AD2MV(ad, offset, gain) (((ad >> 4) - offset) * 1000 / gain)
 

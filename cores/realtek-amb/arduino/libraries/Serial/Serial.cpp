@@ -1,6 +1,9 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-03. */
 
-#include "SerialClass.h"
+#include "Serial.h"
+
+#include <Arduino.h>
+#include <sdk_private.h>
 
 #if HAS_SERIAL0
 SerialClass Serial0(UART0_DEV, UART0_IRQ, PIN_SERIAL0_RX, PIN_SERIAL0_TX);
@@ -12,7 +15,7 @@ SerialClass Serial1(UART1_DEV, UART1_IRQ, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
 SerialClass Serial2(UART2_DEV, UART_LOG_IRQ, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
 #endif
 
-SerialClass::SerialClass(UART_TypeDef *uart, IRQn irq, pin_size_t rx, pin_size_t tx) {
+SerialClass::SerialClass(void *uart, uint8_t irq, pin_size_t rx, pin_size_t tx) {
 	data.uart = uart;
 	data.buf  = NULL;
 	this->irq = irq;
@@ -21,17 +24,18 @@ SerialClass::SerialClass(UART_TypeDef *uart, IRQn irq, pin_size_t rx, pin_size_t
 }
 
 static uint32_t callback(void *param) {
-	SerialData *data = (SerialData *)param;
+	SerialData *data   = (SerialData *)param;
+	UART_TypeDef *uart = (UART_TypeDef *)data->uart;
 
-	uint32_t intcr		  = data->uart->DLH_INTCR;
-	data->uart->DLH_INTCR = 0;
+	uint32_t intcr	= uart->DLH_INTCR;
+	uart->DLH_INTCR = 0;
 
 	uint8_t c;
-	UART_CharGet(data->uart, &c);
+	UART_CharGet(uart, &c);
 	if (c)
 		data->buf->store_char(c);
 
-	data->uart->DLH_INTCR = intcr;
+	uart->DLH_INTCR = intcr;
 	return 0;
 }
 
@@ -51,8 +55,8 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 	cfg.Parity	   = parity;
 	cfg.ParityType = parityType;
 	cfg.StopBit	   = stopBits;
-	UART_Init(data.uart, &cfg);
-	UART_SetBaud(data.uart, baudrate);
+	UART_Init((UART_TypeDef *)data.uart, &cfg);
+	UART_SetBaud((UART_TypeDef *)data.uart, baudrate);
 
 	if (data.buf) {
 		data.buf->clear();
@@ -88,11 +92,11 @@ int SerialClass::read() {
 }
 
 void SerialClass::flush() {
-	UART_WaitBusy(data.uart, 10);
+	UART_WaitBusy((UART_TypeDef *)data.uart, 10);
 }
 
 size_t SerialClass::write(uint8_t c) {
-	while (UART_Writable(data.uart) == 0) {}
-	UART_CharPut(data.uart, c);
+	while (UART_Writable((UART_TypeDef *)data.uart) == 0) {}
+	UART_CharPut((UART_TypeDef *)data.uart, c);
 	return 1;
 }

@@ -17,6 +17,7 @@
 */
 
 #include <Arduino.h>
+
 #include <cmsis_os.h>
 
 #ifndef portNVIC_SYSTICK_CURRENT_VALUE_REG
@@ -88,6 +89,7 @@ unsigned long micros(void) {
 }
 
 void yield(void) {
+	runPeriodicTasks();
 	vTaskDelay(1);
 	taskYIELD();
 }

@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 WiFiStatus
 WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
@@ -95,7 +95,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		dhcpRet = LwIP_DHCP(0, DHCP_START);
 		if (dhcpRet == DHCP_ADDRESS_ASSIGNED) {
 			LT_HEAP_I();
-			EventInfo *eventInfo				   = (EventInfo *)zalloc(sizeof(EventInfo));
+			EventInfo *eventInfo				   = (EventInfo *)calloc(1, sizeof(EventInfo));
 			eventInfo->got_ip.if_index			   = 0;
 			eventInfo->got_ip.esp_netif			   = NULL;
 			eventInfo->got_ip.ip_info.ip.addr	   = localIP();

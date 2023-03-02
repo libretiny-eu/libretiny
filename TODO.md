@@ -35,6 +35,8 @@ Explicit is better than implicit.
 
 ### Other
 
+- refactor `SerialClass` to have a shared header `Serial.h` in the common core (and `SerialData`, just like WiFi)
+- implement Wire on BK, refactor the API and class
 - watchdog API
 - `Preferences` library
 - test/fix IPv6 on different families

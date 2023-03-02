@@ -1,7 +1,5 @@
 #include <Arduino.h>
-#include <gpio_api.h>
-#include <gpio_irq_api.h>
-#include <gpio_irq_ex_api.h>
+#include <sdk_private.h>
 
 extern void *gpio_pin_struct[PINS_COUNT];
 static void *gpio_irq_handler_list[PINS_COUNT] = {NULL};

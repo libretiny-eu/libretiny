@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include <Arduino.h>
+#include <api/ArduinoAPI.h>
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>
 
 using namespace arduino;
 
 typedef struct {
-	UART_TypeDef *uart;
+	void *uart; // UART_TypeDef
 	RingBuffer *buf;
 } SerialData;
 
@@ -17,12 +17,12 @@ class SerialClass : public HardwareSerial {
   private:
 	// data accessible to IRQ handler
 	SerialData data;
-	IRQn irq;
+	uint8_t irq; // IRQn
 	pin_size_t rx;
 	pin_size_t tx;
 
   public:
-	SerialClass(UART_TypeDef *uart, IRQn irq, pin_size_t rx, pin_size_t tx);
+	SerialClass(void *uart, uint8_t irq, pin_size_t rx, pin_size_t tx);
 
 	inline void begin(unsigned long baudrate) {
 		begin(baudrate, SERIAL_8N1);

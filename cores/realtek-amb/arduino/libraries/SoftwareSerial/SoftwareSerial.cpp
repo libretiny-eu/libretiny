@@ -1,12 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-03. */
 
-#include "SoftwareSerial.h"
-
-extern "C" {
-
-#include <timer_api.h>
-
-} // extern "C"
+#include <SoftwareSerial.h>
+#include <sdk_private.h>
 
 #define TIMER_MAX 3
 #define OBJ		  ((gtimer_t *)this->param)

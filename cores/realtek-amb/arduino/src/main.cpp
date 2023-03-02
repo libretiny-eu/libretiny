@@ -1,10 +1,12 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
 #include <Arduino.h>
+#include <sdk_private.h>
 
 extern "C" {
 
 #include <cmsis_os.h>
+#include <core_cm4.h>
 
 osThreadId main_tid = 0;
 

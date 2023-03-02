@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
-#include "WiFiPriv.h"
+#include "WiFiPrivate.h"
 
 int32_t WiFiClass::channel() {
 	int channel = 0;
@@ -13,12 +13,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_DiagPrintf_disable();
 	startWifiTask();
 
-	if (!data.initialized) {
+	if (!DATA->initialized) {
 		// initialize wifi first
 		LT_IM(WIFI, "Initializing LwIP");
 		LwIP_Init();
 		reset_wifi_struct();
-		data.initialized = true;
+		DATA->initialized = true;
 	}
 	LT_HEAP_I();
 	if (getMode()) {
@@ -58,7 +58,7 @@ error:
 }
 
 WiFiMode WiFiClass::getMode() {
-	if (!data.initialized)
+	if (!DATA->initialized)
 		return WIFI_MODE_NULL;
 	return (WiFiMode)wifi_mode;
 }
@@ -80,12 +80,12 @@ bool WiFiClass::setSleep(bool enable) {
 		if (wifi_disable_powersave() != RTW_SUCCESS)
 			return false;
 	}
-	data.sleep = enable;
+	DATA->sleep = enable;
 	return true;
 }
 
 bool WiFiClass::getSleep() {
-	return data.sleep;
+	return DATA->sleep;
 }
 
 bool WiFiClass::setTxPower(int power) {

@@ -1,36 +1,27 @@
-/* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
+/* Copyright (c) Kuba Szczodrzyński 2023-03-02. */
 
 #pragma once
 
+// Provide GPIO names to variant.cpp files
+#define LT_VARIANT_INCLUDE "sdk_private.h"
+
+#include <stdint.h>
+
 #ifdef __cplusplus
-#include "WCharacterFixup.h"
-#endif
+extern "C" {
+#endif // __cplusplus
 
-#define PinMode PinModeArduino // this conflicts with SDK enum
-#include <api/ArduinoAPI.h>
-#include <core/LibreTuyaAPI.h>
-#undef PinMode
+extern uint32_t SystemCoreClock;
+extern void vPortClearInterruptMask(uint32_t ulNewMaskValue);
+extern uint32_t ulPortSetInterruptMask(void);
 
-// Include family-specific code
-#include "WVariant.h"
-// Include board variant
-#include "variant.h"
+#define clockCyclesPerMicrosecond()	 (SystemCoreClock / 1000000L)
+#define clockCyclesToMicroseconds(a) (a * 1000L / (SystemCoreClock / 1000L))
+#define microsecondsToClockCycles(a) (a * (SystemCoreClock / 1000000L))
 
-// Choose the main UART output port
-#ifndef LT_UART_DEFAULT_PORT
-#if HAS_SERIAL2
-#define LT_UART_DEFAULT_PORT 2
-#elif HAS_SERIAL0
-#define LT_UART_DEFAULT_PORT 0
-#elif HAS_SERIAL1
-#define LT_UART_DEFAULT_PORT 1
-#else
-#error "No serial port is available"
-#endif
-#endif
+#define interrupts()   vPortClearInterruptMask(0)
+#define noInterrupts() ulPortSetInterruptMask()
 
-// Define available serial ports
 #ifdef __cplusplus
-#include "SerialClass.h"
-#include <core/SerialExtern.h>
+} // extern "C"
 #endif

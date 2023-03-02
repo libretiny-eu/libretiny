@@ -1,8 +1,5 @@
 #include <Arduino.h>
-#include <gpio_api.h>
-#include <gpio_irq_api.h>
-#include <gpio_irq_ex_api.h>
-#include <pwmout_api.h>
+#include <sdk_private.h>
 
 extern void *gpio_pin_struct[PINS_COUNT];
 
@@ -28,7 +25,7 @@ void pinRemoveMode(pin_size_t pinNumber) {
 	pin->enabled			   = PIN_NONE;
 }
 
-void pinMode(pin_size_t pinNumber, PinModeArduino pinMode) {
+void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)
 		return;
@@ -116,22 +113,4 @@ PinStatus digitalRead(pin_size_t pinNumber) {
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];
 	return gpio_read(gpio);
-}
-
-/**************************** Extend API by RTK ***********************************/
-
-uint32_t digitalPinToPort(uint32_t pinNumber) {
-	if (pinInvalid(pinNumber))
-		return 0xFFFFFFFF;
-
-	uint32_t pin_name = HAL_GPIO_GetPinName(pinTable[pinNumber].gpio);
-	return HAL_GPIO_GET_PORT_BY_NAME(pin_name);
-}
-
-uint32_t digitalPinToBitMask(uint32_t pinNumber) {
-	if (pinInvalid(pinNumber))
-		return 0xFFFFFFFF;
-
-	uint32_t pin_name = HAL_GPIO_GetPinName(pinTable[pinNumber].gpio);
-	return 1 << (HAL_GPIO_GET_PIN_BY_NAME(pin_name));
 }

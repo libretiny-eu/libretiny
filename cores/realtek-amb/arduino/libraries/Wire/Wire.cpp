@@ -2,10 +2,9 @@
 
 #include "Wire.h"
 
-#include <Arduino.h>
+#include <sdk_private.h>
 
 extern "C" {
-#include <i2c_api.h>
 extern int i2c_write_timeout(i2c_t *obj, int address, char *data, int length, int stop, int timeout_ms);
 }
 

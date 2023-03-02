@@ -11,6 +11,8 @@ extern "C" {
 
 // disable typedef in basic_types.h
 #define boolean boolean_rtl
+// fix conflicts with Arduino's PinMode enum
+#define PinMode PinModeRTL
 
 #include <strproc.h> // define string macros first
 #undef isdigit		 // then remove them, as they conflict
@@ -22,16 +24,30 @@ extern "C" {
 #undef strtoul
 
 #include <ameba_soc.h>
+#include <analogin_api.h>
+#include <analogout_api.h>
 #include <flash_api.h>
 #include <gpio_api.h>
+#include <gpio_ex_api.h>
+#include <gpio_irq_api.h>
+#include <gpio_irq_ex_api.h>
+#include <i2c_api.h>
 #include <main.h>
+#include <objects.h>
+#include <pwmout_api.h>
 #include <rand.h>
 #include <rt_lib_rom.h>
+#include <rtl8710b.h>
 #include <rtl_lib.h>
+#include <sys_api.h>
+#include <timer_api.h>
+#include <us_ticker_api.h>
 #include <wait_api.h>
+#include <wdt_api.h>
 
-// remove previously defined workaround
+// remove previously defined workarounds
 #undef boolean
+#undef PinMode
 
 // undefine ROM stdio in favor of printf() library (wrappers)
 #undef printf

@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include <api/WiFi/WiFi.h>
+#include <WiFi.h>
+#include <sdk_private.h>
 
 extern "C" {
 
@@ -45,3 +46,13 @@ extern void handleRtwEvent(uint16_t event, char *data, int len, int flags);
 
 #define NETNAME_STA WLAN0_NAME
 #define NETNAME_AP	(wifi_mode == WIFI_MODE_APSTA ? WLAN1_NAME : WLAN0_NAME)
+
+typedef struct {
+	bool initialized;
+	bool sleep;
+	SemaphoreHandle_t scanSem;
+} WiFiData;
+
+#define DATA  ((WiFiData *)data)
+#define pDATA ((WiFiData *)pWiFi->data)
+#define cDATA ((WiFiData *)cls->data)

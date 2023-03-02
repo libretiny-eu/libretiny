@@ -1,15 +1,9 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-28. */
 
-#include <LibreTuyaAPI.h>
+#include <LT.h>
+#include <sdk_private.h>
 
 #include <Flash.h>
-
-extern "C" {
-#include <flash_api.h>
-#include <rtl8710b.h>
-#include <sys_api.h>
-#include <wdt_api.h>
-}
 
 void LibreTuya::restart() {
 	// The Watchdog Way

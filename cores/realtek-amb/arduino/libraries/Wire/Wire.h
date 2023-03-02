@@ -2,16 +2,9 @@
 
 #pragma once
 
+#include <Arduino.h>
+#include <HardwareI2C.h>
 #include <api/RingBuffer.h>
-#include <api/Wire.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-// #include <i2c_api.h>
-#ifdef __cplusplus
-}
-#endif
 
 #if !defined(PIN_WIRE0_SDA) && defined(PIN_WIRE1_SDA)
 #define Wire1 Wire
@@ -25,7 +18,7 @@ typedef struct i2c_s i2c_t;
 
 using arduino::RingBuffer;
 
-class TwoWire : public ITwoWire {
+class TwoWire : public HardwareI2C {
   private:
 	i2c_t *_i2c	 = NULL;
 	uint8_t _idx = 0;
@@ -60,10 +53,10 @@ class TwoWire : public ITwoWire {
 	int peek();
 	void flush();
 
-	using ITwoWire::begin;
-	using ITwoWire::endTransmission;
-	using ITwoWire::requestFrom;
-	using ITwoWire::write;
+	using HardwareI2C::begin;
+	using HardwareI2C::endTransmission;
+	using HardwareI2C::requestFrom;
+	using HardwareI2C::write;
 	using Print::write;
 };
 
