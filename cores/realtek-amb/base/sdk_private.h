@@ -23,7 +23,17 @@ extern "C" {
 #undef strtol
 #undef strtoul
 
+#if LT_RTL8710B
 #include <ameba_soc.h>
+#include <rand.h>
+#include <rt_lib_rom.h>
+#include <rtl8710b.h>
+#include <rtl_lib.h>
+#endif
+#if LT_RTL8720C
+#include <rtl8710c.h>
+#endif
+
 #include <analogin_api.h>
 #include <analogout_api.h>
 #include <flash_api.h>
@@ -35,10 +45,6 @@ extern "C" {
 #include <main.h>
 #include <objects.h>
 #include <pwmout_api.h>
-#include <rand.h>
-#include <rt_lib_rom.h>
-#include <rtl8710b.h>
-#include <rtl_lib.h>
 #include <sys_api.h>
 #include <timer_api.h>
 #include <us_ticker_api.h>
@@ -57,6 +63,8 @@ extern "C" {
 #undef vsnprintf
 #undef vprintf
 #include <stdio.h>
+// conflict with lt_logger.h
+#undef log_printf
 
 // moved from syscalls.h
 #define _close	__rtl_close

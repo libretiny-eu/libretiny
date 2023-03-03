@@ -18,6 +18,14 @@ family: Family = env["FAMILY_OBJ"]
 # Move common core sources (env.AddCoreSources()) and Arduino libs
 # below per-family sources (to maintain child families taking precedence)
 
+# Global flags (applying to the SDK)
+env.Append(
+    CCFLAGS=[
+        # Newer versions of GCC complain about undefined macros in #if
+        "-Wno-undef",
+    ],
+)
+
 # Include SDK builder scripts
 # No environment options that follow later will be considered
 found = False

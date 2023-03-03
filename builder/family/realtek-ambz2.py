@@ -2,16 +2,20 @@
 
 from os.path import join
 
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
+platform: PlatformBase = env.PioPlatform()
 board: PlatformBoardConfig = env.BoardConfig()
+queue = env.AddLibraryQueue("realtek-ambz2")
+env.ConfigureFamily()
 
 COMPONENT_DIR = join("$SDK_DIR", "component")
 
 # Flags
-env.Append(
+queue.AppendPublic(
     CCFLAGS=[
         "-march=armv8-m.main+dsp",
         "-mthumb",
@@ -34,7 +38,6 @@ env.Append(
         "-std=gnu99",
         "-Wall",
         "-Wpointer-arith",
-        "-Wundef",
         "-Wno-write-strings",
         "-Wno-maybe-uninitialized",
     ],
@@ -52,6 +55,14 @@ env.Append(
         ("CONFIG_BUILD_RAM", "1"),
         "V8M_STKOVF",
     ],
+    CPPPATH=[
+        # allow including <ctype.h> from GCC instead of RTL SDK
+        join(
+            platform.get_package_dir("toolchain-gccarmnoneeabi"),
+            "arm-none-eabi",
+            "include",
+        ),
+    ],
     LINKFLAGS=[
         "-march=armv8-m.main+dsp",
         "-mthumb",
@@ -68,54 +79,8 @@ env.Append(
         "-Wl,--cref",
         "-Wl,--build-id=none",
         "-Wl,--use-blx",
+        "-Wl,--undefined=gRamStartFun",
         "-Wl,-no-enum-size-warning",
-        # TODO fix wraps
-        "-Wl,-wrap,strcat",
-        "-Wl,-wrap,strchr",
-        "-Wl,-wrap,strcmp",
-        "-Wl,-wrap,strncmp",
-        "-Wl,-wrap,strnicmp",
-        "-Wl,-wrap,strcpy",
-        "-Wl,-wrap,strncpy",
-        "-Wl,-wrap,strlcpy",
-        "-Wl,-wrap,strlen",
-        "-Wl,-wrap,strnlen",
-        "-Wl,-wrap,strncat",
-        "-Wl,-wrap,strpbrk",
-        "-Wl,-wrap,strspn",
-        "-Wl,-wrap,strstr",
-        "-Wl,-wrap,strtok",
-        "-Wl,-wrap,strxfrm",
-        "-Wl,-wrap,strsep",
-        "-Wl,-wrap,strtod",
-        "-Wl,-wrap,strtof",
-        "-Wl,-wrap,strtold",
-        "-Wl,-wrap,strtoll",
-        "-Wl,-wrap,strtoul",
-        "-Wl,-wrap,strtoull",
-        "-Wl,-wrap,atoi",
-        "-Wl,-wrap,atoui",
-        "-Wl,-wrap,atol",
-        "-Wl,-wrap,atoul",
-        "-Wl,-wrap,atoull",
-        "-Wl,-wrap,atof",
-        "-Wl,-wrap,malloc",
-        "-Wl,-wrap,realloc",
-        "-Wl,-wrap,calloc",
-        "-Wl,-wrap,free",
-        "-Wl,-wrap,_malloc_r",
-        "-Wl,-wrap,_calloc_r",
-        "-Wl,-wrap,memcmp",
-        "-Wl,-wrap,memcpy",
-        "-Wl,-wrap,memmove",
-        "-Wl,-wrap,memset",
-        "-Wl,-wrap,printf",
-        "-Wl,-wrap,sprintf",
-        "-Wl,-wrap,puts",
-        "-Wl,-wrap,putc",
-        "-Wl,-wrap,putchar",
-        "-Wl,-wrap,snprintf",
-        "-Wl,-wrap,vsnprintf",
         "-Wl,-wrap,aesccmp_construct_mic_iv",
         "-Wl,-wrap,aesccmp_construct_mic_header1",
         "-Wl,-wrap,aesccmp_construct_ctr_preload",
@@ -123,17 +88,52 @@ env.Append(
         "-Wl,-wrap,rom_psk_CalcPTK",
         "-Wl,-wrap,aes_80211_encrypt",
         "-Wl,-wrap,aes_80211_decrypt",
+        # stdlib wrappers
+        "-Wl,-wrap,strcat",
+        "-Wl,-wrap,strchr",
+        "-Wl,-wrap,strcmp",
+        "-Wl,-wrap,strncmp",
+        "-Wl,-wrap,strcpy",
+        "-Wl,-wrap,strncpy",
+        "-Wl,-wrap,strlen",
+        "-Wl,-wrap,strncat",
+        "-Wl,-wrap,strpbrk",
+        "-Wl,-wrap,strspn",
+        "-Wl,-wrap,strstr",
+        "-Wl,-wrap,strtok",
+        "-Wl,-wrap,strxfrm",
+        "-Wl,-wrap,strtod",
+        "-Wl,-wrap,strtof",
+        "-Wl,-wrap,strtold",
+        "-Wl,-wrap,strtoll",
+        "-Wl,-wrap,strtoul",
+        "-Wl,-wrap,strtoull",
+        "-Wl,-wrap,atoi",
+        "-Wl,-wrap,atol",
+        "-Wl,-wrap,atof",
+        "-Wl,-wrap,malloc",
+        "-Wl,-wrap,calloc",
+        "-Wl,-wrap,realloc",
+        "-Wl,-wrap,free",
+        "-Wl,-wrap,_malloc_r",
+        "-Wl,-wrap,_calloc_r",
+        "-Wl,-wrap,_realloc_r",
+        "-Wl,-wrap,_free_r",
+        "-Wl,-wrap,memcmp",
+        "-Wl,-wrap,memcpy",
+        "-Wl,-wrap,memmove",
+        "-Wl,-wrap,memset",
+        # TODO remove this if possible
+        "-Wl,-wrap,putc",
     ],
 )
 
 # Sources - from SDK project/realtek_amebaz2_v0_example/GCC-RELEASE/application.is.mk
 # - without "utilities - example", "bluetooth - example" and "network - app - mqtt"
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz2_sdk",
     base_dir=COMPONENT_DIR,
     srcs=[
-        # libc api wrapper
-        "+<soc/realtek/8710c/misc/utilities/source/ram/libc_wrap.c>",
         # cmsis
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram/*.c>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram_s/app_start.c>",
@@ -219,14 +219,13 @@ env.AddLibrary(
         "+<soc/realtek/8710c/misc/driver>",
         "+<soc/realtek/8710c/misc/os>",
         "+<soc/realtek/8710c/misc/platform>",
-        "+<soc/realtek/8710c/misc/utilities/include>",
+        "+<soc/realtek/8710c/misc/utilities>",
     ],
     options=dict(
         CCFLAGS=[
             "-Wno-int-conversion",
             "-Wno-unused-label",
             "-Wno-unused-but-set-variable",
-            "-Wno-undef",
             "-Wno-pointer-sign",
             "-Wno-parentheses",
             "-Wno-implicit-function-declaration",
@@ -239,7 +238,7 @@ env.AddLibrary(
 )
 
 # Sources - network utilities
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz2_net",
     base_dir=COMPONENT_DIR,
     srcs=[
@@ -305,7 +304,7 @@ env.AddLibrary(
 )
 
 # Sources - Bluetooth support
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz2_bluetooth",
     base_dir=join(COMPONENT_DIR, "common", "bluetooth", "realtek", "sdk"),
     srcs=[
@@ -350,7 +349,7 @@ env.AddLibrary(
 
 
 # Sources - lwIP 2.0.2
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz2_lwip",
     base_dir=join(COMPONENT_DIR, "common", "network", "lwip", "lwip_v2.0.2"),
     srcs=[
@@ -372,7 +371,7 @@ env.AddLibrary(
 )
 
 # Sources - mbedTLS
-env.AddLibrary(
+queue.AddLibrary(
     name="ambz2_mbedtls",
     base_dir=join(COMPONENT_DIR, "common", "network", "ssl", "mbedtls-2.4.0"),
     srcs=[
@@ -428,7 +427,7 @@ env.AddLibrary(
 )
 
 # Libs & linker config
-env.Append(
+queue.AppendPublic(
     LIBPATH=[
         # fmt: off
         join(COMPONENT_DIR, "soc", "realtek", "8710c", "misc", "bsp", "lib", "common", "GCC"),
@@ -465,7 +464,7 @@ env.Replace(
 )
 
 # Build all libraries
-env.BuildLibraries()
+queue.BuildLibraries()
 
 # Main firmware outputs and actions
 env.Replace(
