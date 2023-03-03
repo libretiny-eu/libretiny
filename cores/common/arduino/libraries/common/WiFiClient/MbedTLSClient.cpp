@@ -15,6 +15,10 @@ extern "C" {
 #include <mbedtls/sha256.h>
 #include <mbedtls/ssl.h>
 
+#if LT_HAS_FREERTOS
+#include <FreeRTOS.h>
+#endif
+
 } // extern "C"
 
 #define _clientKeyC ((mbedtls_pk_context *)_clientKey)

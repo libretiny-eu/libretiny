@@ -2,6 +2,10 @@
 
 #include "WiFi.h"
 
+#if LT_HAS_FREERTOS
+#include <FreeRTOS.h>
+#endif
+
 bool WiFiClass::mode(WiFiMode mode) {
 	// store a pointer to WiFi for WiFiEvents.cpp
 	pWiFi = this;

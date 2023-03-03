@@ -93,7 +93,7 @@ void lt_log_disable();
 #define LT_FM(...)
 #endif
 
-#if LT_LOG_HEAP
+#if LT_LOG_HEAP && LT_HAS_FREERTOS
 #define LT_HEAP_I() LT_I("Free heap: %u", LT_HEAP_FUNC());
 #else
 #define LT_HEAP_I()

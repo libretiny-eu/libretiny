@@ -2,6 +2,10 @@
 
 #include "wiring_custom.h"
 
+#if LT_HAS_FREERTOS
+#include <FreeRTOS.h>
+#endif
+
 int _analogReadResolution  = 10;	// 0-1023
 int _analogWriteResolution = 8;		// 0-255
 int _analogWritePeriod	   = 20000; // 50 Hz
