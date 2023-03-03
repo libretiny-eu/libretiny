@@ -13,6 +13,8 @@ extern "C" {
 #define boolean boolean_rtl
 // fix conflicts with Arduino's PinMode enum
 #define PinMode PinModeRTL
+// remove log_printf() if included before sdk_private.h
+#undef log_printf
 
 #include <strproc.h> // define string macros first
 #undef isdigit		 // then remove them, as they conflict

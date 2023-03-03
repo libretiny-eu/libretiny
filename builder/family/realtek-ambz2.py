@@ -222,9 +222,11 @@ queue.AddLibrary(
             "-Wno-parentheses",
             "-Wno-implicit-function-declaration",
             "-Wno-misleading-indentation",
-            # TODO remove this; only for example_wlan_fast_connect.c
+            "-Wno-unused-value",
+            # TODO remove this; only for example_wlan_fast_connect.c and at_cmd/*
             "-Wno-format-truncation",
             "-Wno-return-type",
+            "-Wno-unused-variable",
         ],
     ),
 )

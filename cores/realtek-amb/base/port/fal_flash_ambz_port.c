@@ -17,7 +17,7 @@ static int read(long offset, uint8_t *buf, size_t size) {
 }
 
 static int write(long offset, const uint8_t *buf, size_t size) {
-	return size * flash_stream_write(NULL, offset, size, buf);
+	return size * flash_stream_write(NULL, offset, size, (uint8_t *)buf);
 }
 
 static int erase(long offset, size_t size) {

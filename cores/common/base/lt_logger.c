@@ -1,9 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-28. */
 
 #include "lt_logger.h"
-
-#include <stdarg.h>
-#include <stdint.h>
+#include <sdk_private.h>
 
 #if LT_HAS_PRINTF
 #include <printf/printf.h>

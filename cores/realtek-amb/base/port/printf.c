@@ -12,10 +12,10 @@
 extern uint32_t UART_Writable(void *UARTx);
 extern void UART_CharPut(void *UARTx, uint8_t TxData);
 
-static const void *uart_dev[3] = {
-	UART0_REG_BASE,
-	UART1_REG_BASE,
-	LOG_UART_REG_BASE,
+static void *uart_dev[3] = {
+	(void *)UART0_REG_BASE,
+	(void *)UART1_REG_BASE,
+	(void *)LOG_UART_REG_BASE,
 };
 
 uint8_t lt_uart_port = 2;
