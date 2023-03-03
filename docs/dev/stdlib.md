@@ -4,7 +4,7 @@ Usually, functions available in C standard library should not be defined by the 
 
 The following functions must not be defined by the SDK. Their presence makes conflicts due to incompatibility with C library, so they should be removed or disabled, and replaced with wrappers.
 
-Memory management functions should be wrapped and redirected to FreeRTOS (if possible).
+Memory management functions should be wrapped and redirected to FreeRTOS (if possible). The necessary linker flags are added for all families (in `base.py`), and a FreeRTOS implementation of the wrappers are provided in `malloc.c` in the common core.
 
 Additionally, if the `printf` library is used in the chip family code, all other vendor-defined printf-like functions should be replaced with it.
 

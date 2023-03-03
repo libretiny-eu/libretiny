@@ -12,6 +12,7 @@ Explicit is better than implicit.
 
 - consider moving to C++17 (GNU)? or any newer than C++11
 - wrap all memory management functions (malloc, calloc, free, memset, etc.) and their vendor SDK counterparts to use FreeRTOS instead
+	- pretty much done for ambz and ambz2, Beken is yet left to do (`os_malloc()` etc.)
 - remove all network protocol client/server implementations from SDKs (mDNS, HTTP, DNS, etc.)
 
 ### New families

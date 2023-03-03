@@ -81,6 +81,17 @@ queue.AppendPublic(
         "$BOARD_DIR",
     ],
     LINKFLAGS=[
+        # malloc.c wrappers
+        "-Wl,-wrap,malloc",
+        "-Wl,-wrap,calloc",
+        "-Wl,-wrap,zalloc",
+        "-Wl,-wrap,realloc",
+        "-Wl,-wrap,free",
+        "-Wl,-wrap,_malloc_r",
+        "-Wl,-wrap,_calloc_r",
+        "-Wl,-wrap,_realloc_r",
+        "-Wl,-wrap,_free_r",
+        # linker map path
         '"-Wl,-Map=' + join("$BUILD_DIR", "${PROGNAME}.map") + '"',
     ],
     LIBS=[

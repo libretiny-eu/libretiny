@@ -8,4 +8,5 @@
 #define LT_HAS_FREERTOS 1
 #define LT_HAS_MBEDTLS	1
 
-#define LT_HEAP_FUNC xPortGetFreeHeapSize
+#define LT_HEAP_FUNC	xPortGetFreeHeapSize
+#define LT_REALLOC_FUNC pvPortRealloc
