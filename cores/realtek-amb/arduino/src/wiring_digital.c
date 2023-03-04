@@ -13,7 +13,7 @@ void pinRemoveMode(pin_size_t pinNumber) {
 	}
 	if (pinEnabled(pin, PIN_GPIO)) {
 		gpio_t *obj = (gpio_t *)gpio_pin_struct[pinNumber];
-		gpio_deinit(obj, pin->gpio);
+		gpio_deinit(obj);
 		free(obj);
 	}
 	if (pinEnabled(pin, PIN_IRQ)) {
@@ -107,9 +107,9 @@ void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 PinStatus digitalRead(pin_size_t pinNumber) {
 	PinInfo *pin = pinInfo(pinNumber);
 	if (!pin)
-		return;
+		return LOW;
 	if (pin->enabled != PIN_GPIO)
-		return;
+		return LOW;
 
 	gpio_t *gpio = (gpio_t *)gpio_pin_struct[pinNumber];
 	return gpio_read(gpio);

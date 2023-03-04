@@ -44,31 +44,8 @@ queue.AppendPublic(
         "-march=armv5te",
         "-mthumb",
         "-mthumb-interwork",
-        "-g",
-        "-O2",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fno-strict-aliasing",
-        "-fsigned-char",
-        "-Wno-comment",
         "-Wno-write-strings",
-        "-Wno-char-subscripts",
-        "-Wno-missing-braces",
         "-Wno-attributes",
-    ],
-    CFLAGS=[
-        "-std=gnu99",
-        "-nostdlib",
-        "-Wall",
-        "-Wno-format",
-        "-Wno-unknown-pragmas",
-    ],
-    CXXFLAGS=[
-        "-std=gnu++11",
-        "-MMD",
-        "-fno-exceptions",
-        "-fno-rtti",
-        "-Wno-literal-suffix",
     ],
     CPPDEFINES=[
         # SDK options
@@ -92,15 +69,24 @@ queue.AppendPublic(
         "-mcpu=arm968e-s",
         "-marm",
         "-mthumb-interwork",
-        "-g",
         "--specs=nano.specs",
-        "-Wl,--gc-sections",
         "-Wl,-wrap,bk_flash_get_info",
         "-Wl,-wrap,bk_flash_erase",
         "-Wl,-wrap,bk_flash_write",
         "-Wl,-wrap,bk_flash_read",
         # stdio wrappers (base/port/printf.c)
         "-Wl,-wrap,bk_printf",
+    ],
+)
+queue.AppendPrivate(
+    CCFLAGS=[
+        "-Wno-comment",
+        "-Wno-char-subscripts",
+        "-Wno-missing-braces",
+    ],
+    CFLAGS=[
+        "-Wno-format",
+        "-Wno-unknown-pragmas",
     ],
 )
 
@@ -330,8 +316,8 @@ queue.AddLibrary(
         CCFLAGS=[
             "-Wno-unused-variable",
             "-Wno-implicit-function-declaration",
+            "-w",
         ],
-        CFLAGS=["-<-Wall>"],
     ),
 )
 

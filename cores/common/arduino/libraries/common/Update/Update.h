@@ -104,6 +104,7 @@ class UpdateClass {
   public:
 	String md5String(void) {
 		// return _md5.toString();
+		return "";
 	}
 
 	void md5(uint8_t *result) {

@@ -36,11 +36,13 @@ extern "C" {
 #include <rtl8710c.h>
 #endif
 
+#include <gpio_api.h>
+#undef MBED_GPIO_API_H // ..no comment
+#include <gpio_ex_api.h>
+
 #include <analogin_api.h>
 #include <analogout_api.h>
 #include <flash_api.h>
-#include <gpio_api.h>
-#include <gpio_ex_api.h>
 #include <gpio_irq_api.h>
 #include <gpio_irq_ex_api.h>
 #include <i2c_api.h>

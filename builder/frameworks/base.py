@@ -18,11 +18,33 @@ family: Family = env["FAMILY_OBJ"]
 # Move common core sources (env.AddCoreSources()) and Arduino libs
 # below per-family sources (to maintain child families taking precedence)
 
-# Global flags (applying to the SDK)
+# Global public flags
+# Refer to https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
 env.Append(
     CCFLAGS=[
-        # Newer versions of GCC complain about undefined macros in #if
-        "-Wno-undef",
+        # C Language Options
+        "-fsigned-char",  # Let the type char be signed
+        # Debugging Options
+        "-g2",  # produce debugging information; the default level is 2
+        # Optimization Options
+        "-Os",  # optimize for size; enables all -O2 optimizations except those that often increase code size
+        "-fdata-sections",  # place each function or data item into its own section
+        "-ffunction-sections",  # place each function or data item into its own section
+        "-fno-strict-aliasing",  # (don't) assume the strictest aliasing rules applicable
+        # Preprocessor Options
+        "-MMD",  # output a rule suitable for make describing the dependencies of the main source file
+        # Code Generation Options
+        "-fno-common",  # place uninitialized global variables in the BSS section of the object file
+        "-fno-exceptions",  # disable exception handling
+        # Developer Options
+        "-fstack-usage",  # output stack usage information for the program, on a per-function basis
+    ],
+    CFLAGS=[
+        "-std=gnu99",
+    ],
+    CXXFLAGS=[
+        "-std=gnu++11",
+        "-fno-rtti",  # disable generation of information about every class with virtual functions
     ],
 )
 
@@ -62,10 +84,18 @@ queue.AddExternalLibrary("ltchiptool")  # uf2ota source code
 queue.AddExternalLibrary("flashdb")
 queue.AddExternalLibrary("printf")
 
-# Flags & linker options
+# Non-SDK defines & linker options
 queue.AppendPublic(
+    CCFLAGS=[
+        "-Wreturn-type",
+        "-Wno-undef",
+    ],
     CFLAGS=[
         "-Werror=implicit-function-declaration",
+    ],
+    CXXFLAGS=[
+        "-Wno-literal-suffix",
+        "-Wno-write-strings",
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),
@@ -82,6 +112,13 @@ queue.AppendPublic(
         "$VARIANTS_DIR",
     ],
     LINKFLAGS=[
+        "-g2",
+        "-Os",
+        "-Wl,--build-id=none",
+        "-Wl,--cref",
+        "-Wl,--gc-sections",
+        "-Wl,--no-enum-size-warning",
+        "-Wl,--no-wchar-size-warning",
         # malloc.c wrappers
         "-Wl,-wrap,malloc",
         "-Wl,-wrap,calloc",

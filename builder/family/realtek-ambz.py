@@ -17,27 +17,7 @@ queue.AppendPublic(
         "-mthumb",
         "-mfloat-abi=hard",
         "-mfpu=fpv4-sp-d16",
-        "-g2",
-        "-w",
-        "-O2",
-        "-fdata-sections",
-        "-ffunction-sections",
-        "-fmessage-length=0",
-        "-fno-common",
         "-fno-short-enums",
-        "-fomit-frame-pointer",
-        "-fsigned-char",
-    ],
-    CFLAGS=[
-        "-std=gnu99",
-        "-Wno-pointer-sign",
-    ],
-    CXXFLAGS=[
-        # borrowed from RtlDuino/development/rtl87xx/platform.txt
-        "-std=gnu++11",
-        "-MMD",
-        "-fno-exceptions",
-        "-fno-rtti",
     ],
     CPPDEFINES=[
         # other options
@@ -52,17 +32,11 @@ queue.AppendPublic(
         "-mthumb",
         "-mfloat-abi=hard",
         "-mfpu=fpv4-sp-d16",
-        "-g",
         "--specs=nano.specs",
-        "-Os",
-        "-Wl,--gc-sections",
-        "-Wl,--cref",
         # the entrypoint in ROM (?)
         "-Wl,--entry=Reset_Handler",
         # start function table in startup.c
         "-Wl,--undefined=gImage2EntryFun0",
-        "-Wl,--no-enum-size-warning",
-        "-Wl,--no-wchar-size-warning",
         "-Wl,-wrap,rom_psk_CalcGTK",
         "-Wl,-wrap,rom_psk_CalcPTK",
         "-Wl,-wrap,CalcMIC",
@@ -86,6 +60,14 @@ queue.AppendPublic(
         "-Wl,-wrap,VSprintf",
         "-Wl,-wrap,LOG_PRINTF",
         "-Wl,-wrap,__rtl_vfprintf_r_v1_00",
+    ],
+)
+queue.AppendPrivate(
+    CFLAGS=[
+        "-Wno-implicit-function-declaration",
+        "-Wno-incompatible-pointer-types",
+        "-Wno-int-conversion",
+        "-Wno-pointer-sign",
     ],
 )
 
@@ -203,6 +185,9 @@ queue.AddLibrary(
         "+<component/common/network/mdns>",
         "+<component/common/network/libwsclient>",
     ],
+    options=dict(
+        CFLAGS=["-w"],
+    ),
 )
 
 # Sources - lwIP

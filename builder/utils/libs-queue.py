@@ -166,7 +166,6 @@ class LibraryQueue:
     def BuildLibraries(self):
         if self.built:
             raise RuntimeError("Cannot build a library queue twice")
-        self.Print()
 
         # add public options to the environment
         apply_options(self.env, self.options_public)

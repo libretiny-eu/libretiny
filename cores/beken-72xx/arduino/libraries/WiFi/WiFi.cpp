@@ -36,6 +36,7 @@ WiFiStatus eventTypeToStatus(uint8_t type) {
 		case RW_EVT_STA_DISCONNECTED:
 			return WL_DISCONNECTED;
 	}
+	return WL_IDLE_STATUS;
 }
 
 WiFiAuthMode securityTypeToAuthMode(uint8_t type) {

@@ -103,6 +103,7 @@ bool TwoWire::end() {
 	i2c_reset(_i2c);
 	delete _i2c;
 	_i2c = NULL;
+	return true;
 }
 
 bool TwoWire::setClock(uint32_t freq) {
@@ -110,6 +111,7 @@ bool TwoWire::setClock(uint32_t freq) {
 		i2c_frequency(_i2c, freq);
 	}
 	_freq = freq;
+	return true;
 }
 
 void TwoWire::beginTransmission(uint8_t address) {

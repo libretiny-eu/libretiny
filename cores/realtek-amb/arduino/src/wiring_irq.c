@@ -18,7 +18,7 @@ static void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
 }
 
 void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus mode) {
-	attachInterruptParam(interruptNumber, callback, mode, NULL);
+	attachInterruptParam(interruptNumber, (voidFuncPtrParam)callback, mode, NULL);
 }
 
 void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback, PinStatus mode, void *param) {

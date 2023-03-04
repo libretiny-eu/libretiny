@@ -35,7 +35,7 @@ extern rtw_wifi_setting_t wifi_setting;
 extern unsigned char sta_password[65];
 extern unsigned char ap_password[65];
 extern void reset_wifi_struct(void);
-extern rtw_mode_t wifi_mode;
+extern wifi_mode_t wifi_mode;
 extern WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 // WiFiEvents.cpp
 extern void startWifiTask();

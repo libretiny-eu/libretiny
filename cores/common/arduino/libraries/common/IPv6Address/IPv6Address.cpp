@@ -54,6 +54,7 @@ size_t IPv6Address::printTo(Print &p) const {
 
 	}
 	return n; */
+	return 0;
 }
 
 String IPv6Address::toString() const {

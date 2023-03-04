@@ -8,4 +8,5 @@ __attribute__((weak)) uint32_t __get_IPSR()
 {
 	uint32_t result;
     asm volatile ("MRS %0, ipsr" : "=r" (result) );
+	return result;
 }

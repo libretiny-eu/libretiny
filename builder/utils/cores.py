@@ -48,7 +48,6 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
             "+<*.c*>",
             "+<common/*.c*>",
             "+<compat/*.c*>",
-            "+<fixups/*.c*>",
             "+<port/*.c*>",
             "+<posix/*.c>",
             "+<wraps/*.c>",
@@ -58,9 +57,22 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
             "!<.>",
             "!<compat>",
             "!<config>",
-            "!<fixups>",
             "!<port>",
         ],
+    )
+    queue.AddLibrary(
+        name=f"core_{name}_fixups",
+        base_dir=path,
+        srcs=[
+            "+<fixups/*.c*>",
+        ],
+        includes=[
+            "!<fixups>",
+        ],
+        options=dict(
+            # disable all warnings for fixups
+            CCFLAGS=["-w"],
+        ),
     )
     return True
 

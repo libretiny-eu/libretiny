@@ -179,7 +179,7 @@ void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 			if (len != 124)
 				return;
 			eventId = ARDUINO_EVENT_WIFI_AP_STACONNECTED;
-			memcpy(eventInfo.wifi_ap_staconnected.mac, (const char *)data[10], 6);
+			memcpy(eventInfo.wifi_ap_staconnected.mac, (const char *)data + 10, 6);
 			break;
 
 		case WIFI_EVENT_STA_DISASSOC:

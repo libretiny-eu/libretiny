@@ -183,6 +183,7 @@ bool LibreTuya::otaSwitch(bool force) {
 bool LibreTuya::wdtEnable(uint32_t timeout) {
 	watchdog_init(timeout);
 	watchdog_start();
+	return true;
 }
 
 void LibreTuya::wdtDisable() {

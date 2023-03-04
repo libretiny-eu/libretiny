@@ -61,6 +61,7 @@ bool LwIPServer::begin(uint16_t port, bool reuseAddr) {
 	_active		  = true;
 	_noDelay	  = false;
 	_sockAccepted = -1;
+	return true;
 }
 
 void LwIPServer::end() {

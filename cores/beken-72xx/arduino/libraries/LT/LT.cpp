@@ -169,6 +169,7 @@ bool LibreTuya::otaSwitch(bool force) {
 bool LibreTuya::wdtEnable(uint32_t timeout) {
 	wdt_ctrl(WCMD_SET_PERIOD, &timeout);
 	wdt_ctrl(WCMD_POWER_UP, NULL);
+	return true;
 }
 
 void LibreTuya::wdtDisable() {
