@@ -57,9 +57,9 @@ queue.AddExternalLibrary("arduino_api")
 # Sources - board variant
 queue.AddLibrary(
     name="board_${VARIANT}",
-    base_dir="$BOARD_DIR",
+    base_dir="$VARIANTS_DIR",
     srcs=[
-        "+<variant.cpp>",
+        "+<${VARIANT}.cpp>",
     ],
     # not adding includes since they're added with the base core
 )

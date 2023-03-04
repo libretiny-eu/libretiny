@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <variant.h>
+#include LT_VARIANT_H
 
 // Choose the main UART output port
 #ifndef LT_UART_DEFAULT_PORT

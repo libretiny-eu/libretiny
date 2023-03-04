@@ -71,6 +71,7 @@ queue.AppendPublic(
         ("LIBRETUYA", 1),
         ("LT_VERSION", env.ReadLTVersion(platform.get_dir(), platform.version)),
         ("LT_BOARD", "${VARIANT}"),
+        ("LT_VARIANT_H", r"\"${VARIANT}.h\""),
         ("F_CPU", board.get("build.f_cpu")),
         ("MCU", "${MCU}"),
         ("FAMILY", "F_${FAMILY}"),
@@ -78,7 +79,7 @@ queue.AppendPublic(
         *env["FLASH_DEFINES"].items(),
     ],
     CPPPATH=[
-        "$BOARD_DIR",
+        "$VARIANTS_DIR",
     ],
     LINKFLAGS=[
         # malloc.c wrappers

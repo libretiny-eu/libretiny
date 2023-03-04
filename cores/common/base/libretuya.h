@@ -42,7 +42,7 @@
 // Family-specific macros
 #include <lt_family.h>
 // Board variant (pin definitions)
-#include <variant.h>
+#include LT_VARIANT_H
 // APIs
 #include "lt_common_api.h" // common APIs
 #include "lt_family_api.h" // family-specific APIs

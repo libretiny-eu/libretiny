@@ -28,13 +28,8 @@ def env_read_version(env: Environment, platform_dir: str, version: str):
             return version
         sha = p.stdout.read().decode().strip()
 
-        p = Popen(["git", "status", "--short"], stdout=PIPE, cwd=platform_dir)
-        if p.wait() != 0:
-            sys.stderr.write(
-                f"Warning! Non-zero return code received from Git: {p.returncode}\n"
-            )
-            return version
-        dirty = p.stdout.read().strip()
+        p = Popen(["git", "diff", "--quiet"], stdout=PIPE, cwd=platform_dir)
+        dirty = p.wait() != 0
     except (FileNotFoundError, IndexError):
         sys.stderr.write(
             "Warning! Git executable not found, or unreadable data received. Cannot read version information.\n"
@@ -67,7 +62,7 @@ def env_configure(
         CORES_DIR=join("${LT_DIR}", "cores"),
         COMMON_DIR=join("${LT_DIR}", "cores", "common"),
         # Build directories & paths
-        BOARD_DIR=join("${LT_DIR}", "boards", "${VARIANT}"),
+        VARIANTS_DIR=join("${LT_DIR}", "boards", "variants"),
         FAMILY_DIR=join("${LT_DIR}", "cores", "${FAMILY_NAME}"),
         MISC_DIR=join("${FAMILY_DIR}", "misc"),
         LDSCRIPT_PATH=[board.get("build.ldscript")],
