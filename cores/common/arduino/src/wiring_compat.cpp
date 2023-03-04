@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-04. */
 
-#include "LibreTuyaCompat.h"
+#include "wiring_compat.h"
 
 #if LT_HAS_FREERTOS
 BaseType_t xTaskCreateUniversal(
@@ -31,3 +31,9 @@ BaseType_t xTaskCreateUniversal(
 	// #endif
 }
 #endif
+
+String ipToString(const IPAddress &ip) {
+	char szRet[16];
+	sprintf(szRet, "%hhu.%hhu.%hhu.%hhu", ip[0], ip[1], ip[2], ip[3]);
+	return String(szRet);
+}

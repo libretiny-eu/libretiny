@@ -5,7 +5,7 @@
 #define CHIP_TYPE(family, chip_id)		(((family >> 24) << 8) | chip_id)
 #define CHIP_TYPE_ENUM(family, chip_id) (ChipType) CHIP_TYPE(family, chip_id)
 
-enum ChipFamily {
+typedef enum {
 	// used in UF2 Family ID
 	F_RTL8710A = 0x9FFFD543, // Realtek Ameba1
 	F_RTL8710B = 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
@@ -15,9 +15,9 @@ enum ChipFamily {
 	F_BK7231N  = 0x7B3EF230, // Beken 7231N
 	F_BK7251   = 0x6A82CC42, // Beken 7251/7252
 	F_BL60X	   = 0xDE1270B7, // Boufallo 602
-};
+} ChipFamily;
 
-enum ChipType {
+typedef enum {
 	// Realtek AmebaZ
 	// IDs copied from rtl8710b_efuse.h
 	RTL8710BL = CHIP_TYPE(F_RTL8710B, 0xE0), // ???
@@ -32,4 +32,4 @@ enum ChipType {
 	BK7231N = CHIP_TYPE(F_BK7231N, 0x1C), // *SCTRL_CHIP_ID = 0x7231c
 	BL2028N = CHIP_TYPE(F_BK7231N, 0x1C), // *SCTRL_CHIP_ID = 0x7231c
 	BK7252	= CHIP_TYPE(F_BK7251, 0x00),  // TODO
-};
+} ChipType;

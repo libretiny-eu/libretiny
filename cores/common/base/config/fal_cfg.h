@@ -2,6 +2,10 @@
 
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 inline void printf_nop(const char *fmt, ...) {}
 
 #define FAL_PRINTF printf_nop
@@ -9,6 +13,10 @@ inline void printf_nop(const char *fmt, ...) {}
 
 // Flash device configuration
 extern const struct fal_flash_dev flash0;
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #define FAL_FLASH_DEV_NAME "flash0"
 
@@ -33,6 +41,6 @@ extern const struct fal_flash_dev flash0;
 #include <fal_def.h>
 
 /**
- * @brief Root partition table, representing the entire flash.
+ * @brief "Root" partition entry, representing the entire flash.
  */
 extern fal_partition_t fal_root_part;

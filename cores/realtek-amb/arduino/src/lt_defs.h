@@ -5,6 +5,7 @@
 #define LT_ARD_HAS_WIFI		  1
 #define LT_ARD_HAS_MD5		  1
 #define LT_ARD_HAS_SOFTSERIAL 1
+#define LT_ARD_HAS_SERIAL	  1
 
 #define ARDUINO_AMEBA
 #define ARDUINO_ARCH_AMBZ

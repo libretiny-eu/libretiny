@@ -2,10 +2,17 @@
 
 #include "lt_logger.h"
 
-#include <Arduino.h>
-#include <printf/printf.h>
+#include <stdarg.h>
+#include <stdint.h>
 
-#if LT_LOGGER_TASK && LT_HAS_FREERTOS
+#if LT_HAS_PRINTF
+#include <printf/printf.h>
+#include <printf_port.h>
+#else
+#include <stdio.h>
+#endif
+
+#if (LT_LOGGER_TIMESTAMP || LT_LOGGER_TASK) && LT_HAS_FREERTOS
 #include <FreeRTOS.h>
 #include <task.h>
 #endif
@@ -42,7 +49,9 @@ static const uint8_t colors[] = {
 };
 #endif
 
+#if LIBRETUYA_ARDUINO
 unsigned long millis(void);
+#endif
 
 #if LT_LOGGER_CALLER
 void lt_log(const uint8_t level, const char *caller, const unsigned short line, const char *format, ...) {
@@ -54,7 +63,13 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		return;
 
 #if LT_LOGGER_TIMESTAMP
+#if LIBRETUYA_ARDUINO
 	float seconds = millis() / 1000.0f;
+#elif LT_HAS_FREERTOS
+	float seconds = xTaskGetTickCount() * portTICK_PERIOD_MS / 1000.0f;
+#else
+	float seconds = 0;
+#endif
 #if LT_PRINTF_BROKEN
 	char zero[4] = "\x00\x30\x30";
 	if (seconds == 0.0f)
@@ -77,9 +92,13 @@ void lt_log(const uint8_t level, const char *format, ...) {
 	char c_value  = '0' + (colors[level] & 0x7);
 #endif
 
+#if LT_HAS_PRINTF
 	fctprintf(
 		(void (*)(char, void *))putchar_p,
 		(void *)uart_port,
+#else
+	printf(
+#endif
 	// format:
 #if LT_LOGGER_COLOR
 		"\e[%c;3%cm"
@@ -128,12 +147,21 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #endif
 	);
 
+#if LT_HAS_PRINTF
 	va_list va_args;
 	va_start(va_args, format);
 	vfctprintf((void (*)(char, void *))putchar_p, (void *)uart_port, format, va_args);
 	va_end(va_args);
 	putchar_p('\r', uart_port);
 	putchar_p('\n', uart_port);
+#else
+	va_list va_args;
+	va_start(va_args, format);
+	vprintf(format, va_args);
+	va_end(va_args);
+	putchar('\r');
+	putchar('\n');
+#endif
 }
 
 void lt_log_set_port(uint8_t port) {

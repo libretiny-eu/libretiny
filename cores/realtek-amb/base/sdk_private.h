@@ -18,6 +18,7 @@
 #undef strtoul
 
 #include <ameba_soc.h>
+#include <flash_api.h>
 #include <gpio_api.h>
 #include <main.h>
 #include <rand.h>
@@ -55,6 +56,3 @@ extern void DumpForOneBytes(void *addr, int cnt); // cnt max 0x70!
 extern void SystemCoreClockUpdate(void);
 
 extern int _sscanf_patch(const char *buf, const char *fmt, ...);
-
-// include printf() wrapper disable methods
-#include <printf_port.h>

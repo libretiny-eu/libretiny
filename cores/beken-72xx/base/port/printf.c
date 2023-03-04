@@ -1,11 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <printf_config.h>
+#include <libretuya.h>
 
 #include <printf/printf.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
 
 extern void bk_send_byte(uint8_t uport, uint8_t data);
 extern int uart_print_port;

@@ -11,6 +11,7 @@ def env_load_defines(env: Environment, path: str):
     path = env.subst(path)
     if not isfile(path):
         raise FileNotFoundError(f"Defines file not found ({path})")
+    config = {}
     f = open(path, "r", encoding="utf-8")
     for line in f:
         line: str
@@ -19,11 +20,16 @@ def env_load_defines(env: Environment, path: str):
         line = line[7:].strip()
         line = line.split(None, 2)
         if len(line) == 1:
-            env.Append(CPPDEFINES=[(line[0], "1")])
+            env.Append(CPPDEFINES=[(line[0], 1)])
+            config[line[0]] = 1
         elif len(line) == 2:
             env.Append(CPPDEFINES=[(line[0], line[1])])
+            config[line[0]] = line[1]
         else:
             raise ValueError(f"Unknown directive: {line}")
+    env.Append(
+        CONFIG=config,
+    )
     f.close()
 
 

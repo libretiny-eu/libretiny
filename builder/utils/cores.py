@@ -22,27 +22,23 @@ def env_add_family(env: Environment, family: Family) -> str:
     return path
 
 
-def env_add_core_config(env: Environment, name: str, path: str) -> bool:
+def env_add_core_config(env: Environment, path: str) -> bool:
     if not isdir(env.subst(path)):
         return False
     env.Prepend(
-        CPPPATH=[join(path, "config")],
-        LIBPATH=[join(path, "fixups")],
+        CPPPATH=[
+            join(path, "compat"),
+            join(path, "config"),
+            join(path, "fixups"),
+        ],
+        LIBPATH=[
+            join(path, "fixups"),
+        ],
     )
     try:
         env.LoadDefines(join(path, "lt_defs.h"))
     except FileNotFoundError:
         pass
-    env.AddLibrary(
-        name=f"core_{name}_fixups",
-        base_dir=path,
-        srcs=[
-            "+<fixups/*.c*>",
-        ],
-        includes=[
-            "!<fixups>",
-        ],
-    )
     return True
 
 
@@ -56,6 +52,8 @@ def env_add_core_sources(env: Environment, name: str, path: str) -> bool:
             "+<*.c*>",
             "+<common/*.c*>",
             "+<compat/*.c*>",
+            "+<fixups/*.c*>",
+            "+<port/*.c*>",
             "+<posix/*.c>",
             "+<wraps/*.c>",
         ],
@@ -63,6 +61,9 @@ def env_add_core_sources(env: Environment, name: str, path: str) -> bool:
             # prepend the paths before SDK directories
             "!<.>",
             "!<compat>",
+            "!<config>",
+            "!<fixups>",
+            "!<port>",
         ],
     )
     return True
@@ -78,7 +79,7 @@ def env_add_arduino_libraries(env: Environment, name: str, path: str) -> bool:
             "+<**/*.c*>",
         ],
         includes=[
-            "!<*>",
+            "!<*/*>" if name.startswith("common") else "!<*>",
         ],
     )
     return True

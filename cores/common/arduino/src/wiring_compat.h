@@ -40,3 +40,7 @@ BaseType_t xTaskCreateUniversal(
 
 // Default values from sdkconfig.h
 #define CONFIG_LWIP_MAX_ACTIVE_TCP 16
+
+#ifdef __cplusplus
+String ipToString(const IPAddress &ip);
+#endif

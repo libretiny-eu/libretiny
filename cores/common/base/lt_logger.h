@@ -2,8 +2,11 @@
 
 #pragma once
 
-#include "LibreTuyaConfig.h"
-#include <stdint.h>
+#include <libretuya.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
 #if LT_LOGGER_CALLER
 #define LT_LOG(level, caller, line, ...) lt_log(level, caller, line, __VA_ARGS__)
@@ -167,4 +170,8 @@ void lt_log_disable();
 	}
 #else
 #define LT_ERRNO()
+#endif
+
+#ifdef __cplusplus
+} // extern "C"
 #endif

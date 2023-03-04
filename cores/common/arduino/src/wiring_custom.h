@@ -2,31 +2,11 @@
 
 #pragma once
 
-#include "LibreTuyaAPI.h"
+#include <Arduino.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @brief Run mainTask & start OS kernel (family-defined).
- * Return false if an error occured; else do not return and
- * and keep the OS kernel running.
- */
-extern bool startMainTask();
-
-/**
- * @brief Main setup() and loop() task.
- * Not to be called directly.
- */
-extern void mainTask(const void *arg);
-
-/**
- * @brief Run periodic tasks, like printing free heap or checking millis() overflow.
- *
- * This is called during delaying operations, like yield() or delay().
- */
-extern void runPeriodicTasks();
 
 #define PIN_NONE (1 << 0)
 #define PIN_GPIO (1 << 1)
@@ -63,6 +43,9 @@ typedef struct {
 extern PinInfo pinTable[];
 
 // Custom Wiring methods
+
+void mainTask(const void *arg); // implemented in main.cpp
+void runPeriodicTasks();		// implemented in wiring_custom.c
 
 bool pinInvalid(pin_size_t pinNumber);
 PinInfo *pinInfo(pin_size_t pinNumber);

@@ -24,7 +24,7 @@ void entry_set_world_flag(void) {
 }
 #endif // CFG_SUPPORT_BOOTLOADER
 
-extern void main(void);
+extern void lt_main(void);
 
 // declare as weak to override with Arduino framework
 __attribute__((weak)) void __wrap_bk_printf_disable();
@@ -57,5 +57,5 @@ void entry_main(void) {
 	// enable bk_printf output again
 	__wrap_bk_printf_enable();
 	// run the app
-	main();
+	lt_main();
 }

@@ -4,4 +4,12 @@
 
 #include <printf_config.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 WRAP_DISABLE_DEF(bk_printf);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

@@ -2,7 +2,6 @@
 
 from os.path import join
 
-from ltchiptool.soc.bk72xx.binary import to_offset
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
 
@@ -50,7 +49,6 @@ env.Append(
         "-fno-strict-aliasing",
         "-fsigned-char",
         "-Wno-comment",
-        "-Werror=implicit-function-declaration",
         "-Wno-write-strings",
         "-Wno-char-subscripts",
         "-Wno-missing-braces",
@@ -78,8 +76,6 @@ env.Append(
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
         ("INCLUDE_xTaskGetHandle", "1"),
-        # mbedtls_net_set_nonblock is commented out in tls_net.c
-        ("mbedtls_net_set_nonblock", "net_set_nonblock"),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
@@ -95,7 +91,6 @@ env.Append(
         "-marm",
         "-mthumb-interwork",
         "-g",
-        "-nostartfiles",
         "--specs=nano.specs",
         "-Wl,--gc-sections",
         "-Wl,-wrap,_free_r",
@@ -204,9 +199,8 @@ env.AddLibrary(
         "+<security/*.c>",
         "+<spidma/*.c>",
         "+<sys_ctrl/*.c>",
-        "+<uart/*.c>",
+        "+<uart/uart.c>",
         "+<wdt/*.c>",
-        "ARDUINO" in env and "-<uart/printf.c>",
     ],
     includes=[
         "+<common>",
@@ -542,6 +536,11 @@ env.Replace(
     SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
+
+
+def to_offset(addr: int) -> int:
+    return int(addr + (addr // 32) * 2)
+
 
 # Calculate RBL header offset
 app_offs = int(env["FLASH_APP_OFFSET"], 16)

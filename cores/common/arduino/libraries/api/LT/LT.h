@@ -7,18 +7,6 @@
 #include "LibreTuyaAPI.h"
 #include <core/ChipType.h>
 
-typedef enum {
-	RESET_REASON_UNKNOWN  = 0,
-	RESET_REASON_POWER	  = 1,
-	RESET_REASON_BROWNOUT = 2,
-	RESET_REASON_HARDWARE = 3,
-	RESET_REASON_SOFTWARE = 4,
-	RESET_REASON_WATCHDOG = 5,
-	RESET_REASON_CRASH	  = 6,
-	RESET_REASON_SLEEP	  = 7,
-	RESET_REASON_MAX	  = 8,
-} ResetReason;
-
 /**
  * @brief Flash chip ID structure.
  */
@@ -43,6 +31,7 @@ class LibreTuya {
 	ChipFamily getChipFamily();
 	const char *getChipFamilyName();
 	const char *getDeviceName();
+	ResetReason getResetReason();
 	const char *getResetReasonName(ResetReason reason = RESET_REASON_MAX);
 	uint32_t getCpuFreqMHz();
 	uint32_t getFlashChipSize();
@@ -67,10 +56,6 @@ class LibreTuya {
 	 * @brief Reboot the CPU and stay in download mode (if possible).
 	 */
 	void restartDownloadMode();
-	/**
-	 * @brief Get the reason of last chip reset.
-	 */
-	ResetReason getResetReason();
 	/**
 	 * @brief Reconfigure GPIO pins used for debugging
 	 * (SWD/JTAG), so that they can be used as normal I/O.

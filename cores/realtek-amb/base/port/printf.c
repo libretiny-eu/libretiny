@@ -1,11 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <printf_config.h>
+#include <libretuya.h>
 
 #include <printf/printf.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <stdio.h>
 
 #define LOG_UART_REG_BASE 0x40003000
 #define UART0_REG_BASE	  0x40040000

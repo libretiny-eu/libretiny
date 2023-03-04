@@ -2,7 +2,11 @@
 
 #pragma once
 
-#include <LibreTuyaConfig.h>
+#include <lt_config.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
 #define PRINTF_HAS_DISABLE 1
 
@@ -127,3 +131,7 @@ void putchar_p(char c, unsigned long port);
 	int __wrap_##name(char *s, size_t count, const char *format, va_list arg) {                                        \
 		return vsnprintf(s, count, format, arg);                                                                       \
 	}
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

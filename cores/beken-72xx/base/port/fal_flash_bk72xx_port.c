@@ -1,10 +1,9 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <lt_logger.h>
-#include <sdk_extern.h>
+#include <libretuya.h>
+#include <sdk_private.h>
 
 #include <fal.h>
-#include <flash_pub.h>
 
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 

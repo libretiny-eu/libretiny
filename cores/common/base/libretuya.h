@@ -12,18 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// C++ standard libraries
-#ifdef __cplusplus
-#include <algorithm>
-#include <cmath>
-using ::round;
-using std::abs;
-using std::isinf;
-using std::isnan;
-using std::max;
-using std::min;
-#endif
-
 // LibreTuya version macros
 #ifndef LT_VERSION
 #define LT_VERSION 1.0.0
@@ -36,25 +24,6 @@ using std::min;
 #define LT_VERSION_STR	   STRINGIFY_MACRO(LT_VERSION)
 #define LT_BOARD_STR	   STRINGIFY_MACRO(LT_BOARD)
 
-// Includes
-#include "LibreTuyaClass.h"	 // global LT class
-#include "LibreTuyaCompat.h" // compatibility methods
-#include "LibreTuyaConfig.h" // configuration macros
-#include "LibreTuyaCustom.h" // family-defined methods (Wiring custom)
-#include <Arduino.h>
-
-// C includes
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
-#include "lt_logger.h"
-#include "lt_posix_api.h"
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
 // Functional macros
 #define LT_BANNER()                                                                                                    \
 	LT_LOG(                                                                                                            \
@@ -64,17 +33,18 @@ extern "C" {
 		"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__                        \
 	)
 
-#ifdef __cplusplus
-String ipToString(const IPAddress &ip);
-
-extern "C" {
-void lt_rand_bytes(uint8_t *buf, size_t len);
-void hexdump(const uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16);
-}
-
-#else
-
-void lt_rand_bytes(uint8_t *buf, size_t len);
-void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width);
-
-#endif
+// Types & macros
+#include "lt_chip.h"   // ChipType enum
+#include "lt_config.h" // configuration macros
+#include "lt_types.h"  // other types & enums
+// Family-specific macros
+#include <lt_family.h>
+// Board variant (pin definitions)
+#include <variant.h>
+// APIs
+#include "lt_common_api.h" // common APIs
+#include "lt_family_api.h" // family-specific APIs
+#include "lt_logger.h"	   // UART logger utility
+#include "lt_posix_api.h"  // POSIX compat functions
+// printf silencing methods
+#include <printf_port.h>

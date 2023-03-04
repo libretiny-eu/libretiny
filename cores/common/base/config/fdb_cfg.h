@@ -36,9 +36,8 @@
 /* MCU Endian Configuration, default is Little Endian Order. */
 // #define FDB_BIG_ENDIAN
 
-#include <printf_config.h>
-
 #if LT_DEBUG_FDB
+#include <libretuya.h>
 #include <printf/printf.h>
 #define FDB_PRINT(...) __wrap_printf(__VA_ARGS__)
 #define FDB_DEBUG_ENABLE

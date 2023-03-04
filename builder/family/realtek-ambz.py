@@ -52,7 +52,6 @@ env.Append(
         "-mfpu=fpv4-sp-d16",
         "-g",
         "--specs=nano.specs",
-        "-nostartfiles",
         "-Os",
         "-Wl,--gc-sections",
         "-Wl,--cref",

@@ -1,12 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-29. */
 
-#include "LibreTuyaAPI.h"
-
-String ipToString(const IPAddress &ip) {
-	char szRet[16];
-	sprintf(szRet, "%hhu.%hhu.%hhu.%hhu", ip[0], ip[1], ip[2], ip[3]);
-	return String(szRet);
-}
+#include "lt_common_api.h"
 
 /**
  * @brief Generate random bytes using rand().
@@ -14,7 +8,6 @@ String ipToString(const IPAddress &ip) {
  * @param buf destination pointer
  * @param len how many bytes to generate
  */
-extern "C" {
 void lt_rand_bytes(uint8_t *buf, size_t len) {
 	int *data = (int *)buf;
 	size_t i;
@@ -27,8 +20,6 @@ void lt_rand_bytes(uint8_t *buf, size_t len) {
 		memcpy(buf + i * sizeof(int), pRem, len);
 	}
 }
-
-#undef putchar
 
 /**
  * @brief Print data pointed to by buf in hexdump-like format (hex+ASCII).
@@ -44,7 +35,7 @@ void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 		// print hex offset
 		printf("%06x ", offset + pos);
 		// calculate current line width
-		uint8_t lineWidth = min(width, len - pos);
+		uint8_t lineWidth = MIN(width, len - pos);
 		// print hexadecimal representation
 		for (uint8_t i = 0; i < lineWidth; i++) {
 			if (i % 8 == 0) {
@@ -61,5 +52,4 @@ void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
 		puts("|\r");
 		pos += lineWidth;
 	}
-}
 }

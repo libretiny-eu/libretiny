@@ -75,7 +75,7 @@ void APP_InitTrace(void)
 
 }
 
-extern void main(void);
+extern void lt_main(void);
 
 // The Main App entry point
 void APP_Start(void)
@@ -112,7 +112,7 @@ void APP_Start(void)
 		"mov sp, r0\n"
 	);
 
-	main();
+	lt_main();
 #endif // end of #if CONFIG_APP_DEMO
 #endif  // end of else of "#ifdef CONFIG_MBED_ENABLED"
 }

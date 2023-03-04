@@ -51,6 +51,13 @@ const char *LibreTuya::getDeviceName() {
 }
 
 /**
+ * @brief Get the reason of last chip reset.
+ */
+ResetReason LibreTuya::getResetReason() {
+	return lt_get_reset_reason();
+}
+
+/**
  * @brief Get a textual representation of a reset reason.
  *
  * @param reason value to convert to text, uses getResetReason() by default

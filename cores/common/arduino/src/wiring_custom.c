@@ -1,10 +1,32 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "LibreTuyaCustom.h"
+#include "wiring_custom.h"
 
 int _analogReadResolution  = 10;	// 0-1023
 int _analogWriteResolution = 8;		// 0-255
 int _analogWritePeriod	   = 20000; // 50 Hz
+
+static unsigned long periodicTasks[] = {0, 0};
+
+/**
+ * @brief Run periodic tasks, like printing free heap or checking millis() overflow.
+ *
+ * This is called during delaying operations, like yield() or delay().
+ */
+void runPeriodicTasks() {
+#if LT_LOG_HEAP
+	if (millis() - periodicTasks[0] > 1000) {
+		LT_HEAP_I();
+		periodicTasks[0] = millis();
+	}
+#endif
+#if LT_USE_TIME
+	if (millis() - periodicTasks[1] > 10000) {
+		gettimeofday(NULL, NULL);
+		periodicTasks[1] = millis();
+	}
+#endif
+}
 
 /**
  * @brief Check if pin is invalid (too low or too high).

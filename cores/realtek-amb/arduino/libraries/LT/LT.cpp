@@ -25,10 +25,6 @@ void LibreTuya::restartDownloadMode() {
 	while (1) {}
 }
 
-ResetReason LibreTuya::getResetReason() {
-	return RESET_REASON_UNKNOWN;
-}
-
 void LibreTuya::gpioRecover() {
 	// PA14 and PA15 are apparently unusable with SWD enabled
 	sys_jtag_off();

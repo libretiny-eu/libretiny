@@ -1,0 +1,15 @@
+/* Copyright (c) Kuba Szczodrzyński 2023-02-27. */
+
+#pragma once
+
+typedef enum {
+	RESET_REASON_UNKNOWN  = 0,
+	RESET_REASON_POWER	  = 1,
+	RESET_REASON_BROWNOUT = 2,
+	RESET_REASON_HARDWARE = 3,
+	RESET_REASON_SOFTWARE = 4,
+	RESET_REASON_WATCHDOG = 5,
+	RESET_REASON_CRASH	  = 6,
+	RESET_REASON_SLEEP	  = 7,
+	RESET_REASON_MAX	  = 8,
+} ResetReason;

@@ -13,6 +13,28 @@ env["ARDUINO"] = True
 # Add base cores' sources first
 env.SConscript("base.py")
 
+# Flags & linker options
+env.Append(
+    CPPDEFINES=[
+        ("LIBRETUYA_ARDUINO", 1),
+        ("ARDUINO", 10812),
+        ("ARDUINO_SDK", 1),
+        ("ARDUINO_ARCH_${FAMILY_CODE}", 1),
+    ],
+    LINKFLAGS=[
+        "--specs=nosys.specs",
+        "-Wl,--as-needed",
+        "-Wl,--build-id=none",
+        "-Wl,--cref",
+        "-Wl,--no-enum-size-warning",
+        "-Wl,--no-undefined",
+        "-Wl,--warn-common",
+        # wrappers from posix/time.c
+        "-Wl,-wrap,gettimeofday",
+        "-Wl,-wrap,settimeofday",
+    ],
+)
+
 family: Family = env["FAMILY_OBJ"]
 
 # Add common sources among all families
@@ -52,35 +74,8 @@ env.AddLibrary(
     srcs=[
         "+<variant.cpp>",
     ],
-    includes=[
-        "!<.>",
-    ],
+    # not adding includes since they're added in base.py
 )
-
-# Flags & linker options
-env.Append(
-    CPPDEFINES=[
-        ("LIBRETUYA_ARDUINO", 1),
-        ("ARDUINO", 10812),
-        ("ARDUINO_SDK", 1),
-        ("ARDUINO_ARCH_${FAMILY_CODE}", 1),
-    ],
-    LINKFLAGS=[
-        "--specs=nosys.specs",
-        "-Wl,--as-needed",
-        "-Wl,--build-id=none",
-        "-Wl,--cref",
-        "-Wl,--no-enum-size-warning",
-        "-Wl,--no-undefined",
-        "-Wl,--warn-common",
-        # wrappers from posix/time.c
-        "-Wl,-wrap,gettimeofday",
-        "-Wl,-wrap,settimeofday",
-    ],
-)
-# Arduino core uses __libc_init_array
-if "-nostartfiles" in env["LINKFLAGS"]:
-    env["LINKFLAGS"].remove("-nostartfiles")
 
 # Build all libraries
 env.BuildLibraries()

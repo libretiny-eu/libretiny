@@ -1,7 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-16. */
 
 #include <stddef.h>
-#include <sdk_mem.h>
+#include <stdlib.h>
+#include <string.h>
 
 __attribute__((weak)) char *strdup(const char *s) {
 	size_t len = strlen(s) + 1;

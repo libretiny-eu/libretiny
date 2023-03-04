@@ -50,7 +50,11 @@ def env_read_version(env: Environment, platform_dir: str, version: str):
     return f"{version}+{build_str}" if build_str else version
 
 
-def env_configure(env: Environment, platform: PlatformBase, board: PlatformBoardConfig):
+def env_configure(
+    env: Environment,
+    platform: PlatformBase,
+    board: PlatformBoardConfig,
+) -> Family:
     # Read external libraries list
     with open(join(platform.get_dir(), "external-libs.json")) as f:
         external_libs = json.load(f)
@@ -84,6 +88,7 @@ def env_configure(env: Environment, platform: PlatformBase, board: PlatformBoard
     )
     # Store family parameters as environment variables
     env.Replace(**dict(family))
+    return family
 
 
 env.AddMethod(env_configure, "ConfigureEnvironment")

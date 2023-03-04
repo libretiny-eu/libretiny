@@ -2,22 +2,16 @@
 
 #pragma once
 
-// for printf() etc (they are wrapped anyway)
-#include <stdio.h>
-
 // most stuff is here
 #include <include.h>
-// for os_printf
-#include <uart_pub.h>
-// for GPIO names
+// other includes
+#include <flash_pub.h>
 #include <gpio_pub.h>
+#include <uart_pub.h>
 
 // conflict with stl_algobase.h
 #undef min
 #undef max
-
-// include printf() wrapper disable methods
-#include <printf_port.h>
 
 // make non-SDK code call the proper printf()
 #undef bk_printf
