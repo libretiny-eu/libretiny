@@ -525,6 +525,13 @@ env.Replace(FLASH_RBL_OFFSET=f"0x{app_offs + rbl_offs:06X}")
 # Build all libraries
 queue.BuildLibraries()
 
+# Rename Arduino's delay() to delayMilliseconds()
+env.Append(
+    CPPDEFINES=[
+        ("delay", "delayMilliseconds"),
+    ],
+)
+
 # Main firmware outputs and actions
 env.Replace(
     # linker command (encryption + packaging)

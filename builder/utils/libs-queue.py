@@ -10,6 +10,7 @@ from ltchiptool.util.dict import merge_dicts
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
+ENV_PUBLIC_ONLY = ["CPPPATH", "LIBPATH", "LIBS", "LINKFLAGS"]
 
 
 def add_base_dir(
@@ -118,6 +119,12 @@ class LibraryQueue:
                     self.includes.insert(0, item)
                 else:
                     self.includes.append(item)
+        # move public-only options to the global env
+        for key in ENV_PUBLIC_ONLY:
+            if key not in lib.options:
+                continue
+            option = lib.options.pop(key)
+            self.options_public = merge_dicts(self.options_public, {key: option})
         self.queue.append(lib)
 
     def AddExternalLibrary(self, name: str, port: Optional[str] = None):
@@ -130,8 +137,7 @@ class LibraryQueue:
         self.options_public = merge_dicts(self.options_public, kwargs)
 
     def AppendPrivate(self, **kwargs):
-        public_only = ["CPPPATH", "LIBPATH", "LIBS", "LINKFLAGS"]
-        if any(key in public_only for key in kwargs.keys()):
+        if any(key in ENV_PUBLIC_ONLY for key in kwargs.keys()):
             raise ValueError("Cannot set these as private options")
         self.options_private = merge_dicts(self.options_private, kwargs)
 
