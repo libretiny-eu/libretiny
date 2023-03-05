@@ -23,6 +23,30 @@ SerialClass::SerialClass(void *uart, uint8_t irq, pin_size_t rx, pin_size_t tx) 
 	this->tx  = tx;
 }
 
+#if LT_AUTO_DOWNLOAD_REBOOT
+static uint8_t adrState = 0;
+
+// clang-format off
+// Family ID, big-endian
+static const uint8_t adrCmd[] = {
+	0x55, 0xAA,
+	(FAMILY >> 24) & 0xFF,
+	(FAMILY >> 16) & 0xFF,
+	(FAMILY >> 8) & 0xFF,
+	(FAMILY >> 0) & 0xFF
+};
+
+// clang-format on
+
+static void adrParse(uint8_t c) {
+	adrState = (adrState + 1) * (c == adrCmd[adrState]);
+	if (adrState == 6) {
+		LT_I("Auto download mode: rebooting");
+		LT.restartDownloadMode();
+	}
+}
+#endif
+
 static uint32_t callback(void *param) {
 	SerialData *data   = (SerialData *)param;
 	UART_TypeDef *uart = (UART_TypeDef *)data->uart;
@@ -31,9 +55,15 @@ static uint32_t callback(void *param) {
 	uart->DLH_INTCR = 0;
 
 	uint8_t c;
-	UART_CharGet(uart, &c);
-	if (c)
+	while (UART_Readable(uart)) {
+		UART_CharGet(uart, &c);
+#if LT_AUTO_DOWNLOAD_REBOOT && defined(PIN_SERIAL2_RX)
+		// parse UART protocol commands on UART2
+		if (uart == UART2_DEV)
+			adrParse(c);
+#endif
 		data->buf->store_char(c);
+	}
 
 	uart->DLH_INTCR = intcr;
 	return 0;
@@ -48,6 +78,19 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 	uint8_t parityType = (config & SERIAL_PARITY_MASK) == SERIAL_PARITY_EVEN;
 	// RUART_STOP_BIT_1 / RUART_STOP_BIT_2
 	uint8_t stopBits = (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2;
+
+	switch ((uint32_t)data.uart) {
+		case UART0_REG_BASE:
+			RCC_PeriphClockCmd(APBPeriph_UART0, APBPeriph_UART0_CLOCK, ENABLE);
+			break;
+		case UART1_REG_BASE:
+			RCC_PeriphClockCmd(APBPeriph_UART1, APBPeriph_UART1_CLOCK, ENABLE);
+			break;
+	}
+
+	Pinmux_Config(pinInfo(this->rx)->gpio, PINMUX_FUNCTION_UART);
+	Pinmux_Config(pinInfo(this->tx)->gpio, PINMUX_FUNCTION_UART);
+	PAD_PullCtrl(pinInfo(this->rx)->gpio, GPIO_PuPd_UP);
 
 	UART_InitTypeDef cfg;
 	UART_StructInit(&cfg);
@@ -64,11 +107,12 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		data.buf = new RingBuffer();
 	}
 
-	Pinmux_Config(pinInfo(this->rx)->gpio, PINMUX_FUNCTION_UART);
-	Pinmux_Config(pinInfo(this->tx)->gpio, PINMUX_FUNCTION_UART);
-
 	VECTOR_IrqUnRegister(this->irq);
 	VECTOR_IrqRegister(callback, this->irq, (uint32_t)&data, 10);
+	VECTOR_IrqEn(this->irq, 10);
+
+	UART_RxCmd((UART_TypeDef *)data.uart, ENABLE);
+	UART_INTConfig((UART_TypeDef *)data.uart, RUART_IER_ERBI, ENABLE);
 }
 
 void SerialClass::end() {

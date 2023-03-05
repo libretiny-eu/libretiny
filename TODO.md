@@ -37,7 +37,7 @@ Explicit is better than implicit.
 
 ### Other
 
-- refactor `SerialClass` to have a shared header `Serial.h` in the common core (and `SerialData`, just like WiFi)
+- refactor `SerialClass` to have a shared header `Serial.h` in the common core (and `SerialData`, just like WiFi). Move ADR to common core
 - implement Wire on BK, refactor the API and class
 - watchdog API
 - `Preferences` library
