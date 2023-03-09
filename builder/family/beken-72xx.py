@@ -533,31 +533,19 @@ env.Append(
 )
 
 # Main firmware outputs and actions
+image_app_crc = "${BUILD_DIR}/image_${MCULC}_app.${FLASH_APP_OFFSET}.crc"
+image_app_rblh = "${BUILD_DIR}/image_${MCULC}_app.${FLASH_RBL_OFFSET}.rblh"
+image_ota_rbl = "${BUILD_DIR}/image_${MCULC}_app.ota.rbl"
 env.Replace(
     # linker command (encryption + packaging)
     LINK="${LTCHIPTOOL} link2bin ${VARIANT} '' ''",
     # UF2OTA input list
     UF2OTA=[
-        # app binary image (enc+crc), OTA1 (uploader) only
-        (
-            "app",
-            "${BUILD_DIR}/${MCULC}_app_${FLASH_APP_OFFSET}.crc",
-            "",
-            "",
-        ),
-        # app RBL header (crc), OTA1 (uploader) only
-        (
-            f"app+{rbl_offs}",
-            "${BUILD_DIR}/${MCULC}_app_${FLASH_RBL_OFFSET}.rblh",
-            "",  # not used for OTA2
-            "",
-        ),
-        # OTA RBL package, OTA2 (uf2ota lib) only
-        (
-            "",  # not used for OTA1
-            "",
-            "download",
-            "${BUILD_DIR}/${MCULC}_app.ota.rbl",
-        ),
+        # app binary image (enc+crc) for flasher
+        f"{image_app_crc}=flasher:app",
+        # app RBL header (with crc) for flasher
+        f"{image_app_rblh}+{rbl_offs}=flasher:app",
+        # OTA RBL package for device only
+        f"{image_ota_rbl}=device:download",
     ],
 )

@@ -274,18 +274,14 @@ env.Prepend(LIBS=[target_boot])
 queue.BuildLibraries()
 
 # Main firmware outputs and actions
+image_ota1 = "${BUILD_DIR}/image_ota1.${FLASH_OTA1_OFFSET}.bin"
+image_ota2 = "${BUILD_DIR}/image_ota2.${FLASH_OTA2_OFFSET}.bin"
 env.Replace(
     # linker command (dual .bin outputs)
     LINK="${LTCHIPTOOL} link2bin ${VARIANT} xip1 xip2",
-    # default output .bin name
-    IMG_FW="image_${FLASH_OTA1_OFFSET}.ota1.bin",
     # UF2OTA input list
     UF2OTA=[
-        (
-            "ota1",
-            "${BUILD_DIR}/image_${FLASH_OTA1_OFFSET}.ota1.bin",
-            "ota2",
-            "${BUILD_DIR}/image_${FLASH_OTA2_OFFSET}.ota2.bin",
-        ),
+        # same OTA images for flasher and device
+        f"{image_ota1},{image_ota2}=device:ota1,ota2;flasher:ota1,ota2",
     ],
 )

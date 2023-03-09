@@ -1,6 +1,5 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
-import sys
 from datetime import datetime
 from os.path import basename, join, normpath
 
@@ -23,7 +22,6 @@ def env_uf2ota(env: Environment, *args, **kwargs):
     if platform.custom("fw_version"):
         project_version = platform.custom("fw_version")
 
-    inputs = " ".join(f'"{";".join(input)}"' for input in env["UF2OTA"])
     output = [
         project_name,
         project_version,
@@ -34,57 +32,46 @@ def env_uf2ota(env: Environment, *args, **kwargs):
     output = "_".join(output) + ".uf2"
     if platform.custom("fw_output"):
         output = platform.custom("fw_output")
+
     output = join("${BUILD_DIR}", output)
+    output_copy_1 = join("${BUILD_DIR}", "firmware.uf2")
+    output_copy_2 = join("${BUILD_DIR}", "firmware.bin")
+
     env["UF2OUT"] = output
     env["UF2OUT_BASE"] = basename(output)
 
     cmd = [
         "@${LTCHIPTOOL} uf2 write",
         f'--output "{output}"',
+        f'--output-copy "{output_copy_1}"',
+        f'--output-copy "{output_copy_2}"',
         "--family ${FAMILY}",
         "--board ${VARIANT}",
-        f"--version {lt_version}",
+        f"--lt-version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
-        inputs,
+        *env["UF2OTA"],
     ]
 
     print(f"|-- {basename(env.subst(output))}")
-
     env.Execute(" ".join(cmd))
+    print(f"|-- {basename(env.subst(output_copy_1))}")
+    print(f"|-- {basename(env.subst(output_copy_2))}")
 
 
-def env_flash_write(env: Environment, target):
+def env_flash_write(env: Environment):
     protocol = env.subst("${UPLOAD_PROTOCOL}")
-    actions = []
-    # from platform-espressif32/builder/main.py
     if protocol == "uart":
         # upload via UART
-        env["UPLOADERFLAGS_UF2"] = [
-            "${UF2OUT}",
+        return [
             "-d",
             "${UPLOAD_PORT}",
             "-b",
             "${UPLOAD_SPEED}",
         ]
-        actions = [
-            env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
-        ]
-    elif protocol == "custom":
-        actions = [
-            env.VerboseAction("${UPLOADCMD}", "Uploading firmware"),
-        ]
     else:
-        sys.stderr.write("Warning! Unknown upload protocol %s\n" % protocol)
-        return
-
-    # add main upload target
-    env.Replace(
-        UPLOADER="${LTCHIPTOOL} flash write",
-        UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS_UF2} ${UPLOADERFLAGS}",
-    )
-    actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
-    env.AddPlatformTarget("upload", target, actions, "Upload")
+        # can't upload via ltchiptool
+        return []
 
 
 env.Append(
@@ -94,4 +81,4 @@ env.Append(
         )
     )
 )
-env.AddMethod(env_flash_write, "AddFlashWriter")
+env.AddMethod(env_flash_write, "GetLtchiptoolWriteFlags")

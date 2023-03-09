@@ -94,7 +94,7 @@ class LibretuyaPlatform(PlatformBase):
     def configure_default_packages(self, options, targets):
         from ltchiptool.util.dict import RecursiveDict
 
-        pioframework = options.get("pioframework")
+        pioframework = options.get("pioframework") or ["base"]
         if not pioframework:
             return
         framework: str = pioframework[0]
@@ -121,7 +121,6 @@ class LibretuyaPlatform(PlatformBase):
                 fg="red",
             )
             exit(1)
-        options.get("pioframework")[0] = framework
 
         # make ArduinoCore-API required
         if framework == "arduino":

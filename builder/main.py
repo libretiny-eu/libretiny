@@ -1,10 +1,17 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
 import sys
+from os.path import join
 
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
-from SCons.Script import Default, DefaultEnvironment, Environment
+from SCons.Script import (
+    COMMAND_LINE_TARGETS,
+    AlwaysBuild,
+    Default,
+    DefaultEnvironment,
+    Environment,
+)
 
 env: Environment = DefaultEnvironment()
 platform: PlatformBase = env.PioPlatform()
@@ -21,7 +28,7 @@ env.SConscript("utils/ltchiptool.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":
-    env.Replace(PROGNAME="firmware")
+    env.Replace(PROGNAME="raw_firmware")
 env.Replace(PROGSUFFIX=".elf")
 
 # Configure the toolchain
@@ -62,19 +69,62 @@ env.AddFlashLayout(board)
 #   - # Main firmware outputs and actions
 
 # Framework builder (base.py/arduino.py) is executed in BuildProgram()
-target_elf = env.BuildProgram()
-targets = [target_elf]
+# Force including the base framework in case no other is specified
+if not env.get("PIOFRAMEWORK"):
+    env.SConscript("frameworks/base.py")
 
-if "UF2OTA" in env:
-    target_uf2 = env.BuildUF2OTA(target_elf)
-    targets.append(target_uf2)
-    env.AddFlashWriter(target_uf2)
-elif "IMG_FW" in env:
-    target_fw = env.subst("$IMG_FW")
-    env.AddPlatformTarget("upload", target_fw, env["UPLOAD_ACTIONS"], "Upload")
+#
+# Target: Build executable and linkable firmware
+#
+target_uf2 = join("${BUILD_DIR}", "firmware.uf2")
+if "nobuild" in COMMAND_LINE_TARGETS:
+    target_elf = join("${BUILD_DIR}", "${PROGNAME}.elf")
+    env["UF2OTA"] = "dummy"  # forcefully allow uploading using ltchiptool
 else:
-    sys.stderr.write(
-        "Warning! Firmware outputs not specified. Uploading is not possible.\n"
-    )
+    target_elf = env.BuildProgram()
+    target_uf2 = env.BuildUF2OTA(target_uf2, target_elf)
+    env.Depends(target_uf2, "checkprogsize")
 
-Default(targets)
+AlwaysBuild(env.Alias("nobuild", target_uf2))
+target_buildprog = env.Alias("buildprog", target_uf2, target_uf2)
+
+#
+# Target: Print binary size
+#
+target_size = env.Alias(
+    "size",
+    target_elf,
+    env.VerboseAction("${SIZEPRINTCMD}", "Calculating size ${SOURCE}"),
+)
+AlwaysBuild(target_size)
+
+#
+# Target: Upload firmware
+#
+upload_protocol = env.subst("${UPLOAD_PROTOCOL}") or "uart"
+upload_actions = []
+upload_source = target_uf2
+ltchiptool_flags = "UF2OTA" in env and env.GetLtchiptoolWriteFlags()
+
+if ltchiptool_flags:
+    # use ltchiptool for flashing, if available
+    env.Replace(
+        LTCHIPTOOL_FLAGS=ltchiptool_flags,
+        UPLOADER="${LTCHIPTOOL} flash write",
+        UPLOADCMD="${UPLOADER} ${LTCHIPTOOL_FLAGS} ${UPLOADERFLAGS} ${SOURCE}",
+    )
+    upload_actions = [
+        env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
+        env.VerboseAction("${UPLOADCMD}", "Uploading ${SOURCE}"),
+    ]
+elif upload_protocol == "custom":
+    upload_actions = [env.VerboseAction("$UPLOADCMD", "Uploading $SOURCE")]
+else:
+    sys.stderr.write("Warning! Unknown upload protocol %s\n" % upload_protocol)
+
+AlwaysBuild(env.Alias("upload", upload_source, upload_actions))
+
+#
+# Default targets
+#
+Default([target_buildprog, target_size])
