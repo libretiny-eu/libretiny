@@ -46,6 +46,7 @@ static int write(long offset, const uint8_t *buf, size_t size) {
 
 static int erase(long offset, size_t size) {
 	unprotect();
+	offset &= ~(FLASH_ERASE_MIN_SIZE - 1);
 	size = ((size - 1) / FLASH_ERASE_MIN_SIZE) + 1;
 	for (uint16_t i = 0; i < size; i++) {
 		uint32_t addr = offset + i * FLASH_ERASE_MIN_SIZE;

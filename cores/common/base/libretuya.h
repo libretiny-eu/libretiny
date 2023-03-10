@@ -36,17 +36,15 @@
 	)
 
 // Types & macros
-#include "lt_chip.h"   // ChipType enum
 #include "lt_config.h" // platform configuration options
-#include "lt_types.h"  // other types & enums
+#include "lt_types.h"  // types & enums
 // Family-specific macros
 #include <lt_family.h>
 // Board variant (pin definitions)
 #include LT_VARIANT_H
 // APIs
-#include "lt_common_api.h" // common APIs
-#include "lt_family_api.h" // family-specific APIs
-#include "lt_logger.h"	   // UART logger utility
-#include "lt_posix_api.h"  // POSIX compat functions
+#include "lt_api.h"		  // main API function definitions
+#include "lt_logger.h"	  // UART logger utility
+#include "lt_posix_api.h" // POSIX compat functions
 // printf silencing methods
 #include <printf_port.h>

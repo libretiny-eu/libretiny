@@ -4,10 +4,6 @@
 
 #include <libretuya.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
 /**
  * @brief Initialize the family core (optional).
  * This method is family-specific; the family core can do whatever it wants to.
@@ -28,12 +24,3 @@ void lt_init_variant() __attribute__((weak));
  * This method is empty if not implemented, and shouldn't be called manually.
  */
 void lt_init_arduino() __attribute__((weak));
-
-/**
- * @brief Get the reason of last chip reset.
- */
-ResetReason lt_get_reset_reason();
-
-#ifdef __cplusplus
-} // extern "C"
-#endif

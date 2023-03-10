@@ -104,6 +104,7 @@ queue.AppendPublic(
         ("LT_VARIANT_H", r"\"${VARIANT}.h\""),
         ("F_CPU", board.get("build.f_cpu")),
         ("MCU", "${MCU}"),
+        ("MCULC", "${MCULC}"),
         ("FAMILY", "F_${FAMILY}"),
         # Add flash layout defines created in env.AddFlashLayout()
         *env["FLASH_DEFINES"].items(),

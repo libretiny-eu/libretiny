@@ -20,7 +20,7 @@ int lt_main(void) {
 	// initialize C library
 	__libc_init_array();
 	// inform about the reset reason
-	LT_I("Reset reason: %u", lt_get_reset_reason());
+	LT_I("Reset reason: %u", lt_get_reboot_reason());
 	// initialize FAL
 	fal_init();
 	// provide root partition

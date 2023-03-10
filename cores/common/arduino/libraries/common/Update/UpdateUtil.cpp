@@ -2,6 +2,10 @@
 
 #include "Update.h"
 
+extern "C" {
+#include <fal.h>
+}
+
 static const uint8_t errorMap[] = {
 	UPDATE_ERROR_OK,		   /* UF2_ERR_OK - no error */
 	UPDATE_ERROR_OK,		   /* UF2_ERR_IGNORE - block should be ignored */
@@ -9,9 +13,9 @@ static const uint8_t errorMap[] = {
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_FAMILY - family ID mismatched */
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_NOT_HEADER - block is not a header */
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_OTA_VER - unknown/invalid OTA format version */
-	UPDATE_ERROR_MAGIC_BYTE,   /* UF2_ERR_OTA_WRONG - no data for current OTA index */
+	UPDATE_ERROR_MAGIC_BYTE,   /* UF2_ERR_OTA_WRONG - no data for current OTA scheme */
 	UPDATE_ERROR_NO_PARTITION, /* UF2_ERR_PART_404 - no partition with that name */
-	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_PART_ONE - only one partition tag in a block */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_PART_INVALID - invalid partition info tag */
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_PART_UNSET - attempted to write without target partition */
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_DATA_TOO_LONG - data too long - tags won't fit */
 	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_SEQ_MISMATCH - sequence number mismatched */
@@ -108,10 +112,9 @@ void UpdateClass::printErrorContext1() {
 	if (ctx)
 		LT_EM(
 			OTA,
-			"- ctx: seq=%u, part1=%s, part2=%s",
+			"- ctx: seq=%u, part=%s",
 			ctx->seq - 1, // print last parsed block seq
-			ctx->part1 ? ctx->part1->name : NULL,
-			ctx->part2 ? ctx->part2->name : NULL
+			ctx->part ? ctx->part->name : NULL
 		);
 
 	uf2_block_t *block = (uf2_block_t *)buf;
@@ -176,15 +179,17 @@ const char *UpdateClass::getBoardName() {
 }
 
 /**
- * @brief See LT.otaCanRollback() for more info.
+ * @copydoc lt_ota_can_rollback()
  */
 bool UpdateClass::canRollBack() {
-	return LT.otaCanRollback();
+	return lt_ota_can_rollback();
 }
 
 /**
  * @brief See LT.otaRollback() for more info.
  */
 bool UpdateClass::rollBack() {
-	return LT.otaRollback();
+	if (!lt_ota_can_rollback())
+		return false;
+	return lt_ota_switch(false);
 }

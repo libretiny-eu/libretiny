@@ -18,9 +18,9 @@ bool UpdateClass::begin(size_t size, int command, int unused2, uint8_t unused3, 
 		return false;
 	cleanup();
 
-	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, trgt: %u", size, LT.otaGetRunning(), LT.otaGetTarget());
+	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, scheme: %u", size, lt_ota_dual_get_current(), lt_ota_get_uf2_scheme());
 
-	ctx	 = uf2_ctx_init(LT.otaGetTarget(), FAMILY);
+	ctx	 = uf2_ctx_init(lt_ota_get_uf2_scheme(), FAMILY);
 	info = uf2_info_init();
 
 	if (!size) {
@@ -54,8 +54,8 @@ bool UpdateClass::end(bool evenIfRemaining) {
 		return false;
 	}
 	// TODO what is evenIfRemaining for?
-	if (!LT.otaSwitch()) {
-		// try to activate the second OTA
+	// try to activate the second OTA
+	if (!lt_ota_switch(/* revert= */ false)) {
 		cleanup(UPDATE_ERROR_ACTIVATE);
 		return false;
 	}

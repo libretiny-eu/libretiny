@@ -4,10 +4,6 @@
 
 #include <libretuya.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
 // https://stackoverflow.com/a/3437484
 #define MAX(a, b)                                                                                                      \
 	({                                                                                                                 \
@@ -22,14 +18,30 @@ extern "C" {
 		_a < _b ? _a : _b;                                                                                             \
 	})
 
+/**
+ * @brief Generate random bytes using rand().
+ *
+ * @param buf destination pointer
+ * @param len how many bytes to generate
+ */
 void lt_rand_bytes(uint8_t *buf, size_t len);
 
+/**
+ * @brief Print data pointed to by buf in hexdump-like format (hex+ASCII).
+ *
+ * @param buf source pointer
+ * @param len how many bytes to print
+ * @param offset increment printed offset by this value
+ * @param width how many bytes on a line
+ */
+void hexdump(
+	const uint8_t *buf,
+	size_t len,
 #ifdef __cplusplus
-void hexdump(const uint8_t *buf, size_t len, uint32_t offset = 0, uint8_t width = 16);
+	uint32_t offset = 0,
+	uint8_t width	= 16
 #else
-void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width);
+	uint32_t offset,
+	uint8_t width
 #endif
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
+);

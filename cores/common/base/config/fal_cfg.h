@@ -42,5 +42,6 @@ extern const struct fal_flash_dev flash0;
 
 /**
  * @brief "Root" partition entry, representing the entire flash.
+ * Declared and initialized in lt_main.c.
  */
 extern fal_partition_t fal_root_part;

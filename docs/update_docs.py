@@ -26,7 +26,7 @@ def load_chip_type_h() -> str:
             "cores",
             "common",
             "base",
-            "lt_chip.h",
+            "lt_types.h",
         )
     )
     code = re.sub(r"//.+", "", code)
@@ -79,11 +79,11 @@ def get_enum_keys(code: str, name: str) -> Set[str]:
 
 
 def get_enum_mcus(code: str) -> Set[str]:
-    return get_enum_keys(code, "ChipType")
+    return get_enum_keys(code, "lt_cpu_model_t")
 
 
 def get_enum_families(code: str) -> Set[str]:
-    return set(family[2:] for family in get_enum_keys(code, "ChipFamily"))
+    return set(family[2:] for family in get_enum_keys(code, "lt_cpu_family_t"))
 
 
 def board_json_sort(tpl):
