@@ -133,7 +133,7 @@ Now, refer to the [flashing guide](../flashing/esphome.md) to learn how to uploa
 !!! note
 	This part is for advanced users. You'll probably be fine with the default options.
 
-All options from [Options & config](../reference/config.md) can be customized in the `libretuya:` block:
+All options from [Options & config](../dev/config.md) can be customized in the `libretuya:` block:
 
 ```yaml title="yourdevice.yml"
 libretuya:

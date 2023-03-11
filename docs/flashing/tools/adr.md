@@ -15,4 +15,4 @@ The code listens on UART1 for a link-check command (`01 E0 FC 01 00`). The baudr
 
 ## Realtek AmebaZ
 
-This is not yet implemented.
+This only works when using [ltchiptool](ltchiptool.md) for flashing. Upon starting UART communication, the tool sends `55 AA 22 E0 D6 FC` (0x55AA followed by the `realtek-ambz` family ID). After detecting that pattern, the chip proceeds to reboot into UART download mode (using [`lt_reboot_download_mode()`](../../../ltapi/lt__device_8h.md))

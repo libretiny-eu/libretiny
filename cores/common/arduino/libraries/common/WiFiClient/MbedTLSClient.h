@@ -2,7 +2,7 @@
 
 #pragma once
 
-#if LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS
+#if (LT_ARD_HAS_WIFI && LT_HAS_MBEDTLS) || DOXYGEN
 
 #include "WiFiClientSecure.h"
 

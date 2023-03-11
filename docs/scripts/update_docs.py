@@ -3,7 +3,7 @@
 import sys
 from os.path import dirname, isfile, join
 
-sys.path.append(join(dirname(__file__), ".."))
+sys.path.append(join(dirname(__file__), "..", ".."))
 
 import re
 from typing import Dict, List, Set
@@ -15,13 +15,14 @@ from ltchiptool.util.fileio import readjson, readtext
 from ltchiptool.util.misc import sizeof
 from markdown import Markdown
 
-OUTPUT = join(dirname(__file__), "status")
+OUTPUT = join(dirname(__file__), "..", "status")
 
 
 def load_chip_type_h() -> str:
     code = readtext(
         join(
             dirname(__file__),
+            "..",
             "..",
             "cores",
             "common",
@@ -223,7 +224,7 @@ def write_families():
             continue
         docs = None
         for f in family.inheritance:
-            readme = join(dirname(__file__), "platform", f.name, "README.md")
+            readme = join(dirname(__file__), "..", "platform", f.name, "README.md")
             if isfile(readme):
                 docs = f"../{f.name}/"
         row = [
@@ -271,7 +272,7 @@ def write_families():
 
 
 def write_boards_list(boards: List[Board]):
-    md = Markdown(dirname(__file__), join("..", "boards", "SUMMARY"))
+    md = Markdown(join(dirname(__file__), ".."), join("..", "boards", "SUMMARY"))
     items = []
     for board in boards:
         symbol = get_board_symbol(board)
@@ -337,7 +338,7 @@ if __name__ == "__main__":
         "boards_tuya_all",
     ]
     for name in boards_all:
-        file = join(dirname(__file__), f"{name}.json")
+        file = join(dirname(__file__), "..", f"{name}.json")
         data = readjson(file)
         write_unsupported_boards(
             series=data,

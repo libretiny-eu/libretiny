@@ -25,8 +25,9 @@ jobs:
         run: |
           mkdir -p site/
           boardgen ltci
-          python docs/update_docs.py
-          python docs/build_json.py
+          python docs/scripts/update_docs.py
+          python docs/scripts/prepare_doxygen.py
+          python docs/scripts/build_json.py
           cp *.json site/
 
       - name: Set custom domain

@@ -26,7 +26,7 @@ A list of chip families currently supported by this project.
 !!! note
 	The term *family* was chosen over *platform*, in order to reduce possible confusion between LibreTuya supported "platforms" and PlatformIO's "platform", as an entire package. *Family* is also more compatible with the UF2 term.
 
-The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../../families.json). The IDs are also present in [ChipType.h](../../ltapi/_chip_type_8h_source.md).
+The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../../families.json). The IDs are also present in [lt_Types.h](../../ltapi/lt__types_8h.md).
 
 {%
 	include-markdown "supported_families.md"

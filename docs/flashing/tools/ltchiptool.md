@@ -45,18 +45,53 @@ Install the package from PyPI, using `pip install ltchiptool`. Run the CLI using
 
 ## GUI Usage
 
-The main window is somewhat similar to [NodeMCU PyFlasher](https://github.com/marcelstoer/nodemcu-pyflasher).
+The main window is somewhat similar to [NodeMCU PyFlasher](https://github.com/marcelstoer/nodemcu-pyflasher). Available modes of operation are described below.
 
-- For dumping, choose `Read flash`. If you've previously chosen an input or output file, it will generate a dump filename with the current timestamp and chip type. Otherwise, click `Browse` and choose the output file. By default, the tool will attempt to read the entire flash chip (usually 2 MiB).
-- For flashing, choose `Write flash`. Click `Browse` and select *any* valid firmware file. The file type and chip type will be auto-detected, along with correct flash offset and length. No need to worry about overwriting the bootloader anymore!
-	- If the file you're selecting is `Unrecognized` or `Not flashable`, it's most likely not a valid firmware file. Refer to usage guides of the custom firmware project of choice, to find which file is meant for flashing.
-- **It's best to leave `Auto-detect advanced parameters` checked**. If you're an experienced user and want to flash custom areas of the flash, uncheck the box and specify the parameters manually.
-- When you're ready, hit `Start`. The tool will try to connect to the chip on the selected UART port. The black log window will print any warnings/errors, as well as **a short guide on how to put the chip in download mode**.
+### Dumping firmware
+
+It is a good idea to dump the stock firmware (full flash contents) of your device before flashing custom firmware.
+
+1. Choose the `Read flash` option. If you've previously chosen an input or output file, it will generate a dump filename based on the current timestamp and chip type. Otherwise, click `Browse` and choose the output file.
+2. You need to pick the "family" of your chip (the chip model). If you choose the wrong option, the process will fail, but the device won't be bricked.
+3. Now, connect the chip to your PC, according to the [chip connection guides](../chip-connection/SUMMARY.md). Select the COM port that your UART adapter is using.
+4. By default, the tool will attempt to read the entire flash chip (usually 2 MiB). Unless you know what you're doing, the default values don't need to be changed.
+5. Hit `Start`. The tool will try to connect to the chip on the selected UART port. The black log window will print any warnings/errors. The dumping process should begin shortly.
+
+### Flashing firmware
+
+If you want to flash custom firmware, or restore stock firmware from a previously dumped file, follow the steps below.
 
 !!! info
 	LibreTuya generates multiple firmware files in the build directory. **You usually want to flash the `.uf2` file**, but since ltchiptool can detect file types, you can choose a different firmware file and it'll tell you if that works.
 
+1. Choose `Write flash`. Click `Browse` and select a valid firmware file. The file type and chip type will be auto-detected, along with correct flash offset and length. No need to worry about overwriting the bootloader anymore!
+2. Connect the chip to your PC, according to the [chip connection guides](../chip-connection/SUMMARY.md). Select the COM port that your UART adapter is using.
+3. Hit `Start`. The tool will try to connect to the chip on the selected UART port. The black log window will print any warnings/errors. The flashing process should begin shortly.
+
+!!! info
+	**It's best to leave `Auto-detect advanced parameters` checked**. If you're an experienced user and want to flash custom areas of the flash, uncheck the box and specify the parameters manually.
+
+	If the file you're selecting is `Unrecognized` or `Not flashable`, it's most likely not a valid firmware file. Refer to usage guides of the custom firmware project of choice, to find which file is meant for flashing.
+
 ## CLI Usage
+
+### Flashing/dumping
+
+This is for users, who are more experienced with using a terminal. There are three main commands used for flashing:
+
+- `ltchiptool flash file <FILE>` - detect file type based on its contents (i.e. chip from which a dump was acquired), similar to Linux `file` command
+- `ltchiptool flash read <FAMILY> <FILE>` - make a full flash dump of the connected device; specifying the family is required
+- `ltchiptool flash write <FILE>` - upload a file to the device; detects file type automatically (just like the `file` command above)
+
+Supported device families can be checked using `ltchiptool list families` command. In the commands above, you can use any of the family names (name/code/short name/etc).
+
+The upload UART port and baud rate should be detected automatically. To override it, use `-d COMx` or `-d /dev/ttyUSBx`. To change the target baud rate, use `-b 460800`.
+Note that the baud rate is changed after linking. Linking is performed using chip-default baud rate.
+
+It's not required to specify chip family for writing files - `ltchiptool` tries to recognize contents of the file, and chooses the best settings automatically.
+If you want to flash unrecognized/raw binaries (or fine-tune the flashing parameters), specify `-f <FAMILY>` and `-s <START OFFSET>`.
+
+## CLI Reference
 
 !!! note
 	If you're here to learn how to flash or dump firmware files, use the instructions above.
@@ -87,22 +122,6 @@ Commands:
   soc       Run SoC-specific tools
   uf2       Work with UF2 files
 ```
-
-### Flashing/dumping
-
-There are three main commands used for flashing:
-
-- `ltchiptool flash file <FILE>` - detect file type based on its contents (i.e. chip from which a dump was acquired), similar to Linux `file` command
-- `ltchiptool flash read <FAMILY> <FILE>` - make a full flash dump of the connected device; specifying the family is required
-- `ltchiptool flash write <FILE>` - upload a file to the device; detects file type automatically (just like the `file` command above)
-
-Supported device families can be checked using `ltchiptool list families` command. In the commands above, you can use any of the family names (name/code/short name/etc).
-
-The upload UART port and baud rate is detected automatically. To override it, use `-d COMx` or `-d /dev/ttyUSBx`. To change the target baud rate, use `-b 460800`.
-Note that the baud rate is changed after linking. Linking is performed using chip-default baud rate.
-
-It's not required to specify chip family for writing files - `ltchiptool` tries to recognize contents of the file, and chooses the best settings automatically.
-If you want to flash unrecognized/raw binaries (or fine-tune the flashing parameters), specify `-f <FAMILY>` and `-s <START OFFSET>`.
 
 ### UF2 Example
 

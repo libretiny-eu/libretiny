@@ -2,7 +2,7 @@
 
 #include "SoftwareSerial.h"
 
-#ifdef LT_ARD_HAS_SOFTSERIAL
+#if LT_ARD_HAS_SOFTSERIAL
 
 SoftwareSerial::SoftwareSerial(pin_size_t receivePin, pin_size_t transmitPin, bool inverted) {
 	data.rx.buf = NULL;

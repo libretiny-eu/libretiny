@@ -5,7 +5,7 @@
 #include <libretuya.h>
 
 /**
- * @brief Get CPU family ID (in ChipFamily enumeration).
+ * @brief Get CPU family ID (as lt_cpu_family_t enum member).
  */
 lt_cpu_family_t lt_get_cpu_family();
 
@@ -15,7 +15,7 @@ lt_cpu_family_t lt_get_cpu_family();
 const char *lt_get_cpu_family_name();
 
 /**
- * @brief Get CPU model ID (in ChipType enumeration).
+ * @brief Get CPU model ID (as lt_cpu_model_t enum member).
  */
 lt_cpu_model_t lt_get_cpu_model();
 

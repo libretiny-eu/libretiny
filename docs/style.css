@@ -18,3 +18,15 @@ a[href^="https://"].md-button::after,
 div[align="center"] a[href^="https://"]::after {
 	display: none !important;
 }
+
+/* ugly but it works ¯\_(ツ)_/¯ */
+a[href="SUMMARY/"],
+a[href="../SUMMARY/"],
+a[href="../../SUMMARY/"],
+a[href="../../../SUMMARY/"],
+a[href="../../../../SUMMARY/"],
+a[href="../../../../../SUMMARY/"]
+{
+	height: 8px;
+	pointer-events: none;
+}

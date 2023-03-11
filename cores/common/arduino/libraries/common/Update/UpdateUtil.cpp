@@ -178,16 +178,12 @@ const char *UpdateClass::getBoardName() {
 	return NULL;
 }
 
-/**
- * @copydoc lt_ota_can_rollback()
- */
+/** @copydoc lt_ota_can_rollback() */
 bool UpdateClass::canRollBack() {
 	return lt_ota_can_rollback();
 }
 
-/**
- * @brief See LT.otaRollback() for more info.
- */
+/** @copydoc lt_ota_switch() */
 bool UpdateClass::rollBack() {
 	if (!lt_ota_can_rollback())
 		return false;

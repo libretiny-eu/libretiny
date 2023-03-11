@@ -2,7 +2,7 @@
 
 #pragma once
 
-#if LT_ARD_HAS_WIFI && LT_HAS_LWIP
+#if (LT_ARD_HAS_WIFI && LT_HAS_LWIP) || DOXYGEN
 
 #include "WiFiServer.h"
 

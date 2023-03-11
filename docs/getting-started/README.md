@@ -28,7 +28,7 @@ Next, read one of the [flashing guides](../flashing/SUMMARY.md) to run your proj
 
 ### LT configuration
 
-LibreTuya has a few configuration options that change its behavior or features. Refer to [LT configuration](../reference/config.md) for details.
+LibreTuya has a few configuration options that change its behavior or features. Refer to [LT configuration](../dev/config.md) for details.
 
 ### GPIO usage
 

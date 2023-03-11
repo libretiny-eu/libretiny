@@ -15,7 +15,7 @@ custom_fw_version = 1.2.0
 ## LibreTuya options
 
 !!! note
-	See [LibreTuyaConfig.h](../../ltapi/_libre_tuya_config_8h_source.md) for most options and their defaults.
+	See [lt_config.h](../../ltapi/lt__config_8h.md) for most options and their defaults.
 
 All options are configurable via C++ defines in PlatformIO project file. For example:
 ```ini title="platformio.ini"
@@ -101,18 +101,21 @@ Options for controlling default UART log output.
 ### Family feature config
 
 !!! bug "Warning"
-	These options are not meant for end-users. They're provided here as a reference for developers.
+	These options are not meant for end-users. They're provided here as a reference for developers. **Do not set these options manually**.
 
-These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it.
+These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it. Files named `lt_defs.h`, containing these options, are read by the PlatformIO builders (note: they're never included by C code).
 
 The `LT_ARD_*` options are only used with Arduino frameworks.
 
 The meaning of most flags is as follows:
 
+- `LT_HAS_FREERTOS` - FreeRTOS supported and used
 - `LT_HAS_LWIP` - LwIP in SDK (any version)
 - `LT_HAS_LWIP2` - LwIP v2.0.0 or newer
-- `LT_HAS_FREERTOS` - FreeRTOS supported and used
 - `LT_HAS_MBEDTLS` - mbedTLS in SDK
-- `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
+- `LT_HAS_PRINTF` - printf library implemented
+- `LT_ARD_HAS_SERIAL` - Serial class implemented, `Serial.h` available
 - `LT_ARD_HAS_SOFTSERIAL` - SoftwareSerial library implemented, `SoftwareSerial.h` available
+- `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
 - `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)
+- `LT_REALLOC_FUNC` - function name used for `realloc()` call

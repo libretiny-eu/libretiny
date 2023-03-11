@@ -41,8 +41,8 @@ These files are present in the build directory after successful compilation:
 File                    | Description
 ------------------------|-------------------------------------------------------------------
 **firmware.uf2**        | **UF2 package for UART and OTA upload**
-image_0x00B000.ota1.bin | OTA 1 image, flashable to 0xB000
-image_0x0D0000.ota2.bin | OTA 2 image, flashable to 0xD0000 (the address might be different)
+image_ota1.0x00B000.bin | OTA 1 image, flashable to 0xB000
+image_ota2.0x0D0000.bin | OTA 2 image, flashable to 0xD0000 (the address might be different)
 
 ## Other tools/guides
 

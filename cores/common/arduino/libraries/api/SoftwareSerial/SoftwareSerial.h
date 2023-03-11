@@ -2,7 +2,7 @@
 
 #pragma once
 
-#ifdef LT_ARD_HAS_SOFTSERIAL
+#if LT_ARD_HAS_SOFTSERIAL || DOXYGEN
 
 #include <Arduino.h>
 #include <api/HardwareSerial.h>

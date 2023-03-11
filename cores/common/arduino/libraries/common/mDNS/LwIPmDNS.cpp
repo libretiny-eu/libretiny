@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-23. */
 
-#ifdef LT_HAS_LWIP2
+#if LT_HAS_LWIP2
 
 #include "mDNS.h"
 #include <vector>

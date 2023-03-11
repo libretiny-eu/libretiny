@@ -26,12 +26,6 @@ Each firmware image may be either applicable:
 
 For easier understanding, these update types will be referred to in this document using the numbers.
 
-## Custom family IDs
-
-{%
-	include-markdown "../status/supported_families.md"
-%}
-
 ## Extension tags
 
 Standard tags are used: `VERSION`, `DEVICE` and `DEVICE_ID`.
