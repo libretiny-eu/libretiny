@@ -35,6 +35,7 @@ env.Append(
         "-MMD",
         "-fno-exceptions",
         "-fno-rtti",
+        "-Wno-psabi",
     ],
     CPPDEFINES=[
         # LibreTuya configuration
@@ -49,6 +50,7 @@ env.Append(
         ("ERRNO", "1"),  # for LwIP
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",  # enable PSK in mbedTLS
         # "MBEDTLS_DEBUG_C",
+        "MBED_PERIPHERALNAMES_H",  # see fixups/cmsis.h
     ],
     LINKFLAGS=[
         "-mcpu=cortex-m4",
