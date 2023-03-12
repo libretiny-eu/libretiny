@@ -44,9 +44,9 @@
       "optional": true,
       "version": "https://github.com/libretuya/framework-realtek-amb1#v2022.06.21",
       "toolchains": {
-        "x86_64": "gccarmnoneeabi@~1.50201.0",
-        "arm": "gccarmnoneeabi@~1.50401.211104",
-        "arm64": "gccarmnoneeabi@~1.50401.210715"
+        "x86_64": "gccarmnoneeabi@~1.50401.0",
+        "arm": "gccarmnoneeabi@~1.50401.0",
+        "arm64": "gccarmnoneeabi@~1.50401.0"
       },
       "libraries": {
         "lwip": [
