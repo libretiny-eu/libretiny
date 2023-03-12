@@ -3,6 +3,6 @@
 #include <Arduino.h>
 #include <sdk_private.h>
 
-uint32_t lt_get_cpu_cycle_count() {
+uint32_t lt_cpu_get_cycle_count() {
 	return microsecondsToClockCycles(micros());
 }

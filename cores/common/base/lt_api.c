@@ -15,42 +15,42 @@
  | |    |  ___/| |  | |
  | |____| |    | |__| |
   \_____|_|     \____*/
-lt_cpu_family_t lt_get_cpu_family() {
+lt_cpu_family_t lt_cpu_get_family() {
 	return FAMILY;
 }
 
-const char *lt_get_cpu_family_name() {
+const char *lt_cpu_get_family_name() {
 	return STRINGIFY_MACRO(FAMILY) + 2;
 }
 
-__attribute__((weak)) lt_cpu_model_t lt_get_cpu_model() {
+__attribute__((weak)) lt_cpu_model_t lt_cpu_get_model() {
 	return MCU;
 }
 
-const char *lt_get_cpu_model_name() {
+const char *lt_cpu_get_model_name() {
 	return STRINGIFY_MACRO(MCU);
 }
 
-const char *lt_get_cpu_model_code() {
+const char *lt_cpu_get_model_code() {
 	return STRINGIFY_MACRO(MCULC);
 }
 
-__attribute__((weak)) uint8_t lt_get_cpu_core_count() {
+__attribute__((weak)) uint8_t lt_cpu_get_core_count() {
 	return 1;
 }
 
 #if LT_HAS_FREERTOS
-__attribute__((weak)) uint32_t lt_get_cpu_freq() {
+__attribute__((weak)) uint32_t lt_cpu_get_freq() {
 	return configCPU_CLOCK_HZ;
 }
 #endif
 
-uint32_t lt_get_cpu_freq_mhz() {
-	return lt_get_cpu_freq() / 1000000;
+uint32_t lt_cpu_get_freq_mhz() {
+	return lt_cpu_get_freq() / 1000000;
 }
 
 #if LT_HAS_FREERTOS
-__attribute__((weak)) uint32_t lt_get_cpu_cycle_count() {
+__attribute__((weak)) uint32_t lt_cpu_get_cycle_count() {
 	return xTaskGetTickCount() * (configCPU_CLOCK_HZ / configTICK_RATE_HZ);
 }
 #endif
@@ -74,10 +74,10 @@ const char *lt_get_board_code() {
 const char *lt_get_device_name() {
 	if (device_name)
 		return device_name;
-	uint32_t chip_id = lt_get_cpu_mac_id();
+	uint32_t chip_id = lt_cpu_get_mac_id();
 	uint8_t *id		 = (uint8_t *)&chip_id;
 
-	const char *model = lt_get_cpu_model_code();
+	const char *model = lt_cpu_get_model_code();
 	uint8_t model_len = strlen(model);
 	device_name		  = (char *)malloc(3 + model_len + 1 + 6 + 1);
 
@@ -165,20 +165,20 @@ bool lt_flash_write(uint32_t offset, uint8_t *data, size_t length) {
 									__/ |
 								   |__*/
 #if LT_HAS_FREERTOS
-__attribute__((weak)) uint32_t lt_get_heap_size() {
+__attribute__((weak)) uint32_t lt_heap_get_size() {
 	return configTOTAL_HEAP_SIZE;
 }
 
-__attribute__((weak)) uint32_t lt_get_heap_free() {
+__attribute__((weak)) uint32_t lt_heap_get_free() {
 	return xPortGetFreeHeapSize();
 }
 
-__attribute__((weak)) uint32_t lt_get_heap_min_free() {
+__attribute__((weak)) uint32_t lt_heap_get_min_free() {
 	return xPortGetMinimumEverFreeHeapSize();
 }
 #endif
 
-__attribute__((weak)) uint32_t lt_get_heap_max_alloc() {
+__attribute__((weak)) uint32_t lt_heap_get_max_alloc() {
 	return 0;
 }
 

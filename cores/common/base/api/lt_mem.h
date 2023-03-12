@@ -7,24 +7,24 @@
 /**
  * @brief Get total RAM size.
  */
-uint32_t lt_get_ram_size();
+uint32_t lt_ram_get_size();
 
 /**
  * @brief Get total heap size.
  */
-uint32_t lt_get_heap_size();
+uint32_t lt_heap_get_size();
 
 /**
  * @brief Get free heap size.
  */
-uint32_t lt_get_heap_free();
+uint32_t lt_heap_get_free();
 
 /**
  * @brief Get lowest level of free heap memory.
  */
-uint32_t lt_get_heap_min_free();
+uint32_t lt_heap_get_min_free();
 
 /**
  * @brief Get largest block of heap that can be allocated at once.
  */
-uint32_t lt_get_heap_max_alloc();
+uint32_t lt_heap_get_max_alloc();

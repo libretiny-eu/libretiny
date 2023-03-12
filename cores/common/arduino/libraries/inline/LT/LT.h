@@ -24,35 +24,35 @@
  */
 class LibreTuya {
   public: /* lt_cpu.h */
-	/** @copydoc lt_get_cpu_family() */
-	inline ChipFamily getChipFamily() { return lt_get_cpu_family(); }
+	/** @copydoc lt_cpu_get_family() */
+	inline ChipFamily getChipFamily() { return lt_cpu_get_family(); }
 
-	/** @copydoc lt_get_cpu_family_name() */
-	inline const char *getChipFamilyName() { return lt_get_cpu_family_name(); }
+	/** @copydoc lt_cpu_get_family_name() */
+	inline const char *getChipFamilyName() { return lt_cpu_get_family_name(); }
 
-	/** @copydoc lt_get_cpu_model() */
-	inline ChipType getChipType() { return lt_get_cpu_model(); }
+	/** @copydoc lt_cpu_get_model() */
+	inline ChipType getChipType() { return lt_cpu_get_model(); }
 
-	/** @copydoc lt_get_cpu_model_name() */
-	inline const char *getChipModel() { return lt_get_cpu_model_name(); }
+	/** @copydoc lt_cpu_get_model_name() */
+	inline const char *getChipModel() { return lt_cpu_get_model_name(); }
 
-	/** @copydoc lt_get_cpu_mac_id() */
-	inline uint32_t getChipId() { return lt_get_cpu_mac_id(); }
+	/** @copydoc lt_cpu_get_mac_id() */
+	inline uint32_t getChipId() { return lt_cpu_get_mac_id(); }
 
-	/** @copydoc lt_get_cpu_core_count() */
-	inline uint8_t getChipCores() { return lt_get_cpu_core_count(); }
+	/** @copydoc lt_cpu_get_core_count() */
+	inline uint8_t getChipCores() { return lt_cpu_get_core_count(); }
 
-	/** @copydoc lt_get_cpu_core_type() */
-	inline const char *getChipCoreType() { return lt_get_cpu_core_type(); }
+	/** @copydoc lt_cpu_get_core_type() */
+	inline const char *getChipCoreType() { return lt_cpu_get_core_type(); }
 
-	/** @copydoc lt_get_cpu_freq() */
-	inline uint32_t getCpuFreq() { return lt_get_cpu_freq(); }
+	/** @copydoc lt_cpu_get_freq() */
+	inline uint32_t getCpuFreq() { return lt_cpu_get_freq(); }
 
-	/** @copydoc lt_get_cpu_freq_mhz() */
-	inline uint32_t getCpuFreqMHz() { return lt_get_cpu_freq_mhz(); }
+	/** @copydoc lt_cpu_get_freq_mhz() */
+	inline uint32_t getCpuFreqMHz() { return lt_cpu_get_freq_mhz(); }
 
-	/** @copydoc lt_get_cpu_cycle_count() */
-	inline uint32_t getCycleCount() { return lt_get_cpu_cycle_count(); }
+	/** @copydoc lt_cpu_get_cycle_count() */
+	inline uint32_t getCycleCount() { return lt_cpu_get_cycle_count(); }
 
   public: /* lt_device.h */
 	/** @copydoc lt_get_version() */
@@ -89,23 +89,23 @@ class LibreTuya {
 	inline uint32_t getFlashChipSize() { return lt_flash_get_size(); }
 
   public: /* lt_mem.h */
-	/** @copydoc lt_get_ram_size() */
-	inline uint32_t getRamSize() { return lt_get_ram_size(); }
+	/** @copydoc lt_ram_get_size() */
+	inline uint32_t getRamSize() { return lt_ram_get_size(); }
 
-	/** @copydoc lt_get_heap_size() */
-	inline uint32_t getHeapSize() { return lt_get_heap_size(); }
+	/** @copydoc lt_heap_get_size() */
+	inline uint32_t getHeapSize() { return lt_heap_get_size(); }
 
-	/** @copydoc lt_get_heap_free() */
-	inline uint32_t getFreeHeap() { return lt_get_heap_free(); }
+	/** @copydoc lt_heap_get_free() */
+	inline uint32_t getFreeHeap() { return lt_heap_get_free(); }
 
-	/** @copydoc lt_get_heap_min_free() */
-	inline uint32_t getMinFreeHeap() { return lt_get_heap_min_free(); }
+	/** @copydoc lt_heap_get_min_free() */
+	inline uint32_t getMinFreeHeap() { return lt_heap_get_min_free(); }
 
-	/** @copydoc lt_get_heap_max_alloc() */
-	inline uint32_t getMaxAllocHeap() { return lt_get_heap_max_alloc(); }
+	/** @copydoc lt_heap_get_max_alloc() */
+	inline uint32_t getMaxAllocHeap() { return lt_heap_get_max_alloc(); }
 
-	/** @copydoc lt_get_heap_max_alloc() */
-	inline uint32_t getMaxFreeBlockSize() { return lt_get_heap_max_alloc(); }
+	/** @copydoc lt_heap_get_max_alloc() */
+	inline uint32_t getMaxFreeBlockSize() { return lt_heap_get_max_alloc(); }
 };
 
 extern LibreTuya LT;

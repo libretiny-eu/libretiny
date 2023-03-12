@@ -24,22 +24,22 @@ void lt_init_family() {
  | |    |  ___/| |  | |
  | |____| |    | |__| |
   \_____|_|     \____*/
-lt_cpu_model_t lt_get_cpu_model() {
+lt_cpu_model_t lt_cpu_get_model() {
 	uint8_t chipId = *(uint8_t *)(SCTRL_CHIP_ID);
 	return CPU_MODEL_ENUM(FAMILY, chipId);
 }
 
-uint32_t lt_get_cpu_unique_id() {
-	return lt_get_cpu_mac_id();
+uint32_t lt_cpu_get_unique_id() {
+	return lt_cpu_get_mac_id();
 }
 
-uint32_t lt_get_cpu_mac_id() {
+uint32_t lt_cpu_get_mac_id() {
 	uint8_t mac[6];
 	cfg_load_mac(mac); // force loading MAC from TLV (ignore user-set WiFi MAC)
 	return (mac[3]) | (mac[4] << 8) | (mac[5] << 16);
 }
 
-const char *lt_get_cpu_core_type() {
+const char *lt_cpu_get_core_type() {
 	return "ARM968E-S";
 }
 
@@ -108,11 +108,11 @@ lt_flash_id_t lt_flash_get_id() {
  |_|  |_|\___|_| |_| |_|\___/|_|   \__, |
 									__/ |
 								   |__*/
-uint32_t lt_get_ram_size() {
+uint32_t lt_ram_get_size() {
 	return 256 * 1024;
 }
 
-uint32_t lt_get_heap_size() {
+uint32_t lt_heap_get_size() {
 #if configDYNAMIC_HEAP_SIZE
 	extern unsigned char _empty_ram;
 #if CFG_SOC_NAME == SOC_BK7231N

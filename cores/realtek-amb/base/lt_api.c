@@ -21,17 +21,17 @@ void lt_init_family() {
  | |    |  ___/| |  | |
  | |____| |    | |__| |
   \_____|_|     \____*/
-lt_cpu_model_t lt_get_cpu_model() {
+lt_cpu_model_t lt_cpu_get_model() {
 	uint8_t chipId;
 	EFUSE_OneByteReadROM(9902, 0xF8, &chipId, L25EOUTVOLTAGE);
 	return CPU_MODEL_ENUM(FAMILY, chipId);
 }
 
-uint32_t lt_get_cpu_unique_id() {
-	return lt_get_cpu_mac_id();
+uint32_t lt_cpu_get_unique_id() {
+	return lt_cpu_get_mac_id();
 }
 
-uint32_t lt_get_cpu_mac_id() {
+uint32_t lt_cpu_get_mac_id() {
 	uint32_t chipId = 0;
 	uint8_t *id		= (uint8_t *)&chipId;
 	// 9902 was extracted from ROM disassembly, probably not needed
@@ -47,11 +47,11 @@ uint32_t lt_get_cpu_mac_id() {
 	return chipId;
 }
 
-const char *lt_get_cpu_core_type() {
+const char *lt_cpu_get_core_type() {
 	return "ARM Cortex-M4F";
 }
 
-uint32_t lt_get_cpu_freq() {
+uint32_t lt_cpu_get_freq() {
 	return CPU_ClkGet(false);
 }
 
@@ -112,7 +112,7 @@ lt_flash_id_t lt_flash_get_id() {
  |_|  |_|\___|_| |_| |_|\___/|_|   \__, |
 									__/ |
 								   |__*/
-uint32_t lt_get_ram_size() {
+uint32_t lt_ram_get_size() {
 	return 256 * 1024;
 }
 
