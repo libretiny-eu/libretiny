@@ -45,6 +45,19 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 	// RUART_STOP_BIT_1 / RUART_STOP_BIT_2
 	uint8_t stopBits = (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2;
 
+	switch ((uint32_t)data.uart) {
+		case UART0_REG_BASE:
+			RCC_PeriphClockCmd(APBPeriph_UART0, APBPeriph_UART0_CLOCK, ENABLE);
+			break;
+		case UART1_REG_BASE:
+			RCC_PeriphClockCmd(APBPeriph_UART1, APBPeriph_UART1_CLOCK, ENABLE);
+			break;
+	}
+
+	Pinmux_Config(pinInfo(this->rx)->gpio, PINMUX_FUNCTION_UART);
+	Pinmux_Config(pinInfo(this->tx)->gpio, PINMUX_FUNCTION_UART);
+	PAD_PullCtrl(pinInfo(this->rx)->gpio, GPIO_PuPd_UP);
+
 	UART_InitTypeDef cfg;
 	UART_StructInit(&cfg);
 	cfg.WordLen	   = dataWidth;
@@ -60,11 +73,12 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		data.buf = new RingBuffer();
 	}
 
-	Pinmux_Config(pinInfo(this->rx)->gpio, PINMUX_FUNCTION_UART);
-	Pinmux_Config(pinInfo(this->tx)->gpio, PINMUX_FUNCTION_UART);
-
 	VECTOR_IrqUnRegister(this->irq);
 	VECTOR_IrqRegister(callback, this->irq, (uint32_t)&data, 10);
+	VECTOR_IrqEn(this->irq, 10);
+
+	UART_RxCmd((UART_TypeDef *)data.uart, ENABLE);
+	UART_INTConfig((UART_TypeDef *)data.uart, RUART_IER_ERBI, ENABLE);
 }
 
 void SerialClass::end() {
