@@ -43,13 +43,13 @@ env.Append(
         "-mthumb",
         "-mthumb-interwork",
         "-g",
-        "-O2",
+        "-Os",
         "-fdata-sections",
         "-ffunction-sections",
+        "-fno-inline-functions",
         "-fno-strict-aliasing",
         "-fsigned-char",
         "-Wno-comment",
-        "-Werror=implicit-function-declaration",
     ],
     CFLAGS=[
         "-std=gnu99",
@@ -57,6 +57,7 @@ env.Append(
         "-Wall",
         "-Wno-format",
         "-Wno-unknown-pragmas",
+        "-Werror=implicit-function-declaration",
     ],
     CXXFLAGS=[
         "-std=gnu++11",
@@ -64,6 +65,8 @@ env.Append(
         "-fno-exceptions",
         "-fno-rtti",
         "-Wno-literal-suffix",
+        "-Wno-psabi",
+        "-Wno-return-type",
     ],
     CPPDEFINES=[
         # LibreTuya configuration
@@ -364,6 +367,8 @@ env.AddLibrary(
         CCFLAGS=[
             "-Wno-unused-variable",
             "-Wno-implicit-function-declaration",
+            "-Wno-incompatible-pointer-types",
+            "-Wno-int-conversion",
         ],
         CFLAGS=["-<-Wall>"],
     ),

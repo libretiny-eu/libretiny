@@ -9,6 +9,8 @@ extern "C" {
 
 extern int uart_print_port;
 
+void __sync_synchronize(void) {}
+
 } // extern "C"
 
 beken_thread_t mainThread;

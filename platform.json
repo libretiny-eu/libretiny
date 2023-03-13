@@ -44,9 +44,7 @@
       "optional": true,
       "version": "https://github.com/libretuya/framework-realtek-amb1#v2022.06.21",
       "toolchains": {
-        "any": "gccarmnoneeabi@~1.50201.0",
-        "arm": "gccarmnoneeabi@~1.100301.0",
-        "linux_x86_64": "gccarmnoneeabi@~1.100301.0"
+        "any": "gccarmnoneeabi@~1.100301.0"
       },
       "libraries": {
         "lwip": [
@@ -67,8 +65,7 @@
       "optional": true,
       "version": "https://github.com/libretuya/framework-beken-bdk#v2021.06.07",
       "toolchains": {
-        "any":"gccarmnoneeabi@~1.40804.0",
-        "arm": "gccarmnoneeabi@~1.40803.0"
+        "any":"gccarmnoneeabi@~1.100301.0"
       },
       "libraries": {
         "lwip": [
