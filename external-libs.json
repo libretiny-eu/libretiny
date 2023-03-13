@@ -45,7 +45,7 @@
 			"+<.>"
 		]
 	},
-	"arduino_api": {
+	"arduino-api": {
 		"package": "framework-arduino-api",
 		"sources": [
 			"+<api/Common.cpp>",
@@ -59,6 +59,27 @@
 			"+<.>",
 			"+<api/deprecated>"
 		]
+	},
+	"freertos": {
+		"package": "library-freertos",
+		"sources": [
+			"+<FreeRTOS/Source/*.c>"
+		],
+		"includes": [
+			"+<FreeRTOS/Source/include>"
+		]
+	},
+	"freertos-port": {
+		"package": "library-freertos-port",
+		"sources": [
+			"+<./$FREERTOS_PORT/*.c>"
+		],
+		"includes": [
+			"+<./$FREERTOS_PORT>"
+		],
+		"defines": {
+			"FREERTOS_PORT_${FREERTOS_PORT_DEFINE}": "1"
+		}
 	},
 	"lwip-amb1": {
 		"package": "library-lwip",

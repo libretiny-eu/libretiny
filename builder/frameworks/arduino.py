@@ -52,7 +52,7 @@ if not found:
     exit(1)
 
 # Sources - ArduinoCore-API
-queue.AddExternalLibrary("arduino_api")
+queue.AddExternalLibrary("arduino-api")
 
 # Sources - board variant
 queue.AddLibrary(

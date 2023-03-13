@@ -269,6 +269,16 @@ queue.AddLibrary(
 )
 
 # Sources - FreeRTOS
+freertos_opts = dict(
+    CCFLAGS=[
+        # build FreeRTOS port in ARM mode
+        "+<-marm>",
+        "-<-mthumb>",
+    ],
+)
+env.Replace(FREERTOS_PORT="beken-bdk", FREERTOS_PORT_DEFINE="BEKEN_BDK")
+queue.AddExternalLibrary("freertos", options=freertos_opts)
+queue.AddExternalLibrary("freertos-port", options=freertos_opts)
 queue.AddLibrary(
     name="bdk_freertos_thumb",
     base_dir=ROOT_DIR,
@@ -278,24 +288,6 @@ queue.AddLibrary(
     includes=[
         "+<os/*>",
     ],
-)
-queue.AddLibrary(
-    name="bdk_freertos_arm",
-    base_dir="$SDK_DIR",
-    srcs=[
-        "+<FreeRTOSv9.0.0/FreeRTOS/Source/**/*.c>",
-    ],
-    includes=[
-        "+<FreeRTOSv9.0.0/FreeRTOS/Source/include>",
-        "+<FreeRTOSv9.0.0/FreeRTOS/Source/portable/Keil/ARM968es>",
-    ],
-    options=dict(
-        CCFLAGS=[
-            # build FreeRTOS port in ARM mode
-            "+<-marm>",
-            "-<-mthumb>",
-        ],
-    ),
 )
 
 # Sources - lwIP

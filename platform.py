@@ -188,13 +188,21 @@ class LibretuyaPlatform(PlatformBase):
                 continue
             for name, lib_versions in package["libraries"].items():
                 package = f"library-{name}"
+                if isinstance(lib_versions, str):
+                    # single version specified as string
+                    if name in versions:
+                        pkg_versions[package] = versions[name]
+                    else:
+                        pkg_versions[package] = lib_versions
+                    continue
+                # mapping of versions to repo branches
                 if name in versions and versions[name] in lib_versions:
                     pkg_versions[package] = lib_versions[versions[name]]
                     continue
                 if "default" in lib_versions:
                     pkg_versions[package] = lib_versions["default"]
 
-        # gather custom versions of other libraries
+        # gather custom (user-set) versions of other libraries
         for name, version in versions.items():
             if name == "toolchain":
                 continue

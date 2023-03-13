@@ -97,7 +97,7 @@ queue.AppendPublic(
     CXXFLAGS=[
         "-Wno-literal-suffix",
         "-Wno-write-strings",
-        "-Wno-psabi",
+        "-Wno-psabi",  # parameter passing for argument of type ... changed in GCC 7.1
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),

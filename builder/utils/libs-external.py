@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
 
+from ltchiptool.util.dict import merge_dicts
 from platformio.package.meta import PackageItem
 from platformio.platform.base import PlatformBase
 from SCons.Script import DefaultEnvironment, Environment
@@ -31,6 +32,7 @@ def env_add_external_library(
     queue,
     name: str,
     port: Optional[str] = None,
+    options: Dict[str, List[str]] = {},
 ):
     if port:
         name += f"-{port}"
@@ -46,16 +48,19 @@ def env_add_external_library(
             f"Version '{version}' of library '{name}' ({lib.package}) is not installed"
         )
 
+    opts_default = dict(
+        CFLAGS=lib.flags,
+        CPPDEFINES=[(k, v) for k, v in lib.defines.items()],
+        LINKFLAGS=lib.linkflags,
+    )
+    options = merge_dicts(opts_default, options)
+
     queue.AddLibrary(
         name=name.replace("-", "_"),
         base_dir=package.path,
         srcs=lib.sources,
         includes=lib.includes,
-        options=dict(
-            CFLAGS=lib.flags,
-            CPPDEFINES=[(k, v) for k, v in lib.defines.items()],
-            LINKFLAGS=lib.linkflags,
-        ),
+        options=options,
     )
 
 

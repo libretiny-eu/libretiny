@@ -4,7 +4,7 @@ import fnmatch
 from dataclasses import InitVar, dataclass, field
 from glob import glob
 from os.path import isdir, join
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Dict, Generator, List, Tuple
 
 from ltchiptool.util.dict import merge_dicts
 from SCons.Script import DefaultEnvironment, Environment
@@ -127,8 +127,8 @@ class LibraryQueue:
             self.options_public = merge_dicts(self.options_public, {key: option})
         self.queue.append(lib)
 
-    def AddExternalLibrary(self, name: str, port: Optional[str] = None):
-        return self.env.AddExternalLibrary(self, name, port)
+    def AddExternalLibrary(self, *args, **kwargs):
+        return self.env.AddExternalLibrary(self, *args, **kwargs)
 
     def AppendPublic(self, **kwargs):
         if "CPPPATH" in kwargs:

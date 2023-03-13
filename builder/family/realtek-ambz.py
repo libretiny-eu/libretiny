@@ -96,17 +96,8 @@ queue.AddLibrary(
         "+<component/common/drivers/wlan/realtek/src/osdep/lwip_intf.c>",
         "+<component/common/network/dhcp/dhcps.c>",
         "+<component/common/network/ssl/ssl_ram_map/ssl_ram_map.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/portable/MemMang/heap_5.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/portable/GCC/ARM_CM4F/port.c>",
-        # "+<component/os/freertos/freertos_v8.1.2/Source/portable/IAR/ARM_CM4F/portasm.s>",
         "+<component/os/freertos/cmsis_os.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/croutine.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/event_groups.c>",
         "+<component/os/freertos/freertos_service.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/list.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/queue.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/tasks.c>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/timers.c>",
         "+<component/os/os_dep/device_lock.c>",
         "+<component/os/os_dep/osdep_service.c>",
         "+<component/common/mbed/targets/hal/rtl8711b/analogin_api.c>",
@@ -144,8 +135,6 @@ queue.AddLibrary(
     includes=[
         "+<project/realtek_amebaz_va0_example/inc>",
         "+<component/os/freertos>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/include>",
-        "+<component/os/freertos/freertos_v8.1.2/Source/portable/GCC/ARM_CM4F>",
         "+<component/os/os_dep/include>",
         "+<component/common/api/network/include>",
         "+<component/common/api>",
@@ -190,6 +179,11 @@ queue.AddLibrary(
         CFLAGS=["-w"],
     ),
 )
+
+# Sources - FreeRTOS
+env.Replace(FREERTOS_PORT=env["FAMILY_NAME"], FREERTOS_PORT_DEFINE="REALTEK_AMB1")
+queue.AddExternalLibrary("freertos")
+queue.AddExternalLibrary("freertos-port")
 
 # Sources - lwIP
 queue.AddExternalLibrary("lwip", port="amb1")

@@ -27,6 +27,7 @@
         "any": "gccarmnoneeabi@~1.100301.0"
       },
       "libraries": {
+        "freertos": "8.1.2",
         "lwip": {
           "1.4.1": "1.4.1-amb1",
           "2.0.0": "2.0.0-amb1",
@@ -53,6 +54,7 @@
         "any":"gccarmnoneeabi@~1.100301.0"
       },
       "libraries": {
+        "freertos": "9.0.0",
         "lwip": {
           "2.0.2": "2.0.2-bdk",
           "2.1.0": "2.1.0-bdk",
@@ -71,6 +73,15 @@
       "optional": true,
       "base_url": "https://github.com/libretuya/lwip",
       "version_prefix": true
+    },
+    "library-freertos": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/libretuya/library-freertos"
+    },
+    "library-freertos-port": {
+      "type": "framework",
+      "version": "https://github.com/libretuya/library-freertos-port#2023.03.13"
     },
     "library-flashdb": {
       "type": "framework",

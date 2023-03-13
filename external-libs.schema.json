@@ -17,14 +17,14 @@
 					"type": "array",
 					"items": {
 						"type": "string",
-						"pattern": "^[!+-]<[\\w/*.]+>$"
+						"pattern": "^[!+-]<[$\\w/*.]+>$"
 					}
 				},
 				"includes": {
 					"type": "array",
 					"items": {
 						"type": "string",
-						"pattern": "^[!+-]<[\\w/*.]+>$"
+						"pattern": "^[!+-]<[$\\w/*.]+>$"
 					}
 				},
 				"flags": {
