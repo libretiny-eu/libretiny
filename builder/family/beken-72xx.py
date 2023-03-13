@@ -83,6 +83,7 @@ queue.AppendPrivate(
         "-Wno-comment",
         "-Wno-char-subscripts",
         "-Wno-missing-braces",
+        "-Wno-return-type",
     ],
     CFLAGS=[
         "-Wno-format",

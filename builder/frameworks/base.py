@@ -31,6 +31,7 @@ env.Append(
         "-fdata-sections",  # place each function or data item into its own section
         "-ffunction-sections",  # place each function or data item into its own section
         "-fno-strict-aliasing",  # (don't) assume the strictest aliasing rules applicable
+        "-fno-inline-functions",  # (don't) consider all functions for inlining
         # Preprocessor Options
         "-MMD",  # output a rule suitable for make describing the dependencies of the main source file
         # Code Generation Options
@@ -96,6 +97,7 @@ queue.AppendPublic(
     CXXFLAGS=[
         "-Wno-literal-suffix",
         "-Wno-write-strings",
+        "-Wno-psabi",
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),

@@ -74,6 +74,33 @@ if dirname(__file__) in sys.path:
 ltchiptool.lt_set_path(dirname(__file__))
 
 
+def get_os_specifiers():
+    system = platform.system().lower()
+    arch = platform.machine().lower()
+    if not arch:  # issue #4353
+        arch = "x86"
+        bits = platform.architecture()[0]
+    if "aarch64" in arch:
+        arch = "arm"
+        bits = 64
+    elif "arm" in arch:
+        arch = "arm"
+        bits = 32
+    elif "64" not in arch:
+        arch = "x86"
+        bits = 32
+    else:
+        arch = "x86"
+        bits = 64
+    return [
+        f"{system}_{arch}_{bits}",  # linux_x86_64
+        f"{system}_{bits}",  # linux_64
+        system,  # windows
+        arch,  # arm
+        "any",
+    ]
+
+
 class LibretuyaPlatform(PlatformBase):
     custom_opts: Dict[str, object] = None
     versions: Dict[str, str] = None
@@ -139,13 +166,17 @@ class LibretuyaPlatform(PlatformBase):
         # set specific compiler versions
         if "toolchains" in package_obj:
             toolchains = package_obj["toolchains"]
-            if "arm" in platform.machine():
-                (toolchain, version) = toolchains["arm"].split("@")
-            elif "aarch64" in platform.machine():
-                (toolchain, version) = toolchains["arm64"].split("@")
-            else:
-                (toolchain, version) = toolchains["x86_64"].split("@")
-            version = versions.get("toolchain") or version
+            toolchain_version = None
+            specifiers = get_os_specifiers()
+            for spec in specifiers:
+                toolchain_version = toolchains.get(spec)
+                if toolchain_version:
+                    break
+            if not toolchain_version:
+                raise RuntimeError(
+                    f"Toolchain not found for the current platform: {specifiers}"
+                )
+            (toolchain, version) = toolchain_version.split("@")
             self.packages[f"toolchain-{toolchain}"]["version"] = version
 
         # gather library dependencies
