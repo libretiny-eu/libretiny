@@ -17,7 +17,7 @@ from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from semantic_version import SimpleSpec, Version
 
-LTCHIPTOOL_VERSION = "^3.0.1"
+LTCHIPTOOL_VERSION = "^3.0.2"
 
 
 # Install & import tools
