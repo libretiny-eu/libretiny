@@ -34,6 +34,9 @@ using std::min;
 #include "wiring_compat.h"
 #include "wiring_custom.h"
 
+// FreeRTOS kernel
+#include <FreeRTOS.h>
+
 // Define available serial ports
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
 #include <Serial.h>

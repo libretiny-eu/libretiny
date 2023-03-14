@@ -71,8 +71,7 @@
     "library-lwip": {
       "type": "framework",
       "optional": true,
-      "base_url": "https://github.com/libretuya/lwip",
-      "version_prefix": true
+      "base_url": "https://github.com/libretuya/lwip"
     },
     "library-freertos": {
       "type": "framework",

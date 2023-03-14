@@ -67,7 +67,10 @@
 		],
 		"includes": [
 			"+<FreeRTOS/Source/include>"
-		]
+		],
+		"defines": {
+			"FREERTOS_PORT_${FREERTOS_PORT_DEFINE}": "1"
+		}
 	},
 	"freertos-port": {
 		"package": "library-freertos-port",
@@ -75,7 +78,7 @@
 			"+<./$FREERTOS_PORT/*.c>"
 		],
 		"includes": [
-			"+<./$FREERTOS_PORT>"
+			"!<./$FREERTOS_PORT>"
 		],
 		"defines": {
 			"FREERTOS_PORT_${FREERTOS_PORT_DEFINE}": "1"
