@@ -25,6 +25,7 @@ env.Append(
         "-fno-short-enums",
         "-fomit-frame-pointer",
         "-fsigned-char",
+        "-fno-delete-null-pointer-checks",
     ],
     CFLAGS=[
         "-std=gnu99",

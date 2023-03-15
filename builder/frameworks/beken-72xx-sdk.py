@@ -49,6 +49,7 @@ env.Append(
         "-fno-inline-functions",
         "-fno-strict-aliasing",
         "-fsigned-char",
+        "-fno-delete-null-pointer-checks",
         "-Wno-comment",
     ],
     CFLAGS=[
