@@ -43,7 +43,9 @@ env.Append(
         "-mthumb",
         "-mthumb-interwork",
         "-g",
-        "-Os",
+        # anything higher, like -O2 or -Os, causes random issues
+        # like bootlooping, missing (blank) strings, random lockups during boot
+        "-O1",
         "-fdata-sections",
         "-ffunction-sections",
         "-fno-inline-functions",
