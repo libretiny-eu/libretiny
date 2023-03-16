@@ -32,6 +32,7 @@ env.Append(
         "-ffunction-sections",  # place each function or data item into its own section
         "-fno-strict-aliasing",  # (don't) assume the strictest aliasing rules applicable
         "-fno-inline-functions",  # (don't) consider all functions for inlining
+        "-fno-delete-null-pointer-checks",  # assume that programs can safely dereference null pointers
         # Preprocessor Options
         "-MMD",  # output a rule suitable for make describing the dependencies of the main source file
         # Code Generation Options

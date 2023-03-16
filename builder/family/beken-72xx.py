@@ -46,6 +46,10 @@ queue.AppendPublic(
         "-mthumb-interwork",
         "-Wno-write-strings",
         "-Wno-attributes",
+        # anything higher, like -O2 or -Os, causes random issues
+        # like bootlooping, missing (blank) strings, random lockups during boot
+        "+<-O1>",
+        "-<-Os>",
     ],
     CPPDEFINES=[
         # SDK options
