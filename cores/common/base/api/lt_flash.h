@@ -40,9 +40,9 @@ bool lt_flash_erase_block(uint32_t offset);
  * @param offset starting offset (in bytes)
  * @param data pointer to where to store the data
  * @param length length of data to read
- * @return whether reading was successful (i.e. all bytes were successfully read)
+ * @return length of data successfully read (should equal 'length')
  */
-bool lt_flash_read(uint32_t offset, uint8_t *data, size_t length);
+uint32_t lt_flash_read(uint32_t offset, uint8_t *data, size_t length);
 
 /**
  * @brief Write data to the flash.
@@ -50,6 +50,6 @@ bool lt_flash_read(uint32_t offset, uint8_t *data, size_t length);
  * @param offset starting offset (in bytes)
  * @param data pointer to data to write
  * @param length length of data to write
- * @return whether writing was successful (i.e. all bytes were successfully written)
+ * @return length of data successfully written (should equal 'length')
  */
-bool lt_flash_write(uint32_t offset, uint8_t *data, size_t length);
+uint32_t lt_flash_write(uint32_t offset, uint8_t *data, size_t length);

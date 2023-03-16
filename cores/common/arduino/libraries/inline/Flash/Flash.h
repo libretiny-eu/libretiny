@@ -23,13 +23,13 @@ class FlashClass {
 	/** @copydoc lt_flash_read() */
 	inline bool readBlock(uint32_t offset, uint8_t *data, size_t length) {
 		//
-		return lt_flash_read(offset, data, length);
+		return lt_flash_read(offset, data, length) == length;
 	}
 
 	/** @copydoc lt_flash_write() */
 	inline bool writeBlock(uint32_t offset, uint8_t *data, size_t length) {
 		//
-		return lt_flash_write(offset, data, length);
+		return lt_flash_write(offset, data, length) == length;
 	}
 };
 

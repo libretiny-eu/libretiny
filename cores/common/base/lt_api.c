@@ -148,12 +148,12 @@ bool lt_flash_erase_block(uint32_t offset) {
 	return fal_partition_erase(fal_root_part, offset, 1) >= 0;
 }
 
-bool lt_flash_read(uint32_t offset, uint8_t *data, size_t length) {
-	return fal_partition_write(fal_root_part, offset, data, length) == length;
+uint32_t lt_flash_read(uint32_t offset, uint8_t *data, size_t length) {
+	return fal_partition_read(fal_root_part, offset, data, length);
 }
 
-bool lt_flash_write(uint32_t offset, uint8_t *data, size_t length) {
-	return fal_partition_read(fal_root_part, offset, data, length) == length;
+uint32_t lt_flash_write(uint32_t offset, uint8_t *data, size_t length) {
+	return fal_partition_write(fal_root_part, offset, data, length);
 }
 
 /*__  __
