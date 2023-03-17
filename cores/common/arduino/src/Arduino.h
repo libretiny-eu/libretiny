@@ -36,6 +36,7 @@ using std::min;
 
 // FreeRTOS kernel
 #include <FreeRTOS.h>
+#include <task.h>
 
 // Define available serial ports
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL

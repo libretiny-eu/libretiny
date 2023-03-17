@@ -6,12 +6,12 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
+struct MD5Context {
+	unsigned long buf[4];
+	unsigned long bits[2];
+	unsigned char in[64];
+};
 
-typedef uint32_t u32;
-typedef uint8_t u8;
-
-#include <crypto/md5_i.h>
 #define LT_MD5_CTX_T struct MD5Context
 
 #ifdef __cplusplus

@@ -4,7 +4,6 @@
 
 #include <Arduino.h>
 
-#if 0 // maybe simply using void* is easier? this is not C++ so it will link anyway
 // available built-in implementations
 #if LT_ARD_MD5_POLARSSL
 #include "MD5PolarSSLImpl.h"
@@ -14,7 +13,6 @@
 #endif
 #if LT_ARD_MD5_HOSTAPD
 #include "MD5HostapdImpl.h"
-#endif
 #endif
 
 // common API

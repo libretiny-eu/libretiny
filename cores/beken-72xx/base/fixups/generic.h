@@ -9,3 +9,9 @@
 #undef ntohs
 #undef htonl
 #undef ntohl
+
+// fix conflicts with std::max() and std::min()
+#ifdef __cplusplus
+#undef max
+#undef min
+#endif
