@@ -2,9 +2,9 @@
 
 Usually, functions available in C standard library should not be defined by the SDK. Instead, they should be included using GCC's headers, and implemented by the libc or wrapped and implemented in the SDK.
 
-The following functions must not be defined by the SDK. Their presence makes conflicts due to incompatibility with C library, so they should be removed or disabled, and replaced with wrappers.
+The following functions should not be defined by the SDK. Their presence creates conflicts due to incompatibility with C library, so they should be removed or disabled, and replaced with wrappers.
 
-Memory management functions should be wrapped and redirected to FreeRTOS (if possible). The necessary linker flags are added for all families (in `base.py`), and a FreeRTOS implementation of the wrappers are provided in `malloc.c` in the common core.
+Memory management functions must be wrapped and redirected to FreeRTOS. The necessary linker flags are already added for all families (in `base.py`), and a FreeRTOS implementation of the wrappers are provided in `malloc.c` in the common core. If the family doesn't use FreeRTOS, a separate implementation must be added.
 
 Additionally, if the `printf` library is used in the chip family code, all other vendor-defined printf-like functions should be replaced with it.
 
@@ -28,6 +28,8 @@ long double strtold(const char *str, char **str_end);
 long long strtoll(const char *str, char **str_end, int base);
 unsigned long strtoul(const char *str, char **str_end, int base);
 unsigned long long strtoull(const char *str, char **str_end, int base);
+// stdlib.h / Random numbers
+int rand();
 
 // string.h / Character classification
 int isalnum(int ch);
@@ -81,6 +83,12 @@ int vprintf(const char *format, va_list vlist);
 int vsprintf(char *buffer, const char *format, va_list vlist);
 int vsnprintf(char *buffer, size_t bufsz, const char *format, va_list vlist);
 
+// POSIX/BSD (from www.die.net)
+size_t strlcat(char *dst, const char *src, size_t size);
+size_t strlcpy(char *dst, const char *src, size_t size);
+size_t strnlen(const char *s, size_t maxlen);
+char *strsep(char **stringp, const char *delim);
+
 // Non-stdlib
 _calloc_r
 _free_r
@@ -89,10 +97,7 @@ _realloc_r
 atoui
 atoul
 atoull
-strlcpy
 strnicmp
-strnlen
-strsep
 zalloc
 
 // Additional forbidden macros

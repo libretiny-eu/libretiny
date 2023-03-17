@@ -45,6 +45,30 @@ queue.AppendPublic(
         "-Wl,-wrap,aes_80211_encrypt",
         "-Wl,-wrap,aes_80211_decrypt",
         "-Wl,-wrap,DecGTK",
+        # ROM stdlib (wraps/stdlib.c)
+        # stock SDK defines these as macros
+        "-Wl,-wrap,atoi",
+        "-Wl,-wrap,atol",
+        "-Wl,-wrap,strtol",
+        "-Wl,-wrap,strtoul",
+        "-Wl,-wrap,rand",
+        "-Wl,-wrap,strcat",
+        "-Wl,-wrap,strcpy",
+        "-Wl,-wrap,strncat",
+        "-Wl,-wrap,strncpy",
+        "-Wl,-wrap,strchr",
+        "-Wl,-wrap,strcmp",
+        "-Wl,-wrap,strlen",
+        "-Wl,-wrap,strncmp",
+        "-Wl,-wrap,strpbrk",
+        "-Wl,-wrap,strstr",
+        "-Wl,-wrap,strtok",
+        "-Wl,-wrap,memchr",
+        "-Wl,-wrap,memcmp",
+        "-Wl,-wrap,memcpy",
+        "-Wl,-wrap,memmove",
+        "-Wl,-wrap,memset",
+        "-Wl,-wrap,strsep",
         # stdio wrappers (base/port/printf.c)
         "-Wl,-wrap,rtl_printf",
         "-Wl,-wrap,rtl_sprintf",
@@ -195,9 +219,8 @@ queue.AddLibrary(
     srcs=[
         # mbedTLS from SDK
         "+<component/common/network/ssl/mbedtls-2.4.0/library/*.c>",
-        # replace these with fixups
+        # replace this with a fixup
         "-<component/common/network/ssl/mbedtls-2.4.0/library/net_sockets.c>",
-        "-<component/common/network/ssl/mbedtls-2.4.0/library/ssl_tls.c>",
     ],
     includes=[
         "+<component/common/network/ssl/mbedtls-2.4.0/include>",

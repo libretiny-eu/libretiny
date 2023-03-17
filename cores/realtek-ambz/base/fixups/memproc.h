@@ -4,5 +4,6 @@
 
 #include <string.h>
 
-#define _strcpy strcpy
-#define _strlen strlen
+#define _memcmp memcmp
+#define _memcpy memcpy
+#define _memset memset

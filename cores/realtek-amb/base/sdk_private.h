@@ -6,31 +6,18 @@
 extern "C" {
 #endif // __cplusplus
 
-// va_list is declared by SDK and conflicting
-#include <stdarg.h>
+// note: this is *not* replacing any stdlib functions :)
+#include <platform_stdlib.h>
 
-// disable typedef in basic_types.h
-#define boolean boolean_rtl
 // fix conflicts with Arduino's PinMode enum
 #define PinMode PinModeRTL
 // remove log_printf() if included before sdk_private.h
 #undef log_printf
 
-#include <strproc.h> // define string macros first
-#undef isdigit		 // then remove them, as they conflict
-#undef islower		 // with ctype.h macros
-#undef isprint
-#undef isspace
-#undef isxdigit
-#undef strtol
-#undef strtoul
-
 #if LT_RTL8710B
 #include <ameba_soc.h>
 #include <rand.h>
-#include <rt_lib_rom.h>
 #include <rtl8710b.h>
-#include <rtl_lib.h>
 #endif
 #if LT_RTL8720C
 #include <rtl8710c.h>
@@ -56,7 +43,6 @@ extern "C" {
 #include <wdt_api.h>
 
 // remove previously defined workarounds
-#undef boolean
 #undef PinMode
 
 // undefine ROM stdio in favor of printf() library (wrappers)
