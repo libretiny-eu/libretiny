@@ -27,16 +27,12 @@
 #define LT_BOARD_STR	   STRINGIFY_MACRO(LT_BOARD)
 #define GCC_VERSION_STR                                                                                                \
 	STRINGIFY_MACRO(__GNUC__) "." STRINGIFY_MACRO(__GNUC_MINOR__) "." STRINGIFY_MACRO(__GNUC_PATCHLEVEL__)
+#define LT_BANNER_STR                                                                                                  \
+	"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__ ", GCC " GCC_VERSION_STR   \
+	" (-O" STRINGIFY_MACRO(__OPTIMIZE_LEVEL__) ")"
 
 // Functional macros
-#define LT_BANNER()                                                                                                    \
-	LT_LOG(                                                                                                            \
-		LT_LEVEL_INFO,                                                                                                 \
-		__FUNCTION__,                                                                                                  \
-		__LINE__,                                                                                                      \
-		"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__                        \
-		", GCC " GCC_VERSION_STR                                                                                       \
-	)
+#define LT_BANNER() LT_LOG(LT_LEVEL_INFO, __FUNCTION__, __LINE__, LT_BANNER_STR)
 
 // Types & macros
 #include "lt_config.h" // platform configuration options

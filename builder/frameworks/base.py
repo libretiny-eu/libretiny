@@ -3,7 +3,7 @@
 from os.path import join
 
 import click
-from ltchiptool import Family
+from ltchiptool import Family, get_version
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Errors import UserError
@@ -13,6 +13,12 @@ env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
 platform: PlatformBase = env.PioPlatform()
 family: Family = env["FAMILY_OBJ"]
+
+# Print information about installed core versions
+lt_version: str = env.ReadLTVersion(platform.get_dir(), platform.version)
+print("PLATFORM VERSIONS:")
+print(" - libretuya @", lt_version)
+print(" - ltchiptool @", get_version())
 
 # TODO remove include path prepending ("!<...>")
 # Move common core sources (env.AddCoreSources()) and Arduino libs
@@ -86,6 +92,12 @@ queue.AddExternalLibrary("ltchiptool")  # uf2ota source code
 queue.AddExternalLibrary("flashdb")
 queue.AddExternalLibrary("printf")
 
+# Find optimization level and add __OPTIMIZE_LEVEL__ macro
+for flag in env["CCFLAGS"]:
+    if not flag.startswith("-O"):
+        continue
+    env.Append(CPPDEFINES=[("__OPTIMIZE_LEVEL__", flag[2])])
+
 # Non-SDK defines & linker options
 queue.AppendPublic(
     CCFLAGS=[
@@ -102,13 +114,13 @@ queue.AppendPublic(
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),
-        ("LT_VERSION", env.ReadLTVersion(platform.get_dir(), platform.version)),
+        ("LT_VERSION", lt_version),
         ("LT_BOARD", "${VARIANT}"),
         ("LT_VARIANT_H", r"\"${VARIANT}.h\""),
         ("F_CPU", board.get("build.f_cpu")),
         ("MCU", "${MCU}"),
         ("MCULC", "${MCULC}"),
-        ("FAMILY", "F_${FAMILY}"),
+        ("FAMILY", "F_${FAMILY_SHORT_NAME}"),
         # Add flash layout defines created in env.AddFlashLayout()
         *env["FLASH_DEFINES"].items(),
     ],

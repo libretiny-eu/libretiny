@@ -26,26 +26,24 @@ def env_uf2ota(env: Environment, *args, **kwargs):
         project_name,
         project_version,
         "${VARIANT}",
-        "${FAMILY}",
+        "${MCULC}",
         f"lt{lt_version}",
     ]
     output = "_".join(output) + ".uf2"
     if platform.custom("fw_output"):
         output = platform.custom("fw_output")
 
-    output = join("${BUILD_DIR}", output)
-    output_copy_1 = join("${BUILD_DIR}", "firmware.uf2")
-    output_copy_2 = join("${BUILD_DIR}", "firmware.bin")
-
-    env["UF2OUT"] = output
-    env["UF2OUT_BASE"] = basename(output)
+    outputs = [
+        join("${BUILD_DIR}", output),
+        join("${BUILD_DIR}", "firmware.uf2"),
+        join("${BUILD_DIR}", "firmware.bin"),
+    ]
+    output_opts = [f'--output "{output}"' for output in outputs]
 
     cmd = [
         "@${LTCHIPTOOL} uf2 write",
-        f'--output "{output}"',
-        f'--output-copy "{output_copy_1}"',
-        f'--output-copy "{output_copy_2}"',
-        "--family ${FAMILY}",
+        *output_opts,
+        "--family ${FAMILY_SHORT_NAME}",
         "--board ${VARIANT}",
         f"--lt-version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
@@ -53,10 +51,9 @@ def env_uf2ota(env: Environment, *args, **kwargs):
         *env["UF2OTA"],
     ]
 
-    print(f"|-- {basename(env.subst(output))}")
+    for output in outputs:
+        print(f"|-- {basename(env.subst(output))}")
     env.Execute(" ".join(cmd))
-    print(f"|-- {basename(env.subst(output_copy_1))}")
-    print(f"|-- {basename(env.subst(output_copy_2))}")
 
 
 def env_flash_write(env: Environment):
