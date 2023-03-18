@@ -130,6 +130,20 @@ typedef enum {
 
 typedef struct {
 	char *ssid;
+	char *password;
+	uint8_t *bssid;
+	bool ssidHidden;
+	int channel;
+	int auth;
+	uint32_t localIP;
+	uint32_t subnet;
+	uint32_t gateway;
+	uint32_t dns1;
+	uint32_t dns2;
+} WiFiNetworkInfo;
+
+typedef struct {
+	char *ssid;
 	WiFiAuthMode auth;
 	int32_t rssi;
 	WiFiMacAddr bssid;

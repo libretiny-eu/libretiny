@@ -34,7 +34,7 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint32_t maxMsPerChannel, uint8_t channel) {
 	if (scan && scan->running)
 		return WIFI_SCAN_RUNNING;
-	if (wifi_mode == WIFI_MODE_NULL)
+	if (getMode() == WIFI_MODE_NULL)
 		enableSTA(true);
 	scanDelete();
 	scanInit();

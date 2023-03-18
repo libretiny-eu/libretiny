@@ -26,31 +26,40 @@ extern "C" {
 
 extern struct netif xnetif[NET_IF_NUM];
 
+// dhcps.c
+extern void dns_server_init(struct netif *pnetif);
+extern void dns_server_deinit(void);
+
+// wifi_util.c
+extern void rltk_stop_softap(const char *ifname);
+extern void rltk_suspend_softap(const char *ifname);
+extern void rltk_suspend_softap_beacon(const char *ifname);
+
 } // extern "C"
 
 // WiFi.cpp
-extern rtw_network_info_t wifi;
-extern rtw_ap_info_t ap;
 extern rtw_wifi_setting_t wifi_setting;
-extern unsigned char sta_password[65];
-extern unsigned char ap_password[65];
-extern void reset_wifi_struct(void);
 extern wifi_mode_t wifi_mode;
 extern WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 // WiFiEvents.cpp
 extern void startWifiTask();
 extern void handleRtwEvent(uint16_t event, char *data, int len, int flags);
 
-#define NETIF_RTW_STA &xnetif[RTW_STA_INTERFACE]
-#define NETIF_RTW_AP  (wifi_mode == WIFI_MODE_APSTA ? &xnetif[RTW_AP_INTERFACE] : NETIF_RTW_STA)
+#define WLAN0_NETIF &xnetif[RTW_STA_INTERFACE]
+#define WLAN1_NETIF &xnetif[RTW_AP_INTERFACE]
+
+#define NETIF_RTW_STA WLAN0_NETIF
+#define NETIF_RTW_AP  (wifi_mode & WIFI_MODE_STA ? WLAN1_NETIF : WLAN0_NETIF)
 
 #define NETNAME_STA WLAN0_NAME
-#define NETNAME_AP	(wifi_mode == WIFI_MODE_APSTA ? WLAN1_NAME : WLAN0_NAME)
+#define NETNAME_AP	(wifi_mode & WIFI_MODE_STA ? WLAN1_NAME : WLAN0_NAME)
 
 typedef struct {
 	bool initialized;
 	bool sleep;
 	SemaphoreHandle_t scanSem;
+	WiFiNetworkInfo sta;
+	WiFiNetworkInfo ap;
 } WiFiData;
 
 #define DATA  ((WiFiData *)data)

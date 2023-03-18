@@ -71,6 +71,12 @@ class WiFiClass {
 	static uint8_t calculateSubnetCIDR(IPAddress subnetMask);
 	static String macToString(uint8_t *mac);
 
+	static void resetNetworkInfo(WiFiNetworkInfo &info);
+
+  private: /* WiFiGeneric.cpp */
+	bool restoreSTAConfig(const WiFiNetworkInfo &info);
+	bool restoreAPConfig(const WiFiNetworkInfo &info);
+
   protected: /* WiFiEvents.cpp */
 	static std::vector<EventHandler> handlers;
 

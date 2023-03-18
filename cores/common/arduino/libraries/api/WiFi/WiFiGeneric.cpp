@@ -119,3 +119,36 @@ String WiFiClass::macToString(uint8_t *mac) {
 	sprintf(macStr, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 	return macStr;
 }
+
+void WiFiClass::resetNetworkInfo(WiFiNetworkInfo &info) {
+	LT_VM(WIFI, "Resetting network info: %s", info.ssid);
+	free(info.ssid);
+	free(info.password);
+	free(info.bssid);
+	// wipe the structure, except IP addresses
+	memset(&info, 0x00, sizeof(WiFiNetworkInfo) - 5 * sizeof(uint32_t));
+}
+
+bool WiFiClass::restoreSTAConfig(const WiFiNetworkInfo &info) {
+	LT_DM(WIFI, "Restoring %s config: %s", "STA", info.ssid);
+	if (!info.ssid)
+		return false;
+	if (info.localIP) {
+		LT_DM(WIFI, "Restoring STA IP config");
+		if (!config(info.localIP, info.gateway, info.subnet, info.dns1, info.dns2))
+			return false;
+	}
+	return begin(info.ssid, info.password, info.channel, info.bssid);
+}
+
+bool WiFiClass::restoreAPConfig(const WiFiNetworkInfo &info) {
+	LT_DM(WIFI, "Restoring %s config: %s", "AP", info.ssid);
+	if (!info.ssid)
+		return false;
+	if (info.localIP) {
+		LT_DM(WIFI, "Restoring AP IP config");
+		if (!softAPConfig(info.localIP, info.gateway, info.subnet))
+			return false;
+	}
+	return softAP(info.ssid, info.password, info.channel, info.ssidHidden);
+}

@@ -14,22 +14,23 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 		return WL_CONNECT_FAILED;
 
 	LT_HEAP_I();
-
 	vTaskDelay(20);
 
-	strcpy((char *)ap.ssid.val, ssid);
-	ap.ssid.len = strlen(ssid);
-	ap.channel	= channel;
+	WiFiNetworkInfo &info = DATA->ap;
+	if (info.ssid != ssid)
+		// free network info, if not called from restoreAPConfig()
+		resetNetworkInfo(info);
 
-	ap.security_type = RTW_SECURITY_OPEN;
-	ap.password		 = NULL;
-	ap.password_len	 = 0;
+	if (info.ssid != ssid)
+		info.ssid = strdup(ssid);
+	info.ssidHidden = ssidHidden;
+	info.channel	= channel;
+	info.auth		= RTW_SECURITY_OPEN;
 
 	if (passphrase) {
-		strcpy((char *)ap_password, passphrase);
-		ap.security_type = RTW_SECURITY_WPA2_AES_PSK;
-		ap.password		 = ap_password;
-		ap.password_len	 = strlen(passphrase);
+		if (info.password != passphrase)
+			info.password = strdup(passphrase);
+		info.auth = RTW_SECURITY_WPA2_AES_PSK;
 	}
 
 	dhcps_deinit();
@@ -39,25 +40,23 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 	int ret;
 	if (!ssidHidden) {
 		ret = wifi_start_ap(
-			(char *)ap.ssid.val,
-			ap.security_type,
-			(char *)ap.password,
-			ap.ssid.len,
-			ap.password_len,
-			ap.channel
+			info.ssid,
+			(rtw_security_t)info.auth,
+			info.password,
+			strlen(info.ssid),
+			strlen(info.password),
+			info.channel
 		);
 	} else {
 		ret = wifi_start_ap_with_hidden_ssid(
-			(char *)ap.ssid.val,
-			ap.security_type,
-			(char *)ap.password,
-			ap.ssid.len,
-			ap.password_len,
-			ap.channel
+			info.ssid,
+			(rtw_security_t)info.auth,
+			info.password,
+			strlen(info.ssid),
+			strlen(info.password),
+			info.channel
 		);
 	}
-
-	wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_START, -2);
 
 	if (ret < 0) {
 		LT_EM(WIFI, "SoftAP failed; ret=%d", ret);
@@ -72,7 +71,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 
 	while (1) {
 		if (wext_get_ssid(ifname, essid) > 0) {
-			if (strcmp((const char *)essid, (const char *)ap.ssid.val) == 0)
+			if (strcmp((const char *)essid, info.ssid) == 0)
 				break;
 		}
 
@@ -83,27 +82,28 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 		timeout--;
 	}
 
+	wifi_indication(WIFI_EVENT_CONNECT, NULL, ARDUINO_EVENT_WIFI_AP_START, -2);
+
 	dhcps_init(ifs);
+	dns_server_deinit();
 	return true;
 }
 
 bool WiFiClass::softAPConfig(IPAddress localIP, IPAddress gateway, IPAddress subnet) {
 	if (!enableAP(true))
 		return false;
-	struct netif *ifs = NETIF_RTW_AP;
+	WiFiNetworkInfo &info = DATA->ap;
+	struct netif *ifs	  = NETIF_RTW_AP;
 	struct ip_addr ipaddr, netmask, gw;
-	ipaddr.addr	 = localIP;
-	netmask.addr = subnet;
-	gw.addr		 = gateway;
+	ipaddr.addr = info.localIP = localIP;
+	netmask.addr = info.subnet = subnet;
+	gw.addr = info.gateway = gateway;
 	netif_set_addr(ifs, &ipaddr, &netmask, &gw);
 	return true;
 }
 
 bool WiFiClass::softAPdisconnect(bool wifiOff) {
-	// TODO implement wifi_restart_ap
-	if (wifiOff)
-		return enableAP(false);
-	return true;
+	return enableAP(false);
 }
 
 uint8_t WiFiClass::softAPgetStationNum() {
@@ -115,11 +115,11 @@ uint8_t WiFiClass::softAPgetStationNum() {
 }
 
 IPAddress WiFiClass::softAPIP() {
-	return LwIP_GetIP(NETIF_RTW_AP);
+	return netif_ip_addr4(NETIF_RTW_AP)->addr;
 }
 
 IPAddress WiFiClass::softAPSubnetMask() {
-	return LwIP_GetMASK(NETIF_RTW_AP);
+	return netif_ip_netmask4(NETIF_RTW_AP)->addr;
 }
 
 const char *WiFiClass::softAPgetHostname() {
@@ -132,19 +132,17 @@ bool WiFiClass::softAPsetHostname(const char *hostname) {
 }
 
 uint8_t *WiFiClass::softAPmacAddress(uint8_t *mac) {
-	uint8_t *macLocal = LwIP_GetMAC(NETIF_RTW_AP);
-	memcpy(mac, macLocal, ETH_ALEN);
-	free(macLocal);
+	memcpy(mac, NETIF_RTW_AP->hwaddr, ETH_ALEN);
 	return mac;
 }
 
 String WiFiClass::softAPmacAddress(void) {
 	uint8_t mac[ETH_ALEN];
-	macAddress(mac);
+	softAPmacAddress(mac);
 	return macToString(mac);
 }
 
 const String WiFiClass::softAPSSID(void) {
-	wifi_get_setting(NETNAME_AP, &wifi_setting);
+	wext_get_ssid(NETNAME_AP, wifi_setting.ssid);
 	return (char *)wifi_setting.ssid;
 }

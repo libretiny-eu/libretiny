@@ -11,20 +11,20 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 
 	LT_HEAP_I();
 
-	memset(wifi.bssid.octet, 0, ETH_ALEN);
-	strcpy((char *)wifi.ssid.val, ssid);
-	wifi.ssid.len = strlen(ssid);
+	WiFiNetworkInfo &info = DATA->sta;
+	if (info.ssid != ssid)
+		// free network info, if not called from restoreSTAConfig()
+		resetNetworkInfo(info);
 
-	wifi.security_type = RTW_SECURITY_OPEN;
-	wifi.password	   = NULL;
-	wifi.password_len  = 0;
-	wifi.key_id		   = 0;
+	if (info.ssid != ssid)
+		info.ssid = strdup(ssid);
+	info.channel = channel;
+	info.auth	 = RTW_SECURITY_OPEN;
 
 	if (passphrase) {
-		strcpy((char *)sta_password, passphrase);
-		wifi.security_type = RTW_SECURITY_WPA2_AES_PSK;
-		wifi.password	   = sta_password;
-		wifi.password_len  = strlen(passphrase);
+		if (info.password != passphrase)
+			info.password = strdup(passphrase);
+		info.auth = RTW_SECURITY_WPA2_AES_PSK;
 	}
 
 	if (reconnect(bssid))
@@ -36,24 +36,26 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
 	if (!enableSTA(true))
 		return false;
+	WiFiNetworkInfo &info = DATA->sta;
 
 	struct ip_addr d1, d2;
-	d1.addr = dns1;
-	d2.addr = dns2;
-	if (dns1[0])
+	d1.addr = info.dns1 = dns1;
+	d2.addr = info.dns2 = dns2;
+	if (d1.addr)
 		dns_setserver(0, &d1);
-	if (dns2[0])
+	if (d2.addr)
 		dns_setserver(0, &d2);
 
 	if (!localIP[0]) {
+		info.localIP = 0;
 		LwIP_DHCP(0, DHCP_START);
 		return true;
 	}
 	struct netif *ifs = NETIF_RTW_STA;
 	struct ip_addr ipaddr, netmask, gw;
-	ipaddr.addr	 = localIP;
-	netmask.addr = subnet;
-	gw.addr		 = gateway;
+	ipaddr.addr = info.localIP = localIP;
+	netmask.addr = info.subnet = subnet;
+	gw.addr = info.gateway = gateway;
 	netif_set_addr(ifs, &ipaddr, &netmask, &gw);
 	LwIP_DHCP(0, DHCP_STOP);
 	return true;
@@ -62,31 +64,39 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 bool WiFiClass::reconnect(const uint8_t *bssid) {
 	int ret;
 	uint8_t dhcpRet;
+	WiFiNetworkInfo &info = DATA->sta;
 
-	LT_IM(WIFI, "Connecting to %s", wifi.ssid.val);
+	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
 	__wrap_rtl_printf_disable();
 	__wrap_DiagPrintf_disable();
 
+	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
+
 	if (!bssid) {
 		ret = wifi_connect(
-			(char *)wifi.ssid.val,
-			wifi.security_type,
-			(char *)wifi.password,
-			wifi.ssid.len,
-			wifi.password_len,
-			wifi.key_id,
+			info.ssid,
+			(rtw_security_t)info.auth,
+			info.password,
+			strlen(info.ssid),
+			strlen(info.password),
+			-1,
 			NULL
 		);
 	} else {
+		if (info.bssid != bssid) {
+			free(info.bssid);
+			info.bssid = (uint8_t *)malloc(ETH_ALEN);
+			memcpy(info.bssid, bssid, ETH_ALEN);
+		}
 		ret = wifi_connect_bssid(
 			(unsigned char *)bssid,
-			(char *)wifi.ssid.val,
-			wifi.security_type,
-			(char *)wifi.password,
+			info.ssid,
+			(rtw_security_t)info.auth,
+			info.password,
 			ETH_ALEN,
-			wifi.ssid.len,
-			wifi.password_len,
-			wifi.key_id,
+			strlen(info.ssid),
+			strlen(info.password),
+			-1,
 			NULL
 		);
 	}
@@ -122,7 +132,9 @@ error:
 }
 
 bool WiFiClass::disconnect(bool wifiOff) {
-	int ret = wifi_disconnect();
+	free(DATA->sta.ssid);
+	DATA->sta.ssid = NULL;
+	int ret		   = wifi_disconnect();
 	if (wifiOff)
 		enableSTA(false);
 	return ret == RTW_SUCCESS;
@@ -141,33 +153,31 @@ bool WiFiClass::getAutoReconnect() {
 IPAddress WiFiClass::localIP() {
 	if (!wifi_mode)
 		return IPAddress();
-	return LwIP_GetIP(NETIF_RTW_STA);
+	return netif_ip_addr4(NETIF_RTW_STA)->addr;
 }
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
-	if (getMode() == WIFI_MODE_NULL) {
+	if ((getMode() & WIFI_MODE_STA) == 0) {
 		uint8_t *efuse = (uint8_t *)malloc(512);
 		EFUSE_LogicalMap_Read(efuse);
 		memcpy(mac, efuse + 0x11A, ETH_ALEN);
 		free(efuse);
 		return mac;
 	}
-	memcpy(mac, LwIP_GetMAC(NETIF_RTW_STA), ETH_ALEN);
+	memcpy(mac, NETIF_RTW_STA.hwaddr, ETH_ALEN);
 	return mac;
 }
 
 IPAddress WiFiClass::subnetMask() {
-	return LwIP_GetMASK(NETIF_RTW_STA);
+	return netif_ip_netmask4(NETIF_RTW_STA)->addr;
 }
 
 IPAddress WiFiClass::gatewayIP() {
-	return LwIP_GetGW(NETIF_RTW_STA);
+	return netif_ip_gw4(NETIF_RTW_STA)->addr;
 }
 
 IPAddress WiFiClass::dnsIP(uint8_t dns_no) {
-	struct ip_addr dns;
-	LwIP_GetDNS(&dns);
-	return dns.addr;
+	return dns_getserver(0)->addr;
 }
 
 IPAddress WiFiClass::broadcastIP() {
@@ -195,14 +205,17 @@ const String WiFiClass::SSID() {
 }
 
 const String WiFiClass::psk() {
-	if (!isConnected() || !wifi.password)
+	if (!isConnected() || !DATA->sta.password)
 		return "";
-	return (char *)wifi.password;
+	return DATA->sta.password;
 }
 
 uint8_t *WiFiClass::BSSID() {
-	wext_get_bssid(NETNAME_STA, wifi.bssid.octet);
-	return wifi.bssid.octet;
+	WiFiNetworkInfo &info = DATA->sta;
+	if (!info.bssid)
+		info.bssid = (uint8_t *)malloc(ETH_ALEN);
+	wext_get_bssid(NETNAME_STA, info.bssid);
+	return info.bssid;
 }
 
 int8_t WiFiClass::RSSI() {
