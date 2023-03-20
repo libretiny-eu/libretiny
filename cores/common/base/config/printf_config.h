@@ -68,7 +68,25 @@ void putchar_p(char c, unsigned long port);
 
 #endif // LT_UART_SILENT_ENABLED && !LT_UART_SILENT_ALL
 
-#if LT_UART_SILENT_ALL
+#if !LT_UART_SILENT_ENABLED
+
+#define WRAP_PRINTF(name)                                                                                              \
+	WRAP_DISABLE_DECL(name)                                                                                            \
+	int __wrap_##name(const char *format, ...) {                                                                       \
+		va_list va;                                                                                                    \
+		va_start(va, format);                                                                                          \
+		const int ret = vprintf(format, va);                                                                           \
+		va_end(va);                                                                                                    \
+		return ret;                                                                                                    \
+	}
+
+#define WRAP_VPRINTF(name)                                                                                             \
+	WRAP_DISABLE_DECL(name)                                                                                            \
+	int __wrap_##name(const char *format, va_list arg) {                                                               \
+		return vprintf(format, arg);                                                                                   \
+	}
+
+#elif LT_UART_SILENT_ALL
 
 #define WRAP_PRINTF(name)                                                                                              \
 	WRAP_DISABLE_DECL(name)                                                                                            \
@@ -82,7 +100,7 @@ void putchar_p(char c, unsigned long port);
 		return 0;                                                                                                      \
 	}
 
-#else // !LT_UART_SILENT_ALL
+#else // !LT_UART_SILENT_ENABLED || !LT_UART_SILENT_ALL
 
 #define WRAP_PRINTF(name)                                                                                              \
 	WRAP_DISABLE_DECL(name)                                                                                            \
@@ -102,7 +120,7 @@ void putchar_p(char c, unsigned long port);
 		return vprintf(format, arg);                                                                                   \
 	}
 
-#endif // !LT_UART_SILENT_ALL
+#endif // !LT_UART_SILENT_ENABLED || !LT_UART_SILENT_ALL
 
 #define WRAP_SPRINTF(name)                                                                                             \
 	int __wrap_##name(char *s, const char *format, ...) {                                                              \

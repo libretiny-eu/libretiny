@@ -52,4 +52,4 @@ uint32_t lt_flash_read(uint32_t offset, uint8_t *data, size_t length);
  * @param length length of data to write
  * @return length of data successfully written (should equal 'length')
  */
-uint32_t lt_flash_write(uint32_t offset, uint8_t *data, size_t length);
+uint32_t lt_flash_write(uint32_t offset, const uint8_t *data, size_t length);

@@ -83,7 +83,7 @@ Options for controlling default UART log output.
 - `LT_UART_DEFAULT_LOGGER` (unset) - override default output port for LT logger only
 - `LT_UART_DEFAULT_SERIAL` (unset) - override default output port for `Serial` class (without a number)
 - `LT_UART_SILENT_ENABLED` (1) - enable auto-silencing of SDK "loggers"; this makes the serial output much more readable, but can hide some error messages
-- `LT_UART_SILENT_ALL` (0) - disable all SDK output (LT output and logger still work)
+- `LT_UART_SILENT_ALL` (0) - disable all SDK output (LT output and logger still work); since v1.0.0 this has no effect if `LT_UART_SILENT_ENABLED` is 0
 
 !!! info
 	Values 0, 1 and 2 correspond to physical UART port numbers (refer to board pinout for the available ports).

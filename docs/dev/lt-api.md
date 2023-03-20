@@ -138,6 +138,20 @@ This API is available using:
    end="# Detailed Description"
 %}
 
+### ESP (compatibility class)
+
+{%
+	include-markdown "../../ltapi/class_esp_class.md"
+   start="# Detailed Description\n"
+   end="## Public Functions Documentation"
+%}
+
+{%
+	include-markdown "../../ltapi/class_esp_class.md"
+   start="## Public Functions\n"
+   end="# Detailed Description"
+%}
+
 ### Arduino custom API
 
 These functions extend the standard Wiring (Arduino) library, to provide additional features.

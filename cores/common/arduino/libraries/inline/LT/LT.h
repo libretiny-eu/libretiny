@@ -3,6 +3,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <ESP.h>
 #include <OTA.h>
 #include <WDT.h>
 

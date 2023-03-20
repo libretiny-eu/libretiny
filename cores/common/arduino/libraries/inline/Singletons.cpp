@@ -7,4 +7,5 @@
 LibreTuya LT;
 LibreTuyaOTA OTA;
 LibreTuyaWDT WDT;
+EspClass ESP;
 FlashClass Flash;

@@ -27,7 +27,7 @@ class FlashClass {
 	}
 
 	/** @copydoc lt_flash_write() */
-	inline bool writeBlock(uint32_t offset, uint8_t *data, size_t length) {
+	inline bool writeBlock(uint32_t offset, const uint8_t *data, size_t length) {
 		//
 		return lt_flash_write(offset, data, length) == length;
 	}
