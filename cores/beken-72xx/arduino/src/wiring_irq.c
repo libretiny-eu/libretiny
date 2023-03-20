@@ -9,30 +9,25 @@ static void *irqHandlerArgs[PINS_COUNT] = {NULL};
 static bool irqChangeList[PINS_COUNT];
 
 static void irqHandler(unsigned char gpio) {
-	int pin = -1;
-	for (pin_size_t i = 0; i < PINS_COUNT; i++) {
-		if (pinTable[i].gpio == gpio) {
-			pin = i;
-			break;
+	PinInfo *pin = pinByGpio(gpio);
+	if (pin == NULL)
+		return;
+	uint32_t index = pinIndex(pin);
+	if (!irqHandlerList[index])
+		return;
+	if (irqChangeList[index]) {
+		if (pin->mode == INPUT_PULLDOWN) {
+			pin->mode = INPUT_PULLUP;
+			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
+		} else if (pin->mode == INPUT_PULLUP) {
+			pin->mode = INPUT_PULLDOWN;
+			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_RISING, irqHandler);
 		}
 	}
-	if (pin == -1)
-		return;
-	if (!irqHandlerList[pin])
-		return;
-	if (irqChangeList[pin]) {
-		if (pinTable[pin].mode == INPUT_PULLDOWN) {
-			pinTable[pin].mode = INPUT_PULLUP;
-			gpio_int_enable(pinTable[pin].gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
-		} else if (pinTable[pin].mode == INPUT_PULLUP) {
-			pinTable[pin].mode = INPUT_PULLDOWN;
-			gpio_int_enable(pinTable[pin].gpio, GPIO_INT_LEVEL_RISING, irqHandler);
-		}
-	}
-	if (irqHandlerArgs[pin] == NULL) {
-		((voidFuncPtr)irqHandlerList[pin])();
+	if (irqHandlerArgs[index] == NULL) {
+		((voidFuncPtr)irqHandlerList[index])();
 	} else {
-		((voidFuncPtrParam)irqHandlerList[pin])(irqHandlerArgs[pin]);
+		((voidFuncPtrParam)irqHandlerList[index])(irqHandlerArgs[index]);
 	}
 }
 
@@ -46,6 +41,7 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		return;
 	if (!pinSupported(pin, PIN_IRQ))
 		return;
+	uint32_t index	= pinIndex(pin);
 	uint32_t event	= 0;
 	PinMode modeNew = 0;
 	bool change		= 0;
@@ -79,9 +75,9 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		default:
 			return;
 	}
-	irqHandlerList[interruptNumber] = callback;
-	irqHandlerArgs[interruptNumber] = param;
-	irqChangeList[interruptNumber]	= change;
+	irqHandlerList[index] = callback;
+	irqHandlerArgs[index] = param;
+	irqChangeList[index]  = change;
 	gpio_int_enable(pin->gpio, event, irqHandler);
 	pin->enabled |= PIN_IRQ | PIN_GPIO;
 	pin->mode = modeNew;
@@ -93,9 +89,10 @@ void detachInterrupt(pin_size_t interruptNumber) {
 		return;
 	if (!pinSupported(pin, PIN_IRQ))
 		return;
-	irqHandlerList[interruptNumber] = NULL;
-	irqHandlerArgs[interruptNumber] = NULL;
-	irqChangeList[interruptNumber]	= false;
+	uint32_t index		  = pinIndex(pin);
+	irqHandlerList[index] = NULL;
+	irqHandlerArgs[index] = NULL;
+	irqChangeList[index]  = false;
 	gpio_int_disable(pin->gpio);
 	pin->enabled &= ~PIN_IRQ;
 }

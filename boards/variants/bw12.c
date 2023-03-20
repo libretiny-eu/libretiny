@@ -2,14 +2,12 @@
 
 #include <Arduino.h>
 
-extern "C" {
-
 #ifdef LT_VARIANT_INCLUDE
 #include LT_VARIANT_INCLUDE
 #endif
 
 // clang-format off
-PinInfo pinTable[PINS_COUNT] = {
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: PA05, PWM4, WAKE1
 	{PA_5,  PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
 	// D1: PA29, UART2_RX, I2C0_SCL, PWM4
@@ -33,6 +31,18 @@ PinInfo pinTable[PINS_COUNT] = {
 	// D10: PA23, UART0_TX, SPI0_MOSI, SPI1_MOSI, I2C1_SDA, SD_D1, PWM0, WAKE3
 	{PA_23, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_I2C | PIN_SPI | PIN_UART,           PIN_NONE, 0},
 };
-// clang-format on
 
-} // extern "C"
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[0]  = &(lt_arduino_pin_info_list[2]),  // PA_0 (D2)
+	[5]  = &(lt_arduino_pin_info_list[0]),  // PA_5 (D0)
+	[12] = &(lt_arduino_pin_info_list[7]),  // PA_12 (D7)
+	[14] = &(lt_arduino_pin_info_list[6]),  // PA_14 (D6)
+	[15] = &(lt_arduino_pin_info_list[8]),  // PA_15 (D8)
+	[18] = &(lt_arduino_pin_info_list[9]),  // PA_18 (D9)
+	[19] = &(lt_arduino_pin_info_list[3]),  // PA_19 (D3)
+	[22] = &(lt_arduino_pin_info_list[4]),  // PA_22 (D4)
+	[23] = &(lt_arduino_pin_info_list[10]), // PA_23 (D10)
+	[29] = &(lt_arduino_pin_info_list[1]),  // PA_29 (D1)
+	[30] = &(lt_arduino_pin_info_list[5]),  // PA_30 (D5)
+};
+// clang-format on

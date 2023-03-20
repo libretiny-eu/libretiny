@@ -33,24 +33,42 @@ void runPeriodicTasks() {
 }
 
 /**
- * @brief Check if pin is invalid (too low or too high).
- */
-bool pinInvalid(pin_size_t pinNumber) {
-#ifdef PINS_COUNT
-	return pinNumber < 0 || pinNumber >= PINS_COUNT;
-#else
-	return false;
-#endif
-}
-
-/**
  * @brief Get PinInfo struct for the specified number.
  * Returns NULL if pin number is invalid.
  */
 PinInfo *pinInfo(pin_size_t pinNumber) {
-	if (pinInvalid(pinNumber))
+	if (pinNumber < 0 || pinNumber > PINS_GPIO_MAX)
 		return NULL;
-	return &(pinTable[pinNumber]);
+	return lt_arduino_pin_gpio_map[pinNumber];
+}
+
+/**
+ * @brief Get PinInfo struct for the specified index.
+ * Returns NULL if pin index is invalid.
+ */
+PinInfo *pinByIndex(uint32_t index) {
+	if (index < 0 || index >= PINS_COUNT)
+		return NULL;
+	return &(lt_arduino_pin_info_list[index]);
+}
+
+/**
+ * @brief Find PinInfo struct by GPIO number.
+ * Returns NULL if not found.
+ */
+PinInfo *pinByGpio(uint32_t gpio) {
+	for (uint32_t i = 0; i < PINS_COUNT; i++) {
+		if (lt_arduino_pin_info_list[i].gpio == gpio)
+			return &(lt_arduino_pin_info_list[i]);
+	}
+	return NULL;
+}
+
+/**
+ * @brief Get index of PinInfo in the global pin info table.
+ */
+uint32_t pinIndex(PinInfo *pin) {
+	return pin - lt_arduino_pin_info_list;
 }
 
 /**

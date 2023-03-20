@@ -2,14 +2,12 @@
 
 #include <Arduino.h>
 
-extern "C" {
-
 #ifdef LT_VARIANT_INCLUDE
 #include LT_VARIANT_INCLUDE
 #endif
 
 // clang-format off
-PinInfo pinTable[PINS_COUNT] = {
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: PA15, PWM1, SWDIO
 	{PA_15, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_SWD,                                PIN_NONE, 0},
 	// D1: PA14, PWM0, SWCLK
@@ -21,6 +19,12 @@ PinInfo pinTable[PINS_COUNT] = {
 	// D4: PA12, PWM3
 	{PA_12, PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
 };
-// clang-format on
 
-} // extern "C"
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[5]  = &(lt_arduino_pin_info_list[2]), // PA_5 (D2)
+	[12] = &(lt_arduino_pin_info_list[4]), // PA_12 (D4)
+	[14] = &(lt_arduino_pin_info_list[1]), // PA_14 (D1)
+	[15] = &(lt_arduino_pin_info_list[0]), // PA_15 (D0)
+	[22] = &(lt_arduino_pin_info_list[3]), // PA_22 (D3)
+};
+// clang-format on

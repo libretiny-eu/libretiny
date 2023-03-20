@@ -2,14 +2,12 @@
 
 #include <Arduino.h>
 
-extern "C" {
-
 #ifdef LT_VARIANT_INCLUDE
 #include LT_VARIANT_INCLUDE
 #endif
 
 // clang-format off
-PinInfo pinTable[PINS_COUNT] = {
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: P0, UART2_TX, I2C2_SCL
 	{GPIO0,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,           PIN_NONE, 0},
 	// D1: P1, UART2_RX, I2C2_SDA
@@ -87,6 +85,45 @@ PinInfo pinTable[PINS_COUNT] = {
 	// D37: P39, DVP_PD7
 	{GPIO39, PIN_GPIO | PIN_IRQ,                                PIN_NONE, 0},
 };
-// clang-format on
 
-} // extern "C"
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[0]  = &(lt_arduino_pin_info_list[0]),  // GPIO0 (D0)
+	[1]  = &(lt_arduino_pin_info_list[1]),  // GPIO1 (D1)
+	[2]  = &(lt_arduino_pin_info_list[2]),  // GPIO2 (D2)
+	[3]  = &(lt_arduino_pin_info_list[3]),  // GPIO3 (D3)
+	[4]  = &(lt_arduino_pin_info_list[4]),  // GPIO4 (D4)
+	[5]  = &(lt_arduino_pin_info_list[5]),  // GPIO5 (D5)
+	[6]  = &(lt_arduino_pin_info_list[6]),  // GPIO6 (D6)
+	[7]  = &(lt_arduino_pin_info_list[7]),  // GPIO7 (D7)
+	[10] = &(lt_arduino_pin_info_list[8]),  // GPIO10 (D8)
+	[11] = &(lt_arduino_pin_info_list[9]),  // GPIO11 (D9)
+	[12] = &(lt_arduino_pin_info_list[10]), // GPIO12 (D10)
+	[13] = &(lt_arduino_pin_info_list[11]), // GPIO13 (D11)
+	[14] = &(lt_arduino_pin_info_list[12]), // GPIO14 (D12)
+	[15] = &(lt_arduino_pin_info_list[13]), // GPIO15 (D13)
+	[16] = &(lt_arduino_pin_info_list[14]), // GPIO16 (D14)
+	[17] = &(lt_arduino_pin_info_list[15]), // GPIO17 (D15)
+	[18] = &(lt_arduino_pin_info_list[16]), // GPIO18 (D16)
+	[19] = &(lt_arduino_pin_info_list[17]), // GPIO19 (D17)
+	[20] = &(lt_arduino_pin_info_list[18]), // GPIO20 (D18)
+	[21] = &(lt_arduino_pin_info_list[19]), // GPIO21 (D19)
+	[22] = &(lt_arduino_pin_info_list[20]), // GPIO22 (D20)
+	[23] = &(lt_arduino_pin_info_list[21]), // GPIO23 (D21)
+	[24] = &(lt_arduino_pin_info_list[22]), // GPIO24 (D22)
+	[25] = &(lt_arduino_pin_info_list[23]), // GPIO25 (D23)
+	[26] = &(lt_arduino_pin_info_list[24]), // GPIO26 (D24)
+	[27] = &(lt_arduino_pin_info_list[25]), // GPIO27 (D25)
+	[28] = &(lt_arduino_pin_info_list[26]), // GPIO28 (D26)
+	[29] = &(lt_arduino_pin_info_list[27]), // GPIO29 (D27)
+	[30] = &(lt_arduino_pin_info_list[28]), // GPIO30 (D28)
+	[31] = &(lt_arduino_pin_info_list[29]), // GPIO31 (D29)
+	[32] = &(lt_arduino_pin_info_list[30]), // GPIO32 (D30)
+	[33] = &(lt_arduino_pin_info_list[31]), // GPIO33 (D31)
+	[34] = &(lt_arduino_pin_info_list[32]), // GPIO34 (D32)
+	[35] = &(lt_arduino_pin_info_list[33]), // GPIO35 (D33)
+	[36] = &(lt_arduino_pin_info_list[34]), // GPIO36 (D34)
+	[37] = &(lt_arduino_pin_info_list[35]), // GPIO37 (D35)
+	[38] = &(lt_arduino_pin_info_list[36]), // GPIO38 (D36)
+	[39] = &(lt_arduino_pin_info_list[37]), // GPIO39 (D37)
+};
+// clang-format on

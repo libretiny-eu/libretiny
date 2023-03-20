@@ -2,14 +2,12 @@
 
 #include <Arduino.h>
 
-extern "C" {
-
 #ifdef LT_VARIANT_INCLUDE
 #include LT_VARIANT_INCLUDE
 #endif
 
 // clang-format off
-PinInfo pinTable[PINS_COUNT] = {
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: P6, PWM0
 	{GPIO6,  PIN_GPIO | PIN_IRQ | PIN_PWM,                      PIN_NONE, 0},
 	// D1: P7, PWM1
@@ -33,6 +31,18 @@ PinInfo pinTable[PINS_COUNT] = {
 	// D10: P21, I2C1_SDA, TMS, MCLK, ^FCS
 	{GPIO21, PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_I2S | PIN_JTAG, PIN_NONE, 0},
 };
-// clang-format on
 
-} // extern "C"
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[0]  = &(lt_arduino_pin_info_list[8]),  // GPIO0 (D8)
+	[1]  = &(lt_arduino_pin_info_list[9]),  // GPIO1 (D9)
+	[6]  = &(lt_arduino_pin_info_list[0]),  // GPIO6 (D0)
+	[7]  = &(lt_arduino_pin_info_list[1]),  // GPIO7 (D1)
+	[8]  = &(lt_arduino_pin_info_list[2]),  // GPIO8 (D2)
+	[10] = &(lt_arduino_pin_info_list[4]),  // GPIO10 (D4)
+	[11] = &(lt_arduino_pin_info_list[5]),  // GPIO11 (D5)
+	[21] = &(lt_arduino_pin_info_list[10]), // GPIO21 (D10)
+	[23] = &(lt_arduino_pin_info_list[3]),  // GPIO23 (D3)
+	[24] = &(lt_arduino_pin_info_list[6]),  // GPIO24 (D6)
+	[26] = &(lt_arduino_pin_info_list[7]),  // GPIO26 (D7)
+};
+// clang-format on

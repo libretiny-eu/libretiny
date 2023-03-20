@@ -45,8 +45,8 @@ bool TwoWire::setPins(int8_t sda, int8_t scl) {
 	// set private pins
 	_sda = sda;
 	_scl = scl;
-	sda	 = pinTable[sda].gpio;
-	scl	 = pinTable[scl].gpio;
+	sda	 = pinInfo(sda)->gpio;
+	scl	 = pinInfo(scl)->gpio;
 
 	// check if pins are valid
 	if ((sda == PA_4 || sda == PA_19 || sda == PA_30) && (scl == PA_1 || scl == PA_22 || scl == PA_29)) {
@@ -81,7 +81,7 @@ bool TwoWire::begin(int8_t sda, int8_t scl, uint32_t frequency) {
 		frequency = WIRE_DEFAULT_FREQ;
 
 	_i2c = new i2c_t;
-	i2c_init(_i2c, (PinName)pinTable[_sda].gpio, (PinName)pinTable[_scl].gpio);
+	i2c_init(_i2c, (PinName)pinInfo(_sda)->gpio, (PinName)pinInfo(_scl)->gpio);
 	i2c_frequency(_i2c, frequency);
 	_freq = frequency;
 	return true;

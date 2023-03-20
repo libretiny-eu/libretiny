@@ -40,7 +40,8 @@ typedef struct {
 	uint32_t mode;
 } PinInfo;
 
-extern PinInfo pinTable[];
+extern PinInfo lt_arduino_pin_info_list[PINS_COUNT];
+extern PinInfo *lt_arduino_pin_gpio_map[PINS_GPIO_MAX + 1];
 
 // Custom Wiring methods
 
@@ -54,8 +55,10 @@ bool startMainTask(void);
 void mainTask(const void *arg); // implemented in main.cpp
 void runPeriodicTasks();		// implemented in wiring_custom.c
 
-bool pinInvalid(pin_size_t pinNumber);
 PinInfo *pinInfo(pin_size_t pinNumber);
+PinInfo *pinByIndex(uint32_t index);
+PinInfo *pinByGpio(uint32_t gpio);
+uint32_t pinIndex(PinInfo *pin);
 bool pinSupported(PinInfo *pin, uint32_t mask);
 bool pinEnabled(PinInfo *pin, uint32_t mask);
 bool pinIsOutput(PinInfo *pin);

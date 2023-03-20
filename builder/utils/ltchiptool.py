@@ -48,6 +48,7 @@ def env_uf2ota(env: Environment, *args, **kwargs):
         f"--lt-version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
+        "--legacy",
         *env["UF2OTA"],
     ]
 

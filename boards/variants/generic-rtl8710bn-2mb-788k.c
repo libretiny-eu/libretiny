@@ -1,15 +1,13 @@
-/* This file was auto-generated from generic-rtl8710bn-2mb-468k.json using boardgen */
+/* This file was auto-generated from generic-rtl8710bn-2mb-788k.json using boardgen */
 
 #include <Arduino.h>
-
-extern "C" {
 
 #ifdef LT_VARIANT_INCLUDE
 #include LT_VARIANT_INCLUDE
 #endif
 
 // clang-format off
-PinInfo pinTable[PINS_COUNT] = {
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: PA00, PWM2
 	{PA_0,  PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
 	// D1: PA05, PWM4, WAKE1
@@ -47,6 +45,25 @@ PinInfo pinTable[PINS_COUNT] = {
 	// A1: ADC2
 	{AD_2,  PIN_ADC,                                                               PIN_NONE, 0},
 };
-// clang-format on
 
-} // extern "C"
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[0]  = &(lt_arduino_pin_info_list[0]),  // PA_0 (D0)
+	[5]  = &(lt_arduino_pin_info_list[1]),  // PA_5 (D1)
+	[6]  = &(lt_arduino_pin_info_list[2]),  // PA_6 (D2)
+	[7]  = &(lt_arduino_pin_info_list[3]),  // PA_7 (D3)
+	[8]  = &(lt_arduino_pin_info_list[4]),  // PA_8 (D4)
+	[9]  = &(lt_arduino_pin_info_list[5]),  // PA_9 (D5)
+	[10] = &(lt_arduino_pin_info_list[6]),  // PA_10 (D6)
+	[11] = &(lt_arduino_pin_info_list[7]),  // PA_11 (D7)
+	[12] = &(lt_arduino_pin_info_list[8]),  // PA_12 (D8)
+	[14] = &(lt_arduino_pin_info_list[9]),  // PA_14 (D9)
+	[15] = &(lt_arduino_pin_info_list[10]), // PA_15 (D10)
+	[18] = &(lt_arduino_pin_info_list[11]), // PA_18 (D11)
+	[19] = &(lt_arduino_pin_info_list[12]), // PA_19 (D12)
+	[22] = &(lt_arduino_pin_info_list[13]), // PA_22 (D13)
+	[23] = &(lt_arduino_pin_info_list[14]), // PA_23 (D14)
+	[29] = &(lt_arduino_pin_info_list[15]), // PA_29 (D15)
+	[30] = &(lt_arduino_pin_info_list[16]), // PA_30 (D16)
+	[41] = &(lt_arduino_pin_info_list[17]), // AD_2 (A1)
+};
+// clang-format on

@@ -5,10 +5,10 @@ extern void *gpio_pin_struct[PINS_COUNT];
 static void *gpio_irq_handler_list[PINS_COUNT] = {NULL};
 static void *gpio_irq_handler_args[PINS_COUNT] = {NULL};
 
-extern bool pinInvalid(pin_size_t pinNumber);
 extern void pinRemoveMode(pin_size_t pinNumber);
 
 static void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
+	// id is pin index
 	if (gpio_irq_handler_list[id] != NULL) {
 		if (gpio_irq_handler_args[id] == NULL)
 			((voidFuncPtr)gpio_irq_handler_list[id])();
@@ -22,33 +22,35 @@ void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus
 }
 
 void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback, PinStatus mode, void *param) {
-	if (pinInvalid(interruptNumber))
+	PinInfo *pin = pinInfo(interruptNumber);
+	if (pin == NULL)
 		return;
+	uint32_t index = pinIndex(pin);
 
-	gpio_irq_handler_list[interruptNumber] = callback;
-	gpio_irq_handler_args[interruptNumber] = param;
+	gpio_irq_handler_list[index] = callback;
+	gpio_irq_handler_args[index] = param;
 
-	if (pinTable[interruptNumber].enabled == PIN_IRQ && pinTable[interruptNumber].mode == mode)
+	if (pin->enabled == PIN_IRQ && pin->mode == mode)
 		// Nothing changes in pin mode
 		return;
 
-	if (pinTable[interruptNumber].enabled != PIN_IRQ)
+	if (pin->enabled != PIN_IRQ)
 		// pin mode changes; deinit gpio and free memory
 		pinRemoveMode(interruptNumber);
 
 	gpio_irq_t *gpio;
 
-	if (pinTable[interruptNumber].enabled == PIN_NONE) {
+	if (pin->enabled == PIN_NONE) {
 		// allocate memory if pin not used before
-		gpio							 = malloc(sizeof(gpio_irq_t));
-		gpio_pin_struct[interruptNumber] = gpio;
-		gpio_irq_init(gpio, pinTable[interruptNumber].gpio, gpioIrqHandler, interruptNumber);
-		pinTable[interruptNumber].enabled = PIN_IRQ;
+		gpio				   = malloc(sizeof(gpio_irq_t));
+		gpio_pin_struct[index] = gpio;
+		gpio_irq_init(gpio, pin->gpio, gpioIrqHandler, index);
+		pin->enabled = PIN_IRQ;
 	} else {
 		// pin already used as irq
-		gpio = (gpio_irq_t *)gpio_pin_struct[interruptNumber];
+		gpio = (gpio_irq_t *)gpio_pin_struct[index];
 	}
-	pinTable[interruptNumber].mode = mode;
+	pin->mode = mode;
 
 	gpio_irq_event event;
 
@@ -74,11 +76,13 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 }
 
 void detachInterrupt(pin_size_t interruptNumber) {
-	if (pinInvalid(interruptNumber))
+	PinInfo *pin = pinInfo(interruptNumber);
+	if (pin == NULL)
 		return;
+	uint32_t index = pinIndex(pin);
 
-	if (pinTable[interruptNumber].enabled == PIN_IRQ) {
+	if (pin->enabled == PIN_IRQ) {
 		pinRemoveMode(interruptNumber);
 	}
-	gpio_irq_handler_list[interruptNumber] = NULL;
+	gpio_irq_handler_list[index] = NULL;
 }

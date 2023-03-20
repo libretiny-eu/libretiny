@@ -25,23 +25,28 @@ extern void *gpio_pin_struct[];
  * or LOW, the type of pulse to measure.  Works on pulses from 2-3 microseconds
  * to 3 minutes in length, but must be called at least a few dozen microseconds
  * before the start of the pulse. */
-extern unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout) {
+extern unsigned long pulseIn(uint8_t pinNumber, uint8_t state, unsigned long timeout) {
 	// cache the port and bit of the pin in order to speed up the
 	// pulse width measuring loop and achieve finer resolution.  calling
 	// digitalRead() instead yields much coarser resolution.
+	PinInfo *pin = pinInfo(pinNumber);
+	if (pin == NULL)
+		return;
+	uint32_t index = pinIndex(pin);
+
 	gpio_t *pGpio_t;
 
 	uint32_t start_ticks, cur_ticks;
 
-	if (pin < 0 || pin > PINS_COUNT || (pinTable[pin].gpio == NC))
+	if (pin < 0 || pin > PINS_COUNT || (pin->gpio == NC))
 		return 0;
 
 	/* Handle */
-	if (pinTable[pin].enabled != PIN_GPIO) {
+	if (pin->enabled != PIN_GPIO) {
 		return 0;
 	}
 
-	pGpio_t = (gpio_t *)gpio_pin_struct[pin];
+	pGpio_t = (gpio_t *)gpio_pin_struct[index];
 
 	// wait for any previous pulse to end
 	start_ticks = us_ticker_read();

@@ -59,7 +59,7 @@ queue.AddLibrary(
     name="board_${VARIANT}",
     base_dir="$VARIANTS_DIR",
     srcs=[
-        "+<${VARIANT}.cpp>",
+        "+<${VARIANT}.c>",
     ],
     # not adding includes since they're added with the base core
 )
