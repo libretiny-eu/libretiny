@@ -51,6 +51,8 @@ env.Replace(
 env.ConfigureEnvironment(platform, board)
 # Flash layout defines
 env.AddFlashLayout(board)
+# Parse custom options
+env.ParseCustomOptions(platform)
 
 # Family builders details:
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources

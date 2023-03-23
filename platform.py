@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
 import importlib
+import json
 import platform
 import sys
 from os import system
@@ -110,6 +111,11 @@ class LibretuyaPlatform(PlatformBase):
         self.custom_opts = {}
         self.versions = {}
 
+    def print(self, *args, **kwargs):
+        if not self.verbose:
+            return
+        print(*args, **kwargs)
+
     def get_package_spec(self, name, version=None):
         # make PlatformIO detach existing package versions instead of overwriting
         # TODO this is an ugly hack, it moves old packages to dirs like "library-lwip@src-21d717f2feaca73533f129ce05c9f4d4"
@@ -121,6 +127,10 @@ class LibretuyaPlatform(PlatformBase):
     def configure_default_packages(self, options, targets):
         from ltchiptool.util.dict import RecursiveDict
 
+        self.verbose = (
+            "-v" in sys.argv or "--verbose" in sys.argv or "PIOVERBOSE=1" in sys.argv
+        )
+
         pioframework = options.get("pioframework") or ["base"]
         if not pioframework:
             return
@@ -131,7 +141,13 @@ class LibretuyaPlatform(PlatformBase):
         for key, value in options.items():
             if not key.startswith("custom_"):
                 continue
-            self.custom_opts[key[7:]] = value
+            key = key[7:]
+            parent, sep, child = key.partition(".")
+            if parent == "options":
+                # allow only one level of nesting ('child' may be a header name, which contains a dot)
+                child = child.replace(".", "#")
+            self.custom_opts[parent + sep + child] = value
+        self.print("Custom options:", json.dumps(self.custom_opts, indent="\t"))
 
         # update framework names to their new values since v1.0.0
         if framework.endswith("-sdk"):

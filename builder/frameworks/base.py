@@ -3,7 +3,7 @@
 from os.path import join
 
 import click
-from ltchiptool import Family, get_version
+from ltchiptool import Family
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Errors import UserError
@@ -14,11 +14,10 @@ board: PlatformBoardConfig = env.BoardConfig()
 platform: PlatformBase = env.PioPlatform()
 family: Family = env["FAMILY_OBJ"]
 
-# Print information about installed core versions
-lt_version: str = env.ReadLTVersion(platform.get_dir(), platform.version)
-print("PLATFORM VERSIONS:")
-print(" - libretuya @", lt_version)
-print(" - ltchiptool @", get_version())
+# Print information about versions and custom options
+env.PrintInfo(platform)
+# Apply custom header options
+env.ApplyCustomOptions(platform)
 
 # TODO remove include path prepending ("!<...>")
 # Move common core sources (env.AddCoreSources()) and Arduino libs
@@ -114,7 +113,7 @@ queue.AppendPublic(
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),
-        ("LT_VERSION", lt_version),
+        ("LT_VERSION", env["LT_VERSION"]),
         ("LT_BOARD", "${VARIANT}"),
         ("LT_VARIANT_H", r"\"${VARIANT}.h\""),
         ("F_CPU", board.get("build.f_cpu")),

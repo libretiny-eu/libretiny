@@ -2,10 +2,12 @@
 
 import json
 import sys
+from os import makedirs
 from os.path import isdir, join
 from subprocess import PIPE, Popen
+from typing import Dict
 
-from ltchiptool import Family
+from ltchiptool import Family, get_version
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
@@ -13,7 +15,7 @@ from SCons.Script import DefaultEnvironment, Environment
 env: Environment = DefaultEnvironment()
 
 
-def env_read_version(env: Environment, platform_dir: str, version: str):
+def read_version(platform_dir: str, version: str):
     if not isdir(join(platform_dir, ".git")):
         sys.stderr.write("Warning! Non-Git installations are NOT SUPPORTED.\n")
         return version
@@ -61,6 +63,7 @@ def env_configure(
         LT_DIR=platform.get_dir(),
         CORES_DIR=join("${LT_DIR}", "cores"),
         COMMON_DIR=join("${LT_DIR}", "cores", "common"),
+        LT_VERSION=read_version(platform.get_dir(), platform.version),
         # Build directories & paths
         VARIANTS_DIR=join("${LT_DIR}", "boards", "variants"),
         FAMILY_DIR=join("${LT_DIR}", "cores", "${FAMILY_NAME}"),
@@ -86,5 +89,90 @@ def env_configure(
     return family
 
 
+def env_print_info(env: Environment, platform: PlatformBase):
+    TAB = " " * 4
+
+    def dump(k, v, indent=""):
+        k = k.replace("#", ".")
+        if isinstance(v, dict):
+            print(f"{indent} - {k}:")
+            for k, v in v.items():
+                dump(k, v, indent + TAB)
+        elif isinstance(v, list):
+            print(f"{indent} - {k}:")
+            for k, v in enumerate(v):
+                dump(k, v, indent + TAB)
+        else:
+            print(f"{indent} - {k} = {v}")
+
+    # Print information about installed core versions
+    print("PLATFORM VERSIONS:")
+    print(" - libretuya @", env["LT_VERSION"])
+    print(" - ltchiptool @", get_version())
+    # Print custom platformio.ini options
+    if platform.custom_opts:
+        print("CUSTOM OPTIONS:")
+        for k, v in platform.custom_opts.items():
+            dump(k, v)
+
+
+def env_parse_custom_options(env: Environment, platform: PlatformBase):
+    opts = platform.custom_opts.get("options", None)
+    if not opts:
+        return
+    headers = {
+        "lwip": "lwipopts.h",
+        "freertos": "FreeRTOSConfig.h",
+    }
+    for header, options in list(opts.items()):
+        if not isinstance(options, str):
+            raise TypeError("Options value should be str")
+        options = options.strip().splitlines()
+        opts_dict = {}
+        for line in options:
+            if "=" not in line:
+                raise ValueError(f"Invalid option: {line}")
+            k, _, v = line.partition("=")
+            k = k.strip()
+            v = v.strip()
+            opts_dict[k] = v
+        # replace predefined header names
+        opts.pop(header)
+        header = headers.get(header, header)
+        header = header.replace(".", "#")
+        opts[header] = opts_dict
+
+
+def env_apply_custom_options(env: Environment, platform: PlatformBase):
+    opts = platform.custom_opts.get("options", None)
+    if not opts:
+        return
+    header_dir = join("${BUILD_DIR}", "include")
+    real_dir = env.subst(header_dir)
+    makedirs(real_dir, exist_ok=True)
+
+    for header, options in opts.items():
+        header: str
+        options: Dict[str, str]
+        # open the header file for writing
+        header = header.replace("#", ".")
+        f = open(join(real_dir, header), "w")
+        f.write(f'#include_next "{header}"\n' "\n" "#pragma once\n" "\n")
+        # write all #defines
+        for k, v in options.items():
+            f.write(
+                f"// {k} = {v}\n"
+                f"#ifdef {k}\n"
+                f"#undef {k}\n"
+                f"#endif\n"
+                f"#define {k} {v}\n"
+            )
+        f.close()
+    # prepend newly created headers before any other
+    env.Prepend(CPPPATH=[header_dir])
+
+
 env.AddMethod(env_configure, "ConfigureEnvironment")
-env.AddMethod(env_read_version, "ReadLTVersion")
+env.AddMethod(env_print_info, "PrintInfo")
+env.AddMethod(env_parse_custom_options, "ParseCustomOptions")
+env.AddMethod(env_apply_custom_options, "ApplyCustomOptions")
