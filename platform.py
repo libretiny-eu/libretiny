@@ -2,11 +2,12 @@
 
 import importlib
 import json
+import os
 import platform
 import sys
 from os import system
 from os.path import dirname
-from typing import Dict
+from typing import Dict, List
 
 import click
 from platformio.debug.config.base import DebugConfigBase
@@ -114,7 +115,10 @@ class LibretuyaPlatform(PlatformBase):
     def print(self, *args, **kwargs):
         if not self.verbose:
             return
-        print(*args, **kwargs)
+        print(f"platform.py({os.getpid()}):", *args, **kwargs)
+
+    def custom(self, key: str) -> object:
+        return self.custom_opts.get(key, None)
 
     def get_package_spec(self, name, version=None):
         # make PlatformIO detach existing package versions instead of overwriting
@@ -124,12 +128,13 @@ class LibretuyaPlatform(PlatformBase):
         spec._name_is_custom = False
         return spec
 
-    def configure_default_packages(self, options, targets):
+    def configure_default_packages(self, options: dict, targets: List[str]):
         from ltchiptool.util.dict import RecursiveDict
 
         self.verbose = (
             "-v" in sys.argv or "--verbose" in sys.argv or "PIOVERBOSE=1" in sys.argv
         )
+        self.print(f"configure_default_packages(targets={targets})")
 
         pioframework = options.get("pioframework") or ["base"]
         if not pioframework:
@@ -272,10 +277,8 @@ class LibretuyaPlatform(PlatformBase):
 
         return super().configure_default_packages(options, targets)
 
-    def custom(self, key: str) -> object:
-        return self.custom_opts.get(key, None)
-
     def get_boards(self, id_=None):
+        self.print(f"get_boards(id_={id_})")
         result = PlatformBase.get_boards(self, id_)
         if not result:
             return result
@@ -289,6 +292,14 @@ class LibretuyaPlatform(PlatformBase):
     def update_board(self, board: PlatformBoardConfig):
         if "_base" in board:
             board._manifest = ltchiptool.Board.get_data(board._manifest)
+            board._manifest.pop("_base")
+
+        if self.custom("board"):
+            from ltchiptool.util.dict import merge_dicts
+
+            with open(self.custom("board"), "r") as f:
+                custom_board = json.load(f)
+            board._manifest = merge_dicts(board._manifest, custom_board)
 
         family = board.get("build.family")
         family = ltchiptool.Family.get(short_name=family)
@@ -310,7 +321,8 @@ class LibretuyaPlatform(PlatformBase):
         if "custom" not in debug["tools"]:
             debug["tools"]["custom"] = {}
         init = debug.get("gdb_init", [])
-        init += ["set mem inaccessible-by-default off"]
+        if "set mem inaccessible-by-default off" not in init:
+            init += ["set mem inaccessible-by-default off"]
 
         for link in protocols:
             if link == "openocd":

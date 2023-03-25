@@ -96,7 +96,7 @@ def env_print_info(env: Environment, platform: PlatformBase):
         k = k.replace("#", ".")
         if isinstance(v, dict):
             print(f"{indent} - {k}:")
-            for k, v in v.items():
+            for k, v in sorted(v.items()):
                 dump(k, v, indent + TAB)
         elif isinstance(v, list):
             print(f"{indent} - {k}:")
@@ -112,7 +112,7 @@ def env_print_info(env: Environment, platform: PlatformBase):
     # Print custom platformio.ini options
     if platform.custom_opts:
         print("CUSTOM OPTIONS:")
-        for k, v in platform.custom_opts.items():
+        for k, v in sorted(platform.custom_opts.items()):
             dump(k, v)
 
 

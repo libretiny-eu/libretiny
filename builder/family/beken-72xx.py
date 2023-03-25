@@ -535,7 +535,7 @@ image_app_rblh = "${BUILD_DIR}/image_${MCULC}_app.${FLASH_RBL_OFFSET}.rblh"
 image_ota_rbl = "${BUILD_DIR}/image_${MCULC}_app.ota.rbl"
 env.Replace(
     # linker command (encryption + packaging)
-    LINK="${LTCHIPTOOL} link2bin ${VARIANT} '' ''",
+    LINK="${LTCHIPTOOL} link2bin ${BOARD_JSON} '' ''",
     # UF2OTA input list
     UF2OTA=[
         # app binary image (enc+crc) for flasher

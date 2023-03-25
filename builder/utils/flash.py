@@ -17,10 +17,12 @@ def env_add_flash_layout(env: Environment, board):
         for name, layout in flash_layout.items():
             name = name.upper()
             (offset, _, length) = layout.partition("+")
-            defines[f"FLASH_{name}_OFFSET"] = offset
-            defines[f"FLASH_{name}_LENGTH"] = length
+            offset = int(offset, 16)
+            length = int(length, 16)
+            defines[f"FLASH_{name}_OFFSET"] = f"0x{offset:06X}"
+            defines[f"FLASH_{name}_LENGTH"] = f"0x{length:06X}"
             fal_items += f"FAL_PART_TABLE_ITEM({name.lower()},{name})"
-            flash_size = max(flash_size, int(offset, 16) + int(length, 16))
+            flash_size = max(flash_size, offset + length)
         defines["FLASH_LENGTH"] = f"0x{flash_size:06X}"
         # for "root" partition
         defines["FLASH_ROOT_OFFSET"] = "0x000000"

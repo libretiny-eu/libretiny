@@ -1,9 +1,11 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
+import json
 from datetime import datetime
 from os.path import basename, join, normpath
 
 from platformio.platform.base import PlatformBase
+from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Builder, DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
@@ -43,13 +45,12 @@ def env_uf2ota(env: Environment, *args, **kwargs):
     cmd = [
         "@${LTCHIPTOOL} uf2 write",
         *output_opts,
-        "--family ${FAMILY_SHORT_NAME}",
-        "--board ${VARIANT}",
+        "--board ${BOARD_JSON}",
         f"--lt-version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
         "--legacy",
-        *env["UF2OTA"],
+        *(f'"{arg}"' for arg in env["UF2OTA"]),
     ]
 
     for output in outputs:
@@ -72,6 +73,13 @@ def env_flash_write(env: Environment):
         return []
 
 
+def env_export_board_data(env: Environment, board: PlatformBoardConfig):
+    output = join("${BUILD_DIR}", "board.json")
+    with open(env.subst(output), "w") as f:
+        json.dump(board.manifest, f, indent="\t")
+    env["BOARD_JSON"] = output
+
+
 env.Append(
     BUILDERS=dict(
         BuildUF2OTA=Builder(
@@ -80,3 +88,4 @@ env.Append(
     )
 )
 env.AddMethod(env_flash_write, "GetLtchiptoolWriteFlags")
+env.AddMethod(env_export_board_data, "ExportBoardData")

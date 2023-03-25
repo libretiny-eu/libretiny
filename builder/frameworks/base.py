@@ -14,10 +14,16 @@ board: PlatformBoardConfig = env.BoardConfig()
 platform: PlatformBase = env.PioPlatform()
 family: Family = env["FAMILY_OBJ"]
 
+# Parse custom options
+env.ParseCustomOptions(platform)
+# Add flash layout C defines
+env.AddFlashLayout(board)
+# Write custom header options
+env.ApplyCustomOptions(platform)
+# Export board manifest for ltchiptool
+env.ExportBoardData(board)
 # Print information about versions and custom options
 env.PrintInfo(platform)
-# Apply custom header options
-env.ApplyCustomOptions(platform)
 
 # TODO remove include path prepending ("!<...>")
 # Move common core sources (env.AddCoreSources()) and Arduino libs

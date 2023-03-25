@@ -49,10 +49,6 @@ env.Replace(
 
 # Environment variables, include paths, etc.
 env.ConfigureEnvironment(platform, board)
-# Flash layout defines
-env.AddFlashLayout(board)
-# Parse custom options
-env.ParseCustomOptions(platform)
 
 # Family builders details:
 # - call env.AddLibrary("lib name", "base dir", [sources]) to add lib sources
@@ -72,7 +68,7 @@ env.ParseCustomOptions(platform)
 
 # Framework builder (base.py/arduino.py) is executed in BuildProgram()
 # Force including the base framework in case no other is specified
-if not env.get("PIOFRAMEWORK"):
+if "nobuild" not in COMMAND_LINE_TARGETS and not env.get("PIOFRAMEWORK"):
     env.SConscript("frameworks/base.py")
 
 #

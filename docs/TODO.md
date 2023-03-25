@@ -30,6 +30,12 @@ Explicit is better than implicit.
 
 - write OpenOCD flashers, using uf2ota library + FAL for partitions (in ltchiptool repository)
 
+### Development
+
+- write Contributor's Guide
+- export LT cores in an Arduino IDE-compatible format (automatically - GitHub Actions)
+- consider using precompiled SDK blobs for improved build speed (especially on e.g. Raspberry Pi)
+
 ### Serial
 
 - configuration of RX/TX pins

@@ -296,7 +296,7 @@ image_ota1 = "${BUILD_DIR}/image_ota1.${FLASH_OTA1_OFFSET}.bin"
 image_ota2 = "${BUILD_DIR}/image_ota2.${FLASH_OTA2_OFFSET}.bin"
 env.Replace(
     # linker command (dual .bin outputs)
-    LINK="${LTCHIPTOOL} link2bin ${VARIANT} xip1 xip2",
+    LINK="${LTCHIPTOOL} link2bin ${BOARD_JSON} xip1 xip2",
     # UF2OTA input list
     UF2OTA=[
         # same OTA images for flasher and device
