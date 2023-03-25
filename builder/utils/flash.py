@@ -2,12 +2,50 @@
 
 import re
 from os.path import isfile, join
+from typing import Dict
 
 from ltchiptool.util.fileio import chext
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
+
+
+def env_parse_custom_flash_layout(
+    env: Environment,
+    platform: PlatformBase,
+    board: PlatformBoardConfig,
+):
+    opts: dict = platform.custom_opts.get("flash", None)
+    if not opts:
+        return
+    flash_layout: dict = board.get("flash")
+
+    # find all default partitions
+    partitions: Dict[str, int] = {}
+    flash_size = 0
+    for name, layout in flash_layout.items():
+        (offset, _, length) = layout.partition("+")
+        offset = int(offset, 16)
+        length = int(length, 16)
+        partitions[name] = offset
+        flash_size = max(flash_size, offset + length)
+
+    # set custom offsets
+    for name, offset in opts.items():
+        offset = int(offset, 0)
+        partitions[name] = offset
+
+    # recalculate partition sizes
+    flash_layout = {}
+    partitions = sorted(partitions.items(), key=lambda p: p[1])
+    for i, (name, offset) in enumerate(partitions):
+        end = partitions[i + 1][1] if i + 1 < len(partitions) else flash_size
+        length = end - offset
+        flash_layout[name] = f"0x{offset:06X}+0x{length:X}"
+    board.manifest["flash"] = flash_layout
+    env["FLASH_IS_CUSTOM"] = True
 
 
 def env_add_flash_layout(env: Environment, board: PlatformBoardConfig):
@@ -74,5 +112,6 @@ def env_generate_linker_script(env: Environment, board: PlatformBoardConfig, nam
     env.Prepend(LIBPATH=["${BUILD_DIR}"])
 
 
+env.AddMethod(env_parse_custom_flash_layout, "ParseCustomFlashLayout")
 env.AddMethod(env_add_flash_layout, "AddFlashLayout")
 env.AddMethod(env_generate_linker_script, "GenerateLinkerScript")

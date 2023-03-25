@@ -89,7 +89,11 @@ def env_configure(
     return family
 
 
-def env_print_info(env: Environment, platform: PlatformBase):
+def env_print_info(
+    env: Environment,
+    platform: PlatformBase,
+    board: PlatformBoardConfig,
+):
     TAB = " " * 4
 
     def dump(k, v, indent=""):
@@ -114,10 +118,15 @@ def env_print_info(env: Environment, platform: PlatformBase):
         print("CUSTOM OPTIONS:")
         for k, v in sorted(platform.custom_opts.items()):
             dump(k, v)
+    # Print custom flash layout
+    if env.get("FLASH_IS_CUSTOM", False):
+        print("CUSTOM FLASH LAYOUT:")
+        for k, v in board.get("flash").items():
+            print(f" - {k}: {v}")
 
 
 def env_parse_custom_options(env: Environment, platform: PlatformBase):
-    opts = platform.custom_opts.get("options", None)
+    opts: dict = platform.custom_opts.get("options", None)
     if not opts:
         return
     headers = {

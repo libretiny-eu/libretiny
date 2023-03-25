@@ -16,6 +16,8 @@ family: Family = env["FAMILY_OBJ"]
 
 # Parse custom options
 env.ParseCustomOptions(platform)
+# Parse custom flash layout
+env.ParseCustomFlashLayout(platform, board)
 # Add flash layout C defines
 env.AddFlashLayout(board)
 # Write custom header options
@@ -23,7 +25,7 @@ env.ApplyCustomOptions(platform)
 # Export board manifest for ltchiptool
 env.ExportBoardData(board)
 # Print information about versions and custom options
-env.PrintInfo(platform)
+env.PrintInfo(platform, board)
 
 # TODO remove include path prepending ("!<...>")
 # Move common core sources (env.AddCoreSources()) and Arduino libs
