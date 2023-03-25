@@ -66,6 +66,7 @@ env.Append(
 found = False
 for f in family.inheritance:
     try:
+        env.Prepend(LIBPATH=[join("$CORES_DIR", f.name, "misc")])
         env.SConscript(f"../family/{f.name}.py", must_exist=True)
         found = True
     except UserError:
@@ -90,7 +91,6 @@ for f in family.inheritance:
         env.Prepend(CPPDEFINES=[(f"LT_{f.short_name}", "1")])
     if f.code:
         env.Prepend(CPPDEFINES=[(f"LT_{f.code.upper()}", "1")])
-    env.Prepend(LIBPATH=[join("$CORES_DIR", f.name, "misc")])
 
 # Sources - external libraries
 queue.AddExternalLibrary("ltchiptool")  # uf2ota source code

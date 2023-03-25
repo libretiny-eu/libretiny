@@ -507,6 +507,8 @@ env.Replace(
     SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
+# Generate linker scripts with correct flash offsets
+env.GenerateLinkerScript(board, board.get("build.ldscript"))
 
 
 def to_offset(addr: int) -> int:

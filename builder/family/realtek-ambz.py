@@ -259,6 +259,9 @@ env.Replace(
     SIZECHECKCMD="$SIZETOOL -A -d $SOURCES",
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
+# Generate linker scripts with correct flash offsets
+env.GenerateLinkerScript(board, board.get("build.ldscript"))
+env.GenerateLinkerScript(board, board.get("build.ldscript").replace("xip1", "xip2"))
 
 env.Append(
     BUILDERS=dict(
