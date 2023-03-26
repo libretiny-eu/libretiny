@@ -43,7 +43,7 @@ void UpdateClass::cleanup(uint8_t ardErr, uf2_err_t uf2Err) {
 		printErrorContext1();
 #endif
 
-	free(ctx); // NULL in constructor
+	uf2_ctx_free(ctx); // NULL in constructor
 	ctx = NULL;
 	uf2_info_free(info); // NULL in constructor
 	info = NULL;

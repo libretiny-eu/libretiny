@@ -17,7 +17,7 @@ from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from semantic_version import SimpleSpec, Version
 
-LTCHIPTOOL_VERSION = "^3.0.0"
+LTCHIPTOOL_VERSION = "^4.0.0"
 
 
 # Install & import tools
@@ -27,7 +27,7 @@ def check_ltchiptool(install: bool):
         print("Installing/updating ltchiptool")
         system(
             f"{sys.executable} -m pip install -U --force-reinstall "
-            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 4.0"'
+            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 5.0"'
         )
 
         # unload all modules from the old version

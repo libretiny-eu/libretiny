@@ -93,7 +93,7 @@ def env_generate_linker_script(env: Environment, board: PlatformBoardConfig, nam
     with open(input, "r") as f:
         ldscript = f.read()
 
-    def transform(match: re.Match[str]):
+    def transform(match: re.Match):
         key = match[1]
         if key in env:
             return env[key]

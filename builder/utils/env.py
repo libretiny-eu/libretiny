@@ -8,6 +8,7 @@ from subprocess import PIPE, Popen
 from typing import Dict
 
 from ltchiptool import Family, get_version
+from ltchiptool.util.misc import sizeof
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
@@ -121,8 +122,10 @@ def env_print_info(
     # Print custom flash layout
     if env.get("FLASH_IS_CUSTOM", False):
         print("CUSTOM FLASH LAYOUT:")
-        for k, v in board.get("flash").items():
-            print(f" - {k}: {v}")
+        for name, layout in board.get("flash").items():
+            (_, _, length) = v.partition("+")
+            length = int(length, 16)
+            print(f" - {name}: {layout} ({sizeof(length)})")
 
 
 def env_parse_custom_options(env: Environment, platform: PlatformBase):
