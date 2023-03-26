@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kuba2k2/platformio-libretuya"
   },
-  "version": "0.12.6",
+  "version": "1.0.0-alpha.1",
   "frameworks": {
     "base": {
       "title": "Base Framework (SDK only)",
