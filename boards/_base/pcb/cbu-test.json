@@ -1,0 +1,30 @@
+{
+  "pcb": {
+    "scale": 11,
+    "test_pads": {
+      "TCSN": "cbu.back.csn.anchor"
+    },
+    "back": [
+      {
+        "type": "rect",
+        "pos": "6.0,13",
+        "size": "2.9,2.9",
+        "preset": "copper1"
+      },
+      {
+        "id": "csn",
+        "name": "label_line_2mm_up",
+        "pos": "4.2,15.1",
+        "vars": {
+          "DIR": "left",
+          "W": 0,
+          "H": 0
+        }
+      },
+      {
+        "name": "test_pad_1mm",
+        "pos": "5.0,15.0"
+      }
+    ]
+  }
+}
