@@ -25,8 +25,8 @@ MEMORY
 	XIPBOOT (rx)  :			ORIGIN = 0x08000000+0x20, LENGTH = 0x04000-0x20	/* XIPBOOT: 16k, 32 Bytes resvd for header*/
 	XIPSYS (r) :			ORIGIN = 0x08009000, LENGTH = 0x1000	/* XIPSYS: 4K system data in flash */
 	XIPCAL (r) :			ORIGIN = 0x0800A000, LENGTH = 0x1000	/* XIPCAL: 4K calibration data in flash */
-	XIP1 (rx)  : 			ORIGIN = 0x08000000+0x20+${FLASH_OTA1_OFFSET}, LENGTH = ${FLASH_OTA1_OFFSET}-0x20	/* XIP1, 32 Bytes resvd for header */
-	XIP2 (rx)  : 			ORIGIN = 0x08000000+0x20+${FLASH_OTA2_OFFSET}, LENGTH = ${FLASH_OTA2_OFFSET}-0x20	/* XIP2, 32 Bytes resvd for header */
+	XIP1 (rx)  : 			ORIGIN = 0x08000000+0x20+${FLASH_OTA1_OFFSET}, LENGTH = ${FLASH_OTA1_LENGTH}-0x20	/* XIP1, 32 Bytes resvd for header */
+	XIP2 (rx)  : 			ORIGIN = 0x08000000+0x20+${FLASH_OTA2_OFFSET}, LENGTH = ${FLASH_OTA2_LENGTH}-0x20	/* XIP2, 32 Bytes resvd for header */
 }
 
 
