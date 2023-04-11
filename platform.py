@@ -26,7 +26,7 @@ def check_ltchiptool(install: bool):
         # update ltchiptool to a supported version
         print("Installing/updating ltchiptool")
         system(
-            f"{sys.executable} -m pip install -U --force-reinstall "
+            f'"{sys.executable}" -m pip install -U --force-reinstall '
             f'"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}a0, < 5.0"'
         )
 

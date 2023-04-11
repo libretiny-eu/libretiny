@@ -288,6 +288,7 @@ queue.AddLibrary(
     base_dir=ROOT_DIR,
     srcs=[
         "+<os/**/*.c>",
+        "-<os/platform_stub.c>",
     ],
     includes=[
         "+<os/*>",
