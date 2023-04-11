@@ -10,6 +10,25 @@ custom_fw_name = my_firmware
 # custom firmware version
 # - default: current date in yy.mm.dd format
 custom_fw_version = 1.2.0
+
+# custom build options (#defines, NOT compiler flags)
+custom_options.lwip =
+	LWIP_IPV4 = 1
+custom_options.freertos =
+	configUSE_TICK_HOOK = 1
+
+# partition layout modification (not recommended, unless you know what you're doing)
+custom_flash.app = 0x12000
+
+# custom board JSON (overrides)
+# - path relative to the project directory; only values specified
+#     in the JSON will override the defaults
+#     (it's like using board_build.xxx but for more keys)
+custom_board = myboard.json
+
+# custom library versions (not recommended)
+custom_versions.lwip = 2.1.3
+custom_versions.beken_bdk = 2021.06.07
 ```
 
 ## LibreTuya options
@@ -31,14 +50,16 @@ build_flags =
 
 - `LT_LOGGER` (1) - enable/disable LibreTuya logger globally; disabling this sets the loglevel to `LT_LEVEL_NONE` - the logger can't be enabled even by using `lt_log_set_port()`
 - `LT_LOGLEVEL` - global LT loglevel:
-  - `LT_LEVEL_VERBOSE`
-  - `LT_LEVEL_TRACE` - same as `LT_LEVEL_VERBOSE`
-  - `LT_LEVEL_DEBUG`
-  - `LT_LEVEL_INFO` - default
-  - `LT_LEVEL_WARN`
-  - `LT_LEVEL_ERROR`
-  - `LT_LEVEL_FATAL`
-  - `LT_LEVEL_NONE` - disables everything
+
+	- `LT_LEVEL_VERBOSE`
+	- `LT_LEVEL_TRACE` - same as `LT_LEVEL_VERBOSE`
+	- `LT_LEVEL_DEBUG`
+	- `LT_LEVEL_INFO` - default
+	- `LT_LEVEL_WARN`
+	- `LT_LEVEL_ERROR`
+	- `LT_LEVEL_FATAL`
+	- `LT_LEVEL_NONE` - disables everything
+
 - `LT_LOGGER_TIMESTAMP` (1) - print program runtime in printk-like format
 - `LT_LOGGER_CALLER` (1) - print calling method name
 - `LT_LOGGER_TASK` (1) - print calling FreeRTOS task (if available)

@@ -51,7 +51,7 @@
       "version": "https://github.com/libretuya/framework-beken-bdk#v2021.06.07",
       "version_prefix": true,
       "toolchains": {
-        "any":"gccarmnoneeabi@~1.100301.0"
+        "any": "gccarmnoneeabi@~1.100301.0"
       },
       "libraries": {
         "freertos": "9.0.0",

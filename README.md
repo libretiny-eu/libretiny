@@ -29,10 +29,11 @@ which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd 
 ## Usage
 
 1. [Install PlatformIO](https://platformio.org/platformio-ide)
-2. `platformio platform install https://github.com/kuba2k2/libretuya`
+2. `platformio platform install -f https://github.com/kuba2k2/libretuya`
 3. Create a project, build it and upload!
 4. See the [docs](https://docs.libretuya.ml/) for any questions/problems.
 
+<!--
 ## Arduino Core support status
 
 Note: this list will probably change with each functionality update.
@@ -57,10 +58,10 @@ TCP Server          | ✔️             | ✔️
 IPv6                | ❌              | ❌
 HTTP Client (SSL)   | ✔️ (✔️)        | ❓
 HTTP Server         | ✔️             | ✔️
-NVS / Preferences   | ❌              | ❌
+NVS / Preferences   | ✔️              | ✔️
 SPIFFS              | ❌              | ❌
 BLE                 | -              | ❌
-NTP                 | ❌              | ❌
+NTP                 | ✔️              | ✔️
 OTA                 | ✔️             | ✔️
 MDNS                | ✔️             | ✔️
 MQTT                | ✅              | ❌
@@ -80,6 +81,7 @@ Names:
 - Core functions - stuff like delay(), millis(), yield(), etc.
 - **CORE LIBRARIES** - included normally in all Arduino cores
 - **OTHER LIBRARIES** - included in ESP32 core or downloadable
+-->
 
 ## License
 

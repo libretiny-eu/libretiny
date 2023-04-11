@@ -4,7 +4,7 @@
 * [💡 ESPHome setup guide](docs/projects/esphome.md)
 * [📲 Flashing/dumping guide](docs/flashing/)
 * [🔌 How to enter download mode?](docs/flashing/chip-connection/)
-* [💻 Supported modules list](docs/status/supported.md)
+* [💻 Supported chips](docs/status/supported.md)
 	* [All boards](boards/)
 * [](SUMMARY.md)
 * 🍪 Chip family docs & info

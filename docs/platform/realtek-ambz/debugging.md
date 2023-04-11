@@ -6,7 +6,7 @@ Debugging of Realtek Ameba chips is possible and was tested with OpenOCD running
 
 LibreTuya has ready-to-use OpenOCD config files:
 
-- [platform/realtek-ambz/openocd/amebaz.cfg](../../../platform/realtek-ambz/openocd/amebaz.cfg)
+- [platform/realtek-ambz/openocd/amebaz.cfg](../../../cores/realtek-ambz/misc/amebaz.cfg)
 
 ## Local debugger
 
