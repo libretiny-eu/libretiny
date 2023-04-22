@@ -101,7 +101,7 @@
     },
     "tool-ltchiptool": {
       "type": "uploader",
-      "version": "https://github.com/libretuya/ltchiptool#v4.0.0a0",
+      "version": "https://github.com/libretuya/ltchiptool#v4.0.0a4",
       "version_prefix": true,
       "note": "This is used only for C/C++ code from ltchiptool."
     },
