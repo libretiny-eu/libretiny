@@ -10,3 +10,4 @@
 
 #define LT_HEAP_FUNC	xPortGetFreeHeapSize
 #define LT_REALLOC_FUNC pvPortRealloc
+#define LT_REMALLOC		1
