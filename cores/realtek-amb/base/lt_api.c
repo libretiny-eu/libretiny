@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-02-27. */
 
-#include <libretuya.h>
+#include <libretiny.h>
 #include <sdk_private.h>
 
 extern uint32_t GlobalDebugEnable;

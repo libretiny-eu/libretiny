@@ -31,7 +31,7 @@ custom_versions.lwip = 2.1.3
 custom_versions.beken_bdk = 2021.06.07
 ```
 
-## LibreTuya options
+## LibreTiny options
 
 !!! note
 	See [lt_config.h](../../ltapi/lt__config_8h.md) for most options and their defaults.
@@ -48,7 +48,7 @@ build_flags =
 
 ### Logger
 
-- `LT_LOGGER` (1) - enable/disable LibreTuya logger globally; disabling this sets the loglevel to `LT_LEVEL_NONE` - the logger can't be enabled even by using `lt_log_set_port()`
+- `LT_LOGGER` (1) - enable/disable LibreTiny logger globally; disabling this sets the loglevel to `LT_LEVEL_NONE` - the logger can't be enabled even by using `lt_log_set_port()`
 - `LT_LOGLEVEL` - global LT loglevel:
 
 	- `LT_LEVEL_VERBOSE`

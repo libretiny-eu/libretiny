@@ -11,7 +11,7 @@
 #include "sys_rtos.h"
 #include "uart_pub.h"
 
-// from LibreTuyaConfig.h
+// from lt_config.h
 #ifndef LT_MICROS_HIGH_RES
 #define LT_MICROS_HIGH_RES 1
 #endif

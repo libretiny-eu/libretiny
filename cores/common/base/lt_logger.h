@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -161,9 +161,9 @@ const char *UpdateClass::getFirmwareVersion() {
 }
 
 /**
- * @brief Get LibreTuya version from UF2 info.
+ * @brief Get LibreTiny version from UF2 info.
  */
-const char *UpdateClass::getLibreTuyaVersion() {
+const char *UpdateClass::getLibreTinyVersion() {
 	if (info)
 		return info->lt_version;
 	return NULL;

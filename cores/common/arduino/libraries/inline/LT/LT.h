@@ -15,15 +15,15 @@
 #define FlashId		lt_flash_id_t
 
 /**
- * @brief Main LibreTuya API class.
+ * @brief Main LibreTiny API class.
  *
  * Since v1.0.0, this class only consists of inline functions, which
- * wrap the LibreTuya C API (lt_api.h). Refer to the docs of the C API
+ * wrap the LibreTiny C API (lt_api.h). Refer to the docs of the C API
  * for more information.
  *
  * The class is accessible using the `LT` global object.
  */
-class LibreTuya {
+class LibreTiny {
   public: /* lt_cpu.h */
 	/** @copydoc lt_cpu_get_family() */
 	inline ChipFamily getChipFamily() { return lt_cpu_get_family(); }
@@ -109,6 +109,6 @@ class LibreTuya {
 	inline uint32_t getMaxFreeBlockSize() { return lt_heap_get_max_alloc(); }
 };
 
-extern LibreTuya LT;
+extern LibreTiny LT;
 
 #endif

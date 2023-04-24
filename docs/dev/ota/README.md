@@ -1,6 +1,6 @@
 # UF2-based OTA
 
-LibreTuya's OTA updating is based on [Microsoft's UF2 specification](https://microsoft.github.io/uf2/). Some aspects of the process, such as OTA1/2 support and target partition selection, have been customized with extension tags.
+LibreTiny's OTA updating is based on [Microsoft's UF2 specification](https://microsoft.github.io/uf2/). Some aspects of the process, such as OTA1/2 support and target partition selection, have been customized with extension tags.
 
 !!! note
 	Just like in UF2, all values in this format are little-endian.

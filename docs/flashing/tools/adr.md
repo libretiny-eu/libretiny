@@ -7,7 +7,7 @@ This feature allows to upload code using UART, without needing to ground the CEN
 It is enabled by default (using the `LT_AUTO_DOWNLOAD_REBOOT` option). It works by listening to incoming UART data, and checking if it matches a command that the flashing program would send. If it does, a chip reboot is performed and the uploading process starts.
 
 !!! note
-	ADR will only work if there's already a recent build of LibreTuya flashed to the device (and if the device doesn't bootloop or freeze immediately).
+	ADR will only work if there's already a recent build of LibreTiny flashed to the device (and if the device doesn't bootloop or freeze immediately).
 
 ## Beken 72xx
 

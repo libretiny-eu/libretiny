@@ -13,7 +13,7 @@ ESPHome can be flashed in few different ways, depending on your needs.
 
 === "CLI"
 
-	The flasher program built-in LibreTuya is also available for ESPHome.
+	The flasher program built-in LibreTiny is also available for ESPHome.
 
 	- use `python -m esphome run yourdevice.yml` to recompile AND upload the firmware
 	- use `python -m esphome upload yourdevice.yml` to upload without recompiling

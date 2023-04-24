@@ -1,6 +1,6 @@
 # Libraries
 
-A page outlining 3-rd some party libraries compatible with LibreTuya.
+A page outlining 3-rd some party libraries compatible with LibreTiny.
 
 !!! note
 	To use some (most? (all?)) of these, a flag in `platformio.ini` is required to disable compatibility checks (because most libs are meant for ESP32/Arduino official framework):

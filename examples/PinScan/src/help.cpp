@@ -7,7 +7,7 @@ void printHelp(uint8_t mode) {
 	switch (mode) {
 		case '\0':
 			stream->setTimeout(10000);
-			stream->println("LibreTuya v" LT_VERSION_STR ", PinScan v" EXAMPLE_VER);
+			stream->println("LibreTiny v" LT_VERSION_STR ", PinScan v" EXAMPLE_VER);
 			stream->println("Board: " LT_BOARD_STR);
 			stream->print("I/O count: ");
 			stream->println(PINS_COUNT);

@@ -2,8 +2,8 @@
 
 #pragma once
 
-// LibreTuya C API (with C standard libraries)
-#include <libretuya.h>
+// LibreTiny C API (with C standard libraries)
+#include <libretiny.h>
 
 // Additional C libraries
 #include <sys/time.h>

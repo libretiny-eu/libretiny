@@ -4,8 +4,8 @@
 
 #include <Flash.h>
 
-LibreTuya LT;
-LibreTuyaOTA OTA;
-LibreTuyaWDT WDT;
+LibreTiny LT;
+LibreTinyOTA OTA;
+LibreTinyWDT WDT;
 EspClass ESP;
 FlashClass Flash;

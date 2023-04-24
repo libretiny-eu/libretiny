@@ -18,7 +18,7 @@
 * 🧑 Programmer's manual
 	* [⚠️ Migration guide](docs/dev/migration_v1.0.0.md)
 	* [🔋 PlatformIO Examples](examples/)
-	* [📖 LibreTuya API](docs/dev/lt-api.md)
+	* [📖 LibreTiny API](docs/dev/lt-api.md)
 		* [C API](ltapi/dir_c7e317b16142bccc961a83c0babf0065.md)
 		* [C++ API](ltapi/dir_930634efd5dc4a957bbb6e685a3ccda1.md)
 	* 📚 Arduino Libraries

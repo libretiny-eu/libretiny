@@ -62,7 +62,7 @@ It is a good idea to dump the stock firmware (full flash contents) of your devic
 If you want to flash custom firmware, or restore stock firmware from a previously dumped file, follow the steps below.
 
 !!! info
-	LibreTuya generates multiple firmware files in the build directory. **You usually want to flash the `.uf2` file**, but since ltchiptool can detect file types, you can choose a different firmware file and it'll tell you if that works.
+	LibreTiny generates multiple firmware files in the build directory. **You usually want to flash the `.uf2` file**, but since ltchiptool can detect file types, you can choose a different firmware file and it'll tell you if that works.
 
 1. Choose `Write flash`. Click `Browse` and select a valid firmware file. The file type and chip type will be auto-detected, along with correct flash offset and length. No need to worry about overwriting the bootloader anymore!
 2. Connect the chip to your PC, according to the [chip connection guides](../chip-connection/SUMMARY.md). Select the COM port that your UART adapter is using.
@@ -135,7 +135,7 @@ Tags:
  - FIRMWARE: arduinotest
  - VERSION: 22.08.01
  - OTA_VERSION: 01
- - DEVICE: LibreTuya
+ - DEVICE: LibreTiny
  - BUILD_DATE: 6d08e862
  - LT_HAS_OTA1: 01
  - LT_HAS_OTA2: 00

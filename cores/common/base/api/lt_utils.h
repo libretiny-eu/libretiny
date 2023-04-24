@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 // https://stackoverflow.com/a/3437484
 #define MAX(a, b)                                                                                                      \

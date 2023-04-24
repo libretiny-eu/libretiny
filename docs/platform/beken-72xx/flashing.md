@@ -41,7 +41,7 @@ Note that the download mode can only be activated when the flasher is running (t
 
 ## Auto-download-reboot
 
-If you have a recent version of LibreTuya installed on the chip, you can use [Auto-download-reboot](../../flashing/tools/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
+If you have a recent version of LibreTiny installed on the chip, you can use [Auto-download-reboot](../../flashing/tools/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
 
 ## Single-adapter usage
 

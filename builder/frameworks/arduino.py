@@ -68,6 +68,7 @@ queue.AddLibrary(
 queue.AppendPublic(
     CPPDEFINES=[
         ("LIBRETUYA_ARDUINO", 1),
+        ("LIBRETINY_ARDUINO", 1),
         ("ARDUINO", 10812),
         ("ARDUINO_SDK", 1),
     ],

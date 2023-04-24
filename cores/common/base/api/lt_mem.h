@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 /**
  * @brief Get total RAM size.

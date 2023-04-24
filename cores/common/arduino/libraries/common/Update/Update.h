@@ -71,7 +71,7 @@ class UpdateClass {
 	const char *errorString();
 	const char *getFirmwareName();
 	const char *getFirmwareVersion();
-	const char *getLibreTuyaVersion();
+	const char *getLibreTinyVersion();
 	const char *getBoardName();
 
   private: /* UpdateUtil.cpp */

@@ -47,7 +47,7 @@ static const uint8_t colors[] = {
 };
 #endif
 
-#if LIBRETUYA_ARDUINO
+#if LIBRETINY_ARDUINO
 unsigned long millis(void);
 #endif
 
@@ -61,7 +61,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 		return;
 
 #if LT_LOGGER_TIMESTAMP
-#if LIBRETUYA_ARDUINO
+#if LIBRETINY_ARDUINO
 	float seconds = millis() / 1000.0f;
 #elif LT_HAS_FREERTOS
 	float seconds = xTaskGetTickCount() * portTICK_PERIOD_MS / 1000.0f;

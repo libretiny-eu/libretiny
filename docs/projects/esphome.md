@@ -2,13 +2,13 @@
 
 Because ESPHome does not natively support running on non-ESP chips, you need to use a fork of the project.
 
-There are two basic ways to install and use LibreTuya-ESPHome. You can choose the option that best suits you:
+There are two basic ways to install and use LibreTiny-ESPHome. You can choose the option that best suits you:
 
 - command line (CLI) - for more experienced users; compilation using CLI commands, somewhat easier to troubleshoot
 - ESPHome Dashboard (GUI) - for new users, might be an easy way to go; config management & compilation using web-based dashboard
 
 !!! tip
-	You can use LibreTuya-ESPHome for ESP32/ESP8266 compilation as well - the forked version *extends* the base, and doesn't remove any existing features. Keep in mind that you might not have latest ESPHome updates until the fork gets updated (which usually happens at most every few weeks).
+	You can use LibreTiny-ESPHome for ESP32/ESP8266 compilation as well - the forked version *extends* the base, and doesn't remove any existing features. Keep in mind that you might not have latest ESPHome updates until the fork gets updated (which usually happens at most every few weeks).
 
 ## Find your device's board
 
@@ -23,7 +23,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 	!!! important
 		Read [Getting started](../getting-started/README.md) first - most importantly, the first part about installation.
 
-		**It is very important that you have the latest version of LibreTuya installed** (not `libretuya-esphome` - this is a different thing!) **so that you don't face issues that are already resolved**.
+		**It is very important that you have the latest version of LibreTiny installed** (not `libretiny-esphome` - this is a different thing!) **so that you don't face issues that are already resolved**.
 
 	Assuming you have PlatformIO, git and Python installed:
 
@@ -44,15 +44,15 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 
 	1. `git clone https://github.com/kuba2k2/libretuya-esphome` (or download the .ZIP and unpack it, not recommended)
 	2. Open a terminal/cmd.exe in the cloned directory (`libretuya-esphome`).
-	3. `python docker/build.py --tag libretuya --arch amd64 --build-type docker build` - this will build the Docker image of ESPHome. Change `amd64` to something else if you're using a Raspberry Pi.
+	3. `python docker/build.py --tag libretiny --arch amd64 --build-type docker build` - this will build the Docker image of ESPHome. Change `amd64` to something else if you're using a Raspberry Pi.
 	4. Create a `docker-compose.yml` file in the same directory:
 
 		```yaml title="docker-compose.yml"
 		version: "3"
 		services:
 		  esphome:
-		    container_name: esphome-libretuya
-		    image: esphome/esphome-amd64:libretuya # (2)!
+		    container_name: esphome-libretiny
+		    image: esphome/esphome-amd64:libretiny # (2)!
 		    volumes:
 		      - ./configs:/config:rw # (1)!
 		      - /etc/localtime:/etc/localtime:ro
@@ -76,7 +76,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 			esphome:
 			  name: yourdevice
 
-			libretuya:
+			libretiny:
 			  board: wr3  # THIS IS YOUR BOARD CODE
 			  framework:
 			    version: latest
@@ -102,7 +102,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 		- `New Device`
 		- `Continue`
 		- enter name and WiFi details
-		- choose `LibreTuya`
+		- choose `LibreTiny`
 		- choose the board that you found before
 		- select `Skip`
 	3. A new config file will be added. Press `Edit` and proceed to the next section.
@@ -133,10 +133,10 @@ Now, refer to the [flashing guide](../flashing/esphome.md) to learn how to uploa
 !!! note
 	This part is for advanced users. You'll probably be fine with the default options.
 
-All options from [Options & config](../dev/config.md) can be customized in the `libretuya:` block:
+All options from [Options & config](../dev/config.md) can be customized in the `libretiny:` block:
 
 ```yaml title="yourdevice.yml"
-libretuya:
+libretiny:
   framework:
     version: latest
   lt_config:
@@ -149,7 +149,7 @@ libretuya:
 Additionally, few options have their dedicated keys:
 
 ```yaml title="yourdevice.yml"
-libretuya:
+libretiny:
   framework:
     version: latest
   # verbose/trace/debug/info/warn/error/fatal

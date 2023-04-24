@@ -112,7 +112,7 @@ def env_print_info(
 
     # Print information about installed core versions
     print("PLATFORM VERSIONS:")
-    print(" - libretuya @", env["LT_VERSION"])
+    print(" - libretiny @", env["LT_VERSION"])
     print(" - ltchiptool @", get_version())
     # Print custom platformio.ini options
     if platform.custom_opts:

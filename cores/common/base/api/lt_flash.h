@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 /**
  * @brief Read flash chip ID and return a lt_flash_id_t struct.

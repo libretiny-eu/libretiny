@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 #include <uf2ota/uf2types.h>
 
 /**

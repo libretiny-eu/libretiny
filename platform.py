@@ -363,7 +363,7 @@ class LibretuyaPlatform(PlatformBase):
             if debug_tool == "custom":
                 return
             exc = DebugInvalidOptionsError(
-                f"[LibreTuya] Debug tool {debug_tool} is not supported by board {board}."
+                f"[LibreTiny] Debug tool {debug_tool} is not supported by board {board}."
             )
             exc.MESSAGE = ""
             raise exc

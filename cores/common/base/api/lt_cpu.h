@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 /**
  * @brief Get CPU family ID (as lt_cpu_family_t enum member).

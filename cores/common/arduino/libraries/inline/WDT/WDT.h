@@ -10,12 +10,12 @@
  * @brief Watchdog control class.
  *
  * This class only consists of inline functions, which
- * wrap the LibreTuya C API (lt_api.h). Refer to the docs of the C API
+ * wrap the LibreTiny C API (lt_api.h). Refer to the docs of the C API
  * for more information.
  *
  * The class is accessible using the `WDT` global object.
  */
-class LibreTuyaWDT {
+class LibreTinyWDT {
   public: /* lt_wdt.h */
 	/** @copydoc lt_wdt_enable() */
 	inline bool enable(uint32_t timeout = 10000) { return lt_wdt_enable(timeout); }
@@ -27,6 +27,6 @@ class LibreTuyaWDT {
 	inline void feed() { lt_wdt_feed(); }
 };
 
-extern LibreTuyaWDT WDT;
+extern LibreTinyWDT WDT;
 
 #endif

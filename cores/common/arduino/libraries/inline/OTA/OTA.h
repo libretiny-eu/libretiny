@@ -10,12 +10,12 @@
  * @brief Over-the-Air updates helper class.
  *
  * This class only consists of inline functions, which
- * wrap the LibreTuya C API (lt_api.h). Refer to the docs of the C API
+ * wrap the LibreTiny C API (lt_api.h). Refer to the docs of the C API
  * for more information.
  *
  * The class is accessible using the `OTA` global object.
  */
-class LibreTuyaOTA {
+class LibreTinyOTA {
   public: /* lt_ota.h */
 	/** @copydoc lt_ota_get_type() */
 	inline lt_ota_type_t getType() { return lt_ota_get_type(); }
@@ -39,6 +39,6 @@ class LibreTuyaOTA {
 	inline bool switchImage(bool revert = false) { return lt_ota_switch(revert); }
 };
 
-extern LibreTuyaOTA OTA;
+extern LibreTinyOTA OTA;
 
 #endif

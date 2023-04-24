@@ -1,4 +1,4 @@
-# LibreTuya
+# LibreTiny
 
 <div align="center" markdown>
 
@@ -20,9 +20,9 @@ PlatformIO development platform for IoT modules manufactured by Tuya Inc.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
 the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,
-which should make it easier to port/run existing ESP apps on Tuya IoT (and 3-rd party) modules.
+which should make it easier to port/run existing ESP apps on less-common, unsupported IoT modules.
 
-**There's an [ESPHome port](https://docs.libretuya.ml/docs/projects/esphome/) based on LibreTuya, which supports BK7231 and RTL8710B chips.**
+**There's an [ESPHome port](https://docs.libretuya.ml/docs/projects/esphome/) based on LibreTiny, which supports BK7231 and RTL8710B chips.**
 
 **Note:** this project is work-in-progress.
 

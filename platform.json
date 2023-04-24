@@ -1,7 +1,7 @@
 {
   "name": "libretuya",
-  "title": "LibreTuya",
-  "description": "Free your Tuya IoT modules.",
+  "title": "LibreTiny",
+  "description": "PlatformIO development platform for IoT modules",
   "repository": {
     "type": "git",
     "url": "https://github.com/kuba2k2/platformio-libretuya"

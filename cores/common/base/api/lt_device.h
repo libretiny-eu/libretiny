@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include <libretuya.h>
+#include <libretiny.h>
 
 /**
- * @brief Get LibreTuya version string.
+ * @brief Get LibreTiny version string.
  */
 const char *lt_get_version();
 

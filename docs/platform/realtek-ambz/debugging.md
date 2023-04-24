@@ -4,13 +4,13 @@ Debugging of Realtek Ameba chips is possible and was tested with OpenOCD running
 
 *(the following is applicable to Arduino framework, and was not tested with SDK framework)*
 
-LibreTuya has ready-to-use OpenOCD config files:
+LibreTiny has ready-to-use OpenOCD config files:
 
 - [platform/realtek-ambz/openocd/amebaz.cfg](../../../cores/realtek-ambz/misc/amebaz.cfg)
 
 ## Local debugger
 
-It should be possible to use PlatformIO's built-in debugging capabilities directly, when plugging an OpenOCD-compatible debugger into your PC. As there are no debugger interfaces built into Tuya boards, you need to specify your interface of choice in `platformio.ini`:
+It should be possible to use PlatformIO's built-in debugging capabilities directly, when plugging an OpenOCD-compatible debugger into your PC. As there are no debugger interfaces built into these IoT boards, you need to specify your interface of choice in `platformio.ini`:
 ```ini
 [env:my_board]
 openocd_interface = <interface name>

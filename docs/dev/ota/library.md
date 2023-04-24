@@ -1,6 +1,6 @@
 # uf2ota library
 
-uf2ota library allows to write a LibreTuya UF2 file to the flash, while parsing all the necessary tags. It manages the target partitions, compatibility checks, and works on top of the FAL provided by FlashDB.
+uf2ota library allows to write a LibreTiny UF2 file to the flash, while parsing all the necessary tags. It manages the target partitions, compatibility checks, and works on top of the FAL provided by FlashDB.
 
 ## Usage example
 

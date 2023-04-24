@@ -1,6 +1,6 @@
 # uf2ota.py
 
-This is a tool for converting LibreTuya firmware images to UF2 format for OTA updates.
+This is a tool for converting LibreTiny firmware images to UF2 format for OTA updates.
 
 ```console
 $ python uf2ota.py
@@ -51,7 +51,7 @@ Tags:
  - FIRMWARE: esphome
  - VERSION: 2022.6.0-dev
  - OTA_VERSION: 01
- - DEVICE: LibreTuya
+ - DEVICE: LibreTiny
  - LT_HAS_OTA1: 01
  - LT_HAS_OTA2: 01
  - LT_PART_1: ota1
@@ -63,7 +63,7 @@ Total binary size: 302448
 
 # dump
 
-Dump UF2 file (only LibreTuya format) into separate firmware binaries.
+Dump UF2 file (only LibreTiny format) into separate firmware binaries.
 
 ```console
 $ python uf2ota.py dump out.uf2

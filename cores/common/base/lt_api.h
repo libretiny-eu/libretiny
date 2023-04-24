@@ -2,7 +2,7 @@
 
 #pragma once
 
-// This file collects all LibreTuya C API includes.
+// This file collects all LibreTiny C API includes.
 // The functions are implemented in lt_api.c, which is located
 // in the common core, and in the family cores.
 

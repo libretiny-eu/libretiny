@@ -6,11 +6,11 @@ arduino/
 │  ├─ cores/                        Wiring core files
 │  ├─ libraries/                    Supported built-in family libraries
 │  ├─ port/                     External library port units
-├─ libretuya/
+├─ libretiny/
 │  ├─ api/                      Library interfaces
 │  ├─ common/                   Units common to all families
 │  ├─ compat/                   Fixes for compatibility with ESP32 framework
-│  ├─ core/                     LibreTuya API for Arduino cores
+│  ├─ core/                     LibreTiny API for Arduino cores
 │  ├─ libraries/                Built-in family-independent libraries
 |  ├─ port/                     External library port units
 |  ├─ posix/                    POSIX-like C utility functions
@@ -26,7 +26,7 @@ builder/
 │  ├─ <family name>-arduino.py      Arduino Core build system
 ├─ libs/                        Builders for external libraries
 ├─ utils/                       SCons utils used during the build
-├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTuya APIs
+├─ arduino-common.py            Builder to provide ArduinoCore-API and LibreTiny APIs
 ├─ main.py                      Main PlatformIO builder
 docs/                           Project documentation, guides, tips, etc.
 platform/

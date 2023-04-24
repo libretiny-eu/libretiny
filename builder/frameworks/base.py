@@ -121,6 +121,7 @@ queue.AppendPublic(
     ],
     CPPDEFINES=[
         ("LIBRETUYA", 1),
+        ("LIBRETINY", 1),
         ("LT_VERSION", env["LT_VERSION"]),
         ("LT_BOARD", "${VARIANT}"),
         ("LT_VARIANT_H", r"\"${VARIANT}.h\""),

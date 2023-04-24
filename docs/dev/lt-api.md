@@ -1,6 +1,6 @@
-# LibreTuya API
+# LibreTiny API
 
-The LibreTuya API is divided in two parts:
+The LibreTiny API is divided in two parts:
 
 - the C API, available in all families and frameworks
 - the C++ API, available in the Arduino framework only.
@@ -13,7 +13,7 @@ It's recommended to use the C API wherever possible.
 
 This API is available using:
 
-- `#include <libretuya.h>`
+- `#include <libretiny.h>`
 - `#include <Arduino.h>`
 
 ### CPU
@@ -96,44 +96,44 @@ This API is available using:
 
 - `#include <Arduino.h>`
 
-### LibreTuya
+### LibreTiny
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya.md"
+	include-markdown "../../ltapi/class_libre_tiny.md"
    start="# Detailed Description\n"
    end="## Public Functions Documentation"
 %}
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya.md"
+	include-markdown "../../ltapi/class_libre_tiny.md"
    start="## Public Functions\n"
    end="# Detailed Description"
 %}
 
-### LibreTuyaOTA
+### LibreTinyOTA
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya_o_t_a.md"
+	include-markdown "../../ltapi/class_libre_tiny_o_t_a.md"
    start="# Detailed Description\n"
    end="## Public Functions Documentation"
 %}
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya_o_t_a.md"
+	include-markdown "../../ltapi/class_libre_tiny_o_t_a.md"
    start="## Public Functions\n"
    end="# Detailed Description"
 %}
 
-### LibreTuyaWDT
+### LibreTinyWDT
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya_w_d_t.md"
+	include-markdown "../../ltapi/class_libre_tiny_w_d_t.md"
    start="# Detailed Description\n"
    end="## Public Functions Documentation"
 %}
 
 {%
-	include-markdown "../../ltapi/class_libre_tuya_w_d_t.md"
+	include-markdown "../../ltapi/class_libre_tiny_w_d_t.md"
    start="## Public Functions\n"
    end="# Detailed Description"
 %}

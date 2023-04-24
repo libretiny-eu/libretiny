@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-24. */
 
-#include <libretuya.h>
+#include <libretiny.h>
 #include <sdk_private.h>
 
 #include <fal.h>

@@ -37,7 +37,7 @@
 // #define FDB_BIG_ENDIAN
 
 #if LT_DEBUG_FDB
-#include <libretuya.h>
+#include <libretiny.h>
 #include <printf/printf.h>
 #define FDB_PRINT(...) __wrap_printf(__VA_ARGS__)
 #define FDB_DEBUG_ENABLE

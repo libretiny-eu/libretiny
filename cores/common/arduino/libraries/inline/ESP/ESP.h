@@ -8,7 +8,7 @@
  * @brief ESP Arduino Core compatibility class.
  *
  * This class only consists of inline functions, which
- * wrap the LibreTuya C API (lt_api.h). Refer to the docs of the C API
+ * wrap the LibreTiny C API (lt_api.h). Refer to the docs of the C API
  * for more information.
  *
  * The class is accessible using the `ESP` global object.

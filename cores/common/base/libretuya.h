@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// LibreTuya version macros
+// LibreTiny version macros
 #ifndef LT_VERSION
 #define LT_VERSION 1.0.0
 #endif
@@ -28,7 +28,7 @@
 #define GCC_VERSION_STR                                                                                                \
 	STRINGIFY_MACRO(__GNUC__) "." STRINGIFY_MACRO(__GNUC_MINOR__) "." STRINGIFY_MACRO(__GNUC_PATCHLEVEL__)
 #define LT_BANNER_STR                                                                                                  \
-	"LibreTuya v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__ ", GCC " GCC_VERSION_STR   \
+	"LibreTiny v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__ ", GCC " GCC_VERSION_STR   \
 	" (-O" STRINGIFY_MACRO(__OPTIMIZE_LEVEL__) ")"
 
 // Functional macros
