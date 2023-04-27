@@ -99,9 +99,8 @@ static bool start() {
 			} else
 				LT_DM(MDNS, "Cannot start mDNS on netif %u; ret=%d, errno=%d", netif->num, ret, errno);
 		}
-
-		return enabled > 0;
 	}
+	return enabled > 0;
 }
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
