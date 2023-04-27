@@ -7,7 +7,7 @@ This feature allows to upload code using UART, without needing to ground the CEN
 It is enabled by default (using the `LT_AUTO_DOWNLOAD_REBOOT` option). It works by listening to incoming UART data, and checking if it matches a command that the flashing program would send. If it does, a chip reboot is performed and the uploading process starts.
 
 !!! note
-	ADR will only work if there's already a recent build of LibreTuya flashed to the device (and if the device doesn't bootloop or freeze immediately).
+	ADR will only work if there's already a recent build of LibreTiny flashed to the device (and if the device doesn't bootloop or freeze immediately).
 
 ## Beken 72xx
 
@@ -15,4 +15,4 @@ The code listens on UART1 for a link-check command (`01 E0 FC 01 00`). The baudr
 
 ## Realtek AmebaZ
 
-This is not yet implemented.
+This only works when using [ltchiptool](ltchiptool.md) for flashing. Upon starting UART communication, the tool sends `55 AA 22 E0 D6 FC` (0x55AA followed by the `realtek-ambz` family ID). After detecting that pattern, the chip proceeds to reboot into UART download mode (using [`lt_reboot_download_mode()`](../../../ltapi/lt__device_8h.md))

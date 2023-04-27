@@ -2,22 +2,22 @@
 
 import importlib
 import json
+import os
 import platform
 import sys
 from os import system
-from os.path import dirname, join
-from typing import Dict
+from os.path import dirname
+from typing import Dict, List
 
+import click
 from platformio.debug.config.base import DebugConfigBase
 from platformio.debug.exception import DebugInvalidOptionsError
-from platformio.package.exception import MissingPackageManifestError
-from platformio.package.manager.base import BasePackageManager
-from platformio.package.meta import PackageItem, PackageSpec
+from platformio.package.meta import PackageItem
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from semantic_version import SimpleSpec, Version
 
-LTCHIPTOOL_VERSION = "^3.0.2"
+LTCHIPTOOL_VERSION = "^4.0.0"
 
 
 # Install & import tools
@@ -26,8 +26,8 @@ def check_ltchiptool(install: bool):
         # update ltchiptool to a supported version
         print("Installing/updating ltchiptool")
         system(
-            f"{sys.executable} -m pip install -U --force-reinstall "
-            f'"ltchiptool >= {LTCHIPTOOL_VERSION}, < 4.0"'
+            f'"{sys.executable}" -m pip install -U --force-reinstall '
+            f'"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}, < 5.0"'
         )
 
         # unload all modules from the old version
@@ -75,67 +75,6 @@ if dirname(__file__) in sys.path:
 # Let ltchiptool know about LT's location
 ltchiptool.lt_set_path(dirname(__file__))
 
-libretuya_packages = None
-manifest_default = {"version": "0.0.0", "description": "", "keywords": []}
-
-
-def load_manifest(self, src):
-    try:
-        return BasePackageManager._load_manifest(self, src)
-    except MissingPackageManifestError:
-        # ignore all exceptions
-        pass
-    # get the installation temporary path
-    path = src.path if isinstance(src, PackageItem) else src
-    # raise the exception if this package is not from libretuya
-    if (
-        not hasattr(self, "spec_map")
-        or path not in self.spec_map
-        or not libretuya_packages
-    ):
-        raise MissingPackageManifestError(", ".join(self.manifest_names))
-    # get the saved spec
-    spec: PackageSpec = self.spec_map[path]
-    # read package data from platform.json
-    manifest: dict = libretuya_packages[spec.name]
-    # find additional manifest info
-    manifest = manifest.get("manifest", manifest_default)
-    # extract tag version
-    url = getattr(spec, "url", None) or getattr(spec, "uri", None) or ""
-    if "#" in url:
-        manifest["version"] = url.rpartition("#")[2].lstrip("v")
-    # put info from spec
-    manifest.update(
-        {
-            "name": spec.name,
-            "repository": {
-                "type": "git",
-                "url": url,
-            },
-        }
-    )
-    # save in cache
-    cache_key = "load_manifest-%s" % path
-    self.memcache_set(cache_key, manifest)
-    # result = ManifestParserFactory.new(json.dumps(manifest), ManifestFileType.PACKAGE_JSON).as_dict()
-    with open(join(path, self.manifest_names[0]), "w") as f:
-        json.dump(manifest, f)
-    return manifest
-
-
-def find_pkg_root(self, path: str, spec: PackageSpec):
-    try:
-        return BasePackageManager._find_pkg_root(self, path, spec)
-    except MissingPackageManifestError as e:
-        # raise the exception if this package is not from libretuya
-        if not libretuya_packages or spec.name not in libretuya_packages:
-            raise e
-    # save the spec for later
-    if not hasattr(self, "spec_map"):
-        self.spec_map = {}
-    self.spec_map[path] = spec
-    return path
-
 
 def get_os_specifiers():
     system = platform.system().lower()
@@ -164,41 +103,86 @@ def get_os_specifiers():
     ]
 
 
-class LibretuyaPlatform(PlatformBase):
-    boards_base: Dict[str, dict] = {}
-    custom_opts: Dict[str, object] = {}
+class LibretinyPlatform(PlatformBase):
+    custom_opts: Dict[str, object] = None
+    versions: Dict[str, str] = None
 
-    def configure_default_packages(self, options, targets):
-        # patch find_pkg root to ignore missing manifests and save PackageSpec
-        if not hasattr(BasePackageManager, "_find_pkg_root"):
-            BasePackageManager._find_pkg_root = BasePackageManager.find_pkg_root
-            BasePackageManager.find_pkg_root = find_pkg_root
-        # patch load_manifest to generate manifests from PackageSpec
-        if not hasattr(BasePackageManager, "_load_manifest"):
-            BasePackageManager._load_manifest = BasePackageManager.load_manifest
-            BasePackageManager.load_manifest = load_manifest
+    def __init__(self, manifest_path):
+        super().__init__(manifest_path)
+        self.custom_opts = {}
+        self.versions = {}
 
-        pioframework = options.get("pioframework")
+    def print(self, *args, **kwargs):
+        if not self.verbose:
+            return
+        print(f"platform.py({os.getpid()}):", *args, **kwargs)
+
+    def custom(self, key: str) -> object:
+        return self.custom_opts.get(key, None)
+
+    def get_package_spec(self, name, version=None):
+        # make PlatformIO detach existing package versions instead of overwriting
+        # TODO this is an ugly hack, it moves old packages to dirs like "library-lwip@src-21d717f2feaca73533f129ce05c9f4d4"
+        # it should be fixed properly at some point. Maybe ask PIO to allow controlling that somehow?
+        spec = super().get_package_spec(name, version)
+        spec._name_is_custom = False
+        return spec
+
+    def configure_default_packages(self, options: dict, targets: List[str]):
+        from ltchiptool.util.dict import RecursiveDict
+
+        self.verbose = (
+            "-v" in sys.argv or "--verbose" in sys.argv or "PIOVERBOSE=1" in sys.argv
+        )
+        self.print(f"configure_default_packages(targets={targets})")
+
+        pioframework = options.get("pioframework") or ["base"]
         if not pioframework:
             return
-        framework = pioframework[0]
+        framework: str = pioframework[0]
 
-        # allow using "arduino" as framework
-        if framework == "arduino":
-            board = self.get_boards(options.get("board"))
-            frameworks = board.get("frameworks")
-            framework = next(fw for fw in frameworks if framework in fw)
-            options.get("pioframework")[0] = framework
+        # save custom options from env
+        self.custom_opts = RecursiveDict()
+        for key, value in options.items():
+            if not key.startswith("custom_"):
+                continue
+            key = key[7:]
+            parent, sep, child = key.partition(".")
+            if parent == "options":
+                # allow only one level of nesting ('child' may be a header name, which contains a dot)
+                child = child.replace(".", "#")
+            self.custom_opts[parent + sep + child] = value
+        self.print("Custom options:", json.dumps(self.custom_opts, indent="\t"))
+
+        # update framework names to their new values since v1.0.0
+        if framework.endswith("-sdk"):
+            click.secho(
+                f"Framework '{framework}' is now named 'base'. "
+                "Update your platformio.ini to use the new name, then try again.",
+                fg="red",
+            )
+            exit(1)
+        if framework.endswith("-arduino"):
+            click.secho(
+                f"Framework '{framework}' is now named 'arduino'. "
+                "Update your platformio.ini to use the new name, then try again.",
+                fg="red",
+            )
+            exit(1)
 
         # make ArduinoCore-API required
-        if "arduino" in framework:
+        if framework == "arduino":
             self.packages["framework-arduino-api"]["optional"] = False
 
-        framework_obj = self.frameworks[framework]
-        if "package" in framework_obj:
-            package_obj = self.packages[framework_obj["package"]]
-        else:
-            package_obj = {}
+        # get framework SDK package
+        board = self.get_boards(options.get("board"))
+        package = board.get("package")
+        package_obj = self.packages.get(package, {})
+        # mark framework SDK as required
+        package_obj["optional"] = False
+
+        # get user-chosen versions of libraries/toolchains
+        versions: RecursiveDict = self.custom("versions") or {}
 
         # set specific compiler versions
         if "toolchains" in package_obj:
@@ -216,54 +200,85 @@ class LibretuyaPlatform(PlatformBase):
             (toolchain, version) = toolchain_version.split("@")
             self.packages[f"toolchain-{toolchain}"]["version"] = version
 
-        # mark framework SDK as required
-        package_obj["optional"] = False
-
         # gather library dependencies
-        libraries = package_obj["libraries"] if "libraries" in package_obj else {}
-        for name, package in self.packages.items():
+        pkg_versions = {}
+        for package in self.packages.values():
             if "optional" in package and package["optional"]:
                 continue
             if "libraries" not in package:
                 continue
-            libraries.update(package["libraries"])
+            for name, lib_versions in package["libraries"].items():
+                package = f"library-{name}"
+                if isinstance(lib_versions, str):
+                    # single version specified as string
+                    if name in versions:
+                        pkg_versions[package] = versions[name]
+                    else:
+                        pkg_versions[package] = lib_versions
+                    continue
+                # mapping of versions to repo branches
+                if name in versions and versions[name] in lib_versions:
+                    pkg_versions[package] = lib_versions[versions[name]]
+                    continue
+                if "default" in lib_versions:
+                    pkg_versions[package] = lib_versions["default"]
 
-        # use appropriate vendor library versions
-        packages_new = {}
-        for name, package in self.packages.items():
-            if not name.startswith("library-"):
+        # gather custom (user-set) versions of other libraries
+        for name, version in versions.items():
+            if name == "toolchain":
                 continue
-            name = name[8:]  # strip "library-"
-            if name not in libraries:
+            name = name.replace("_", "-")
+            version = version.lstrip("v")
+            # find the package by "library-xxx", "framework-xxx" or "tool-xxx"
+            package = f"library-{name}"
+            if package not in self.packages:
+                package = f"framework-{name}"
+            if package not in self.packages:
+                package = f"tool-{name}"
+            if package not in self.packages:
+                click.secho(
+                    f"Library '{name}' couldn't be found. "
+                    f"Remove 'custom_versions.{name}' from platformio.ini and try again.",
+                    fg="red",
+                )
+                exit(1)
+            if package in pkg_versions:
+                # skip already added libs
                 continue
-            lib_version = libraries[name][-1]  # get latest version tag
-            package = dict(**package)  # clone the base package
-            package["version"] = (
-                package["base_url"] + "#" + lib_version
-            )  # use the specific version
-            package["optional"] = False  # make it required
-            lib_version = lib_version.lstrip("v")  # strip "v" in target name
-            name = f"library-{name}@{lib_version}"
-            packages_new[name] = package  # put the package under a new name
-        self.packages.update(packages_new)
+            pkg_versions[package] = version
 
-        # save platform packages for later
-        global libretuya_packages
-        libretuya_packages = self.packages
+        # enable packages required for framework libraries
+        for name, version in pkg_versions.items():
+            if name not in self.packages:
+                raise ValueError(f"Library '{name}' doesn't exist")
+            package = self.packages[name]
+            if "base_url" not in package:
+                if "#" not in package.get("version", ""):
+                    click.secho(
+                        f"Property 'base_url' is missing for '{name}'. "
+                        "The version of this package can't be changed by the user.",
+                        fg="red",
+                    )
+                    exit(1)
+                package["base_url"] = package["version"].partition("#")[0]
+            if package.get("version_prefix", False):
+                version = "v" + version
+            package["optional"] = False
+            package["version"] = package["base_url"] + "#" + version
 
-        # save custom options from env
-        self.custom_opts = {}
-        for key, value in options.items():
-            if not key.startswith("custom_"):
-                continue
-            self.custom_opts[key[7:]] = value
+        # store version numbers of all used packages
+        for package in self.get_installed_packages(with_optional=False):
+            package: PackageItem
+            version = package.metadata.version
+            version = str(version).partition("sha.")[0]
+            version = version.strip("+.")
+            version = version.rpartition("+")[2]
+            self.versions[package.metadata.name] = version
 
         return super().configure_default_packages(options, targets)
 
-    def custom(self, key: str) -> object:
-        return self.custom_opts.get(key, None)
-
     def get_boards(self, id_=None):
+        self.print(f"get_boards(id_={id_})")
         result = PlatformBase.get_boards(self, id_)
         if not result:
             return result
@@ -277,11 +292,24 @@ class LibretuyaPlatform(PlatformBase):
     def update_board(self, board: PlatformBoardConfig):
         if "_base" in board:
             board._manifest = ltchiptool.Board.get_data(board._manifest)
+            board._manifest.pop("_base")
 
-        # add "arduino" framework
-        has_arduino = any("arduino" in fw for fw in board.manifest["frameworks"])
-        if has_arduino:
+        if self.custom("board"):
+            from ltchiptool.util.dict import merge_dicts
+
+            with open(self.custom("board"), "r") as f:
+                custom_board = json.load(f)
+            board._manifest = merge_dicts(board._manifest, custom_board)
+
+        family = board.get("build.family")
+        family = ltchiptool.Family.get(short_name=family)
+        # add "frameworks" key with the default "base"
+        board.manifest["frameworks"] = ["base"]
+        # add "arduino" framework if supported
+        if family.has_arduino_core:
             board.manifest["frameworks"].append("arduino")
+        # add SDK package name
+        board.manifest["package"] = family.target_package
 
         # inspired by platform-ststm32/platform.py
         debug = board.manifest.get("debug", {})
@@ -293,7 +321,8 @@ class LibretuyaPlatform(PlatformBase):
         if "custom" not in debug["tools"]:
             debug["tools"]["custom"] = {}
         init = debug.get("gdb_init", [])
-        init += ["set mem inaccessible-by-default off"]
+        if "set mem inaccessible-by-default off" not in init:
+            init += ["set mem inaccessible-by-default off"]
 
         for link in protocols:
             if link == "openocd":
@@ -334,7 +363,7 @@ class LibretuyaPlatform(PlatformBase):
             if debug_tool == "custom":
                 return
             exc = DebugInvalidOptionsError(
-                f"[LibreTuya] Debug tool {debug_tool} is not supported by board {board}."
+                f"[LibreTiny] Debug tool {debug_tool} is not supported by board {board}."
             )
             exc.MESSAGE = ""
             raise exc

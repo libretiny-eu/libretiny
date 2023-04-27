@@ -1,5 +1,10 @@
 # Realtek AmebaZ
 
+<div align="center" markdown>
+
+[Read flashing guide](flashing.md){ .md-button }
+</div>
+
 ## Resources
 
 Name                                                                                                                                                                           | Notes

@@ -33,7 +33,7 @@ Downloading is done using UART. For best experience, you should have two USB<->U
 Note that the download mode can only be activated when the flasher is running (there's no GPIO-strapping like on ESP8266). Additionally, BK7231T (not N) will exit the download mode when the flasher finishes its work.
 
 !!! tip
-	BK7231N can't be software-bricked, because it has a ROM that contains the download mode. **BK7231T doesn't contain the ROM, so be careful with this one**.
+	BK7231N can't be software-bricked, because it has a ROM that contains the download mode. **BK7231T doesn't contain it, so be careful with this one**.
 
 ## bk7231tools
 
@@ -41,26 +41,26 @@ Note that the download mode can only be activated when the flasher is running (t
 
 ## Auto-download-reboot
 
-If you have a recent version of LibreTuya installed on the chip, you can use [Auto-download-reboot](../../flashing/tools/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
+If you have a recent version of LibreTiny installed on the chip, you can use [Auto-download-reboot](../../flashing/tools/adr.md) to reboot the chip automatically. This is enabled by default, so you don't have to change anything.
 
 ## Single-adapter usage
 
 If you only have a single adapter, or just want to use the UART1 (upload) port only, you can change the logging port.
 
-Refer to [Options & config](../../reference/config.md) (`Serial output` section). Set `LT_UART_DEFAULT_PORT` to `1`, which will use UART1 for all output.
+Refer to [Options & config](../../dev/config.md) (`Serial output` section). Set `LT_UART_DEFAULT_PORT` to `1`, which will use UART1 for all output.
 
 ## Firmware output files
 
 These files are present in the build directory after successful compilation:
 
-File                      | Description
---------------------------|----------------------------------------
-**firmware.uf2**          | **UF2 package for UART and OTA upload**
-bk7231t_app.ota.rbl       | Beken OTA package (e.g. OpenBeken)
-bk7231t_app.ota.ug.bin    | Tuya OTA package (incl. Cloudcutter)
-bk7231t_app_0x011000.rbl  | App partition - flashable at 0x11000
-bk7231t_app_0x011000.crc  | Encrypted app image - not for flashing
-bk7231t_app_0x129F0A.rblh | RBL header - not for flashing
+File                            | Description
+--------------------------------|----------------------------------------
+**firmware.uf2**                | **UF2 package for UART and OTA upload**
+image_bk7231t_app.ota.rbl       | Beken OTA package (e.g. OpenBeken)
+image_bk7231t_app.ota.ug.bin    | Tuya OTA package (incl. Cloudcutter)
+image_bk7231t_app.0x011000.rbl  | App partition - flashable at 0x11000
+image_bk7231t_app.0x011000.crc  | Encrypted app image - not for flashing
+image_bk7231t_app.0x129F0A.rblh | RBL header - not for flashing
 
 ## SPI flashing (unbricking BK7231T)
 
