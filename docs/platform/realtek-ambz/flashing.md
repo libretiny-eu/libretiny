@@ -41,8 +41,8 @@ These files are present in the build directory after successful compilation:
 File                    | Description
 ------------------------|-------------------------------------------------------------------
 **firmware.uf2**        | **UF2 package for UART and OTA upload**
-image_0x00B000.ota1.bin | OTA 1 image, flashable to 0xB000
-image_0x0D0000.ota2.bin | OTA 2 image, flashable to 0xD0000 (the address might be different)
+image_ota1.0x00B000.bin | OTA 1 image, flashable to 0xB000
+image_ota2.0x0D0000.bin | OTA 2 image, flashable to 0xD0000 (the address might be different)
 
 ## Other tools/guides
 
@@ -50,7 +50,7 @@ These tools are **not recommended** and are kept here for reference only. Don't 
 
 - [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
 - [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
-- [rtltool.py](https://github.com/libretuya/ltchiptool/blob/master/ltchiptool/soc/ambz/util/rtltool.py)
+- [rtltool.py](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/soc/ambz/util/rtltool.py)
 
 OTA1/2 files can be flashed using `ImageTool_v2.3.1_AmebaZ(8710b)`. Browse and select one of the files and enter an appropriate address. Select COM port, press `Open` and then `Download`.
 

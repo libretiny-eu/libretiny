@@ -12,7 +12,7 @@
 	},
 	"name": "Generic - BK7231N (Tuya QFN32)",
 	"symbol": "BK7231N (Tuya QFN32)",
-	"url": "https://kuba2k2.github.io/libretuya/boards/generic-bk7231n-qfn32-tuya/",
+	"url": "https://docs.libretiny.eu/boards/generic-bk7231n-qfn32-tuya/",
 	"vendor": "Generic",
 	"pcb": {
 		"pinout": {

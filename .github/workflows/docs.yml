@@ -18,25 +18,28 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install ltchiptool
-        run: pip install ltchiptool
+      - name: Install docs dependencies
+        run: pip install -U ltchiptool boardgen
 
-      - name: Generate static JSON files
+      - name: Generate docs and static JSON files
         run: |
           mkdir -p site/
-          python docs/build_json.py
+          boardgen ltci
+          python docs/scripts/update_docs.py
+          python docs/scripts/prepare_doxygen.py
+          python docs/scripts/build_json.py
           cp *.json site/
 
       - name: Set custom domain
         run: |
           mkdir -p site/
-          echo docs.libretuya.ml > site/CNAME
+          echo docs.libretiny.eu > site/CNAME
 
       - name: Deploy docs
-        uses: libretuya/mkdocs-deploy-gh-pages@master
+        uses: libretiny-eu/mkdocs-deploy-gh-pages@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFIG_FILE: mkdocs.yml
           EXTRA_PACKAGES: build-base doxygen
           REQUIREMENTS: docs/requirements.txt
-          CUSTOM_DOMAIN: docs.libretuya.ml
+          CUSTOM_DOMAIN: docs.libretiny.eu

@@ -12,7 +12,7 @@
 	},
 	"name": "Generic - RTL8720CF (2M/992k)",
 	"symbol": "RTL8720CF (2M/992k)",
-	"url": "https://kuba2k2.github.io/libretuya/boards/generic-rtl8720cf-2mb-992k/",
+	"url": "https://docs.libretiny.eu/boards/generic-rtl8720cf-2mb-992k/",
 	"vendor": "Generic",
 	"pcb": {
 		"pinout": {

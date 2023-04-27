@@ -11,7 +11,7 @@
 	},
 	"name": "Generic - BK7252",
 	"symbol": "BK7252",
-	"url": "https://kuba2k2.github.io/libretuya/boards/generic-bk7252/",
+	"url": "https://docs.libretiny.eu/boards/generic-bk7252/",
 	"vendor": "Generic",
 	"pcb": {
 		"pinout": {

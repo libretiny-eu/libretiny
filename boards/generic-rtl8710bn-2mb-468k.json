@@ -11,7 +11,7 @@
 	},
 	"name": "Generic - RTL8710BN (2M/468k)",
 	"symbol": "RTL8710BN (2M/468k)",
-	"url": "https://kuba2k2.github.io/libretuya/boards/generic-rtl8710bn-2mb-468k/",
+	"url": "https://docs.libretiny.eu/boards/generic-rtl8710bn-2mb-468k/",
 	"vendor": "Generic",
 	"pcb": {
 		"pinout": {

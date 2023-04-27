@@ -1,5 +1,10 @@
 # Beken 72xx
 
+<div align="center" markdown>
+
+[Read flashing guide](flashing.md){ .md-button }
+</div>
+
 ## Resources
 
 Name                                                                                                                                                                    | Notes
@@ -17,7 +22,7 @@ Name                                                                            
 
 There are many chip variations in this SoC family:
 
-- BK7231 - marked BK7321QN40, so we're calling it "BK7231Q" to reduce confusion
+- BK7231 - marked BK7231QN40, so we're calling it "BK7231Q" to reduce confusion
 - BK7231T
 - BK7231N
 - BK7231S

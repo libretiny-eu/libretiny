@@ -9,7 +9,7 @@ By using a simple TUI (text user interface), you can check which I/O pins corres
 
 Uploading the example and opening up a terminal (e.g. PuTTY) presents this menu:
 ```
-LibreTuya v0.8.0, PinScan v1.0
+LibreTiny v0.8.0, PinScan v1.0
 Board: cb2s
 I/O count: 11
 Digital I/O count: 11
