@@ -7,7 +7,6 @@
 #define LWIP_SO_RCVBUF		 1 // for ioctl(FIONREAD)
 
 #define LWIP_MDNS_RESPONDER 1
-#define LWIP_NETIF_EXT_STATUS_CALLBACK 1
 #define MDNS_MAX_SERVICES	10
 
 #include_next "lwipopts.h"

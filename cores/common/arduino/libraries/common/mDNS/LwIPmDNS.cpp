@@ -45,11 +45,11 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 }
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
-static void readdServices(struct netif *netif) {
+static void addServices(struct netif *netif) {
 	for (uint8_t i = 0; i < services.size(); i++) {
 		LT_DM(
 			MDNS,
-			"Readd service: netif %u / %s / %s / %u / %u",
+			"Add service: netif %u / %s / %s / %u / %u",
 			netif->num,
 			services_name[i],
 			services[i],
@@ -70,46 +70,38 @@ static void readdServices(struct netif *netif) {
 }
 #endif
 
-static bool start() {
-	uint8_t enabled = 0;
-	struct netif *netif;
-	for (netif = netif_list; netif != NULL; netif = netif->next) {
-		LT_DM(MDNS, "Stopping mDNS & IGMP on netif %u", netif->num);
-		igmp_stop(netif);
-		mdns_resp_remove_netif(netif);
-		LT_DM(MDNS, "Stopped mDNS & IGMP on netif %u", netif->num);
-		if (netif_is_up(netif)) {
-			LT_DM(MDNS, "Starting mDNS on netif %u", netif->num);
-			if ((netif->flags & NETIF_FLAG_IGMP) == 0) {
-				LT_DM(MDNS, "Starting IGMP on netif %u", netif->num);
-				netif->flags |= NETIF_FLAG_IGMP;
-				igmp_start(netif);
-			}
-			err_t ret = mdns_resp_add_netif(netif, hostName, 255);
-			if (ret == ERR_OK) {
-				LT_DM(MDNS, "Started mDNS & IGMP on netif %u, announcing it to network", netif->num);
-#ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
-				if (services.size() > 0) {
-					LT_DM(MDNS, "Readding Services");
-					readdServices(netif);
-				}
-#endif
-				mdns_resp_announce(netif);
-				enabled++;
-			} else
-				LT_DM(MDNS, "Cannot start mDNS on netif %u; ret=%d, errno=%d", netif->num, ret, errno);
+static bool enableMDNS(struct netif *netif) {
+	if (netif_is_up(netif)) {
+		LT_DM(MDNS, "Starting mDNS on netif %u", netif->num);
+		if ((netif->flags & NETIF_FLAG_IGMP) == 0) {
+			netif->flags |= NETIF_FLAG_IGMP;
+			igmp_start(netif);
+			LT_DM(MDNS, "Added IGMP to netif %u", netif->num);
+		}
+		err_t ret = mdns_resp_add_netif(netif, hostName, 255);
+		if (ret == ERR_OK) {
+			LT_DM(MDNS, "mDNS started on netif %u, announcing it to network", netif->num);
+			mdns_resp_announce(netif);
+			return true;
+		} else {
+			LT_DM(MDNS, "Cannot start mDNS on netif %u; ret=%d, errno=%d", netif->num, ret, errno);
 		}
 	}
-	return enabled > 0;
+	return false;
 }
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void
 mdns_netif_ext_status_callback(struct netif *netif, netif_nsc_reason_t reason, const netif_ext_callback_args_t *args) {
-	if (reason & (LWIP_NSC_IPV4_ADDRESS_CHANGED | LWIP_NSC_IPV4_GATEWAY_CHANGED | LWIP_NSC_IPV4_NETMASK_CHANGED |
-				  LWIP_NSC_IPV4_SETTINGS_CHANGED | LWIP_NSC_IPV6_SET | LWIP_NSC_IPV6_ADDR_STATE_CHANGED)) {
-		LT_DM(MDNS, "Restarting mDNS");
-		start();
+	if (reason & LWIP_NSC_NETIF_REMOVED) {
+		LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
+		mdns_resp_remove_netif(netif);
+	} else if (reason & LWIP_NSC_STATUS_CHANGED) {
+		LT_DM(MDNS, "Netif changed, starting mDNS on netif %u", netif->num);
+		if (enableMDNS(netif) && services.size() > 0) {
+			LT_DM(MDNS, "Adding services to netif %u", netif->num);
+			addServices(netif);
+		}
 	}
 }
 #endif
@@ -125,7 +117,11 @@ bool mDNS::begin(const char *hostname) {
 	mdns_resp_register_name_result_cb(mdnsStatusCallback);
 #endif
 	mdns_resp_init();
-	return start();
+	struct netif *netif;
+	for (netif = netif_list; netif != NULL; netif = netif->next) {
+		enableMDNS(netif);
+	}
+	return true;
 }
 
 void mDNS::end() {
