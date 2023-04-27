@@ -33,13 +33,13 @@ jobs:
       - name: Set custom domain
         run: |
           mkdir -p site/
-          echo docs.libretuya.ml > site/CNAME
+          echo docs.libretiny.eu > site/CNAME
 
       - name: Deploy docs
-        uses: libretuya/mkdocs-deploy-gh-pages@master
+        uses: libretiny-eu/mkdocs-deploy-gh-pages@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFIG_FILE: mkdocs.yml
           EXTRA_PACKAGES: build-base doxygen
           REQUIREMENTS: docs/requirements.txt
-          CUSTOM_DOMAIN: docs.libretuya.ml
+          CUSTOM_DOMAIN: docs.libretiny.eu

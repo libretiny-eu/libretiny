@@ -1,22 +1,22 @@
 # ltchiptool
 
-[ltchiptool](https://github.com/libretuya/ltchiptool) is a universal, easy-to-use GUI flashing/dumping tool for BK7231, RTL8710B and RTL8720C. It also contains some CLI utilities for binary firmware manipulation.
+[ltchiptool](https://github.com/libretiny-eu/ltchiptool) is a universal, easy-to-use GUI flashing/dumping tool for BK7231, RTL8710B and RTL8720C. It also contains some CLI utilities for binary firmware manipulation.
 
 <div align="center" markdown>
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI](https://img.shields.io/pypi/v/ltchiptool)](https://pypi.org/project/ltchiptool/)
 
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/libretuya/ltchiptool?include_prereleases&label=GUI%20release)](https://github.com/libretuya/ltchiptool/releases/latest)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/libretuya/ltchiptool?include_prereleases&label=GUI%20release)](https://github.com/libretiny-eu/ltchiptool/releases/latest)
 
-<img src="https://raw.githubusercontent.com/libretuya/ltchiptool/master/.github/screenshot.png" style="height:500px">
+<img src="https://raw.githubusercontent.com/libretiny-eu/ltchiptool/master/.github/screenshot.png" style="height:500px">
 </div>
 
 ## Installation
 
 <div align="center" markdown>
 
-[:material-download-outline: Download Windows GUI](https://github.com/libretuya/ltchiptool/releases/latest){ .md-button }
+[:material-download-outline: Download Windows GUI](https://github.com/libretiny-eu/ltchiptool/releases/latest){ .md-button }
 </div>
 
 ### CLI program
@@ -26,7 +26,7 @@ Install the package from PyPI, using `pip install ltchiptool`. Run the CLI using
 ### GUI application
 
 ???+ quote "Windows 7 and newer"
-	Download the latest release .EXE from the [GitHub Releases page](https://github.com/libretuya/ltchiptool/releases/latest). Open the file, and you're ready to go!
+	Download the latest release .EXE from the [GitHub Releases page](https://github.com/libretiny-eu/ltchiptool/releases/latest). Open the file, and you're ready to go!
 
 ??? quote "Windows (manual installation)"
 	Install the package from PyPI (**including GUI extras**), using `pip install ltchiptool[gui]`. Note that Python 3.10 or newer is required for the GUI. I recommend Python 3.10 since it has [prebuilt wheels](https://pypi.org/project/wxPython/4.2.0/#files) of wxPython, which doesn't require C++ build dependencies.
@@ -96,7 +96,7 @@ If you want to flash unrecognized/raw binaries (or fine-tune the flashing parame
 !!! note
 	If you're here to learn how to flash or dump firmware files, use the instructions above.
 
-	The content below serves as a short documentation page for [`ltchiptool`](https://github.com/libretuya/ltchiptool) and is mostly meant for advanced users.
+	The content below serves as a short documentation page for [`ltchiptool`](https://github.com/libretiny-eu/ltchiptool) and is mostly meant for advanced users.
 
 ```console
 $ ltchiptool --help

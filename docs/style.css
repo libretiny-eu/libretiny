@@ -12,7 +12,7 @@ article a[href^="https://"]::after {
 	display: inline-block;
 }
 
-a[href^="https://docs.libretuya.ml"]::after,
+a[href^="https://docs.libretiny.eu"]::after,
 a[href^="http://localhost"]::after,
 a[href^="https://"].md-button::after,
 div[align="center"] a[href^="https://"]::after {

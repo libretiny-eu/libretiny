@@ -28,8 +28,8 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 	Assuming you have PlatformIO, git and Python installed:
 
 	1. Open a terminal/cmd.exe, create `esphome` directory and `cd` into it.
-	2. `git clone https://github.com/kuba2k2/libretuya-esphome`
-	3. `cd` into the newly created `libretuya-esphome` directory.
+	2. `git clone https://github.com/kuba2k2/libretiny-esphome`
+	3. `cd` into the newly created `libretiny-esphome` directory.
 	4. Check if it works by typing `python -m esphome`
 
 	!!! tip
@@ -42,8 +42,8 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 
 	For this, you need Docker, Docker Compose and Python installed. After running the commands, you'll have a running ESPHome Dashboard interface that you can connect to.
 
-	1. `git clone https://github.com/kuba2k2/libretuya-esphome` (or download the .ZIP and unpack it, not recommended)
-	2. Open a terminal/cmd.exe in the cloned directory (`libretuya-esphome`).
+	1. `git clone https://github.com/kuba2k2/libretiny-esphome` (or download the .ZIP and unpack it, not recommended)
+	2. Open a terminal/cmd.exe in the cloned directory (`libretiny-esphome`).
 	3. `python docker/build.py --tag libretiny --arch amd64 --build-type docker build` - this will build the Docker image of ESPHome. Change `amd64` to something else if you're using a Raspberry Pi.
 	4. Create a `docker-compose.yml` file in the same directory:
 

@@ -103,7 +103,7 @@ def get_os_specifiers():
     ]
 
 
-class LibretuyaPlatform(PlatformBase):
+class LibretinyPlatform(PlatformBase):
     custom_opts: Dict[str, object] = None
     versions: Dict[str, str] = None
 

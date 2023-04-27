@@ -1,10 +1,10 @@
 {
-  "name": "libretuya",
+  "name": "libretiny",
   "title": "LibreTiny",
   "description": "PlatformIO development platform for IoT modules",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kuba2k2/platformio-libretuya"
+    "url": "https://github.com/kuba2k2/platformio-libretiny"
   },
   "version": "1.0.0-alpha.1",
   "frameworks": {
@@ -21,7 +21,7 @@
     "framework-realtek-amb1": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretuya/framework-realtek-amb1#v2022.06.21",
+      "version": "https://github.com/libretiny-eu/framework-realtek-amb1#v2022.06.21",
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
@@ -39,7 +39,7 @@
     "framework-realtek-ambz2": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretuya/framework-realtek-ambz2#v2022.11.17",
+      "version": "https://github.com/libretiny-eu/framework-realtek-ambz2#v2022.11.17",
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
@@ -48,7 +48,7 @@
     "framework-beken-bdk": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretuya/framework-beken-bdk#v2021.06.07",
+      "version": "https://github.com/libretiny-eu/framework-beken-bdk#v2021.06.07",
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
@@ -66,29 +66,29 @@
     "framework-arduino-api": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretuya/ArduinoCore-API#2022.08.24"
+      "version": "https://github.com/libretiny-eu/ArduinoCore-API#2022.08.24"
     },
     "library-lwip": {
       "type": "framework",
       "optional": true,
-      "base_url": "https://github.com/libretuya/lwip"
+      "base_url": "https://github.com/libretiny-eu/lwip"
     },
     "library-freertos": {
       "type": "framework",
       "optional": true,
-      "base_url": "https://github.com/libretuya/library-freertos"
+      "base_url": "https://github.com/libretiny-eu/library-freertos"
     },
     "library-freertos-port": {
       "type": "framework",
-      "version": "https://github.com/libretuya/library-freertos-port#2023.03.13"
+      "version": "https://github.com/libretiny-eu/library-freertos-port#2023.03.13"
     },
     "library-flashdb": {
       "type": "framework",
-      "version": "https://github.com/libretuya/library-flashdb#1.2.0"
+      "version": "https://github.com/libretiny-eu/library-flashdb#1.2.0"
     },
     "library-printf": {
       "type": "framework",
-      "version": "https://github.com/libretuya/library-printf#6.1.0"
+      "version": "https://github.com/libretiny-eu/library-printf#6.1.0"
     },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
@@ -101,7 +101,7 @@
     },
     "tool-ltchiptool": {
       "type": "uploader",
-      "version": "https://github.com/libretuya/ltchiptool#v4.0.0a4",
+      "version": "https://github.com/libretiny-eu/ltchiptool#v4.0.0a4",
       "version_prefix": true,
       "note": "This is used only for C/C++ code from ltchiptool."
     },

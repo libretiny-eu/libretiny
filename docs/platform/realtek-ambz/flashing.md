@@ -50,7 +50,7 @@ These tools are **not recommended** and are kept here for reference only. Don't 
 
 - [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
 - [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
-- [rtltool.py](https://github.com/libretuya/ltchiptool/blob/master/ltchiptool/soc/ambz/util/rtltool.py)
+- [rtltool.py](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/soc/ambz/util/rtltool.py)
 
 OTA1/2 files can be flashed using `ImageTool_v2.3.1_AmebaZ(8710b)`. Browse and select one of the files and enter an appropriate address. Select COM port, press `Open` and then `Download`.
 

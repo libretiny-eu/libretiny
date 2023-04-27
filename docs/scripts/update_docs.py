@@ -261,7 +261,7 @@ def write_families():
             # Source SDK
             "[`{}`]({})".format(
                 family.target_package,
-                f"https://github.com/libretuya/{family.target_package}",
+                f"https://github.com/libretiny-eu/{family.target_package}",
             )
             if family.target_package
             else "-",
