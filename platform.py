@@ -27,7 +27,7 @@ def check_ltchiptool(install: bool):
         print("Installing/updating ltchiptool")
         system(
             f'"{sys.executable}" -m pip install -U --force-reinstall '
-            f'"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}a0, < 5.0"'
+            f'"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}, < 5.0"'
         )
 
         # unload all modules from the old version
