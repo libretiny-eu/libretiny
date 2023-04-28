@@ -31,6 +31,7 @@ extern "C" {
 extern void func_init_extended();
 extern void app_pre_start();
 extern void bk_wlan_ap_init(network_InitTypeDef_st *inNetworkInitPara);
+extern int bk_wlan_power_save_set_level(BK_PS_LEVEL level);
 
 // func/hostapd-2.5/wpa_supplicant/main_supplicant.c
 extern struct wpa_ssid_value *wpas_connect_ssid;
@@ -64,6 +65,7 @@ typedef struct {
 	rw_evt_type lastStaEvent;
 	rw_evt_type lastApEvent;
 	bool apEnabled;
+	bool sleep;
 } WiFiData;
 
 #define DATA  ((WiFiData *)data)
