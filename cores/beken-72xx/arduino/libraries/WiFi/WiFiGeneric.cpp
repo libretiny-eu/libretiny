@@ -94,10 +94,10 @@ bool WiFiClass::setSleep(bool enable) {
 	} else {
 		bk_wlan_power_save_set_level((BK_PS_LEVEL)0);
 	}
-	data.sleep = enable;
+	DATA->sleep = enable;
 	return true;
 }
 
 bool WiFiClass::getSleep() {
-	return data.sleep;
+	return DATA->sleep;
 }
