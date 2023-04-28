@@ -90,9 +90,9 @@ bool WiFiClass::setSleep(bool enable) {
 	if (enable) {
 		// Replicating OpenBeken PowerSave feature
 		// https://github.com/openshwprojects/OpenBK7231T_App/blob/567c5756b489f0670988fad1c2742a19f0f217ea/src/cmnds/cmd_main.c#L58
-		bk_wlan_power_save_set_level((BK_PS_LEVEL) (PS_RF_SLEEP_BIT | PS_MCU_SLEEP_BIT));
+		bk_wlan_power_save_set_level((BK_PS_LEVEL)(PS_RF_SLEEP_BIT | PS_MCU_SLEEP_BIT));
 	} else {
-		bk_wlan_power_save_set_level((BK_PS_LEVEL) 0);
+		bk_wlan_power_save_set_level((BK_PS_LEVEL)0);
 	}
 	data.sleep = enable;
 	return true;
