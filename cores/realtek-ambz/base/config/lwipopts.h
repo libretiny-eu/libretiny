@@ -5,7 +5,8 @@
 #include_next "lwipopts.h"
 
 // - 2022-05-23 set LWIP_NUM_NETIF_CLIENT_DATA to 1
-#define LWIP_NUM_NETIF_CLIENT_DATA 1
+#define LWIP_NUM_NETIF_CLIENT_DATA	   1
+#define LWIP_NETIF_EXT_STATUS_CALLBACK 1
 // - 2022-05-23 set MEMP_NUM_UDP_PCB to 7
 #undef MEMP_NUM_UDP_PCB
 #define MEMP_NUM_UDP_PCB 7
