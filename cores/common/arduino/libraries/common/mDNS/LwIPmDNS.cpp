@@ -19,7 +19,7 @@ static std::vector<uint8_t> protos;
 static std::vector<uint16_t> ports;
 static std::vector<std::vector<char *>> records;
 
-const char *hostName;
+static const char *hostName;
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
