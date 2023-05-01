@@ -21,8 +21,7 @@ extern uint32_t ulPortSetInterruptMask(void);
 
 #define interrupts()   vPortClearInterruptMask(0)
 #define noInterrupts() ulPortSetInterruptMask()
-#undef delay
-#define delay(ms) delayMilliseconds(ms)
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

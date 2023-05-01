@@ -528,7 +528,7 @@ queue.BuildLibraries()
 # Rename Arduino's delay() to delayMilliseconds()
 env.Append(
     CPPDEFINES=[
-        ("delay", "delayMilliseconds"),
+        ("delay(ms)", "delayMilliseconds(ms)"),
     ],
 )
 
