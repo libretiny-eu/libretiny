@@ -12,7 +12,7 @@ There are two basic ways to install and use LibreTiny-ESPHome. You can choose th
 
 ## Find your device's board
 
-Go to [Boards & CPU list](../status/supported/), find your board (chip model), click on it and remember the **`Board code`**. This will be used later, during config creation.
+Go to [Boards & CPU list](../status/supported.md), find your board (chip model), click on it and remember the **`Board code`**. This will be used later, during config creation.
 
 If your board isn't listed, use one of the **Generic** boards, depending on the chip type of your device.
 
