@@ -10,8 +10,7 @@
 		"code": "amb1",
 		"description": "Realtek Ameba1",
 		"id": "0x9FFFD543",
-		"short_name": "RTL8710A",
-		"mcus": []
+		"short_name": "RTL8710A"
 	},
 	"realtek-ambz": {
 		"parent": "realtek-amb",
@@ -19,11 +18,7 @@
 		"description": "Realtek AmebaZ",
 		"id": "0x22E0D6FC",
 		"short_name": "RTL8710B",
-		"package": "framework-realtek-amb1",
-		"mcus": [
-			"RTL8710BN",
-			"RTL8710BX"
-		]
+		"package": "framework-realtek-amb1"
 	},
 	"realtek-ambz2": {
 		"parent": "realtek-amb",
@@ -31,18 +26,14 @@
 		"description": "Realtek AmebaZ2",
 		"id": "0xE08F7564",
 		"short_name": "RTL8720C",
-		"package": "framework-realtek-ambz2",
-		"mcus": [
-			"RTL8720CF"
-		]
+		"package": "framework-realtek-ambz2"
 	},
 	"realtek-ambd": {
 		"parent": "realtek-amb",
 		"code": "ambd",
 		"description": "Realtek AmebaD",
 		"id": "0x3379CFE2",
-		"short_name": "RTL8720D",
-		"mcus": []
+		"short_name": "RTL8720D"
 	},
 	"beken-72xx": {
 		"parent": null,
@@ -65,34 +56,21 @@
 		"code": "bk7231u",
 		"description": "Beken 7231U/7231T",
 		"id": "0x675A40B0",
-		"short_name": "BK7231U",
-		"mcus": [
-			"BK7231T",
-			"BK7231S",
-			"BK7231U"
-		]
+		"short_name": "BK7231U"
 	},
 	"beken-7231n": {
 		"parent": "beken-72xx-gen1",
 		"description": "Beken 7231N",
 		"code": "bk7231n",
 		"id": "0x7B3EF230",
-		"short_name": "BK7231N",
-		"mcus": [
-			"BK7231N",
-			"BL2028N"
-		]
+		"short_name": "BK7231N"
 	},
 	"beken-7251": {
 		"parent": "beken-72xx-gen1",
 		"code": "bk7251",
 		"description": "Beken 7251/7252",
 		"id": "0x6A82CC42",
-		"short_name": "BK7251",
-		"mcus": [
-			"BK7251",
-			"BK7252"
-		]
+		"short_name": "BK7251"
 	},
 	"boufallo-bl678": {
 		"parent": null,
@@ -104,8 +82,7 @@
 		"code": "bl60x",
 		"description": "Boufallo BL602/BL604",
 		"id": "0xDE1270B7",
-		"short_name": "BL60X",
-		"mcus": []
+		"short_name": "BL60X"
 	},
 	"winnermicro-iot": {
 		"parent": null,

@@ -34,13 +34,6 @@
 				"package": {
 					"type": "string",
 					"pattern": "^framework-[a-z0-9-]+$"
-				},
-				"mcus": {
-					"type": "array",
-					"items": {
-						"type": "string",
-						"pattern": "^[A-Z0-9]+$"
-					}
 				}
 			},
 			"additionalProperties": false,

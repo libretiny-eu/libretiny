@@ -1,12 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-31.
 
-import sys
-from os.path import dirname, isfile, join
-
-sys.path.append(join(dirname(__file__), "..", ".."))
-
 import re
-from typing import Dict, List, Set
+from os.path import dirname, isfile, join
 
 import colorama
 from colorama import Fore, Style
@@ -35,56 +30,69 @@ def load_chip_type_h() -> str:
     return code
 
 
-def check_mcus(boards: List[Board]) -> bool:
-    for board in boards:
-        # check if all boards' MCUs are defined in families.json
-        mcu_name: str = board["build.mcu"]
-        mcus = [mcu.lower() for mcu in board.family.mcus]
-        if mcu_name not in mcus:
-            print(
-                Fore.RED
-                + f"ERROR: MCU '{mcu_name}' of board '{board.name}' is not defined for family '{board.family.name}'"
-                + Style.RESET_ALL
-            )
-            return False
-    return True
-
-
-def get_family_mcus() -> Set[str]:
-    out = []
-    for family in Family.get_all():
-        out += family.mcus
-    return set(out)
-
-
-def get_family_names() -> Set[str]:
-    return set(family.short_name for family in Family.get_all() if family.is_chip)
-
-
-def get_board_mcus(boards: List[Board]) -> Set[str]:
-    out = set()
-    for board in boards:
-        mcu_name: str = board["build.mcu"]
-        out.add(mcu_name.upper())
-    return out
-
-
-def get_enum_keys(code: str, name: str) -> Set[str]:
+def parse_enum(code: str, name: str) -> dict[str, str]:
     code = code.replace("\t", " ")
     code = code.partition(f"{name};")[0]
     code = code.rpartition("{")[2]
     code = code.strip().strip("{}").strip()
     code = [line.strip().strip(",").strip() for line in code.split("\n")]
     code = filter(None, code)
-    return set(line.partition(" ")[0].strip() for line in code)
+    code = [line.partition("=") for line in code]
+    code = {key.strip(): value.strip() for key, _, value in code}
+    return code
 
 
-def get_enum_mcus(code: str) -> Set[str]:
-    return get_enum_keys(code, "lt_cpu_model_t")
+def get_families_json() -> dict[str, int]:
+    return {
+        family.short_name: family.id for family in Family.get_all() if family.is_chip
+    }
 
 
-def get_enum_families(code: str) -> Set[str]:
-    return set(family[2:] for family in get_enum_keys(code, "lt_cpu_family_t"))
+def get_mcus_boards(boards: list[Board]) -> dict[str, str]:
+    out = {}
+    for board in boards:
+        mcu_name: str = board["build.mcu"].upper()
+        family_name: str = board.family.short_name
+        if mcu_name in out and out[mcu_name] != family_name:
+            print(
+                Fore.RED
+                + f"ERROR: MCU '{mcu_name}' of board '{board.name}' belongs to multiple families: '{out[mcu_name]}' and '{family_name}'"
+                + Style.RESET_ALL
+            )
+            continue
+        out[mcu_name] = family_name
+    return out
+
+
+def get_families_enum(code: str) -> dict[str, int]:
+    return {
+        family[2:]: int(family_id, 16)
+        for family, family_id in parse_enum(code, "lt_cpu_family_t").items()
+    }
+
+
+def get_mcus_enum(code: str) -> tuple[dict[str, str], dict[str, str]]:
+    mcus = {}
+    aliases = {}
+    enum = parse_enum(code, "lt_cpu_model_t")
+    for mcu, mcu_id in enum.items():
+        while mcu_id in enum:
+            aliases[mcu] = mcu_id
+            mcu_id = enum[mcu_id]
+        mcus[mcu] = mcu_id.split("(")[1].split(",")[0][2:]
+    return mcus, aliases
+
+
+def get_readme_family_link(family: Family) -> str | None:
+    for f in family.inheritance[::-1]:
+        path = f"../platform/{f.name}/README.md"
+        if isfile(join(dirname(__file__), path)):
+            return path
+    return None
+
+
+def get_readme_board_link(board: Board) -> str:
+    return f"../../boards/{board.name}/README.md"
 
 
 def board_json_sort(tpl):
@@ -110,13 +118,25 @@ def get_board_symbol(board: Board) -> str:
     return board.symbol or board.generic_name or board.name.upper()
 
 
-def write_chips(mcus: List[str]):
+def write_chips(mcus: dict[str, Family], aliases: dict[str, str]):
     md = Markdown(OUTPUT, "supported_chips")
-    md.add_list(*mcus)
+    chips = []
+    clones = []
+    for mcu, family in sorted(mcus.items()):
+        docs = get_readme_family_link(family)
+        target = chips
+        if mcu in aliases:
+            mcu = f"{mcu} ({aliases[mcu]})"
+            target = clones
+        if docs:
+            target.append(md.get_link(mcu, docs))
+        else:
+            target.append(mcu)
+    md.add_list(*chips, *clones)
     md.write()
 
 
-def write_boards(boards: List[Board]):
+def write_boards(boards: list[Board]):
     md = Markdown(OUTPUT, "supported_boards")
     header = [
         "Name",
@@ -140,7 +160,7 @@ def write_boards(boards: List[Board]):
             vendor_prev = vendor
         # count total pin count & IO count
         pins = "-"
-        pinout: Dict[str, dict] = board["pcb.pinout"]
+        pinout: dict[str, dict] = board["pcb.pinout"]
         if pinout:
             pinout = [pin for name, pin in pinout.items() if name.isnumeric()]
             pins_total = len(pinout)
@@ -148,7 +168,8 @@ def write_boards(boards: List[Board]):
             pins = f"{pins_total} ({pins_io} I/O)"
         # format row values
         symbol = get_board_symbol(board)
-        board_url = f"[{symbol}](../../boards/{board.name}/README.md)"
+        docs = get_readme_board_link(board)
+        board_url = f"[{symbol}]({docs})"
         row = [
             board_url,
             board["build.mcu"].upper(),
@@ -166,9 +187,11 @@ def write_boards(boards: List[Board]):
 
 
 def write_unsupported_boards(
-    series: Dict[str, Dict[str, dict]],
+    series: dict[str, dict[str, dict]],
     name: str,
-    supported: List[str],
+    supported: list[str],
+    mcus: dict[str, Family],
+    generics: dict[str, list[Board]],
 ):
     md = Markdown(OUTPUT, name)
     header = [
@@ -189,9 +212,18 @@ def write_unsupported_boards(
         for board_name, board in sorted(boards.items(), key=board_json_sort):
             if board_name in supported:
                 continue
+            board_text = board_name.upper()
+            mcu_text = mcu = board["mcu"].upper()
+            if mcu in generics:
+                generic = generics[mcu][0]
+                board_text += f' :material-information-outline:{{ title="You can use {generic.name} board instead" }}'
+            if mcu in mcus:
+                docs = get_readme_family_link(mcus[mcu])
+                if docs:
+                    mcu_text = md.get_link(mcu, docs)
             row = [
-                board_name.upper(),
-                board["mcu"].upper(),
+                board_text,
+                mcu_text,
                 sizeof(board["flash"]) if board["flash"] else "?",
                 sizeof(board["ram"]) if board["ram"] else "?",
                 str(board["pins_total"]),
@@ -206,14 +238,14 @@ def write_unsupported_boards(
     md.write()
 
 
-def write_families():
+def write_families(supported: list[Family]):
     md = Markdown(OUTPUT, "supported_families")
     header = [
         "Title",
-        "Name (parent)",
+        "Name",
         "Code",
         "Short name & ID",
-        "Arduino Core",
+        "Supported?",
         "Source SDK",
     ]
     rows = []
@@ -222,11 +254,7 @@ def write_families():
         # TODO update the table to support parent-child relationship
         if not family.is_chip:
             continue
-        docs = None
-        for f in family.inheritance:
-            readme = join(dirname(__file__), "..", "platform", f.name, "README.md")
-            if isfile(readme):
-                docs = f"../{f.name}/"
+        docs = get_readme_family_link(family)
         row = [
             # Title
             "[{}]({})".format(
@@ -235,29 +263,19 @@ def write_families():
             )
             if docs
             else family.description,
-            # Name (parent)
-            family.is_supported
-            and (
-                f"`{family.name}`"
-                if not family.parent
-                else f"`{family.name}` (`{family.parent_name}`)"
-            )
-            or "`-`",
+            # Name
+            family.is_supported and f"`{family.name}`" or "`-`",
             # Code
-            family.is_supported
-            and (
-                f"`{family.code}`"
-                if not family.parent
-                else f"`{family.code}` (`{family.parent_code}`)"
-            )
-            or "`-`",
+            family.is_supported and f"`{family.code}`" or "`-`",
             # Short name & ID
             "`{}` (0x{:X})".format(
                 family.short_name,
                 family.id,
             ),
             # Arduino Core
-            "✔️" if family.is_supported and family.has_arduino_core else "❌",
+            "✔️"
+            if family in supported and family.is_supported and family.has_arduino_core
+            else "❌",
             # Source SDK
             "[`{}`]({})".format(
                 family.target_package,
@@ -271,7 +289,7 @@ def write_families():
     md.write()
 
 
-def write_boards_list(boards: List[Board]):
+def write_boards_list(boards: list[Board]):
     md = Markdown(join(dirname(__file__), ".."), join("..", "boards", "SUMMARY"))
     items = []
     for board in boards:
@@ -301,47 +319,118 @@ if __name__ == "__main__":
             )
             errors = True
 
-    families_json = get_family_names()
-    families_enum = get_enum_families(code)
-    if families_json != families_enum:
-        print(Fore.RED + f"ERROR: Inconsistent JSON families vs ChipType.h families:")
-        print("- Missing in JSON: " + ", ".join(families_enum - families_json))
-        print("- Missing in enum: " + ", ".join(families_json - families_enum))
-        print(Style.RESET_ALL, end="")
-        errors = True
+    families_json = get_families_json()
+    families_enum = get_families_enum(code)
+    families_json_keys = set(families_json.keys())
+    families_enum_keys = set(families_enum.keys())
+    mcus_boards = get_mcus_boards(boards)
+    mcus_enum, mcu_aliases = get_mcus_enum(code)
+    mcus_boards_keys = set(mcus_boards.keys())
+    mcus_enum_keys = set(mcus_enum.keys())
+    mcus_missing_in_boards = mcus_enum_keys - mcus_boards_keys
+    mcus_missing_in_enum = mcus_boards_keys - mcus_enum_keys
 
-    mcus_json = get_family_mcus()
-    mcus_enum = get_enum_mcus(code)
-    mcus_boards = get_board_mcus(boards)
-    if mcus_json != mcus_enum:
+    # check if all families are defined in lt_types.h and families.json
+    if families_json_keys != families_enum_keys:
+        print(Fore.RED + f"ERROR: Inconsistent lt_types.h vs families.json:")
         print(
-            Fore.YELLOW + f"NOTICE: Inconsistent JSON family MCUs vs ChipType.h MCUs:"
+            "- Missing in JSON: " + ", ".join(families_enum_keys - families_json_keys)
         )
-        print("- Missing in JSON: " + ", ".join(mcus_enum - mcus_json))
-        print("- Missing in enum: " + ", ".join(mcus_json - mcus_enum))
+        print(
+            "- Missing in enum: " + ", ".join(families_json_keys - families_enum_keys)
+        )
         print(Style.RESET_ALL, end="")
-        # this is not considered an error (for now)
-        # errors = True
-
-    if not check_mcus(boards):
         errors = True
+
+    # verify that family IDs match
+    for family in families_json_keys.union(families_enum_keys):
+        if (
+            family in families_json
+            and family in families_enum
+            and families_json[family] != families_enum[family]
+        ):
+            print(
+                Fore.RED
+                + f"ERROR: Family ID mismatch for '{family}': 0x{families_json[family]:08X} vs 0x{families_enum[family]:08X}"
+                + Style.RESET_ALL
+            )
+            errors = True
+
+    # warn if any enum MCUs are unused in boards
+    if mcus_missing_in_boards:
+        print(
+            Fore.YELLOW
+            + f"NOTICE: Unused MCUs: "
+            + ", ".join(mcus_missing_in_boards)
+            + Style.RESET_ALL
+        )
+
+    # fail if any board MCUs are undefined in enum
+    if mcus_missing_in_enum:
+        print(
+            Fore.RED
+            + f"ERROR: Undefined MCUs in lt_types.h: "
+            + ", ".join(mcus_missing_in_enum)
+            + Style.RESET_ALL
+        )
+        errors = True
+
+    # check if all MCUs belong to the correct family
+    for mcu in mcus_boards_keys.union(mcus_enum_keys):
+        if (
+            mcu in mcus_boards
+            and mcu in mcus_enum
+            and mcus_boards[mcu] != mcus_enum[mcu]
+        ):
+            print(
+                Fore.RED
+                + f"ERROR: MCU family mismatch for '{mcu}': '{mcus_boards[mcu]}' vs '{mcus_enum[mcu]}'"
+                + Style.RESET_ALL
+            )
+            errors = True
 
     if errors:
         exit(1)
 
-    write_chips(sorted(mcus_boards.union(mcus_json)))
+    # check all supported families by MCU presence in enum
+    families_supported = sorted(families_enum_keys.intersection(mcus_enum.values()))
+    families_supported = [Family.get(f) for f in families_supported]
+    # filter out MCUs of unsupported families
+    mcus_boards.update(mcus_enum)
+    mcus_all = {}
+    for mcu, family in mcus_boards.items():
+        family = Family.get(family)
+        if family not in families_supported:
+            continue
+        mcus_all[mcu] = family
+    # remove boards of unsupported families
+    boards = [board for board in boards if board.family in families_supported]
+
+    # find generic variants of boards
+    generics: dict[str, list[Board]] = {}
+    for board in boards:
+        if not board.is_generic:
+            continue
+        mcu: str = board["build.mcu"].upper()
+        if mcu not in generics:
+            generics[mcu] = []
+        generics[mcu].append(board)
+
+    write_chips(mcus_all, mcu_aliases)
     write_boards(boards)
     write_boards_list(boards)
-    write_families()
+    write_families(families_supported)
 
-    boards_all = [
+    board_lists = [
         "boards_tuya_all",
     ]
-    for name in boards_all:
+    for name in board_lists:
         file = join(dirname(__file__), "..", f"{name}.json")
         data = readjson(file)
         write_unsupported_boards(
             series=data,
             name=f"unsupported_{name}",
             supported=[board.name for board in boards],
+            mcus=mcus_all,
+            generics=generics,
         )
