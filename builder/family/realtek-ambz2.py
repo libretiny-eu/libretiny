@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-07-20.
 
-from os.path import join
+from os.path import isfile, join
+from shutil import copyfile
 
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
@@ -436,10 +437,25 @@ env.Replace(
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
 
+# Bootloader - copy for linking
+# fmt: off
+bootloader_src = env.subst("${SDK_DIR}/component/soc/realtek/8710c/misc/bsp/image/bootloader.axf")
+bootloader_dst = env.subst("${BUILD_DIR}/bootloader.axf")
+# fmt: on
+if not isfile(bootloader_dst):
+    copyfile(bootloader_src, bootloader_dst)
+
 # Build all libraries
 queue.BuildLibraries()
 
 # Main firmware outputs and actions
+image_firmware_is = "${BUILD_DIR}/image_firmware_is.${FLASH_OTA1_OFFSET}.bin"
 env.Replace(
-    # TODO
+    # linker command (dual .bin outputs)
+    LINK="${LTCHIPTOOL} link2bin ${BOARD_JSON} '' ''",
+    # UF2OTA input list
+    UF2OTA=[
+        # same OTA images for flasher and device
+        f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2;flasher:ota1,ota2",
+    ],
 )

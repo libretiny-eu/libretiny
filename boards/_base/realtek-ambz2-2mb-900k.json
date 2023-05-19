@@ -1,0 +1,12 @@
+{
+	"flash": {
+		"ota1": "0x010000+0xE0000",
+		"ota2": "0x0F0000+0xE0000",
+		"kvs": "0x1D0000+0x8000",
+		"userdata": "0x1D8000+0x28000"
+	},
+	"upload": {
+		"flash_size": 2097152,
+		"maximum_size": 917504
+	}
+}

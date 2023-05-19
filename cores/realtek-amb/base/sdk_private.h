@@ -20,6 +20,7 @@ extern "C" {
 #include <rtl8710b.h>
 #endif
 #if LT_RTL8720C
+#include <hal.h>
 #include <rtl8710c.h>
 #endif
 
