@@ -5,8 +5,8 @@ import json
 import os
 import platform
 import sys
-from os import system
 from os.path import dirname
+from subprocess import Popen
 from typing import Dict, List
 
 import click
@@ -25,10 +25,18 @@ def check_ltchiptool(install: bool):
     if install:
         # update ltchiptool to a supported version
         print("Installing/updating ltchiptool")
-        system(
-            f'"{sys.executable}" -m pip install -U --force-reinstall '
-            f'"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}, < 5.0"'
+        p = Popen(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-U",
+                "--force-reinstall",
+                f"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}, < 5.0",
+            ],
         )
+        p.wait()
 
         # unload all modules from the old version
         for name, module in list(sorted(sys.modules.items())):
