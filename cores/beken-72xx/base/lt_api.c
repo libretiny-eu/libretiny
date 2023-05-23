@@ -29,10 +29,6 @@ lt_cpu_model_t lt_cpu_get_model() {
 	return CPU_MODEL_ENUM(FAMILY, chipId);
 }
 
-uint32_t lt_cpu_get_unique_id() {
-	return lt_cpu_get_mac_id();
-}
-
 uint32_t lt_cpu_get_mac_id() {
 	uint8_t mac[6];
 	cfg_load_mac(mac); // force loading MAC from TLV (ignore user-set WiFi MAC)

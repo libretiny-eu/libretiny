@@ -16,9 +16,11 @@
 #include <string.h>
 
 #include "basic_types.h" // fixup: replaces typedef boolean for Arduino compatibility
-#ifdef LT_RTL8710B
-#include "memproc.h" // fixup: redirects to stdlib
+#if __has_include(<memproc.h>)
+#include <memproc.h> // fixup: redirects to stdlib
 #endif
+#if __has_include(<strproc.h>)
 #include "strproc.h" // fixup: redirects to stdlib
+#endif
 
 #include "diag.h"

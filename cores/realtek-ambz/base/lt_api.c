@@ -27,10 +27,6 @@ lt_cpu_model_t lt_cpu_get_model() {
 	return CPU_MODEL_ENUM(FAMILY, chipId);
 }
 
-uint32_t lt_cpu_get_unique_id() {
-	return lt_cpu_get_mac_id();
-}
-
 uint32_t lt_cpu_get_mac_id() {
 	uint32_t chipId = 0;
 	uint8_t *id		= (uint8_t *)&chipId;
@@ -61,12 +57,6 @@ uint32_t lt_cpu_get_freq() {
  | |  | |/ _ \ \ / / |/ __/ _ \
  | |__| |  __/\ V /| | (_|  __/
  |_____/ \___| \_/ |_|\___\__*/
-void lt_reboot() {
-	// The Watchdog Way
-	lt_wdt_enable(1L);
-	while (1) {}
-}
-
 bool lt_reboot_download_mode() {
 	// mww 0x40000138 0x8
 	HAL_WRITE32(SYSTEM_CTRL_BASE, REG_SYS_NORESET_FF, 0x08);
@@ -74,11 +64,6 @@ bool lt_reboot_download_mode() {
 	sys_reset();
 	while (1) {}
 	return true;
-}
-
-lt_reboot_reason_t lt_get_reboot_reason() {
-	// TODO
-	return REBOOT_REASON_UNKNOWN;
 }
 
 void lt_gpio_recover() {

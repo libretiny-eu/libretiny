@@ -15,7 +15,7 @@ const char *lt_get_version();
 const char *lt_get_board_code();
 
 /**
- * @brief Get device friendly name in format "LT-<family code>-<MAC ID>".
+ * @brief Get device friendly name in format "LT-<chip model>-<MAC ID>".
  * Can be used as hostname.
  */
 const char *lt_get_device_name();

@@ -35,6 +35,10 @@ const char *lt_cpu_get_model_code() {
 	return STRINGIFY_MACRO(MCULC);
 }
 
+__attribute__((weak)) uint32_t lt_cpu_get_unique_id() {
+	return lt_cpu_get_mac_id();
+}
+
 __attribute__((weak)) uint8_t lt_cpu_get_core_count() {
 	return 1;
 }
@@ -85,6 +89,12 @@ const char *lt_get_device_name() {
 	return device_name;
 }
 
+__attribute__((weak)) void lt_reboot() {
+	// The Watchdog Way
+	lt_wdt_enable(1L);
+	while (1) {}
+}
+
 __attribute__((weak)) bool lt_reboot_wdt() {
 	if (!lt_wdt_enable(1L))
 		return false;
@@ -95,24 +105,30 @@ __attribute__((weak)) bool lt_reboot_download_mode() {
 	return false;
 }
 
+__attribute__((weak)) lt_reboot_reason_t lt_get_reboot_reason() {
+	return REBOOT_REASON_UNKNOWN;
+}
+
 const char *lt_get_reboot_reason_name(lt_reboot_reason_t reason) {
 	if (!reason)
 		reason = lt_get_reboot_reason();
 	switch (reason) {
-		case RESET_REASON_POWER:
+		case REBOOT_REASON_POWER:
 			return "Power-On";
-		case RESET_REASON_BROWNOUT:
+		case REBOOT_REASON_BROWNOUT:
 			return "Brownout";
-		case RESET_REASON_HARDWARE:
+		case REBOOT_REASON_HARDWARE:
 			return "HW Reboot";
-		case RESET_REASON_SOFTWARE:
+		case REBOOT_REASON_SOFTWARE:
 			return "SW Reboot";
-		case RESET_REASON_WATCHDOG:
+		case REBOOT_REASON_WATCHDOG:
 			return "WDT Reset";
-		case RESET_REASON_CRASH:
+		case REBOOT_REASON_CRASH:
 			return "Crash";
-		case RESET_REASON_SLEEP:
+		case REBOOT_REASON_SLEEP:
 			return "Sleep Wakeup";
+		case REBOOT_REASON_DEBUGGER:
+			return "Debugger";
 		default:
 			return "Unknown";
 	}
