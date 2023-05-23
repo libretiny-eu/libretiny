@@ -8,10 +8,8 @@
 extern "C" {
 #endif // __cplusplus
 
-WRAP_DISABLE_DEF(rtl_printf);
-WRAP_DISABLE_DEF(DiagPrintf);
-WRAP_DISABLE_DEF(prvDiagPrintf);
-WRAP_DISABLE_DEF(LOG_PRINTF);
+WRAP_DISABLE_DEF(rt_printf);
+WRAP_DISABLE_DEF(rt_log_printf);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -19,20 +19,11 @@ void putchar_(char c) {
 }
 
 void putchar_p(char c, unsigned long port) {
-	// while (UART_Writable(uart_dev[port]) == 0) {}
+	while (uart_dev[port]->lsr_b.txfifo_empty == 0) {}
 	uart_dev[port]->thr = c;
 }
 
-WRAP_PRINTF(rtl_printf);
-WRAP_SPRINTF(rtl_sprintf);
-WRAP_SNPRINTF(rtl_snprintf);
-WRAP_VSNPRINTF(rtl_vsnprintf);
-WRAP_VSNPRINTF(rtl_vsnprintf_r);
-WRAP_VPRINTF(rtl_vprintf);
-WRAP_PRINTF(DiagPrintf);
-WRAP_SPRINTF(DiagSPrintf);
-WRAP_SNPRINTF(DiagSnPrintf);
-WRAP_PRINTF(prvDiagPrintf);
-WRAP_SPRINTF(prvDiagSPrintf);
-WRAP_VSPRINTF(VSprintf);
-WRAP_PRINTF(LOG_PRINTF);
+WRAP_PRINTF(rt_printf);
+WRAP_SPRINTF(rt_sprintf);
+WRAP_SNPRINTF(rt_snprintf);
+WRAP_PRINTF(rt_log_printf);

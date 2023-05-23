@@ -92,6 +92,7 @@ queue.AppendPublic(
         "-Wl,-wrap,memset",
         # TODO remove this if possible
         "-Wl,-wrap,putc",
+        # rt_printf wrappers are not here, as they're just changing code using #defines
     ],
 )
 
@@ -104,17 +105,6 @@ queue.AddLibrary(
         # cmsis
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram/*.c>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram_s/app_start.c>",
-        # console
-        "+<common/api/at_cmd/atcmd_bt.c>",
-        "+<common/api/at_cmd/atcmd_lwip.c>",
-        "+<common/api/at_cmd/atcmd_mp_ext2.c>",
-        "+<common/api/at_cmd/atcmd_mp.c>",
-        "+<common/api/at_cmd/atcmd_sys.c>",
-        "+<common/api/at_cmd/atcmd_wifi.c>",
-        "+<common/api/at_cmd/log_service.c>",
-        "+<soc/realtek/8710c/app/shell/cmd_shell.c>",
-        "+<soc/realtek/8710c/app/shell/ram_s/consol_cmds.c>",
-        "+<soc/realtek/8710c/misc/driver/rtl_console.c>",
         # utilities
         "+<common/utilities/cJSON.c>",
         "+<common/utilities/http_client.c>",
@@ -147,13 +137,9 @@ queue.AddLibrary(
         "+<common/file_system/fatfs/r0.10c/src/ff.c>",
         "+<common/file_system/fatfs/r0.10c/src/option/ccsbcs.c>",
         "+<common/file_system/ftl/ftl.c>",
-        # TODO remove this
-        "+<common/example/example_entry.c>",
-        "+<common/example/wlan_fast_connect/example_wlan_fast_connect.c>",
     ],
     includes=[
         "+<$SDK_DIR/project/realtek_amebaz2_v0_example/inc>",
-        "+<common/api/at_cmd>",
         "+<common/api/platform>",
         "+<common/api>",
         "+<common/application>",
@@ -175,7 +161,6 @@ queue.AddLibrary(
         "+<os/freertos/freertos_v10.0.1/Source/portable/GCC/ARM_RTL8710C>",
         "+<os/os_dep/include>",
         "+<soc/realtek/8710c/app/rtl_printf/include>",
-        "+<soc/realtek/8710c/app/shell>",
         "+<soc/realtek/8710c/app/stdio_port>",
         "+<soc/realtek/8710c/cmsis/cmsis-core/include>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/include>",
@@ -286,6 +271,7 @@ queue.AddLibrary(
         # "+<src/ble/profile/server/hids_rmc.c>",
         "+<src/ble/profile/server/simple_ble_service.c>",
         "+<src/mcu/module/data_uart_cmd/user_cmd_parse.c>",
+        "-<board/common/src/bt_uart_bridge.c>",
     ],
     includes=[
         "+<.>",

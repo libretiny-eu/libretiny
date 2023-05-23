@@ -7,24 +7,26 @@
 
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 
+static flash_t flash_obj;
+
 static int init() {
-	flash_get_status(NULL);
+	flash_get_status(&flash_obj);
 	return 0;
 }
 
 static int read(long offset, uint8_t *buf, size_t size) {
-	return size * flash_stream_read(NULL, offset, size, buf);
+	return size * flash_stream_read(&flash_obj, offset, size, buf);
 }
 
 static int write(long offset, const uint8_t *buf, size_t size) {
-	return size * flash_stream_write(NULL, offset, size, (uint8_t *)buf);
+	return size * flash_stream_write(&flash_obj, offset, size, (uint8_t *)buf);
 }
 
 static int erase(long offset, size_t size) {
 	offset &= ~(FLASH_ERASE_MIN_SIZE - 1);
 	size = ((size - 1) / FLASH_ERASE_MIN_SIZE) + 1;
 	for (uint16_t i = 0; i < size; i++) {
-		flash_erase_sector(NULL, offset + i * FLASH_ERASE_MIN_SIZE);
+		flash_erase_sector(&flash_obj, offset + i * FLASH_ERASE_MIN_SIZE);
 	}
 	return size * FLASH_ERASE_MIN_SIZE;
 }
