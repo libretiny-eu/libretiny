@@ -1,6 +1,10 @@
 /* Linker script to configure memory regions. */
 
-/* LT changes: added .ARM.exidx section */
+/* LibreTiny changes:
+	- added .ARM.exidx section
+	- added .ARM.extab
+	- added missing C++ support
+*/
 
 /* !! the include symbole may failed if the symbol file name is too long!! */
 INCLUDE "romsym_is.so"
@@ -278,6 +282,29 @@ SECTIONS
 		/* put RO data sections need to be encrypted here */
 		*(.xip.sec_rodata*)
 
+		/* Add This for C++ support */
+		/* ambd_arduino/Arduino_package/hardware/variants/rtl8720dn_bw16/linker_scripts/gcc/rlx8721d_img2_is_arduino.ld */
+		. = ALIGN(4);
+		__preinit_array_start = .;
+		KEEP(*(.preinit_array))
+		__preinit_array_end = .;
+		. = ALIGN(4);
+		__init_array_start = .;
+		KEEP(*(SORT(.init_array.*)))
+		KEEP(*(.init_array))
+		__init_array_end = .;
+		. = ALIGN(4);
+		__fini_array_start = .;
+		KEEP(*(SORT(.fini_array.*)))
+		KEEP(*(.fini_array))
+		__fini_array_end = .;
+		/*-----------------*/
+		/* https://community.silabs.com/s/article/understand-the-gnu-linker-script-of-cortex-m4?language=en_US */
+		KEEP(*(.init))
+		KEEP(*(.fini))
+		*(.init)
+		*(.fini)
+
 		__xip_code_text_end__ = .;
 	} > XIP_FLASH_C
 
@@ -292,8 +319,25 @@ SECTIONS
 		*(.rodata*)
 		*(.rodata.str1*)
 
+		/* https://www.embedded.com/building-bare-metal-arm-systems-with-gnu-part-3/ */
+		KEEP(*crtbegin.o(.ctors))
+		KEEP(*(EXCLUDE_FILE (*ctrend.o) .ctors))
+		KEEP(*(SORT(.ctors.*)))
+		KEEP(*crtend.o(.ctors))
+		KEEP(*crtbegin.o(.dtors))
+		KEEP(*(EXCLUDE_FILE (*crtend.o) .dtors))
+		KEEP(*(SORT(.dtors.*)))
+		KEEP(*crtend.o(.dtors))
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+
 		. = ALIGN(4);
 		__xip_code_rodata_end__ = .;
+	} > XIP_FLASH_P
+
+	/* Add This for C++ support */
+	.ARM.extab :
+	{
+		*(.ARM.extab* .gnu.linkonce.armextab.*)
 	} > XIP_FLASH_P
 
 	.ARM.exidx :
