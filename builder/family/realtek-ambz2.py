@@ -116,11 +116,6 @@ queue.AddLibrary(
         "+<os/freertos/freertos_service.c>",
         "+<os/os_dep/device_lock.c>",
         "+<os/os_dep/osdep_service.c>",
-        # os - freertos
-        "+<os/freertos/freertos_v10.0.1/Source/*.c>",
-        # os - freertos - portable
-        "+<os/freertos/freertos_v10.0.1/Source/portable/MemMang/heap_5.c>",
-        "+<os/freertos/freertos_v10.0.1/Source/portable/GCC/ARM_RTL8710C/port.c>",
         # peripheral - api
         "+<common/mbed/targets/hal/rtl8710c/*.c>",
         # peripheral - hal
@@ -157,8 +152,6 @@ queue.AddLibrary(
         "+<common/test>",
         "+<common/utilities>",
         "+<os/freertos>",
-        "+<os/freertos/freertos_v10.0.1/Source/include>",
-        "+<os/freertos/freertos_v10.0.1/Source/portable/GCC/ARM_RTL8710C>",
         "+<os/os_dep/include>",
         "+<soc/realtek/8710c/app/rtl_printf/include>",
         "+<soc/realtek/8710c/app/stdio_port>",
@@ -190,6 +183,11 @@ queue.AddLibrary(
         ],
     ),
 )
+
+# Sources - FreeRTOS
+env.Replace(FREERTOS_PORT=env["FAMILY_NAME"], FREERTOS_PORT_DEFINE="REALTEK_AMBZ2")
+queue.AddExternalLibrary("freertos")
+queue.AddExternalLibrary("freertos-port")
 
 # Sources - network utilities
 queue.AddLibrary(
