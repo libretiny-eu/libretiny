@@ -42,6 +42,7 @@ using std::min;
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
 #include <Serial.h>
 
+#if HAS_SERIAL_CLASS
 #if HAS_SERIAL0
 extern SerialClass Serial0;
 #endif
@@ -50,6 +51,7 @@ extern SerialClass Serial1;
 #endif
 #if HAS_SERIAL2
 extern SerialClass Serial2;
+#endif
 #endif
 
 #define SerialN(x) Serial##x

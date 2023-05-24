@@ -34,7 +34,7 @@ for f in family.inheritance:
     code = f"{f.code}_arduino"
     path = join("$CORES_DIR", f.name, "arduino")
 
-    found = found or env.AddCoreSources(queue, name=code, path=join(path, "src"))
+    found = env.AddCoreSources(queue, name=code, path=join(path, "src")) or found
     env.AddArduinoLibraries(queue, name=code, path=join(path, "libraries"))
 
     if f.short_name:

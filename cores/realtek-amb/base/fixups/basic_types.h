@@ -7,6 +7,9 @@
 
 #include <stdbool.h>
 
+// the SDK declares bool if not defined before
+// which conflicts with C++ built-in bool
+// so it's either -fpermissive or this:
 #ifndef bool
 #define bool bool
 #endif

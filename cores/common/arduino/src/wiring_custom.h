@@ -21,6 +21,8 @@ extern "C" {
 #define PIN_SWD	 (1 << 10)
 #define PIN_UART (1 << 11)
 
+#define PIN_INVALID 255
+
 typedef struct {
 	/**
 	 * @brief GPIO name in the family SDK.

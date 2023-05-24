@@ -16,3 +16,13 @@
 #error "No serial port is available"
 #endif
 #endif
+
+// clang-format off
+// Auto-download-reboot detection pattern
+// Family ID, big-endian
+#define LT_UART_ADR_PATTERN 0x55, 0xAA, \
+	(FAMILY >> 24) & 0xFF, \
+	(FAMILY >> 16) & 0xFF, \
+	(FAMILY >> 8) & 0xFF, \
+	(FAMILY >> 0) & 0xFF
+// clang-format on

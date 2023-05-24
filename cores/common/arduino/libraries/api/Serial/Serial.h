@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <api/ArduinoAPI.h>
+#include <Arduino.h>
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>
 
@@ -10,11 +10,14 @@ using namespace arduino;
 
 class SerialClass : public HardwareSerial {
   private:
-	uint8_t port;
+	uint32_t port;
 	RingBuffer *buf;
 
   public:
-	SerialClass(uint8_t port);
+	void *data;
+
+  public:
+	SerialClass(uint32_t port);
 
 	inline void begin(unsigned long baudrate) {
 		begin(baudrate, SERIAL_8N1);
@@ -32,5 +35,12 @@ class SerialClass : public HardwareSerial {
 		return !!buf;
 	}
 
+  public:
+#if LT_AUTO_DOWNLOAD_REBOOT
+	static void adrParse(uint8_t c);
+#endif
+
 	using Print::write;
 };
+
+#define HAS_SERIAL_CLASS 1

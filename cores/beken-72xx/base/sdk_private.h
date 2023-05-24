@@ -19,9 +19,7 @@ extern "C" {
 #include <wdt_pub.h>
 #include <wlan_ui_pub.h>
 
-extern uint8_t system_mac[];
-extern uint32_t wdt_ctrl(uint32_t cmd, void *param);
-extern int uart_print_port;
+#include <sdk_extern.h>
 
 // conflict with stl_algobase.h
 #undef min
