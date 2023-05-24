@@ -11,6 +11,7 @@ extern "C" {
 
 // SDK
 void software_reset();
+void sys_swd_off();
 void sys_uart_download_mode();
 void sys_download_mode(uint8_t mode);
 

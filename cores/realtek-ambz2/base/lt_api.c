@@ -78,6 +78,7 @@ lt_reboot_reason_t lt_get_reboot_reason() {
 
 void lt_gpio_recover() {
 	sys_jtag_off();
+	sys_swd_off();
 }
 
 /*__  __

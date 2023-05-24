@@ -1,59 +1,50 @@
-#include <Arduino.h>
-#include <sdk_private.h>
+/* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
 
-extern void *gpio_pin_struct[PINS_COUNT];
-static void *gpio_irq_handler_list[PINS_COUNT] = {NULL};
-static void *gpio_irq_handler_args[PINS_COUNT] = {NULL};
-
-extern void pinRemoveMode(pin_size_t pinNumber);
+#include "wiring_private.h"
 
 static void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
-	// id is pin index
-	if (gpio_irq_handler_list[id] != NULL) {
-		if (gpio_irq_handler_args[id] == NULL)
-			((voidFuncPtr)gpio_irq_handler_list[id])();
-		else
-			((voidFuncPtrParam)gpio_irq_handler_list[id])(gpio_irq_handler_args[id]);
-	}
-}
-
-void attachInterrupt(pin_size_t interruptNumber, voidFuncPtr callback, PinStatus mode) {
-	attachInterruptParam(interruptNumber, (voidFuncPtrParam)callback, mode, NULL);
+	// id is pin data
+	PinData *data = (PinData *)id;
+	if (!data->irqHandler)
+		return;
+	if (!data->irqParam)
+		((voidFuncPtr)data->irqHandler)();
+	else
+		((voidFuncPtrParam)data->irqHandler)(data->irqParam);
 }
 
 void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback, PinStatus mode, void *param) {
-	PinInfo *pin = pinInfo(interruptNumber);
-	if (pin == NULL)
-		return;
-	uint32_t index = pinIndex(pin);
+	pinCheckGetData(interruptNumber, PIN_IRQ, );
 
-	gpio_irq_handler_list[index] = callback;
-	gpio_irq_handler_args[index] = param;
+	data->irqHandler = callback;
+	data->irqParam	 = param;
 
-	if (pin->enabled == PIN_IRQ && pin->mode == mode)
-		// Nothing changes in pin mode
+	if (pinEnabled(pin, PIN_IRQ) && data->irqMode == mode)
 		return;
 
-	if (pin->enabled != PIN_IRQ)
-		// pin mode changes; deinit gpio and free memory
-		pinRemoveMode(interruptNumber);
+#if LT_RTL8720C
+	// apparently IRQ can't be used with any kind of pull-up/down
+	// TODO verify if it can be used on AmebaZ
+	pinRemoveMode(pin, PIN_PWM | PIN_GPIO);
+#else
+	// GPIO can't be used together with PWM
+	pinRemoveMode(pin, PIN_PWM);
+#endif
 
-	gpio_irq_t *gpio;
-
-	if (pin->enabled == PIN_NONE) {
+	gpio_irq_t *irq = data->irq;
+	if (!irq) {
 		// allocate memory if pin not used before
-		gpio				   = malloc(sizeof(gpio_irq_t));
-		gpio_pin_struct[index] = gpio;
-		gpio_irq_init(gpio, pin->gpio, gpioIrqHandler, index);
-		pin->enabled = PIN_IRQ;
-	} else {
-		// pin already used as irq
-		gpio = (gpio_irq_t *)gpio_pin_struct[index];
+		data->irq = irq = malloc(sizeof(gpio_irq_t));
+		if (gpio_irq_init(irq, pin->gpio, gpioIrqHandler, (uint32_t)data) != 0) {
+			LT_W("IRQ init failed");
+			free(data->irq);
+			data->irq = NULL;
+			return;
+		}
+		pinEnable(pin, PIN_IRQ);
 	}
-	pin->mode = mode;
 
 	gpio_irq_event event;
-
 	switch (mode) {
 		case LOW:
 			event = IRQ_LOW;
@@ -67,22 +58,22 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		case RISING:
 			event = IRQ_RISE;
 			break;
+		case CHANGE:
+#if LT_RTL8720C
+			event = IRQ_FALL_RISE;
+#else
+			LT_W("CHANGE interrupts not supported");
+#endif
+			break;
 		default:
 			return;
 	}
+	data->irqMode = mode;
 
-	gpio_irq_set(gpio, event, 1);
-	gpio_irq_enable(gpio);
+	gpio_irq_set(irq, event, 1);
+	gpio_irq_enable(irq);
 }
 
 void detachInterrupt(pin_size_t interruptNumber) {
-	PinInfo *pin = pinInfo(interruptNumber);
-	if (pin == NULL)
-		return;
-	uint32_t index = pinIndex(pin);
-
-	if (pin->enabled == PIN_IRQ) {
-		pinRemoveMode(interruptNumber);
-	}
-	gpio_irq_handler_list[index] = NULL;
+	pinModeRemove(interruptNumber, PIN_IRQ);
 }

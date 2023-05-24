@@ -21,7 +21,10 @@ extern "C" {
 #define PIN_SWD	 (1 << 10)
 #define PIN_UART (1 << 11)
 
-#define PIN_INVALID 255
+#define PIN_MODE_ALL 0xFFFFFFFF
+#define PIN_INVALID	 255
+
+typedef struct PinData_s PinData;
 
 typedef struct {
 	/**
@@ -37,9 +40,9 @@ typedef struct {
 	 */
 	uint32_t enabled;
 	/**
-	 * @brief Pin mode (direction, IRQ level, etc.).
+	 * @brief Pin data (direction, IRQ level, etc.). The structure is family-specific.
 	 */
-	uint32_t mode;
+	PinData *data;
 } PinInfo;
 
 extern PinInfo lt_arduino_pin_info_list[PINS_COUNT];
@@ -57,14 +60,21 @@ bool startMainTask(void);
 void mainTask(const void *arg); // implemented in main.cpp
 void runPeriodicTasks();		// implemented in wiring_custom.c
 
+void pinModeRemove(pin_size_t pinNumber, uint32_t mask);
 PinInfo *pinInfo(pin_size_t pinNumber);
 PinInfo *pinByIndex(uint32_t index);
 PinInfo *pinByGpio(uint32_t gpio);
 uint32_t pinIndex(PinInfo *pin);
 bool pinSupported(PinInfo *pin, uint32_t mask);
 bool pinEnabled(PinInfo *pin, uint32_t mask);
-bool pinIsOutput(PinInfo *pin);
-bool pinIsInput(PinInfo *pin);
+void pinRemoveMode(PinInfo *pin, uint32_t mask);
+
+/**
+ * @brief Deinitialize the pin, by removing all enabled modes.
+ */
+inline void pinModeNone(pin_size_t pinNumber) {
+	pinModeRemove(pinNumber, PIN_MODE_ALL);
+}
 
 int analogRead(pin_size_t pinNumber);
 void analogReadResolution(int res);

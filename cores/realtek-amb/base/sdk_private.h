@@ -27,6 +27,9 @@ extern "C" {
 #endif
 
 #include <cmsis_os.h>
+#undef malloc
+#undef free
+#undef calloc
 
 // mbed APIs
 #include <gpio_api.h>

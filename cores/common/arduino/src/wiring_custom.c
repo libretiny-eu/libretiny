@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "wiring_custom.h"
+#include "wiring_private.h"
 
 #if LT_HAS_FREERTOS
 #include <FreeRTOS.h>
@@ -30,6 +30,18 @@ void runPeriodicTasks() {
 		periodicTasks[1] = millis();
 	}
 #endif
+}
+
+/**
+ * @brief Disable modes specified by 'mask'.
+ */
+void pinModeRemove(pin_size_t pinNumber, uint32_t mask) {
+	PinInfo *pin = pinInfo(pinNumber);
+	if (!pin)
+		return;
+	pinRemoveMode(pin, mask);
+	if (pin->enabled == PIN_NONE && mask == PIN_MODE_ALL)
+		pinRemoveData(pin);
 }
 
 /**
@@ -83,20 +95,6 @@ bool pinSupported(PinInfo *pin, uint32_t mask) {
  */
 bool pinEnabled(PinInfo *pin, uint32_t mask) {
 	return (pin->enabled & mask) == mask;
-}
-
-/**
- * @brief Check if GPIO pin is configured as output.
- */
-bool pinIsOutput(PinInfo *pin) {
-	return pin->mode == OUTPUT || pin->mode == OUTPUT_OPENDRAIN;
-}
-
-/**
- * @brief Check if GPIO pin is configured as output.
- */
-bool pinIsInput(PinInfo *pin) {
-	return pin->mode == INPUT || pin->mode == INPUT_PULLUP || pin->mode == INPUT_PULLDOWN;
 }
 
 /**

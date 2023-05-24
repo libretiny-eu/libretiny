@@ -1,21 +1,10 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <Arduino.h>
-#include <include.h>
-
-#include <arm_arch.h>
-#include <bk_timer.h>
-#include <bk_timer_pub.h>
-#include <rtos_pub.h>
-#include <sys_rtos.h>
+#include "wiring_private.h"
 
 #define TICKS_PER_US	   (CFG_XTAL_FREQUENCE / 1000 / 1000)
 #define US_PER_OVERFLOW	   (portTICK_PERIOD_MS * 1000)
 #define TICKS_PER_OVERFLOW (TICKS_PER_US * US_PER_OVERFLOW)
-
-void delayMilliseconds(unsigned long ms) {
-	rtos_delay_milliseconds(ms);
-}
 
 static uint32_t getTicksCount() {
 	// copied from bk_timer_ctrl(), for speeds
@@ -104,8 +93,22 @@ unsigned long micros() {
 #endif
 }
 
-void yield() {
-	runPeriodicTasks();
-	vTaskDelay(1);
-	taskYIELD();
+void pinRemoveMode(PinInfo *pin, uint32_t mask) {
+	PinData *data = pinData(pin);
+	if ((mask & PIN_GPIO) && (pin->enabled & PIN_GPIO)) {
+		gpio_config(pin->gpio, GMODE_INPUT_PULLDOWN);
+		pinDisable(pin, PIN_GPIO);
+	}
+	if ((mask & PIN_IRQ) && (pin->enabled & PIN_IRQ)) {
+		data->irqHandler = NULL;
+		gpio_int_disable(pin->gpio);
+		pinDisable(pin, PIN_IRQ);
+	}
+	if ((mask & PIN_PWM) && (pin->enabled & PIN_PWM)) {
+		data->pwm->cfg.bits.en = PWM_DISABLE;
+		__wrap_bk_printf_disable();
+		sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, data->pwm);
+		__wrap_bk_printf_enable();
+		pinDisable(pin, PIN_PWM);
+	}
 }
