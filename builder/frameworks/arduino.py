@@ -73,7 +73,6 @@ queue.AppendPublic(
         ("ARDUINO_SDK", 1),
     ],
     LINKFLAGS=[
-        "--specs=nosys.specs",
         "-Wl,--as-needed",
         "-Wl,--build-id=none",
         "-Wl,--cref",

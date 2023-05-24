@@ -17,3 +17,6 @@
 #define DBG_SCE_ERR(...)
 #define DBG_SCE_WARN(...)
 #define DBG_SCE_INFO(...)
+
+// ...?
+#define CONFIG_ADC_EN

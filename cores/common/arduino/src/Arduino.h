@@ -25,6 +25,7 @@ using std::min;
 #include <api/ArduinoAPI.h>
 #ifdef __cplusplus
 #include <LT.h>
+using namespace arduino;
 #endif
 
 // Include family-specific code

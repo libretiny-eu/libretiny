@@ -31,14 +31,14 @@ extern unsigned long pulseIn(uint8_t pinNumber, uint8_t state, unsigned long tim
 	// digitalRead() instead yields much coarser resolution.
 	PinInfo *pin = pinInfo(pinNumber);
 	if (pin == NULL)
-		return;
+		return 0;
 	uint32_t index = pinIndex(pin);
 
 	gpio_t *pGpio_t;
 
 	uint32_t start_ticks, cur_ticks;
 
-	if (pin < 0 || pin > PINS_COUNT || (pin->gpio == NC))
+	if (pin->gpio == NC)
 		return 0;
 
 	/* Handle */

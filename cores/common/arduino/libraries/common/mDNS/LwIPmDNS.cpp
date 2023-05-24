@@ -13,6 +13,8 @@ extern "C" {
 #include <lwip/netif.h>
 }
 
+#if LWIP_MDNS_RESPONDER
+
 static std::vector<char *> services_name;
 static std::vector<char *> services;
 static std::vector<uint8_t> protos;
@@ -81,7 +83,11 @@ static bool enableMDNS(struct netif *netif) {
 		err_t ret = mdns_resp_add_netif(netif, hostName, 255);
 		if (ret == ERR_OK) {
 			LT_DM(MDNS, "mDNS started on netif %u, announcing it to network", netif->num);
+#if LWIP_VERSION_SIMPLE >= 20100
 			mdns_resp_announce(netif);
+#else
+#warning "lwIP version older than 2.1.0, mdns_resp_announce() unavailable"
+#endif
 			return true;
 		} else {
 			LT_DM(MDNS, "Cannot start mDNS on netif %u; ret=%d, errno=%d", netif->num, ret, errno);
@@ -186,5 +192,7 @@ bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *ite
 }
 
 MDNSResponder MDNS;
+
+#endif
 
 #endif

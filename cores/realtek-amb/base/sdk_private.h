@@ -14,6 +14,7 @@ extern "C" {
 // remove log_printf() if included before sdk_private.h
 #undef log_printf
 
+// CMSIS & Realtek APIs
 #if LT_RTL8710B
 #include <ameba_soc.h>
 #include <rand.h>
@@ -25,6 +26,9 @@ extern "C" {
 #include <rtl8710c.h>
 #endif
 
+#include <cmsis_os.h>
+
+// mbed APIs
 #include <gpio_api.h>
 #undef MBED_GPIO_API_H // ..no comment
 #include <gpio_ex_api.h>
@@ -48,6 +52,7 @@ extern "C" {
 #include <wait_api.h>
 #include <wdt_api.h>
 
+// other SDK APIs
 #if __has_include(<sdk_extern.h>)
 #include <sdk_extern.h>
 #endif

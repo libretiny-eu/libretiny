@@ -5,12 +5,9 @@
 
 extern "C" {
 
-#include <cmsis_os.h>
-#include <core_cm4.h>
-
 osThreadId main_tid = 0;
 
-#if LT_AUTO_DOWNLOAD_REBOOT && defined(PIN_SERIAL2_RX) && defined(PIN_SERIAL2_TX)
+#if LT_AUTO_DOWNLOAD_REBOOT && LT_ARD_HAS_SERIAL && defined(PIN_SERIAL2_RX) && defined(PIN_SERIAL2_TX)
 void lt_init_arduino() {
 	// initialize auto-download-reboot parser
 	Serial2.begin(115200);

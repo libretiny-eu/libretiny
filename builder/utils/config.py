@@ -20,13 +20,21 @@ def env_load_defines(env: Environment, path: str):
         line = line[7:].strip()
         line = line.split(None, 2)
         if len(line) == 1:
-            env.Append(CPPDEFINES=[(line[0], 1)])
-            config[line[0]] = 1
+            key, value = line[0], 1
         elif len(line) == 2:
-            env.Append(CPPDEFINES=[(line[0], line[1])])
-            config[line[0]] = line[1]
+            key, value = line[0], line[1]
         else:
             raise ValueError(f"Unknown directive: {line}")
+        for tpl in env["CPPDEFINES"]:
+            if isinstance(tpl, tuple):
+                k = tpl[0]
+            else:
+                k = tpl
+            if k == key:
+                env["CPPDEFINES"].remove(tpl)
+                break
+        env.Append(CPPDEFINES=[(key, value)])
+        config[key] = value
     env.Append(
         CONFIG=config,
     )
