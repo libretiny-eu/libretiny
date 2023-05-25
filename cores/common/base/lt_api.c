@@ -39,6 +39,12 @@ __attribute__((weak)) uint32_t lt_cpu_get_unique_id() {
 	return lt_cpu_get_mac_id();
 }
 
+__attribute__((weak)) uint32_t lt_cpu_get_mac_id() {
+	uint8_t mac[6];
+	lt_get_device_mac(mac);
+	return (mac[3] << 0) | (mac[4] << 8) | (mac[5] << 16);
+}
+
 __attribute__((weak)) uint8_t lt_cpu_get_core_count() {
 	return 1;
 }

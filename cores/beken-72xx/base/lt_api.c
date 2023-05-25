@@ -29,12 +29,6 @@ lt_cpu_model_t lt_cpu_get_model() {
 	return CPU_MODEL_ENUM(FAMILY, chipId);
 }
 
-uint32_t lt_cpu_get_mac_id() {
-	uint8_t mac[6];
-	cfg_load_mac(mac); // force loading MAC from TLV (ignore user-set WiFi MAC)
-	return (mac[3]) | (mac[4] << 8) | (mac[5] << 16);
-}
-
 const char *lt_cpu_get_core_type() {
 	return "ARM968E-S";
 }
@@ -45,6 +39,10 @@ const char *lt_cpu_get_core_type() {
  | |  | |/ _ \ \ / / |/ __/ _ \
  | |__| |  __/\ V /| | (_|  __/
  |_____/ \___| \_/ |_|\___\__*/
+void lt_get_device_mac(uint8_t *mac) {
+	cfg_load_mac(mac);
+}
+
 void lt_reboot() {
 	bk_reboot();
 }

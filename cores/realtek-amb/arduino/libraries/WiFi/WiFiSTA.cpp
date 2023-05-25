@@ -158,10 +158,7 @@ IPAddress WiFiClass::localIP() {
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	if ((getMode() & WIFI_MODE_STA) == 0) {
-		uint8_t *efuse = (uint8_t *)malloc(512);
-		EFUSE_LogicalMap_Read(efuse);
-		memcpy(mac, efuse + 0x11A, ETH_ALEN);
-		free(efuse);
+		lt_get_device_mac(mac);
 		return mac;
 	}
 	memcpy(mac, NETIF_RTW_STA.hwaddr, ETH_ALEN);

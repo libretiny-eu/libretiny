@@ -57,6 +57,13 @@ uint32_t lt_cpu_get_freq() {
  | |  | |/ _ \ \ / / |/ __/ _ \
  | |__| |  __/\ V /| | (_|  __/
  |_____/ \___| \_/ |_|\___\__*/
+void lt_get_device_mac(uint8_t *mac) {
+	uint8_t *efuse = (uint8_t *)malloc(512);
+	EFUSE_LogicalMap_Read(efuse);
+	memcpy(mac, efuse + 0x11A, 6);
+	free(efuse);
+}
+
 bool lt_reboot_download_mode() {
 	// mww 0x40000138 0x8
 	HAL_WRITE32(SYSTEM_CTRL_BASE, REG_SYS_NORESET_FF, 0x08);

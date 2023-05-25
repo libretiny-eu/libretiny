@@ -21,6 +21,13 @@ const char *lt_get_board_code();
 const char *lt_get_device_name();
 
 /**
+ * @brief Read device's *default* MAC address into 'mac' array.
+ * This can be used even without Wi-Fi enabled, and will ignore
+ * user-changed Wi-Fi MAC (if changing is possible).
+ */
+void lt_get_device_mac(uint8_t *mac);
+
+/**
  * @brief Reboot the CPU.
  */
 void lt_reboot();

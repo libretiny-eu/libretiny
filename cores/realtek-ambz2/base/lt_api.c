@@ -28,12 +28,6 @@ lt_cpu_model_t lt_cpu_get_model() {
 	return CPU_MODEL_ENUM(FAMILY, (chip_id & 0xFF) | flash_mode);
 }
 
-uint32_t lt_cpu_get_mac_id() {
-	uint8_t mac[3];
-	efuse_logical_read(0x11A + 3, 3, mac);
-	return (mac[0] << 0) | (mac[1] << 8) | (mac[2] << 16);
-}
-
 const char *lt_cpu_get_core_type() {
 	return "ARM Cortex-M4";
 }
@@ -48,6 +42,10 @@ uint32_t lt_cpu_get_freq() {
  | |  | |/ _ \ \ / / |/ __/ _ \
  | |__| |  __/\ V /| | (_|  __/
  |_____/ \___| \_/ |_|\___\__*/
+void lt_get_device_mac(uint8_t *mac) {
+	efuse_logical_read(0x11A, 6, mac);
+}
+
 void lt_reboot() {
 	sys_cpu_reset();
 	while (1) {}

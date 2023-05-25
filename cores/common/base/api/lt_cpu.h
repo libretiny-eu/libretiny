@@ -38,6 +38,7 @@ uint32_t lt_cpu_get_unique_id();
 /**
  * @brief Get CPU ID based on the last three octets of MAC address.
  * Note: the number is 24-bit (with the MSB being zero).
+ * The 3rd-to-last octet is least-significant, the last octet is most-significant.
  */
 uint32_t lt_cpu_get_mac_id();
 
