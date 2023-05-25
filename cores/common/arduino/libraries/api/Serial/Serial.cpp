@@ -2,8 +2,10 @@
 
 #include "Serial.h"
 
-SerialClass::SerialClass(uint32_t port) {
+SerialClass::SerialClass(uint32_t port, pin_size_t rx, pin_size_t tx) {
 	this->port = port;
+	this->rx   = rx;
+	this->tx   = tx;
 	this->buf  = NULL;
 	this->data = NULL;
 }

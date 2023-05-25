@@ -8,22 +8,52 @@
 
 using namespace arduino;
 
+#ifndef PIN_SERIAL0_RX
+#define PIN_SERIAL0_RX PIN_INVALID
+#endif
+#ifndef PIN_SERIAL1_RX
+#define PIN_SERIAL1_RX PIN_INVALID
+#endif
+#ifndef PIN_SERIAL2_RX
+#define PIN_SERIAL2_RX PIN_INVALID
+#endif
+#ifndef PIN_SERIAL0_TX
+#define PIN_SERIAL0_TX PIN_INVALID
+#endif
+#ifndef PIN_SERIAL1_TX
+#define PIN_SERIAL1_TX PIN_INVALID
+#endif
+#ifndef PIN_SERIAL2_TX
+#define PIN_SERIAL2_TX PIN_INVALID
+#endif
+
 class SerialClass : public HardwareSerial {
   private:
 	uint32_t port;
-	RingBuffer *buf;
+	pin_size_t rx;
+	pin_size_t tx;
 
   public:
 	void *data;
 
+  private:
+	RingBuffer *buf;
+	uint32_t baudrate;
+	uint16_t config;
+
   public:
-	SerialClass(uint32_t port);
+	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID);
 
 	inline void begin(unsigned long baudrate) {
 		begin(baudrate, SERIAL_8N1);
 	}
 
+	inline void configure(unsigned long baudrate) {
+		configure(baudrate, SERIAL_8N1);
+	}
+
 	void begin(unsigned long baudrate, uint16_t config);
+	void configure(unsigned long baudrate, uint16_t config);
 	void end();
 	int available();
 	int peek();

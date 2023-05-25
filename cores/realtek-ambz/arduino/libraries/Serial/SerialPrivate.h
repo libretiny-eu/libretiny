@@ -8,8 +8,6 @@
 typedef struct {
 	UART_TypeDef *uart;
 	IRQn irq;
-	pin_size_t rx;
-	pin_size_t tx;
 	RingBuffer buf;
 } SerialData;
 

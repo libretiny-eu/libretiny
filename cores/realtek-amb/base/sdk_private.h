@@ -49,6 +49,7 @@ extern "C" {
 #include <main.h>
 #include <objects.h>
 #include <pwmout_api.h>
+#include <serial_api.h>
 #include <sys_api.h>
 #include <timer_api.h>
 #include <us_ticker_api.h>
