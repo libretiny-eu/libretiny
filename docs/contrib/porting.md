@@ -50,6 +50,7 @@ Here's what has to be done to make that work:
 	- Make sure not to make a mess in the `CCFLAGS`/`CPPDEFINES`, and only include what's needed there. Some flags are project-wide (family-independent) in `builder/frameworks/base.py`.
 	- Use a **pure PlatformIO** project - **not ESPHome!**. Pass one of the generic boards you created before, and `framework = base` in `platformio.ini`. Generally, try to get the thing to compile.
 	- Use a simple Hello World program - C, not C++. Only add `main()` function with a `printf()` and a `while(1)` loop.
+	- I've noticed that using `nano.specs` instead of `nosys.specs` produces smaller binaries.
 
 9. When you get it to link successfully, build a UF2 file.
 
@@ -91,3 +92,9 @@ Here's what has to be done to make that work:
 5. Write LibreTiny C APIs - in `lt_api.c`.
 
 6. At this point, your Hello World code should work fine.
+
+## Porting Arduino Core - C++ support
+
+1. Add main.cpp and write wiring_*.c ports. GPIOs and stuff should work even without proper C++ support.
+
+2. Port Serial library first. This should already show whether C++ works fine or if it doesn't. For example, calling `Serial.println()` refers to the virtual function `Print::write`, which will probably crash the chip if C++ is not being linked properly.

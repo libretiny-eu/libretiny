@@ -53,7 +53,7 @@ queue.AppendPublic(
         "-mthumb",
         "-mcmse",
         "-mfloat-abi=soft",
-        "--specs=nosys.specs",
+        "--specs=nano.specs",
         "-Wl,--use-blx",
         "-Wl,--undefined=gRamStartFun",
         "-Wl,-wrap,aesccmp_construct_mic_iv",

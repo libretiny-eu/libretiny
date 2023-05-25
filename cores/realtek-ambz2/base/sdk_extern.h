@@ -10,6 +10,7 @@ extern "C" {
 #endif // __cplusplus
 
 // SDK
+extern hal_uart_adapter_t log_uart;
 void software_reset();
 void sys_swd_off();
 void sys_uart_download_mode();

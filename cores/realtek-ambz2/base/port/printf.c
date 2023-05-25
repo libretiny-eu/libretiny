@@ -19,7 +19,7 @@ void putchar_(char c) {
 }
 
 void putchar_p(char c, unsigned long port) {
-	while ((uart_dev[port]->tflvr & 0x1F) > 15) {}
+	while (uart_dev[port]->tflvr_b.tx_fifo_lv >= Uart_Tx_FIFO_Size) {}
 	uart_dev[port]->thr = c;
 }
 

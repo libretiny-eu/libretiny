@@ -16,3 +16,7 @@
 #error "No serial port is available"
 #endif
 #endif
+
+// Auto-download-reboot detection pattern
+// "ping" command for BootROM
+#define LT_UART_ADR_PATTERN 'p', 'i', 'n', 'g', '\n'

@@ -134,26 +134,6 @@ SECTIONS
 		*(.sram.data*)
 		*(.data*)
 
-		. = ALIGN(4);
-		/* preinit data */
-		PROVIDE_HIDDEN (__preinit_array_start = .);
-		KEEP(*(.preinit_array))
-		PROVIDE_HIDDEN (__preinit_array_end = .);
-
-		. = ALIGN(4);
-		/* init data */
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP(*(SORT(.init_array.*)))
-		KEEP(*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
-
-		. = ALIGN(4);
-		/* finit data */
-		PROVIDE_HIDDEN (__fini_array_start = .);
-		KEEP(*(SORT(.fini_array.*)))
-		KEEP(*(.fini_array))
-		PROVIDE_HIDDEN (__fini_array_end = .);
-
 		KEEP(*(.jcr*))
 		. = ALIGN(4);
 		/* All data end */
@@ -282,29 +262,6 @@ SECTIONS
 		/* put RO data sections need to be encrypted here */
 		*(.xip.sec_rodata*)
 
-		/* Add This for C++ support */
-		/* ambd_arduino/Arduino_package/hardware/variants/rtl8720dn_bw16/linker_scripts/gcc/rlx8721d_img2_is_arduino.ld */
-		. = ALIGN(4);
-		__preinit_array_start = .;
-		KEEP(*(.preinit_array))
-		__preinit_array_end = .;
-		. = ALIGN(4);
-		__init_array_start = .;
-		KEEP(*(SORT(.init_array.*)))
-		KEEP(*(.init_array))
-		__init_array_end = .;
-		. = ALIGN(4);
-		__fini_array_start = .;
-		KEEP(*(SORT(.fini_array.*)))
-		KEEP(*(.fini_array))
-		__fini_array_end = .;
-		/*-----------------*/
-		/* https://community.silabs.com/s/article/understand-the-gnu-linker-script-of-cortex-m4?language=en_US */
-		KEEP(*(.init))
-		KEEP(*(.fini))
-		*(.init)
-		*(.fini)
-
 		__xip_code_text_end__ = .;
 	} > XIP_FLASH_C
 
@@ -329,6 +286,30 @@ SECTIONS
 		KEEP(*(SORT(.dtors.*)))
 		KEEP(*crtend.o(.dtors))
 		*(.rodata .rodata.* .gnu.linkonce.r.*)
+
+		/* Add This for C++ support */
+		/* ambd_arduino/Arduino_package/hardware/variants/rtl8720dn_bw16/linker_scripts/gcc/rlx8721d_img2_is_arduino.ld */
+		. = ALIGN(4);
+		__preinit_array_start = .;
+		KEEP(*(.preinit_array))
+		__preinit_array_end = .;
+		. = ALIGN(4);
+		__init_array_start = .;
+		KEEP(*(SORT(.init_array.*)))
+		KEEP(*(.init_array))
+		__init_array_end = .;
+		. = ALIGN(4);
+		__fini_array_start = .;
+		KEEP(*(SORT(.fini_array.*)))
+		KEEP(*(.fini_array))
+		__fini_array_end = .;
+		/*-----------------*/
+
+		/* https://community.silabs.com/s/article/understand-the-gnu-linker-script-of-cortex-m4?language=en_US */
+		KEEP(*(.init))
+		KEEP(*(.fini))
+		*(.init)
+		*(.fini)
 
 		. = ALIGN(4);
 		__xip_code_rodata_end__ = .;
