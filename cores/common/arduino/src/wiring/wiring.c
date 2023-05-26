@@ -12,6 +12,11 @@ __attribute__((weak)) void yield() {
 	runPeriodicTasks();
 	vTaskDelay(1);
 	taskYIELD();
+	lt_wdt_feed();
 }
+
+#else
+
+__attribute__((weak)) void yield() {}
 
 #endif

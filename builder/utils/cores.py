@@ -50,6 +50,7 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
             "+<compat/*.c*>",
             "+<port/*.c*>",
             "+<posix/*.c>",
+            "+<wiring/*.c>",
             "+<wraps/*.c>",
         ],
         includes=[
@@ -58,6 +59,7 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
             "!<compat>",
             "!<config>",
             "!<port>",
+            "!<wiring>",
         ],
     )
     queue.AddLibrary(
