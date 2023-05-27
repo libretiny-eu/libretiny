@@ -44,7 +44,7 @@ uint32_t lt_cpu_get_mac_id() {
 }
 
 const char *lt_cpu_get_core_type() {
-	return "ARM Cortex-M4F";
+	return "ARM Cortex-M4F (ARMv7E-M)";
 }
 
 uint32_t lt_cpu_get_freq() {
@@ -73,11 +73,23 @@ bool lt_reboot_download_mode() {
 	return true;
 }
 
-void lt_gpio_recover() {
-	// PA14 and PA15 are apparently unusable with SWD enabled
-	sys_jtag_off();
-	Pinmux_Config(PA_14, PINMUX_FUNCTION_GPIO);
-	Pinmux_Config(PA_15, PINMUX_FUNCTION_GPIO);
+bool lt_set_debug_mode(lt_debug_mode_t mode) {
+	uint32_t *swd;
+	switch (mode) {
+		case DEBUG_MODE_OFF:
+			sys_jtag_off();
+			Pinmux_Config(PA_14, PINMUX_FUNCTION_GPIO);
+			Pinmux_Config(PA_15, PINMUX_FUNCTION_GPIO);
+			return true;
+		case DEBUG_MODE_SWD:
+			Pinmux_Config(PA_14, PINMUX_FUNCTION_SWD);
+			Pinmux_Config(PA_15, PINMUX_FUNCTION_SWD);
+			uint32_t *swd = (uint32_t *)0x400000A4;
+			*swd |= 0x1000;
+			return true;
+		default:
+			return false;
+	}
 }
 
 /*______ _           _
@@ -186,26 +198,4 @@ bool lt_ota_switch(bool revert) {
 	// write OTA switch to flash
 	flash_write_word(NULL, FLASH_SYSTEM_OFFSET + 4, value);
 	return true;
-}
-
-/*_          __   _       _         _
- \ \        / /  | |     | |       | |
-  \ \  /\  / /_ _| |_ ___| |__   __| | ___   __ _
-   \ \/  \/ / _` | __/ __| '_ \ / _` |/ _ \ / _` |
-	\  /\  / (_| | || (__| | | | (_| | (_) | (_| |
-	 \/  \/ \__,_|\__\___|_| |_|\__,_|\___/ \__, |
-											 __/ |
-											|___*/
-bool lt_wdt_enable(uint32_t timeout) {
-	watchdog_init(timeout);
-	watchdog_start();
-	return true;
-}
-
-void lt_wdt_disable() {
-	watchdog_stop();
-}
-
-void lt_wdt_feed() {
-	watchdog_refresh();
 }

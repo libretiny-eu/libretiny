@@ -30,7 +30,7 @@ lt_cpu_model_t lt_cpu_get_model() {
 }
 
 const char *lt_cpu_get_core_type() {
-	return "ARM968E-S";
+	return "ARM968E-S (ARMv5TE)";
 }
 
 /*_____             _

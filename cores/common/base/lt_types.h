@@ -86,3 +86,9 @@ typedef enum {
 	OTA_TYPE_DUAL	= 1,
 	OTA_TYPE_FILE	= 2,
 } lt_ota_type_t;
+
+typedef enum {
+	DEBUG_MODE_OFF	= 0,
+	DEBUG_MODE_JTAG = 1,
+	DEBUG_MODE_SWD	= 2,
+} lt_debug_mode_t;

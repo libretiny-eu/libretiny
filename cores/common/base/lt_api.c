@@ -140,8 +140,12 @@ const char *lt_get_reboot_reason_name(lt_reboot_reason_t reason) {
 	}
 }
 
+__attribute__((weak)) bool lt_set_debug_mode(lt_debug_mode_t mode) {
+	return false;
+}
+
 __attribute__((weak)) void lt_gpio_recover() {
-	// nop by default
+	lt_set_debug_mode(DEBUG_MODE_OFF);
 }
 
 /*______ _           _

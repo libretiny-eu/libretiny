@@ -59,6 +59,13 @@ lt_reboot_reason_t lt_get_reboot_reason();
 const char *lt_get_reboot_reason_name(lt_reboot_reason_t reason);
 
 /**
+ * @brief Set debugger mode (JTAG, SWD or OFF).
+ *
+ * @return whether the mode is supported, and setting it was successful
+ */
+bool lt_set_debug_mode(lt_debug_mode_t mode);
+
+/**
  * @brief Reconfigure GPIO pins used for debugging
  * (SWD/JTAG), so that they can be used as normal I/O.
  */

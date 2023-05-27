@@ -29,7 +29,7 @@ lt_cpu_model_t lt_cpu_get_model() {
 }
 
 const char *lt_cpu_get_core_type() {
-	return "ARM Cortex-M4";
+	return "ARM Cortex-M33 (ARMv8-M)";
 }
 
 uint32_t lt_cpu_get_freq() {
@@ -74,9 +74,29 @@ lt_reboot_reason_t lt_get_reboot_reason() {
 	}
 }
 
-void lt_gpio_recover() {
-	sys_jtag_off();
-	sys_swd_off();
+bool lt_set_debug_mode(lt_debug_mode_t mode) {
+	switch (mode) {
+		case DEBUG_MODE_OFF:
+			if (hal_misc_jtag_pin_ctrl(0) != HAL_OK)
+				return false;
+			if (hal_misc_swd_pin_ctrl(0) != HAL_OK)
+				return false;
+			return true;
+		case DEBUG_MODE_JTAG:
+			if (hal_misc_swd_pin_ctrl(0) != HAL_OK)
+				return false;
+			if (hal_misc_jtag_pin_ctrl(1) != HAL_OK)
+				return false;
+			return true;
+		case DEBUG_MODE_SWD:
+			if (hal_misc_jtag_pin_ctrl(0) != HAL_OK)
+				return false;
+			if (hal_misc_swd_pin_ctrl(1) != HAL_OK)
+				return false;
+			return true;
+		default:
+			return false;
+	}
 }
 
 /*__  __
