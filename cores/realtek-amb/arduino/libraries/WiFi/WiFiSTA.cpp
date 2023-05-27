@@ -67,8 +67,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	WiFiNetworkInfo &info = DATA->sta;
 
 	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
-	__wrap_rtl_printf_disable();
-	__wrap_DiagPrintf_disable();
+	DIAG_PRINTF_DISABLE();
 
 	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
 
@@ -116,8 +115,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
 			// free memory as wifi_indication creates a copy
 			free(eventInfo);
-			__wrap_rtl_printf_enable();
-			__wrap_DiagPrintf_enable();
+			DIAG_PRINTF_ENABLE();
 			return true;
 		}
 		LT_EM(WIFI, "DHCP failed; dhcpRet=%d", dhcpRet);
@@ -126,8 +124,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	}
 	LT_EM(WIFI, "Connection failed; ret=%d", ret);
 error:
-	__wrap_rtl_printf_enable();
-	__wrap_DiagPrintf_enable();
+	DIAG_PRINTF_ENABLE();
 	return false;
 }
 

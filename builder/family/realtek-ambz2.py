@@ -198,6 +198,7 @@ queue.AddLibrary(
         "+<common/api/lwip_netconf.c>",
         # network - api - wifi
         "+<common/api/wifi/*.c>",
+        "ARDUINO" in "ENV" and "-<common/api/wifi/wifi_ind.c>",
         # network - api - wifi - rtw_wpa_supplicant
         "+<common/api/wifi/rtw_wpa_supplicant/src/crypto/tls_polarssl.c>",
         "+<common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/*.c>",

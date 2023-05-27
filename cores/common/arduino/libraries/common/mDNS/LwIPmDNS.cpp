@@ -13,6 +13,11 @@ extern "C" {
 #include <lwip/netif.h>
 }
 
+#if LWIP_VERSION_SIMPLE < 20100 && defined(LWIP_NETIF_EXT_STATUS_CALLBACK)
+#warning "LWIP_NETIF_EXT_STATUS_CALLBACK not available before lwIP 2.1.0"
+#undef LWIP_NETIF_EXT_STATUS_CALLBACK
+#endif
+
 #if LWIP_MDNS_RESPONDER
 
 static std::vector<char *> services_name;

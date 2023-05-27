@@ -162,3 +162,28 @@ typedef enum {
 	WLMODE_DISABLE = 1,
 	WLMODE_ENABLE  = 2,
 } WiFiModeAction;
+
+static const char *WiFiModeText[]	= {"NULL", "STA", "AP", "AP+STA"};
+static const char *WiFiStatusText[] = {
+	"Idle",
+	"No SSID",
+	"Scan Completed",
+	"Connected",
+	"Connect failed",
+	"Connection lost",
+	"Disconnected",
+};
+static const char *WiFiAuthModeText[] = {
+	"Open",
+	"WEP",
+	"WPA PSK",
+	"WPA2 PSK",
+	"WPA/WPA2 PSK",
+	"WPA2 EAP",
+	"WPA3 PSK",
+	"WPA2/WPA3 PSK",
+	"WAPI PSK",
+	"WPA",
+	"WPA2",
+	"Auto",
+};

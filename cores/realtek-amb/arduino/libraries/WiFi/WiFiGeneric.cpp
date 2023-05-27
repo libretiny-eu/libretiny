@@ -9,8 +9,7 @@ int32_t WiFiClass::channel() {
 }
 
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
-	__wrap_rtl_printf_disable();
-	__wrap_DiagPrintf_disable();
+	DIAG_PRINTF_DISABLE();
 	startWifiTask();
 
 	if (!DATA->initialized) {
@@ -102,7 +101,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 			LT_DM(WIFI, "Mode: %s DISABLE", WLAN1_NAME);
 			netif_set_link_down(WLAN1_NETIF);
 			netif_set_down(WLAN1_NETIF);
+#if !LT_RTL8720C
 			rltk_stop_softap(WLAN1_NAME);
+#else
+			rltk_suspend_softap(WLAN1_NAME);
+#endif
 			rltk_wlan_init(WLAN1_IDX, RTW_MODE_NONE);
 			wext_set_mode(WLAN1_NAME, IW_MODE_INFRA);
 		}
@@ -152,13 +155,11 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	LT_HEAP_I();
-	__wrap_rtl_printf_enable();
-	__wrap_DiagPrintf_enable();
+	DIAG_PRINTF_ENABLE();
 	return true;
 
 error:
-	__wrap_rtl_printf_enable();
-	__wrap_DiagPrintf_enable();
+	DIAG_PRINTF_ENABLE();
 	return false;
 }
 
