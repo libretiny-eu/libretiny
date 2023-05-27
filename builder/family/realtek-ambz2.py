@@ -189,6 +189,9 @@ env.Replace(FREERTOS_PORT=env["FAMILY_NAME"], FREERTOS_PORT_DEFINE="REALTEK_AMBZ
 queue.AddExternalLibrary("freertos")
 queue.AddExternalLibrary("freertos-port")
 
+# Sources - lwIP
+queue.AddExternalLibrary("lwip", port="ambz2")
+
 # Sources - network utilities
 queue.AddLibrary(
     name="ambz2_net",
@@ -216,7 +219,6 @@ queue.AddLibrary(
         "+<common/network/httpd/httpd_tls.c>",
         # network
         "+<common/network/dhcp/dhcps.c>",
-        "+<common/network/sntp/sntp.c>",
         # network - websocket
         "+<common/network/websocket/*.c>",
         # network - mdns
@@ -296,34 +298,6 @@ queue.AddLibrary(
         CCFLAGS=[
             "-Wno-unused-function",
             "-Wno-unused-variable",
-            "-Wno-implicit-function-declaration",
-        ],
-    ),
-)
-
-
-# Sources - lwIP 2.0.2
-queue.AddLibrary(
-    name="ambz2_lwip",
-    base_dir=join(COMPONENT_DIR, "common", "network", "lwip", "lwip_v2.0.2"),
-    srcs=[
-        "+<port/realtek/freertos/*.c>",
-        "+<src/api/*.c>",
-        "+<src/apps/ping/*.c>",
-        "+<src/apps/mdns/*.c>",
-        "+<src/core/*.c>",
-        "+<src/core/ipv4/*.c>",
-        "+<src/core/ipv6/*.c>",
-        "+<src/netif/ethernet.c>",
-    ],
-    includes=[
-        "+<port/realtek>",
-        "+<port/realtek/freertos>",
-        "+<src/include>",
-        "+<src/include/netif>",
-    ],
-    options=dict(
-        CFLAGS=[
             "-Wno-implicit-function-declaration",
         ],
     ),

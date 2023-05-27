@@ -4,8 +4,14 @@
 
 #include_next "lwipopts.h"
 
-#define ip_addr			  ip4_addr	 // LwIP 2.0.x compatibility
-#define ip_addr_t		  ip4_addr_t // LwIP 2.0.x compatibility
+#if (!defined(LWIP_IPV4) || LWIP_IPV4) && !LWIP_IPV6
+#define ip_addr	  ip4_addr	 // LwIP 2.0.x compatibility
+#define ip_addr_t ip4_addr_t // LwIP 2.0.x compatibility
+#endif
+#if !LWIP_IPV4 && LWIP_IPV6
+#define ip_addr	  ip6_addr	 // LwIP 2.0.x compatibility
+#define ip_addr_t ip6_addr_t // LwIP 2.0.x compatibility
+#endif
 #define in_addr_t		  u32_t
 #define IN_ADDR_T_DEFINED 1
 
