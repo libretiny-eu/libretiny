@@ -33,10 +33,6 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		this->data = new SerialData();
 		this->buf  = &BUF;
 
-		if (this->port == 2) {
-			hal_uart_deinit(&log_uart);
-		}
-
 		// TODO handle PIN_INVALID
 		hal_uart_init(&UART, this->tx, this->rx, NULL);
 

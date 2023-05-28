@@ -404,6 +404,12 @@ bootloader_dst = env.subst("${BUILD_DIR}/bootloader.axf")
 if not isfile(bootloader_dst):
     copyfile(bootloader_src, bootloader_dst)
 
+# OTA2 clearing - 4096 bytes of 0xFF
+image_ota_clear = env.subst("${BUILD_DIR}/raw_ota_clear.bin")
+if not isfile(image_ota_clear):
+    with open(image_ota_clear, "wb") as f:
+        f.write(b"\xFF" * 4096)
+
 # Build all libraries
 queue.BuildLibraries()
 
@@ -416,5 +422,7 @@ env.Replace(
     UF2OTA=[
         # same OTA images for flasher and device
         f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2;flasher:ota1,ota2",
+        # clearing headers of the "other" OTA image (hence the indexes are swapped)
+        f"{image_ota_clear},{image_ota_clear}=device:ota2,ota1;flasher:ota2,ota1",
     ],
 )
