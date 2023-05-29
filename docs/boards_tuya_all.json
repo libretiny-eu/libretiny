@@ -441,6 +441,34 @@
 			"datasheet_id": "Kc5x1p35fs5zf"
 		}
 	},
+	"t2": {
+		"t2-u": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "T2-U-module-datasheet",
+			"datasheet_id": "Kce1tncb80ldq"
+		}
+	},
+	"t1": {
+		"t1-2s": {
+			"mcu": "t1a",
+			"flash": 1048576,
+			"ram": 294912,
+			"pins_total": 11,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "T1-2S-module-datasheet",
+			"datasheet_id": "Kcl2d5xjy1rly"
+		}
+	},
 	"axy": {
 		"axy2s": {
 			"mcu": "ecr6600",
@@ -493,7 +521,7 @@
 	},
 	"wt": {
 		"wt3": {
-			"mcu": "t2",
+			"mcu": "bk7231n",
 			"flash": 2097152,
 			"ram": 262144,
 			"pins_total": 16,

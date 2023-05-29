@@ -40,6 +40,7 @@ typedef enum {
 	RTL8711BU = CPU_MODEL(F_RTL8710B, 0xFC), // CHIPID_8711BG / QFN68
 	MX1290	  = RTL8710BN,
 	MX1290V2  = RTL8710BX,
+	W302	  = RTL8710BN,
 	// Realtek AmebaZ2 (chip_id << 2 | flash_mode)
 	RTL8720CM = CPU_MODEL(F_RTL8720C, 0xEC), // 0xFB << 2 | 0
 	RTL8720CF = CPU_MODEL(F_RTL8720C, 0xED), // 0xFB << 2 | 1

@@ -5,9 +5,8 @@
 	"flash": {
 		"ota1": "0x00B000+0x75000",
 		"ota2": "0x080000+0x75000",
-		"kvs": "0xF5000+0x6000",
-		"userdata": "0xFB000+0x104000",
-		"rdp": "0x1FF000+0x1000"
+		"kvs": "0x0F5000+0x8000",
+		"userdata": "0x0FD000+0x102000"
 	},
 	"upload": {
 		"flash_size": 2097152,
