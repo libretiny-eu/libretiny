@@ -73,12 +73,6 @@ queue.AppendPublic(
         ("ARDUINO_SDK", 1),
     ],
     LINKFLAGS=[
-        "-Wl,--as-needed",
-        "-Wl,--build-id=none",
-        "-Wl,--cref",
-        "-Wl,--no-enum-size-warning",
-        "-Wl,--no-undefined",
-        "-Wl,--warn-common",
         # wrappers from posix/time.c
         "-Wl,-wrap,gettimeofday",
         "-Wl,-wrap,settimeofday",

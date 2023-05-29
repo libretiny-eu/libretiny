@@ -138,11 +138,14 @@ queue.AppendPublic(
     LINKFLAGS=[
         "-g2",
         "-Os",
+        "-Wl,--as-needed",
         "-Wl,--build-id=none",
         "-Wl,--cref",
         "-Wl,--gc-sections",
         "-Wl,--no-enum-size-warning",
         "-Wl,--no-wchar-size-warning",
+        "-Wl,--no-undefined",
+        "-Wl,--warn-common",
         # malloc.c wrappers
         "-Wl,-wrap,malloc",
         "-Wl,-wrap,calloc",

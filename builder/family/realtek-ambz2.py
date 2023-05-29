@@ -56,6 +56,7 @@ queue.AppendPublic(
         "--specs=nano.specs",
         "-Wl,--use-blx",
         "-Wl,--undefined=gRamStartFun",
+        "-Wl,--warn-section-align",
         "-Wl,-wrap,aesccmp_construct_mic_iv",
         "-Wl,-wrap,aesccmp_construct_mic_header1",
         "-Wl,-wrap,aesccmp_construct_ctr_preload",
