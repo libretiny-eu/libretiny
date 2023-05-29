@@ -13,7 +13,13 @@
 	},
 	"debug": {
 		"protocol": "openocd",
-		"protocols": []
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "amebaz2.cfg",
+		"gdb_init": [
+			"mem 0x9b000000 0x9c000000 ro"
+		]
 	},
 	"upload": {
 		"maximum_ram_size": 262144,
