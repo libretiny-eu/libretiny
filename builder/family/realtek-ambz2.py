@@ -418,7 +418,7 @@ queue.BuildLibraries()
 image_firmware_is = "${BUILD_DIR}/image_firmware_is.${FLASH_OTA1_OFFSET}.bin"
 env.Replace(
     # linker command (dual .bin outputs)
-    LINK="${LTCHIPTOOL} link2bin ${BOARD_JSON} '' ''",
+    LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
     # UF2OTA input list
     UF2OTA=[
         # same OTA images for flasher and device
