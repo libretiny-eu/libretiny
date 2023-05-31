@@ -106,6 +106,7 @@ queue.AddLibrary(
         # cmsis
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram/*.c>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram_s/app_start.c>",
+        "+<soc/realtek/8710c/misc/driver/flash_api_ext.c>",
         # utilities
         "+<common/utilities/cJSON.c>",
         "+<common/utilities/http_client.c>",

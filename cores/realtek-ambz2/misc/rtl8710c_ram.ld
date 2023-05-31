@@ -385,5 +385,11 @@ SECTIONS
 	PROVIDE(__sram_end__ = __StackLimit);
 
 	/* Check if data + heap + stack exceeds RAM limit */
-	/* TODO:	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack") */
+	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
+	ASSERT(__bss_start__ >= __ram_code_text_end__, "sram heap will overwrite sram text")
+	ASSERT(__bss_start__ >= __ram_code_rodata_end__, "sram heap will overwrite sram rodata")
+	ASSERT(__bss_start__ >= __data_end__, "sram heap will overwrite sram data")
+	ASSERT(__psram_bss_start__ >= __psram_code_text_end__, "psram heap will overwrite psram text")
+	ASSERT(__psram_bss_start__ >= __psram_code_rodata_end__, "psram heap will overwrite psram rodata")
+	ASSERT(__psram_bss_start__ >= __psram_data_end__, "psram heap will overwrite psram data")
 }
