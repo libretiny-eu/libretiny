@@ -114,9 +114,10 @@ void SerialClass::end() {
 		DIAG_UartReInit((IRQ_FUN)UartLogIrqHandle);
 	}
 
+	delete DATA;
+	this->data	   = NULL;
 	this->buf	   = NULL;
 	this->baudrate = 0;
-	delete DATA;
 }
 
 void SerialClass::flush() {

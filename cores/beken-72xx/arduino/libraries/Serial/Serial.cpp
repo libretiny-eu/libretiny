@@ -68,9 +68,10 @@ void SerialClass::end() {
 			break;
 	}
 
+	delete DATA;
+	this->data	   = NULL;
 	this->buf	   = NULL;
 	this->baudrate = 0;
-	delete DATA;
 }
 
 void SerialClass::flush() {

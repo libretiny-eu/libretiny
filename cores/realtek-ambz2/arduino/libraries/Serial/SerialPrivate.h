@@ -6,7 +6,7 @@
 #include <sdk_private.h>
 
 typedef struct {
-	hal_uart_adapter_t uart;
+	hal_uart_adapter_t *uart;
 	RingBuffer buf;
 } SerialData;
 
