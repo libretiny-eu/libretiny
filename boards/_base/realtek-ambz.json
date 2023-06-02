@@ -1,6 +1,7 @@
 {
 	"build": {
 		"family": "RTL8710B",
+		"ldscript": "rlx8711B-symbol-v02-img2_xip1.ld",
 		"f_cpu": "125000000L",
 		"prefix": "arm-none-eabi-",
 		"amb_flash_addr": "0x08000000"
@@ -24,10 +25,6 @@
 			"mem 0x8000000 0x8200000 ro"
 		]
 	},
-	"frameworks": [
-		"realtek-ambz-sdk",
-		"realtek-ambz-arduino"
-	],
 	"upload": {
 		"maximum_ram_size": 262144,
 		"require_upload_port": true,

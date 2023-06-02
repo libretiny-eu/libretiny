@@ -415,6 +415,32 @@
 			"datasheet_id": "Kbtesqh678sbe"
 		}
 	},
+	"tcs905": {
+		"tcs905-3s": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 22,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "TCS905-3S-Module-Datasheet",
+			"datasheet_id": "Kc5xc8hhigndh"
+		},
+		"tcs905-u": {
+			"mcu": "bk7231n",
+			"flash": 2097152,
+			"ram": 262144,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "TCS905-U-module-datasheet",
+			"datasheet_id": "Kc5x1p35fs5zf"
+		}
+	},
 	"axy": {
 		"axy2s": {
 			"mcu": "ecr6600",
@@ -491,6 +517,20 @@
 			],
 			"datasheet_name": "WL2H-U-Module-Datasheet",
 			"datasheet_id": "Kbohlj8eg19u5"
+		}
+	},
+	"wx": {
+		"wxu": {
+			"mcu": "t103c-hl",
+			"flash": 2097152,
+			"ram": 327680,
+			"pins_total": 21,
+			"connectivity": [
+				"wifi",
+				"ble"
+			],
+			"datasheet_name": "wxu-module-datasheet",
+			"datasheet_id": "Kc2xk9qlk04so"
 		}
 	},
 	"wr": {

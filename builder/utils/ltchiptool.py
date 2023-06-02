@@ -1,16 +1,18 @@
 # Copyright (c) Kuba Szczodrzyński 2022-06-02.
 
-import sys
+import json
 from datetime import datetime
 from os.path import basename, join, normpath
 
-from SCons.Script import Builder, DefaultEnvironment
+from platformio.platform.base import PlatformBase
+from platformio.platform.board import PlatformBoardConfig
+from SCons.Script import Builder, DefaultEnvironment, Environment
 
-env = DefaultEnvironment()
-platform = env.PioPlatform()
+env: Environment = DefaultEnvironment()
+platform: PlatformBase = env.PioPlatform()
 
 
-def env_uf2ota(env, *args, **kwargs):
+def env_uf2ota(env: Environment, *args, **kwargs):
     now = datetime.now()
     project_dir = env.subst("$PROJECT_DIR")
     project_name = basename(normpath(project_dir))
@@ -22,68 +24,60 @@ def env_uf2ota(env, *args, **kwargs):
     if platform.custom("fw_version"):
         project_version = platform.custom("fw_version")
 
-    inputs = " ".join(f'"{";".join(input)}"' for input in env["UF2OTA"])
     output = [
         project_name,
         project_version,
         "${VARIANT}",
-        "${FAMILY}",
+        "${MCULC}",
         f"lt{lt_version}",
     ]
     output = "_".join(output) + ".uf2"
     if platform.custom("fw_output"):
         output = platform.custom("fw_output")
-    output = join("${BUILD_DIR}", output)
-    env["UF2OUT"] = output
-    env["UF2OUT_BASE"] = basename(output)
+
+    outputs = [
+        join("${BUILD_DIR}", output),
+        join("${BUILD_DIR}", "firmware.uf2"),
+        join("${BUILD_DIR}", "firmware.bin"),
+    ]
+    output_opts = [f'--output "{output}"' for output in outputs]
 
     cmd = [
         "@${LTCHIPTOOL} uf2 write",
-        f'--output "{output}"',
-        "--family ${FAMILY}",
-        "--board ${VARIANT}",
-        f"--version {lt_version}",
+        *output_opts,
+        "--board ${BOARD_JSON}",
+        f"--lt-version {lt_version}",
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
-        inputs,
+        "--legacy",
+        *(f'"{arg}"' for arg in env["UF2OTA"]),
     ]
 
-    print(f"|-- {basename(env.subst(output))}")
-
+    for output in outputs:
+        print(f"|-- {basename(env.subst(output))}")
     env.Execute(" ".join(cmd))
 
 
-def env_flash_write(env, target):
+def env_flash_write(env: Environment):
     protocol = env.subst("${UPLOAD_PROTOCOL}")
-    actions = []
-    # from platform-espressif32/builder/main.py
     if protocol == "uart":
         # upload via UART
-        env["UPLOADERFLAGS_UF2"] = [
-            "${UF2OUT}",
+        return [
             "-d",
             "${UPLOAD_PORT}",
             "-b",
             "${UPLOAD_SPEED}",
         ]
-        actions = [
-            env.VerboseAction(env.AutodetectUploadPort, "Looking for upload port..."),
-        ]
-    elif protocol == "custom":
-        actions = [
-            env.VerboseAction("${UPLOADCMD}", "Uploading firmware"),
-        ]
     else:
-        sys.stderr.write("Warning! Unknown upload protocol %s\n" % protocol)
-        return
+        # can't upload via ltchiptool
+        return []
 
-    # add main upload target
-    env.Replace(
-        UPLOADER="${LTCHIPTOOL} flash write",
-        UPLOADCMD="${UPLOADER} ${UPLOADERFLAGS_UF2} ${UPLOADERFLAGS}",
-    )
-    actions.append(env.VerboseAction("${UPLOADCMD}", "Uploading ${UF2OUT_BASE}"))
-    env.AddPlatformTarget("upload", target, actions, "Upload")
+
+def env_export_board_data(env: Environment, board: PlatformBoardConfig):
+    output = join("${BUILD_DIR}", "board.json")
+    with open(env.subst(output), "w") as f:
+        json.dump(board.manifest, f, indent="\t")
+    env["BOARD_JSON"] = output
 
 
 env.Append(
@@ -93,4 +87,5 @@ env.Append(
         )
     )
 )
-env.AddMethod(env_flash_write, "AddFlashWriter")
+env.AddMethod(env_flash_write, "GetLtchiptoolWriteFlags")
+env.AddMethod(env_export_board_data, "ExportBoardData")

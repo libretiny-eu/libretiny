@@ -1,8 +1,8 @@
-site_name: LibreTuya
+site_name: LibreTiny
 docs_dir: .
 
-site_url: https://docs.libretuya.ml/
-repo_url: https://github.com/kuba2k2/libretuya
+site_url: https://docs.libretiny.eu/
+repo_url: https://github.com/kuba2k2/libretiny
 
 theme:
   name: material
@@ -24,9 +24,10 @@ plugins:
       projects:
         # project names must be alphanumeric, else snippets won't work
         ltapi:
-          src-dirs: arduino/libretuya/
+          src-dirs: cores/common/
           doxy-cfg:
-            PREDEFINED: __cplusplus
+            OPTIMIZE_OUTPUT_FOR_C: YES
+            PREDEFINED: __cplusplus DOXYGEN=1
             CASE_SENSE_NAMES: NO
       save-api: .
   - literate-nav:
@@ -34,11 +35,6 @@ plugins:
   - section-index
   - include-markdown
   - search
-  - git-revision-date-localized:
-      type: timeago
-      enable_creation_date: true
-      exclude:
-        - ltapi/*
 
 extra_css:
   - docs/style.css
