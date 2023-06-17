@@ -269,10 +269,9 @@ __attribute__((weak)) void lt_wdt_disable() {}
 
 __attribute__((weak)) void lt_wdt_feed() {}
 
-
 /**
-* Deep Sleep
-**/
+ * Deep Sleep
+ **/
 
 __attribute__((weak)) void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high);
 

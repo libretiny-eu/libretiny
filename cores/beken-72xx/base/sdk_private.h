@@ -11,6 +11,8 @@ extern "C" {
 // other includes
 #include <flash_pub.h>
 #include <gpio_pub.h>
+#include <manual_ps.h>
+#include <manual_ps_pub.h>
 #include <param_config.h>
 #include <start_type_pub.h>
 #include <sys_ctrl.h>
@@ -18,8 +20,6 @@ extern "C" {
 #include <uart_pub.h>
 #include <wdt_pub.h>
 #include <wlan_ui_pub.h>
-#include <manual_ps_pub.h>
-#include <manual_ps.h>
 
 extern uint8_t system_mac[];
 extern uint32_t wdt_ctrl(uint32_t cmd, void *param);
