@@ -2,7 +2,7 @@
 	"pcb": {
 		"templates": [
 			"tuya2",
-			"rf-15mm-type1",
+			"rf-type1",
 			"tuya2-shield"
 		],
 		"vars": {

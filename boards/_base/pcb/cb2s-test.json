@@ -15,7 +15,7 @@
 			},
 			{
 				"id": "u2_txd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "6.7,6.1",
 				"vars": {
 					"DIR": "left",
@@ -29,7 +29,7 @@
 			},
 			{
 				"id": "u2_rxd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "6.2,8.1",
 				"vars": {
 					"DIR": "left",
@@ -43,7 +43,7 @@
 			},
 			{
 				"id": "csn",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "4.2,11.1",
 				"vars": {
 					"DIR": "left",
