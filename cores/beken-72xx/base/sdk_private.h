@@ -18,6 +18,8 @@ extern "C" {
 #include <uart_pub.h>
 #include <wdt_pub.h>
 #include <wlan_ui_pub.h>
+#include <manual_ps_pub.h>
+#include <manual_ps.h>
 
 extern uint8_t system_mac[];
 extern uint32_t wdt_ctrl(uint32_t cmd, void *param);

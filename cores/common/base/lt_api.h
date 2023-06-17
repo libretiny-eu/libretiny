@@ -18,6 +18,7 @@ extern "C" {
 #include "api/lt_ota.h"
 #include "api/lt_utils.h"
 #include "api/lt_wdt.h"
+#include "api/lt_deep_sleep.h"
 
 #ifdef __cplusplus
 } // extern "C"

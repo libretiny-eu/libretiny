@@ -188,3 +188,25 @@ void lt_wdt_disable() {
 void lt_wdt_feed() {
 	wdt_ctrl(WCMD_RELOAD_PERIOD, NULL);
 }
+
+
+/**
+* Deep Sleep
+**/
+
+static PS_DEEP_CTRL_PARAM deep_sleep_param;
+
+void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high) {
+  deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_GPIO;
+  deep_sleep_param.gpio_index_map = gpio_index_map;
+  deep_sleep_param.gpio_edge_map = on_high ? 0 : 0xFFFFFFFF;
+}
+
+void lt_deep_sleep_config_timer(uint32_t sleep_duration) {
+  deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_RTC;
+  deep_sleep_param.sleep_time = sleep_duration;
+}
+
+void lt_deep_sleep_enter() {
+  bk_enter_deep_sleep_mode((PS_DEEP_CTRL_PARAM*)&deep_sleep_param);
+}
