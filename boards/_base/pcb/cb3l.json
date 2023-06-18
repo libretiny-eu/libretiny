@@ -2,14 +2,12 @@
 	"pcb": {
 		"templates": [
 			"esp12s",
-			"esp12e-shield",
+			"pcb-white",
 			"tuya-16x24",
 			"rf-type1"
 		],
 		"vars": {
-			"MASK_PRESET": "mask_white",
-			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black"
+			"PINHOLE": 1
 		},
 		"pinout_hidden": "I2S,SD,SPI,I2C,JTAG,FLASH",
 		"pinout": {

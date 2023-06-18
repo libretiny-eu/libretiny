@@ -2,14 +2,9 @@
 	"pcb": {
 		"templates": [
 			"tuya2l",
-			"rf-type1",
-			"tuya2l-shield"
+			"pcb-white",
+			"rf-type1"
 		],
-		"vars": {
-			"MASK_PRESET": "mask_white",
-			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black"
-		},
 		"pinout_hidden": "I2S,I2C,JTAG,FLASH",
 		"pinout": {
 			"1": {
