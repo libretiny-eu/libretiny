@@ -2,14 +2,13 @@
 	"pcb": {
 		"templates": [
 			"tuya2l",
-			"rf-15mm-type1",
+			"rf-type1",
 			"tuya2l-shield"
 		],
 		"vars": {
 			"MASK_PRESET": "mask_white",
 			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_hole"
+			"SILK_COLOR": "black"
 		},
 		"pinout_hidden": "I2S,I2C,JTAG,FLASH",
 		"pinout": {

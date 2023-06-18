@@ -11,25 +11,11 @@
 		},
 		"back": [
 			{
-				"type": "rect",
-				"pos": "0,0",
-				"size": "15,17.3",
-				"preset": "${MASK_PRESET}"
-			},
-			{
-				"name": "pins_horz7_2mm_0.7mm",
-				"pos": "1.15,17.3",
-				"vars": {
-					"PINTYPE": "${PINTYPE_HORZ}",
-					"PINDIR": "down"
-				}
-			},
-			{
 				"name": "test_pad_1mm",
 				"pos": "1.5,7.5"
 			},
 			{
-				"name": "label_line_2mm_down",
+				"name": "label_line_down",
 				"pos": "0.4,4.7",
 				"vars": {
 					"DIR": "right",
@@ -51,7 +37,7 @@
 			},
 			{
 				"id": "u2_txd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "2.2,5.1",
 				"vars": {
 					"DIR": "left",
@@ -65,7 +51,7 @@
 			},
 			{
 				"id": "u1_txd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "4.0,5.1",
 				"vars": {
 					"DIR": "left",
@@ -79,7 +65,7 @@
 			},
 			{
 				"id": "gnd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "9.2,5.1",
 				"vars": {
 					"DIR": "left",
@@ -93,7 +79,7 @@
 			},
 			{
 				"id": "rst",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "2.2,9.9",
 				"vars": {
 					"DIR": "left",
@@ -107,7 +93,7 @@
 			},
 			{
 				"id": "f_csn",
-				"name": "label_line_2mm_down",
+				"name": "label_line_down",
 				"pos": "2.2,12.8",
 				"vars": {
 					"DIR": "left",

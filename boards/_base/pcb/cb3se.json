@@ -4,14 +4,12 @@
 			"esp12e-22",
 			"esp12e-shield-nohole",
 			"tuya-16x24",
-			"rf-16mm-type1"
+			"rf-type1"
 		],
 		"vars": {
 			"MASK_PRESET": "mask_blue_light",
 			"TRACE_COLOR": "#58839B",
-			"SILK_COLOR": "white",
-			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_nohole"
+			"SILK_COLOR": "white"
 		},
 		"pinout_hidden": "I2S,SD,JTAG,FLASH,SCL1",
 		"pinout": {
