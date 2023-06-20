@@ -42,7 +42,7 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	{GPIO17, PIN_GPIO | PIN_IRQ | PIN_SPI,                      PIN_NONE, 0},
 	// D16: P18, SD_D2
 	{GPIO18, PIN_GPIO | PIN_IRQ,                                PIN_NONE, 0},
-	// D17: P19, SD_D1
+	// D17: P19, SD_D3
 	{GPIO19, PIN_GPIO | PIN_IRQ,                                PIN_NONE, 0},
 	// D18: P20, I2C1_SCL, TCK, FSCK
 	{GPIO20, PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_JTAG,           PIN_NONE, 0},

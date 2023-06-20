@@ -21,7 +21,7 @@ def add_base_dir(
 ):
     out = []
     for expr in expressions:
-        if expr == False:
+        if expr == False or expr is None:
             # support '[cond] and [path]' logical expressions
             continue
         if expr[1] != "<" or expr[-1] != ">":
@@ -39,6 +39,9 @@ def add_base_dir(
 
 def iter_expressions(expressions: List[str]) -> Generator[Tuple[str, str], None, None]:
     for expr in expressions:
+        if expr == False or expr is None:
+            # support '[cond] and [path]' logical expressions
+            continue
         if expr[1:2] != "<" or expr[-1:] != ">":
             yield ("+", expr)
             continue

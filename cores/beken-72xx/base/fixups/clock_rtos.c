@@ -12,7 +12,7 @@
 #include "uart_pub.h"
 
 // from lt_config.h
-#ifndef LT_MICROS_HIGH_RES
+#if !defined(LT_MICROS_HIGH_RES) && !LT_BK7231Q
 #define LT_MICROS_HIGH_RES 1
 #endif
 
@@ -30,7 +30,7 @@ static void fclk_hdl(UINT8 param);
 
 void fclk_init(void) {
 #if (CFG_SOC_NAME == SOC_BK7231)
-	fclk_timer_hw_init(BK_PWM_TIMER_ID0);
+	fclk_timer_hw_init(BK_PWM_TIMER_ID3);
 #elif LT_MICROS_HIGH_RES
 	fclk_timer_hw_init(BK_TIMER_ID0);
 #else
@@ -51,7 +51,7 @@ static void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id) {
 	fclk_id = timer_id;
 	if (fclk_id >= BK_PWM_TIMER_ID0) { // pwm timer
 		pwm_param_t param;
-		param.channel		  = (fclk_id - PWM0);
+		param.channel		  = (fclk_id - BK_PWM_TIMER_ID0);
 		param.cfg.bits.en	  = PWM_ENABLE;
 		param.cfg.bits.int_en = PWM_INT_EN;
 		param.cfg.bits.mode	  = PWM_TIMER_MODE;
