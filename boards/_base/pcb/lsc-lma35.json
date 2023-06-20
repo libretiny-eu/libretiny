@@ -2,15 +2,9 @@
 	"pcb": {
 		"templates": [
 			"custom-20x24-22",
-			"rf-20mm-type1"
+			"pcb-blue-light",
+			"rf-type1"
 		],
-		"vars": {
-			"MASK_PRESET": "mask_blue_light",
-			"TRACE_COLOR": "#58839B",
-			"SILK_COLOR": "white",
-			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_nohole"
-		},
 		"pinout_hidden": "I2S,JTAG,FLASH,SD,SPI,SDA1",
 		"pinout": {
 			"1": {

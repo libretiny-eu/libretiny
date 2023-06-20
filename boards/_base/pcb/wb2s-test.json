@@ -19,7 +19,7 @@
 			},
 			{
 				"id": "sck",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "2.6,5.4",
 				"vars": {
 					"DIR": "left",
@@ -33,7 +33,7 @@
 			},
 			{
 				"id": "pwm3",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "4.6,5.4",
 				"vars": {
 					"DIR": "left",
@@ -47,7 +47,7 @@
 			},
 			{
 				"id": "2rx",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "7.0,5.4",
 				"vars": {
 					"DIR": "right",
@@ -61,7 +61,7 @@
 			},
 			{
 				"id": "2tx",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "9.0,5.4",
 				"vars": {
 					"DIR": "right",
@@ -75,7 +75,7 @@
 			},
 			{
 				"id": "csn",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "2.2,8.4",
 				"vars": {
 					"DIR": "left",
@@ -89,7 +89,7 @@
 			},
 			{
 				"id": "si",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "6.0,8.9",
 				"vars": {
 					"DIR": "right",
@@ -103,7 +103,7 @@
 			},
 			{
 				"id": "adc_so",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "1.3,11.7",
 				"vars": {
 					"DIR": "left",
@@ -117,7 +117,7 @@
 			},
 			{
 				"id": "cen",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "5.1,11.7",
 				"vars": {
 					"DIR": "right",
@@ -131,7 +131,7 @@
 			},
 			{
 				"id": "vbat",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "1.7,14.6",
 				"vars": {
 					"DIR": "left",
@@ -145,7 +145,7 @@
 			},
 			{
 				"id": "gnd",
-				"name": "label_line_2mm_up",
+				"name": "label_line_up",
 				"pos": "5.6,14.6",
 				"vars": {
 					"DIR": "right",

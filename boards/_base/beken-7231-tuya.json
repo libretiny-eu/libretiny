@@ -1,0 +1,8 @@
+{
+	"build": {
+		"bkcrypt_coeffs": "510fb093a3cbeadc5993a17ec7adeb03"
+	},
+	"flash": {
+		"tuya": "0x1ED000+0x13000"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"build": {
+		"ldscript": "bk7231_bsp.ld",
+		"bkoffset_app": "0x10000",
+		"bkrbl_size_app": "0x108700"
+	},
+	"upload": {
+		"maximum_size": 1083136
+	}
+}

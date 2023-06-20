@@ -2,15 +2,9 @@
 	"pcb": {
 		"templates": [
 			"tuya2l",
-			"rf-15mm-type1",
-			"tuya2l-shield"
+			"pcb-white",
+			"rf-type1"
 		],
-		"vars": {
-			"MASK_PRESET": "mask_white",
-			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_hole"
-		},
 		"pinout_hidden": "I2S",
 		"pinout": {
 			"1": {
@@ -43,7 +37,7 @@
 				"GND": null
 			},
 			"TRST": {
-				"CTRL": "^RST"
+				"IC": 21
 			},
 			"TRX1": {
 				"IC": 26,

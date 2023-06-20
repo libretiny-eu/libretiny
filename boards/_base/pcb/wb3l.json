@@ -2,16 +2,12 @@
 	"pcb": {
 		"templates": [
 			"esp12e-21",
-			"esp12e-shield-nohole",
+			"pcb-white",
 			"tuya-16x24",
-			"rf-16mm-type1"
+			"rf-type1"
 		],
 		"vars": {
-			"MASK_PRESET": "mask_white",
-			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black",
-			"PINTYPE_VERT": "pin_vert_2mm_cast_nohole",
-			"PINTYPE_HORZ": "pin_horz_2mm_cast_nohole"
+			"PINHOLE": 0
 		},
 		"pinout_hidden": "I2S,SD,SPI",
 		"pinout": {

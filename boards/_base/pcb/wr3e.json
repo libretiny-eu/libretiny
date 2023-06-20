@@ -1,10 +1,8 @@
 {
 	"pcb": {
-		"vars": {
-			"MASK_PRESET": "mask_blue_light",
-			"TRACE_COLOR": "#58839B",
-			"SILK_COLOR": "white"
-		},
+		"templates": [
+			"pcb-blue-light"
+		],
 		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
 		"pinout": {
 			"1": {

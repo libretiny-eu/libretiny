@@ -2,7 +2,7 @@
 	"_base": [
 		"beken-72xx",
 		"beken-7231n",
-		"beken-7231n-tuya",
+		"beken-7231-tuya",
 		"ic/bk7231-qfn32",
 		"pcb/lsc-lma35"
 	],
@@ -10,8 +10,8 @@
 		"mcu": "bk7231n",
 		"variant": "lsc-lma35"
 	},
-	"name": "LSC LMA35",
-	"symbol": "LSC LMA35",
+	"name": "LSC LMA35 BK7231N",
+	"symbol": "LSC LMA35 N",
 	"url": "https://www.action.com/de-at/p/lsc-smart-connect-outdoor-led-streifen/",
 	"vendor": "Unknown",
 	"pcb": {

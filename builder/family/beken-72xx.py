@@ -27,7 +27,7 @@ SOC_BK7271 = 4
 SOC_BK7231N = 5
 SOC_BK7236 = 6
 SOC_NAMES = {
-    SOC_BK7231: "bk7231",
+    SOC_BK7231: "bk7231u",
     SOC_BK7231U: "bk7231u",
     SOC_BK7251: "bk7251",
     SOC_BK7271: "bk7271",
@@ -98,13 +98,13 @@ queue.AppendPrivate(
 srcs_core = []
 
 # Fix for BK7231T's bootloader compatibility
-if board.get("build.bkboot_version") == "1.0.5-bk7231s":
+if board.get("build.bkboot_version") in ["1.0.5-bk7231s", "bk7231q"]:
     # this has to be public, so that fixups/intc.c sees it
     queue.AppendPublic(CPPDEFINES=[("CFG_SUPPORT_BOOTLOADER", "1")])
     queue.AddLibrary(
         name="bdk_boot",
-        base_dir="$FAMILY_DIR/base/fixups",
-        srcs=["+<boot_handlers_105_bk7231s.S>"],
+        base_dir="$CORES_DIR/beken-72xx/base/fixups",
+        srcs=["+<boot_handlers_bk7231u.S>"],
     )
 else:
     srcs_core.append("+<driver/entry/boot_handlers.S>")
@@ -216,7 +216,7 @@ queue.AddLibrary(
         "+<func.c>",
         "+<airkiss/*.c>",
         "+<base64/*.c>",
-        "+<ble_wifi_exchange/*.c>",
+        SOC != SOC_BK7231 and "+<ble_wifi_exchange/*.c>",
         "+<camera_intf/*.c>",
         "+<hostapd_intf/*.c>",
         "+<joint_up/*.c>",
@@ -320,7 +320,7 @@ queue.AddLibrary(
 )
 
 # Sources - chip-specific drivers
-if SOC in [SOC_BK7231U, SOC_BK7251]:
+if SOC in [SOC_BK7231, SOC_BK7231U, SOC_BK7251]:
     queue.AddLibrary(
         name="bdk_driver_spi",
         base_dir=join(DRIVER_DIR, "spi"),
@@ -486,7 +486,7 @@ queue.AppendPublic(
         "sensor",
         "usb",
         # "wpa", # this is compiled from func/hostapd_intf/hostapd_intf.c
-        f"ble_{SOC_NAMES[SOC]}",
+        SOC != SOC_BK7231 and f"ble_{SOC_NAMES[SOC]}",
         f"cal_{SOC_NAMES[SOC]}",
         f"rf_test_{SOC_NAMES[SOC]}",
         f"rf_use_{SOC_NAMES[SOC]}",

@@ -1,0 +1,20 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231n",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/cb1s",
+		"pcb/cb1s-test"
+	],
+	"build": {
+		"mcu": "bk7231n",
+		"variant": "cb1s"
+	},
+	"name": "CB1S Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/cb1s-module-datasheet?id=Kaij1abmwyjq2",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "CB1S"
+	}
+}

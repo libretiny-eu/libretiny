@@ -116,7 +116,7 @@ Options for controlling default UART log output.
 ### Misc options
 
 - `LT_USE_TIME` (0) - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically
-- `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer; disable if your application doesn't need `micros()`
+- `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer (if possible); disable if your application doesn't need `micros()`
 - `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../flashing/tools/adr.md)
 
 ### Family feature config
