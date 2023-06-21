@@ -2,15 +2,15 @@
 
 #pragma once
 
-#include LT_VARIANT_H
+#include <lt_pins.h>
 
 // Choose the main UART output port
 #ifndef LT_UART_DEFAULT_PORT
-#if HAS_SERIAL2
+#if LT_HW_UART2
 #define LT_UART_DEFAULT_PORT 2
-#elif HAS_SERIAL0
+#elif LT_HW_UART0
 #define LT_UART_DEFAULT_PORT 0
-#elif HAS_SERIAL1
+#elif LT_HW_UART1
 #define LT_UART_DEFAULT_PORT 1
 #else
 #error "No serial port is available"

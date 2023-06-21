@@ -2,10 +2,10 @@
 
 #include "SerialPrivate.h"
 
-#if HAS_SERIAL1
+#if LT_HW_UART1
 SerialClass Serial1(UART1_PORT);
 #endif
-#if HAS_SERIAL2
+#if LT_HW_UART2
 SerialClass Serial2(UART2_PORT);
 #endif
 

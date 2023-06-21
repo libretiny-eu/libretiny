@@ -44,13 +44,13 @@ using namespace arduino;
 #include <Serial.h>
 
 #if HAS_SERIAL_CLASS
-#if HAS_SERIAL0
+#if LT_HW_UART0
 extern SerialClass Serial0;
 #endif
-#if HAS_SERIAL1
+#if LT_HW_UART1
 extern SerialClass Serial1;
 #endif
-#if HAS_SERIAL2
+#if LT_HW_UART2
 extern SerialClass Serial2;
 #endif
 #endif

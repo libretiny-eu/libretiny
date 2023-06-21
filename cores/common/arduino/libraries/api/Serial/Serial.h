@@ -8,31 +8,6 @@
 
 using namespace arduino;
 
-#if HAS_SERIAL0
-#ifndef PIN_SERIAL0_RX
-#define PIN_SERIAL0_RX PIN_INVALID
-#endif
-#ifndef PIN_SERIAL0_TX
-#define PIN_SERIAL0_TX PIN_INVALID
-#endif
-#endif
-#if HAS_SERIAL1
-#ifndef PIN_SERIAL1_RX
-#define PIN_SERIAL1_RX PIN_INVALID
-#endif
-#ifndef PIN_SERIAL1_TX
-#define PIN_SERIAL1_TX PIN_INVALID
-#endif
-#endif
-#if HAS_SERIAL2
-#ifndef PIN_SERIAL2_RX
-#define PIN_SERIAL2_RX PIN_INVALID
-#endif
-#ifndef PIN_SERIAL2_TX
-#define PIN_SERIAL2_TX PIN_INVALID
-#endif
-#endif
-
 class SerialClass : public HardwareSerial {
   private:
 	uint32_t port;

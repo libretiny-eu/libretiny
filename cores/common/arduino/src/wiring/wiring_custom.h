@@ -22,7 +22,6 @@ extern "C" {
 #define PIN_UART (1 << 11)
 
 #define PIN_MODE_ALL 0xFFFFFFFF
-#define PIN_INVALID	 255
 
 typedef struct PinData_s PinData;
 
