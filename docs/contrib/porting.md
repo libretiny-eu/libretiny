@@ -31,6 +31,7 @@ Here's what has to be done to make that work:
 5. Add base core code.
 
 	- `lt_defs.h`, `lt_family.h` and `lt_api.c` files need to be created, and initialized with (even empty) functions and definitions.
+	- The list of family functions can be found [here](lt-api.md).
 	- Make the SDK call `lt_main()` as the entrypoint. If needed, use fixups.
 
 6. Write a binary manipulation tool.

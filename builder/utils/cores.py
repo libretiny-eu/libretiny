@@ -46,6 +46,7 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
         base_dir=path,
         srcs=[
             "+<*.c*>",
+            "+<api/*.c>",
             "+<common/*.c*>",
             "+<compat/*.c*>",
             "+<port/*.c*>",
