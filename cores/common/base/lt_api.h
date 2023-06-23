@@ -11,6 +11,7 @@ extern "C" {
 #endif // __cplusplus
 
 #include "api/lt_cpu.h"
+#include "api/lt_deep_sleep.h"
 #include "api/lt_device.h"
 #include "api/lt_flash.h"
 #include "api/lt_init.h"

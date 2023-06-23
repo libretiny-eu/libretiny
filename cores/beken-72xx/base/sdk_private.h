@@ -11,6 +11,8 @@ extern "C" {
 // other includes
 #include <flash_pub.h>
 #include <gpio_pub.h>
+#include <manual_ps.h>
+#include <manual_ps_pub.h>
 #include <param_config.h>
 #include <start_type_pub.h>
 #include <sys_ctrl.h>

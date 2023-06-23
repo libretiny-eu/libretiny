@@ -268,3 +268,13 @@ __attribute__((weak)) bool lt_wdt_enable(uint32_t timeout) {
 __attribute__((weak)) void lt_wdt_disable() {}
 
 __attribute__((weak)) void lt_wdt_feed() {}
+
+/**
+ * Deep Sleep
+ **/
+
+__attribute__((weak)) void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high);
+
+__attribute__((weak)) void lt_deep_sleep_config_timer(uint32_t sleep_duration);
+
+__attribute__((weak)) void lt_deep_sleep_enter();
