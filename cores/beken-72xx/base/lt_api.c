@@ -208,7 +208,7 @@ void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high) {
 void lt_deep_sleep_config_timer(uint32_t sleep_duration) {
 	deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_RTC;
 	uint64_t duration_math = 32768*sleep_duration;
-	if (duration_math > 0xFFFFFFFF) {
+	if (duration_math/1000 > 0xFFFFFFFF) {
 		// Sleep forever
 		deep_sleep_param.sleep_time = 0xFFFFFFFF;
 	} else {
