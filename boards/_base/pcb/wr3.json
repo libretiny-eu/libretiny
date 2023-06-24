@@ -1,5 +1,8 @@
 {
 	"pcb": {
+		"templates": [
+			"pcb-black"
+		],
 		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
 		"pinout": {
 			"1": {

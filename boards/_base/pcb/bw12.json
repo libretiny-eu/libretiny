@@ -2,13 +2,11 @@
 	"pcb": {
 		"templates": [
 			"esp12s",
-			"esp12s-shield",
+			"pcb-black",
 			"rf-type1"
 		],
 		"vars": {
-			"MASK_PRESET": "mask_black",
-			"TRACE_COLOR": "#FAFD9D",
-			"SILK_COLOR": "white"
+			"TRACE_COLOR": "#FAFD9D"
 		},
 		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
 		"pinout": {

@@ -6,3 +6,7 @@
 
 // force including fixups/generic.h, even by BDK/include.h
 #include "generic.h"
+
+#if CFG_SOC_NAME == SOC_BK7231
+#include "bk7231q.h"
+#endif

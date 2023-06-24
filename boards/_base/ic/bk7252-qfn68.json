@@ -103,7 +103,7 @@
 				"C_NAME": "GPIO19",
 				"GPIO": "P19",
 				"IRQ": null,
-				"SD": "D1"
+				"SD": "D3"
 			},
 			"31": {
 				"C_NAME": "GPIO17",

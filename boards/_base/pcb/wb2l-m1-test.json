@@ -1,0 +1,16 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TRST": "wb2l-m1.back.rst.anchor",
+			"TRX1": "wb2l-m1.back.u1_rxd.anchor",
+			"TTX1": "wb2l-m1.back.u1_txd.anchor",
+			"TRX2": "wb2l-m1.back.u2_rxd.anchor",
+			"TTX2": "wb2l-m1.back.u2_txd.anchor",
+			"TGND": "wb2l-m1.back.gnd.anchor",
+			"TSCK": "wb2l-m1.back.f_sck.anchor",
+			"TCSN": "wb2l-m1.back.f_csn.anchor",
+			"TSI": "wb2l-m1.back.f_si.anchor",
+			"TSO": "wb2l-m1.back.f_so.anchor"
+		}
+	}
+}
