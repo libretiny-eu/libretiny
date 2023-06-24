@@ -1,13 +1,9 @@
 {
 	"pcb": {
 		"templates": [
-			"tuyalc5"
+			"tuyalc5",
+			"pcb-white"
 		],
-		"vars": {
-			"MASK_PRESET": "mask_white",
-			"TRACE_COLOR": "#E0E0E0",
-			"SILK_COLOR": "black"
-		},
 		"pinout_hidden": "I2S",
 		"pinout": {
 			"1": {

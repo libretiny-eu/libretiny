@@ -9,6 +9,11 @@
 #include <rtos_pub.h>
 #include <sys_rtos.h>
 
+#if LT_BK7231Q
+#undef LT_MICROS_HIGH_RES
+#define LT_MICROS_HIGH_RES 0
+#endif
+
 #define TICKS_PER_US	   (CFG_XTAL_FREQUENCE / 1000 / 1000)
 #define US_PER_OVERFLOW	   (portTICK_PERIOD_MS * 1000)
 #define TICKS_PER_OVERFLOW (TICKS_PER_US * US_PER_OVERFLOW)
@@ -17,6 +22,7 @@ void delayMilliseconds(unsigned long ms) {
 	rtos_delay_milliseconds(ms);
 }
 
+#if LT_MICROS_HIGH_RES
 static uint32_t getTicksCount() {
 	// copied from bk_timer_ctrl(), for speeds
 	uint32_t timeout = 0;
@@ -28,6 +34,7 @@ static uint32_t getTicksCount() {
 	}
 	return REG_READ(TIMER0_2_READ_VALUE);
 }
+#endif
 
 void delayMicroseconds(unsigned int us) {
 #if LT_MICROS_HIGH_RES
@@ -61,10 +68,6 @@ unsigned long millis() {
 }
 
 unsigned long micros() {
-#if (CFG_SOC_NAME == SOC_BK7231)
-#error "Not implemented"
-#endif
-
 #if LT_MICROS_HIGH_RES
 	static uint32_t lastMillis		= 0;
 	static uint32_t correctedMillis = 0;

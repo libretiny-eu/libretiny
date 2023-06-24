@@ -1,6 +1,5 @@
 {
 	"pcb": {
-		"scale": 11,
 		"test_pads": {
 			"TCSN": "cbu.back.csn.anchor"
 		},
