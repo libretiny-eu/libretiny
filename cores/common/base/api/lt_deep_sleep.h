@@ -13,6 +13,13 @@
 void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high);
 
 /**
+ * @brief Disable GPIO Wakeup on given pins
+ *
+ * @param gpio_index_map bitMap of the pins we should disable wake up on
+ */
+void lt_deep_sleep_unset_gpio(uint32_t gpio_index_map);
+
+/**
  * @brief Disable the hardware watchdog.
  * @param sleep_duration the time in seconds to sleep
  */

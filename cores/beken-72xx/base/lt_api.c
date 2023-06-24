@@ -205,6 +205,10 @@ void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high) {
 	}
 }
 
+void lt_deep_sleep_unset_gpio(uint32_t gpio_index_map) {
+	deep_sleep_param.gpio_index_map &= (~gpio_index_map);
+}
+
 void lt_deep_sleep_config_timer(uint32_t sleep_duration) {
 	deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_RTC;
 	uint64_t duration_math = 32768*sleep_duration;
