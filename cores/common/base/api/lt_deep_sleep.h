@@ -20,7 +20,7 @@ void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high);
 void lt_deep_sleep_unset_gpio(uint32_t gpio_index_map);
 
 /**
- * @brief Disable the hardware watchdog.
+ * @brief Set a sleep timer to wake up the device
  * @param sleep_duration the time in seconds to sleep
  */
 void lt_deep_sleep_config_timer(uint32_t sleep_duration);
