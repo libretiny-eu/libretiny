@@ -5,7 +5,12 @@
 [Read chip docs](README.md){ .md-button }
 </div>
 
-Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins. You need a good USB<->UART adapter (preferably a real FT232RL) for the process.
+Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins.
+
+!!! tip
+    You need a good USB<->UART adapter for the process. Some chips may not support 11.5M baud rate,
+	required by the ROM for the initial handshake. Widespread PL2303 is currently known not to work,
+	at least under Windows. FT232RL is verified to work reliably.
 
 **Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
 
@@ -30,6 +35,7 @@ Downloading is done using UART2 (sometimes called Log_UART). Refer to your board
 
 	If the download mode is enabled, you'll see a few garbage characters
 	printed to the serial console every second.
+
 
 !!! tip
 	Because the UART uploading code is programmed in the ROM of the chip, it can't be software-bricked, even if you damage the bootloader.
