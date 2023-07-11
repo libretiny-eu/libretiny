@@ -4,7 +4,8 @@
 		"realtek-ambz-2mb-788k",
 		"ic/rtl8710bn",
 		"pcb/wr2-base",
-		"pcb/wr2e"
+		"pcb/wr2e",
+		"pcb/wr2e-test"
 	],
 	"build": {
 		"mcu": "rtl8710bn",
