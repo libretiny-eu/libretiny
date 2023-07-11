@@ -8,7 +8,7 @@
 Downloading is done using UART2 (sometimes called Log_UART). Refer to your board documentation to find the correct pins.
 
 !!! tip
-    You need a good USB<->UART adapter for the process. Some chips may not support 11.5M baud rate,
+    You need a good USB<->UART adapter for the process. Some chips may not support 1.5M baud rate,
 	required by the ROM for the initial handshake. Widespread PL2303 is currently known not to work,
 	at least under Windows. FT232RL is verified to work reliably.
 
@@ -21,17 +21,18 @@ Downloading is done using UART2 (sometimes called Log_UART). Refer to your board
 	----|------------------------------
 	RX  | TX2 (Log_TX / PA30)
 	TX  | RX2 (Log_RX / PA29)
-	RTS | CEN (or RST, optional)
-	DTR | TX2 (Log_TX / PA30, optional)
 	GND | GND
 
 	Make sure to use a good 3.3V power supply, otherwise the adapter might
 	lose power during chip reset. Usually, the adapter's power regulator
 	is not enough and an external power supply is needed (like AMS1117).
 
-	If you didn't connect RTS and DTR, you need to put the chip in download
-	mode manually. This is done by connecting CEN to GND, while holding TX2 (Log_TX)
-	to GND as well. After doing that, you need to disconnect TX2 from GND.
+	You need to put the chip in download mode manually:
+
+	- connect CEN to GND
+	- connect TX2 to GND
+	- release CEN from GND
+	- release TX2 from GND
 
 	If the download mode is enabled, you'll see a few garbage characters
 	printed to the serial console every second.
