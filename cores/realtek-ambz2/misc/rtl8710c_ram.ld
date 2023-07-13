@@ -1,6 +1,10 @@
 /* Linker script to configure memory regions. */
 
-/* LT changes: added .ARM.exidx section */
+/* LibreTiny changes:
+	- added .ARM.exidx section
+	- added .ARM.extab
+	- added missing C++ support
+*/
 
 /* !! the include symbole may failed if the symbol file name is too long!! */
 INCLUDE "romsym_is.so"
@@ -129,26 +133,6 @@ SECTIONS
 		*(vtable)
 		*(.sram.data*)
 		*(.data*)
-
-		. = ALIGN(4);
-		/* preinit data */
-		PROVIDE_HIDDEN (__preinit_array_start = .);
-		KEEP(*(.preinit_array))
-		PROVIDE_HIDDEN (__preinit_array_end = .);
-
-		. = ALIGN(4);
-		/* init data */
-		PROVIDE_HIDDEN (__init_array_start = .);
-		KEEP(*(SORT(.init_array.*)))
-		KEEP(*(.init_array))
-		PROVIDE_HIDDEN (__init_array_end = .);
-
-		. = ALIGN(4);
-		/* finit data */
-		PROVIDE_HIDDEN (__fini_array_start = .);
-		KEEP(*(SORT(.fini_array.*)))
-		KEEP(*(.fini_array))
-		PROVIDE_HIDDEN (__fini_array_end = .);
 
 		KEEP(*(.jcr*))
 		. = ALIGN(4);
@@ -292,8 +276,49 @@ SECTIONS
 		*(.rodata*)
 		*(.rodata.str1*)
 
+		/* https://www.embedded.com/building-bare-metal-arm-systems-with-gnu-part-3/ */
+		KEEP(*crtbegin.o(.ctors))
+		KEEP(*(EXCLUDE_FILE (*ctrend.o) .ctors))
+		KEEP(*(SORT(.ctors.*)))
+		KEEP(*crtend.o(.ctors))
+		KEEP(*crtbegin.o(.dtors))
+		KEEP(*(EXCLUDE_FILE (*crtend.o) .dtors))
+		KEEP(*(SORT(.dtors.*)))
+		KEEP(*crtend.o(.dtors))
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+
+		/* Add This for C++ support */
+		/* ambd_arduino/Arduino_package/hardware/variants/rtl8720dn_bw16/linker_scripts/gcc/rlx8721d_img2_is_arduino.ld */
+		. = ALIGN(4);
+		__preinit_array_start = .;
+		KEEP(*(.preinit_array))
+		__preinit_array_end = .;
+		. = ALIGN(4);
+		__init_array_start = .;
+		KEEP(*(SORT(.init_array.*)))
+		KEEP(*(.init_array))
+		__init_array_end = .;
+		. = ALIGN(4);
+		__fini_array_start = .;
+		KEEP(*(SORT(.fini_array.*)))
+		KEEP(*(.fini_array))
+		__fini_array_end = .;
+		/*-----------------*/
+
+		/* https://community.silabs.com/s/article/understand-the-gnu-linker-script-of-cortex-m4?language=en_US */
+		KEEP(*(.init))
+		KEEP(*(.fini))
+		*(.init)
+		*(.fini)
+
 		. = ALIGN(4);
 		__xip_code_rodata_end__ = .;
+	} > XIP_FLASH_P
+
+	/* Add This for C++ support */
+	.ARM.extab :
+	{
+		*(.ARM.extab* .gnu.linkonce.armextab.*)
 	} > XIP_FLASH_P
 
 	.ARM.exidx :
@@ -360,5 +385,11 @@ SECTIONS
 	PROVIDE(__sram_end__ = __StackLimit);
 
 	/* Check if data + heap + stack exceeds RAM limit */
-	/* TODO:	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack") */
+	ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
+	ASSERT(__bss_start__ >= __ram_code_text_end__, "sram heap will overwrite sram text")
+	ASSERT(__bss_start__ >= __ram_code_rodata_end__, "sram heap will overwrite sram rodata")
+	ASSERT(__bss_start__ >= __data_end__, "sram heap will overwrite sram data")
+	ASSERT(__psram_bss_start__ >= __psram_code_text_end__, "psram heap will overwrite psram text")
+	ASSERT(__psram_bss_start__ >= __psram_code_rodata_end__, "psram heap will overwrite psram rodata")
+	ASSERT(__psram_bss_start__ >= __psram_data_end__, "psram heap will overwrite psram data")
 }

@@ -70,7 +70,7 @@ build_flags =
 
 #### Per-module logging & debugging
 
-The following options enable library-specific logging output. They are effective **for all loglevels** - i.e. disabling `LT_DEBUG_WIFI` will disable WiFi debug messages, as well as errors.
+The following options enable library-specific logging output. They are effective **for all loglevels** - i.e. disabling `LT_DEBUG_WIFI` will disable WiFi debug messages, warnings, as well as errors.
 
 To see debug messages from i.e. OTA, loglevel must also be changed.
 
@@ -119,24 +119,43 @@ Options for controlling default UART log output.
 - `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer (if possible); disable if your application doesn't need `micros()`
 - `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../flashing/tools/adr.md)
 
-### Family feature config
+### Family configuration
 
 !!! bug "Warning"
 	These options are not meant for end-users. They're provided here as a reference for developers. **Do not set these options manually**.
 
 These options are selectively set by all families, as part of the build process. They are used for enabling LT core API parts, if the family has support for it. Files named `lt_defs.h`, containing these options, are read by the PlatformIO builders (note: they're never included by C code).
 
-The `LT_ARD_*` options are only used with Arduino frameworks.
+Checking for option value should be done with `#if` (not with `#ifdef`!) - if it's not defined, it will evaluate to 0. Otherwise, it will use the defined value, either 0 or 1.
 
-The meaning of most flags is as follows:
-
-- `LT_HAS_FREERTOS` - FreeRTOS supported and used
-- `LT_HAS_LWIP` - LwIP in SDK (any version)
-- `LT_HAS_LWIP2` - LwIP v2.0.0 or newer
-- `LT_HAS_MBEDTLS` - mbedTLS in SDK
-- `LT_HAS_PRINTF` - printf library implemented
-- `LT_ARD_HAS_SERIAL` - Serial class implemented, `Serial.h` available
-- `LT_ARD_HAS_SOFTSERIAL` - SoftwareSerial library implemented, `SoftwareSerial.h` available
-- `LT_ARD_HAS_WIFI` - WiFi library implemented, `WiFiData.h` available
-- `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)
-- `LT_REALLOC_FUNC` - function name used for `realloc()` call
+- family-/chip-specific hardware peripherals
+	- `LT_HW_WIFI` - WiFi supported on the chip
+	- `LT_HW_BT` - Bluetooth Classic supported on the chip
+	- `LT_HW_BLE` - Bluetooth Low Energy supported on the chip
+	- `LT_HW_WATCHDOG` - watchdog available
+	- `LT_HW_DEEP_SLEEP` - deep sleep possible
+- board-specific peripherals (note: defined in `lt_pins.h`, depending on available pin numbers)
+	- `LT_HW_UART#` - UART number # available on the board
+	- `LT_HW_I2C#` - I²C number # available on the board
+	- `LT_HW_SPI#` - SPI number # available on the board
+- family software options (SDK features, LT implementation status)
+	- `LT_HAS_FREERTOS` - FreeRTOS supported and used
+	- `LT_HAS_LWIP` - LwIP in SDK (any version)
+	- `LT_HAS_LWIP2` - LwIP v2.0.0 or newer
+	- `LT_HAS_MBEDTLS` - mbedTLS in SDK
+	- `LT_HAS_PRINTF` - printf library implemented
+	- `LT_HAS_FLASH` - FAL flash port implemented
+	- `LT_HAS_OTA` - OTA implemented in base framework
+- Arduino Core implementation status (only available and used along with Arduino framework)
+	- `LT_ARD_HAS_SERIAL` - Serial class implemented
+	- `LT_ARD_HAS_SOFTSERIAL` - SoftwareSerial library implemented
+	- `LT_ARD_HAS_WIFI` - WiFi library implemented
+	- `LT_ARD_HAS_WIRE` - Wire (I²C) library implemented
+	- `LT_ARD_HAS_SPI` - SPI library implemented
+	- `LT_ARD_MD5_POLARSSL` - use PolarSSL for MD5 library
+	- `LT_ARD_MD5_MBEDTLS` - use mbedTLS for MD5 library
+	- `LT_ARD_MD5_HOSTAPD` - use hostapd for MD5 library
+- misc options
+	- `LT_HEAP_FUNC` - function name used to get available heap size (for `LT_HEAP_I()`)
+	- `LT_REALLOC_FUNC` - function name used for `realloc()` call
+	- `LT_REMALLOC` - use `malloc()` and `memcpy()` in `realloc()` call

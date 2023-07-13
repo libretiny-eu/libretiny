@@ -25,7 +25,8 @@ jobs:
         run: |
           mkdir -p site/
           boardgen ltci
-          python docs/scripts/update_docs.py
+          python docs/scripts/write_boards.py
+          python docs/scripts/write_apis.py
           python docs/scripts/prepare_doxygen.py
           python docs/scripts/build_json.py
           cp *.json site/

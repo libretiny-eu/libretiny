@@ -95,7 +95,7 @@ for f in family.inheritance:
         env.Prepend(CPPDEFINES=[(f"LT_{f.code.upper()}", "1")])
 
 # Sources - external libraries
-queue.AddExternalLibrary("ltchiptool")  # uf2ota source code
+queue.AddExternalLibrary("uf2ota")
 queue.AddExternalLibrary("flashdb")
 queue.AddExternalLibrary("printf")
 
@@ -138,11 +138,14 @@ queue.AppendPublic(
     LINKFLAGS=[
         "-g2",
         "-Os",
+        "-Wl,--as-needed",
         "-Wl,--build-id=none",
         "-Wl,--cref",
         "-Wl,--gc-sections",
         "-Wl,--no-enum-size-warning",
         "-Wl,--no-wchar-size-warning",
+        "-Wl,--no-undefined",
+        "-Wl,--warn-common",
         # malloc.c wrappers
         "-Wl,-wrap,malloc",
         "-Wl,-wrap,calloc",

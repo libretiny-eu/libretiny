@@ -17,4 +17,4 @@ UM0201 | [Ameba Common BT Application User Manual EN](https://raw.githubusercont
 &nbsp; | Found elsewhere
 AN0400 | [Ameba-D Application Note_v3_watermark](https://files.seeedstudio.com/products/102110419/Basic%20documents/AN0400%20Ameba-D%20Application%20Note_v3_watermark.pdf)
 AN0500 | [Realtek Ameba-ZII application note](https://www.e-paper-display.com/99IOT/00015797-AN0500-Realtek-Ameba-ZII-application-note.en_233850.pdf)
-&nbsp; | [Realtek Ameba-ZII datasheet v0.8](https://www.e-paper-display.com/Ameba-Z_II_DataSheet_v0r8_RTL8720Cx_20190424%29.pdf)
+&nbsp; | [Realtek Ameba-ZII datasheet v0.8](https://web.archive.org/web/20230523175304if_/https://cetest02.cn-bj.ufileos.com/100001_2110255103/RTL872xZ2%20IC%20Datasheet.pdf)

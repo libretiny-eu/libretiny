@@ -44,6 +44,7 @@
 // APIs
 #include "lt_api.h"		  // main API function definitions
 #include "lt_logger.h"	  // UART logger utility
+#include "lt_pins.h"	  // additional pin macros
 #include "lt_posix_api.h" // POSIX compat functions
 // printf silencing methods
 #include <printf_port.h>

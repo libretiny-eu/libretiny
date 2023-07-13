@@ -11,7 +11,7 @@ bool WiFiClass::mode(WiFiMode mode) {
 	pWiFi = this;
 
 	WiFiMode currentMode = getMode();
-	LT_DM(WIFI, "Mode changing %u -> %u", currentMode, mode);
+	LT_DM(WIFI, "Mode changing %s -> %s", WiFiModeText[currentMode], WiFiModeText[mode]);
 	if (mode == currentMode)
 		return true;
 

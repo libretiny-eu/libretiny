@@ -1,7 +1,7 @@
 import json
 
 from ltchiptool import Board
-from update_docs import board_obj_sort
+from write_boards import board_obj_sort
 
 boards = map(Board, Board.get_list())
 boards = list(sorted(boards, key=board_obj_sort))

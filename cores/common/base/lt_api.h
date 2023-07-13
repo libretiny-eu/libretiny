@@ -3,7 +3,7 @@
 #pragma once
 
 // This file collects all LibreTiny C API includes.
-// The functions are implemented in lt_api.c, which is located
+// The functions are implemented in api/*.c units, which are located
 // in the common core, and in the family cores.
 
 #ifdef __cplusplus

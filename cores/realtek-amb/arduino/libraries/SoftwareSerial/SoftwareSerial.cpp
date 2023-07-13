@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-03. */
 
+#if LT_RTL8710B
+
 #include <SoftwareSerial.h>
 #include <sdk_private.h>
 
@@ -94,3 +96,5 @@ void SoftwareSerial::startTx() {
 void SoftwareSerial::endTx() {
 	gtimer_stop(OBJ);
 }
+
+#endif

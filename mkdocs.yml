@@ -39,6 +39,10 @@ plugins:
 extra_css:
   - docs/style.css
 
+extra_javascript:
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - docs/script.js
+
 markdown_extensions:
   - md_in_html
   - admonition

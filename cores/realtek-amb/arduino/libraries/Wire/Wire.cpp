@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-05-08. */
 
+#if LT_RTL8710B
+
 #include "Wire.h"
 
 #include <sdk_private.h>
@@ -191,3 +193,5 @@ int TwoWire::peek() {
 }
 
 void TwoWire::flush() {}
+
+#endif

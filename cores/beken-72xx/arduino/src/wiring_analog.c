@@ -1,10 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include <Arduino.h>
-
-#include <gpio_pub.h>
-#include <pwm_pub.h>
-#include <saradc_pub.h>
+#include "wiring_private.h"
 
 static GPIO_INDEX pwmToGpio[] = {
 	GPIO6,	// PWM0
@@ -59,11 +55,7 @@ static pwm_param_t pwm;
 static uint16_t adcData[1];
 
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
-	PinInfo *pin = pinInfo(pinNumber);
-	if (!pin)
-		return 0;
-	if (!pinSupported(pin, PIN_ADC))
-		return 0;
+	pinCheckGetInfo(pinNumber, PIN_ADC, 0);
 
 	UINT32 status;
 	saradc_desc_t adc;
@@ -90,11 +82,10 @@ uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
 }
 
 void analogWrite(pin_size_t pinNumber, int value) {
-	PinInfo *pin = pinInfo(pinNumber);
-	if (!pin)
-		return;
-	if (!pinSupported(pin, PIN_PWM))
-		return;
+	pinCheckGetData(pinNumber, PIN_PWM, );
+
+	// GPIO can't be used together with PWM
+	pinRemoveMode(pin, PIN_GPIO | PIN_IRQ);
 
 	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	uint32_t frequency = 26 * _analogWritePeriod - 1;
@@ -122,8 +113,9 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
 			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
 			__wrap_bk_printf_enable();
-			pin->enabled &= ~PIN_GPIO;
-			pin->enabled |= PIN_PWM;
+			// pass global PWM object pointer
+			data->pwm = &pwm;
+			pinEnable(pin, PIN_PWM);
 		} else {
 			// update duty cycle
 			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
@@ -131,11 +123,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	} else {
 		if (pinEnabled(pin, PIN_PWM)) {
 			// disable PWM
-			pwm.cfg.bits.en = PWM_DISABLE;
-			__wrap_bk_printf_disable();
-			sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, &pwm);
-			__wrap_bk_printf_enable();
-			pin->enabled &= ~PIN_PWM;
+			pinRemoveMode(pin, PIN_PWM);
 		}
 		// force level as LOW
 		pinMode(pinNumber, OUTPUT);

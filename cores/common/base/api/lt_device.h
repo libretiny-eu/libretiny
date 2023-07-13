@@ -4,6 +4,41 @@
 
 #include <libretiny.h>
 
+#define RESET_REASON_UNKNOWN  REBOOT_REASON_UNKNOWN
+#define RESET_REASON_POWER	  REBOOT_REASON_POWER
+#define RESET_REASON_BROWNOUT REBOOT_REASON_BROWNOUT
+#define RESET_REASON_HARDWARE REBOOT_REASON_HARDWARE
+#define RESET_REASON_SOFTWARE REBOOT_REASON_SOFTWARE
+#define RESET_REASON_WATCHDOG REBOOT_REASON_WATCHDOG
+#define RESET_REASON_CRASH	  REBOOT_REASON_CRASH
+#define RESET_REASON_SLEEP	  REBOOT_REASON_SLEEP
+#define RESET_REASON_MAX	  REBOOT_REASON_MAX
+
+/**
+ * @brief Reset reason enumeration.
+ */
+typedef enum {
+	REBOOT_REASON_UNKNOWN  = 1,
+	REBOOT_REASON_POWER	   = 2,
+	REBOOT_REASON_BROWNOUT = 3,
+	REBOOT_REASON_HARDWARE = 4,
+	REBOOT_REASON_SOFTWARE = 5,
+	REBOOT_REASON_WATCHDOG = 6,
+	REBOOT_REASON_CRASH	   = 7,
+	REBOOT_REASON_SLEEP	   = 8,
+	REBOOT_REASON_DEBUGGER = 9,
+	REBOOT_REASON_MAX	   = 10,
+} lt_reboot_reason_t;
+
+/**
+ * @brief Debugging mode enumeration.
+ */
+typedef enum {
+	DEBUG_MODE_OFF	= 0,
+	DEBUG_MODE_JTAG = 1,
+	DEBUG_MODE_SWD	= 2,
+} lt_debug_mode_t;
+
 /**
  * @brief Get LibreTiny version string.
  */
@@ -15,10 +50,17 @@ const char *lt_get_version();
 const char *lt_get_board_code();
 
 /**
- * @brief Get device friendly name in format "LT-<family code>-<MAC ID>".
+ * @brief Get device friendly name in format "LT-<chip model>-<MAC ID>".
  * Can be used as hostname.
  */
 const char *lt_get_device_name();
+
+/**
+ * @brief Read device's *default* MAC address into 'mac' array.
+ * This can be used even without Wi-Fi enabled, and will ignore
+ * user-changed Wi-Fi MAC (if changing is possible).
+ */
+void lt_get_device_mac(uint8_t *mac);
 
 /**
  * @brief Reboot the CPU.
@@ -50,6 +92,13 @@ lt_reboot_reason_t lt_get_reboot_reason();
  * @param reason value to convert to text, pass 0 to read from lt_reboot_get_reason()
  */
 const char *lt_get_reboot_reason_name(lt_reboot_reason_t reason);
+
+/**
+ * @brief Set debugger mode (JTAG, SWD or OFF).
+ *
+ * @return whether the mode is supported, and setting it was successful
+ */
+bool lt_set_debug_mode(lt_debug_mode_t mode);
 
 /**
  * @brief Reconfigure GPIO pins used for debugging

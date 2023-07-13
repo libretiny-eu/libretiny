@@ -1,7 +1,10 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-28. */
 
 #include "lt_logger.h"
+
+#if __has_include(<sdk_private.h>)
 #include <sdk_private.h>
+#endif
 
 #if LT_HAS_PRINTF
 #include <printf/printf.h>
@@ -33,7 +36,11 @@
 #define COLOR_BRIGHT_CYAN	 0x16
 #define COLOR_BRIGHT_WHITE	 0x17
 
-static uint32_t uart_port  = LT_UART_DEFAULT_LOGGER;
+#ifdef LT_UART_DEFAULT_PORT
+static uint32_t uart_port = LT_UART_DEFAULT_LOGGER;
+#else
+static uint32_t uart_port = 0;
+#endif
 static const char levels[] = {'V', 'D', 'I', 'W', 'E', 'F'};
 
 #if LT_LOGGER_COLOR

@@ -68,7 +68,6 @@ void wifi_unreg_event_handler(unsigned int event_cmds, rtw_event_handler_t handl
 
 // function called by wext_wlan_indicate
 void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int flags) {
-	LT_HEAP_I();
 	if (event >= WIFI_EVENT_MAX)
 		return;
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {

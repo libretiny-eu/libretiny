@@ -3,11 +3,11 @@
 #include "WiFi.h"
 
 void WiFiClass::printDiag(Print &dest) {
-	const char *modes[] = {"NULL", "STA", "AP", "STA+AP"};
-	const char *enc[]	= {"Open", "WEP", "WPA PSK", "WPA2 PSK", "WPA/WPA2", "WPA", "WPA2"};
-
 	dest.print("Mode: ");
-	dest.println(modes[getMode()]);
+	dest.println(WiFiModeText[getMode()]);
+
+	dest.print("Status: ");
+	dest.println(WiFiStatusText[status()]);
 
 	if (getMode() & WIFI_MODE_STA) {
 		dest.println("-- Station --");
@@ -21,7 +21,7 @@ void WiFiClass::printDiag(Print &dest) {
 			dest.print("RSSI: ");
 			dest.println(RSSI());
 			dest.print("Encryption: ");
-			dest.println(enc[getEncryption()]);
+			dest.println(WiFiAuthModeText[getEncryption()]);
 			dest.print("IP: ");
 			dest.println(localIP());
 			dest.print("MAC: ");

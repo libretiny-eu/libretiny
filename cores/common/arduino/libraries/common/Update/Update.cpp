@@ -2,9 +2,25 @@
 
 #include "Update.h"
 
-UpdateClass::UpdateClass() : ctx(NULL), info(NULL), buf(NULL) {
-	cleanup();
-}
+static const UpdateError errorMap[] = {
+	UPDATE_ERROR_OK,		   /* UF2_ERR_OK - no error */
+	UPDATE_ERROR_OK,		   /* UF2_ERR_IGNORE - block should be ignored */
+	UPDATE_ERROR_MAGIC_BYTE,   /* UF2_ERR_MAGIC - wrong magic numbers */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_FAMILY - family ID mismatched */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_NOT_HEADER - block is not a header */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_OTA_VER - unknown/invalid OTA format version */
+	UPDATE_ERROR_MAGIC_BYTE,   /* UF2_ERR_OTA_WRONG - no data for current OTA scheme */
+	UPDATE_ERROR_NO_PARTITION, /* UF2_ERR_PART_404 - no partition with that name */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_PART_INVALID - invalid partition info tag */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_PART_UNSET - attempted to write without target partition */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_DATA_TOO_LONG - data too long - tags won't fit */
+	UPDATE_ERROR_BAD_ARGUMENT, /* UF2_ERR_SEQ_MISMATCH - sequence number mismatched */
+	UPDATE_ERROR_ERASE,		   /* UF2_ERR_ERASE_FAILED - erasing flash failed */
+	UPDATE_ERROR_WRITE,		   /* UF2_ERR_WRITE_FAILED - writing to flash failed */
+	UPDATE_ERROR_WRITE,		   /* UF2_ERR_WRITE_LENGTH - wrote fewer data than requested */
+	UPDATE_ERROR_WRITE,		   /* UF2_ERR_WRITE_PROTECT - target area is write-protected */
+	UPDATE_ERROR_WRITE,		   /* UF2_ERR_ALLOC_FAILED - dynamic memory allocation failed */
+};
 
 /**
  * @brief Initialize the update process.
@@ -13,55 +29,93 @@ UpdateClass::UpdateClass() : ctx(NULL), info(NULL), buf(NULL) {
  * @param command must be U_FLASH
  * @return false if parameters are invalid or update is running, true otherwise
  */
-bool UpdateClass::begin(size_t size, int command, int unused2, uint8_t unused3, const char *unused4) {
-	if (ctx)
-		return false;
-	cleanup();
-
-	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, scheme: %u", size, lt_ota_dual_get_current(), lt_ota_get_uf2_scheme());
-
-	ctx	 = uf2_ctx_init(lt_ota_get_uf2_scheme(), FAMILY);
-	info = uf2_info_init();
-
-	if (!size) {
-		cleanup(UPDATE_ERROR_SIZE);
+bool UpdateClass::begin(
+	size_t size,
+	int command,
+	__attribute__((unused)) int ledPin,
+	__attribute__((unused)) uint8_t ledOn,
+	__attribute__((unused)) const char *label
+) {
+#if !LT_HAS_OTA
+	LT_E("OTA is not yet supported on this chip!");
+	this->errArd = UPDATE_ERROR_BAD_ARGUMENT;
+	return false;
+#endif
+	if (this->ctx) {
 		return false;
 	}
-
+	this->clearError();
+	if (size == 0) {
+		this->errArd = UPDATE_ERROR_SIZE;
+		return false;
+	}
 	if (command != U_FLASH) {
-		cleanup(UPDATE_ERROR_BAD_ARGUMENT);
+		this->errArd = UPDATE_ERROR_BAD_ARGUMENT;
 		return false;
 	}
+	if (size == UPDATE_SIZE_UNKNOWN) {
+		size = 0;
+	}
 
-	bytesTotal = size;
+	this->ctx = static_cast<lt_ota_ctx_t *>(malloc(sizeof(lt_ota_ctx_t)));
+	lt_ota_begin(this->ctx, size);
+	this->ctx->callback		  = reinterpret_cast<void (*)(void *)>(progressHandler);
+	this->ctx->callback_param = this;
 	return true;
 }
 
 /**
  * @brief Finalize the update process. Check for errors and update completion, then activate the new firmware image.
  *
- * @param evenIfRemaining no idea
- * @return false in case of errors or no update running, true otherwise
+ * @param evenIfRemaining don't raise errors if still in progress
+ * @return false in case of errors or no update running; true otherwise
  */
 bool UpdateClass::end(bool evenIfRemaining) {
-	if (hasError() || !ctx)
-		// false if not running
+	if (!this->ctx)
 		return false;
 
-	if (!isFinished() && !evenIfRemaining) {
+	// update is running or finished; cleanup and end it
+	if (!isFinished() && !evenIfRemaining)
 		// abort if not finished
-		cleanup(UPDATE_ERROR_ABORT);
-		return false;
-	}
-	// TODO what is evenIfRemaining for?
-	// try to activate the second OTA
-	if (!lt_ota_switch(/* revert= */ false)) {
-		cleanup(UPDATE_ERROR_ACTIVATE);
-		return false;
+		this->errArd = UPDATE_ERROR_ABORT;
+
+	this->cleanup(/* clearError= */ evenIfRemaining);
+	return !this->hasError();
+}
+
+/**
+ * @brief Cleanup (free) the update context.
+ * Try activating the firmware if possible, set local error codes.
+ *
+ * @param clearError assume successful finish after correct activation
+ */
+void UpdateClass::cleanup(bool clearError) {
+	if (!this->ctx)
+		return;
+
+	if (!lt_ota_end(this->ctx)) {
+		// activating firmware failed
+		this->errArd = UPDATE_ERROR_ACTIVATE;
+		this->errUf2 = UF2_ERR_OK;
+	} else if (clearError) {
+		// successful finish and activation, clear error codes
+		this->clearError();
+	} else if (this->ctx->error > UF2_ERR_IGNORE) {
+		// make error code based on UF2OTA code
+		this->errArd = errorMap[this->ctx->error];
+		this->errUf2 = this->ctx->error;
+	} else {
+		// only keep Arduino error code (set by the caller)
+		this->errUf2 = UF2_ERR_OK;
 	}
 
-	cleanup();
-	return true;
+#if LT_DEBUG_OTA
+	if (this->hasError())
+		this->printErrorContext();
+#endif
+
+	free(this->ctx);
+	this->ctx = nullptr;
 }
 
 /**
@@ -69,60 +123,44 @@ bool UpdateClass::end(bool evenIfRemaining) {
  *
  * It's advised to write in 512-byte chunks (or its multiples).
  *
- * @param data
- * @param len
- * @return size_t
+ * @param data chunk of data
+ * @param len length of the chunk
+ * @return size_t amount of bytes written
  */
-size_t UpdateClass::write(uint8_t *data, size_t len) {
-	size_t written = 0;
-	if (hasError() || !ctx)
-		// 0 if not running
+size_t UpdateClass::write(const uint8_t *data, size_t len) {
+	if (!this->ctx)
 		return 0;
 
-	LT_VM(OTA, "write(%u) / buf %u/512", len, bufSize());
-
-	/* while (buf == bufPos && len >= UF2_BLOCK_SIZE) {
-		// buffer empty and entire block is in data
-		if (!tryWriteData(data, UF2_BLOCK_SIZE)) {
-			// returns 0 if data contains an invalid block
-			return written;
-		}
-		data += UF2_BLOCK_SIZE;
-		len -= UF2_BLOCK_SIZE;
-		written += UF2_BLOCK_SIZE;
-	} */
-
-	// write until buffer space is available
-	uint16_t toWrite; // 1..512
-	while (len && (toWrite = min(len, bufLeft()))) {
-		tryWriteData(data, toWrite);
-		if (hasError()) {
-			// return on errors
-			printErrorContext2(data, toWrite);
-			return written;
-		}
-		data += toWrite;
-		len -= toWrite;
-		written += toWrite;
-	}
+	size_t written = lt_ota_write(ctx, data, len);
+	if (written != len)
+		this->cleanup(/* clearError= */ false);
 	return written;
 }
 
+/**
+ * @brief Write all data remaining in the given stream.
+ *
+ * If the stream doesn't produce any data within UPDATE_TIMEOUT_MS,
+ * the update process will be aborted.
+ *
+ * @param data stream to read from
+ * @return size_t amount of bytes written
+ */
 size_t UpdateClass::writeStream(Stream &data) {
-	size_t written = 0;
-	if (hasError() || !ctx)
-		// 0 if not running
+	if (!this->ctx)
 		return 0;
 
+	size_t written	  = 0;
 	uint32_t lastData = millis();
 	// loop until the update is complete
 	while (remaining()) {
 		// check stream availability
-		int available = data.available();
+		auto available = data.available();
 		if (available <= 0) {
 			if (millis() - lastData > UPDATE_TIMEOUT_MS) {
 				// waited for data too long; abort with error
-				cleanup(UPDATE_ERROR_STREAM);
+				this->errArd = UPDATE_ERROR_STREAM;
+				this->cleanup(/* clearError= */ false);
 				return written;
 			}
 			continue;
@@ -131,94 +169,21 @@ size_t UpdateClass::writeStream(Stream &data) {
 		lastData = millis();
 
 		// read data to fit in the remaining buffer space
-		bufAlloc();
-		uint16_t read = data.readBytes(bufPos, bufLeft());
-		bufPos += read;
-		written += read;
-		tryWriteData();
+		auto bufSize = this->ctx->buf_pos - this->ctx->buf;
+		auto read	 = data.readBytes(this->ctx->buf_pos, UF2_BLOCK_SIZE - bufSize);
+		// increment buffer writing head
+		this->ctx->buf_pos += read;
+		// process the block if complete
+		if (bufSize + read == UF2_BLOCK_SIZE)
+			lt_ota_write_block(this->ctx, reinterpret_cast<uf2_block_t *>(this->ctx->buf));
+		// abort on errors
 		if (hasError()) {
-			// return on errors
-			printErrorContext2(NULL, read); // buf is not valid anymore
+			this->cleanup(/* clearError= */ false);
 			return written;
 		}
+		written += read;
 	}
 	return written;
-}
-
-/**
- * @brief Try to use the buffer as a block to write. In case of UF2 errors,
- * error codes are set, the update is aborted and 0 is returned
- *
- * @param data received data to copy to buffer or NULL if already in buffer
- * @param len received data length - must be at most bufLeft()
- * @return size_t "used" data size - 0 or 512
- */
-size_t UpdateClass::tryWriteData(uint8_t *data, size_t len) {
-	uf2_block_t *block = NULL;
-
-	LT_VM(OTA, "Writing %u to buffer (%u/512)", len, bufSize());
-
-	if (len == UF2_BLOCK_SIZE) {
-		// data has a complete block
-		block = (uf2_block_t *)data;
-	} else if (data && len) {
-		// data has a part of a block, copy it to buffer
-		bufAlloc();
-		memcpy(bufPos, data, len);
-		bufPos += len;
-	}
-
-	if (!block && bufSize() == UF2_BLOCK_SIZE) {
-		// use buffer as block (only if not found above)
-		block = (uf2_block_t *)buf;
-	}
-
-	// a complete block has been found
-	if (block) {
-		if (checkUf2Error(uf2_check_block(ctx, block)))
-			// block is invalid
-			return 0;
-
-		if (errUf2 == UF2_ERR_IGNORE)
-			// treat ignored blocks as valid
-			return UF2_BLOCK_SIZE;
-
-		if (!bytesWritten) {
-			// parse header block to allow retrieving firmware info
-			if (checkUf2Error(uf2_parse_header(ctx, block, info)))
-				// header is invalid
-				return 0;
-
-			LT_IM(OTA, "%s v%s - LT v%s @ %s", info->fw_name, info->fw_version, info->lt_version, info->board);
-
-			if (bytesTotal == UPDATE_SIZE_UNKNOWN) {
-				// set total update size from block count info
-				bytesTotal = block->block_count * UF2_BLOCK_SIZE;
-			} else if (bytesTotal != block->block_count * UF2_BLOCK_SIZE) {
-				// given update size does not match the block count
-				LT_EM(OTA, "Image size wrong; got %u, calculated %u", bytesTotal, block->block_count * UF2_BLOCK_SIZE);
-				cleanup(UPDATE_ERROR_SIZE);
-				return 0;
-			}
-		} else {
-			// write data blocks normally
-			if (checkUf2Error(uf2_write(ctx, block)))
-				// block writing failed
-				return 0;
-		}
-
-		// increment total writing progress
-		bytesWritten += UF2_BLOCK_SIZE;
-		// call progress callback
-		if (callback)
-			callback(bytesWritten, bytesTotal);
-		// reset the buffer as it's used already
-		if (bufSize() == UF2_BLOCK_SIZE)
-			bufPos = buf;
-		return UF2_BLOCK_SIZE;
-	}
-
-	return 0;
 }
 
 UpdateClass Update;

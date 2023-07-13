@@ -67,8 +67,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	WiFiNetworkInfo &info = DATA->sta;
 
 	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
-	__wrap_rtl_printf_disable();
-	__wrap_DiagPrintf_disable();
+	DIAG_PRINTF_DISABLE();
 
 	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
 
@@ -116,8 +115,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
 			// free memory as wifi_indication creates a copy
 			free(eventInfo);
-			__wrap_rtl_printf_enable();
-			__wrap_DiagPrintf_enable();
+			DIAG_PRINTF_ENABLE();
 			return true;
 		}
 		LT_EM(WIFI, "DHCP failed; dhcpRet=%d", dhcpRet);
@@ -126,8 +124,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	}
 	LT_EM(WIFI, "Connection failed; ret=%d", ret);
 error:
-	__wrap_rtl_printf_enable();
-	__wrap_DiagPrintf_enable();
+	DIAG_PRINTF_ENABLE();
 	return false;
 }
 
@@ -158,10 +155,7 @@ IPAddress WiFiClass::localIP() {
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	if ((getMode() & WIFI_MODE_STA) == 0) {
-		uint8_t *efuse = (uint8_t *)malloc(512);
-		EFUSE_LogicalMap_Read(efuse);
-		memcpy(mac, efuse + 0x11A, ETH_ALEN);
-		free(efuse);
+		lt_get_device_mac(mac);
 		return mac;
 	}
 	memcpy(mac, NETIF_RTW_STA.hwaddr, ETH_ALEN);
