@@ -98,6 +98,10 @@
       "type": "framework",
       "version": "https://github.com/libretiny-eu/library-printf#6.1.0"
     },
+    "library-uf2ota": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-uf2ota#5.0.0"
+    },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optionalVersions": [
@@ -106,12 +110,6 @@
         "~1.90301.0",
         "~1.100301.0"
       ]
-    },
-    "tool-ltchiptool": {
-      "type": "uploader",
-      "version": "https://github.com/libretiny-eu/ltchiptool#v4.0.0",
-      "version_prefix": true,
-      "note": "This is used only for C/C++ code from ltchiptool."
     },
     "tool-openocd": {
       "type": "uploader",

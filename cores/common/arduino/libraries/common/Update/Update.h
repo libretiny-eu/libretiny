@@ -4,38 +4,29 @@
 #include <functional>
 #include <uf2ota/uf2ota.h>
 
-// No Error
-#define UPDATE_ERROR_OK			  (0)
-// Flash Write Failed
-#define UPDATE_ERROR_WRITE		  (1)
-// Flash Erase Failed
-#define UPDATE_ERROR_ERASE		  (2)
-// Flash Read Failed
-#define UPDATE_ERROR_READ		  (3)
-// Not Enough Space
-#define UPDATE_ERROR_SPACE		  (4)
-// Bad Size Given
-#define UPDATE_ERROR_SIZE		  (5)
-// Stream Read Timeout
-#define UPDATE_ERROR_STREAM		  (6)
-// MD5 Check Failed
-#define UPDATE_ERROR_MD5		  (7)
-// Wrong Magic Byte
-#define UPDATE_ERROR_MAGIC_BYTE	  (8)
-// Could Not Activate The Firmware
-#define UPDATE_ERROR_ACTIVATE	  (9)
-// Partition Could Not be Found
-#define UPDATE_ERROR_NO_PARTITION (10)
-// Bad Argument
-#define UPDATE_ERROR_BAD_ARGUMENT (11)
-// Aborted
-#define UPDATE_ERROR_ABORT		  (12)
+typedef enum {
+	UPDATE_ERROR_OK			  = 0,	//!< No Error
+	UPDATE_ERROR_WRITE		  = 1,	//!< Flash Write Failed
+	UPDATE_ERROR_ERASE		  = 2,	//!< Flash Erase Failed
+	UPDATE_ERROR_READ		  = 3,	//!< Flash Read Failed
+	UPDATE_ERROR_SPACE		  = 4,	//!< Not Enough Space
+	UPDATE_ERROR_SIZE		  = 5,	//!< Bad Size Given
+	UPDATE_ERROR_STREAM		  = 6,	//!< Stream Read Timeout
+	UPDATE_ERROR_MD5		  = 7,	//!< MD5 Check Failed
+	UPDATE_ERROR_MAGIC_BYTE	  = 8,	//!< Wrong Magic Byte
+	UPDATE_ERROR_ACTIVATE	  = 9,	//!< Could Not Activate The Firmware
+	UPDATE_ERROR_NO_PARTITION = 10, //!< Partition Could Not be Found
+	UPDATE_ERROR_BAD_ARGUMENT = 11, //!< Bad Argument
+	UPDATE_ERROR_ABORT		  = 12, //!< Aborted
+} UpdateError;
+
+typedef enum {
+	U_FLASH	 = 0,
+	U_SPIFFS = 100,
+	U_AUTH	 = 200,
+} UpdateCommand;
 
 #define UPDATE_SIZE_UNKNOWN 0xFFFFFFFF
-
-#define U_FLASH	 0
-#define U_SPIFFS 100
-#define U_AUTH	 200
 
 #define ENCRYPTED_BLOCK_SIZE 16
 
@@ -46,109 +37,132 @@ class UpdateClass {
 	typedef std::function<void(size_t, size_t)> THandlerFunction_Progress;
 
   public: /* Update.cpp */
-	UpdateClass();
 	bool begin(
-		size_t size			= UPDATE_SIZE_UNKNOWN,
-		int command			= U_FLASH,
-		int unused2			= -1,
-		uint8_t unused3		= LOW,
-		const char *unused4 = NULL // this is for SPIFFS
+		size_t size		  = UPDATE_SIZE_UNKNOWN,
+		int command		  = U_FLASH,
+		int ledPin		  = -1,
+		uint8_t ledOn	  = LOW,
+		const char *label = nullptr
 	);
 	bool end(bool evenIfRemaining = false);
-	size_t write(uint8_t *data, size_t len);
+
+	size_t write(const uint8_t *data, size_t len);
 	size_t writeStream(Stream &data);
-	bool canRollBack();
-	bool rollBack();
-	// bool setMD5(const char *expected_md5);
 
   private: /* Update.cpp */
-	size_t tryWriteData(uint8_t *data = NULL, size_t len = 0);
+	void cleanup(bool clearError = false);
 
   public: /* UpdateUtil.cpp */
-	UpdateClass &onProgress(THandlerFunction_Progress callback);
-	void abort();
-	void printError(Print &out);
-	const char *errorString();
-	const char *getFirmwareName();
-	const char *getFirmwareVersion();
-	const char *getLibreTinyVersion();
-	const char *getBoardName();
+	UpdateClass &onProgress(THandlerFunction_Progress handler);
+	static bool canRollBack();
+	static bool rollBack();
+	uint16_t getErrorCode() const;
+	bool hasError() const;
+	void clearError();
+	const char *errorString() const;
+	void printError(Print &out) const;
 
   private: /* UpdateUtil.cpp */
-	void cleanup(uint8_t ardErr = UPDATE_ERROR_OK, uf2_err_t uf2Err = UF2_ERR_OK);
-	bool checkUf2Error(uf2_err_t err);
-	void bufAlloc();
-	void printErrorContext1();
-	void printErrorContext2(const uint8_t *data, size_t len);
-	uint16_t bufLeft();
-	uint16_t bufSize();
+	static void progressHandler(UpdateClass *self);
+	void printErrorContext();
 
   private:
-	// uf2ota context
-	uf2_ota_t *ctx;
-	uf2_info_t *info;
-	// block buffer
-	uint8_t *buf;
-	uint8_t *bufPos;
-	// update progress - multiplies of 512 bytes
-	uint32_t bytesWritten;
-	uint32_t bytesTotal;
-	// errors
-	uf2_err_t errUf2;
-	uint8_t errArd;
-	// progress callback
-	THandlerFunction_Progress callback;
-	// String _target_md5;
-	// MD5Builder _md5;
+	lt_ota_ctx_t *ctx{nullptr};
+	uf2_err_t errUf2{UF2_ERR_OK};
+	UpdateError errArd{UPDATE_ERROR_OK};
+	THandlerFunction_Progress callback{nullptr};
 
   public:
-	String md5String(void) {
-		// return _md5.toString();
-		return "";
+	/**
+	 * @brief Get Arduino error code of the update.
+	 */
+	inline UpdateError getError() const {
+		return this->errArd;
 	}
 
-	void md5(uint8_t *result) {
-		// return _md5.getBytes(result);
+	/**
+	 * @brief Get UF2OTA error code of the update.
+	 */
+	inline uf2_err_t getUF2Error() const {
+		return this->ctx ? this->ctx->error : this->errUf2;
 	}
 
-	uint8_t getError() {
-		return errArd;
+	/**
+	 * @brief Same as end().
+	 */
+	inline void abort() {
+		this->end();
 	}
 
-	uf2_err_t getUF2Error() {
-		return errUf2;
+	/**
+	 * @brief Check if the update process has been started.
+	 */
+	inline bool isRunning() {
+		return this->ctx;
 	}
 
-	uint16_t getErrorCode() {
-		return (errArd << 8) | errUf2;
+	/**
+	 * @brief Check if the update process hasn't been started or has been completed.
+	 */
+	inline bool isFinished() {
+		return !(this->ctx && this->ctx->bytes_written != this->ctx->bytes_total);
 	}
 
-	void clearError() {
-		cleanup(UPDATE_ERROR_OK);
+	/**
+	 * @brief Return complete update image size.
+	 */
+	inline size_t size() {
+		return this->ctx ? this->ctx->bytes_total : 0;
 	}
 
-	bool hasError() {
-		return errArd != UPDATE_ERROR_OK;
+	/**
+	 * @brief Return amount of bytes already written.
+	 */
+	inline size_t progress() {
+		return this->ctx ? this->ctx->bytes_written : 0;
 	}
 
-	bool isRunning() {
-		return ctx != NULL;
+	/**
+	 * @brief Return amount of bytes remaining to write.
+	 */
+	inline size_t remaining() {
+		return this->size() - this->progress();
 	}
 
-	bool isFinished() {
-		return bytesWritten == bytesTotal;
+	/**
+	 * @brief Get firmware name from UF2 info.
+	 */
+	inline const char *getFirmwareName() {
+		if (this->ctx)
+			return this->ctx->info.fw_name;
+		return nullptr;
 	}
 
-	size_t size() {
-		return bytesTotal;
+	/**
+	 * @brief Get firmware version from UF2 info.
+	 */
+	inline const char *getFirmwareVersion() {
+		if (this->ctx)
+			return this->ctx->info.fw_version;
+		return nullptr;
 	}
 
-	size_t progress() {
-		return bytesWritten;
+	/**
+	 * @brief Get LibreTiny version from UF2 info.
+	 */
+	inline const char *getLibreTinyVersion() {
+		if (this->ctx)
+			return this->ctx->info.lt_version;
+		return nullptr;
 	}
 
-	size_t remaining() {
-		return bytesTotal - bytesWritten;
+	/**
+	 * @brief Get target board name from UF2 info.
+	 */
+	inline const char *getBoardName() {
+		if (this->ctx)
+			return this->ctx->info.board;
+		return nullptr;
 	}
 };
 

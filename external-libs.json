@@ -36,13 +36,13 @@
 			"PRINTF_INCLUDE_CONFIG_H": "1"
 		}
 	},
-	"ltchiptool": {
-		"package": "tool-ltchiptool",
+	"uf2ota": {
+		"package": "library-uf2ota",
 		"sources": [
-			"+<uf2ota/*.c>"
+			"+<src/*.c>"
 		],
 		"includes": [
-			"+<.>"
+			"+<include>"
 		]
 	},
 	"arduino-api": {

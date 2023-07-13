@@ -38,7 +38,7 @@ if __name__ == "__main__":
     implementation = re.sub(macro_regex, "", implementation, flags=re.MULTILINE)
     implementation = re.sub(line_regex, "\n", implementation)
 
-    declaration_regex = r"^([\d\w\s]+ \*?)([\S]+?)\(.*?\);$"
+    declaration_regex = r"^([^\s][\d\w\s]+ \*?)([\S]+?)\(.*?\);$"
     implementation_regex = r"^(__attribute__\(\(weak\)\) )?([\w\d* ]+?)([\w\d]+)\(.+?{"
 
     function_types = {}
@@ -85,11 +85,15 @@ if __name__ == "__main__":
                 + Style.RESET_ALL
             )
 
+        function_types[function_name] = function_type
         if is_weak:
             weak_functions.add(function_name)
         else:
             impl_functions.add(function_name)
 
+for function in list(impl_functions):
+    if "static" in function_types[function]:
+        impl_functions.remove(function)
 
 common_functions = impl_functions.union(weak_functions)
 family_functions = decl_functions - common_functions

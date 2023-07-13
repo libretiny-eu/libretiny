@@ -95,7 +95,7 @@ for f in family.inheritance:
         env.Prepend(CPPDEFINES=[(f"LT_{f.code.upper()}", "1")])
 
 # Sources - external libraries
-queue.AddExternalLibrary("ltchiptool")  # uf2ota source code
+queue.AddExternalLibrary("uf2ota")
 queue.AddExternalLibrary("flashdb")
 queue.AddExternalLibrary("printf")
 
