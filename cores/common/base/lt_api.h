@@ -16,6 +16,7 @@ extern "C" {
 #include "api/lt_init.h"
 #include "api/lt_mem.h"
 #include "api/lt_ota.h"
+#include "api/lt_sleep.h"
 #include "api/lt_utils.h"
 #include "api/lt_wdt.h"
 

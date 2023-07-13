@@ -14,6 +14,7 @@ extern "C" {
 #include <bk_timer_pub.h>
 #include <flash_pub.h>
 #include <gpio_pub.h>
+#include <manual_ps_pub.h>
 #include <param_config.h>
 #include <pwm_pub.h>
 #include <rtos_pub.h>
