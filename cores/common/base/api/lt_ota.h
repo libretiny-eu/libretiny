@@ -6,6 +6,15 @@
 #include <uf2ota/uf2types.h>
 
 /**
+ * @brief Chip's OTA type enumeration.
+ */
+typedef enum {
+	OTA_TYPE_SINGLE = 0,
+	OTA_TYPE_DUAL	= 1,
+	OTA_TYPE_FILE	= 2,
+} lt_ota_type_t;
+
+/**
  * @brief Get OTA type of the device's chip.
  */
 lt_ota_type_t lt_ota_get_type();

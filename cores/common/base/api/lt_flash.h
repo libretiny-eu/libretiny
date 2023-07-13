@@ -5,6 +5,15 @@
 #include <libretiny.h>
 
 /**
+ * @brief Flash chip ID structure.
+ */
+typedef struct {
+	uint8_t manufacturer_id;
+	uint8_t chip_id;
+	uint8_t chip_size_id;
+} lt_flash_id_t;
+
+/**
  * @brief Read flash chip ID and return a lt_flash_id_t struct.
  */
 lt_flash_id_t lt_flash_get_id();

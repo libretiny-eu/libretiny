@@ -7,16 +7,6 @@
 #define CPU_MODEL(family, chip_id)		(((family >> 24) << 8) | chip_id)
 #define CPU_MODEL_ENUM(family, chip_id) (lt_cpu_model_t) CPU_MODEL(family, chip_id)
 
-#define RESET_REASON_UNKNOWN  REBOOT_REASON_UNKNOWN
-#define RESET_REASON_POWER	  REBOOT_REASON_POWER
-#define RESET_REASON_BROWNOUT REBOOT_REASON_BROWNOUT
-#define RESET_REASON_HARDWARE REBOOT_REASON_HARDWARE
-#define RESET_REASON_SOFTWARE REBOOT_REASON_SOFTWARE
-#define RESET_REASON_WATCHDOG REBOOT_REASON_WATCHDOG
-#define RESET_REASON_CRASH	  REBOOT_REASON_CRASH
-#define RESET_REASON_SLEEP	  REBOOT_REASON_SLEEP
-#define RESET_REASON_MAX	  REBOOT_REASON_MAX
-
 typedef enum {
 	F_RTL8710A = 0x9FFFD543, // Realtek Ameba1
 	F_RTL8710B = 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
@@ -55,43 +45,3 @@ typedef enum {
 	BK7231S = BK7231T,
 	BK7231U = BK7231T,
 } lt_cpu_model_t;
-
-/**
- * @brief Reset reason enumeration.
- */
-typedef enum {
-	REBOOT_REASON_UNKNOWN  = 1,
-	REBOOT_REASON_POWER	   = 2,
-	REBOOT_REASON_BROWNOUT = 3,
-	REBOOT_REASON_HARDWARE = 4,
-	REBOOT_REASON_SOFTWARE = 5,
-	REBOOT_REASON_WATCHDOG = 6,
-	REBOOT_REASON_CRASH	   = 7,
-	REBOOT_REASON_SLEEP	   = 8,
-	REBOOT_REASON_DEBUGGER = 9,
-	REBOOT_REASON_MAX	   = 10,
-} lt_reboot_reason_t;
-
-/**
- * @brief Flash chip ID structure.
- */
-typedef struct {
-	uint8_t manufacturer_id;
-	uint8_t chip_id;
-	uint8_t chip_size_id;
-} lt_flash_id_t;
-
-/**
- * @brief Chip's OTA type enumeration.
- */
-typedef enum {
-	OTA_TYPE_SINGLE = 0,
-	OTA_TYPE_DUAL	= 1,
-	OTA_TYPE_FILE	= 2,
-} lt_ota_type_t;
-
-typedef enum {
-	DEBUG_MODE_OFF	= 0,
-	DEBUG_MODE_JTAG = 1,
-	DEBUG_MODE_SWD	= 2,
-} lt_debug_mode_t;
