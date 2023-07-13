@@ -1,11 +1,15 @@
 # ESPHome
 
+!!! tip
+	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing LibreTiny-ESPHome. **Includes Home Assistant Add-On setup.**
+
 Because ESPHome does not natively support running on non-ESP chips, you need to use a fork of the project.
 
-There are two basic ways to install and use LibreTiny-ESPHome. You can choose the option that best suits you:
+There are three basic ways to install and use LibreTiny-ESPHome. You can choose the option that best suits you:
 
-- command line (CLI) - for more experienced users; compilation using CLI commands, somewhat easier to troubleshoot
 - ESPHome Dashboard (GUI) - for new users, might be an easy way to go; config management & compilation using web-based dashboard
+- command line (CLI) - for more experienced users; compilation using CLI commands, somewhat easier to troubleshoot
+- [Home Assistant Add-On](https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio) - using LibreTiny-ESPHome in Home Assistant, alongside your normal ESPHome installation - click the link for more info
 
 !!! tip
 	You can use LibreTiny-ESPHome for ESP32/ESP8266 compilation as well - the forked version *extends* the base, and doesn't remove any existing features. Keep in mind that you might not have latest ESPHome updates until the fork gets updated (which usually happens at most every few weeks).
@@ -17,6 +21,30 @@ Go to [Boards & CPU list](../status/supported.md), find your board (chip model),
 If your board isn't listed, use one of the **Generic** boards, depending on the chip type of your device.
 
 ## Download ESPHome
+
+=== "GUI"
+
+	For this, you need Docker, Docker Compose and Python installed. After running the commands, you'll have a running ESPHome Dashboard interface that you can connect to.
+
+	1. Open a terminal/cmd.exe.
+	2. Create a `docker-compose.yml` file in a directory of choice:
+
+		```yaml title="docker-compose.yml"
+		version: "3"
+		services:
+		  esphome:
+		    container_name: esphome-libretiny
+		    image: docker pull ghcr.io/libretiny-eu/libretiny-esphome-docker:latest
+		    volumes:
+		      - ./configs:/config:rw # (1)!
+		      - /etc/localtime:/etc/localtime:ro
+		    restart: always
+		    privileged: false
+		    network_mode: host
+		```
+
+		1. You can change `./configs` to another path, in which your ESPHome configs will be stored.
+	3. Start the container using `docker-compose up`. You should be able to open the GUI on [http://localhost:6052/](http://localhost:6052/).
 
 === "CLI"
 
@@ -38,34 +66,19 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 		- uninstall ESPHome first: `pip uninstall esphome`
 		- install the forked version: `pip install -e .`
 
+## Create your device config
+
 === "GUI"
 
-	For this, you need Docker, Docker Compose and Python installed. After running the commands, you'll have a running ESPHome Dashboard interface that you can connect to.
-
-	1. `git clone https://github.com/kuba2k2/libretiny-esphome` (or download the .ZIP and unpack it, not recommended)
-	2. Open a terminal/cmd.exe in the cloned directory (`libretiny-esphome`).
-	3. `python docker/build.py --tag libretiny --arch amd64 --build-type docker build` - this will build the Docker image of ESPHome. Change `amd64` to something else if you're using a Raspberry Pi.
-	4. Create a `docker-compose.yml` file in the same directory:
-
-		```yaml title="docker-compose.yml"
-		version: "3"
-		services:
-		  esphome:
-		    container_name: esphome-libretiny
-		    image: esphome/esphome-amd64:libretiny # (2)!
-		    volumes:
-		      - ./configs:/config:rw # (1)!
-		      - /etc/localtime:/etc/localtime:ro
-		    restart: always
-		    privileged: false
-		    network_mode: host
-		```
-
-		1. You can change `./configs` to another path, in which your ESPHome configs will be stored.
-		2. Ensure the architecture (`amd64`) matches the one you selected in step 3.
-	5. Start the container - `docker-compose up`. You should be able to open the GUI on [http://localhost:6052/](http://localhost:6052/).
-
-## Create your device config
+	1. Open the GUI on [http://localhost:6052/](http://localhost:6052/) (or a different IP address if you're running on a Pi).
+	2. Go through the wizard steps:
+		- `New Device`
+		- `Continue`
+		- enter name and WiFi details
+		- choose `LibreTiny`
+		- choose the board that you found before
+		- select `Skip`
+	3. A new config file will be added. Press `Edit` and proceed to the next section.
 
 === "CLI"
 
@@ -95,17 +108,9 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 			    password: "Dv2hZMGZRUvy"
 			```
 
-=== "GUI"
+## Automatically generate config
 
-	1. Open the GUI on [http://localhost:6052/](http://localhost:6052/) (or a different IP address if you're running on a Pi).
-	2. Go through the wizard steps:
-		- `New Device`
-		- `Continue`
-		- enter name and WiFi details
-		- choose `LibreTiny`
-		- choose the board that you found before
-		- select `Skip`
-	3. A new config file will be added. Press `Edit` and proceed to the next section.
+Instead of adding components manually and writing everything from scratch, you can use [UPK2ESPHome](https://upk.libretiny.eu/) to generate a working config (for supported BK7231 devices only). If your device has a Cloudcutter profile, there's a high chance it can have a generated config.
 
 ## Add components
 
@@ -118,13 +123,13 @@ Now, just like with standard ESPHome on ESP32/ESP8266, you need to add component
 
 ## Build & upload
 
-=== "CLI"
-
-	The command `python -m esphome compile yourdevice.yml` will compile ESPHome.
-
 === "GUI"
 
 	Close the config editor. Press the three dots icon and select `Install`. Choose `Manual download` and `Modern format`. The firmware will be compiled and a UF2 file will be downloaded automatically.
+
+=== "CLI"
+
+	The command `python -m esphome compile yourdevice.yml` will compile ESPHome.
 
 Now, refer to the [flashing guide](../flashing/esphome.md) to learn how to upload ESPHome to your device. There's also info on using `tuya-cloudcutter` in that guide.
 

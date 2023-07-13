@@ -1,5 +1,8 @@
 # Flashing ESPHome
 
+!!! tip
+	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../projects/esphome.md). **Includes Home Assistant Add-On setup.**
+
 ESPHome can be flashed in few different ways, depending on your needs.
 
 !!! abstract
@@ -30,7 +33,7 @@ ESPHome can be flashed in few different ways, depending on your needs.
 	The built-in flasher is not yet available in the GUI. Here are your options:
 
 	- OTA, using the downloaded UF2 file (if you're already running ESPHome)
-	- wired (also UF2), using ltchiptool
+	- wired (also UF2), using [ltchiptool](tools/ltchiptool.md)
 	- wirelessly, using tuya-cloudcutter
 
 	Read below for more details on each of these methods.

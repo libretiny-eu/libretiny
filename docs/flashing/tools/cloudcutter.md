@@ -1,5 +1,8 @@
 # Converting with tuya-cloudcutter
 
+!!! tip
+	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../../projects/esphome.md). **Includes Home Assistant Add-On setup.**
+
 !!! note
 	This currently applies to BK7231T and BK7231N only. `tuya-cloudcutter` can't be used for other chips.
 
