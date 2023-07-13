@@ -76,8 +76,8 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 			esphome:
 			  name: yourdevice
 
-			libretiny:
-			  board: wr3  # THIS IS YOUR BOARD CODE
+			bk72xx:  # adjust accordingly: bk72xx or rtl87xx
+			  board: cb2s  # THIS IS YOUR BOARD CODE
 			  framework:
 			    version: latest
 
@@ -133,10 +133,10 @@ Now, refer to the [flashing guide](../flashing/esphome.md) to learn how to uploa
 !!! note
 	This part is for advanced users. You'll probably be fine with the default options.
 
-All options from [Options & config](../dev/config.md) can be customized in the `libretiny:` block:
+All options from [Options & config](../dev/config.md) can be customized in the LibreTiny block:
 
 ```yaml title="yourdevice.yml"
-libretiny:
+bk72xx:
   framework:
     version: latest
   lt_config:
@@ -149,7 +149,7 @@ libretiny:
 Additionally, few options have their dedicated keys:
 
 ```yaml title="yourdevice.yml"
-libretiny:
+bk72xx:
   framework:
     version: latest
   # verbose/trace/debug/info/warn/error/fatal
