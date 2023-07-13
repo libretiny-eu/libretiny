@@ -43,6 +43,14 @@
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
+      },
+      "libraries": {
+        "freertos": "10.0.1",
+        "lwip": {
+          "2.0.3": "2.0.3-ambz2",
+          "2.1.3": "2.1.3-ambz2",
+          "default": "2.1.3-ambz2"
+        }
       }
     },
     "framework-beken-bdk": {
@@ -80,7 +88,7 @@
     },
     "library-freertos-port": {
       "type": "framework",
-      "version": "https://github.com/libretiny-eu/library-freertos-port#2023.03.13"
+      "version": "https://github.com/libretiny-eu/library-freertos-port#2023.05.23"
     },
     "library-flashdb": {
       "type": "framework",
@@ -90,6 +98,10 @@
       "type": "framework",
       "version": "https://github.com/libretiny-eu/library-printf#6.1.0"
     },
+    "library-uf2ota": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-uf2ota#5.0.0"
+    },
     "toolchain-gccarmnoneeabi": {
       "type": "toolchain",
       "optionalVersions": [
@@ -98,12 +110,6 @@
         "~1.90301.0",
         "~1.100301.0"
       ]
-    },
-    "tool-ltchiptool": {
-      "type": "uploader",
-      "version": "https://github.com/libretiny-eu/ltchiptool#v4.0.0",
-      "version_prefix": true,
-      "note": "This is used only for C/C++ code from ltchiptool."
     },
     "tool-openocd": {
       "type": "uploader",

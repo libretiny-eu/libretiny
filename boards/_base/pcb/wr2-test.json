@@ -1,0 +1,44 @@
+{
+	"pcb": {
+		"back": [
+			{
+				"comment": "RXD Pad",
+				"name": "test_pad_1mm",
+				"pos": "5.4,14.5"
+			},
+			{
+				"comment": "TXD Pad",
+				"name": "test_pad_1mm",
+				"pos": "5.4,13.2"
+			},
+			{
+				"comment": "RXD Pad label",
+				"id": "rxd",
+				"name": "label_line_up",
+				"pos": "4.6,14.6",
+				"vars": {
+					"DIR": "left",
+					"RASTER": 2,
+					"W": 2.1,
+					"H": 0
+				}
+			},
+			{
+				"comment": "TXD Pad label",
+				"id": "txd",
+				"name": "label_line_up",
+				"pos": "5.4,12.4",
+				"vars": {
+					"DIR": "left",
+					"RASTER": 2,
+					"W": 2.7,
+					"H": 0.5
+				}
+			}
+		],
+		"test_pads": {
+			"TRX2": "wr2.back.rxd.anchor",
+			"TTX2": "wr2.back.txd.anchor"
+		}
+	}
+}

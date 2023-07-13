@@ -1,10 +1,12 @@
 {
 	"_base": [
 		"realtek-ambz",
+		"realtek-ambz-tuya",
 		"realtek-ambz-2mb-788k",
 		"ic/rtl8710bn",
 		"pcb/wr2-base",
-		"pcb/wr2"
+		"pcb/wr2",
+		"pcb/wr2-test"
 	],
 	"build": {
 		"mcu": "rtl8710bn",

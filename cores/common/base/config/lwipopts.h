@@ -33,6 +33,9 @@
 // clang-format on
 #endif
 
+// lwIP version as a decimal number, with 2 digits for each part (major, minor, patch)
+#define LWIP_VERSION_SIMPLE (LWIP_VERSION_MAJOR * 10000 + LWIP_VERSION_MINOR * 100 + LWIP_VERSION_REVISION)
+
 // remove family-defined debugging options (use lwIP defaults, or user-defined)
 #undef ETHARP_DEBUG
 #undef NETIF_DEBUG

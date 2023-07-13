@@ -25,6 +25,7 @@ using std::min;
 #include <api/ArduinoAPI.h>
 #ifdef __cplusplus
 #include <LT.h>
+using namespace arduino;
 #endif
 
 // Include family-specific code
@@ -42,14 +43,16 @@ using std::min;
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
 #include <Serial.h>
 
-#if HAS_SERIAL0
+#if HAS_SERIAL_CLASS
+#if LT_HW_UART0
 extern SerialClass Serial0;
 #endif
-#if HAS_SERIAL1
+#if LT_HW_UART1
 extern SerialClass Serial1;
 #endif
-#if HAS_SERIAL2
+#if LT_HW_UART2
 extern SerialClass Serial2;
+#endif
 #endif
 
 #define SerialN(x) Serial##x

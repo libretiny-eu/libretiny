@@ -59,14 +59,23 @@ def env_uf2ota(env: Environment, *args, **kwargs):
 
 
 def env_flash_write(env: Environment):
+    # UPLOAD_PROTOCOL = upload_protocol or board->upload.protocol
+    # UPLOAD_PORT = upload_port (PIO can choose this automatically I guess)
+    # UPLOAD_SPEED = upload_speed or board->upload.speed (**can be empty**)
     protocol = env.subst("${UPLOAD_PROTOCOL}")
+    speed = env.subst("${UPLOAD_SPEED}")
     if protocol == "uart":
         # upload via UART
+        if speed:
+            return [
+                "-d",
+                "${UPLOAD_PORT}",
+                "-b",
+                "${UPLOAD_SPEED}",
+            ]
         return [
             "-d",
             "${UPLOAD_PORT}",
-            "-b",
-            "${UPLOAD_SPEED}",
         ]
     else:
         # can't upload via ltchiptool

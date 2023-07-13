@@ -14,21 +14,34 @@ extern "C" {
 // remove log_printf() if included before sdk_private.h
 #undef log_printf
 
+// CMSIS & Realtek APIs
 #if LT_RTL8710B
 #include <ameba_soc.h>
 #include <rand.h>
 #include <rtl8710b.h>
 #endif
 #if LT_RTL8720C
+#include <hal.h>
+#include <hal_sys_ctrl.h>
 #include <rtl8710c.h>
 #endif
 
+#include <cmsis_os.h>
+#undef malloc
+#undef free
+#undef calloc
+
+// mbed APIs
 #include <gpio_api.h>
 #undef MBED_GPIO_API_H // ..no comment
 #include <gpio_ex_api.h>
 
 #include <analogin_api.h>
 #include <analogout_api.h>
+#include <efuse_api.h>
+#if LT_RTL8720C
+#include <efuse_logical_api.h>
+#endif
 #include <flash_api.h>
 #include <gpio_irq_api.h>
 #include <gpio_irq_ex_api.h>
@@ -36,11 +49,17 @@ extern "C" {
 #include <main.h>
 #include <objects.h>
 #include <pwmout_api.h>
+#include <serial_api.h>
 #include <sys_api.h>
 #include <timer_api.h>
 #include <us_ticker_api.h>
 #include <wait_api.h>
 #include <wdt_api.h>
+
+// other SDK APIs
+#if __has_include(<sdk_extern.h>)
+#include <sdk_extern.h>
+#endif
 
 // remove previously defined workarounds
 #undef PinMode
@@ -66,14 +85,7 @@ extern "C" {
 #define _write	__rtl_write
 #define _sbrk	__rtl_sbrk
 
-#define delay_us wait_us
-
-extern void wait_us(int us);
-extern int LOGUART_SetBaud(uint32_t BaudRate);	  // from fixups/log_uart.c
-extern void DumpForOneBytes(void *addr, int cnt); // cnt max 0x70!
-extern void SystemCoreClockUpdate(void);
-
-extern int _sscanf_patch(const char *buf, const char *fmt, ...);
+extern flash_t lt_flash_obj;
 
 #ifdef __cplusplus
 } // extern "C"

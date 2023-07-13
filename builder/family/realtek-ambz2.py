@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-07-20.
 
-from os.path import join
+from os.path import isfile, join
+from shutil import copyfile
 
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
@@ -52,9 +53,10 @@ queue.AppendPublic(
         "-mthumb",
         "-mcmse",
         "-mfloat-abi=soft",
-        "--specs=nosys.specs",
+        "--specs=nano.specs",
         "-Wl,--use-blx",
         "-Wl,--undefined=gRamStartFun",
+        "-Wl,--warn-section-align",
         "-Wl,-wrap,aesccmp_construct_mic_iv",
         "-Wl,-wrap,aesccmp_construct_mic_header1",
         "-Wl,-wrap,aesccmp_construct_ctr_preload",
@@ -91,6 +93,7 @@ queue.AppendPublic(
         "-Wl,-wrap,memset",
         # TODO remove this if possible
         "-Wl,-wrap,putc",
+        # rt_printf wrappers are not here, as they're just changing code using #defines
     ],
 )
 
@@ -103,17 +106,7 @@ queue.AddLibrary(
         # cmsis
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram/*.c>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/source/ram_s/app_start.c>",
-        # console
-        "+<common/api/at_cmd/atcmd_bt.c>",
-        "+<common/api/at_cmd/atcmd_lwip.c>",
-        "+<common/api/at_cmd/atcmd_mp_ext2.c>",
-        "+<common/api/at_cmd/atcmd_mp.c>",
-        "+<common/api/at_cmd/atcmd_sys.c>",
-        "+<common/api/at_cmd/atcmd_wifi.c>",
-        "+<common/api/at_cmd/log_service.c>",
-        "+<soc/realtek/8710c/app/shell/cmd_shell.c>",
-        "+<soc/realtek/8710c/app/shell/ram_s/consol_cmds.c>",
-        "+<soc/realtek/8710c/misc/driver/rtl_console.c>",
+        "+<soc/realtek/8710c/misc/driver/flash_api_ext.c>",
         # utilities
         "+<common/utilities/cJSON.c>",
         "+<common/utilities/http_client.c>",
@@ -125,11 +118,6 @@ queue.AddLibrary(
         "+<os/freertos/freertos_service.c>",
         "+<os/os_dep/device_lock.c>",
         "+<os/os_dep/osdep_service.c>",
-        # os - freertos
-        "+<os/freertos/freertos_v10.0.1/Source/*.c>",
-        # os - freertos - portable
-        "+<os/freertos/freertos_v10.0.1/Source/portable/MemMang/heap_5.c>",
-        "+<os/freertos/freertos_v10.0.1/Source/portable/GCC/ARM_RTL8710C/port.c>",
         # peripheral - api
         "+<common/mbed/targets/hal/rtl8710c/*.c>",
         # peripheral - hal
@@ -146,13 +134,9 @@ queue.AddLibrary(
         "+<common/file_system/fatfs/r0.10c/src/ff.c>",
         "+<common/file_system/fatfs/r0.10c/src/option/ccsbcs.c>",
         "+<common/file_system/ftl/ftl.c>",
-        # TODO remove this
-        "+<common/example/example_entry.c>",
-        "+<common/example/wlan_fast_connect/example_wlan_fast_connect.c>",
     ],
     includes=[
         "+<$SDK_DIR/project/realtek_amebaz2_v0_example/inc>",
-        "+<common/api/at_cmd>",
         "+<common/api/platform>",
         "+<common/api>",
         "+<common/application>",
@@ -170,11 +154,8 @@ queue.AddLibrary(
         "+<common/test>",
         "+<common/utilities>",
         "+<os/freertos>",
-        "+<os/freertos/freertos_v10.0.1/Source/include>",
-        "+<os/freertos/freertos_v10.0.1/Source/portable/GCC/ARM_RTL8710C>",
         "+<os/os_dep/include>",
         "+<soc/realtek/8710c/app/rtl_printf/include>",
-        "+<soc/realtek/8710c/app/shell>",
         "+<soc/realtek/8710c/app/stdio_port>",
         "+<soc/realtek/8710c/cmsis/cmsis-core/include>",
         "+<soc/realtek/8710c/cmsis/rtl8710c/include>",
@@ -205,6 +186,14 @@ queue.AddLibrary(
     ),
 )
 
+# Sources - FreeRTOS
+env.Replace(FREERTOS_PORT=env["FAMILY_NAME"], FREERTOS_PORT_DEFINE="REALTEK_AMBZ2")
+queue.AddExternalLibrary("freertos")
+queue.AddExternalLibrary("freertos-port")
+
+# Sources - lwIP
+queue.AddExternalLibrary("lwip", port="ambz2")
+
 # Sources - network utilities
 queue.AddLibrary(
     name="ambz2_net",
@@ -214,6 +203,7 @@ queue.AddLibrary(
         "+<common/api/lwip_netconf.c>",
         # network - api - wifi
         "+<common/api/wifi/*.c>",
+        "ARDUINO" in "ENV" and "-<common/api/wifi/wifi_ind.c>",
         # network - api - wifi - rtw_wpa_supplicant
         "+<common/api/wifi/rtw_wpa_supplicant/src/crypto/tls_polarssl.c>",
         "+<common/api/wifi/rtw_wpa_supplicant/wpa_supplicant/*.c>",
@@ -231,7 +221,6 @@ queue.AddLibrary(
         "+<common/network/httpd/httpd_tls.c>",
         # network
         "+<common/network/dhcp/dhcps.c>",
-        "+<common/network/sntp/sntp.c>",
         # network - websocket
         "+<common/network/websocket/*.c>",
         # network - mdns
@@ -285,6 +274,7 @@ queue.AddLibrary(
         # "+<src/ble/profile/server/hids_rmc.c>",
         "+<src/ble/profile/server/simple_ble_service.c>",
         "+<src/mcu/module/data_uart_cmd/user_cmd_parse.c>",
+        "-<board/common/src/bt_uart_bridge.c>",
     ],
     includes=[
         "+<.>",
@@ -310,34 +300,6 @@ queue.AddLibrary(
         CCFLAGS=[
             "-Wno-unused-function",
             "-Wno-unused-variable",
-            "-Wno-implicit-function-declaration",
-        ],
-    ),
-)
-
-
-# Sources - lwIP 2.0.2
-queue.AddLibrary(
-    name="ambz2_lwip",
-    base_dir=join(COMPONENT_DIR, "common", "network", "lwip", "lwip_v2.0.2"),
-    srcs=[
-        "+<port/realtek/freertos/*.c>",
-        "+<src/api/*.c>",
-        "+<src/apps/ping/*.c>",
-        "+<src/apps/mdns/*.c>",
-        "+<src/core/*.c>",
-        "+<src/core/ipv4/*.c>",
-        "+<src/core/ipv6/*.c>",
-        "+<src/netif/ethernet.c>",
-    ],
-    includes=[
-        "+<port/realtek>",
-        "+<port/realtek/freertos>",
-        "+<src/include>",
-        "+<src/include/netif>",
-    ],
-    options=dict(
-        CFLAGS=[
             "-Wno-implicit-function-declaration",
         ],
     ),
@@ -436,10 +398,38 @@ env.Replace(
     SIZEPRINTCMD="$SIZETOOL -B -d $SOURCES",
 )
 
+# Bootloader - copy for linking
+# fmt: off
+bootloader_src = env.subst("${SDK_DIR}/component/soc/realtek/8710c/misc/bsp/image/bootloader.axf")
+bootloader_dst = env.subst("${BUILD_DIR}/bootloader.axf")
+# fmt: on
+if not isfile(bootloader_dst):
+    copyfile(bootloader_src, bootloader_dst)
+
+# OTA2 clearing - 4096 bytes of 0xFF
+image_ota_clear = env.subst("${BUILD_DIR}/raw_ota_clear.bin")
+if not isfile(image_ota_clear):
+    with open(image_ota_clear, "wb") as f:
+        f.write(b"\xFF" * 4096)
+
 # Build all libraries
 queue.BuildLibraries()
 
 # Main firmware outputs and actions
+image_part_table = "${BUILD_DIR}/image_part_table.${FLASH_PART_TABLE_OFFSET}.bin"
+image_bootloader = "${BUILD_DIR}/image_bootloader.${FLASH_BOOT_OFFSET}.bin"
+image_firmware_is = "${BUILD_DIR}/image_firmware_is.${FLASH_OTA1_OFFSET}.bin"
 env.Replace(
-    # TODO
+    # linker command (dual .bin outputs)
+    LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
+    # UF2OTA input list
+    UF2OTA=[
+        # same OTA images for flasher and device
+        f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2;flasher:ota1,ota2",
+        # having flashed an application image, update the bootloader and partition table (incl. keys)
+        f"{image_bootloader}=device:boot;flasher:boot",
+        f"{image_part_table}=device:part_table;flasher:part_table",
+        # clearing headers of the "other" OTA image (hence the indexes are swapped)
+        f"{image_ota_clear},{image_ota_clear}=device:ota2,ota1;flasher:ota2,ota1",
+    ],
 )

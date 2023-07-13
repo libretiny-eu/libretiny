@@ -72,11 +72,11 @@ uint8_t LwIPUDP::begin(IPAddress address, uint16_t port) {
 }
 
 uint8_t LwIPUDP::begin(uint16_t p) {
-	return begin(IPAddress(INADDR_ANY), p);
+	return begin(IPAddress((uint32_t)INADDR_ANY), p);
 }
 
 uint8_t LwIPUDP::beginMulticast(IPAddress a, uint16_t p) {
-	if (begin(IPAddress(INADDR_ANY), p)) {
+	if (begin(IPAddress((uint32_t)INADDR_ANY), p)) {
 		if ((uint32_t)a != 0) {
 			struct ip_mreq mreq;
 			mreq.imr_multiaddr.s_addr = (in_addr_t)a;
@@ -111,14 +111,14 @@ void LwIPUDP::stop() {
 		mreq.imr_multiaddr.s_addr = (in_addr_t)multicast_ip;
 		mreq.imr_interface.s_addr = (in_addr_t)0;
 		setsockopt(udp_server, IPPROTO_IP, IP_DROP_MEMBERSHIP, &mreq, sizeof(mreq));
-		multicast_ip = IPAddress(INADDR_ANY);
+		multicast_ip = IPAddress((uint32_t)INADDR_ANY);
 	}
 	close(udp_server);
 	udp_server = -1;
 }
 
 int LwIPUDP::beginMulticastPacket() {
-	if (!server_port || multicast_ip == IPAddress(INADDR_ANY))
+	if (!server_port || multicast_ip == IPAddress((uint32_t)INADDR_ANY))
 		return 0;
 	remote_ip	= multicast_ip;
 	remote_port = server_port;

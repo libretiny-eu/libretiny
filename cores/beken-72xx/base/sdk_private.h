@@ -6,13 +6,19 @@
 extern "C" {
 #endif // __cplusplus
 
-// most stuff is here
+// most stuff is here - this has to be before other includes!
 #include <include.h>
 // other includes
+#include <arm_arch.h>
+#include <bk_timer.h>
+#include <bk_timer_pub.h>
 #include <flash_pub.h>
 #include <gpio_pub.h>
 #include <manual_ps_pub.h>
 #include <param_config.h>
+#include <pwm_pub.h>
+#include <rtos_pub.h>
+#include <saradc_pub.h>
 #include <start_type_pub.h>
 #include <sys_ctrl.h>
 #include <sys_rtos.h>
@@ -20,9 +26,7 @@ extern "C" {
 #include <wdt_pub.h>
 #include <wlan_ui_pub.h>
 
-extern uint8_t system_mac[];
-extern uint32_t wdt_ctrl(uint32_t cmd, void *param);
-extern int uart_print_port;
+#include <sdk_extern.h>
 
 // conflict with stl_algobase.h
 #undef min

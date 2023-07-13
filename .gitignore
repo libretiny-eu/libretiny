@@ -264,3 +264,5 @@ docs/status/supported_*.md
 docs/status/unsupported_boards_*.md
 boards/**/*.svg
 boards/**/*.md
+# other generated files
+docs/contrib/lt-api-functions.md

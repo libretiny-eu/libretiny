@@ -2,7 +2,7 @@
   "_base": [
     "beken-72xx",
     "beken-7231n",
-    "beken-7231-crypt-tuya",
+    "beken-7231-tuya",
     "ic/bk7231-qfn32",
     "pcb/cbu",
     "pcb/cbu-test"

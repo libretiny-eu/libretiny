@@ -36,13 +36,13 @@
 			"PRINTF_INCLUDE_CONFIG_H": "1"
 		}
 	},
-	"ltchiptool": {
-		"package": "tool-ltchiptool",
+	"uf2ota": {
+		"package": "library-uf2ota",
 		"sources": [
-			"+<uf2ota/*.c>"
+			"+<src/*.c>"
 		],
 		"includes": [
-			"+<.>"
+			"+<include>"
 		]
 	},
 	"arduino-api": {
@@ -120,6 +120,26 @@
 			"+<src/include>",
 			"+<src/include/ipv4>",
 			"+<port>"
+		]
+	},
+	"lwip-ambz2": {
+		"package": "library-lwip",
+		"sources": [
+			"+<src/api/*.c>",
+			"+<src/core/*.c>",
+			"+<src/core/ipv4/*.c>",
+			"+<src/netif/ethernet.c>",
+			"+<src/netif/etharp.c>",
+			"+<src/apps/mdns/mdns.c>",
+			"+<src/apps/sntp/sntp.c>",
+			"+<port/realtek/freertos/ethernetif.c>",
+			"+<port/realtek/freertos/sys_arch.c>"
+		],
+		"includes": [
+			"+<src/include>",
+			"+<src/include/ipv4>",
+			"+<port/realtek>",
+			"+<port/realtek/freertos>"
 		]
 	}
 }

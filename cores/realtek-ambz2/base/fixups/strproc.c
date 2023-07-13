@@ -151,7 +151,7 @@ unsigned int atoui(const char *num) {
 	return strproc_stubs.atoui(num);
 }
 
-size_t strnlen(const char *s, size_t count) {
+__attribute__((weak)) size_t strnlen(const char *s, size_t count) {
 	return strproc_stubs.strnlen(s, count);
 }
 
@@ -163,6 +163,6 @@ int strnicmp(const char *s1, const char *s2, size_t len) {
 	return strproc_stubs.strnicmp(s1, s2, len);
 }
 
-char *strsep(char **s, const char *ct) {
+__attribute__((weak)) char *strsep(char **s, const char *ct) {
 	return strproc_stubs.strsep(s, ct);
 }

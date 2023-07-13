@@ -22,6 +22,10 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	{PA_14, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_SWD,                                PIN_NONE, 0},
 	// D6: PA15, PWM1, SWDIO
 	{PA_15, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_SWD,                                PIN_NONE, 0},
+	// D7: PA30, UART2_TX, I2C0_SDA, PWM4
+	{PA_30, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_I2C | PIN_UART,                     PIN_NONE, 0},
+	// D8: PA29, UART2_RX, I2C0_SCL, PWM4
+	{PA_29, PIN_GPIO | PIN_IRQ | PIN_PWM | PIN_I2C | PIN_UART,                     PIN_NONE, 0},
 	// A1: ADC2
 	{AD_2,  PIN_ADC,                                                               PIN_NONE, 0},
 };
@@ -34,6 +38,8 @@ PinInfo *lt_arduino_pin_gpio_map[] = {
 	[18] = &(lt_arduino_pin_info_list[3]), // PA_18 (D3)
 	[19] = &(lt_arduino_pin_info_list[1]), // PA_19 (D1)
 	[23] = &(lt_arduino_pin_info_list[4]), // PA_23 (D4)
-	[41] = &(lt_arduino_pin_info_list[7]), // AD_2 (A1)
+	[29] = &(lt_arduino_pin_info_list[8]), // PA_29 (D8)
+	[30] = &(lt_arduino_pin_info_list[7]), // PA_30 (D7)
+	[41] = &(lt_arduino_pin_info_list[9]), // AD_2 (A1)
 };
 // clang-format on

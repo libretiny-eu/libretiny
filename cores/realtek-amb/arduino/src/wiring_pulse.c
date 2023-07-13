@@ -16,10 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <Arduino.h>
-#include <sdk_private.h>
-
-extern void *gpio_pin_struct[];
+#include "wiring_private.h"
 
 /* Measures the length (in microseconds) of a pulse on the pin; state is HIGH
  * or LOW, the type of pulse to measure.  Works on pulses from 2-3 microseconds
@@ -31,22 +28,20 @@ extern unsigned long pulseIn(uint8_t pinNumber, uint8_t state, unsigned long tim
 	// digitalRead() instead yields much coarser resolution.
 	PinInfo *pin = pinInfo(pinNumber);
 	if (pin == NULL)
-		return;
+		return 0;
 	uint32_t index = pinIndex(pin);
-
-	gpio_t *pGpio_t;
 
 	uint32_t start_ticks, cur_ticks;
 
-	if (pin < 0 || pin > PINS_COUNT || (pin->gpio == NC))
+	if (pin->gpio == NC)
 		return 0;
 
 	/* Handle */
-	if (pin->enabled != PIN_GPIO) {
+	if (!pinEnabled(pin, PIN_GPIO)) {
 		return 0;
 	}
-
-	pGpio_t = (gpio_t *)gpio_pin_struct[index];
+	PinData *data	= pinData(pin);
+	gpio_t *pGpio_t = data->gpio;
 
 	// wait for any previous pulse to end
 	start_ticks = us_ticker_read();
