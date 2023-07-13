@@ -36,6 +36,11 @@ bool UpdateClass::begin(
 	__attribute__((unused)) uint8_t ledOn,
 	__attribute__((unused)) const char *label
 ) {
+#if !LT_HAS_OTA
+	LT_E("OTA is not yet supported on this chip!");
+	this->errArd = UPDATE_ERROR_BAD_ARGUMENT;
+	return false;
+#endif
 	if (this->ctx) {
 		return false;
 	}
@@ -165,7 +170,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 
 		// read data to fit in the remaining buffer space
 		auto bufSize = this->ctx->buf_pos - this->ctx->buf;
-		auto read = data.readBytes(this->ctx->buf_pos, UF2_BLOCK_SIZE - bufSize);
+		auto read	 = data.readBytes(this->ctx->buf_pos, UF2_BLOCK_SIZE - bufSize);
 		// increment buffer writing head
 		this->ctx->buf_pos += read;
 		// process the block if complete

@@ -4,8 +4,6 @@
 
 #include <uf2ota/uf2ota.h>
 
-#define UF2_CTX_SIZE (sizeof(uf2_ota_t) + sizeof(uf2_info_t))
-
 static inline size_t lt_ota_buf_left(lt_ota_ctx_t *ctx) {
 	return ctx->buf + UF2_BLOCK_SIZE - ctx->buf_pos;
 }
@@ -18,7 +16,7 @@ void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size) {
 	if (!ctx)
 		return;
 
-	memset((void *)ctx + UF2_CTX_SIZE, 0, sizeof(lt_ota_ctx_t) - UF2_CTX_SIZE);
+	memset(ctx, 0, sizeof(lt_ota_ctx_t));
 	uf2_ctx_init(&ctx->uf2, lt_ota_get_uf2_scheme(), lt_cpu_get_family());
 	uf2_info_init(&ctx->info);
 	ctx->buf_pos	 = ctx->buf;

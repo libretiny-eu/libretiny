@@ -416,6 +416,8 @@ if not isfile(image_ota_clear):
 queue.BuildLibraries()
 
 # Main firmware outputs and actions
+image_part_table = "${BUILD_DIR}/image_part_table.${FLASH_PART_TABLE_OFFSET}.bin"
+image_bootloader = "${BUILD_DIR}/image_bootloader.${FLASH_BOOT_OFFSET}.bin"
 image_firmware_is = "${BUILD_DIR}/image_firmware_is.${FLASH_OTA1_OFFSET}.bin"
 env.Replace(
     # linker command (dual .bin outputs)
@@ -424,6 +426,9 @@ env.Replace(
     UF2OTA=[
         # same OTA images for flasher and device
         f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2;flasher:ota1,ota2",
+        # having flashed an application image, update the bootloader and partition table (incl. keys)
+        f"{image_bootloader}=device:boot;flasher:boot",
+        f"{image_part_table}=device:part_table;flasher:part_table",
         # clearing headers of the "other" OTA image (hence the indexes are swapped)
         f"{image_ota_clear},{image_ota_clear}=device:ota2,ota1;flasher:ota2,ota1",
     ],
