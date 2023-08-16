@@ -5,9 +5,6 @@
 #include <Arduino.h>
 
 // available built-in implementations
-#if LT_ARD_MD5_POLARSSL
-#include "MD5PolarSSLImpl.h"
-#endif
 #if LT_ARD_MD5_MBEDTLS
 #include "MD5MbedTLSImpl.h"
 #endif

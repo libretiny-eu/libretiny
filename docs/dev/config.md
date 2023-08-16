@@ -152,7 +152,6 @@ Checking for option value should be done with `#if` (not with `#ifdef`!) - if it
 	- `LT_ARD_HAS_WIFI` - WiFi library implemented
 	- `LT_ARD_HAS_WIRE` - Wire (I²C) library implemented
 	- `LT_ARD_HAS_SPI` - SPI library implemented
-	- `LT_ARD_MD5_POLARSSL` - use PolarSSL for MD5 library
 	- `LT_ARD_MD5_MBEDTLS` - use mbedTLS for MD5 library
 	- `LT_ARD_MD5_HOSTAPD` - use hostapd for MD5 library
 - misc options
