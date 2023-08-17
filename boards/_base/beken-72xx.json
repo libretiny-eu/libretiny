@@ -41,8 +41,7 @@
 			}
 		},
 		"links": {
-			"General info": "../../docs/platform/beken-72xx/README.md",
-			"Flashing guide": "../../docs/platform/beken-72xx/flashing.md"
+			"Info & flashing guide": "../../docs/platform/beken-72xx/README.md"
 		},
 		"extra": [
 			"Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes."

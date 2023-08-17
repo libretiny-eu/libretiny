@@ -23,7 +23,7 @@ ESPHome can be flashed in few different ways, depending on your needs.
 
 	<!-- the line below needs to be indented by 4 spaces!!!  -->
     {%
-		include-markdown "inc/uart-info.md"
+		include-markdown "../inc/uart-info.md"
 	%}
 
 	If your device is already running ESPHome, refer to the OTA guide below.
@@ -46,13 +46,13 @@ This method requires having ESPHome already installed on your device.
 - You can also use ESPHome CLI to flash via OTA. Add a `--device` argument to the command, as such: `python -m esphome upload yourdevice.yml --device yourdevice.local`
 
 {%
-	include-markdown "inc/uart-ltchiptool.md"
+	include-markdown "../inc/uart-ltchiptool.md"
 %}
 
 {%
-	include-markdown "inc/ota-cloudcutter.md"
+	include-markdown "../inc/ota-cloudcutter.md"
 %}
 
 {%
-	include-markdown "inc/ota-openbeken.md"
+	include-markdown "../inc/ota-openbeken.md"
 %}

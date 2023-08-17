@@ -1,0 +1,1 @@
+You need to know which board your device uses. Head to [Supported Boards](../status/supported.md) to find it. A good number of popular boards have their dedicated support and documentation pages in LibreTiny. Otherwise, you have to use one of the **Generic** boards that matches the CPU model of your device.

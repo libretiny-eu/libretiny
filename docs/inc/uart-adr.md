@@ -1,0 +1,1 @@
+If you have a recent version of LibreTiny already installed on the chip, you don't need to perform any steps to enter download mode. Instead, [Auto-download-reboot](../flashing/tools/adr.md) will reboot the chip automatically, as soon as it notices the flasher program. This is enabled by default, so you don't have to configure anything.

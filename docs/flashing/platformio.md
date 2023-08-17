@@ -20,9 +20,9 @@ upload_port = COM96
 ```
 
 {%
-	include-markdown "inc/uart-info.md"
+	include-markdown "../inc/uart-info.md"
 %}
 
 {%
-	include-markdown "inc/uart-ltchiptool.md"
+	include-markdown "../inc/uart-ltchiptool.md"
 %}

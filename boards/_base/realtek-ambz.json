@@ -45,8 +45,7 @@
 			}
 		},
 		"links": {
-			"General info": "../../docs/platform/realtek-amb/README.md",
-			"Flashing guide": "../../docs/platform/realtek-ambz/flashing.md",
+			"Info & flashing guide": "../../docs/platform/realtek-ambz/README.md",
 			"Debugging": "../../docs/platform/realtek-ambz/debugging.md"
 		}
 	}

@@ -9,5 +9,5 @@ The [LibreTiny C API](../dev/lt-api.md) functions are split between three types:
 A quick outline of all available functions and their types:
 
 {%
-	include-markdown "lt-api-functions.md"
+	include-markdown "./lt-api-functions.md"
 %}

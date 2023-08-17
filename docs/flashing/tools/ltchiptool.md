@@ -53,7 +53,7 @@ It is a good idea to dump the stock firmware (full flash contents) of your devic
 
 1. Choose the `Read flash` option. If you've previously chosen an input or output file, it will generate a dump filename based on the current timestamp and chip type. Otherwise, click `Browse` and choose the output file.
 2. You need to pick the "family" of your chip (the chip model). If you choose the wrong option, the process will fail, but the device won't be bricked.
-3. Now, connect the chip to your PC, according to the [chip connection guides](../chip-connection/SUMMARY.md). Select the COM port that your UART adapter is using.
+3. Now, connect the chip to your PC, according to the [chip connection guides](../../platform/SUMMARY.md). Select the COM port that your UART adapter is using.
 4. By default, the tool will attempt to read the entire flash chip (usually 2 MiB). Unless you know what you're doing, the default values don't need to be changed.
 5. Hit `Start`. The tool will try to connect to the chip on the selected UART port. The black log window will print any warnings/errors. The dumping process should begin shortly.
 
@@ -65,7 +65,7 @@ If you want to flash custom firmware, or restore stock firmware from a previousl
 	LibreTiny generates multiple firmware files in the build directory. **You usually want to flash the `.uf2` file**, but since ltchiptool can detect file types, you can choose a different firmware file and it'll tell you if that works.
 
 1. Choose `Write flash`. Click `Browse` and select a valid firmware file. The file type and chip type will be auto-detected, along with correct flash offset and length. No need to worry about overwriting the bootloader anymore!
-2. Connect the chip to your PC, according to the [chip connection guides](../chip-connection/SUMMARY.md). Select the COM port that your UART adapter is using.
+2. Connect the chip to your PC, according to the [chip connection guides](../../platform/SUMMARY.md). Select the COM port that your UART adapter is using.
 3. Hit `Start`. The tool will try to connect to the chip on the selected UART port. The black log window will print any warnings/errors. The flashing process should begin shortly.
 
 !!! info

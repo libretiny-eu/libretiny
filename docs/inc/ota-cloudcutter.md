@@ -5,4 +5,4 @@
 
 Grab the `image_bk7231x_app.ota.ug.bin` file from the build directory - take care to choose the correct file. It must have "OTA" and "UG" in its name.
 
-Next, refer to [Using tuya-cloudcutter](../tools/cloudcutter.md) guide.
+Next, refer to [Using tuya-cloudcutter](../flashing/tools/cloudcutter.md) guide.

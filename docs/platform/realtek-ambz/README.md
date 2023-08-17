@@ -1,51 +1,115 @@
 # Realtek AmebaZ
 
-<div align="center" markdown>
+## Introduction
 
-[Read flashing guide](flashing.md){ .md-button }
-</div>
+Realtek AmebaZ is a family of Wi-Fi microcontrollers, primarily consisting of two chips - RTL8710BN and RTL8710BX.
 
-## Resources
+RTL8710BX seems to be the same chip but clocked at 62.5 MHz (instead of 125 MHz for BN). However, it seems that firmware compiled for either of the chips can run on the other with no issues.
 
-Name                                                                                                                                                                           | Notes
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------
-[Realtek Ameba-Z datasheet v3.4](https://web.archive.org/web/20211203124711if_/https://adelectronicsru.files.wordpress.com/2018/10/um0114-realtek-ameba-z-data-sheet-v3-4.pdf) |
-[Ameba1/AmebaZ SDK](https://github.com/ambiot/amb1_sdk)                                                                                                                        |
+Features:
 
-## Realtek documents
+- ARM Cortex M4 CPU (up to 125 MHz)
+- 512 KiB ROM
+- 256 KiB SRAM
+- SPI flash interface with XiP
+- 802.11b/g/n Wi-Fi
 
-Code   | Name
--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-&nbsp; | From **amb1_sdk**
-AN0004 | [Realtek low power wi-fi mp user guide](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0004%20Realtek%20low%20power%20wi-fi%20mp%20user%20guide.pdf)
-AN0011 | [Realtek wlan simple configuration](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0011%20Realtek%20wlan%20simple%20configuration.pdf)
-AN0012 | [Realtek secure socket layer(ssl)](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0012%20Realtek%20secure%20socket%20layer(ssl).pdf)
-AN0025 | [Realtek at command](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0025%20Realtek%20at%20command.pdf)
-AN0033 | [Realtek Ameba-1 over the air firmware update](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0033%20Realtek%20Ameba-1%20over%20the%20air%20firmware%20update.pdf)
-AN0045 | [Realtek Ameba-1 power modes](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0045%20Realtek%20Ameba-1%20power%20modes.pdf)
-AN0046 | [Realtek Ameba uart adapter](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0046%20Realtek%20Ameba%20uart%20adapter.pdf)
-AN0060 | [Realtek UART update user manual](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0060%20Realtek%20UART%20update%20user%20manual.pdf)
-AN0075 | [Realtek Ameba-all at command v2.0](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0075%20Realtek%20Ameba-all%20at%20command%20v2.0.pdf)
-AN0096 | [Realtek xmodem UART update user manual](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0096%20Realtek%20xmodem%20UART%20update%20user%20manual.pdf)
-AN0110 | [Realtek Ameba-Z over the air firmware update](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0110%20Realtek%20Ameba-Z%20over%20the%20air%20firmware%20update.pdf)
-AN0111 | [Realtek Ameba-Z FreeRTOS tickless](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/AN0111%20Realtek%20Ameba-Z%20FreeRTOS%20tickless.pdf)
-UM0006 | [Realtek wificonf application programming interface](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0006%20Realtek%20wificonf%20application%20programming%20interface.pdf)
-UM0014 | [Realtek web server user guide](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0014%20Realtek%20web%20server%20user%20guide.pdf)
-UM0023 | [Realtek Ameba-1 build environment setup - iar](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0023%20Realtek%20Ameba-1%20build%20environment%20setup%20-%20iar.pdf)
-UM0027 | [Realtek Ameba-1 crypto engine](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0027%20Realtek%20Ameba-1%20crypto%20engine.pdf)
-UM0034 | [Realtek Ameba-1 memory layout](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0034%20Realtek%20Ameba-1%20memory%20layout.pdf)
-UM0039 | [Realtek Ameba-1 SDK quick start](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0039%20Realtek%20Ameba-1%20SDK%20quick%20start.pdf)
-UM0048 | [Realtek Ameba1 DEV 1v0 User Manual_1v8_20160328](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0048%20Realtek%20Ameba1%20DEV%201v0%20User%20Manual_1v8_20160328.pdf)
-UM0060 | [Realtek Ameba-1 mqtt user guide](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0060%20Realtek%20Ameba-1%20mqtt%20user%20guide.pdf)
-UM0096 | [Realtek Ameba build environment setup - gcc](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0096%20Realtek%20Ameba%20build%20environment%20setup%20-%20gcc.pdf)
-UM0096 | [Realtek Ameba-1 build environment setup - gcc](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0096%20Realtek%20Ameba-1%20build%20environment%20setup%20-%20gcc.pdf)
-UM0101 | [Realtek Ameba-1 peripheral developerment user manual](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0101%20Realtek%20Ameba-1%20peripheral%20developerment%20user%20manual.pdf)
-UM0110 | [Realtek Ameba-Z build environment setup - iar](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0110%20Realtek%20Ameba-Z%20build%20environment%20setup%20-%20iar.pdf)
-UM0111 | [Realtek Ameba-Z memory layout](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0111%20Realtek%20Ameba-Z%20memory%20layout.pdf)
-UM0112 | [Realtek Ameba-Z SDK quick start](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0112%20Realtek%20Ameba-Z%20SDK%20quick%20start.pdf)
-UM0113 | [Realtek Ameba-Z DEV 1v0 User Manual](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0113%20Realtek%20Ameba-Z%20DEV%201v0%20User%20Manual.pdf)
-UM0115 | [Realtek Ameba-Z Introduction](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0115%20Realtek%20Ameba-Z%20Introduction.pdf)
-UM0116 | [Realtek Ameba-Z SDK change](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0116%20Realtek%20Ameba-Z%20SDK%20change.pdf)
-UM0120 | [Realtek Ameba-Z User Configuration](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0120%20Realtek%20Ameba-Z%20User%20Configuration.pdf)
-UM0121 | [Realtek Ameba-Z suspend resume api](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0121%20Realtek%20Ameba-Z%20suspend%20resume%20api.pdf)
-UM0123 | [Realtek Ameba-Z power modes](https://raw.githubusercontent.com/ambiot/amb1_sdk/0c8da639b097f01c60e419405aecfafab1d08e43/doc/UM0123%20Realtek%20Ameba-Z%20power%20modes.pdf)
+Resources:
+
+- [Realtek Ameba-Z datasheet v3.4](https://web.archive.org/web/20211203124711if_/https://adelectronicsru.files.wordpress.com/2018/10/um0114-realtek-ameba-z-data-sheet-v3-4.pdf)
+- [Realtek product page](https://www.realtek.com/en/products/communications-network-ics/item/rtl8710bn)
+- [Realtek PDFs for Ameba1/AmebaZ](https://github.com/ambiot/amb1_sdk/tree/0c8da639b097f01c60e419405aecfafab1d08e43/doc/)
+- [Ameba1/AmebaZ SDK](https://github.com/ambiot/amb1_sdk)
+
+## Finding your board
+
+{%
+	include-markdown "../../inc/find-board.md"
+%}
+
+## Flashing
+
+Realtek RTL8710B has two UART ports - UART2 (sometimes called LOG_UART) and UART0. The port used for flashing and viewing logs is UART2.
+
+You need to find which pins correspond to UART2 TX and RX. If your board is supported, you'll find the pinout on its documentation page. Otherwise (and for generic boards), you'll have to find the pinout online.
+
+!!! tip
+    You need a good USB<->UART adapter for the process. Some chips may not support 1.5M baud rate,
+	required by the ROM for the initial handshake. Widespread PL2303 is currently known not to work,
+	at least under Windows. FT232RL is verified to work reliably.
+
+### Wiring
+
+Connect UART2 of the Realtek chip to the USB-TTL adapter:
+
+PC  | RTL8710B
+----|--------------------
+RX  | TX2 (Log_TX / PA30)
+TX  | RX2 (Log_RX / PA29)
+GND | GND
+
+{%
+	include-markdown "../../inc/uart-power.md"
+%}
+
+In order to flash the chip, you need to enable **download mode**. This is done by resetting the chip while pulling down the TX2 pin.
+
+Do this, in order:
+
+- connect CEN to GND
+- connect TX2 to GND
+- release CEN from GND
+- release TX2 from GND
+
+{%
+	include-markdown "../../inc/uart-cen.md"
+%}
+
+To find out whether download mode is enabled, open a serial terminal (such as PuTTY) on your PC. You should see a few characters printed to the serial console every second (usually some kind of grey blocks, or other non-letter characters).
+
+Note that you will not see any characters before you release TX2 from GND.
+
+### Partition layout
+
+When you compile firmware for Realtek with LibreTiny (either ESPHome or other PlatformIO projects), you need to choose a **board**. Different Realtek boards have different partition layouts - the main difference is the OTA2 firmware address. Choosing a board with wrong address will make it harder to flash OTA updates.
+
+Flashing over UART will update (set) the on-chip OTA address to match the firmware being flashed. **OTA flashing will not update the address** - so make sure to choose the correct board, and **keep using the same board** for OTA flashing.
+
+Using incorrect boards may result in OTA updates having no effect, or (worst case) bricking the device completely.
+
+### Flashing
+
+The recommended tool to flash (or dump firmware) is `ltchiptool`.
+
+**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
+
+!!! tip
+	Because the UART uploading code is programmed in the ROM of the chip, it can't be software-bricked, even if you damage the bootloader.
+
+### Auto-download-reboot
+
+{%
+	include-markdown "../../inc/uart-adr.md"
+%}
+
+## Firmware output files
+
+These files are present in the build directory after successful compilation:
+
+File                    | Description
+------------------------|-------------------------------------------------------------------
+**firmware.uf2**        | **UF2 package for UART and OTA upload**
+image_ota1.0x00B000.bin | OTA 1 image, flashable to 0xB000
+image_ota2.0x0D0000.bin | OTA 2 image, flashable to 0xD0000 (the address might be different)
+
+## Other tools/guides
+
+These tools are **not recommended** and are kept here for reference only. Don't use them, please.
+
+- [Flashing (Tuya manual)](https://developer.tuya.com/en/docs/iot/burn-and-authorize-wr-series-modules?id=Ka789pjc581u8)
+- [ImageTool (AmebaZ/AmebaD)](https://images.tuyacn.com/smart/Image_Tool/Image_Tool.zip)
+- [rtltool.py](https://github.com/libretiny-eu/ltchiptool/blob/master/ltchiptool/soc/ambz/util/rtltool.py)
+
+OTA1/2 files can be flashed using `ImageTool_v2.3.1_AmebaZ(8710b)`. Browse and select one of the files and enter an appropriate address. Select COM port, press `Open` and then `Download`.
+
+This method is not recommended, as it requires you to know the currently enabled OTA index (1 or 2). Flashing the wrong file will either not make any changes, or upload firmware which won't run.
