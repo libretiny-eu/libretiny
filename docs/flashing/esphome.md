@@ -56,3 +56,13 @@ This method requires having ESPHome already installed on your device.
 {%
 	include-markdown "../inc/ota-openbeken.md"
 %}
+
+### Migrating from ESPHome to OpenBeken
+
+ESPHome is only compatible with UF2 OTA packages, which OpenBeken doesn't provide. You need to create an UF2 package manually, using ltchiptool (see [ltchiptool#7](https://github.com/libretiny-eu/ltchiptool/issues/7) for more info). Grab an .RBL file from OpenBeken Releases page, and run this command:
+
+```
+ltchiptool uf2 write -b generic-bk7231n-qfn32-tuya -o OpenBeken.uf2 "OpenBK7231N_1.17.205.rbl=device:download"
+```
+
+This will create `OpenBeken.uf2` file that you can upload on the ESPHome web server dashboard page. **Pay attention to the chip selection** - incorrectly built UF2 file may brick your device! Make sure to download the right .RBL file of OpenBeken, and to choose the correct board (`-b`) parameter.
