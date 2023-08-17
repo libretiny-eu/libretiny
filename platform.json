@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kuba2k2/platformio-libretiny"
   },
-  "version": "1.2.0",
+  "version": "1.2.1",
   "frameworks": {
     "base": {
       "title": "Base Framework (SDK only)",
