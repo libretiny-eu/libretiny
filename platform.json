@@ -4,7 +4,7 @@
   "description": "PlatformIO development platform for IoT modules",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kuba2k2/platformio-libretiny"
+    "url": "https://github.com/kuba2k2/libretiny.git"
   },
   "version": "1.2.1",
   "frameworks": {
