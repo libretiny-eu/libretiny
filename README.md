@@ -1,8 +1,10 @@
 # LibreTiny
 
+<small>(formerly LibreTuya)</small>
+
 <div align="center" markdown>
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kuba2k2/libretiny/Deploy%20docs%20on%20GitHub%20Pages?label=docs&logo=markdown)](https://kuba2k2.github.io/libretiny/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kuba2k2/libretiny/docs.yml?label=docs&logo=markdown)](https://kuba2k2.github.io/libretiny/)
 ![GitHub last commit](https://img.shields.io/github/last-commit/kuba2k2/libretiny?logo=github)
 
 [![Code style: clang-format](https://img.shields.io/badge/code%20style-clang--format-purple.svg)](.clang-format)
@@ -16,12 +18,6 @@
 
 </div>
 
-## LibreTuya is now LibreTiny! 🎉
-
-We have [renamed the project](https://github.com/kuba2k2/libretiny/issues/92) to LibreTiny, also marking the very first v1.0.0 release, along with a huge structure refactor. While some care has been taken to ensure that things don't break, you may still need to update some references in your code to use the new name.
-
----
-
 PlatformIO development platform for IoT modules manufactured by Tuya Inc.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
@@ -32,62 +28,11 @@ which should make it easier to port/run existing ESP apps on less-common, unsupp
 
 **Note:** this project is work-in-progress.
 
-## Usage
+<div align="center" markdown>
 
-1. [Install PlatformIO](https://platformio.org/platformio-ide)
-2. `platformio platform install -f https://github.com/kuba2k2/libretiny`
-3. Create a project, build it and upload!
-4. See the [docs](https://docs.libretiny.eu/) for any questions/problems.
+## [⭐ Getting started ⭐](https://docs.libretiny.eu/docs/getting-started/)
 
-<!--
-## Arduino Core support status
-
-Note: this list will probably change with each functionality update.
-
-&nbsp;              | `realtek-ambz` | `beken-72xx`
---------------------|----------------|-------------
-Core functions      | ✔️             | ✔️
-GPIO/PWM/IRQ        | ✔️/✔️/✔️       | ✔️/✔️/✔️
-Analog input (ADC)  | ✔️             | ✔️
-Serial              | ✔️             | ✔️
-Serial (extra)      | 0, 1, 2        | 1, 2
-Flash I/O           | ✔️             | ✔️
-**CORE LIBRARIES**  |                |
-SoftwareSerial      | ✔️             | ❌
-SPI                 | ❌              | ❌
-Wire                | ❗              | ❌
-**OTHER LIBRARIES** |                |
-Wi-Fi STA/AP/Mixed  | ✔️             | ✔️
-Wi-Fi Events        | ✔️             | ✔️
-TCP Client (SSL)    | ✔️ (✔️)        | ✔️ (❗)
-TCP Server          | ✔️             | ✔️
-IPv6                | ❌              | ❌
-HTTP Client (SSL)   | ✔️ (✔️)        | ❓
-HTTP Server         | ✔️             | ✔️
-NVS / Preferences   | ✔️              | ✔️
-SPIFFS              | ❌              | ❌
-BLE                 | -              | ❌
-NTP                 | ✔️              | ✔️
-OTA                 | ✔️             | ✔️
-MDNS                | ✔️             | ✔️
-MQTT                | ✅              | ❌
-SD                  | ❌              | ❌
-
-Symbols:
-
-- ✔️ working
-- ✅ tested, external library
-- ❓ untested
-- ❗ broken
-- ❌ not implemented (yet?)
-- \- not applicable
-
-Names:
-
-- Core functions - stuff like delay(), millis(), yield(), etc.
-- **CORE LIBRARIES** - included normally in all Arduino cores
-- **OTHER LIBRARIES** - included in ESP32 core or downloadable
--->
+</div>
 
 ## License
 

@@ -26,11 +26,48 @@ A list of chip families currently supported by this project.
 !!! note
 	The term *family* was chosen over *platform*, in order to reduce possible confusion between LibreTiny supported "platforms" and PlatformIO's "platform", as an entire package. *Family* is also more compatible with the UF2 term.
 
-The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../../families.json). The IDs are also present in [lt_types.h](../../ltapi/lt__types_8h.md).
+The following list corresponds to UF2 OTA format family names, and is also [available as JSON](../../families.json). The IDs are also present in [lt_types.h](../../ltapi/lt__types_8h.md). You can view the family list by using `ltchiptool list families`.
 
 {%
 	include-markdown "./supported_families.md"
 %}
+
+## Feature support
+
+If you notice a feature that you've tested, which works (or not) and doesn't match this table, feel free to submit an issue on GitHub.
+
+&nbsp;                   | `BK7231T` | `BK7231N` | `RTL8710B` | `RTL8720C` | `BK7231Q`
+-------------------------|-----------|-----------|------------|------------|----------
+Stability                | 5/5       | 5/5       | 4/5        | 2/5        | 1/5
+LibreTiny Core           | ✔️        | ✔️        | ✔️         | ✔️         | ✔️
+Wiring Core              | ✔️        | ✔️        | ✔️         | ✔️         | ✔️
+**PERIPHERALS** (Core)   |           |           |            |            |
+UART I/O                 | ✔️        | ✔️        | ✔️         | ✔️         | ✔️
+Flash I/O                | ✔️        | ✔️        | ✔️         | ❓          | ❓
+Deep sleep               | ❓         | ✔️        | ❌          | ❌          | ❓
+Watchdog timer           | ✔️        | ✔️        | ✔️         | ❓          | ❓
+**PERIPHERALS** (Wiring) |           |           |            |            |
+Digital I/O              | ✔️        | ✔️        | ✔️         | ❓          | ❓
+PWM                      | ✔️        | ✔️        | ✔️         | ❓          | ❓
+Interrupts               | ✔️        | ✔️        | ✔️         | ❓          | ❓
+Analog input (ADC)       | ✔️        | ✔️        | ✔️         | ❓          | ❓
+`Wire` (I²C)             | ❌         | ❌         | ❗          | ❌          | ❌
+`SPI`                    | ❌         | ❌         | ❌          | ❌          | ❌
+`Serial`                 | ✔️        | ✔️        | ✔️         | ✔️         | ❓
+`SoftwareSerial`         | ❌         | ❌         | ✔️         | ❌          | ❌
+**NETWORKING**           |           |           |            |            |
+Wi-Fi STA/AP/Mixed       | ✔️        | ✔️        | ✔️         | ❓          | ❌
+Wi-Fi Events             | ✔️        | ✔️        | ✔️         | ❓          | ❌
+OTA updates              | ✔️        | ✔️        | ✔️         | ❌          | ❌
+MDNS                     | ✔️        | ✔️        | ✔️         | ❓          | ❓
+
+Symbols:
+
+- ✔️ working
+- ❓ untested
+- ❗ broken
+- ❌ not implemented (yet?)
+- \- not applicable
 
 ## Unsupported boards
 
