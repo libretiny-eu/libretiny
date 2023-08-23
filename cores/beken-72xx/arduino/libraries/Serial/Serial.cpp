@@ -47,6 +47,10 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		.flow_control = FLOW_CTRL_DISABLED,
 	};
 
+	if (port == 1)
+		uart1_init();
+	else if (port == 2)
+		uart2_init();
 	uart_hw_set_change(port, &cfg);
 	uart_rx_callback_set(port, callback, &BUF);
 
