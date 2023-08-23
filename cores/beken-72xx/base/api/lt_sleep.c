@@ -9,9 +9,9 @@ void lt_deep_sleep_config_gpio(uint32_t gpio_index_map, bool on_high) {
 	deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_GPIO;
 	deep_sleep_param.gpio_index_map |= gpio_index_map;
 	if (on_high) {
-		deep_sleep_param.gpio_edge_map &= (~gpio_index_map);
-	} else {
 		deep_sleep_param.gpio_edge_map |= gpio_index_map;
+	} else {
+		deep_sleep_param.gpio_edge_map &= (~gpio_index_map);
 	}
 }
 
