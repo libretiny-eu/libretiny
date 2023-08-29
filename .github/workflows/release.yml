@@ -1,0 +1,22 @@
+name: Release
+on:
+  push:
+    tags: ["v*.*.*"]
+jobs:
+  lint-clang:
+    name: Run Clang lint
+    uses: kuba2k2/kuba2k2/.github/workflows/lint-clang.yml@master
+  publish-pio-platform:
+    name: Publish PlatformIO platform
+    needs:
+      - lint-clang
+    uses: kuba2k2/kuba2k2/.github/workflows/publish-pio-platform.yml@master
+    secrets:
+      PLATFORMIO_AUTH_TOKEN: ${{ secrets.PLATFORMIO_AUTH_TOKEN }}
+  gh-release:
+    name: Publish GitHub release
+    needs:
+      - publish-pio-platform
+    uses: kuba2k2/kuba2k2/.github/workflows/gh-release.yml@master
+    permissions:
+      contents: write
