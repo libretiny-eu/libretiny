@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <MD5.h>
 #include <functional>
 #include <uf2ota/uf2ota.h>
 
@@ -56,6 +57,9 @@ class UpdateClass {
 	UpdateClass &onProgress(THandlerFunction_Progress handler);
 	static bool canRollBack();
 	static bool rollBack();
+	bool setMD5(const char *md5);
+	String md5String();
+	void md5(uint8_t *result);
 	uint16_t getErrorCode() const;
 	bool hasError() const;
 	void clearError();
@@ -71,6 +75,9 @@ class UpdateClass {
 	uf2_err_t errUf2{UF2_ERR_OK};
 	UpdateError errArd{UPDATE_ERROR_OK};
 	THandlerFunction_Progress callback{nullptr};
+	LT_MD5_CTX_T *md5Ctx{nullptr};
+	uint8_t *md5Digest{nullptr};
+	uint8_t *md5Expected{nullptr};
 
   public:
 	/**

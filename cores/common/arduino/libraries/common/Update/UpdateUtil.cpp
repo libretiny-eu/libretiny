@@ -72,6 +72,41 @@ bool UpdateClass::rollBack() {
 }
 
 /**
+ * @brief Set the expected MD5 of the firmware (hexadecimal string).
+ */
+bool UpdateClass::setMD5(const char *md5) {
+	if (strlen(md5) != 32)
+		return false;
+	this->md5Expected = static_cast<uint8_t *>(malloc(16));
+	if (!this->md5Expected)
+		return false;
+	lt_xtob(md5, 32, this->md5Expected);
+	return true;
+}
+
+/**
+ * @brief Return a hexadecimal string of calculated firmware MD5 sum.
+ */
+String UpdateClass::md5String() {
+	if (!this->md5Digest)
+		return "";
+	char out[32 + 1];
+	lt_btox(this->md5Digest, 16, out);
+	return String(out);
+}
+
+/**
+ * @brief Get calculated MD5 digest of the firmware.
+ */
+void UpdateClass::md5(uint8_t *result) {
+	if (!this->md5Digest) {
+		memset(result, '\0', 16);
+		return;
+	}
+	memcpy(result, this->md5Digest, 16);
+}
+
+/**
  * @brief Get combined error code of the update.
  */
 uint16_t UpdateClass::getErrorCode() const {

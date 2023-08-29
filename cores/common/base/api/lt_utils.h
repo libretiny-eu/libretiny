@@ -45,3 +45,23 @@ void hexdump(
 	uint8_t width
 #endif
 );
+
+/**
+ * @brief Convert a byte array to hexadecimal string.
+ *
+ * @param src source byte array
+ * @param len source length (bytes)
+ * @param dest destination string
+ * @return destination string
+ */
+char *lt_btox(const uint8_t *src, int len, char *dest);
+
+/**
+ * @brief Convert a hexadecimal string to byte array.
+ *
+ * @param src source string
+ * @param len source length (chars)
+ * @param dest destination byte array
+ * @return destination byte array
+ */
+uint8_t *lt_xtob(const char *src, int len, uint8_t *dest);

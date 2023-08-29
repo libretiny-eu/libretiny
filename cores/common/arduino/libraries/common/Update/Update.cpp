@@ -61,6 +61,10 @@ bool UpdateClass::begin(
 	lt_ota_begin(this->ctx, size);
 	this->ctx->callback		  = reinterpret_cast<void (*)(void *)>(progressHandler);
 	this->ctx->callback_param = this;
+
+	this->md5Ctx = static_cast<LT_MD5_CTX_T *>(malloc(sizeof(LT_MD5_CTX_T)));
+	MD5Init(this->md5Ctx);
+
 	return true;
 }
 
@@ -79,6 +83,9 @@ bool UpdateClass::end(bool evenIfRemaining) {
 		// abort if not finished
 		this->errArd = UPDATE_ERROR_ABORT;
 
+	this->md5Digest = static_cast<uint8_t *>(malloc(16));
+	MD5Final(this->md5Digest, this->md5Ctx);
+
 	this->cleanup(/* clearError= */ evenIfRemaining);
 	return !this->hasError();
 }
@@ -96,6 +103,10 @@ void UpdateClass::cleanup(bool clearError) {
 	if (!lt_ota_end(this->ctx)) {
 		// activating firmware failed
 		this->errArd = UPDATE_ERROR_ACTIVATE;
+		this->errUf2 = UF2_ERR_OK;
+	} else if (this->md5Digest && this->md5Expected && memcmp(this->md5Digest, this->md5Expected, 16) != 0) {
+		// MD5 doesn't match
+		this->errArd = UPDATE_ERROR_MD5;
 		this->errUf2 = UF2_ERR_OK;
 	} else if (clearError) {
 		// successful finish and activation, clear error codes
@@ -116,6 +127,12 @@ void UpdateClass::cleanup(bool clearError) {
 
 	free(this->ctx);
 	this->ctx = nullptr;
+	free(this->md5Ctx);
+	this->md5Ctx = nullptr;
+	free(this->md5Digest);
+	this->md5Digest = nullptr;
+	free(this->md5Expected);
+	this->md5Expected = nullptr;
 }
 
 /**
@@ -132,6 +149,7 @@ size_t UpdateClass::write(const uint8_t *data, size_t len) {
 		return 0;
 
 	size_t written = lt_ota_write(ctx, data, len);
+	MD5Update(this->md5Ctx, data, len);
 	if (written != len)
 		this->cleanup(/* clearError= */ false);
 	return written;
@@ -171,6 +189,8 @@ size_t UpdateClass::writeStream(Stream &data) {
 		// read data to fit in the remaining buffer space
 		auto bufSize = this->ctx->buf_pos - this->ctx->buf;
 		auto read	 = data.readBytes(this->ctx->buf_pos, UF2_BLOCK_SIZE - bufSize);
+		// update MD5
+		MD5Update(this->md5Ctx, this->ctx->buf_pos, read);
 		// increment buffer writing head
 		this->ctx->buf_pos += read;
 		// process the block if complete

@@ -4,7 +4,7 @@
 
 <div align="center" markdown>
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kuba2k2/libretiny/docs.yml?label=docs&logo=markdown)](https://kuba2k2.github.io/libretiny/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kuba2k2/libretiny/push-master.yml?label=docs&logo=markdown)](https://docs.libretiny.eu/)
 ![GitHub last commit](https://img.shields.io/github/last-commit/kuba2k2/libretiny?logo=github)
 
 [![Code style: clang-format](https://img.shields.io/badge/code%20style-clang--format-purple.svg)](.clang-format)
