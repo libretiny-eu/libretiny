@@ -83,7 +83,8 @@ bool UpdateClass::end(bool evenIfRemaining) {
 		// abort if not finished
 		this->errArd = UPDATE_ERROR_ABORT;
 
-	this->md5Digest = static_cast<uint8_t *>(malloc(16));
+	if (!this->md5Digest)
+		this->md5Digest = static_cast<uint8_t *>(malloc(16));
 	MD5Final(this->md5Digest, this->md5Ctx);
 
 	this->cleanup(/* clearError= */ evenIfRemaining);

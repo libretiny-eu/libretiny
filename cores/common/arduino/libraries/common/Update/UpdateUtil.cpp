@@ -77,7 +77,8 @@ bool UpdateClass::rollBack() {
 bool UpdateClass::setMD5(const char *md5) {
 	if (strlen(md5) != 32)
 		return false;
-	this->md5Expected = static_cast<uint8_t *>(malloc(16));
+	if (!this->md5Expected)
+		this->md5Expected = static_cast<uint8_t *>(malloc(16));
 	if (!this->md5Expected)
 		return false;
 	lt_xtob(md5, 32, this->md5Expected);
