@@ -5,3 +5,4 @@ mkdocs-section-index
 mkdocs-include-markdown-plugin
 mkdocs-git-revision-date-localized-plugin
 -e git+https://github.com/kuba2k2/mkdoxy#egg=mkdoxy
+mkdocs-redirects

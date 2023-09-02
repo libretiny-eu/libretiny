@@ -32,6 +32,18 @@ plugins:
       save-api: .
   - literate-nav:
       nav_file: SUMMARY.md
+  - redirects:
+      redirect_maps:
+        "link/cloudcutter-video.md": 'https://www.youtube.com/watch?v=sSj8f-HCHQ0'
+        "link/cloudcutter-digiblur.md": 'https://digiblur.com/2023/08/19/updated-tuya-cloudcutter-with-esphome-bk7231-how-to-guide/'
+        "link/boards.md": "docs/status/supported.md"
+        "link/gpio-access.md": "docs/getting-started/gpio.md"
+        "link/config.md": "docs/dev/config.md"
+        "link/config-debug.md": "docs/dev/config.md#per-module-logging-debugging"
+        "link/config-serial.md": "docs/dev/config.md#serial-output"
+        "link/flashing-beken-72xx.md": "docs/platform/beken-72xx.md#flashing"
+        "link/flashing-realtek-ambz.md": "docs/platform/realtek-ambz.md#flashing"
+        "link/kickstart.md": "https://github.com/libretiny-eu/esphome-kickstart/releases/latest"
   - section-index
   - include-markdown
   - search
