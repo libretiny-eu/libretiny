@@ -41,8 +41,8 @@ plugins:
         "link/config.md": "docs/dev/config.md"
         "link/config-debug.md": "docs/dev/config.md#per-module-logging-debugging"
         "link/config-serial.md": "docs/dev/config.md#serial-output"
-        "link/flashing-beken-72xx.md": "docs/platform/beken-72xx.md#flashing"
-        "link/flashing-realtek-ambz.md": "docs/platform/realtek-ambz.md#flashing"
+        "link/flashing-beken-72xx.md": "docs/platform/beken-72xx/README.md#flashing"
+        "link/flashing-realtek-ambz.md": "docs/platform/realtek-ambz/README.md#flashing"
         "link/kickstart.md": "https://github.com/libretiny-eu/esphome-kickstart/releases/latest"
   - section-index
   - include-markdown
