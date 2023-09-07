@@ -77,7 +77,7 @@ def env_configure(
         # ltchiptool config:
         # -r    output raw log messages
         # -i 1  indent log messages
-        LTCHIPTOOL='"${PYTHONEXE}" -m ltchiptool -r -i 1',
+        LTCHIPTOOL='"${LTPYTHONEXE}" -m ltchiptool -r -i 1 -L "${LT_DIR}"',
         # Fix for link2bin to get tmpfile name in argv
         LINKCOM="${LINK} ${LINKARGS}",
         LINKARGS="${TEMPFILE('-o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS', '$LINKCOMSTR')}",
