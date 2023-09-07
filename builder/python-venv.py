@@ -29,7 +29,7 @@ def env_configure_python_venv(env: Environment):
             # Use the built-in PlatformIO Python to create a standalone virtual env
             env.Execute(
                 env.VerboseAction(
-                    f'"${PYTHONEXE}" -m venv --clear "{venv_path.absolute()}"',
+                    f'"$PYTHONEXE" -m venv --clear "{venv_path.absolute()}"',
                     "LibreTiny: Creating a virtual environment for Python dependencies",
                 )
             )

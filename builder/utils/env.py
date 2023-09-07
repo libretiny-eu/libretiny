@@ -8,6 +8,7 @@ from subprocess import PIPE, Popen
 from typing import Dict
 
 from ltchiptool import Family, get_version
+from ltchiptool.util.lvm import LVM
 from ltchiptool.util.misc import sizeof
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
@@ -87,6 +88,8 @@ def env_configure(
     )
     # Store family parameters as environment variables
     env.Replace(**dict(family))
+    # Set platform directory in ltchiptool (for use in this process only)
+    LVM.add_path(platform.get_dir())
     return family
 
 
