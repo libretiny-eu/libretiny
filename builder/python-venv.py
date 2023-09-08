@@ -111,7 +111,8 @@ def env_install_python_dependencies(env: Environment, dependencies: dict):
     if to_install:
         env.Execute(
             env.VerboseAction(
-                '"${LTPYTHONEXE}" -m pip install -U ' + " ".join(to_install),
+                '"${LTPYTHONEXE}" -m pip install --prefer-binary -U '
+                + " ".join(to_install),
                 "LibreTiny: Installing Python dependencies",
             )
         )
