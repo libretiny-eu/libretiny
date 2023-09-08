@@ -21,24 +21,10 @@ platform: PlatformBase = env.PioPlatform()
 def env_configure_python_venv(env: Environment):
     venv_path = Path(env.subst("${PROJECT_CORE_DIR}"), "penv", ".libretiny")
 
-    if not venv_path.is_dir():
-        pip_path = venv_path.joinpath(
-            "Scripts" if IS_WINDOWS else "bin",
-            "pip" + (".exe" if IS_WINDOWS else ""),
-        )
-        if not pip_path.is_file():
-            # Use the built-in PlatformIO Python to create a standalone virtual env
-            env.Execute(
-                env.VerboseAction(
-                    f'"$PYTHONEXE" -m venv --clear "{venv_path.absolute()}"',
-                    "LibreTiny: Creating a virtual environment for Python dependencies",
-                )
-            )
-
-        assert (
-            pip_path.is_file()
-        ), "Error: Failed to create a proper virtual environment. Missing the pip binary!"
-
+    pip_path = venv_path.joinpath(
+        "Scripts" if IS_WINDOWS else "bin",
+        "pip" + (".exe" if IS_WINDOWS else ""),
+    )
     python_path = venv_path.joinpath(
         "Scripts" if IS_WINDOWS else "bin",
         "python" + (".exe" if IS_WINDOWS else ""),
@@ -49,6 +35,38 @@ def env_configure_python_venv(env: Environment):
         "site-packages",
     )
 
+    if not pip_path.is_file():
+        # Use the built-in PlatformIO Python to create a standalone virtual env
+        result = env.Execute(
+            env.VerboseAction(
+                f'"$PYTHONEXE" -m venv --clear "{venv_path.absolute()}"',
+                "LibreTiny: Creating a virtual environment for Python dependencies",
+            )
+        )
+        if not python_path.is_file():
+            # Creating the venv failed
+            raise RuntimeError(
+                f"Failed to create virtual environment. Error code {result}"
+            )
+        if not pip_path.is_file():
+            # Creating the venv succeeded but pip didn't get installed
+            # (i.e. Debian/Ubuntu without ensurepip)
+            print(
+                "LibreTiny: Failed to install pip, running get-pip.py", file=sys.stderr
+            )
+            import requests
+
+            with requests.get("https://bootstrap.pypa.io/get-pip.py") as r:
+                p = subprocess.Popen(
+                    args=str(python_path.absolute()),
+                    stdin=subprocess.PIPE,
+                )
+                p.communicate(r.content)
+                p.wait()
+
+    assert (
+        pip_path.is_file()
+    ), f"Error: Missing the pip binary in virtual environment `{pip_path.absolute()}`"
     assert (
         python_path.is_file()
     ), f"Error: Missing Python executable file `{python_path.absolute()}`"
