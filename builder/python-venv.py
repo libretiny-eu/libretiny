@@ -3,6 +3,7 @@
 import json
 import site
 import subprocess
+import sys
 from pathlib import Path
 
 import semantic_version
@@ -42,13 +43,21 @@ def env_configure_python_venv(env: Environment):
         "Scripts" if IS_WINDOWS else "bin",
         "python" + (".exe" if IS_WINDOWS else ""),
     )
+    site_path = venv_path.joinpath(
+        "Lib" if IS_WINDOWS else "lib",
+        "." if IS_WINDOWS else f"python{sys.version_info[0]}.{sys.version_info[1]}",
+        "site-packages",
+    )
 
     assert (
         python_path.is_file()
     ), f"Error: Missing Python executable file `{python_path.absolute()}`"
+    assert (
+        site_path.is_dir()
+    ), f"Error: Missing site-packages directory `{site_path.absolute()}`"
 
     env.Replace(LTPYTHONEXE=python_path.absolute(), LTPYTHONENV=venv_path.absolute())
-    site.addsitedir(str(venv_path.absolute()))
+    site.addsitedir(str(site_path.absolute()))
 
 
 def env_install_python_dependencies(env: Environment, dependencies: dict):
