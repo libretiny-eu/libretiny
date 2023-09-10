@@ -1,12 +1,12 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
-import importlib
 import json
 import os
 import platform
+import site
 import sys
 from os.path import dirname
-from subprocess import Popen
+from pathlib import Path
 from typing import Dict, List
 
 import click
@@ -15,73 +15,8 @@ from platformio.debug.exception import DebugInvalidOptionsError
 from platformio.package.meta import PackageItem
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
-from semantic_version import SimpleSpec, Version
 
-LTCHIPTOOL_VERSION = "^4.2.3"
-
-
-# Install & import tools
-def check_ltchiptool(install: bool):
-    if install:
-        # update ltchiptool to a supported version
-        print("Installing/updating ltchiptool")
-        p = Popen(
-            [
-                sys.executable,
-                "-m",
-                "pip",
-                "install",
-                "-U",
-                "--force-reinstall",
-                f"ltchiptool >= {LTCHIPTOOL_VERSION[1:]}, < 5.0",
-            ],
-        )
-        p.wait()
-
-        # unload all modules from the old version
-        for name, module in list(sorted(sys.modules.items())):
-            if not name.startswith("ltchiptool"):
-                continue
-            del sys.modules[name]
-            del module
-
-    # try to import it
-    ltchiptool = importlib.import_module("ltchiptool")
-
-    # check if the version is known
-    version = Version.coerce(ltchiptool.get_version()).truncate()
-    if version in SimpleSpec(LTCHIPTOOL_VERSION):
-        return
-    if not install:
-        raise ImportError(f"Version incompatible: {version}")
-
-
-def try_check_ltchiptool():
-    install_modes = [False, True]
-    exception = None
-    for install in install_modes:
-        try:
-            check_ltchiptool(install)
-            return
-        except (ImportError, AttributeError) as ex:
-            exception = ex
-    print(
-        "!!! Installing ltchiptool failed, or version outdated. "
-        "Please install ltchiptool manually using pip. "
-        f"Cannot continue. {type(exception).name}: {exception}"
-    )
-    raise exception
-
-
-try_check_ltchiptool()
-import ltchiptool
-
-# Remove current dir so it doesn't conflict with PIO
-if dirname(__file__) in sys.path:
-    sys.path.remove(dirname(__file__))
-
-# Let ltchiptool know about LT's location
-ltchiptool.lt_set_path(dirname(__file__))
+site.addsitedir(Path(__file__).absolute().parent.joinpath("tools"))
 
 
 def get_os_specifiers():
@@ -119,6 +54,12 @@ class LibretinyPlatform(PlatformBase):
         super().__init__(manifest_path)
         self.custom_opts = {}
         self.versions = {}
+        self.verbose = (
+            "-v" in sys.argv
+            or "--verbose" in sys.argv
+            or "PIOVERBOSE=1" in sys.argv
+            or os.environ.get("PIOVERBOSE", "0") == "1"
+        )
 
     def print(self, *args, **kwargs):
         if not self.verbose:
@@ -137,11 +78,8 @@ class LibretinyPlatform(PlatformBase):
         return spec
 
     def configure_default_packages(self, options: dict, targets: List[str]):
-        from ltchiptool.util.dict import RecursiveDict
+        from libretiny import RecursiveDict
 
-        self.verbose = (
-            "-v" in sys.argv or "--verbose" in sys.argv or "PIOVERBOSE=1" in sys.argv
-        )
         self.print(f"configure_default_packages(targets={targets})")
 
         pioframework = options.get("pioframework") or ["base"]
@@ -298,19 +236,19 @@ class LibretinyPlatform(PlatformBase):
         return result
 
     def update_board(self, board: PlatformBoardConfig):
+        from libretiny import Board, Family, merge_dicts
+
         if "_base" in board:
-            board._manifest = ltchiptool.Board.get_data(board._manifest)
+            board._manifest = Board.get_data(board._manifest)
             board._manifest.pop("_base")
 
         if self.custom("board"):
-            from ltchiptool.util.dict import merge_dicts
-
             with open(self.custom("board"), "r") as f:
                 custom_board = json.load(f)
             board._manifest = merge_dicts(board._manifest, custom_board)
 
         family = board.get("build.family")
-        family = ltchiptool.Family.get(short_name=family)
+        family = Family.get(short_name=family)
         # add "frameworks" key with the default "base"
         board.manifest["frameworks"] = ["base"]
         # add "arduino" framework if supported

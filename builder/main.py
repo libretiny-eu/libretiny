@@ -17,6 +17,13 @@ env: Environment = DefaultEnvironment()
 platform: PlatformBase = env.PioPlatform()
 board: PlatformBoardConfig = env.BoardConfig()
 
+python_deps = {
+    "ltchiptool": ">=4.5.1,<5.0",
+}
+env.SConscript("python-venv.py", exports="env")
+env.ConfigurePythonVenv()
+env.InstallPythonDependencies(python_deps)
+
 # Utilities
 env.SConscript("utils/config.py", exports="env")
 env.SConscript("utils/cores.py", exports="env")
@@ -24,7 +31,7 @@ env.SConscript("utils/env.py", exports="env")
 env.SConscript("utils/flash.py", exports="env")
 env.SConscript("utils/libs-external.py", exports="env")
 env.SConscript("utils/libs-queue.py", exports="env")
-env.SConscript("utils/ltchiptool.py", exports="env")
+env.SConscript("utils/ltchiptool-util.py", exports="env")
 
 # Firmware name
 if env.get("PROGNAME", "program") == "program":

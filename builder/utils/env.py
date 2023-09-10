@@ -8,6 +8,7 @@ from subprocess import PIPE, Popen
 from typing import Dict
 
 from ltchiptool import Family, get_version
+from ltchiptool.util.lvm import LVM
 from ltchiptool.util.misc import sizeof
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
@@ -77,7 +78,7 @@ def env_configure(
         # ltchiptool config:
         # -r    output raw log messages
         # -i 1  indent log messages
-        LTCHIPTOOL='"${PYTHONEXE}" -m ltchiptool -r -i 1',
+        LTCHIPTOOL='"${LTPYTHONEXE}" -m ltchiptool -r -i 1 -L "${LT_DIR}"',
         # Fix for link2bin to get tmpfile name in argv
         LINKCOM="${LINK} ${LINKARGS}",
         LINKARGS="${TEMPFILE('-o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS', '$LINKCOMSTR')}",
@@ -87,6 +88,8 @@ def env_configure(
     )
     # Store family parameters as environment variables
     env.Replace(**dict(family))
+    # Set platform directory in ltchiptool (for use in this process only)
+    LVM.add_path(platform.get_dir())
     return family
 
 
