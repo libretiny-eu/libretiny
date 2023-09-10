@@ -56,7 +56,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 	Assuming you have PlatformIO, git and Python installed:
 
 	1. Open a terminal/cmd.exe, create `esphome` directory and `cd` into it.
-	2. `git clone https://github.com/kuba2k2/libretiny-esphome`
+	2. `git clone https://github.com/libretiny-eu/libretiny-esphome`
 	3. `cd` into the newly created `libretiny-esphome` directory.
 	4. Check if it works by typing `python -m esphome`
 

@@ -18,7 +18,7 @@
 		"extra": [
 			"## Information",
 			"This is a generic board definition for RTL8710BX with 4 MiB of flash. It has a bigger application partition size (980 KiB). The used bootloader is also different from the standard Tuya one.",
-			"It can be found in [Ezviz T31 smart plug](https://www.ezviz.com/product/T31/2021) - bare chip soldered onto the manufacturer-made PCB. The plug is not Tuya/SmartLife-compatible and has a 25Q32CSIG flash chip. Refer to [libretiny#23](https://github.com/kuba2k2/libretiny/issues/23) for photos and more information.",
+			"It can be found in [Ezviz T31 smart plug](https://www.ezviz.com/product/T31/2021) - bare chip soldered onto the manufacturer-made PCB. The plug is not Tuya/SmartLife-compatible and has a 25Q32CSIG flash chip. Refer to [libretiny#23](https://github.com/libretiny-eu/libretiny/issues/23) for photos and more information.",
 			"Note that stock firmware seems to use smaller app images (0x80000 / 512 KiB). After 0x180000 some product-test data and device logs can be found. Because the OTA2 offset is 0x100000, the board definition was configured to use all available space."
 		]
 	},

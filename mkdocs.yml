@@ -2,7 +2,7 @@ site_name: LibreTiny
 docs_dir: .
 
 site_url: https://docs.libretiny.eu/
-repo_url: https://github.com/kuba2k2/libretiny
+repo_url: https://github.com/libretiny-eu/libretiny
 
 theme:
   name: material

@@ -3,7 +3,7 @@
 Using LibreTiny is simple, just like every other PlatformIO development platform.
 
 1. [Install PlatformIO](https://platformio.org/platformio-ide)
-2. `platformio platform install -f https://github.com/kuba2k2/libretiny`
+2. `platformio platform install -f https://github.com/libretiny-eu/libretiny`
 
 !!! tip
 	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../projects/esphome.md). **Includes Home Assistant Add-On setup.**
