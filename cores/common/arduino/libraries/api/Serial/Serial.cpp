@@ -24,7 +24,7 @@ void SerialClass::adrParse(uint8_t c) {
 #endif
 
 int SerialClass::available() {
-	return this->buf && this->buf->available();
+	return this->buf ? this->buf->available() : 0;
 }
 
 int SerialClass::peek() {
