@@ -42,20 +42,4 @@ using namespace arduino;
 // Define available serial ports
 #if defined(__cplusplus) && LT_ARD_HAS_SERIAL
 #include <Serial.h>
-
-#if HAS_SERIAL_CLASS
-#if LT_HW_UART0
-extern SerialClass Serial0;
-#endif
-#if LT_HW_UART1
-extern SerialClass Serial1;
-#endif
-#if LT_HW_UART2
-extern SerialClass Serial2;
-#endif
-#endif
-
-#define SerialN(x) Serial##x
-#define SerialM(x) SerialN(x)
-#define Serial	   SerialM(LT_UART_DEFAULT_SERIAL)
 #endif

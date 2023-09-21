@@ -2,16 +2,6 @@
 
 #include "SerialPrivate.h"
 
-#if LT_HW_UART0
-SerialClass Serial0(0, PIN_SERIAL0_RX, PIN_SERIAL0_TX);
-#endif
-#if LT_HW_UART1
-SerialClass Serial1(1, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
-#endif
-#if LT_HW_UART2
-SerialClass Serial2(2, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
-#endif
-
 static UART_TypeDef *PORT_UART[3] = {UART0_DEV, UART1_DEV, UART2_DEV};
 static const IRQn PORT_IRQ[3]	  = {UART0_IRQ, UART1_IRQ, UART_LOG_IRQ};
 

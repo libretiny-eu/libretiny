@@ -6,8 +6,6 @@
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>
 
-using namespace arduino;
-
 typedef struct SerialData SerialData;
 
 class SerialClass : public HardwareSerial {
@@ -55,4 +53,16 @@ class SerialClass : public HardwareSerial {
 	using Print::write;
 };
 
-#define HAS_SERIAL_CLASS 1
+#if LT_HW_UART0
+extern SerialClass Serial0;
+#endif
+#if LT_HW_UART1
+extern SerialClass Serial1;
+#endif
+#if LT_HW_UART2
+extern SerialClass Serial2;
+#endif
+
+#define SerialN(x) Serial##x
+#define SerialM(x) SerialN(x)
+#define Serial	   SerialM(LT_UART_DEFAULT_SERIAL)

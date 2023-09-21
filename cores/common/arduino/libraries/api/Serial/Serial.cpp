@@ -34,3 +34,13 @@ int SerialClass::peek() {
 int SerialClass::read() {
 	return this->buf ? this->buf->read_char() : -1;
 }
+
+#if LT_HW_UART0
+SerialClass Serial0(0, PIN_SERIAL0_RX, PIN_SERIAL0_TX);
+#endif
+#if LT_HW_UART1
+SerialClass Serial1(1, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
+#endif
+#if LT_HW_UART2
+SerialClass Serial2(2, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
+#endif
