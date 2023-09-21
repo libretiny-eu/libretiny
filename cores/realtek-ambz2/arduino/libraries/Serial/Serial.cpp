@@ -29,7 +29,7 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		} else {
 			this->data->uart = uart = new hal_uart_adapter_t();
 			// TODO handle PIN_INVALID
-			hal_uart_init(uart, this->tx, this->rx, NULL);
+			hal_uart_init(uart, this->tx, this->rx, nullptr);
 		}
 
 		if (this->rx != PIN_INVALID) {
@@ -67,15 +67,15 @@ void SerialClass::end() {
 	hal_uart_adapter_t *uart = this->data->uart;
 	if (this->port == 2) {
 		uart->base_addr->ier_b.erbi = 0;
-		hal_uart_rxind_hook(uart, NULL, 0, RxIrq);
+		hal_uart_rxind_hook(uart, nullptr, 0, RxIrq);
 	} else {
 		hal_uart_deinit(uart);
 		delete this->data->uart;
 	}
 
 	delete this->data;
-	this->data	   = NULL;
-	this->buf	   = NULL;
+	this->data	   = nullptr;
+	this->buf	   = nullptr;
 	this->baudrate = 0;
 }
 

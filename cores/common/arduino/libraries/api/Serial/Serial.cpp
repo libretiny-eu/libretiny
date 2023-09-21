@@ -2,14 +2,6 @@
 
 #include "Serial.h"
 
-SerialClass::SerialClass(uint32_t port, pin_size_t rx, pin_size_t tx) {
-	this->port = port;
-	this->rx   = rx;
-	this->tx   = tx;
-	this->buf  = NULL;
-	this->data = NULL;
-}
-
 #if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN)
 static uint8_t adrState = 0;
 static uint8_t adrCmd[] = {LT_UART_ADR_PATTERN};

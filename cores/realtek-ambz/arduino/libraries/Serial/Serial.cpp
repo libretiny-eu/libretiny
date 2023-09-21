@@ -105,8 +105,8 @@ void SerialClass::end() {
 	}
 
 	delete this->data;
-	this->data	   = NULL;
-	this->buf	   = NULL;
+	this->data	   = nullptr;
+	this->buf	   = nullptr;
 	this->baudrate = 0;
 }
 

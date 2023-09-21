@@ -14,7 +14,7 @@ static void callback_uart0(void) {
 	}
 }
 #else
-#define callback_uart0 NULL
+#define callback_uart0 nullptr
 #endif
 
 #if LT_HW_UART1
@@ -26,7 +26,7 @@ static void callback_uart1(void) {
 	}
 }
 #else
-#define callback_uart1 NULL
+#define callback_uart1 nullptr
 #endif
 
 #if LT_HW_UART2
@@ -38,7 +38,7 @@ static void callback_uart2(void) {
 	}
 }
 #else
-#define callback_uart2 NULL
+#define callback_uart2 nullptr
 #endif
 
 static const serial_rx_callbcak serial_rx_callbacks[SER_PORT_NUM] = {
@@ -75,8 +75,8 @@ void SerialClass::end() {
 	serial_deinit(serial_handles[this->port]);
 
 	delete this->data;
-	this->data	   = NULL;
-	this->buf	   = NULL;
+	this->data	   = nullptr;
+	this->buf	   = nullptr;
 	this->baudrate = 0;
 }
 
