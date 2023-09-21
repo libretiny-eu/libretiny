@@ -14,17 +14,25 @@
 
 // Wire Interfaces
 // ---------------
-#define PIN_WIRE0_SCL 29u // PA_29
-#define PIN_WIRE0_SDA 30u // PA_30
-#define PIN_WIRE1_SCL 18u // PA_18
-#define PIN_WIRE1_SDA 23u // PA_23
+#define PIN_WIRE0_SCL  29u // PA_29
+#define PIN_WIRE0_SDA  30u // PA_30
+#define PIN_WIRE1_SCL  18u // PA_18
+#define PIN_WIRE1_SDA  23u // PA_23
+#define PINS_WIRE0_SCL (pin_size_t[]){29u}
+#define PINS_WIRE0_SDA (pin_size_t[]){30u}
+#define PINS_WIRE1_SCL (pin_size_t[]){18u}
+#define PINS_WIRE1_SDA (pin_size_t[]){23u}
 
 // Serial ports
 // ------------
-#define PIN_SERIAL0_RX 18u // PA_18
-#define PIN_SERIAL0_TX 23u // PA_23
-#define PIN_SERIAL2_RX 29u // PA_29
-#define PIN_SERIAL2_TX 30u // PA_30
+#define PIN_SERIAL0_RX  18u // PA_18
+#define PIN_SERIAL0_TX  23u // PA_23
+#define PIN_SERIAL2_RX  29u // PA_29
+#define PIN_SERIAL2_TX  30u // PA_30
+#define PINS_SERIAL0_RX (pin_size_t[]){18u}
+#define PINS_SERIAL0_TX (pin_size_t[]){23u}
+#define PINS_SERIAL2_RX (pin_size_t[]){29u}
+#define PINS_SERIAL2_TX (pin_size_t[]){30u}
 
 // Pin function macros
 // -------------------
@@ -40,7 +48,6 @@
 #define PIN_PA23  23u // PA_23
 #define PIN_PA29  29u // PA_29
 #define PIN_PA30  30u // PA_30
-#define PIN_PWM0  23u // PA_23
 #define PIN_PWM1  15u // PA_15
 #define PIN_PWM2  0u  // PA_0
 #define PIN_PWM3  12u // PA_12

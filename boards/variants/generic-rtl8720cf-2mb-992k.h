@@ -25,6 +25,10 @@
 #define PIN_SPI0_SCK_0  3u  // PIN_A3
 #define PIN_SPI0_SCK_1  8u  // PIN_A8
 #define PIN_SPI0_SCK_2  16u // PIN_A16
+#define PINS_SPI0_CS    (pin_size_t[]){2u, 7u, 15u}
+#define PINS_SPI0_MISO  (pin_size_t[]){10u, 20u}
+#define PINS_SPI0_MOSI  (pin_size_t[]){4u, 9u, 19u}
+#define PINS_SPI0_SCK   (pin_size_t[]){3u, 8u, 16u}
 
 // Wire Interfaces
 // ---------------
@@ -36,6 +40,8 @@
 #define PIN_WIRE0_SDA_1 12u // PIN_A12
 #define PIN_WIRE0_SDA_2 16u // PIN_A16
 #define PIN_WIRE0_SDA_3 20u // PIN_A20
+#define PINS_WIRE0_SCL  (pin_size_t[]){2u, 11u, 15u, 19u}
+#define PINS_WIRE0_SDA  (pin_size_t[]){3u, 12u, 16u, 20u}
 
 // Serial ports
 // ------------
@@ -54,6 +60,17 @@
 #define PIN_SERIAL2_RTS  20u // PIN_A20
 #define PIN_SERIAL2_RX   15u // PIN_A15
 #define PIN_SERIAL2_TX   16u // PIN_A16
+#define PINS_SERIAL0_CTS (pin_size_t[]){10u}
+#define PINS_SERIAL0_RTS (pin_size_t[]){9u}
+#define PINS_SERIAL0_RX  (pin_size_t[]){12u, 13u}
+#define PINS_SERIAL0_TX  (pin_size_t[]){11u, 14u}
+#define PINS_SERIAL1_CTS (pin_size_t[]){4u}
+#define PINS_SERIAL1_RX  (pin_size_t[]){0u, 2u}
+#define PINS_SERIAL1_TX  (pin_size_t[]){1u, 3u}
+#define PINS_SERIAL2_CTS (pin_size_t[]){19u}
+#define PINS_SERIAL2_RTS (pin_size_t[]){20u}
+#define PINS_SERIAL2_RX  (pin_size_t[]){15u}
+#define PINS_SERIAL2_TX  (pin_size_t[]){16u}
 
 // Pin function macros
 // -------------------
@@ -61,7 +78,6 @@
 #define PIN_CTS0  10u // PIN_A10
 #define PIN_CTS1  4u  // PIN_A4
 #define PIN_CTS2  19u // PIN_A19
-#define PIN_MISO0 20u // PIN_A20
 #define PIN_MOSI0 19u // PIN_A19
 #define PIN_PA00  0u  // PIN_A0
 #define PIN_PA01  1u  // PIN_A1
@@ -84,23 +100,13 @@
 #define PIN_PA20  20u // PIN_A20
 #define PIN_PA23  23u // PIN_A23
 #define PIN_PWM0  20u // PIN_A20
-#define PIN_PWM1  12u // PIN_A12
-#define PIN_PWM2  14u // PIN_A14
-#define PIN_PWM3  15u // PIN_A15
-#define PIN_PWM4  16u // PIN_A16
 #define PIN_PWM5  17u // PIN_A17
 #define PIN_PWM6  18u // PIN_A18
 #define PIN_PWM7  23u // PIN_A23
 #define PIN_RTS0  9u  // PIN_A9
 #define PIN_RTS2  20u // PIN_A20
-#define PIN_RX0   13u // PIN_A13
-#define PIN_RX1   2u  // PIN_A2
 #define PIN_RX2   15u // PIN_A15
 #define PIN_SCK0  16u // PIN_A16
-#define PIN_SCL0  19u // PIN_A19
-#define PIN_SDA0  20u // PIN_A20
-#define PIN_TX0   14u // PIN_A14
-#define PIN_TX1   3u  // PIN_A3
 #define PIN_TX2   16u // PIN_A16
 
 // Port availability
