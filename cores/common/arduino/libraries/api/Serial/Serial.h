@@ -15,13 +15,13 @@ class SerialClass : public HardwareSerial {
 	pin_size_t tx; //!< TX pin number of this instance
 
   private:
-	SerialData *data;  //!< family-specific, created in begin(), destroyed in end()
-	RingBuffer *buf;   //!< RX data buffer, assigned in begin(), removed in end()
-	uint32_t baudrate; //!< currently set baudrate
-	uint16_t config;   //!< currently set configuration
+	SerialData *data{nullptr}; //!< family-specific, created in begin(), destroyed in end()
+	RingBuffer *buf{nullptr};  //!< RX data buffer, assigned in begin(), removed in end()
+	uint32_t baudrate{0};	   //!< currently set baudrate
+	uint16_t config{0};		   //!< currently set configuration
 
   public:
-	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID);
+	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID) : port(port), rx(rx), tx(tx) {}
 
 	void begin(unsigned long baudrate, uint16_t config);
 	void configure(unsigned long baudrate, uint16_t config);

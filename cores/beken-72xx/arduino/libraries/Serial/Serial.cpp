@@ -65,7 +65,7 @@ void SerialClass::end() {
 	if (!this->data)
 		return;
 
-	uart_rx_callback_set(this->port - 1, NULL, NULL);
+	uart_rx_callback_set(this->port - 1, nullptr, nullptr);
 	switch (this->port) {
 		case 1:
 			uart1_exit();
@@ -76,8 +76,8 @@ void SerialClass::end() {
 	}
 
 	delete this->data;
-	this->data	   = NULL;
-	this->buf	   = NULL;
+	this->data	   = nullptr;
+	this->buf	   = nullptr;
 	this->baudrate = 0;
 }
 
