@@ -9,7 +9,7 @@ SerialClass Serial1(UART1_PORT);
 SerialClass Serial2(UART2_PORT);
 #endif
 
-static void callback(int port, void *param) {
+static void callback(int port, RingBuffer *buf) {
 	int ch;
 	while ((ch = uart_read_byte(port)) != -1) {
 #if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN) && PIN_SERIAL1_RX != PIN_INVALID
@@ -17,14 +17,14 @@ static void callback(int port, void *param) {
 		if (port == UART1_PORT)
 			SerialClass::adrParse(ch);
 #endif
-		pBUF->store_char(ch);
+		buf->store_char(ch);
 	}
 }
 
 void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 	if (!this->data) {
 		this->data = new SerialData();
-		this->buf  = &BUF;
+		this->buf  = &this->data->buf;
 	}
 
 	if (this->baudrate != baudrate || this->config != config)
@@ -47,12 +47,12 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		.flow_control = FLOW_CTRL_DISABLED,
 	};
 
-	if (port == 1)
+	if (this->port == 1)
 		uart1_init();
-	else if (port == 2)
+	else if (this->port == 2)
 		uart2_init();
-	uart_hw_set_change(port, &cfg);
-	uart_rx_callback_set(port, callback, &BUF);
+	uart_hw_set_change(this->port, &cfg);
+	uart_rx_callback_set(this->port, (uart_callback)callback, &this->data->buf);
 
 	this->baudrate = baudrate;
 	this->config   = config;
@@ -62,8 +62,8 @@ void SerialClass::end() {
 	if (!this->data)
 		return;
 
-	uart_rx_callback_set(port, NULL, NULL);
-	switch (port) {
+	uart_rx_callback_set(this->port, NULL, NULL);
+	switch (this->port) {
 		case 1:
 			uart1_exit();
 			break;
@@ -72,7 +72,7 @@ void SerialClass::end() {
 			break;
 	}
 
-	delete DATA;
+	delete this->data;
 	this->data	   = NULL;
 	this->buf	   = NULL;
 	this->baudrate = 0;
@@ -87,6 +87,6 @@ void SerialClass::flush() {
 size_t SerialClass::write(uint8_t c) {
 	if (!this->data)
 		return 0;
-	bk_send_byte(port, c);
+	bk_send_byte(this->port, c);
 	return 1;
 }

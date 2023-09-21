@@ -5,15 +5,8 @@
 #include <Arduino.h>
 #include <sdk_private.h>
 
-typedef struct {
+struct SerialData {
 	UART_TypeDef *uart;
 	IRQn irq;
 	RingBuffer buf;
-} SerialData;
-
-#define DATA   ((SerialData *)data)
-#define pDATA  ((SerialData *)param)
-#define BUF	   (DATA->buf)
-#define pdBUF  (pDATA->buf)
-#define UART   (DATA->uart)
-#define pdUART (pDATA->uart)
+};

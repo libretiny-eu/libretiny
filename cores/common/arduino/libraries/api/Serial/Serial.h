@@ -8,22 +8,32 @@
 
 using namespace arduino;
 
+typedef struct SerialData SerialData;
+
 class SerialClass : public HardwareSerial {
   private:
-	uint32_t port;
-	pin_size_t rx;
-	pin_size_t tx;
-
-  public:
-	void *data;
+	uint32_t port; //!< port number, family-specific
+	pin_size_t rx; //!< RX pin number of this instance
+	pin_size_t tx; //!< TX pin number of this instance
 
   private:
-	RingBuffer *buf;
-	uint32_t baudrate;
-	uint16_t config;
+	SerialData *data;  //!< family-specific, created in begin(), destroyed in end()
+	RingBuffer *buf;   //!< RX data buffer, assigned in begin(), removed in end()
+	uint32_t baudrate; //!< currently set baudrate
+	uint16_t config;   //!< currently set configuration
 
   public:
 	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID);
+
+	void begin(unsigned long baudrate, uint16_t config);
+	void configure(unsigned long baudrate, uint16_t config);
+	void end();
+	void flush();
+	size_t write(uint8_t c);
+
+	int available();
+	int peek();
+	int read();
 
 	inline void begin(unsigned long baudrate) {
 		begin(baudrate, SERIAL_8N1);
@@ -32,15 +42,6 @@ class SerialClass : public HardwareSerial {
 	inline void configure(unsigned long baudrate) {
 		configure(baudrate, SERIAL_8N1);
 	}
-
-	void begin(unsigned long baudrate, uint16_t config);
-	void configure(unsigned long baudrate, uint16_t config);
-	void end();
-	int available();
-	int peek();
-	int read();
-	void flush();
-	size_t write(uint8_t c);
 
 	operator bool() {
 		return !!buf;
