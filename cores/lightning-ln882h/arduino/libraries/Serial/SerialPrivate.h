@@ -5,10 +5,6 @@
 #include <Arduino.h>
 #include <sdk_private.h>
 
-typedef struct {
+struct SerialData {
 	SerialRingBuffer buf;
-	void (*callback)(void);
-} SerialData;
-
-#define DATA ((SerialData *)this->data)
-#define BUF	 (DATA->buf)
+};
