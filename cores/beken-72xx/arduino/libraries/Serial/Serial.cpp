@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-23. */
 
+#if LT_ARD_HAS_SERIAL || DOXYGEN
+
 #include "SerialPrivate.h"
 
 #if LT_HW_UART1
@@ -93,3 +95,5 @@ size_t SerialClass::write(uint8_t c) {
 	bk_send_byte(this->port - 1, c);
 	return 1;
 }
+
+#endif

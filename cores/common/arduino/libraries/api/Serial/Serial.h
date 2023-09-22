@@ -2,6 +2,10 @@
 
 #pragma once
 
+#if !LT_ARD_HAS_SERIAL
+#error "Serial library not implemented for this chip family"
+#endif
+
 #include <Arduino.h>
 #include <api/HardwareSerial.h>
 #include <api/RingBuffer.h>

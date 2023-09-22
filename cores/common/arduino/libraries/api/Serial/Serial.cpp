@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-05-23. */
 
+#if LT_ARD_HAS_SERIAL || DOXYGEN
+
 #include "Serial.h"
 
 #if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN)
@@ -35,4 +37,6 @@ SerialClass Serial1(1, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
 #endif
 #if LT_HW_UART2
 SerialClass Serial2(2, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
+#endif
+
 #endif

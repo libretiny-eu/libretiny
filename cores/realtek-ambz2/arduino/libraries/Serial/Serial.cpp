@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-05-24. */
 
+#if LT_ARD_HAS_SERIAL || DOXYGEN
+
 #include "SerialPrivate.h"
 
 static void callback(SerialData *data, uint32_t event) {
@@ -92,3 +94,5 @@ size_t SerialClass::write(uint8_t c) {
 	hal_uart_putc(this->data->uart, c);
 	return 1;
 }
+
+#endif
