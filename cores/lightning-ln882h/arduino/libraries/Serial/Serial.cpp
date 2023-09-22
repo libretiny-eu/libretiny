@@ -1,5 +1,7 @@
 /* Copyright (c) Etienne Le Cousin 2024-02-10. */
 
+#if LT_ARD_HAS_SERIAL || DOXYGEN
+
 #include "SerialPrivate.h"
 
 extern Serial_t *serial_handles[SER_PORT_NUM];
@@ -92,3 +94,5 @@ size_t SerialClass::write(uint8_t c) {
 	serial_putchar(serial_handles[this->port], c);
 	return 1;
 }
+
+#endif

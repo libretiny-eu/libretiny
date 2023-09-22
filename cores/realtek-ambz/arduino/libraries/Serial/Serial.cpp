@@ -1,5 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-03. */
 
+#if LT_ARD_HAS_SERIAL || DOXYGEN
+
 #include "SerialPrivate.h"
 
 static UART_TypeDef *PORT_UART[3] = {UART0_DEV, UART1_DEV, UART2_DEV};
@@ -123,3 +125,5 @@ size_t SerialClass::write(uint8_t c) {
 	UART_CharPut(this->data->uart, c);
 	return 1;
 }
+
+#endif
