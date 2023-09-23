@@ -4,30 +4,23 @@
 
 #include "Wire.h"
 
-TwoWire::~TwoWire() {}
+#include <ArduinoPrivate.h>
 
-template <typename C, typename T>
-static bool contains(C &&c, T e) {
-	for (auto x : c) {
-		if (x == e)
-			return true;
-	}
-	return false;
-};
+TwoWire::~TwoWire() {}
 
 int TwoWire::getPortByPins(pin_size_t sda, pin_size_t scl) {
 	if (sda == PIN_INVALID || scl == PIN_INVALID)
 		return -1;
 #if defined(PINS_WIRE0_SDA) && defined(PINS_WIRE0_SCL)
-	if (contains(PINS_WIRE0_SDA, sda) && contains(PINS_WIRE0_SCL, scl))
+	if (ltArrayContains(PINS_WIRE0_SDA, sda) && ltArrayContains(PINS_WIRE0_SCL, scl))
 		return 0;
 #endif
 #if defined(PINS_WIRE1_SDA) && defined(PINS_WIRE1_SCL)
-	if (contains(PINS_WIRE1_SDA, sda) && contains(PINS_WIRE1_SCL, scl))
+	if (ltArrayContains(PINS_WIRE1_SDA, sda) && ltArrayContains(PINS_WIRE1_SCL, scl))
 		return 1;
 #endif
 #if defined(PINS_WIRE2_SDA) && defined(PINS_WIRE2_SCL)
-	if (contains(PINS_WIRE2_SDA, sda) && contains(PINS_WIRE2_SCL, scl))
+	if (ltArrayContains(PINS_WIRE2_SDA, sda) && ltArrayContains(PINS_WIRE2_SCL, scl))
 		return 2;
 #endif
 	return -1;

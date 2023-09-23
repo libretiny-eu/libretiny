@@ -62,3 +62,17 @@ inline void pinDisable(PinInfo *pin, uint32_t mask) {
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+// C++ utilities
+#ifdef __cplusplus
+
+template <typename C, typename T>
+static bool ltArrayContains(C &&c, T e) {
+	for (auto x : c) {
+		if (x == e)
+			return true;
+	}
+	return false;
+};
+
+#endif // __cplusplus
