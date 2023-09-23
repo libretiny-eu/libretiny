@@ -4,9 +4,6 @@
 
 #include "SerialPrivate.h"
 
-static UART_TypeDef *PORT_UART[3] = {UART0_DEV, UART1_DEV, UART2_DEV};
-static const IRQn PORT_IRQ[3]	  = {UART0_IRQ, UART1_IRQ, UART_LOG_IRQ};
-
 static uint32_t callback(SerialData *data) {
 	UART_TypeDef *uart = data->uart;
 
@@ -32,14 +29,14 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 	if (!this->data) {
 		this->data		 = new SerialData();
 		this->buf		 = &this->data->buf;
-		this->data->uart = PORT_UART[this->port];
-		this->data->irq	 = PORT_IRQ[this->port];
+		this->data->uart = UART_DEV_TABLE[this->port].UARTx;
+		this->data->irq	 = (IRQn)UART_DEV_TABLE[this->port].IrqNum;
 
-		switch ((uint32_t)this->data->uart) {
-			case UART0_REG_BASE:
+		switch (this->port) {
+			case 0:
 				RCC_PeriphClockCmd(APBPeriph_UART0, APBPeriph_UART0_CLOCK, ENABLE);
 				break;
-			case UART1_REG_BASE:
+			case 1:
 				RCC_PeriphClockCmd(APBPeriph_UART1, APBPeriph_UART1_CLOCK, ENABLE);
 				break;
 		}
@@ -57,17 +54,21 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 		this->configure(baudrate, config);
 
 	if (this->rx != PIN_INVALID) {
-		VECTOR_IrqUnRegister(this->data->irq);
-		VECTOR_IrqRegister((IRQ_FUN)callback, this->data->irq, (uint32_t)this->data, 10);
-		VECTOR_IrqEn(this->data->irq, 10);
-		UART_RxCmd(this->data->uart, ENABLE);
-		UART_INTConfig(this->data->uart, RUART_IER_ERBI, ENABLE);
+		UART_TypeDef *uart = this->data->uart;
+		IRQn irq		   = this->data->irq;
+
+		VECTOR_IrqUnRegister(irq);
+		VECTOR_IrqRegister((IRQ_FUN)callback, irq, (uint32_t)this->data, 10);
+		VECTOR_IrqEn(irq, 10);
+		UART_RxCmd(uart, ENABLE);
+		UART_INTConfig(uart, RUART_IER_ERBI, ENABLE);
 	}
 }
 
 void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	if (!this->data)
 		return;
+	UART_TypeDef *uart = this->data->uart;
 
 	// RUART_WLS_7BITS / RUART_WLS_8BITS
 	uint8_t dataWidth = (config & SERIAL_DATA_MASK) == SERIAL_DATA_8;
@@ -84,8 +85,8 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	cfg.Parity	   = parity;
 	cfg.ParityType = parityType;
 	cfg.StopBit	   = stopBits;
-	UART_Init(this->data->uart, &cfg);
-	UART_SetBaud(this->data->uart, baudrate);
+	UART_Init(uart, &cfg);
+	UART_SetBaud(uart, baudrate);
 
 	this->baudrate = baudrate;
 	this->config   = config;
@@ -94,14 +95,16 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 void SerialClass::end() {
 	if (!this->data)
 		return;
+	UART_TypeDef *uart = this->data->uart;
+	IRQn irq		   = this->data->irq;
 
-	UART_INTConfig(this->data->uart, RUART_IER_ERBI, DISABLE);
-	UART_RxCmd(this->data->uart, DISABLE);
-	VECTOR_IrqDis(this->data->irq);
-	VECTOR_IrqUnRegister(this->data->irq);
-	UART_DeInit(this->data->uart);
+	UART_INTConfig(uart, RUART_IER_ERBI, DISABLE);
+	UART_RxCmd(uart, DISABLE);
+	VECTOR_IrqDis(irq);
+	VECTOR_IrqUnRegister(irq);
+	UART_DeInit(uart);
 
-	if (this->data->uart == UART2_DEV) {
+	if (uart == UART2_DEV) {
 		// restore command line mode
 		DIAG_UartReInit((IRQ_FUN)UartLogIrqHandle);
 	}
