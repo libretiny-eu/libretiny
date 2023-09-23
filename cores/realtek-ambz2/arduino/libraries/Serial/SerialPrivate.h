@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include <Arduino.h>
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
+#include <Serial.h>
 
 struct SerialData {
 	hal_uart_adapter_t *uart;

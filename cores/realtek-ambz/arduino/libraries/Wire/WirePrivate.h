@@ -2,8 +2,8 @@
 
 #pragma once
 
+#include <ArduinoPrivate.h>
 #include <Wire.h>
-#include <sdk_private.h>
 
 struct WireData {
 	I2C_InitTypeDef init;

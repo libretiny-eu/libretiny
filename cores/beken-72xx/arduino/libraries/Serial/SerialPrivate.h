@@ -2,8 +2,7 @@
 
 #pragma once
 
-#include <Arduino.h>
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
 
 struct SerialData {
 	RingBuffer buf;

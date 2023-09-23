@@ -54,7 +54,6 @@ bool TwoWire::begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t fr
 bool TwoWire::setClock(uint32_t frequency) {
 	if (!this->data)
 		return false;
-
 	I2C_InitTypeDef *init = &this->data->init;
 	I2C_TypeDef *i2c	  = this->data->i2c;
 	uint32_t freqKhz	  = frequency / 1000;

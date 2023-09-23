@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 #if LT_BK7231Q
 #undef LT_MICROS_HIGH_RES

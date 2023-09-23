@@ -139,13 +139,13 @@ TwoWire Wire(2);
 #endif
 
 #if LT_HW_I2C0
-TwoWire Wire0(WIRE_PORT_FIXED_BIT | 0);
+TwoWire Wire0(PORT_FIXED_BIT | 0);
 #endif
 #if LT_HW_I2C1
-TwoWire Wire1(WIRE_PORT_FIXED_BIT | 1);
+TwoWire Wire1(PORT_FIXED_BIT | 1);
 #endif
 #if LT_HW_I2C2
-TwoWire Wire2(WIRE_PORT_FIXED_BIT | 2);
+TwoWire Wire2(PORT_FIXED_BIT | 2);
 #endif
 
 #endif

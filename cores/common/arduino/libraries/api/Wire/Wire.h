@@ -16,8 +16,6 @@ typedef struct WireData WireData;
 #define WIRE_HAS_END	  1
 #define WIRE_DEFAULT_FREQ 100000
 
-#define WIRE_PORT_FIXED_BIT (1 << 16)
-
 class TwoWire : public Stream {
   private:
 	uint8_t port{0};			 //!< port number, family-specific
@@ -41,7 +39,7 @@ class TwoWire : public Stream {
 
   public:
 	TwoWire(uint32_t port) : port(port) {
-		this->fixedPort = bool(port & WIRE_PORT_FIXED_BIT);
+		this->fixedPort = bool(port & PORT_FIXED_BIT);
 	}
 
 	TwoWire(pin_size_t sda, pin_size_t scl) : sda(sda), scl(scl) {}
