@@ -134,3 +134,7 @@
 #ifndef LT_DEBUG_I2C
 #define LT_DEBUG_I2C 1
 #endif
+
+#ifndef LT_DEBUG_SPI
+#define LT_DEBUG_SPI 1
+#endif
