@@ -14,9 +14,12 @@
 
 // Serial ports
 // ------------
-#define PIN_SERIAL1_RX 10u // GPIO10
-#define PIN_SERIAL1_TX 11u // GPIO11
-#define PIN_SERIAL2_TX 0u  // GPIO0
+#define PIN_SERIAL1_RX  10u // GPIO10
+#define PIN_SERIAL1_TX  11u // GPIO11
+#define PIN_SERIAL2_TX  0u  // GPIO0
+#define PINS_SERIAL1_RX (pin_size_t[]){10u}
+#define PINS_SERIAL1_TX (pin_size_t[]){11u}
+#define PINS_SERIAL2_TX (pin_size_t[]){0u}
 
 // Pin function macros
 // -------------------
