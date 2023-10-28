@@ -1,0 +1,25 @@
+{
+	"_base": [
+		"realtek-ambz2",
+		"realtek-ambz2-8720",
+		"realtek-ambz2-tuya",
+		"realtek-ambz2-image",
+		"realtek-ambz2-2mb-900k",
+		"ic/rtl8720cf",
+		"pcb/wbr3",
+		"pcb/wbr3-test"
+	],
+	"build": {
+		"mcu": "rtl8720cf",
+		"variant": "wbr3"
+	},
+	"name": "WBR3 Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wbr3-module-datasheet?id=K9dujs2k5nriy",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WBR3"
+	},
+	"pcb": {
+		"symbol": "WBR3"
+	}
+}
