@@ -13,18 +13,12 @@ extern "C" {
 
 #include "lwip/priv/tcpip_priv.h"
 
-static esp_err_t tcpip_adapter_get_netif(tcpip_adapter_if_t tcpip_if, void ** netif){
-    *netif = netif_default;
-    return (*netif != NULL)?ESP_OK:ESP_FAIL;
-}
-
 typedef struct {
     struct tcpip_api_call_data call;
     udp_pcb * pcb;
     const ip_addr_t *addr;
     uint16_t port;
     struct pbuf *pb;
-    struct netif *netif;
     err_t err;
 } udp_api_call_t;
 
@@ -100,30 +94,12 @@ static err_t _udp_sendto(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *
     return msg.err;
 }
 
-static err_t _udp_sendto_if_api(struct tcpip_api_call_data *api_call_msg){
-    udp_api_call_t * msg = (udp_api_call_t *)api_call_msg;
-    msg->err = udp_sendto_if(msg->pcb, msg->pb, msg->addr, msg->port, msg->netif);
-    return msg->err;
-}
-
-static err_t _udp_sendto_if(struct udp_pcb *pcb, struct pbuf *pb, const ip_addr_t *addr, u16_t port, struct netif *netif){
-    udp_api_call_t msg;
-    msg.pcb = pcb;
-    msg.addr = addr;
-    msg.port = port;
-    msg.pb = pb;
-    msg.netif = netif;
-    tcpip_api_call(_udp_sendto_if_api, (struct tcpip_api_call_data*)&msg);
-    return msg.err;
-}
-
 typedef struct {
         void *arg;
         udp_pcb *pcb;
         pbuf *pb;
         const ip_addr_t *addr;
         uint16_t port;
-        struct netif * netif;
 } lwip_event_packet_t;
 
 static QueueHandle_t _udp_queue;
@@ -137,7 +113,7 @@ static void _udp_task(void *pvParameters){
                 free((void*)(e));
                 continue;
             }
-            AsyncUDP::_s_recv(e->arg, e->pcb, e->pb, e->addr, e->port, e->netif);
+            AsyncUDP::_s_recv(e->arg, e->pcb, e->pb, e->addr, e->port);
             free((void*)(e));
         }
     }
@@ -161,7 +137,7 @@ static bool _udp_task_start(){
     return true;
 }
 
-static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif *netif)
+static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, uint16_t port)
 {
     if(!_udp_task_handle || !_udp_queue){
         return false;
@@ -175,7 +151,6 @@ static bool _udp_task_post(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *a
     e->pb = pb;
     e->addr = addr;
     e->port = port;
-    e->netif = netif;
     if (xQueueSend(_udp_queue, &e, portMAX_DELAY) != pdPASS) {
         free((void*)(e));
         return false;
@@ -189,7 +164,7 @@ static void _udp_recv(void *arg, udp_pcb *pcb, pbuf *pb, const ip_addr_t *addr, 
         pbuf * this_pb = pb;
         pb = pb->next;
         this_pb->next = NULL;
-        if(!_udp_task_post(arg, pcb, this_pb, addr, port, ip_current_input_netif())){
+        if(!_udp_task_post(arg, pcb, this_pb, addr, port)){
             pbuf_free(this_pb);
         }
     }
@@ -283,7 +258,6 @@ void AsyncUDPMessage::flush()
 AsyncUDPPacket::AsyncUDPPacket(AsyncUDPPacket &packet){
     _udp = packet._udp;
     _pb = packet._pb;
-    _if = packet._if;
     _data = packet._data;
     _len = packet._len;
     _index = 0;
@@ -297,11 +271,10 @@ AsyncUDPPacket::AsyncUDPPacket(AsyncUDPPacket &packet){
     pbuf_ref(_pb);
 }
 
-AsyncUDPPacket::AsyncUDPPacket(AsyncUDP *udp, pbuf *pb, const ip_addr_t *raddr, uint16_t rport, struct netif * ntif)
+AsyncUDPPacket::AsyncUDPPacket(AsyncUDP *udp, pbuf *pb, const ip_addr_t *raddr, uint16_t rport)
 {
     _udp = udp;
     _pb = pb;
-    _if = TCPIP_ADAPTER_IF_MAX;
     _data = (uint8_t*)(pb->payload);
     _len = pb->len;
     _index = 0;
@@ -320,18 +293,6 @@ AsyncUDPPacket::AsyncUDPPacket(AsyncUDP *udp, pbuf *pb, const ip_addr_t *raddr, 
     _remoteIp.addr = iphdr->src.addr;
 
     memcpy(_remoteMac, eth->src.addr, 6);
-
-    struct netif * netif = NULL;
-    void * nif = NULL;
-    int i;
-    for (i=0; i<TCPIP_ADAPTER_IF_MAX; i++) {
-        tcpip_adapter_get_netif ((tcpip_adapter_if_t)i, &nif);
-        netif = (struct netif *)nif;
-        if (netif && netif == ntif) {
-            _if = (tcpip_adapter_if_t)i;
-            break;
-        }
-    }
 }
 
 AsyncUDPPacket::~AsyncUDPPacket()
@@ -383,11 +344,6 @@ void AsyncUDPPacket::flush(){
     _index = _len;
 }
 
-tcpip_adapter_if_t AsyncUDPPacket::interface()
-{
-    return _if;
-}
-
 IPAddress AsyncUDPPacket::localIP()
 {
     return IPAddress(_localIp.addr);
@@ -429,7 +385,7 @@ size_t AsyncUDPPacket::write(const uint8_t *data, size_t len)
     if(!data){
         return 0;
     }
-    return _udp->writeTo(data, len, &_remoteIp, _remotePort, _if);
+    return _udp->writeTo(data, len, &_remoteIp, _remotePort);
 }
 
 size_t AsyncUDPPacket::write(uint8_t data)
@@ -532,47 +488,28 @@ bool AsyncUDP::listen(const ip_addr_t *addr, uint16_t port)
     return true;
 }
 
-static esp_err_t joinMulticastGroup(const ip_addr_t *addr, bool join, tcpip_adapter_if_t tcpip_if=TCPIP_ADAPTER_IF_MAX)
+static esp_err_t joinMulticastGroup(const ip_addr_t *addr, bool join=true)
 {
-    struct netif * netif = NULL;
-    if(tcpip_if < TCPIP_ADAPTER_IF_MAX){
-        void * nif = NULL;
-        esp_err_t err = tcpip_adapter_get_netif(tcpip_if, &nif);
-        if (err) {
-            return ESP_ERR_INVALID_ARG;
+    if(join){
+        if (igmp_joingroup(IP4_ADDR_ANY, addr)) {
+            return ESP_ERR_INVALID_STATE;
         }
-        netif = (struct netif *)nif;
-
-        if(join){
-            if (igmp_joingroup_netif(netif, addr)) {
-                return ESP_ERR_INVALID_STATE;
-            }
-        } else {
-            if (igmp_leavegroup_netif(netif, addr)) {
-                return ESP_ERR_INVALID_STATE;
-            }
-        }
-    }  else {
-        if(join){
-            if (igmp_joingroup(IP4_ADDR_ANY, addr)) {
-                return ESP_ERR_INVALID_STATE;
-            }
-        } else {
-            if (igmp_leavegroup(IP4_ADDR_ANY, addr)) {
-                return ESP_ERR_INVALID_STATE;
-            }
+    } else {
+        if (igmp_leavegroup(IP4_ADDR_ANY, addr)) {
+            return ESP_ERR_INVALID_STATE;
         }
     }
+
     return ESP_OK;
 }
 
-bool AsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
+bool AsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uint8_t ttl)
 {
     if(!ip_addr_ismulticast(addr)) {
         return false;
     }
 
-    if (joinMulticastGroup(addr, true, tcpip_if)!= ERR_OK) {
+    if (joinMulticastGroup(addr, true)!= ERR_OK) {
         return false;
     }
 
@@ -590,7 +527,7 @@ bool AsyncUDP::listenMulticast(const ip_addr_t *addr, uint16_t port, uint8_t ttl
     return true;
 }
 
-size_t AsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr_t * addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr_t * addr, uint16_t port)
 {
     if(!_pcb) {
         UDP_MUTEX_LOCK();
@@ -620,23 +557,23 @@ size_t AsyncUDP::writeTo(const uint8_t * data, size_t len, const ip_addr_t * add
     return 0;
 }
 
-void AsyncUDP::_recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uint16_t port, struct netif * netif)
+void AsyncUDP::_recv(udp_pcb *upcb, pbuf *pb, const ip_addr_t *addr, uint16_t port)
 {
     while(pb != NULL) {
         pbuf * this_pb = pb;
         pb = pb->next;
         this_pb->next = NULL;
         if(_handler) {
-            AsyncUDPPacket packet(this, this_pb, addr, port, netif);
+            AsyncUDPPacket packet(this, this_pb, addr, port);
             _handler(packet);
         }
         pbuf_free(this_pb);
     }
 }
 
-void AsyncUDP::_s_recv(void *arg, udp_pcb *upcb, pbuf *p, const ip_addr_t *addr, uint16_t port, struct netif * netif)
+void AsyncUDP::_s_recv(void *arg, udp_pcb *upcb, pbuf *p, const ip_addr_t *addr, uint16_t port)
 {
-    reinterpret_cast<AsyncUDP*>(arg)->_recv(upcb, p, addr, port, netif);
+    reinterpret_cast<AsyncUDP*>(arg)->_recv(upcb, p, addr, port);
 }
 
 bool AsyncUDP::listen(uint16_t port)
@@ -651,11 +588,11 @@ bool AsyncUDP::listen(const IPAddress addr, uint16_t port)
     return listen(&laddr, port);
 }
 
-bool AsyncUDP::listenMulticast(const IPAddress addr, uint16_t port, uint8_t ttl, tcpip_adapter_if_t tcpip_if)
+bool AsyncUDP::listenMulticast(const IPAddress addr, uint16_t port, uint8_t ttl)
 {
     ip_addr_t laddr;
     laddr.addr = addr;
-    return listenMulticast(&laddr, port, ttl, tcpip_if);
+    return listenMulticast(&laddr, port, ttl);
 }
 
 bool AsyncUDP::connect(const IPAddress addr, uint16_t port)
@@ -665,11 +602,11 @@ bool AsyncUDP::connect(const IPAddress addr, uint16_t port)
     return connect(&daddr, port);
 }
 
-size_t AsyncUDP::writeTo(const uint8_t *data, size_t len, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::writeTo(const uint8_t *data, size_t len, const IPAddress addr, uint16_t port)
 {
     ip_addr_t daddr;
     daddr.addr = addr;
-    return writeTo(data, len, &daddr, port, tcpip_if);
+    return writeTo(data, len, &daddr, port);
 }
 
 IPAddress AsyncUDP::listenIP()
@@ -690,14 +627,14 @@ size_t AsyncUDP::write(uint8_t data)
     return write(&data, 1);
 }
 
-size_t AsyncUDP::broadcastTo(uint8_t *data, size_t len, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::broadcastTo(uint8_t *data, size_t len, uint16_t port)
 {
-    return writeTo(data, len, IP_ADDR_BROADCAST, port, tcpip_if);
+    return writeTo(data, len, IP_ADDR_BROADCAST, port);
 }
 
-size_t AsyncUDP::broadcastTo(const char * data, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::broadcastTo(const char * data, uint16_t port)
 {
-    return broadcastTo((uint8_t *)data, strlen(data), port, tcpip_if);
+    return broadcastTo((uint8_t *)data, strlen(data), port);
 }
 
 size_t AsyncUDP::broadcast(uint8_t *data, size_t len)
@@ -714,20 +651,20 @@ size_t AsyncUDP::broadcast(const char * data)
 }
 
 
-size_t AsyncUDP::sendTo(AsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::sendTo(AsyncUDPMessage &message, const ip_addr_t *addr, uint16_t port)
 {
     if(!message) {
         return 0;
     }
-    return writeTo(message.data(), message.length(), addr, port, tcpip_if);
+    return writeTo(message.data(), message.length(), addr, port);
 }
 
-size_t AsyncUDP::sendTo(AsyncUDPMessage &message, const IPAddress addr, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::sendTo(AsyncUDPMessage &message, const IPAddress addr, uint16_t port)
 {
     if(!message) {
         return 0;
     }
-    return writeTo(message.data(), message.length(), addr, port, tcpip_if);
+    return writeTo(message.data(), message.length(), addr, port);
 }
 
 size_t AsyncUDP::send(AsyncUDPMessage &message)
@@ -738,12 +675,12 @@ size_t AsyncUDP::send(AsyncUDPMessage &message)
     return writeTo(message.data(), message.length(), &(_pcb->remote_ip), _pcb->remote_port);
 }
 
-size_t AsyncUDP::broadcastTo(AsyncUDPMessage &message, uint16_t port, tcpip_adapter_if_t tcpip_if)
+size_t AsyncUDP::broadcastTo(AsyncUDPMessage &message, uint16_t port)
 {
     if(!message) {
         return 0;
     }
-    return broadcastTo(message.data(), message.length(), port, tcpip_if);
+    return broadcastTo(message.data(), message.length(), port);
 }
 
 size_t AsyncUDP::broadcast(AsyncUDPMessage &message)
