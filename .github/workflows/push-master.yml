@@ -17,7 +17,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install docs dependencies
-        run: pip install -U ltchiptool boardgen
+        run: pip install -U ltchiptool "boardgen>=0.11.0"
 
       - name: Generate docs and static JSON files
         run: |

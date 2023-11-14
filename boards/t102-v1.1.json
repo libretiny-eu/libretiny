@@ -13,7 +13,8 @@
 	"url": "https://docs.libretiny.eu/boards/t102-v1.1/",
 	"vendor": "Unknown",
 	"doc": {
-		"fccid": "2AU7O-T102V11"
+		"fccid": "2AU7O-T102V11",
+		"mcu": "w302"
 	},
 	"pcb": {
 		"symbol": "T102_V1.1"
