@@ -3,7 +3,7 @@
 		"templates": [
 			"pcb-black"
 		],
-		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD,SPI",
+		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
 		"pinout": {
 			"1": {
 				"NC": null
