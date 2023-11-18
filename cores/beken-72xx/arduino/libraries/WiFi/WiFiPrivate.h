@@ -56,7 +56,7 @@ extern void wifiEventHandler(rw_evt_type event);
 #define IP_FMT "%u.%u.%u.%u"
 
 typedef struct {
-	network_InitTypeDef_st configSta;
+	network_InitTypeDef_adv_st configSta;
 	network_InitTypeDef_ap_st configAp;
 	unsigned long scannedAt;
 	SemaphoreHandle_t scanSem;
@@ -72,7 +72,7 @@ typedef struct {
 #define pDATA ((WiFiData *)pWiFi->data)
 #define cDATA ((WiFiData *)cls->data)
 
-#define STA_CFG		(DATA->configSta)
+#define STA_CFG	(DATA->configSta)
 #define AP_CFG		(DATA->configAp)
 #define IP_STATUS	(DATA->statusIp)
 #define LINK_STATUS (DATA->statusLink)
