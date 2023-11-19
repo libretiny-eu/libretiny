@@ -25,9 +25,6 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 		}
 		STA_ADV_CFG.ap_info.channel = channel;
 		STA_ADV_CFG.wifi_retry_interval = 100;
-
-		// Unsure why, but this gets unset in advanced config if set during config(), but standard config survives
-		STA_ADV_CFG.dhcp_mode = STA_CFG.dhcp_mode;
 	} else {
 		strcpy(STA_CFG.wifi_ssid, ssid);
 		memset(STA_CFG.wifi_bssid, 0x00, 6);
