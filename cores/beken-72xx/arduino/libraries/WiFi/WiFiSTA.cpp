@@ -57,14 +57,14 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 			sprintf(STA_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 			sprintf(STA_ADV_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 		} else {
-			STA_CFG.dns_server_ip_addr[0] = '\0';
+			STA_CFG.dns_server_ip_addr[0]     = '\0';
 			STA_ADV_CFG.dns_server_ip_addr[0] = '\0';
 		}
 	} else {
-		STA_CFG.local_ip_addr[0]      = '\0';
-		STA_CFG.net_mask[0]           = '\0';
-		STA_CFG.gateway_ip_addr[0]    = '\0';
-		STA_CFG.dns_server_ip_addr[0] = '\0';
+		STA_CFG.local_ip_addr[0]          = '\0';
+		STA_CFG.net_mask[0]               = '\0';
+		STA_CFG.gateway_ip_addr[0]        = '\0';
+		STA_CFG.dns_server_ip_addr[0]     = '\0';
 		STA_ADV_CFG.local_ip_addr[0]      = '\0';
 		STA_ADV_CFG.net_mask[0]           = '\0';
 		STA_ADV_CFG.gateway_ip_addr[0]    = '\0';
@@ -116,7 +116,6 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	} else {
 		bk_wlan_start_sta(&STA_CFG);
 	}
-	
 	__wrap_bk_printf_enable();
 
 	LT_DM(WIFI, "Start OK");
