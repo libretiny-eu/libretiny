@@ -96,6 +96,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	} else {
 		LT_IM(WIFI, "Connecting to %s", STA_CFG.wifi_ssid);
 		memset(STA_CFG.wifi_bssid, 0x00, 6);
+		STA_CFG.wifi_mode = BK_STATION;
 	}
 
 	LT_DM(WIFI, "Data = %p", DATA->configSta);
