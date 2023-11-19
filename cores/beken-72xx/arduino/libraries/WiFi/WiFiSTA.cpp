@@ -20,10 +20,10 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 			strcpy(STA_ADV_CFG.key, passphrase);
 			STA_ADV_CFG.key_len = strlen(passphrase);
 		} else {
-			STA_ADV_CFG.key[0] = '\0';
+			STA_ADV_CFG.key[0]	= '\0';
 			STA_ADV_CFG.key_len = 0;
 		}
-		STA_ADV_CFG.ap_info.channel = channel;
+		STA_ADV_CFG.ap_info.channel		= channel;
 		STA_ADV_CFG.wifi_retry_interval = 100;
 	} else {
 		strcpy(STA_CFG.wifi_ssid, ssid);
@@ -34,7 +34,7 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 			STA_CFG.wifi_key[0] = '\0';
 		}
 		STA_CFG.wifi_retry_interval = 100;
-		STA_CFG.wifi_mode = BK_STATION;
+		STA_CFG.wifi_mode			= BK_STATION;
 	}
 
 	if (reconnect(bssid))
@@ -44,7 +44,7 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 }
 
 bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1, IPAddress dns2) {
-	STA_CFG.dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
+	STA_CFG.dhcp_mode	  = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	STA_ADV_CFG.dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	if (localIP) {
 		sprintf(STA_CFG.local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
@@ -57,17 +57,17 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 			sprintf(STA_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 			sprintf(STA_ADV_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
 		} else {
-			STA_CFG.dns_server_ip_addr[0]     = '\0';
+			STA_CFG.dns_server_ip_addr[0]	  = '\0';
 			STA_ADV_CFG.dns_server_ip_addr[0] = '\0';
 		}
 	} else {
-		STA_CFG.local_ip_addr[0]          = '\0';
-		STA_CFG.net_mask[0]               = '\0';
-		STA_CFG.gateway_ip_addr[0]        = '\0';
-		STA_CFG.dns_server_ip_addr[0]     = '\0';
-		STA_ADV_CFG.local_ip_addr[0]      = '\0';
-		STA_ADV_CFG.net_mask[0]           = '\0';
-		STA_ADV_CFG.gateway_ip_addr[0]    = '\0';
+		STA_CFG.local_ip_addr[0]		  = '\0';
+		STA_CFG.net_mask[0]				  = '\0';
+		STA_CFG.gateway_ip_addr[0]		  = '\0';
+		STA_CFG.dns_server_ip_addr[0]	  = '\0';
+		STA_ADV_CFG.local_ip_addr[0]	  = '\0';
+		STA_ADV_CFG.net_mask[0]			  = '\0';
+		STA_ADV_CFG.gateway_ip_addr[0]	  = '\0';
 		STA_ADV_CFG.dns_server_ip_addr[0] = '\0';
 	}
 

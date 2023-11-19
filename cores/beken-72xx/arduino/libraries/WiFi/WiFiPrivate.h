@@ -73,8 +73,8 @@ typedef struct {
 #define pDATA ((WiFiData *)pWiFi->data)
 #define cDATA ((WiFiData *)cls->data)
 
-#define STA_CFG	(DATA->configSta)
-#define STA_ADV_CFG	(DATA->configStaAdv)
+#define STA_CFG		(DATA->configSta)
+#define STA_ADV_CFG (DATA->configStaAdv)
 #define AP_CFG		(DATA->configAp)
 #define IP_STATUS	(DATA->statusIp)
 #define LINK_STATUS (DATA->statusLink)
