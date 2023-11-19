@@ -20,19 +20,21 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 			strcpy(STA_ADV_CFG.key, passphrase);
 			STA_ADV_CFG.key_len = strlen(passphrase);
 		} else {
-			STA_ADV_CFG.ap_info.bssid[0] = '\0';
+			STA_ADV_CFG.key[0] = '\0';
+			STA_ADV_CFG.key_len = 0;
 		}
-
 		STA_ADV_CFG.ap_info.channel = channel;
 		STA_ADV_CFG.wifi_retry_interval = 100;
 	} else {
 		strcpy(STA_CFG.wifi_ssid, ssid);
+		memset(STA_CFG.wifi_bssid, 0x00, 6);
 		if (passphrase) {
 			strcpy(STA_CFG.wifi_key, passphrase);
 		} else {
-			STA_CFG.wifi_bssid[0] = '\0';
+			STA_CFG.wifi_key[0] = '\0';
 		}
 		STA_CFG.wifi_retry_interval = 100;
+		STA_CFG.wifi_mode = BK_STATION;
 	}
 
 	if (reconnect(bssid))
@@ -46,10 +48,10 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 	STA_ADV_CFG.dhcp_mode = localIP ? DHCP_DISABLE : DHCP_CLIENT;
 	if (localIP) {
 		sprintf(STA_CFG.local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
-		sprintf(STA_ADV_CFG.local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
 		sprintf(STA_CFG.net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
-		sprintf(STA_ADV_CFG.net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
 		sprintf(STA_CFG.gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
+		sprintf(STA_ADV_CFG.local_ip_addr, IP_FMT, localIP[0], localIP[1], localIP[2], localIP[3]);
+		sprintf(STA_ADV_CFG.net_mask, IP_FMT, subnet[0], subnet[1], subnet[2], subnet[3]);
 		sprintf(STA_ADV_CFG.gateway_ip_addr, IP_FMT, gateway[0], gateway[1], gateway[2], gateway[3]);
 		if (dns1) {
 			sprintf(STA_CFG.dns_server_ip_addr, IP_FMT, dns1[0], dns1[1], dns1[2], dns1[3]);
@@ -93,10 +95,10 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 
 	if (bssid) {
 		LT_IM(WIFI, "Connecting to " MACSTR, MAC2STR(bssid));
+		// Unsure why, but this gets unset in advanced config if set during config(), but standard config survives
+		STA_ADV_CFG.dhcp_mode = STA_CFG.dhcp_mode;
 	} else {
 		LT_IM(WIFI, "Connecting to %s", STA_CFG.wifi_ssid);
-		memset(STA_CFG.wifi_bssid, 0x00, 6);
-		STA_CFG.wifi_mode = BK_STATION;
 	}
 
 	LT_DM(WIFI, "Data = %p", DATA->configSta);
