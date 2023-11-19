@@ -7,6 +7,7 @@ WiFiClass::WiFiClass() {
 
 	DATA->scanSem	  = xSemaphoreCreateBinary();
 	STA_CFG.dhcp_mode = DHCP_CLIENT;
+	STA_ADV_CFG.dhcp_mode = DHCP_CLIENT;
 }
 
 WiFiClass::~WiFiClass() {
