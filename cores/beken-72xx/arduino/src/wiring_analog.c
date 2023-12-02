@@ -91,6 +91,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	uint32_t frequency = 26 * _analogWritePeriod - 1;
 	uint32_t dutyCycle = percent * frequency;
 	pwm.channel		   = gpioToPwm(pin->gpio);
+	uint32_t channel_in_32bit = pwm.channel;
 #if CFG_SOC_NAME != SOC_BK7231N
 	pwm.duty_cycle = dutyCycle;
 #else
@@ -110,13 +111,14 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			pwm.p_Int_Handler	= NULL;
 			__wrap_bk_printf_disable();
 			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &pwm);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel_in_32bit);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &channel_in_32bit);
 			__wrap_bk_printf_enable();
 			// pass global PWM object pointer
 			data->pwm = &pwm;
 			pinEnable(pin, PIN_PWM);
 		} else {
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel_in_32bit);
 			// update duty cycle
 			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
 		}
