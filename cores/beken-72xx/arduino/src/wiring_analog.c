@@ -87,10 +87,10 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	// GPIO can't be used together with PWM
 	pinRemoveMode(pin, PIN_GPIO | PIN_IRQ);
 
-	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
-	uint32_t frequency = 26 * _analogWritePeriod - 1;
-	uint32_t dutyCycle = percent * frequency;
-	pwm.channel		   = gpioToPwm(pin->gpio);
+	float percent			  = value * 1.0 / ((1 << _analogWriteResolution) - 1);
+	uint32_t frequency		  = 26 * _analogWritePeriod - 1;
+	uint32_t dutyCycle		  = percent * frequency;
+	pwm.channel				  = gpioToPwm(pin->gpio);
 	uint32_t channel_in_32bit = pwm.channel;
 #if CFG_SOC_NAME != SOC_BK7231N
 	pwm.duty_cycle = dutyCycle;

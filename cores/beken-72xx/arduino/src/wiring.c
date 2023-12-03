@@ -108,7 +108,7 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 		pinDisable(pin, PIN_IRQ);
 	}
 	if ((mask & PIN_PWM) && (pin->enabled & PIN_PWM)) {
-		data->pwm->cfg.bits.en = PWM_DISABLE;
+		data->pwm->cfg.bits.en	  = PWM_DISABLE;
 		uint32_t channel_in_32bit = data->pwm->channel;
 		__wrap_bk_printf_disable();
 		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_LOW, &channel_in_32bit);
