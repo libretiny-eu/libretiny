@@ -4,11 +4,15 @@ Device configuration (`user_param_key`) can be extracted to JSON, using bk7231to
 
 Originally posted [by @blakadder](https://discord.com/channels/967863521511608370/983843871320580096/1059286760074530947) on Discord channel #resources, modified by me to include more keys and values.
 
+Also see:
+
+- [UPK2ESPHome](https://upk.libretiny.eu/)
+
 Key(s)                                      | Meaning                               | Possible values
---------------------------------------------|---------------------------------------|---------------------------------------------------------
+--------------------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------
 `crc`                                       |                                       |
-`module`                                    |Actual hw board used                   | `CB3S` / `WB3S`, maybe others
-`category`                                  |Device type encoded on a set of digits | 0502 - cw light<br>0505 - rgbcw light
+`module`                                    | Actual hw board used                  | `CB3S` / `WB3S`, maybe others
+`category`                                  | Device type encoded                   | 0502 - cw light<br>0505 - rgbcw light
 `Jsonver`<br>`jv`                           |                                       |
 **Common**                                  |                                       |
 `netled_pin`<br>`netled1_pin`<br>`wfst_pin` | Status LED for WiFi                   |
@@ -37,10 +41,10 @@ Key(s)                                      | Meaning                           
 `gmkr`, `gmkg`, `gmkb`                      |                                       |
 `gmwr`, `gmwg`, `gmwb`                      |                                       |
 `hsvstep`                                   |                                       |
-`rgbt`                                      |Used in prod.tests, not relevant       |
-`rstbr`                                     |Pairing related - not relevant         | 10-100
-`rstcor`                                    |Pairing related - not relevant         | `c`/`r`
-`rsttemp`                                   |Pairing related - not relevant         | 0-100
+`rgbt`                                      | Used in prod.tests, not relevant      |
+`rstbr`                                     | Pairing related - not relevant        | 10-100
+`rstcor`                                    | Pairing related - not relevant        | `c`/`r`
+`rsttemp`                                   | Pairing related - not relevant        | 0-100
 **PWM Lights**                              |                                       |
 `r_pin` + `r_lv`                            | Red Channel Pin + Active Level        |
 `g_pin` + `g_lv`                            | Green Channel Pin + Active Level      |
@@ -97,8 +101,8 @@ Key(s)                                      | Meaning                           
 `pirlduty`                                  |                                       | 100
 `pirmduty`                                  |                                       | 50
 `pirhduty`                                  |                                       | 0
-`pirin_pin` + `pirin_lv`                    | GPIO pin used to report motion + Active Level|
-`pirsense_pin` + `pirsense_lv`              | PIR sensitivity pwm pin + Active Level|
+`pirin_pin` + `pirin_lv`                    | Motion reporting GPIO + Active Level  |
+`pirsense_pin` + `pirsense_lv`              | PIR sensitivity (PWM) + Active Level  |
 `pirrange`                                  |                                       |
 `pirwarn`                                   |                                       |
 **Key-controlled**                          |                                       |
@@ -127,7 +131,7 @@ Key(s)                                      | Meaning                           
 `bleonoff`                                  |                                       |
 `blindt`                                    |                                       |
 `buzzer`                                    |                                       |
-`cagt`                                      |Used in prod.tests, not relevant       | N/A
+`cagt`                                      | Used in prod.tests, not relevant      | N/A
 `cctseg`                                    |                                       |
 `cd_flag2`                                  |                                       |
 `cdsval`                                    |                                       |
@@ -138,7 +142,7 @@ Key(s)                                      | Meaning                           
 `ch_num`                                    |                                       |
 `clean_t`                                   |                                       |
 `cntdown1`                                  |                                       |
-`colorpfun`                                 |The power limit of the mix of colors   |0 - no limits<br>1 - limits specified
+`colorpfun`                                 | The power limit of the mix of colors  | 0 - no limits<br>1 - limits specified
 `ctrl_lv`                                   |                                       |
 `ctrl_pin`                                  |                                       |
 `customcode`                                |                                       |
@@ -149,7 +153,7 @@ Key(s)                                      | Meaning                           
 `dimt`                                      |                                       |
 `dimval`                                    |                                       |
 `dmod`                                      | Light driver                          | 0 - PWM<br>1 - SM16726B<br>2 - SM2135E
-`defcolor`                                  | Default light color                   | 
+`defcolor`                                  | Default light color                   |
 `door1_magt_lv`                             |                                       |
 `door1_magt_pin`                            |                                       |
 `door_alarm_st1`                            |                                       |
@@ -181,7 +185,7 @@ Key(s)                                      | Meaning                           
 `nightbrig`                                 |                                       |
 `nightcct`                                  |                                       |
 `nightled`                                  |                                       |
-`notdisturb`                                |Do not disturb (DND) mode              | 0 - DND disabled<br>1 - DND enabled
+`notdisturb`                                | Do not disturb (DND) mode             | 0 - DND disabled<br>1 - DND enabled
 `on_off_cnt`                                |                                       |
 `onoff1`                                    |                                       |
 `onoff_clear_t`                             |                                       |
@@ -189,23 +193,23 @@ Key(s)                                      | Meaning                           
 `onoff_rst_m`                               |                                       |
 `onoff_rst_type`                            |                                       |
 `onoff_type`                                |                                       |
-`onoffmode`                                 |On/off gradient                        | 0 - Gradient is provided when the light is turned on/off.<br>1 - Gradient is not provided when the light is turned on/off.
+`onoffmode`                                 | On/off gradient                       | 0 - Gradient is provided when the light is turned on/off.<br>1 - Gradient is not provided when the light is turned on/off.
 `onofftime`                                 |                                       |
 `owm`                                       |                                       |
-`pairt`                                     |Pairing related - not relevant         | 6-600
-`pmemory`                                   |Power-off memory                       | 0 - power-off memory disabled<br>1: power-off memory enabled
+`pairt`                                     | Pairing related - not relevant        | 6-600
+`pmemory`                                   | Power-off memory                      | 0 - power-off memory disabled<br>1: power-off memory enabled
 `preheatt`                                  |                                       |
-`prodagain`                                 |Used in prod.tests, not relevant       | 0-1
+`prodagain`                                 | Used in prod.tests, not relevant      | 0-1
 `rand_dpid`                                 |                                       |
-`remdmode`                                  |Pairing related - not relevant         | 0-1
+`remdmode`                                  | Pairing related - not relevant        | 0-1
 `remote_add_dp`                             |                                       |
 `remote_list_dp`                            |                                       |
 `remote_select`                             |                                       |
 `resistor`                                  |                                       |
 `reuse_led_m`                               |                                       |
 `rsthold`                                   |                                       |
-`rstmode`                                   |Pairing related - not relevant         |
-`rstnum`                                    |Pairing related - not relevant         |
+`rstmode`                                   | Pairing related - not relevant        |
+`rstnum`                                    | Pairing related - not relevant        |
 `scenespct`                                 |                                       |
 `series_ctrl`                               |                                       |
 `sfunc`                                     |                                       |
@@ -224,5 +228,5 @@ Key(s)                                      | Meaning                           
 `voice_ctrl1`                               |                                       |
 `voice_ctrl_set1`                           |                                       |
 `whiteseg`                                  |                                       |
-`wt`                                        |Used in prod.tests, not relevant       | N/A
+`wt`                                        | Used in prod.tests, not relevant      | N/A
 `zero_select`                               |                                       |
