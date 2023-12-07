@@ -201,8 +201,8 @@ int LittleFSImpl::lfs_flash_sync(const struct lfs_config *c) {
 #endif
 
 #if !defined(NO_GLOBAL_INSTANCES) && !defined(NO_GLOBAL_LITTLEFS)
-#define FS_PHYS_ADDR 0x1DB000
-#define FS_PHYS_SIZE (0x200000 - FS_PHYS_ADDR)
+#define FS_PHYS_ADDR FLASH_USERDATA_OFFSET
+#define FS_PHYS_SIZE FLASH_USERDATA_LENGTH
 #define FS_PHYS_PAGE 0x100
 #define FS_PHYS_BLOCK 0x1000
 #define FS_MAX_OPEN_FILES 5
