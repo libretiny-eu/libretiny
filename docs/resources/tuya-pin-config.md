@@ -7,7 +7,7 @@ Originally posted [by @blakadder](https://discord.com/channels/96786352151160837
 Key(s)                                      | Meaning                               | Possible values
 --------------------------------------------|---------------------------------------|---------------------------------------------------------
 `crc`                                       |                                       |
-`module`                                    |                                       |
+`module`                                    |Actual hw board used                   | `CB3S` / `WB3S`, maybe others
 `category`                                  |Device type encoded on a set of digits | 0502 - cw light<br>0505 - rgbcw light
 `Jsonver`<br>`jv`                           |                                       |
 **Common**                                  |                                       |
@@ -93,12 +93,12 @@ Key(s)                                      | Meaning                           
 `wgmod`, `swgmod`, `scgmod`                 |                                       |
 **PIR**                                     |                                       |
 `pirmod`                                    |                                       |
-`pirfreq`                                   |                                       |
-`pirlduty`                                  |                                       |
-`pirmduty`                                  |                                       |
-`pirhduty`                                  |                                       |
-`pirin_pin` + `pirin_lv`                    |                                       |
-`pirsense_pin` + `pirsense_lv`              |                                       |
+`pirfreq`                                   | PWM Operating Frequency (Hz) for PIR  | 1000
+`pirlduty`                                  |                                       | 100
+`pirmduty`                                  |                                       | 50
+`pirhduty`                                  |                                       | 0
+`pirin_pin` + `pirin_lv`                    | GPIO pin used to report motion + Active Level|
+`pirsense_pin` + `pirsense_lv`              | PIR sensitivity pwm pin + Active Level|
 `pirrange`                                  |                                       |
 `pirwarn`                                   |                                       |
 **Key-controlled**                          |                                       |
