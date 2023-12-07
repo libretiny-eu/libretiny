@@ -8,7 +8,7 @@ Key(s)                                      | Meaning                           
 --------------------------------------------|---------------------------------------|---------------------------------------------------------
 `crc`                                       |                                       |
 `module`                                    |                                       |
-`category`                                  |                                       |
+`category`                                  |Device type encoded on a set of digits | 0502 - cw light<br>0505 - rgbcw light
 `Jsonver`<br>`jv`                           |                                       |
 **Common**                                  |                                       |
 `netled_pin`<br>`netled1_pin`<br>`wfst_pin` | Status LED for WiFi                   |
@@ -20,11 +20,11 @@ Key(s)                                      | Meaning                           
 `iicsda`                                    | I²C SDA Pin                           |
 `net_trig`                                  |                                       |
 `net_type`                                  |                                       |
-`wfcfg`                                     |                                       | `spcl` / `spcl_auto` / `prod`
+`wfcfg`                                     | Pairing related - not relevant        | `spcl` / `spcl_auto` / `prod`
 `wfct`                                      |                                       |
 **Lights/bulbs**                            |                                       |
 `cmod`                                      | Color Mode                            | `rgbcw` / `rgb` / `cw` / `c` / `rgbc`
-`cwtype`                                    |                                       |
+`cwtype`                                    | Color temperature driver              | 0 - cool and warm white (CW)<br>1 - correlated color temperature (CCT)
 `brightmin`, `brightmax`                    | Min/Max Brightness                    | 0%-100%
 `cwmin`, `cwmax`                            | Cold-Warm Min/Max Brightness          | 0%-100%
 `cwmaxp`                                    | Cold-Warm Max Power                   | 0%-100%
@@ -33,14 +33,14 @@ Key(s)                                      | Meaning                           
 `brightstep`<br>`bristep`                   | Brightness Step                       |
 `defbright`                                 | Default Brightness                    | 0%-100%
 `defcolor`                                  | Default Color                         | `c` / `r`
-`deftemp`                                   | Default Color Temperature             |
+`deftemp`                                   | Default Color Temperature             | 0-100 when defcolor is cool white
 `gmkr`, `gmkg`, `gmkb`                      |                                       |
 `gmwr`, `gmwg`, `gmwb`                      |                                       |
 `hsvstep`                                   |                                       |
-`rgbt`                                      |                                       |
-`rstbr`                                     |                                       |
-`rstcor`                                    |                                       | `c`/`r`
-`rsttemp`                                   |                                       |
+`rgbt`                                      |Used in prod.tests, not relevant       |
+`rstbr`                                     |Pairing related - not relevant         | 10-100
+`rstcor`                                    |Pairing related - not relevant         | `c`/`r`
+`rsttemp`                                   |Pairing related - not relevant         | 0-100
 **PWM Lights**                              |                                       |
 `r_pin` + `r_lv`                            | Red Channel Pin + Active Level        |
 `g_pin` + `g_lv`                            | Green Channel Pin + Active Level      |
@@ -52,8 +52,8 @@ Key(s)                                      | Meaning                           
 `dccur`<br>`ehccur`<br>`cjccur`             | Cold White Current                    |
 `dwcur`<br>`ehwcur`<br>`cjwcur`             | Warm White Current                    |
 `drgbcur`                                   | RGB Current                           |
-`campere`                                   |                                       |
-`wampere`                                   |                                       |
+`campere`                                   | Max current of SM2135 colored output  | 10-45 with a pitch of 5 and defaults to 20
+`wampere`                                   | Max current of SM2135 white output    | 10-80 with a pitch of 5 and defaults to 30
 `iicr`                                      | Red Channel Number                    | 0-5
 `iicg`                                      | Green Channel Number                  | 0-5
 `iicb`                                      | Blue Channel Number                   | 0-5
@@ -127,7 +127,7 @@ Key(s)                                      | Meaning                           
 `bleonoff`                                  |                                       |
 `blindt`                                    |                                       |
 `buzzer`                                    |                                       |
-`cagt`                                      |                                       |
+`cagt`                                      |Used in prod.tests, not relevant       | N/A
 `cctseg`                                    |                                       |
 `cd_flag2`                                  |                                       |
 `cdsval`                                    |                                       |
@@ -138,7 +138,7 @@ Key(s)                                      | Meaning                           
 `ch_num`                                    |                                       |
 `clean_t`                                   |                                       |
 `cntdown1`                                  |                                       |
-`colorpfun`                                 |                                       |
+`colorpfun`                                 |The power limit of the mix of colors   |0 - no limits<br>1 - limits specified
 `ctrl_lv`                                   |                                       |
 `ctrl_pin`                                  |                                       |
 `customcode`                                |                                       |
@@ -148,7 +148,8 @@ Key(s)                                      | Meaning                           
 `dimmod`                                    |                                       |
 `dimt`                                      |                                       |
 `dimval`                                    |                                       |
-`dmod`                                      |                                       |
+`dmod`                                      | Light driver                          | 0 - PWM<br>1 - SM16726B<br>2 - SM2135E
+`defcolor`                                  | Default light color                   | 
 `door1_magt_lv`                             |                                       |
 `door1_magt_pin`                            |                                       |
 `door_alarm_st1`                            |                                       |
@@ -180,7 +181,7 @@ Key(s)                                      | Meaning                           
 `nightbrig`                                 |                                       |
 `nightcct`                                  |                                       |
 `nightled`                                  |                                       |
-`notdisturb`                                |                                       |
+`notdisturb`                                |Do not disturb (DND) mode              | 0 - DND disabled<br>1 - DND enabled
 `on_off_cnt`                                |                                       |
 `onoff1`                                    |                                       |
 `onoff_clear_t`                             |                                       |
@@ -188,23 +189,23 @@ Key(s)                                      | Meaning                           
 `onoff_rst_m`                               |                                       |
 `onoff_rst_type`                            |                                       |
 `onoff_type`                                |                                       |
-`onoffmode`                                 |                                       |
+`onoffmode`                                 |On/off gradient                        | 0 - Gradient is provided when the light is turned on/off.<br>1 - Gradient is not provided when the light is turned on/off.
 `onofftime`                                 |                                       |
 `owm`                                       |                                       |
-`pairt`                                     |                                       |
-`pmemory`                                   |                                       |
+`pairt`                                     |Pairing related - not relevant         | 6-600
+`pmemory`                                   |Power-off memory                       | 0 - power-off memory disabled<br>1: power-off memory enabled
 `preheatt`                                  |                                       |
-`prodagain`                                 |                                       |
+`prodagain`                                 |Used in prod.tests, not relevant       | 0-1
 `rand_dpid`                                 |                                       |
-`remdmode`                                  |                                       |
+`remdmode`                                  |Pairing related - not relevant         | 0-1
 `remote_add_dp`                             |                                       |
 `remote_list_dp`                            |                                       |
 `remote_select`                             |                                       |
 `resistor`                                  |                                       |
 `reuse_led_m`                               |                                       |
 `rsthold`                                   |                                       |
-`rstmode`                                   |                                       |
-`rstnum`                                    |                                       |
+`rstmode`                                   |Pairing related - not relevant         |
+`rstnum`                                    |Pairing related - not relevant         |
 `scenespct`                                 |                                       |
 `series_ctrl`                               |                                       |
 `sfunc`                                     |                                       |
@@ -223,5 +224,5 @@ Key(s)                                      | Meaning                           
 `voice_ctrl1`                               |                                       |
 `voice_ctrl_set1`                           |                                       |
 `whiteseg`                                  |                                       |
-`wt`                                        |                                       |
+`wt`                                        |Used in prod.tests, not relevant       | N/A
 `zero_select`                               |                                       |
