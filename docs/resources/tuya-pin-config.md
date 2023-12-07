@@ -30,7 +30,7 @@ Key(s)                                      | Meaning                           
 `wfct`                                      |                                       |
 **Lights/bulbs**                            |                                       |
 `cmod`                                      | Color Mode                            | `rgbcw` / `rgb` / `cw` / `c` / `rgbc`
-`dmod`                                      | Light driver type                     | 0 - PWM<br>1 - SM16726B<br>2 - SM2135E<br>3 - SM2135EH<br>4 - SM2135EJ<br>5 - BP1658CJ
+`dmod`                                      | Light driver type                     | 0 - PWM<br>1 - SM16726B<br>2 - SM2135E<br>3 - SM2135EH<br>4 - SM2135EJ<br>5 - BP1658CJ<br>6 - BP5758D<br>7 - SM2235/2335
 `cwtype`                                    | Color temperature driver              | 0 - cool and warm white (CW)<br>1 - correlated color temperature (CCT)
 `onoffmode`                                 | On/off gradient enabled               | 0 / 1
 `pmemory`                                   | Power-off memory enabled              | 0 / 1
