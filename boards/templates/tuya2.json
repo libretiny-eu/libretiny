@@ -37,7 +37,7 @@
 		},
 		{
 			"type": "text",
-			"pos": "7.0,5.0",
+			"pos": "6.0,5.5",
 			"text": "${SYMBOL}",
 			"font_size": 1.0,
 			"fill": {

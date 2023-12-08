@@ -1,6 +1,5 @@
 {
 	"pcb": {
-		"scale": 11,
 		"test_pads": {
 			"TTX2": "cb2s.back.u2_txd.anchor",
 			"TRX2": "cb2s.back.u2_rxd.anchor",

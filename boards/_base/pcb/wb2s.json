@@ -1,6 +1,5 @@
 {
 	"pcb": {
-		"scale": 10.5,
 		"templates": [
 			"tuya2",
 			"pcb-blue-light",

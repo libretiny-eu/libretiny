@@ -9,7 +9,7 @@
 		"vars": {
 			"PINHOLE": 0
 		},
-		"pinout_hidden": "I2S,SD,SPI",
+		"pinout_hidden": "I2S,SD",
 		"pinout": {
 			"1": {
 				"NC": null
