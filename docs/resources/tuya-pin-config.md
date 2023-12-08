@@ -111,6 +111,12 @@ Key(s)                                      | Meaning                           
 `pirsense_pin` + `pirsense_lv`              | PIR sensitivity (PWM) + Active Level  |
 `pirrange`                                  |                                       |
 `pirwarn`                                   |                                       |
+**Ambient light sensor**                    |                                       |
+`day`                                       | Value to compare against ADC readout  | ADC value range (0-3300)
+`dusk`                                      | Value to compare against ADC readout  | ADC value range (0-3300)
+`evenfall`                                  | Value to compare against ADC readout  | ADC value range (0-3300)
+`evening`                                   | Value to compare against ADC readout  | ADC value range (0-3300)
+`night`                                     | Value to compare against ADC readout  | ADC value range (0-3300)
 **Key-controlled**                          |                                       |
 `key_pin` + `key_lv`                        | Key Pin + Active Level                |
 `kXpin_pin` + `kXpin_lv`                    |                                       |
@@ -165,7 +171,6 @@ Key(s)                                      | Meaning                           
 `ctrl_pin`                                  |                                       |
 `customcode`                                |                                       |
 `cyc_dpid`                                  |                                       |
-`day`                                       |                                       |
 `dctrl_select`                              |                                       |
 `dimmod`                                    |                                       |
 `dimt`                                      |                                       |
@@ -174,9 +179,6 @@ Key(s)                                      | Meaning                           
 `door1_magt_pin`                            |                                       |
 `door_alarm_st1`                            |                                       |
 `door_mag1`                                 |                                       |
-`dusk`                                      |                                       |
-`evenfall`                                  |                                       |
-`evening`                                   |                                       |
 `ffc_select`                                |                                       |
 `inch_dp`                                   |                                       |
 `indep_cfgbt`                               |                                       |
@@ -197,7 +199,6 @@ Key(s)                                      | Meaning                           
 `netnc`                                     |                                       |
 `nety_led`                                  |                                       |
 `netyc`                                     |                                       |
-`night`                                     |                                       |
 `nightbrig`                                 |                                       |
 `nightcct`                                  |                                       |
 `nightled`                                  |                                       |
