@@ -51,7 +51,6 @@ static uint8_t gpioToAdc(GPIO_INDEX gpio) {
 	return 0;
 }
 
-static pwm_param_t pwm;
 static uint16_t adcData[1];
 
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
@@ -90,35 +89,35 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	uint32_t frequency = 26 * _analogWritePeriod - 1;
 	uint32_t dutyCycle = percent * frequency;
-	pwm.channel		   = gpioToPwm(pin->gpio);
+	data->pwm.channel  = gpioToPwm(pin->gpio);
+	uint32_t channel   = data->pwm.channel;
 #if CFG_SOC_NAME != SOC_BK7231N
-	pwm.duty_cycle = dutyCycle;
+	data->pwm.duty_cycle = dutyCycle;
 #else
-	pwm.duty_cycle1 = dutyCycle;
-	pwm.duty_cycle2 = 0;
-	pwm.duty_cycle3 = 0;
+	data->pwm.duty_cycle1 = dutyCycle;
+	data->pwm.duty_cycle2 = 0;
+	data->pwm.duty_cycle3 = 0;
 #endif
 
 	if (dutyCycle) {
 		if (!pinEnabled(pin, PIN_PWM)) {
 			// enable PWM and set its value
-			pwm.cfg.bits.en		= PWM_ENABLE;
-			pwm.cfg.bits.int_en = PWM_INT_DIS;
-			pwm.cfg.bits.mode	= PWM_PWM_MODE;
-			pwm.cfg.bits.clk	= PWM_CLK_26M;
-			pwm.end_value		= frequency;
-			pwm.p_Int_Handler	= NULL;
+			data->pwm.cfg.bits.en	  = PWM_ENABLE;
+			data->pwm.cfg.bits.int_en = PWM_INT_DIS;
+			data->pwm.cfg.bits.mode	  = PWM_PWM_MODE;
+			data->pwm.cfg.bits.clk	  = PWM_CLK_26M;
+			data->pwm.end_value		  = frequency;
+			data->pwm.p_Int_Handler	  = NULL;
 			__wrap_bk_printf_disable();
-			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &pwm);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &pwm.channel);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &pwm.channel);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &data->pwm);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &channel);
 			__wrap_bk_printf_enable();
-			// pass global PWM object pointer
-			data->pwm = &pwm;
 			pinEnable(pin, PIN_PWM);
 		} else {
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel);
 			// update duty cycle
-			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &pwm);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &data->pwm);
 		}
 	} else {
 		if (pinEnabled(pin, PIN_PWM)) {

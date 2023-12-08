@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 struct PinData_s {
-	pwm_param_t *pwm;
+	pwm_param_t pwm;
 	PinMode gpioMode;
 	PinStatus irqMode;
 	void *irqHandler;
