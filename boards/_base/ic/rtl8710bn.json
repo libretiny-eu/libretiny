@@ -52,42 +52,42 @@
 				"C_NAME": "PA_6",
 				"GPIO": "PA06",
 				"IRQ": null,
-				"SPI": "FCS",
+				"FLASH": "^FCS",
 				"SD": "D2"
 			},
 			"19": {
 				"C_NAME": "PA_7",
 				"GPIO": "PA07",
 				"IRQ": null,
-				"SPI": "FD1",
+				"FLASH": "FD1",
 				"SD": "D3"
 			},
 			"20": {
 				"C_NAME": "PA_8",
 				"GPIO": "PA08",
 				"IRQ": null,
-				"SPI": "FD2",
+				"FLASH": "FD2",
 				"SD": "CMD"
 			},
 			"21": {
 				"C_NAME": "PA_9",
 				"GPIO": "PA09",
 				"IRQ": null,
-				"SPI": "FD0",
+				"FLASH": "FD0",
 				"SD": "CLK"
 			},
 			"22": {
 				"C_NAME": "PA_10",
 				"GPIO": "PA10",
 				"IRQ": null,
-				"SPI": "FSCK",
+				"FLASH": "FSCK",
 				"SD": "D0"
 			},
 			"23": {
 				"C_NAME": "PA_11",
 				"GPIO": "PA11",
 				"IRQ": null,
-				"SPI": "FD3",
+				"FLASH": "FD3",
 				"SD": "D1"
 			},
 			"27": {
