@@ -37,7 +37,7 @@ Key(s)                                      | Meaning                           
 `defcolor`                                  | Default Color                         | `c` / `r`
 `defbright`                                 | Default Brightness                    | 0%-100%
 `deftemp`                                   | Default Color Temperature             | 0-100 when defcolor is cool white
-`cwmaxp`                                    | Cold-Warm Max Power                   | 0%-100%
+`cwmaxp`                                    | Cold-Warm Max Power                   | 100-200 with a pitch of 10
 `brightmin`, `brightmax`                    | Min/Max Brightness                    | 0%-100%
 `colormin`, `colormax`                      | RGB Min/Max Brightness                | 0%-100%
 `cwmin`, `cwmax`                            | Cold-Warm Min/Max Brightness          | 0%-100%
