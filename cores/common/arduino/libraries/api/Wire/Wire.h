@@ -16,6 +16,15 @@ typedef struct WireData WireData;
 #define WIRE_HAS_END	  1
 #define WIRE_DEFAULT_FREQ 100000
 
+enum TwoWireResult {
+	TWOWIRE_SUCCESS		= 0,
+	TWOWIRE_TX_OVERFLOW = 1,
+	TWOWIRE_NACK_ADDR	= 2,
+	TWOWIRE_NACK_DATA	= 3,
+	TWOWIRE_ERROR		= 4,
+	TWOWIRE_TIMEOUT		= 5,
+};
+
 class TwoWire : public Stream {
   private:
 	uint8_t port{0};			 //!< port number, family-specific
@@ -51,15 +60,9 @@ class TwoWire : public Stream {
 	bool setClock(uint32_t frequency);
 	bool end();
 
-	/**
-	 * @return 0: success;
-	 * 1: data too long to fit in transmit buffer;
-	 * 2: received NACK on transmit of address;
-	 * 3: received NACK on transmit of data;
-	 * 4: other error;
-	 * 5: timeout
-	 */
-	uint8_t endTransmission(bool sendStop = true);
+	/* (master write) */
+	TwoWireResult endTransmission(bool sendStop = true);
+	/* (master read) */
 	size_t requestFrom(uint16_t address, size_t len, bool sendStop);
 
   private:

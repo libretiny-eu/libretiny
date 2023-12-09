@@ -33,6 +33,11 @@ bool TwoWire::setPinsPrivate(pin_size_t sda, pin_size_t scl) {
 	if (scl == PIN_INVALID)
 		scl = this->scl;
 
+	// clear current transmission
+	if (this->txBuf)
+		this->txBuf->clear();
+	this->txAddress = 0;
+
 	if (sda == PIN_INVALID && scl == PIN_INVALID) {
 		// set pins by port number
 #if defined(PINS_WIRE0_SDA) && defined(PINS_WIRE0_SCL)
@@ -86,7 +91,7 @@ void TwoWire::beginTransmission(uint16_t address) {
 		// cannot begin if not started in master mode
 		return;
 	this->txBuf->clear();
-	this->txAddress = address;
+	this->txAddress = address & 0x7F;
 }
 
 size_t TwoWire::write(uint8_t data) {

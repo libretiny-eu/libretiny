@@ -119,9 +119,9 @@ static bool isNoAck(I2C_TypeDef *i2c) {
 	return false;
 }
 
-uint8_t TwoWire::endTransmission(bool sendStop) {
-	if (!this->txBuf || this->address != 0x00)
-		return 4;
+TwoWireResult TwoWire::endTransmission(bool sendStop) {
+	if (!this->txBuf || this->txAddress == 0x00)
+		return TWOWIRE_ERROR;
 	I2C_InitTypeDef *init = &this->data->init;
 	I2C_TypeDef *i2c	  = this->data->i2c;
 	RingBuffer *buf		  = this->txBuf;
@@ -164,7 +164,7 @@ uint8_t TwoWire::endTransmission(bool sendStop) {
 		// wait for TX FIFO to be not full
 		if (isFlagTimeout(i2c, timeout, BIT_IC_STATUS_TFNF)) {
 			LT_EM(I2C, "Timeout @ 0x%02x (TX FIFO full)", this->txAddress);
-			return 5;
+			return TWOWIRE_TIMEOUT;
 		}
 
 		uint32_t data = buf->read_char();
@@ -182,15 +182,15 @@ check:
 	if (isFlagTimeout(i2c, timeout, BIT_IC_STATUS_TFE)) {
 		if (!scanOnly)
 			LT_EM(I2C, "Timeout @ 0x%02x (TX FIFO not empty)", this->txAddress);
-		return 5;
+		return TWOWIRE_TIMEOUT;
 	}
 	// check if transmission succeeded
 	if (sendStop && isNoAck(i2c)) {
 		if (!scanOnly)
 			LT_EM(I2C, "No ACK @ 0x%02x", address);
-		return scanOnly ? 2 : 3;
+		return scanOnly ? TWOWIRE_NACK_ADDR : TWOWIRE_NACK_DATA;
 	}
-	return 0;
+	return TWOWIRE_SUCCESS;
 }
 
 size_t TwoWire::requestFrom(uint16_t address, size_t len, bool sendStop) {
