@@ -83,6 +83,11 @@ bool TwoWire::begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t fr
 	if (!this->setPinsPrivate(sda, scl))
 		return false;
 
+	if (address != 0x00) {
+		LT_EM(I2C, "Slave mode is not supported yet!");
+		return false;
+	}
+
 	LT_DM(I2C, "Begin: sda=%d, scl=%d, port=%d", this->sda, this->scl, this->port);
 
 	if (!this->data) {

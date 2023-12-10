@@ -14,6 +14,11 @@ extern "C" {
 #include <bk_timer_pub.h>
 #include <flash_pub.h>
 #include <gpio_pub.h>
+#include <i2c1.h>
+#include <i2c2.h>
+#include <i2c_pub.h>
+#include <icu_pub.h>
+#include <intc_pub.h>
 #include <manual_ps_pub.h>
 #include <param_config.h>
 #include <pwm_pub.h>
