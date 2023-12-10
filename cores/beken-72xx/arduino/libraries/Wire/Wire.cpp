@@ -36,7 +36,7 @@ bool TwoWire::beginPrivate(uint8_t address, uint32_t frequency) {
 	switch (this->port) {
 		case 1:
 			// i2c1_hardware_init()
-			REG_I2C1->config.value = 0;
+			REG_I2C1->config = 0;
 			intc_service_register(IRQ_I2C1, PRI_IRQ_I2C1, i2c1Handler);
 			// i2c1_power_up()
 			param = PWD_I2C1_CLK_BIT;
@@ -52,21 +52,21 @@ bool TwoWire::beginPrivate(uint8_t address, uint32_t frequency) {
 			break;
 		case 2:
 			// i2c2_hardware_init()
-			REG_I2C2->config.value = 0;
-			REG_I2C2->status.value = 0;
+			REG_I2C2->config = 0;
+			REG_I2C2->status = 0;
 			// intc_service_register(IRQ_I2C2, PRI_IRQ_I2C2, i2c2Handler);
 			// i2c2_set_idle_cr(0x3)
-			REG_I2C2->config.idle_cr = 3;
+			REG_I2C2->IDLE_CR = 0b11;
 			// i2c2_set_scl_cr(0x4)
-			REG_I2C2->config.scl_cr = 4;
+			REG_I2C2->SCL_CR = 0b100;
 			// i2c2_set_smbus_cs(0x3)
-			REG_I2C2->config.clk_src = 3;
+			REG_I2C2->SMBCS = 0b11;
 			// i2c2_set_timeout_en(1)
-			REG_I2C2->config.timeout_en = 1;
+			REG_I2C2->SMBTOE = true;
 			// i2c2_set_free_detect(1)
-			REG_I2C2->config.idle_det_en = 1;
+			REG_I2C2->SMBFTE = true;
 			// i2c2_set_salve_en(0)
-			REG_I2C2->config.inh = 0;
+			REG_I2C2->INH = true;
 			// i2c2_power_up()
 			param = PCLK_POSI_I2C2;
 			icu_ctrl(CMD_CONF_PCLK_26M, &param);
@@ -103,10 +103,10 @@ bool TwoWire::setClock(uint32_t frequency) {
 	uint32_t reg;
 	switch (this->port) {
 		case 1:
-			REG_I2C1->config.freq_div = div;
+			REG_I2C1->FREQ_DIV = div;
 			break;
 		case 2:
-			REG_I2C2->config.freq_div = div;
+			REG_I2C2->FREQ_DIV = div;
 			break;
 	}
 
@@ -122,7 +122,7 @@ bool TwoWire::endPrivate() {
 	switch (this->port) {
 		case 1:
 			// i2c1_set_ensmb(0)
-			REG_I2C1->config.en = false;
+			REG_I2C1->ENSMB = false;
 			// i2c1_disable_interrupt()
 			param = IRQ_I2C1_BIT;
 			icu_ctrl(CMD_ICU_INT_DISABLE, &param);
@@ -130,11 +130,11 @@ bool TwoWire::endPrivate() {
 			param = PWD_I2C1_CLK_BIT;
 			icu_ctrl(CMD_CLK_PWR_DOWN, &param);
 			// i2c1_exit()
-			REG_I2C1->config.value = 0;
+			REG_I2C1->config = 0;
 			break;
 		case 2:
 			// i2c2_set_ensmb(0)
-			REG_I2C2->config.en = false;
+			REG_I2C2->ENSMB = false;
 			// i2c2_disable_interrupt()
 			param = IRQ_I2C2_BIT;
 			icu_ctrl(CMD_ICU_INT_DISABLE, &param);
@@ -142,8 +142,8 @@ bool TwoWire::endPrivate() {
 			param = PWD_I2C2_CLK_BIT;
 			icu_ctrl(CMD_CLK_PWR_DOWN, &param);
 			// i2c2_exit()
-			REG_I2C2->config.value = 0;
-			REG_I2C2->status.value = 0;
+			REG_I2C2->config = 0;
+			REG_I2C2->status = 0;
 			break;
 	}
 
@@ -151,7 +151,7 @@ bool TwoWire::endPrivate() {
 }
 
 static void i2c1Handler() {
-	if (!REG_I2C1->config.sm_int) {
+	if (!REG_I2C1->SI) {
 		LT_WM(I2C, "I2C1 interrupt not triggered");
 		return;
 	}
@@ -167,43 +167,39 @@ static void i2c1Handler() {
 	// uint32_t reg;
 	switch (i2c1Mode) {
 		case I2C_ISR_MASTER_WRITE:
-			// disable START condition
-			if (REG_I2C1->config.start) {
-				REG_I2C1->config.start = false;
-			}
 			// check if ACK received
-			i2c1TxAck = REG_I2C1->config.rx_ack;
+			i2c1TxAck = REG_I2C1->ACKRX;
 			// end the transmission if NACK or no data left
 			if (!i2c1TxAck || i2c1TxBuf == nullptr || i2c1TxBuf->available() == 0) {
 				// send STOP condition if requested
 				if (i2c1TxSendStop)
-					REG_I2C1->config.stop = true;
+					REG_I2C1->STO = true;
 				// finish the transmission
 				i2c1Mode   = I2C_ISR_NONE;
 				i2c1TxDone = true;
 				break;
 			}
 			// otherwise write the next byte
-			REG_I2C1->data.data = i2c1TxBuf->read_char();
+			REG_I2C1->SMB_DAT = i2c1TxBuf->read_char();
 			break;
 	}
 
-	REG_I2C1->config.sm_int = false;
+	REG_I2C1->STA = false;
+	REG_I2C1->SI  = false;
 }
 
 TwoWireResult TwoWire::endTransmission(bool sendStop) {
 	if (!this->txBuf || this->txAddress == 0x00)
 		return TWOWIRE_ERROR;
 	RingBuffer *buf = this->txBuf;
-	uint32_t reg;
 
 	portDISABLE_INTERRUPTS();
 	// disable STOP condition
-	REG_I2C1->config.stop = false;
+	REG_I2C1->STO = false;
 	// set slave address
-	REG_I2C1->data.data = (this->txAddress << 1) | 0;
+	REG_I2C1->SMB_DAT = (this->txAddress << 1) | 0;
 	// enable START condition
-	REG_I2C1->config.start = true;
+	REG_I2C1->STA = true;
 	// set work state for ISR
 	int dataLength = buf->available();
 	i2c1Mode	   = I2C_ISR_MASTER_WRITE;
@@ -212,8 +208,8 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 	i2c1TxDone	   = false;
 	i2c1TxAck	   = false;
 	// start the transmission and I2C peripheral
-	REG_I2C1->config.tx_mode = true;
-	REG_I2C1->config.en		 = true;
+	REG_I2C1->TXMODE = true;
+	REG_I2C1->ENSMB	 = true;
 	portENABLE_INTERRUPTS();
 
 	// wait for transmission to finish
@@ -228,8 +224,8 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 
 	// stop the transmission (wait a bit for STOP condition)
 	ps_delay(1000);
-	REG_I2C1->config.tx_mode = false;
-	REG_I2C1->config.en		 = false;
+	REG_I2C1->TXMODE = false;
+	REG_I2C1->ENSMB	 = false;
 
 	// check if ACK received
 	if (!i2c1TxAck) {
