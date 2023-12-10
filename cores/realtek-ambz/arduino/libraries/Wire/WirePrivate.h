@@ -6,7 +6,7 @@
 #include <Wire.h>
 
 struct WireData {
-	I2C_InitTypeDef init;
+	RingBuffer *buf;
 	I2C_TypeDef *i2c;
-	RingBuffer buf;
+	I2C_InitTypeDef init;
 };

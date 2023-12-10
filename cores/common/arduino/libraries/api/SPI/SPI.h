@@ -48,8 +48,20 @@ class SPIClass {
 	bool useCs{false};		   //!< whether to toggle CS automatically
 
 	int getPortByPins(pin_size_t sck, pin_size_t miso, pin_size_t mosi);
+	bool setPinsPrivate(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
 
-  public:
+  private: /* family core */
+	bool beginPrivate();
+	bool endPrivate();
+
+  public: /* family core */
+	void setFrequency(uint32_t frequency);
+	void setDataMode(uint8_t dataMode);
+
+	uint8_t transfer(uint8_t data);
+	void write(uint8_t data);
+
+  public: /* common core */
 	SPIClass(uint32_t port) : port(port) {
 		this->fixedPort = bool(port & PORT_FIXED_BIT);
 	}
@@ -58,20 +70,11 @@ class SPIClass {
 
 	~SPIClass();
 
+	bool begin(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
 	bool begin();
 	bool end();
-	void setFrequency(uint32_t frequency);
-	void setDataMode(uint8_t dataMode);
 
-	uint8_t transfer(uint8_t data);
-	void write(uint8_t data);
-
-  private:
-	bool setPinsPrivate(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
-
-  public:
 	bool setPins(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
-	bool begin(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
 
 	void beginTransaction(SPISettings settings);
 	void endTransaction();

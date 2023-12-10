@@ -2,25 +2,20 @@
 
 #include "SPIPrivate.h"
 
-bool SPIClass::begin() {
-	if (!this->setPinsPrivate(PIN_INVALID, PIN_INVALID, PIN_INVALID))
+bool SPIClass::beginPrivate() {
+	if (!this->data)
 		return false;
 
-	LT_DM(SPI, "Begin: sck=%d, miso=%d, mosi=%d, port=%d", this->sck, this->miso, this->mosi, this->port);
+	this->data->spi = SPI_DEV_TABLE[this->port].SPIx;
+	this->data->irq = (IRQn)SPI_DEV_TABLE[this->port].IrqNum;
 
-	if (!this->data) {
-		this->data		= new SPIData();
-		this->data->spi = SPI_DEV_TABLE[this->port].SPIx;
-		this->data->irq = (IRQn)SPI_DEV_TABLE[this->port].IrqNum;
-
-		switch (this->port) {
-			case 0:
-				RCC_PeriphClockCmd(APBPeriph_SPI0, APBPeriph_SPI0_CLOCK, ENABLE);
-				break;
-			case 1:
-				RCC_PeriphClockCmd(APBPeriph_SPI1, APBPeriph_SPI1_CLOCK, ENABLE);
-				break;
-		}
+	switch (this->port) {
+		case 0:
+			RCC_PeriphClockCmd(APBPeriph_SPI0, APBPeriph_SPI0_CLOCK, ENABLE);
+			break;
+		case 1:
+			RCC_PeriphClockCmd(APBPeriph_SPI1, APBPeriph_SPI1_CLOCK, ENABLE);
+			break;
 	}
 
 	Pinmux_Config(this->sck, PINMUX_FUNCTION_SPIM);
@@ -44,7 +39,7 @@ bool SPIClass::begin() {
 	return true;
 }
 
-bool SPIClass::end() {
+bool SPIClass::endPrivate() {
 	if (!this->data)
 		return true;
 	SPI_TypeDef *spi = this->data->spi;
@@ -55,8 +50,6 @@ bool SPIClass::end() {
 	VECTOR_IrqUnRegister(irq);
 	SSI_Cmd(spi, DISABLE);
 
-	delete this->data;
-	this->data = nullptr;
 	return true;
 }
 
@@ -65,7 +58,7 @@ void SPIClass::setFrequency(uint32_t frequency) {
 		return;
 	uint32_t maxFrequency = CPU_ClkGet(false) >> 2;
 	if (frequency > maxFrequency) {
-		LT_EM(SPI, "Clock freq too high! %lu > %lu", frequency, maxFrequency);
+		LT_WM(SPI, "Clock freq too high! %lu > %lu", frequency, maxFrequency);
 		SSI_SetBaud(this->data->spi, maxFrequency, maxFrequency << 1);
 	} else {
 

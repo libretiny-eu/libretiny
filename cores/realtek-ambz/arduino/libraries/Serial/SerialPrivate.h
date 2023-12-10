@@ -6,7 +6,7 @@
 #include <Serial.h>
 
 struct SerialData {
+	RingBuffer *buf;
 	UART_TypeDef *uart;
 	IRQn irq;
-	RingBuffer buf;
 };

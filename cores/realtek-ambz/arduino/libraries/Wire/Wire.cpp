@@ -2,34 +2,20 @@
 
 #include "WirePrivate.h"
 
-bool TwoWire::begin(pin_size_t sda, pin_size_t scl, uint32_t frequency) {
-	return this->begin(0x00, sda, scl, frequency);
-}
-
-bool TwoWire::begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t frequency) {
-	if (!this->setPinsPrivate(sda, scl))
+bool TwoWire::beginPrivate(uint8_t address, uint32_t frequency) {
+	if (!this->data)
 		return false;
+	this->data->buf = this->rxBuf;
+	this->data->i2c = I2C_DEV_TABLE[this->port].I2Cx;
 
-	LT_DM(I2C, "Begin: sda=%d, scl=%d, port=%d", this->sda, this->scl, this->port);
-
-	if (!this->data) {
-		this->data		= new WireData();
-		this->rxBuf		= &this->data->buf;
-		this->txBuf		= new RingBuffer();
-		this->data->i2c = I2C_DEV_TABLE[this->port].I2Cx;
-
-		switch (this->port) {
-			case 0:
-				RCC_PeriphClockCmd(APBPeriph_I2C0, APBPeriph_I2C0_CLOCK, ENABLE);
-				break;
-			case 1:
-				RCC_PeriphClockCmd(APBPeriph_I2C1, APBPeriph_I2C1_CLOCK, ENABLE);
-				break;
-		}
+	switch (this->port) {
+		case 0:
+			RCC_PeriphClockCmd(APBPeriph_I2C0, APBPeriph_I2C0_CLOCK, ENABLE);
+			break;
+		case 1:
+			RCC_PeriphClockCmd(APBPeriph_I2C1, APBPeriph_I2C1_CLOCK, ENABLE);
+			break;
 	}
-
-	if (frequency == 0)
-		frequency = WIRE_DEFAULT_FREQ;
 
 	Pinmux_Config(this->sda, PINMUX_FUNCTION_I2C);
 	Pinmux_Config(this->scl, PINMUX_FUNCTION_I2C);
@@ -42,11 +28,6 @@ bool TwoWire::begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t fr
 	init->I2CMaster	 = address == 0x00 ? I2C_MASTER_MODE : I2C_SLAVE_MODE;
 	init->I2CAckAddr = address;
 	this->address	 = address;
-
-	if (this->frequency != frequency)
-		this->setClock(frequency);
-
-	this->txBuf->clear();
 
 	return true;
 }
@@ -75,19 +56,12 @@ bool TwoWire::setClock(uint32_t frequency) {
 	return true;
 }
 
-bool TwoWire::end() {
+bool TwoWire::endPrivate() {
 	if (!this->data)
 		return true;
 	I2C_TypeDef *i2c = this->data->i2c;
 
 	I2C_Cmd(i2c, DISABLE);
-
-	delete this->data;
-	delete this->txBuf;
-	this->data		= nullptr;
-	this->rxBuf		= nullptr;
-	this->txBuf		= nullptr;
-	this->frequency = 0;
 	return true;
 }
 
@@ -162,7 +136,7 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 	int bytesLeft;
 	while (bytesLeft = buf->available()) {
 		// wait for TX FIFO to be not full
-		if (isFlagTimeout(i2c, timeout, BIT_IC_STATUS_TFNF)) {
+		if (isFlagTimeout(i2c, this->timeout, BIT_IC_STATUS_TFNF)) {
 			LT_EM(I2C, "Timeout @ 0x%02x (TX FIFO full)", this->txAddress);
 			return TWOWIRE_TIMEOUT;
 		}
@@ -179,7 +153,7 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 
 check:
 	// wait for TX FIFO to be empty
-	if (isFlagTimeout(i2c, timeout, BIT_IC_STATUS_TFE)) {
+	if (isFlagTimeout(i2c, this->timeout, BIT_IC_STATUS_TFE)) {
 		if (!scanOnly)
 			LT_EM(I2C, "Timeout @ 0x%02x (TX FIFO not empty)", this->txAddress);
 		return TWOWIRE_TIMEOUT;

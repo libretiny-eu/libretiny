@@ -45,8 +45,20 @@ class TwoWire : public Stream {
 	void (*onReceiveCallback)(int){nullptr};
 
 	int getPortByPins(pin_size_t sda, pin_size_t scl);
+	bool setPinsPrivate(pin_size_t sda, pin_size_t scl);
 
-  public:
+  private: /* family core */
+	bool beginPrivate(uint8_t address, uint32_t frequency = 0);
+	bool endPrivate();
+
+  public: /* family core */
+	bool setClock(uint32_t frequency);
+	/* (master write) */
+	TwoWireResult endTransmission(bool sendStop = true);
+	/* (master read) */
+	size_t requestFrom(uint16_t address, size_t len, bool sendStop);
+
+  public: /* common core */
 	TwoWire(uint32_t port) : port(port) {
 		this->fixedPort = bool(port & PORT_FIXED_BIT);
 	}
@@ -57,18 +69,8 @@ class TwoWire : public Stream {
 
 	bool begin(pin_size_t sda, pin_size_t scl, uint32_t frequency = 0);
 	bool begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t frequency = 0);
-	bool setClock(uint32_t frequency);
 	bool end();
 
-	/* (master write) */
-	TwoWireResult endTransmission(bool sendStop = true);
-	/* (master read) */
-	size_t requestFrom(uint16_t address, size_t len, bool sendStop);
-
-  private:
-	bool setPinsPrivate(pin_size_t sda, pin_size_t scl);
-
-  public:
 	bool setPins(pin_size_t sda, pin_size_t scl);
 	void beginTransmission(uint16_t address);
 	size_t write(uint8_t data);

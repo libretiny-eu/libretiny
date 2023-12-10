@@ -17,20 +17,25 @@ class SerialClass : public HardwareSerial {
 	pin_size_t tx; //!< TX pin number of this instance
 
   private:
-	SerialData *data{nullptr}; //!< family-specific, created in begin(), destroyed in end()
-	RingBuffer *buf{nullptr};  //!< RX data buffer, assigned in begin(), removed in end()
-	uint32_t baudrate{0};	   //!< currently set baudrate
-	uint16_t config{0};		   //!< currently set configuration
+	SerialData *data{nullptr};	//!< family-specific, created in begin(), destroyed in end()
+	RingBuffer *rxBuf{nullptr}; //!< RX data buffer, created in begin(), destroyed in end()
+	uint32_t baudrate{0};		//!< currently set baudrate
+	uint16_t config{0};			//!< currently set configuration
 
-  public:
-	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID) : port(port), rx(rx), tx(tx) {}
+  private: /* family core */
+	void beginPrivate(unsigned long baudrate, uint16_t config);
+	void endPrivate();
 
-	void begin(unsigned long baudrate, uint16_t config);
+  public: /* family core */
 	void configure(unsigned long baudrate, uint16_t config);
-	void end();
 	void flush();
 	size_t write(uint8_t c);
 
+  public: /* common core */
+	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID) : port(port), rx(rx), tx(tx) {}
+
+	void begin(unsigned long baudrate, uint16_t config);
+	void end();
 	int available();
 	int peek();
 	int read();
@@ -44,7 +49,7 @@ class SerialClass : public HardwareSerial {
 	}
 
 	operator bool() {
-		return !!buf;
+		return !!this->rxBuf;
 	}
 
   public:

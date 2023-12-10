@@ -2,9 +2,7 @@
 
 #if LT_ARD_HAS_WIRE || DOXYGEN
 
-#include "Wire.h"
-
-#include <ArduinoPrivate.h>
+#include <WirePrivate.h>
 
 TwoWire::~TwoWire() {}
 
@@ -74,6 +72,50 @@ bool TwoWire::setPinsPrivate(pin_size_t sda, pin_size_t scl) {
 	this->port = port;
 	this->sda  = sda;
 	this->scl  = scl;
+	return true;
+}
+
+bool TwoWire::begin(pin_size_t sda, pin_size_t scl, uint32_t frequency) {
+	return this->begin(0x00, sda, scl, frequency);
+}
+
+bool TwoWire::begin(uint8_t address, pin_size_t sda, pin_size_t scl, uint32_t frequency) {
+	if (!this->setPinsPrivate(sda, scl))
+		return false;
+
+	LT_DM(I2C, "Begin: sda=%d, scl=%d, port=%d", this->sda, this->scl, this->port);
+
+	if (!this->data) {
+		this->data	= new WireData();
+		this->rxBuf = new RingBuffer();
+		this->txBuf = new RingBuffer();
+	}
+
+	if (frequency == 0)
+		frequency = this->frequency;
+	if (frequency == 0)
+		frequency = WIRE_DEFAULT_FREQ;
+
+	if (!this->beginPrivate(address, frequency))
+		return false;
+	if (!this->setClock(frequency))
+		return false;
+
+	this->txBuf->clear();
+
+	return true;
+}
+
+bool TwoWire::end() {
+	if (!this->endPrivate())
+		return false;
+
+	delete this->data;
+	delete this->txBuf;
+	this->data		= nullptr;
+	this->rxBuf		= nullptr;
+	this->txBuf		= nullptr;
+	this->frequency = 0;
 	return true;
 }
 

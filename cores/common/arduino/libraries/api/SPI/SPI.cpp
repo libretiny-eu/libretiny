@@ -2,9 +2,7 @@
 
 #if LT_ARD_HAS_SPI || DOXYGEN
 
-#include "SPI.h"
-
-#include <ArduinoPrivate.h>
+#include <SPIPrivate.h>
 
 SPIClass::~SPIClass() {}
 
@@ -84,16 +82,38 @@ bool SPIClass::setPinsPrivate(pin_size_t sck, pin_size_t miso, pin_size_t mosi, 
 	return true;
 }
 
-bool SPIClass::setPins(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs) {
-	if (!this->data)
-		return this->setPinsPrivate(sck, miso, mosi, cs);
-	return this->begin(sck, miso, mosi, cs);
-}
-
 bool SPIClass::begin(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs) {
 	if (!this->setPinsPrivate(sck, miso, mosi, cs))
 		return false;
 	return this->begin();
+}
+
+bool SPIClass::begin() {
+	if (!this->setPinsPrivate(PIN_INVALID, PIN_INVALID, PIN_INVALID))
+		return false;
+
+	LT_DM(SPI, "Begin: sck=%d, miso=%d, mosi=%d, port=%d", this->sck, this->miso, this->mosi, this->port);
+
+	if (!this->data) {
+		this->data = new SPIData();
+	}
+
+	return true;
+}
+
+bool SPIClass::end() {
+	if (!this->endPrivate())
+		return false;
+
+	delete this->data;
+	this->data = nullptr;
+	return true;
+}
+
+bool SPIClass::setPins(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs) {
+	if (!this->data)
+		return this->setPinsPrivate(sck, miso, mosi, cs);
+	return this->begin(sck, miso, mosi, cs);
 }
 
 __attribute__((weak)) void SPIClass::beginTransaction(SPISettings settings) {

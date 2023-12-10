@@ -5,5 +5,5 @@
 #include <ArduinoPrivate.h>
 
 struct SerialData {
-	RingBuffer buf;
+	RingBuffer *buf;
 };
