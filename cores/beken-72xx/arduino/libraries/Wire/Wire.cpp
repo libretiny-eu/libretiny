@@ -3,20 +3,24 @@
 #include "WirePrivate.h"
 
 #define I2C_DIVID_CLK(div) (I2C1_DEFAULT_CLK / (((div + 1) * 3) - 6))
+#define I2C_BUSY_RETRIES   5
 
 enum I2CISRMode {
-	I2C_ISR_NONE		 = 0,
+	I2C_ISR_IDLE		 = 0,
 	I2C_ISR_MASTER_WRITE = 1,
 	I2C_ISR_MASTER_READ	 = 2,
 	I2C_ISR_SLAVE_WRITE	 = 3,
 	I2C_ISR_SLAVE_READ	 = 4,
 };
 
-static I2CISRMode i2c1Mode	 = I2C_ISR_NONE;
+static I2CISRMode i2c1Mode = I2C_ISR_IDLE;
+static bool i2c1SendStop   = false;
+static bool i2c1GotAck	   = false;
+
 static RingBuffer *i2c1TxBuf = nullptr;
-static bool i2c1TxSendStop	 = false;
-static bool i2c1TxDone		 = false;
-static bool i2c1TxAck		 = false;
+
+static RingBuffer *i2c1RxBuf = nullptr;
+static int32_t i2c1RxLength	 = 0;
 
 static void i2c1Handler();
 
@@ -84,13 +88,35 @@ bool TwoWire::beginPrivate(uint8_t address, uint32_t frequency) {
 	return true;
 }
 
+/* if (REG_I2C1->BUSY) {
+	if (this->data->busyCount >= I2C_BUSY_RETRIES) {
+		LT_FM(I2C, "GPIO didn't help!");
+		return false;
+	} else {
+		LT_EM(
+			I2C,
+			"Busy in begin()! GPIO taking over (%u/" STRINGIFY_MACRO(I2C_BUSY_RETRIES) ")",
+			++this->data->busyCount
+		);
+		this->endPrivate();
+		delay(200);
+		pinMode(this->sda, OUTPUT);
+		pinMode(this->scl, OUTPUT);
+		digitalWrite(this->sda, HIGH);
+		digitalWrite(this->scl, HIGH);
+		delay(300);
+		return this->beginPrivate(address, frequency);
+	}
+} */
+
 bool TwoWire::setClock(uint32_t frequency) {
 	if (!this->data)
 		return false;
 
-	if (frequency >= 50000 && frequency < 400000) {
-		// this frequency range is very unreliable on BK7231
-		frequency = 400000;
+	uint32_t maxFrequency = 409600;
+	if (frequency > maxFrequency) {
+		LT_WM(I2C, "Clock freq too high! %lu < %lu", frequency, maxFrequency);
+		frequency = maxFrequency;
 	}
 
 	uint32_t div = I2C_CLK_DIVID(frequency);
@@ -150,40 +176,85 @@ bool TwoWire::endPrivate() {
 	return true;
 }
 
+/* LT_DM(
+	I2C,
+	"ISR IN : mode=%d, tx=%d/rx=%d, ENSMB=%d, STA=%d, STO=%d, ACKTX=%d, TXMODE=%d, ACKRX=%d, ACKRQ=%d",
+	i2c1Mode,
+	i2c1TxBuf ? i2c1TxBuf->available() : -1,
+	i2c1RxLength,
+	REG_I2C1->ENSMB,
+	REG_I2C1->STA,
+	REG_I2C1->STO,
+	REG_I2C1->ACKTX,
+	REG_I2C1->TXMODE,
+	REG_I2C1->ACKRX,
+	REG_I2C1->ACKRQ
+); */
+
 static void i2c1Handler() {
 	if (!REG_I2C1->SI) {
 		LT_WM(I2C, "I2C1 interrupt not triggered");
 		return;
 	}
 
-	// LT_D(
-	// 	"In ISR: mode=%d, available=%d, config=%08x/%08x",
-	// 	i2c1Mode,
-	// 	i2c1TxBuf ? i2c1TxBuf->available() : -1,
-	// 	LT_MEM32(REG_I2C1_CONFIG),
-	// 	REG_I2C1->config.value
-	// );
+	if (REG_I2C1->TXMODE) {
+		// check if ACK received
+		i2c1GotAck = REG_I2C1->ACKRX;
+		// end the transmission if NACK
+		if (!i2c1GotAck)
+			goto stop;
+	}
 
-	// uint32_t reg;
 	switch (i2c1Mode) {
 		case I2C_ISR_MASTER_WRITE:
-			// check if ACK received
-			i2c1TxAck = REG_I2C1->ACKRX;
-			// end the transmission if NACK or no data left
-			if (!i2c1TxAck || i2c1TxBuf == nullptr || i2c1TxBuf->available() == 0) {
-				// send STOP condition if requested
-				if (i2c1TxSendStop)
-					REG_I2C1->STO = true;
-				// finish the transmission
-				i2c1Mode   = I2C_ISR_NONE;
-				i2c1TxDone = true;
-				break;
-			}
+			// end the transmission if no data left to send
+			if (i2c1TxBuf == nullptr || i2c1TxBuf->available() == 0)
+				goto stop;
 			// otherwise write the next byte
 			REG_I2C1->SMB_DAT = i2c1TxBuf->read_char();
 			break;
-	}
 
+		case I2C_ISR_MASTER_READ:
+			// disable TX mode unconditionally
+			REG_I2C1->TXMODE = false;
+			// failsafe for no buffer
+			if (i2c1RxBuf == nullptr)
+				i2c1RxLength = 0;
+			// quit the first ISR call, wait for next one with data
+			if (REG_I2C1->STA) {
+				// send ACK if *any* data is requested
+				REG_I2C1->ACKTX = i2c1RxLength > 0 ? true : false;
+				goto end;
+			} else {
+				// send ACK if *more* data is requested
+				REG_I2C1->ACKTX = i2c1RxLength > 1 ? true : false;
+			}
+			// receive data
+			if (i2c1RxLength > 0) {
+				i2c1RxBuf->store_char(REG_I2C1->SMB_DAT);
+				i2c1RxLength--;
+			}
+			// end the transmission if no data left to receive
+			if (i2c1RxLength <= 0)
+				goto stop;
+			break;
+	}
+	goto end;
+
+stop:
+	// both methods will stop firing the ISR:
+	if (i2c1SendStop) {
+		// - send STOP condition if requested
+		// REG_I2C1->TXMODE = true;
+		REG_I2C1->STO = true;
+	} else {
+		// - otherwise disable I2C entirely
+		REG_I2C1->ENSMB = false;
+	}
+	// finish the transmission
+	i2c1Mode = I2C_ISR_IDLE;
+
+end:
 	REG_I2C1->STA = false;
 	REG_I2C1->SI  = false;
 }
@@ -203,10 +274,8 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 	// set work state for ISR
 	int dataLength = buf->available();
 	i2c1Mode	   = I2C_ISR_MASTER_WRITE;
+	i2c1SendStop   = sendStop;
 	i2c1TxBuf	   = buf;
-	i2c1TxSendStop = sendStop;
-	i2c1TxDone	   = false;
-	i2c1TxAck	   = false;
 	// start the transmission and I2C peripheral
 	REG_I2C1->TXMODE = true;
 	REG_I2C1->ENSMB	 = true;
@@ -214,7 +283,7 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 
 	// wait for transmission to finish
 	unsigned long start = millis();
-	while (!i2c1TxDone) {
+	while (i2c1Mode != I2C_ISR_IDLE) {
 		ps_delay(1000);
 		if (millis() - start > timeout) {
 			LT_EM(I2C, "Timeout @ 0x%02x (TX not done)", this->txAddress);
@@ -223,15 +292,57 @@ TwoWireResult TwoWire::endTransmission(bool sendStop) {
 	}
 
 	// stop the transmission (wait a bit for STOP condition)
-	ps_delay(1000);
+	delayMicroseconds(500);
 	REG_I2C1->TXMODE = false;
 	REG_I2C1->ENSMB	 = false;
 
 	// check if ACK received
-	if (!i2c1TxAck) {
+	if (!i2c1GotAck) {
 		if (buf->available() == dataLength)
 			return TWOWIRE_NACK_ADDR;
 		return TWOWIRE_NACK_DATA;
 	}
 	return TWOWIRE_SUCCESS;
+}
+
+size_t TwoWire::requestFrom(uint16_t address, size_t len, bool sendStop) {
+	if (!this->rxBuf || this->address != 0x00)
+		return 0;
+	RingBuffer *buf = this->rxBuf;
+
+	portDISABLE_INTERRUPTS();
+	// disable STOP condition
+	REG_I2C1->STO = false;
+	// set slave address
+	REG_I2C1->SMB_DAT = (this->txAddress << 1) | 1;
+	// enable START condition
+	REG_I2C1->STA = true;
+	// set work state for ISR
+	int dataLength = buf->available();
+	i2c1Mode	   = I2C_ISR_MASTER_READ;
+	i2c1SendStop   = sendStop;
+	i2c1RxBuf	   = buf;
+	i2c1RxLength   = len;
+	// start the transmission and I2C peripheral
+	REG_I2C1->TXMODE = true;
+	REG_I2C1->ENSMB	 = true;
+	portENABLE_INTERRUPTS();
+
+	// wait for transmission to finish
+	unsigned long start = millis();
+	while (i2c1Mode != I2C_ISR_IDLE) {
+		ps_delay(1000);
+		if (millis() - start > timeout) {
+			LT_EM(I2C, "Timeout @ 0x%02x (RX not done)", this->txAddress);
+			goto end;
+		}
+	}
+
+	// stop the transmission (wait a bit for STOP condition)
+	delayMicroseconds(500);
+	REG_I2C1->TXMODE = false;
+	REG_I2C1->ENSMB	 = false;
+
+end:
+	return len - i2c1RxLength;
 }
