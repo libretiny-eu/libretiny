@@ -111,7 +111,7 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	data->pwm.duty_cycle3 = 0;
 #endif
 
-	if (data->pwmState == LT_PWM_STOPPED) {
+	if ((data->pwmState == LT_PWM_STOPPED) || (data->pwmState == LT_PWM_PAUSED)) {
 		if (dutyCycle) {
 			// enable PWM and set its value
 
@@ -137,15 +137,6 @@ void analogWrite(pin_size_t pinNumber, int value) {
 			__wrap_bk_printf_enable();
 
 			data->pwmState = LT_PWM_PAUSED;
-		}
-	} else if (data->pwmState == LT_PWM_PAUSED) {
-		if (dutyCycle) {
-			__wrap_bk_printf_disable();
-			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &data->pwm);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel);
-			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &channel);
-			__wrap_bk_printf_enable();
-			data->pwmState = LT_PWM_RUNNING;
 		}
 	}
 }
