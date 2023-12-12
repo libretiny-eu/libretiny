@@ -27,7 +27,7 @@ enum TwoWireResult {
 
 class TwoWire : public Stream {
   private:
-	uint8_t port{0};			 //!< port number, family-specific
+	int port{-1};				 //!< port number, family-specific
 	bool fixedPort{false};		 //!< whether port is not changeable
 	pin_size_t sda{PIN_INVALID}; //!< SDA pin number of this instance
 	pin_size_t scl{PIN_INVALID}; //!< SCL pin number of this instance
@@ -64,6 +64,8 @@ class TwoWire : public Stream {
 	}
 
 	TwoWire(pin_size_t sda, pin_size_t scl) : sda(sda), scl(scl) {}
+
+	TwoWire() {}
 
 	~TwoWire();
 

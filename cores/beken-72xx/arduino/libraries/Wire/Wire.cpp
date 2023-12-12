@@ -113,7 +113,7 @@ bool TwoWire::setClock(uint32_t frequency) {
 	if (!this->data)
 		return false;
 
-	uint32_t maxFrequency = 409600;
+	uint32_t maxFrequency = 400000;
 	if (frequency > maxFrequency) {
 		LT_WM(I2C, "Clock freq too high! %lu < %lu", frequency, maxFrequency);
 		frequency = maxFrequency;
