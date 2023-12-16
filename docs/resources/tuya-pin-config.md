@@ -2,14 +2,21 @@
 
 Device configuration (`user_param_key`) can be extracted to JSON, using bk7231tools from a full firmware dump.
 
-Originally posted [by @blakadder](https://discord.com/channels/967863521511608370/983843871320580096/1059286760074530947) on Discord channel #resources, modified by me to include more keys and values.
+Also see:
+
+- [UPK2ESPHome](https://upk.libretiny.eu/)
+
+Sources:
+
+- [`tuya_demo_light_pwm`](https://github.com/tuya/tuya-iotos-embeded-sdk-wifi-ble-bk7231n/blob/master/apps/tuya_demo_light_pwm/include/common/device_config_load.h) for *Lights/bulbs*
+- Original post [by @blakadder](https://discord.com/channels/967863521511608370/983843871320580096/1059286760074530947) on Discord channel #resources
 
 Key(s)                                      | Meaning                               | Possible values
---------------------------------------------|---------------------------------------|---------------------------------------------------------
-`crc`                                       |                                       |
-`module`                                    |                                       |
-`category`                                  |                                       |
-`Jsonver`<br>`jv`                           |                                       |
+--------------------------------------------|---------------------------------------|---------------------------------------------------------------------------------------
+`crc`                                       | UPK data checksum                     |
+`module`                                    | Tuya module used                      | `CB3S` / `WB3S` / `CBU`, etc.
+`category`                                  | Device type as a number               | 0502 - CW light<br>0505 - RGBCW light
+`Jsonver`<br>`jv`                           | "JSON" version                        |
 **Common**                                  |                                       |
 `netled_pin`<br>`netled1_pin`<br>`wfst_pin` | Status LED for WiFi                   |
 `netled_lv`<br>`netled1_lv`<br>`wfst_lv`    | Status LED Active Level               | 0 - Active low<br>1 - Active high
@@ -20,27 +27,30 @@ Key(s)                                      | Meaning                           
 `iicsda`                                    | I²C SDA Pin                           |
 `net_trig`                                  |                                       |
 `net_type`                                  |                                       |
-`wfcfg`                                     |                                       | `spcl` / `spcl_auto` / `prod`
 `wfct`                                      |                                       |
 **Lights/bulbs**                            |                                       |
 `cmod`                                      | Color Mode                            | `rgbcw` / `rgb` / `cw` / `c` / `rgbc`
-`cwtype`                                    |                                       |
-`brightmin`, `brightmax`                    | Min/Max Brightness                    | 0%-100%
-`cwmin`, `cwmax`                            | Cold-Warm Min/Max Brightness          | 0%-100%
-`cwmaxp`                                    | Cold-Warm Max Power                   | 0%-100%
-`colormin`, `colormax`                      | RGB Min/Max Brightness                | 0%-100%
-`colormaxp`                                 | RGB Max Power                         | 0%-100%
-`brightstep`<br>`bristep`                   | Brightness Step                       |
-`defbright`                                 | Default Brightness                    | 0%-100%
+`dmod`                                      | Light driver type                     | 0 - PWM<br>1 - SM16726B<br>2 - SM2135E<br>3 - SM2135EH<br>4 - SM2135EJ<br>5 - BP1658CJ<br>6 - BP5758D<br>7 - SM2235/2335
+`cwtype`                                    | Color temperature driver              | 0 - cool and warm white (CW)<br>1 - correlated color temperature (CCT)
+`onoffmode`                                 | On/off gradient enabled               | 0 / 1
+`pmemory`                                   | Power-off memory enabled              | 0 / 1
 `defcolor`                                  | Default Color                         | `c` / `r`
-`deftemp`                                   | Default Color Temperature             |
+`defbright`                                 | Default Brightness                    | 0%-100%
+`deftemp`                                   | Default Color Temperature             | 0-100 when defcolor is cool white
+`cwmaxp`                                    | Cold-Warm Max Power                   | 100-200 with a pitch of 10
+`brightmin`, `brightmax`                    | Min/Max Brightness                    | 0%-100%
+`colormin`, `colormax`                      | RGB Min/Max Brightness                | 0%-100%
+`cwmin`, `cwmax`                            | Cold-Warm Min/Max Brightness          | 0%-100%
+`colormaxp`                                 | RGB Max Power                         | 0%-100%
+`colorpfun`                                 | Color mixing power limit enabled      | 0 / 1
+`brightstep`<br>`bristep`                   | Brightness Step                       |
+`hsvstep`                                   |                                       |
+`rgbt`                                      | Used in prod.tests, not relevant      |
+`title20`                                   | "title20/T20" supported               | 0 / 1
+**Gamma correction**                        |                                       |
+`gmr`, `gmg`, `gmb`                         |                                       |
 `gmkr`, `gmkg`, `gmkb`                      |                                       |
 `gmwr`, `gmwg`, `gmwb`                      |                                       |
-`hsvstep`                                   |                                       |
-`rgbt`                                      |                                       |
-`rstbr`                                     |                                       |
-`rstcor`                                    |                                       | `c`/`r`
-`rsttemp`                                   |                                       |
 **PWM Lights**                              |                                       |
 `r_pin` + `r_lv`                            | Red Channel Pin + Active Level        |
 `g_pin` + `g_lv`                            | Green Channel Pin + Active Level      |
@@ -52,8 +62,8 @@ Key(s)                                      | Meaning                           
 `dccur`<br>`ehccur`<br>`cjccur`             | Cold White Current                    |
 `dwcur`<br>`ehwcur`<br>`cjwcur`             | Warm White Current                    |
 `drgbcur`                                   | RGB Current                           |
-`campere`                                   |                                       |
-`wampere`                                   |                                       |
+`campere`                                   | Max current of SM2135 colored output  | 10-45 with a pitch of 5 and defaults to 20
+`wampere`                                   | Max current of SM2135 white output    | 10-80 with a pitch of 5 and defaults to 30
 `iicr`                                      | Red Channel Number                    | 0-5
 `iicg`                                      | Green Channel Number                  | 0-5
 `iicb`                                      | Blue Channel Number                   | 0-5
@@ -72,7 +82,7 @@ Key(s)                                      | Meaning                           
 `rl_drvtime`                                |                                       |
 `total_bt_pin` + `total_bt_lv`              |                                       |
 **Power monitoring**                        |                                       |
-`ele_fun_en`                                | Power Monitoring Enabled              | 1
+`ele_fun_en`                                | Power Monitoring Enabled              | 0 / 1
 `chip_type`                                 | Power Monitoring Chip Type            | 0 - BL0937<br>1 - HLW8012<br>2 - HLW8032<br>4 - BL0942
 `ele_pin`                                   | CF Pin                                |
 `vi_pin`                                    | CF1 Pin                               |
@@ -84,7 +94,7 @@ Key(s)                                      | Meaning                           
 `vol_def`                                   | Socket operating voltage              | 0 - 220V<br>1 - 110V
 `work_voltage`                              | Socket operating voltage              |
 **Infrared**                                |                                       |
-`irfunc`                                    | IR Function                           | 0, 1
+`irfunc`                                    | IR Function enabled                   | 0 / 1
 `infre`                                     | IR Transmitter Pin                    |
 `infrr`<br>`ir`                             | IR Receiver Pin                       |
 `irkXfun` + `irkXval`                       | IR Key X Function + Value             | X in 1..30
@@ -93,14 +103,20 @@ Key(s)                                      | Meaning                           
 `wgmod`, `swgmod`, `scgmod`                 |                                       |
 **PIR**                                     |                                       |
 `pirmod`                                    |                                       |
-`pirfreq`                                   |                                       |
-`pirlduty`                                  |                                       |
-`pirmduty`                                  |                                       |
-`pirhduty`                                  |                                       |
-`pirin_pin` + `pirin_lv`                    |                                       |
-`pirsense_pin` + `pirsense_lv`              |                                       |
+`pirfreq`                                   | PWM Operating Frequency (Hz) for PIR  | 1000
+`pirlduty`                                  |                                       | 100
+`pirmduty`                                  |                                       | 50
+`pirhduty`                                  |                                       | 0
+`pirin_pin` + `pirin_lv`                    | Motion reporting GPIO + Active Level  |
+`pirsense_pin` + `pirsense_lv`              | PIR sensitivity (PWM) + Active Level  |
 `pirrange`                                  |                                       |
 `pirwarn`                                   |                                       |
+**Ambient light sensor**                    |                                       |
+`day`                                       | Value to compare against ADC readout  | ADC value range (0-3300)
+`dusk`                                      | Value to compare against ADC readout  | ADC value range (0-3300)
+`evenfall`                                  | Value to compare against ADC readout  | ADC value range (0-3300)
+`evening`                                   | Value to compare against ADC readout  | ADC value range (0-3300)
+`night`                                     | Value to compare against ADC readout  | ADC value range (0-3300)
 **Key-controlled**                          |                                       |
 `key_pin` + `key_lv`                        | Key Pin + Active Level                |
 `kXpin_pin` + `kXpin_lv`                    |                                       |
@@ -109,9 +125,23 @@ Key(s)                                      | Meaning                           
 `keyccfg1`, `keyccfg2`                      |                                       |
 `keyfunc`, `keyglobefunc`                   |                                       |
 `keylt`, `keynumber`                        |                                       |
+**Pairing-related**                         |                                       |
+`wfcfg`                                     | Wi-Fi pairing config                  | `spcl` / `spcl_auto` / `prod` / `old` / `low`
+`remdmode`                                  | "light reset pairing mode"            | 0 / 1
+`rstnum`                                    | On/off cycles to reset                |
+`rstcor`                                    | Light color while connecting          | `c` / `r`
+`rstbr`                                     | Light brightness while connecting     | 10-100
+`rsttemp`                                   | Light temperature while connecting    | 0-100
+`remdtime`                                  | Pairing mode timeout                  | seconds
+`wfptime`                                   | Light pairing time                    | minutes
+`cagt`                                      | Used in prod.tests, not relevant      | N/A
+`prodagain`                                 | Used in prod.tests, not relevant      | 0 / 1
+`rstmode`                                   | Pairing related - not relevant        |
+`pairt`                                     | Pairing related - not relevant        | 6-600
+`wt`                                        | Used in prod.tests, not relevant      | N/A
 **Other**                                   |                                       |
 `buzzer_pwm`                                | Buzzer working PWM frequency          |
-`ismusic`                                   |                                       | 0, 1
+`ismusic`                                   |                                       | 0 / 1
 `ledX_pin` + `ledX_lv`                      | LED X Pin + Active Level              |
 `led_pin` + `led_lv`                        | LED Pin + Active Level                |
 **Unknown**                                 |                                       |
@@ -127,7 +157,6 @@ Key(s)                                      | Meaning                           
 `bleonoff`                                  |                                       |
 `blindt`                                    |                                       |
 `buzzer`                                    |                                       |
-`cagt`                                      |                                       |
 `cctseg`                                    |                                       |
 `cd_flag2`                                  |                                       |
 `cdsval`                                    |                                       |
@@ -138,24 +167,18 @@ Key(s)                                      | Meaning                           
 `ch_num`                                    |                                       |
 `clean_t`                                   |                                       |
 `cntdown1`                                  |                                       |
-`colorpfun`                                 |                                       |
 `ctrl_lv`                                   |                                       |
 `ctrl_pin`                                  |                                       |
 `customcode`                                |                                       |
 `cyc_dpid`                                  |                                       |
-`day`                                       |                                       |
 `dctrl_select`                              |                                       |
 `dimmod`                                    |                                       |
 `dimt`                                      |                                       |
 `dimval`                                    |                                       |
-`dmod`                                      |                                       |
 `door1_magt_lv`                             |                                       |
 `door1_magt_pin`                            |                                       |
 `door_alarm_st1`                            |                                       |
 `door_mag1`                                 |                                       |
-`dusk`                                      |                                       |
-`evenfall`                                  |                                       |
-`evening`                                   |                                       |
 `ffc_select`                                |                                       |
 `inch_dp`                                   |                                       |
 `indep_cfgbt`                               |                                       |
@@ -176,11 +199,10 @@ Key(s)                                      | Meaning                           
 `netnc`                                     |                                       |
 `nety_led`                                  |                                       |
 `netyc`                                     |                                       |
-`night`                                     |                                       |
 `nightbrig`                                 |                                       |
 `nightcct`                                  |                                       |
 `nightled`                                  |                                       |
-`notdisturb`                                |                                       |
+`notdisturb`                                | Do not disturb (DND) mode enabled     | 0 / 1
 `on_off_cnt`                                |                                       |
 `onoff1`                                    |                                       |
 `onoff_clear_t`                             |                                       |
@@ -188,23 +210,16 @@ Key(s)                                      | Meaning                           
 `onoff_rst_m`                               |                                       |
 `onoff_rst_type`                            |                                       |
 `onoff_type`                                |                                       |
-`onoffmode`                                 |                                       |
 `onofftime`                                 |                                       |
 `owm`                                       |                                       |
-`pairt`                                     |                                       |
-`pmemory`                                   |                                       |
 `preheatt`                                  |                                       |
-`prodagain`                                 |                                       |
 `rand_dpid`                                 |                                       |
-`remdmode`                                  |                                       |
 `remote_add_dp`                             |                                       |
 `remote_list_dp`                            |                                       |
 `remote_select`                             |                                       |
 `resistor`                                  |                                       |
 `reuse_led_m`                               |                                       |
 `rsthold`                                   |                                       |
-`rstmode`                                   |                                       |
-`rstnum`                                    |                                       |
 `scenespct`                                 |                                       |
 `series_ctrl`                               |                                       |
 `sfunc`                                     |                                       |
@@ -214,7 +229,6 @@ Key(s)                                      | Meaning                           
 `switch1`                                   |                                       |
 `tempmix`                                   |                                       |
 `tempstep`                                  |                                       |
-`title20`                                   |                                       |
 `total_stat`                                |                                       |
 `tracetime1`                                |                                       |
 `trigdelay`                                 |                                       |
@@ -223,5 +237,4 @@ Key(s)                                      | Meaning                           
 `voice_ctrl1`                               |                                       |
 `voice_ctrl_set1`                           |                                       |
 `whiteseg`                                  |                                       |
-`wt`                                        |                                       |
 `zero_select`                               |                                       |
