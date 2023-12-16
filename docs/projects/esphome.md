@@ -187,7 +187,8 @@ Source can be post-fixed to modify branch or include open Pull Requests
 - Branch: add `@branch_name` (ex: `source: "github://libretiny-eu/libretiny@experimental_branch_name"`)
 - Pull Requests: add `#pr_number` (ex: `source: "github://libretiny-eu/libretiny#1"`)
 
-Note: `https` sources are also fine if you are not using or cannot access github.
+!!! note
+ `https` sources are also fine if you are not using or cannot access github.
 
 === "Local"
 
