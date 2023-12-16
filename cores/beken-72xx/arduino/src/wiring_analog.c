@@ -86,10 +86,22 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	// GPIO can't be used together with PWM
 	pinRemoveMode(pin, PIN_GPIO | PIN_IRQ);
 
-	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	uint32_t frequency = 26 * _analogWritePeriod - 1;
+
+	if (!pinEnabled(pin, PIN_PWM)) {
+		pinEnable(pin, PIN_PWM);
+		data->pwmState			  = LT_PWM_STOPPED;
+		data->pwm.channel		  = gpioToPwm(pin->gpio);
+		data->pwm.cfg.bits.en	  = PWM_ENABLE;
+		data->pwm.cfg.bits.int_en = PWM_INT_DIS;
+		data->pwm.cfg.bits.mode	  = PWM_PWM_MODE;
+		data->pwm.cfg.bits.clk	  = PWM_CLK_26M;
+		data->pwm.end_value		  = frequency;
+		data->pwm.p_Int_Handler	  = NULL;
+	}
+
+	float percent	   = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	uint32_t dutyCycle = percent * frequency;
-	data->pwm.channel  = gpioToPwm(pin->gpio);
 	uint32_t channel   = data->pwm.channel;
 #if CFG_SOC_NAME != SOC_BK7231N
 	data->pwm.duty_cycle = dutyCycle;
@@ -99,33 +111,32 @@ void analogWrite(pin_size_t pinNumber, int value) {
 	data->pwm.duty_cycle3 = 0;
 #endif
 
-	if (dutyCycle) {
-		if (!pinEnabled(pin, PIN_PWM)) {
+	if ((data->pwmState == LT_PWM_STOPPED) || (data->pwmState == LT_PWM_PAUSED)) {
+		if (dutyCycle) {
 			// enable PWM and set its value
-			data->pwm.cfg.bits.en	  = PWM_ENABLE;
-			data->pwm.cfg.bits.int_en = PWM_INT_DIS;
-			data->pwm.cfg.bits.mode	  = PWM_PWM_MODE;
-			data->pwm.cfg.bits.clk	  = PWM_CLK_26M;
-			data->pwm.end_value		  = frequency;
-			data->pwm.p_Int_Handler	  = NULL;
+
 			__wrap_bk_printf_disable();
 			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &data->pwm);
 			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel);
 			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_ENABLE, &channel);
 			__wrap_bk_printf_enable();
-			pinEnable(pin, PIN_PWM);
-		} else {
+
+			data->pwmState = LT_PWM_RUNNING;
+		}
+	} else if (data->pwmState == LT_PWM_RUNNING) {
+		if (dutyCycle) {
+			__wrap_bk_printf_disable();
 			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_HIGH, &channel);
-			// update duty cycle
 			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &data->pwm);
+			__wrap_bk_printf_enable();
+		} else {
+			__wrap_bk_printf_disable();
+			sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_LEVL_SET_LOW, &channel);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_SET_DUTY_CYCLE, &data->pwm);
+			sddev_control(PWM_DEV_NAME, CMD_PWM_UNIT_DISABLE, &channel);
+			__wrap_bk_printf_enable();
+
+			data->pwmState = LT_PWM_PAUSED;
 		}
-	} else {
-		if (pinEnabled(pin, PIN_PWM)) {
-			// disable PWM
-			pinRemoveMode(pin, PIN_PWM);
-		}
-		// force level as LOW
-		pinMode(pinNumber, OUTPUT);
-		digitalWrite(pinNumber, LOW);
 	}
 }

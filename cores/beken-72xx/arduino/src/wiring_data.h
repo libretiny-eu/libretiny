@@ -9,8 +9,11 @@
 extern "C" {
 #endif
 
+typedef enum lt_pwm_state_tag { LT_PWM_STOPPED, LT_PWM_RUNNING, LT_PWM_PAUSED } lt_pwm_state_t;
+
 struct PinData_s {
 	pwm_param_t pwm;
+	lt_pwm_state_t pwmState;
 	PinMode gpioMode;
 	PinStatus irqMode;
 	void *irqHandler;
