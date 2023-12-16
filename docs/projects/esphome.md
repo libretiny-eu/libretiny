@@ -179,16 +179,15 @@ There are a two ways to use development versions of LibreTiny with ESPHome
 bk72xx:
   framework:
     version: "0.0.0"
- source: "github://libretiny-eu/libretiny"
+ source: "https://github.com/libretiny-eu/libretiny"
 ```
 
 Source can be post-fixed to modify branch or include open Pull Requests
 
-- Branch: add `@branch_name` (ex: `source: "github://libretiny-eu/libretiny@experimental_branch_name"`)
-- Pull Requests: add `#pr_number` (ex: `source: "github://libretiny-eu/libretiny#1"`)
-
-!!! note
- `https` sources are also fine if you are not using or cannot access github.
+- Branch: add `#branch_name` (ex: `source: "https://github.com/libretiny-eu/libretiny#experimental_branch_name"`)
+- Pull Requests: Pull requests currently require you to check out the source branch of the pull request.  To get this
+  information, visit the PR, click on the source branch, and copy their git address and apply the branch their PR uses
+  ex: `https://github.com/pr_user/libretiny#pr_branch`
 
 === "Local"
 
