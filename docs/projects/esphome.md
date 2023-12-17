@@ -179,7 +179,7 @@ There are a two ways to use development versions of LibreTiny with ESPHome
 bk72xx:
   framework:
     version: "0.0.0"
- source: "https://github.com/libretiny-eu/libretiny"
+    source: "https://github.com/libretiny-eu/libretiny"
 ```
 
 Source can be post-fixed to modify branch or include open Pull Requests
@@ -197,5 +197,5 @@ Check out with git or download and extract a copy of LibreTiny to your local fil
 bk72xx:
   framework:
     version: "0.0.0"
- source: "/local_path_to_libretiny"
+    source: "/local_path_to_libretiny"
 ```
