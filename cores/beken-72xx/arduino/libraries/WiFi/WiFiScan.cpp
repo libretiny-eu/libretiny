@@ -16,6 +16,8 @@ static void scanHandler(void *ctx, uint8_t param) {
 	}
 
 	ScanResult_adv result;
+	result.ApNum  = 0;
+	result.ApList = NULL;
 	if (wlan_sta_scan_result(&result)) {
 		LT_EM(WIFI, "Failed to get scan result");
 		goto end;
@@ -46,6 +48,9 @@ end:
 		// running == false means it was discarded (timeout)
 		scan->running = false;
 		xSemaphoreGive(cDATA->scanSem);
+	}
+	if (result.ApList) {
+		free(result.ApList);
 	}
 	LT_HEAP_I();
 	return;
