@@ -49,8 +49,11 @@ bool WiFiClass::scanAlloc(uint8_t count) {
 	if (!scan->ap) {
 		return false;
 	}
+	if (count > scan->count) {
+		// clear only new entries
+		memset(scan->ap + scan->count, 0, sizeof(WiFiScanAP) * (count - scan->count));
+	}
 	scan->count = count;
-	memset(scan->ap + count, 0, sizeof(WiFiScanAP));
 	return true;
 }
 
