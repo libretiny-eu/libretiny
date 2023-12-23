@@ -163,7 +163,7 @@ class WiFiClass {
 	);
 
 	int16_t scanComplete();
-	uint8_t scanAlloc(uint8_t count);
+	bool scanAlloc(uint8_t count);
 	void scanInit();
 	void scanDelete();
 
