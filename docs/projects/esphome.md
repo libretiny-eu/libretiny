@@ -34,7 +34,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 		services:
 		  esphome:
 		    container_name: esphome-libretiny
-		    image: docker pull ghcr.io/libretiny-eu/libretiny-esphome-docker:latest
+		    image: ghcr.io/libretiny-eu/libretiny-esphome-docker:latest
 		    volumes:
 		      - ./configs:/config:rw # (1)!
 		      - /etc/localtime:/etc/localtime:ro
