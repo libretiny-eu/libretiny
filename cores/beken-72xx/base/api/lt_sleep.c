@@ -21,12 +21,12 @@ void lt_deep_sleep_unset_gpio(uint32_t gpio_index_map) {
 
 void lt_deep_sleep_config_timer(uint32_t sleep_duration) {
 	deep_sleep_param.wake_up_way |= PS_DEEP_WAKEUP_RTC;
-	uint64_t duration_math = 32768 * sleep_duration;
-	if (duration_math / 1000 > 0xFFFFFFFF) {
+	uint32_t duration_math = (32768 * ((float) sleep_duration)/1000.0);
+	if (duration_math > 0xFFFFFFFF) {
 		// Sleep forever
 		deep_sleep_param.sleep_time = 0xFFFFFFFF;
 	} else {
-		deep_sleep_param.sleep_time = (duration_math / 1000) & 0xFFFFFFFF;
+		deep_sleep_param.sleep_time = duration_math & 0xFFFFFFFF;
 	}
 }
 
