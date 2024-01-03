@@ -11,6 +11,11 @@ There are three basic ways to install and use ESPHome. You can choose the option
 - command line (CLI) - for more experienced users; compilation using CLI commands, somewhat easier to troubleshoot
 - Home Assistant Add-On - using ESPHome in Home Assistant as an add-on
 
+!!! warning "Important"
+	If you have the LibreTiny-ESPHome add-on installed in Home Assistant, migrate your YAML files over to the official ESPHome add-on.
+
+	The standalone add-on is now deprecated - after migrating your configs, uninstall the old add-on.
+
 ## Find your device's board
 
 Go to [Boards & CPU list](../status/supported.md), find your board (chip model), click on it and remember the **`Board code`**. This will be used later, during config creation.
