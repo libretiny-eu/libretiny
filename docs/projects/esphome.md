@@ -36,7 +36,7 @@ If your board isn't listed, use one of the **Generic** boards, depending on the 
 		services:
 		  esphome:
 		    container_name: esphome
-		    image: docker pull ghcr.io/esphome/esphome:latest
+		    image: ghcr.io/esphome/esphome:latest
 		    volumes:
 		      - ./configs:/config:rw # (1)!
 		      - /etc/localtime:/etc/localtime:ro
