@@ -15,7 +15,6 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 
 	if (bssid) {
 		strcpy(STA_ADV_CFG.ap_info.ssid, ssid);
-		memcpy(STA_ADV_CFG.ap_info.bssid, bssid, 6);
 		if (passphrase) {
 			strcpy(STA_ADV_CFG.key, passphrase);
 			STA_ADV_CFG.key_len = strlen(passphrase);
@@ -27,7 +26,6 @@ WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, cons
 		STA_ADV_CFG.wifi_retry_interval = 100;
 	} else {
 		strcpy(STA_CFG.wifi_ssid, ssid);
-		memset(STA_CFG.wifi_bssid, 0x00, 6);
 		if (passphrase) {
 			strcpy(STA_CFG.wifi_key, passphrase);
 		} else {
