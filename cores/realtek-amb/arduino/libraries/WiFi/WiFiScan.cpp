@@ -21,8 +21,8 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 		return RTW_SUCCESS;
 
 	uint8_t last = scan->count + 1;
-	if (!cls->scanAlloc(last)) {
-		return RTW_ERROR;
+	if (cls->scanAlloc(last) < last) {
+		return RTW_SUCCESS;
 	}
 
 	scan->ap[last].ssid	   = strdup((char *)net->SSID.val);

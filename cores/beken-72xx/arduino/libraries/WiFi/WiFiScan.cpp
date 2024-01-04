@@ -24,12 +24,13 @@ static void scanHandler(void *ctx, uint8_t param) {
 	}
 	LT_IM(WIFI, "Found %d APs", result.ApNum);
 
-	if (!cls->scanAlloc(result.ApNum)) {
+	auto apNum = cls->scanAlloc(result.ApNum);
+	if (0 == apNum) {
 		LT_WM(WIFI, "scan->ap alloc failed");
 		goto end;
 	}
 
-	for (uint8_t i = 0; i < result.ApNum; i++) {
+	for (uint8_t i = 0; i < apNum; i++) {
 		scan->ap[i].ssid	= strdup(result.ApList[i].ssid);
 		scan->ap[i].auth	= securityTypeToAuthMode(result.ApList[i].security);
 		scan->ap[i].rssi	= result.ApList[i].ApPower;
