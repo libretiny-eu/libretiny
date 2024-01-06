@@ -20,7 +20,10 @@ static rtw_result_t scanHandler(rtw_scan_handler_result_t *result) {
 	if (!net->SSID.len)
 		return RTW_SUCCESS;
 
-	uint8_t last = cls->scanAlloc(scan->count + 1);
+	uint8_t last = scan->count + 1;
+	if (cls->scanAlloc(last) < last) {
+		return RTW_SUCCESS;
+	}
 
 	scan->ap[last].ssid	   = strdup((char *)net->SSID.val);
 	scan->ap[last].auth	   = securityTypeToAuthMode(net->security);
