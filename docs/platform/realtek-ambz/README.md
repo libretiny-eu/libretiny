@@ -27,6 +27,8 @@ Resources:
 	include-markdown "../../inc/find-board.md"
 %}
 
+---
+
 ## Flashing
 
 Realtek RTL8710B has two UART ports - UART2 (sometimes called LOG_UART) and UART0. The port used for flashing and viewing logs is UART2.
@@ -54,16 +56,16 @@ GND | GND
 
 In order to flash the chip, you need to enable **download mode**. This is done by resetting the chip while pulling down the TX2 pin.
 
+{%
+	include-markdown "../../inc/uart-cen.md"
+%}
+
 Do this, in order:
 
 - connect CEN to GND
 - connect TX2 to GND
 - release CEN from GND
 - release TX2 from GND
-
-{%
-	include-markdown "../../inc/uart-cen.md"
-%}
 
 To find out whether download mode is enabled, open a serial terminal (such as PuTTY) on your PC. You should see a few characters printed to the serial console every second (usually some kind of grey blocks, or other non-letter characters).
 
@@ -86,7 +88,9 @@ The recommended tool to flash (or dump firmware) is `ltchiptool`.
 !!! tip
 	Because the UART uploading code is programmed in the ROM of the chip, it can't be software-bricked, even if you damage the bootloader.
 
-### Auto-download-reboot
+---
+
+## Auto-download-reboot
 
 {%
 	include-markdown "../../inc/uart-adr.md"
