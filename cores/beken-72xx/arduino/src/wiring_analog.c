@@ -65,13 +65,21 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	adc.pData		   = adcData;
 	adc.data_buff_size = 1;
 	handle			   = ddev_open(SARADC_DEV_NAME, &status, (uint32_t)&adc);
-	if (status)
+	if (handle == -1) {
 		return 0;
+	}
+
+	if (status != SARADC_SUCCESS) {
+		ddev_close(handle);
+		return 0;
+	}
+
 	// wait for data
 	while (!adc.has_data || adc.current_sample_data_cnt < 1) {
 		delay(1);
 	}
-	ddev_control(handle, SARADC_CMD_RUN_OR_STOP_ADC, (void *)false);
+	uint8_t run_stop = 0; // stop
+	ddev_control(handle, SARADC_CMD_RUN_OR_STOP_ADC, &run_stop);
 	ddev_close(handle);
 	return adcData[0];
 }
