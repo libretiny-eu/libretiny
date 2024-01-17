@@ -149,8 +149,8 @@ size_t UpdateClass::write(const uint8_t *data, size_t len) {
 	if (!this->ctx)
 		return 0;
 
-	size_t written = lt_ota_write(ctx, data, len);
 	MD5Update(this->md5Ctx, data, len);
+	size_t written = lt_ota_write(ctx, data, len);
 	if (written != len)
 		this->cleanup(/* clearError= */ false);
 	return written;
