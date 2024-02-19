@@ -67,6 +67,8 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.escapeall:
+      hardbreak: true
   - pymdownx.inlinehilite
   - pymdownx.details
   - pymdownx.superfences
