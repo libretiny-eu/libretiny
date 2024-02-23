@@ -34,7 +34,7 @@ typedef enum {
 	REBOOT_REASON_MAX        = 12,
 } lt_reboot_reason_t;
 
-//RESET_REASON_SLEEP depricated
+// RESET_REASON_SLEEP deprecated, kept for compatibility
 #define RESET_REASON_SLEEP REBOOT_REASON_SLEEP_GPIO 
 
 /**
