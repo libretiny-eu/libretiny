@@ -35,7 +35,8 @@ typedef enum {
 } lt_reboot_reason_t;
 
 // RESET_REASON_SLEEP deprecated, kept for compatibility
-#define RESET_REASON_SLEEP REBOOT_REASON_SLEEP_GPIO
+#define RESET_REASON_SLEEP	REBOOT_REASON_SLEEP_GPIO
+#define REBOOT_REASON_SLEEP REBOOT_REASON_SLEEP_GPIO
 
 /**
  * @brief Debugging mode enumeration.
