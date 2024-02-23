@@ -32,11 +32,11 @@ lt_reboot_reason_t lt_get_reboot_reason() {
 		case RESET_SOURCE_CRASH_PER_XAT0:
 			return REBOOT_REASON_CRASH;
 		case RESET_SOURCE_DEEPPS_USB:
-                    return REBOOT_REASON_SLEEP_USB;
+			return REBOOT_REASON_SLEEP_USB;
 		case RESET_SOURCE_DEEPPS_GPIO:
-		    return REBOOT_REASON_SLEEP_GPIO;
+			return REBOOT_REASON_SLEEP_GPIO;
 		case RESET_SOURCE_DEEPPS_RTC:
-		    return REBOOT_REASON_SLEEP_RTC;
+			return REBOOT_REASON_SLEEP_RTC;
 		default:
 			return REBOOT_REASON_UNKNOWN;
 	}
