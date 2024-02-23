@@ -285,12 +285,14 @@ def write_families(supported: list[Family]):
         docs = get_readme_family_link(family)
         row = [
             # Title
-            "[{}]({})".format(
-                family.description,
-                docs,
-            )
-            if docs
-            else family.description,
+            (
+                "[{}]({})".format(
+                    family.description,
+                    docs,
+                )
+                if docs
+                else family.description
+            ),
             # Name
             family.is_supported and f"`{family.name}`" or "`-`",
             # Code
@@ -301,16 +303,22 @@ def write_families(supported: list[Family]):
                 family.id,
             ),
             # Arduino Core
-            "✔️"
-            if family in supported and family.is_supported and family.has_arduino_core
-            else "❌",
+            (
+                "✔️"
+                if family in supported
+                and family.is_supported
+                and family.has_arduino_core
+                else "❌"
+            ),
             # Source SDK
-            "[`{}`]({})".format(
-                family.target_package,
-                f"https://github.com/libretiny-eu/{family.target_package}",
-            )
-            if family.target_package
-            else "-",
+            (
+                "[`{}`]({})".format(
+                    family.target_package,
+                    f"https://github.com/libretiny-eu/{family.target_package}",
+                )
+                if family.target_package
+                else "-"
+            ),
         ]
         rows.append(row)
     md.add_table(header, *rows)
