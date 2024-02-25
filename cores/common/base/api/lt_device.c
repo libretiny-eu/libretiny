@@ -62,8 +62,12 @@ const char *lt_get_reboot_reason_name(lt_reboot_reason_t reason) {
 			return "WDT Reset";
 		case REBOOT_REASON_CRASH:
 			return "Crash";
-		case REBOOT_REASON_SLEEP:
-			return "Sleep Wakeup";
+		case REBOOT_REASON_SLEEP_GPIO:
+			return "Sleep Wakeup (GPIO)";
+		case REBOOT_REASON_SLEEP_RTC:
+			return "Sleep Wakeup (RTC)";
+		case REBOOT_REASON_SLEEP_USB:
+			return "Sleep Wakeup (USB)";
 		case REBOOT_REASON_DEBUGGER:
 			return "Debugger";
 		default:
