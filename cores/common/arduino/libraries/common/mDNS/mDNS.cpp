@@ -3,7 +3,7 @@
 #include "mDNS.h"
 
 static char *ensureUnderscore(const char *value) {
-	uint8_t len	 = strlen(value) + 1 + 1; // 1 for underscore, 1 for null-terminator
+	uint8_t len	 = strlen(value) + (value[0] != '_') + 1; // 1 for underscore (if needed), 1 for null-terminator
 	char *result = (char *)malloc(len);
 	result[0]	 = '_';
 	strcpy(result + 1, value + (value[0] == '_'));
