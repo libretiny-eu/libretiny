@@ -2,12 +2,21 @@
 
 #include "mDNS.h"
 
-static char *ensureUnderscore(const char *value) {
-	uint8_t len	 = strlen(value) + (value[0] != '_') + 1; // 1 for underscore (if needed), 1 for null-terminator
+static const char *ensureUnderscore(const char *value) {
+	if (value[0] == '_') {
+		return value;
+	}
+	size_t len	 = strlen(value) + 1 + 1; // 1 for underscore, 1 for null-terminator
 	char *result = (char *)malloc(len);
 	result[0]	 = '_';
-	strcpy(result + 1, value + (value[0] == '_'));
+	strcpy(result + 1, value + 1);
 	return result;
+}
+
+static void freeIfDuplicate(const char *original, const char *duplicate) {
+	if ((duplicate) && (original != duplicate)) {
+		free((void *)duplicate);
+	}
 }
 
 void mDNS::setInstanceName(const char *name) {
@@ -21,7 +30,7 @@ bool mDNS::addService(char *service, char *proto, uint16_t port) {
 	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	bool result = addServiceImpl(instanceName ? instanceName : "LT mDNS", _service, _proto, port);
-	free(_service);
+	freeIfDuplicate(service, _service);
 	return result;
 }
 
@@ -34,7 +43,7 @@ bool mDNS::addServiceTxt(char *service, char *proto, char *key, char *value) {
 	sprintf(txt, "%s=%s", key, value);
 
 	bool result = addServiceTxtImpl(_service, _proto, txt);
-	free(_service);
+	freeIfDuplicate(service, _service);
 	free(txt);
 	return result;
 }
