@@ -9,7 +9,7 @@ static const char *ensureUnderscore(const char *value) {
 	size_t len	 = strlen(value) + 1 + 1; // 1 for underscore, 1 for null-terminator
 	char *result = (char *)malloc(len);
 	result[0]	 = '_';
-	strcpy(result + 1, value + 1);
+	strcpy(result + 1, value);
 	return result;
 }
 
