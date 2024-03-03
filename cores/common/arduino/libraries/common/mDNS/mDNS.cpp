@@ -13,7 +13,7 @@ static const char *ensureUnderscore(const char *value) {
 	return result;
 }
 
-static void freeIfDuplicate(const char *original, const char *duplicate) {
+static inline void freeIfCopied(const char *original, const char *duplicate) {
 	if ((duplicate) && (original != duplicate)) {
 		free((void *)duplicate);
 	}
@@ -30,7 +30,7 @@ bool mDNS::addService(char *service, char *proto, uint16_t port) {
 	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	bool result = addServiceImpl(instanceName ? instanceName : "LT mDNS", _service, _proto, port);
-	freeIfDuplicate(service, _service);
+	freeIfCopied(service, _service);
 	return result;
 }
 
@@ -43,7 +43,7 @@ bool mDNS::addServiceTxt(char *service, char *proto, char *key, char *value) {
 	sprintf(txt, "%s=%s", key, value);
 
 	bool result = addServiceTxtImpl(_service, _proto, txt);
-	freeIfDuplicate(service, _service);
+	freeIfCopied(service, _service);
 	free(txt);
 	return result;
 }
