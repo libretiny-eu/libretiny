@@ -181,18 +181,17 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 }
 
 bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *item) {
-	int8_t index = -1;
-	for (uint8_t i = 0; i < services.size(); i++) {
+	uint8_t i;
+	for (i = 0; i < services.size(); i++) {
 		// find a matching service
 		if (strcmp(services[i], service) == 0 && protos[i] == proto) {
-			index = i;
 			break;
 		}
 	}
-	if (index == -1)
+	if (i == services.size())
 		return false;
 
-	records[index].push_back(strdup(item));
+	records[i].push_back(strdup(item));
 	return true;
 }
 
