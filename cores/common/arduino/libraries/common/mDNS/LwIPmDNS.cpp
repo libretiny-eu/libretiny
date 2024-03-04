@@ -31,9 +31,34 @@ static const char *hostName;
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
 
+static inline void freeAllocatedStrings(const std::vector<char *> &strings) {
+	for (auto &str : strings) {
+		free(str);
+	}
+}
+
 mDNS::mDNS() {}
 
-mDNS::~mDNS() {}
+mDNS::~mDNS() {
+	cleanup();
+}
+
+void mDNS::cleanup() {
+	freeAllocatedStrings(services_name);
+	services_name.clear();
+	freeAllocatedStrings(services);
+	services.clear();
+	for (auto &record : records) {
+		freeAllocatedStrings(record);
+	}
+	records.clear();
+
+	free((void *)hostName);
+	hostName = NULL;
+
+	free((void *)instanceName);
+	instanceName = NULL;
+}
 
 static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	size_t index = (size_t)userdata;
@@ -136,12 +161,18 @@ bool mDNS::begin(const char *hostname) {
 }
 
 void mDNS::end() {
+#ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
+	netif_remove_ext_callback(&netif_callback);
+#endif
+
 	struct netif *netif = netif_list;
 	while (netif != NULL) {
 		if (netif_is_up(netif))
 			mdns_resp_remove_netif(netif);
 		netif = netif->next;
 	}
+
+	cleanup();
 }
 
 bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port) {

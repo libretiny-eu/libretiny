@@ -26,8 +26,8 @@ void mDNS::setInstanceName(const char *name) {
 }
 
 bool mDNS::addService(char *service, char *proto, uint16_t port) {
-	char *_service = ensureUnderscore(service);
-	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
+	const char *_service = ensureUnderscore(service);
+	uint8_t _proto		 = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	bool result = addServiceImpl(instanceName ? instanceName : "LT mDNS", _service, _proto, port);
 	freeIfCopied(service, _service);
@@ -35,8 +35,8 @@ bool mDNS::addService(char *service, char *proto, uint16_t port) {
 }
 
 bool mDNS::addServiceTxt(char *service, char *proto, char *key, char *value) {
-	char *_service = ensureUnderscore(service);
-	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
+	const char *_service = ensureUnderscore(service);
+	uint8_t _proto		 = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	uint8_t txt_len = strlen(key) + strlen(value) + 1;
 	char *txt		= (char *)malloc(txt_len + 1);
