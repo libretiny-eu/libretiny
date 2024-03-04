@@ -2,7 +2,7 @@
 
 #include "mDNS.h"
 
-static const char *ensureUnderscore(const char *value) {
+static char *ensureUnderscore(char *value) {
 	if (value[0] == '_') {
 		return value;
 	}
@@ -13,7 +13,7 @@ static const char *ensureUnderscore(const char *value) {
 	return result;
 }
 
-static inline void freeIfCopied(const char *original, const char *duplicate) {
+static inline void freeIfCopied(const char *original, char *duplicate) {
 	if ((duplicate) && (original != duplicate)) {
 		free((void *)duplicate);
 	}
@@ -26,8 +26,8 @@ void mDNS::setInstanceName(const char *name) {
 }
 
 bool mDNS::addService(char *service, char *proto, uint16_t port) {
-	const char *_service = ensureUnderscore(service);
-	uint8_t _proto		 = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
+	char *_service = ensureUnderscore(service);
+	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	bool result = addServiceImpl(instanceName ? instanceName : "LT mDNS", _service, _proto, port);
 	freeIfCopied(service, _service);
@@ -35,8 +35,8 @@ bool mDNS::addService(char *service, char *proto, uint16_t port) {
 }
 
 bool mDNS::addServiceTxt(char *service, char *proto, char *key, char *value) {
-	const char *_service = ensureUnderscore(service);
-	uint8_t _proto		 = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
+	char *_service = ensureUnderscore(service);
+	uint8_t _proto = strncmp(proto + (proto[0] == '_'), "tcp", 3) == 0 ? MDNS_TCP : MDNS_UDP;
 
 	uint8_t txt_len = strlen(key) + strlen(value) + 1;
 	char *txt		= (char *)malloc(txt_len + 1);
