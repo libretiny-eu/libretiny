@@ -15,7 +15,7 @@ static char *ensureUnderscore(char *value) {
 
 static inline void freeIfCopied(const char *original, char *duplicate) {
 	if ((duplicate) && (original != duplicate)) {
-		free((void *)duplicate);
+		free(duplicate);
 	}
 }
 
