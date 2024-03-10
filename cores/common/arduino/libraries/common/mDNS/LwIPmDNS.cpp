@@ -137,8 +137,8 @@ mdns_netif_ext_status_callback(struct netif *netif, netif_nsc_reason_t reason, c
 	if (reason & LWIP_NSC_NETIF_REMOVED) {
 		LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
 		mdns_resp_remove_netif(netif);
-	} else if (reason & LWIP_NSC_STATUS_CHANGED) {
-		LT_DM(MDNS, "Netif changed, starting mDNS on netif %u", netif->num);
+	} else if ((reason & LWIP_NSC_STATUS_CHANGED) || (reason & LWIP_NSC_NETIF_ADDED)) {
+		LT_DM(MDNS, "Netif changed/added, starting mDNS on netif %u", netif->num);
 		if (enableMDNS(netif) && services.size() > 0) {
 			LT_DM(MDNS, "Adding services to netif %u", netif->num);
 			addServices(netif);
