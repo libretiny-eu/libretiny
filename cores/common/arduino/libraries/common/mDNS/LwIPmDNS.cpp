@@ -20,22 +20,50 @@ extern "C" {
 
 #if LWIP_MDNS_RESPONDER
 
-static std::vector<char *> services_name;
-static std::vector<char *> services;
-static std::vector<uint8_t> protos;
-static std::vector<uint16_t> ports;
-static std::vector<std::vector<char *>> records;
+struct CachedService {
+	CachedService(const char *_name, const char *_service, mdns_sd_proto _proto, uint16_t _port)
+		: name(strdup(_name)), service(strdup(_service)), proto(_proto), port(_port) {}
+
+	CachedService(const CachedService &)			= delete;
+	CachedService &operator=(const CachedService &) = delete;
+
+	CachedService(CachedService &&other)
+		: name(other.name), service(other.service), proto(other.proto), port(other.port),
+		  records(std::move(other.records)) {
+		other.name	  = nullptr;
+		other.service = nullptr;
+		other.records.clear();
+	}
+
+	~CachedService() {
+		if (name) {
+			free(name);
+		}
+
+		if (service) {
+			free(service);
+		}
+
+		for (auto &str : records) {
+			if (str) {
+				free(str);
+			}
+		}
+	}
+
+	char *name;
+	char *service;
+	mdns_sd_proto proto;
+	uint16_t port;
+	std::vector<char *> records;
+};
+
+static std::vector<CachedService> sCachedServices;
 
 static const char *hostName;
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
-
-static inline void freeAllocatedStrings(const std::vector<char *> &strings) {
-	for (auto &str : strings) {
-		free(str);
-	}
-}
 
 mDNS::mDNS() {}
 
@@ -44,14 +72,7 @@ mDNS::~mDNS() {
 }
 
 void mDNS::cleanup() {
-	freeAllocatedStrings(services_name);
-	services_name.clear();
-	freeAllocatedStrings(services);
-	services.clear();
-	for (auto &record : records) {
-		freeAllocatedStrings(record);
-	}
-	records.clear();
+	sCachedServices.clear();
 
 	free((void *)hostName);
 	hostName = NULL;
@@ -62,10 +83,10 @@ void mDNS::cleanup() {
 
 static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	size_t index = (size_t)userdata;
-	if (index >= records.size())
+	if (index >= sCachedServices.size())
 		return;
 
-	for (const auto record : records[index]) {
+	for (const auto &record : sCachedServices[index].records) {
 		err_t err = mdns_resp_add_service_txtitem(service, record, strlen(record));
 		if (err != ERR_OK) {
 			LT_DM(MDNS, "Error %d while adding txt record: %s", err, record);
@@ -79,22 +100,23 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void addServices(struct netif *netif) {
-	for (uint8_t i = 0; i < services.size(); i++) {
+	for (uint8_t i = 0; i < sCachedServices.size(); i++) {
+		const auto &cachedService = sCachedServices[i];
 		LT_DM(
 			MDNS,
 			"Add service: netif %u / %s / %s / %u / %u",
 			netif->num,
-			services_name[i],
-			services[i],
-			protos[i],
-			ports[i]
+			cachedService.name,
+			cachedService.service,
+			cachedService.proto,
+			cachedService.port
 		);
 		s8_t slot = mdns_resp_add_service(
 			netif,
-			services_name[i],
-			services[i],
-			(mdns_sd_proto)protos[i],
-			ports[i],
+			cachedService.name,
+			cachedService.service,
+			cachedService.proto,
+			cachedService.port,
 			255,
 			mdnsTxtCallback,
 			reinterpret_cast<void *>(i) // index of newly added service
@@ -139,7 +161,7 @@ mdns_netif_ext_status_callback(struct netif *netif, netif_nsc_reason_t reason, c
 		mdns_resp_remove_netif(netif);
 	} else if ((reason & LWIP_NSC_STATUS_CHANGED) || (reason & LWIP_NSC_NETIF_ADDED)) {
 		LT_DM(MDNS, "Netif changed/added, starting mDNS on netif %u", netif->num);
-		if (enableMDNS(netif) && services.size() > 0) {
+		if (enableMDNS(netif) && sCachedServices.size() > 0) {
 			LT_DM(MDNS, "Adding services to netif %u", netif->num);
 			addServices(netif);
 		}
@@ -184,12 +206,9 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 	bool added			= false;
 	struct netif *netif = netif_list;
 
+	std::size_t serviceIndex = sCachedServices.size();
 	// add the service to TXT record arrays
-	services_name.push_back(strdup(name));
-	services.push_back(strdup(service));
-	protos.push_back(proto);
-	ports.push_back(port);
-	records.emplace_back();
+	sCachedServices.emplace_back(name, service, (mdns_sd_proto)proto, port);
 
 	while (netif != NULL) {
 		if (netif_is_up(netif)) {
@@ -204,7 +223,7 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 				port,
 				255,
 				mdnsTxtCallback,
-				(void *)services.size() // index of newly added service
+				(void *)serviceIndex // index of newly added service
 			);
 
 			if (slot < 0) {
@@ -221,16 +240,17 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 
 bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *item) {
 	uint8_t i;
-	for (i = 0; i < services.size(); i++) {
+	for (i = 0; i < sCachedServices.size(); i++) {
+		const auto &cachedService = sCachedServices[i];
 		// find a matching service
-		if (strcmp(services[i], service) == 0 && protos[i] == proto) {
+		if (strcmp(cachedService.service, service) == 0 && cachedService.proto == proto) {
 			break;
 		}
 	}
-	if (i == services.size())
+	if (i == sCachedServices.size())
 		return false;
 
-	records[i].push_back(strdup(item));
+	sCachedServices[i].records.push_back(strdup(item));
 	return true;
 }
 
