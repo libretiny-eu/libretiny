@@ -183,6 +183,14 @@ void mDNS::end() {
 bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port) {
 	bool added			= false;
 	struct netif *netif = netif_list;
+
+	// add the service to TXT record arrays
+	services_name.push_back(strdup(name));
+	services.push_back(strdup(service));
+	protos.push_back(proto);
+	ports.push_back(port);
+	records.emplace_back();
+
 	while (netif != NULL) {
 		if (netif_is_up(netif)) {
 			// register TXT callback;
@@ -201,26 +209,14 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 
 			if (slot < 0) {
 				LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
-			} else {
-				added = true;
 			}
+
+			added = true;
 		}
 		netif = netif->next;
 	}
 
-	if (!added)
-		return false;
-
-	// we end up here if service added to at least one interface
-
-	// add the service to TXT record arrays
-	services_name.push_back(strdup(name));
-	services.push_back(strdup(service));
-	protos.push_back(proto);
-	ports.push_back(port);
-	records.emplace_back();
-
-	return true;
+	return added;
 }
 
 bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *item) {
