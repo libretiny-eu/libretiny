@@ -89,7 +89,7 @@ static void addServices(struct netif *netif) {
 			protos[i],
 			ports[i]
 		);
-		mdns_resp_add_service(
+		s8_t slot = mdns_resp_add_service(
 			netif,
 			services_name[i],
 			services[i],
@@ -99,6 +99,10 @@ static void addServices(struct netif *netif) {
 			mdnsTxtCallback,
 			reinterpret_cast<void *>(i) // index of newly added service
 		);
+
+		if (slot < 0) {
+			LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
+		}
 	}
 }
 #endif
