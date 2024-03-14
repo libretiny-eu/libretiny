@@ -89,15 +89,17 @@ def env_add_arduino_libraries(env: Environment, queue, name: str, path: str) -> 
         srcs=[
             "+<**/*.c*>",
         ],
-        includes=[
-            "!<*/.>",
-            "!<*/*>",
-        ]
-        if name.startswith("common")
-        else [
-            "!<.>",
-            "!<*>",
-        ],
+        includes=(
+            [
+                "!<*/.>",
+                "!<*/*>",
+            ]
+            if name.startswith("common")
+            else [
+                "!<.>",
+                "!<*>",
+            ]
+        ),
     )
     return True
 

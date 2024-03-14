@@ -51,6 +51,7 @@ class mDNS {
   private:
 	bool addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port);
 	bool addServiceTxtImpl(const char *service, uint8_t proto, const char *item);
+	void cleanup();
 
 	char *instanceName = NULL;
 

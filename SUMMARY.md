@@ -14,6 +14,7 @@
 * [](SUMMARY.md)
 * 🍪 Chip family docs & info
 	* [Beken BK72xx](docs/platform/beken-72xx/README.md)
+		* [Finding encryption keys](docs/platform/beken-72xx/keys.md)
 	* [Realtek Ameba - info](docs/platform/realtek-amb/README.md)
 	* [Realtek AmebaZ](docs/platform/realtek-ambz/README.md)
 		* [Debugging](docs/platform/realtek-ambz/debugging.md)

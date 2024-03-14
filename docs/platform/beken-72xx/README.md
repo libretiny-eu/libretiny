@@ -2,6 +2,9 @@
 
 ## Introduction
 
+!!! note inline end "Also read"
+	- [Finding encryption keys](keys.md) - what to do if LibreTiny doesn't boot because of incorrect flash encryption keys
+
 Beken BK7231 is a family of Wi-Fi and BLE microcontrollers, of which most popular are BK7231N and BK7231T.
 
 Features:
@@ -28,7 +31,13 @@ Resources:
 	include-markdown "../../inc/find-board.md"
 %}
 
+---
+
 ## Flashing
+
+{%
+	include-markdown "../../inc/flashing-note.md"
+%}
 
 BK7231 has two UART ports - UART2 (sometimes called LOG_UART) and UART1. The UART1 port is used for flashing (and external components, such as TuyaMCU) and has no text output. The UART2 port is used for log viewing only.
 
@@ -53,11 +62,11 @@ GND | GND
 	include-markdown "../../inc/uart-power.md"
 %}
 
-The download mode is entered when the chip communicates with the flasher program. Hence, the first step is running the flasher program (described below). While the program is trying to establish communication, **the chip has to be rebooted**. In order to do that, you need to bridge CEN pin to GND with a wire.
-
 {%
 	include-markdown "../../inc/uart-cen.md"
 %}
+
+The download mode is entered when the chip communicates with the flasher program. Hence, the first step is running the flasher program (described below). While the program is trying to establish communication, **the chip has to be rebooted**. In order to do that, you need to bridge CEN pin to GND with a wire.
 
 Keep in mind that BK7231T (not N) will exit the download mode when it can't communicate with the flasher (or when the flasher finishes its work). It's not possible to forcefully enter download mode without it.
 
@@ -79,7 +88,9 @@ The recommended tool to flash (or dump firmware) is `ltchiptool`.
 
 	`ltchiptool`'s Beken flashing program is based on [bk7231tools](https://github.com/tuya-cloudcutter/bk7231tools). Refer to the guide for information how to use it, but keep in mind that using the ltchiptool GUI is probably just easier.
 
-### Auto-download-reboot
+---
+
+## Auto-download-reboot
 
 {%
 	include-markdown "../../inc/uart-adr.md"
