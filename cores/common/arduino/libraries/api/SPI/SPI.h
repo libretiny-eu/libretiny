@@ -47,6 +47,11 @@ class SPIClass {
 	bool inTransaction{false}; //!< whether transaction is in progress
 	bool useCs{false};		   //!< whether to toggle CS automatically
 
+	uint8_t *txBuf{nullptr}; //!< TX data buffer (read head)
+	uint32_t txLen{0};		 //!< TX data length (remaining)
+	uint8_t *rxBuf{nullptr}; //!< RX data buffer (write head)
+	uint32_t rxLen{0};		 //!< RX data length (remaining)
+
 	int getPortByPins(pin_size_t sck, pin_size_t miso, pin_size_t mosi);
 	bool setPinsPrivate(pin_size_t sck, pin_size_t miso, pin_size_t mosi, pin_size_t cs = PIN_INVALID);
 
@@ -58,8 +63,9 @@ class SPIClass {
 	void setFrequency(uint32_t frequency);
 	void setDataMode(uint8_t dataMode);
 
-	uint8_t transfer(uint8_t data);
-	void write(uint8_t data);
+	void commitTransaction();
+	void isrHandler(void *param);
+	static void isrHandlerStatic(void *param);
 
   public: /* common core */
 	SPIClass(uint32_t port) : port(port) {
@@ -88,8 +94,10 @@ class SPIClass {
 		this->transferBytes((const uint8_t *)data, (uint8_t *)data, len);
 	}
 
+	uint8_t transfer(uint8_t data);
 	uint16_t transfer16(uint16_t data);
 	uint32_t transfer32(uint32_t data);
+	void write(uint8_t data);
 	void write16(uint16_t data);
 	void write32(uint32_t data);
 

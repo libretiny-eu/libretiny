@@ -98,6 +98,12 @@ bool SPIClass::begin() {
 		this->data = new SPIData();
 	}
 
+	if (!this->beginPrivate())
+		return false;
+	this->setFrequency(settings._clock);
+	this->setBitOrder(settings._bitOrder);
+	this->setDataMode(settings._dataMode);
+
 	return true;
 }
 
@@ -161,6 +167,15 @@ __attribute__((weak)) void SPIClass::setBitOrder(uint8_t bitOrder) {
 	this->settings._bitOrder = bitOrder;
 }
 
+__attribute__((weak)) uint8_t SPIClass::transfer(uint8_t data) {
+	this->txBuf = &data;
+	this->txLen = 1;
+	this->rxBuf = &data;
+	this->rxLen = 1;
+	this->commitTransaction();
+	return data;
+}
+
 __attribute__((weak)) uint16_t SPIClass::transfer16(uint16_t data) {
 	ByteUint16 data16;
 	data16.val = data;
@@ -189,6 +204,13 @@ __attribute__((weak)) uint32_t SPIClass::transfer32(uint32_t data) {
 		data32.lsb	 = this->transfer(data32.lsb);
 	}
 	return data32.val;
+}
+
+__attribute__((weak)) void SPIClass::write(uint8_t data) {
+	this->txBuf = &data;
+	this->txLen = 1;
+	this->rxLen = 0;
+	this->commitTransaction();
 }
 
 __attribute__((weak)) void SPIClass::write16(uint16_t data) {
