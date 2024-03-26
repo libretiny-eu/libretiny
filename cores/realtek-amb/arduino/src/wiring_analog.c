@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 /* ADC */
 static analogin_t adc1;

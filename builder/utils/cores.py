@@ -51,8 +51,8 @@ def env_add_core_sources(env: Environment, queue, name: str, path: str) -> bool:
             "+<compat/*.c*>",
             "+<port/*.c*>",
             "+<posix/*.c>",
-            "+<wiring/*.c>",
-            "+<wraps/*.c>",
+            "+<wiring/*.c*>",
+            "+<wraps/*.c*>",
         ],
         includes=[
             # prepend the paths before SDK directories

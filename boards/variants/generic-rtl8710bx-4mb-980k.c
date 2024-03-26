@@ -12,18 +12,18 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	{PA_0,  PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
 	// D1: PA05, PWM4, WAKE1
 	{PA_5,  PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
-	// D2: PA06, FCS, SD_D2
-	{PA_6,  PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	// D2: PA06, ^FCS, SD_D2
+	{PA_6,  PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D3: PA07, FD1, SD_D3
-	{PA_7,  PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	{PA_7,  PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D4: PA08, FD2, SD_CMD
-	{PA_8,  PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	{PA_8,  PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D5: PA09, FD0, SD_CLK
-	{PA_9,  PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	{PA_9,  PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D6: PA10, FSCK, SD_D0
-	{PA_10, PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	{PA_10, PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D7: PA11, FD3, SD_D1
-	{PA_11, PIN_GPIO | PIN_IRQ | PIN_SPI,                                          PIN_NONE, 0},
+	{PA_11, PIN_GPIO | PIN_IRQ,                                                    PIN_NONE, 0},
 	// D8: PA12, PWM3
 	{PA_12, PIN_GPIO | PIN_IRQ | PIN_PWM,                                          PIN_NONE, 0},
 	// D9: PA14, PWM0, SWCLK
