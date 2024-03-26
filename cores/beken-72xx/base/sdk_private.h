@@ -24,6 +24,7 @@ extern "C" {
 #include <pwm_pub.h>
 #include <rtos_pub.h>
 #include <saradc_pub.h>
+#include <spi_pub.h>
 #include <start_type_pub.h>
 #include <sys_ctrl.h>
 #include <sys_rtos.h>
