@@ -1,6 +1,6 @@
 {
 	"pcb": {
-		"scale": 10,
+		"scale": 14,
 		"test_pads": {
 			"TSCK": "cb1s.back.sck.anchor",
 			"TCSN": "cb1s.back.csn.anchor",

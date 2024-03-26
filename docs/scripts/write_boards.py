@@ -1,5 +1,11 @@
 # Copyright (c) Kuba Szczodrzyński 2022-05-31.
 
+import os
+import sys
+
+while os.getcwd() in sys.path:
+    sys.path.remove(os.getcwd())
+
 import re
 from os.path import dirname, isfile, join
 
@@ -48,19 +54,41 @@ def get_families_json() -> dict[str, int]:
     }
 
 
-def get_mcus_boards(boards: list[Board]) -> dict[str, str]:
+def get_mcus_boards(boards: list[Board], aliases: dict[str, str]) -> dict[str, str]:
     out = {}
-    for board in boards:
-        mcu_name: str = board["build.mcu"].upper()
-        family_name: str = board.family.short_name
+
+    def check_mcu(mcu_name, family_name):
         if mcu_name in out and out[mcu_name] != family_name:
             print(
                 Fore.RED
                 + f"ERROR: MCU '{mcu_name}' of board '{board.name}' belongs to multiple families: '{out[mcu_name]}' and '{family_name}'"
-                + Style.RESET_ALL
+                + Style.RESET_ALL,
+                file=sys.stderr,
             )
-            continue
         out[mcu_name] = family_name
+
+    for board in boards:
+        mcu_name: str = board["build.mcu"].upper()
+        mcu_alias: str = board["doc.mcu"]
+        family_name: str = board.family.short_name
+        check_mcu(mcu_name, family_name)
+        if mcu_alias:
+            mcu_alias = mcu_alias.upper()
+            check_mcu(mcu_alias, family_name)
+            if mcu_alias not in aliases:
+                print(
+                    Fore.RED
+                    + f"ERROR: MCU alias '{mcu_alias}' of board '{board.name}' is not defined in enum"
+                    + Style.RESET_ALL,
+                    file=sys.stderr,
+                )
+            elif aliases[mcu_alias] != mcu_name:
+                print(
+                    Fore.RED
+                    + f"ERROR: MCU alias '{mcu_alias}' of board '{board.name}' doesn't match real name '{mcu_name}'"
+                    + Style.RESET_ALL,
+                    file=sys.stderr,
+                )
     return out
 
 
@@ -257,12 +285,14 @@ def write_families(supported: list[Family]):
         docs = get_readme_family_link(family)
         row = [
             # Title
-            "[{}]({})".format(
-                family.description,
-                docs,
-            )
-            if docs
-            else family.description,
+            (
+                "[{}]({})".format(
+                    family.description,
+                    docs,
+                )
+                if docs
+                else family.description
+            ),
             # Name
             family.is_supported and f"`{family.name}`" or "`-`",
             # Code
@@ -273,16 +303,22 @@ def write_families(supported: list[Family]):
                 family.id,
             ),
             # Arduino Core
-            "✔️"
-            if family in supported and family.is_supported and family.has_arduino_core
-            else "❌",
+            (
+                "✔️"
+                if family in supported
+                and family.is_supported
+                and family.has_arduino_core
+                else "❌"
+            ),
             # Source SDK
-            "[`{}`]({})".format(
-                family.target_package,
-                f"https://github.com/libretiny-eu/{family.target_package}",
-            )
-            if family.target_package
-            else "-",
+            (
+                "[`{}`]({})".format(
+                    family.target_package,
+                    f"https://github.com/libretiny-eu/{family.target_package}",
+                )
+                if family.target_package
+                else "-"
+            ),
         ]
         rows.append(row)
     md.add_table(header, *rows)
@@ -315,7 +351,8 @@ if __name__ == "__main__":
             print(
                 Fore.RED
                 + f"ERROR: Invalid build.variant of '{board['source']}': '{board.name}'"
-                + Style.RESET_ALL
+                + Style.RESET_ALL,
+                file=sys.stderr,
             )
             errors = True
 
@@ -323,8 +360,8 @@ if __name__ == "__main__":
     families_enum = get_families_enum(code)
     families_json_keys = set(families_json.keys())
     families_enum_keys = set(families_enum.keys())
-    mcus_boards = get_mcus_boards(boards)
     mcus_enum, mcu_aliases = get_mcus_enum(code)
+    mcus_boards = get_mcus_boards(boards, mcu_aliases)
     mcus_boards_keys = set(mcus_boards.keys())
     mcus_enum_keys = set(mcus_enum.keys())
     mcus_missing_in_boards = mcus_enum_keys - mcus_boards_keys
@@ -332,14 +369,19 @@ if __name__ == "__main__":
 
     # check if all families are defined in lt_types.h and families.json
     if families_json_keys != families_enum_keys:
-        print(Fore.RED + f"ERROR: Inconsistent lt_types.h vs families.json:")
         print(
-            "- Missing in JSON: " + ", ".join(families_enum_keys - families_json_keys)
+            Fore.RED + f"ERROR: Inconsistent lt_types.h vs families.json:",
+            file=sys.stderr,
         )
         print(
-            "- Missing in enum: " + ", ".join(families_json_keys - families_enum_keys)
+            "- Missing in JSON: " + ", ".join(families_enum_keys - families_json_keys),
+            file=sys.stderr,
         )
-        print(Style.RESET_ALL, end="")
+        print(
+            "- Missing in enum: " + ", ".join(families_json_keys - families_enum_keys),
+            file=sys.stderr,
+        )
+        print(Style.RESET_ALL, end="", file=sys.stderr)
         errors = True
 
     # verify that family IDs match
@@ -352,7 +394,8 @@ if __name__ == "__main__":
             print(
                 Fore.RED
                 + f"ERROR: Family ID mismatch for '{family}': 0x{families_json[family]:08X} vs 0x{families_enum[family]:08X}"
-                + Style.RESET_ALL
+                + Style.RESET_ALL,
+                file=sys.stderr,
             )
             errors = True
 
@@ -371,7 +414,8 @@ if __name__ == "__main__":
             Fore.RED
             + f"ERROR: Undefined MCUs in lt_types.h: "
             + ", ".join(mcus_missing_in_enum)
-            + Style.RESET_ALL
+            + Style.RESET_ALL,
+            file=sys.stderr,
         )
         errors = True
 
@@ -385,7 +429,8 @@ if __name__ == "__main__":
             print(
                 Fore.RED
                 + f"ERROR: MCU family mismatch for '{mcu}': '{mcus_boards[mcu]}' vs '{mcus_enum[mcu]}'"
-                + Style.RESET_ALL
+                + Style.RESET_ALL,
+                file=sys.stderr,
             )
             errors = True
 

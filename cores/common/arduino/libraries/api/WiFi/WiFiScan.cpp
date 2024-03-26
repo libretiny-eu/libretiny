@@ -39,13 +39,23 @@ void WiFiClass::scanDelete() {
 }
 
 uint8_t WiFiClass::scanAlloc(uint8_t count) {
-	uint8_t last = scan->count;
-	scan->count	 = count;
-	scan->ap	 = (WiFiScanAP *)realloc(scan->ap, count * sizeof(WiFiScanAP));
-	if (!scan->ap)
-		return 255;
-	memset(scan->ap + last, 0, sizeof(WiFiScanAP));
-	return last;
+	if ((!scan->ap) || (count > scan->count)) {
+		auto newMem = (WiFiScanAP *)realloc(scan->ap, count * sizeof(WiFiScanAP));
+		if (!newMem) {
+			return scan->count;
+		}
+		scan->ap = newMem;
+	}
+	if (!scan->ap) {
+		scan->count = 0;
+		return 0;
+	}
+	if (count > scan->count) {
+		// clear only new entries
+		memset(scan->ap + scan->count, 0, sizeof(WiFiScanAP) * (count - scan->count));
+	}
+	scan->count = count;
+	return count;
 }
 
 String WiFiClass::SSID(uint8_t networkItem) {

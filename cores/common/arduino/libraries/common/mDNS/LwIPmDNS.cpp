@@ -31,9 +31,34 @@ static const char *hostName;
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
 
+static inline void freeAllocatedStrings(const std::vector<char *> &strings) {
+	for (auto &str : strings) {
+		free(str);
+	}
+}
+
 mDNS::mDNS() {}
 
-mDNS::~mDNS() {}
+mDNS::~mDNS() {
+	cleanup();
+}
+
+void mDNS::cleanup() {
+	freeAllocatedStrings(services_name);
+	services_name.clear();
+	freeAllocatedStrings(services);
+	services.clear();
+	for (auto &record : records) {
+		freeAllocatedStrings(record);
+	}
+	records.clear();
+
+	free((void *)hostName);
+	hostName = NULL;
+
+	free((void *)instanceName);
+	instanceName = NULL;
+}
 
 static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	size_t index = (size_t)userdata;
@@ -42,8 +67,9 @@ static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 
 	for (const auto record : records[index]) {
 		err_t err = mdns_resp_add_service_txtitem(service, record, strlen(record));
-		if (err != ERR_OK)
-			return;
+		if (err != ERR_OK) {
+			LT_DM(MDNS, "Error %d while adding txt record: %s", err, record);
+		}
 	}
 }
 
@@ -136,12 +162,18 @@ bool mDNS::begin(const char *hostname) {
 }
 
 void mDNS::end() {
+#ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
+	netif_remove_ext_callback(&netif_callback);
+#endif
+
 	struct netif *netif = netif_list;
 	while (netif != NULL) {
 		if (netif_is_up(netif))
 			mdns_resp_remove_netif(netif);
 		netif = netif->next;
 	}
+
+	cleanup();
 }
 
 bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port) {
@@ -181,18 +213,17 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 }
 
 bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *item) {
-	int8_t index = -1;
-	for (uint8_t i = 0; i < services.size(); i++) {
+	uint8_t i;
+	for (i = 0; i < services.size(); i++) {
 		// find a matching service
 		if (strcmp(services[i], service) == 0 && protos[i] == proto) {
-			index = i;
 			break;
 		}
 	}
-	if (index == -1)
+	if (i == services.size())
 		return false;
 
-	records[index].push_back(strdup(item));
+	records[i].push_back(strdup(item));
 	return true;
 }
 
