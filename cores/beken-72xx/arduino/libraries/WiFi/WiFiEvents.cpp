@@ -31,8 +31,7 @@ static void wifiEventTask(void *arg) {
 // connection but no SSID yet returned by BDK. Even a sinlge millisecond
 // delay should prevent this from happening. It's better to waste a bit
 // of time here than to lose a valid connection down the line.
-static String waitForValidSSID(WiFiClass * pWiFi)
-{
+static String waitForValidSSID(WiFiClass *pWiFi) {
 	String result;
 
 	// Read the initial value that might just be available already.
