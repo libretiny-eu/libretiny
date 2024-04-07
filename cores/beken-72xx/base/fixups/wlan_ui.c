@@ -11,7 +11,6 @@ extern void bk_wlan_sta_adv_param_2_sta(network_InitTypeDef_adv_st *sta_adv,netw
 OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitParaAdv)
 {
     if (bk_wlan_is_monitor_mode()) {
-        os_printf("airkiss is not finish yet, stop airkiss or waiting it finish!\r\n");
         return 0;
     }
 
@@ -53,8 +52,8 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
         char key_buffer[PMK_LEN + 1];
 
         /* Make copy with a guaranteed null terminator. */
-        os_memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
-        key_buffer[g_sta_param_ptr->key_len + 1] = '\0';
+        memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
+        key_buffer[g_sta_param_ptr->key_len] = '\0';
 
         /*
          * let wpa_psk_cal thread to caculate psk.
@@ -92,8 +91,8 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
         char key_buffer[PMK_LEN + 1];
 
         /* Make copy with a guaranteed null terminator. */
-        os_memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
-        key_buffer[g_sta_param_ptr->key_len + 1] = '\0';
+        memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
+        key_buffer[g_sta_param_ptr->key_len] = '\0';
 
         /*
          * let wpa_psk_cal thread to caculate psk.
@@ -110,11 +109,11 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
     wlan_sta_enable();
 
     /* set network parameters: ssid, passphase */
-    wlan_sta_set((uint8_t*)inNetworkInitParaAdv->ap_info.ssid, os_strlen(inNetworkInitParaAdv->ap_info.ssid),
+    wlan_sta_set((uint8_t*)inNetworkInitParaAdv->ap_info.ssid, strlen(inNetworkInitParaAdv->ap_info.ssid),
                  (uint8_t*)inNetworkInitParaAdv->key);
 
     /* set fast connect bssid */
-    os_memset(&config, 0, sizeof(config));
+    memset(&config, 0, sizeof(config));
     /*
      * This API has no way to communicate whether BSSID was supplied or not.
      * So we will use an assumption that no valid endpoint will ever use the
@@ -124,14 +123,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
      * We have just zeroed out the `config` struct so we can use those zeroes
      * for comparison with our input argument.
      */
-    if (os_memcmp(config.u.bssid, inNetworkInitParaAdv->ap_info.bssid, ETH_ALEN)) {
-        os_memcpy(config.u.bssid, inNetworkInitParaAdv->ap_info.bssid, ETH_ALEN);
+    if (memcmp(config.u.bssid, inNetworkInitParaAdv->ap_info.bssid, ETH_ALEN)) {
+        memcpy(config.u.bssid, inNetworkInitParaAdv->ap_info.bssid, ETH_ALEN);
         config.field = WLAN_STA_FIELD_BSSID;
         wpa_ctrl_request(WPA_CTRL_CMD_STA_SET, &config);
     }
 
     /* set fast connect freq */
-    os_memset(&config, 0, sizeof(config));
+    memset(&config, 0, sizeof(config));
     config.u.channel = inNetworkInitParaAdv->ap_info.channel;
     config.field = WLAN_STA_FIELD_FREQ;
     wpa_ctrl_request(WPA_CTRL_CMD_STA_SET, &config);
