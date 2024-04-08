@@ -28,7 +28,7 @@ static void wifiEventTask(void *arg) {
 }
 
 // There is a race condition, when we have an event about a successful
-// connection but no SSID yet returned by BDK. Even a sinlge millisecond
+// connection but no SSID yet returned by BDK. Even a single millisecond
 // delay should prevent this from happening. It's better to waste a bit
 // of time here than to lose a valid connection down the line.
 static String waitForValidSSID(WiFiClass *pWiFi) {
@@ -38,10 +38,8 @@ static String waitForValidSSID(WiFiClass *pWiFi) {
 	result = pWiFi->SSID();
 
 	if (!result.length()) {
-		std::size_t i = 0;
-
-		for (; i < 10; ++i) {
-			// Dealy and query again.
+		for (std::size_t i = 0; i < 10; i++) {
+			// Delay and query again.
 			delay(1);
 			result = pWiFi->SSID();
 
@@ -55,7 +53,7 @@ static String waitForValidSSID(WiFiClass *pWiFi) {
 		}
 
 		if (!result.length()) {
-			LT_DM(WIFI, "Could not obtain a valid SSID after %u delays", i);
+			LT_WM(WIFI, "Could not obtain a valid SSID after %u delays", i);
 		}
 	}
 
