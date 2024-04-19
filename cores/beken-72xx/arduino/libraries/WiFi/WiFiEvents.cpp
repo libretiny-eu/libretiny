@@ -38,7 +38,8 @@ static String waitForValidSSID(WiFiClass *pWiFi) {
 	result = pWiFi->SSID();
 
 	if (!result.length()) {
-		for (std::size_t i = 0; i < 10; i++) {
+		std::size_t i = 0;
+		for (; i < 10; i++) {
 			// Delay and query again.
 			delay(1);
 			result = pWiFi->SSID();
