@@ -61,6 +61,9 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 		case CHANGE:
 #if LT_RTL8720C
 			event = IRQ_FALL_RISE;
+// Prevents Change interrupt errors on RTL8710B chips.
+#elif LT_RTL8710B
+			event = IRQ_RISE;
 #else
 			LT_W("CHANGE interrupts not supported");
 #endif
