@@ -27,6 +27,40 @@ static void wifiEventTask(void *arg) {
 	}
 }
 
+// There is a race condition, when we have an event about a successful
+// connection but no SSID yet returned by BDK. Even a single millisecond
+// delay should prevent this from happening. It's better to waste a bit
+// of time here than to lose a valid connection down the line.
+static String waitForValidSSID(WiFiClass *pWiFi) {
+	String result;
+
+	// Read the initial value that might just be available already.
+	result = pWiFi->SSID();
+
+	if (!result.length()) {
+		std::size_t i = 0;
+		for (; i < 10; i++) {
+			// Delay and query again.
+			delay(1);
+			result = pWiFi->SSID();
+
+			if (result.length()) {
+				LT_DM(WIFI, "Got valid SSID after %u delays", i + 1);
+				break;
+			}
+
+			// It's a good idea to yield.
+			yield();
+		}
+
+		if (!result.length()) {
+			LT_WM(WIFI, "Could not obtain a valid SSID after %u delays", i);
+		}
+	}
+
+	return result;
+}
+
 void wifiEventSendArduino(EventId event) {
 	event = (EventId)(RW_EVT_ARDUINO | event);
 	wifiStatusCallback((rw_evt_type *)&event);
@@ -51,11 +85,6 @@ void wifiEventHandler(rw_evt_type event) {
 		return; // failsafe
 
 	LT_DM(WIFI, "BK event %u", event);
-
-	if (event <= RW_EVT_STA_GOT_IP)
-		pDATA->lastStaEvent = event;
-	else
-		pDATA->lastApEvent = event;
 
 	EventId eventId;
 	EventInfo eventInfo;
@@ -103,7 +132,7 @@ void wifiEventHandler(rw_evt_type event) {
 
 		case RW_EVT_STA_CONNECTED:
 			eventId								  = ARDUINO_EVENT_WIFI_STA_CONNECTED;
-			ssid								  = pWiFi->SSID();
+			ssid								  = waitForValidSSID(pWiFi);
 			eventInfo.wifi_sta_connected.ssid_len = ssid.length();
 			eventInfo.wifi_sta_connected.channel  = pWiFi->channel();
 			eventInfo.wifi_sta_connected.authmode = pWiFi->getEncryption();
@@ -143,6 +172,14 @@ void wifiEventHandler(rw_evt_type event) {
 				return;
 			eventId = (EventId)(event - RW_EVT_ARDUINO);
 			break;
+	}
+
+	// Publish state update only after the event data is retrieved.
+	// This relates to the race condition with RW_EVT_STA_CONNECTED.
+	if (event <= RW_EVT_STA_GOT_IP) {
+		pDATA->lastStaEvent = event;
+	} else {
+		pDATA->lastApEvent = event;
 	}
 
 	pWiFi->postEvent(eventId, eventInfo);
