@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 #if LT_HAS_FREERTOS
 #include <FreeRTOS.h>

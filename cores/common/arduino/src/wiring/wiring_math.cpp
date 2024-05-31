@@ -29,7 +29,7 @@ long random(long howbig) {
 		return 0;
 	}
 
-	return rand() % howbig;
+	return abs(rand()) % howbig;
 }
 
 long random(long howsmall, long howbig) {

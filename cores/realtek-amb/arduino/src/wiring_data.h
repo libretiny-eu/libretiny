@@ -2,8 +2,7 @@
 
 #pragma once
 
-#include <Arduino.h>
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
 
 #ifdef __cplusplus
 extern "C" {

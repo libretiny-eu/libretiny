@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 	pinCheckGetData(pinNumber, PIN_GPIO, );
