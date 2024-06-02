@@ -7,4 +7,11 @@
 #define sys_now sys_now_dummy
 #include_next "lwipopts.h"
 #undef sys_now
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern unsigned long sys_now(void);
+#ifdef __cplusplus
+}
+#endif
