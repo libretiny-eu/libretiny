@@ -9,19 +9,19 @@ static void irqHandler(unsigned char gpio) {
 	PinData *data = pinData(pin);
 	if (!data->irqHandler)
 		return;
-	if (data->irqChange) {
-		if (data->gpioMode == INPUT_PULLDOWN) {
-			data->gpioMode = INPUT_PULLUP;
-			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
-		} else if (data->gpioMode == INPUT_PULLUP) {
-			data->gpioMode = INPUT_PULLDOWN;
-			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_RISING, irqHandler);
-		}
-	}
 	if (!data->irqParam)
 		((voidFuncPtr)data->irqHandler)();
 	else
 		((voidFuncPtrParam)data->irqHandler)(data->irqParam);
+	if (data->irqChange) {
+		if (data->irqMode == RISING) {
+			data->irqMode = FALLING;
+			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_FALLING, irqHandler);
+		} else {
+			data->irqMode = RISING;
+			gpio_int_enable(pin->gpio, GPIO_INT_LEVEL_RISING, irqHandler);
+		}
+	}
 }
 
 void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback, PinStatus mode, void *param) {
@@ -52,7 +52,13 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 			event = GPIO_INT_LEVEL_RISING;
 			break;
 		case CHANGE:
-			event  = GPIO_INT_LEVEL_FALLING;
+			if (gpio_input(pin->gpio)) {
+				event  = GPIO_INT_LEVEL_FALLING;
+				mode = FALLING;
+			} else {
+				event = GPIO_INT_LEVEL_RISING;
+				mode = RISING;
+			}
 			change = true;
 			break;
 		default:
