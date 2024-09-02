@@ -80,7 +80,30 @@ IPAddress WiFiClass::hostByName(const char *hostname) {
 	ip_addr_t ip;
 	int ret = netconn_gethostbyname(hostname, &ip);
 	if (ret == ERR_OK) {
-		return ip.addr;
+#ifdef CONFIG_IPV6
+		if (IP_IS_V6(&ip)) {
+			ip6_addr_t *ip6 = ip_2_ip6(&ip);
+			return IPAddress(
+				IP6_ADDR_BLOCK1(ip6) >> 8,
+				IP6_ADDR_BLOCK1(ip6) & 0xff,
+				IP6_ADDR_BLOCK2(ip6) >> 8,
+				IP6_ADDR_BLOCK2(ip6) & 0xff,
+				IP6_ADDR_BLOCK3(ip6) >> 8,
+				IP6_ADDR_BLOCK3(ip6) & 0xff,
+				IP6_ADDR_BLOCK4(ip6) >> 8,
+				IP6_ADDR_BLOCK4(ip6) & 0xff,
+				IP6_ADDR_BLOCK5(ip6) >> 8,
+				IP6_ADDR_BLOCK5(ip6) & 0xff,
+				IP6_ADDR_BLOCK6(ip6) >> 8,
+				IP6_ADDR_BLOCK6(ip6) & 0xff,
+				IP6_ADDR_BLOCK7(ip6) >> 8,
+				IP6_ADDR_BLOCK7(ip6) & 0xff,
+				IP6_ADDR_BLOCK8(ip6) >> 8,
+				IP6_ADDR_BLOCK8(ip6) & 0xff
+			);
+		}
+#endif
+		return IPAddress(ip_addr_get_ip4_u32(&ip));
 	}
 	return IPAddress();
 }
