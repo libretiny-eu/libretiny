@@ -73,10 +73,15 @@ static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	}
 }
 
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 	LT_DM(MDNS, "Status: netif %u, status %u", netif->num, result);
 }
-
+#else
+static void mdnsStatusCallback(struct netif *netif, uint8_t result, int8_t slot) {
+	LT_DM(MDNS, "Status: netif %u, status %u slot %d", netif->num, result, slot);
+}
+#endif
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void addServices(struct netif *netif) {
 	for (uint8_t i = 0; i < services.size(); i++) {
@@ -95,7 +100,9 @@ static void addServices(struct netif *netif) {
 			services[i],
 			(mdns_sd_proto)protos[i],
 			ports[i],
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 			255,
+#endif
 			mdnsTxtCallback,
 			reinterpret_cast<void *>(i) // index of newly added service
 		);
@@ -111,7 +118,11 @@ static bool enableMDNS(struct netif *netif) {
 			igmp_start(netif);
 			LT_DM(MDNS, "Added IGMP to netif %u", netif->num);
 		}
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 		err_t ret = mdns_resp_add_netif(netif, hostName, 255);
+#else
+		err_t ret = mdns_resp_add_netif(netif, hostName);
+#endif
 		if (ret == ERR_OK) {
 			LT_DM(MDNS, "mDNS started on netif %u, announcing it to network", netif->num);
 #if LWIP_VERSION_SIMPLE >= 20100
@@ -190,7 +201,9 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 				service,
 				(mdns_sd_proto)proto,
 				port,
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 				255,
+#endif
 				mdnsTxtCallback,
 				(void *)services.size() // index of newly added service
 			);
