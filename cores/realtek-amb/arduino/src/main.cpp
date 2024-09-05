@@ -1,7 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-19. */
 
-#include <Arduino.h>
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
 
 extern "C" {
 

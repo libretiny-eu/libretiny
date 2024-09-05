@@ -65,12 +65,6 @@
 #define PIN_CS0   19u // PA_19
 #define PIN_CS1   19u // PA_19
 #define PIN_CTS0  19u // PA_19
-#define PIN_FCS   6u  // PA_6
-#define PIN_FD0   9u  // PA_9
-#define PIN_FD1   7u  // PA_7
-#define PIN_FD2   8u  // PA_8
-#define PIN_FD3   11u // PA_11
-#define PIN_FSCK  10u // PA_10
 #define PIN_MISO0 22u // PA_22
 #define PIN_MISO1 22u // PA_22
 #define PIN_MOSI0 23u // PA_23

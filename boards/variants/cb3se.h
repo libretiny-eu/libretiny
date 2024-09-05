@@ -12,6 +12,17 @@
 #define NUM_ANALOG_OUTPUTS 6  // PWM & DAC outputs
 #define PINS_GPIO_MAX      26 // Last usable GPIO number
 
+// SPI Interfaces
+// --------------
+#define PIN_SPI0_CS    15u // GPIO15
+#define PIN_SPI0_MISO  17u // GPIO17
+#define PIN_SPI0_MOSI  16u // GPIO16
+#define PIN_SPI0_SCK   14u // GPIO14
+#define PINS_SPI0_CS   (pin_size_t[]){15u}
+#define PINS_SPI0_MISO (pin_size_t[]){17u}
+#define PINS_SPI0_MOSI (pin_size_t[]){16u}
+#define PINS_SPI0_SCK  (pin_size_t[]){14u}
+
 // Wire Interfaces
 // ---------------
 #define PIN_WIRE2_SCL  0u // GPIO0
@@ -72,8 +83,10 @@
 // -----------------
 #define HAS_SERIAL1             1
 #define HAS_SERIAL2             1
+#define HAS_SPI0                1
 #define HAS_WIRE2               1
 #define SERIAL_INTERFACES_COUNT 2
+#define SPI_INTERFACES_COUNT    1
 #define WIRE_INTERFACES_COUNT   1
 
 // Arduino pin names
