@@ -129,6 +129,8 @@ class WiFiClass {
 	uint8_t subnetCIDR();
 	bool enableIpV6();
 	IPv6Address localIPv6();
+	std::vector<IPv6Address> allLocalIPv6();
+
 	const char *getHostname();
 	bool setHostname(const char *hostname);
 	bool setMacAddress(const uint8_t *mac);

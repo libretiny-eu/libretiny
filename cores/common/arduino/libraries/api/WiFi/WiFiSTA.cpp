@@ -44,5 +44,9 @@ __attribute__((weak)) bool WiFiClass::enableIpV6() {
 }
 
 __attribute__((weak)) IPv6Address WiFiClass::localIPv6() {
-	return IPv6Address();
+	return {};
+}
+
+__attribute__((weak)) std::vector<IPv6Address> WiFiClass::allLocalIPv6() {
+	return {};
 }
