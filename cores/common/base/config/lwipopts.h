@@ -15,8 +15,15 @@
 
 // set lwIP debugging options according to LT config
 #if LT_DEBUG_LWIP
+// enable main debugging switch
 #undef LWIP_DEBUG
 #define LWIP_DEBUG 1
+// enable all messages
+#undef LWIP_DBG_MIN_LEVEL
+#define LWIP_DBG_MIN_LEVEL 0
+// enable all debugging types
+#undef LWIP_DBG_TYPES_ON
+#define LWIP_DBG_TYPES_ON 0xF8
 // make lwIP use printf() library
 #include <stdio.h>
 #undef LWIP_PLATFORM_DIAG
