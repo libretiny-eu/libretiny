@@ -53,11 +53,11 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 			break;
 		case CHANGE:
 			if (gpio_input(pin->gpio)) {
-				event  = GPIO_INT_LEVEL_FALLING;
-				mode = FALLING;
+				event = GPIO_INT_LEVEL_FALLING;
+				mode  = FALLING;
 			} else {
 				event = GPIO_INT_LEVEL_RISING;
-				mode = RISING;
+				mode  = RISING;
 			}
 			change = true;
 			break;
