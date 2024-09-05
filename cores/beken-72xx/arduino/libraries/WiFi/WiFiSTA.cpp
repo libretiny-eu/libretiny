@@ -260,9 +260,10 @@ IPv6Address WiFiClass::localIPv6() {
 	if (sta_ip_is_start())
 		nr_addresses = net_get_if_ipv6_pref_addr(&addr, ifs);
 
-	for (int i = 0; i < nr_addresses; i++)
+	for (int i = 0; i < nr_addresses; i++) {
 		if (ip6_addr_islinklocal(&addr.ipv6[i]))
 			return IPv6Address(addr.ipv6[i].addr);
+	}
 
 	return IPv6Address();
 }
@@ -276,8 +277,9 @@ std::vector<IPv6Address> WiFiClass::allLocalIPv6() {
 	if (sta_ip_is_start())
 		nr_addresses = net_get_if_ipv6_pref_addr(&addr, ifs);
 
-	for (int i = 0; i < nr_addresses; i++)
+	for (int i = 0; i < nr_addresses; i++) {
 		result.push_back(IPv6Address(addr.ipv6[i].addr));
+	}
 
 	return result;
 }

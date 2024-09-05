@@ -82,6 +82,7 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result, int8_t slot)
 	LT_DM(MDNS, "Status: netif %u, status %u slot %d", netif->num, result, slot);
 }
 #endif
+
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void addServices(struct netif *netif) {
 	for (uint8_t i = 0; i < services.size(); i++) {
