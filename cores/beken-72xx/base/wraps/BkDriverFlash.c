@@ -70,8 +70,12 @@ OSStatus __wrap_bk_flash_erase(bk_partition_t partition, uint32_t off_set, uint3
 	return kNoErr;
 }
 
-OSStatus
-__wrap_bk_flash_write(bk_partition_t partition, volatile uint32_t off_set, uint8_t *inBuffer, uint32_t inBufferLength) {
+OSStatus __wrap_bk_flash_write(
+	bk_partition_t partition,
+	volatile uint32_t off_set,
+	uint8_t *inBuffer,
+	uint32_t inBufferLength
+) {
 	UINT32 status;
 	DD_HANDLE flash_hdl;
 	uint32_t start_addr;
@@ -98,8 +102,12 @@ __wrap_bk_flash_write(bk_partition_t partition, volatile uint32_t off_set, uint8
 	return kNoErr;
 }
 
-OSStatus
-__wrap_bk_flash_read(bk_partition_t partition, volatile uint32_t off_set, uint8_t *outBuffer, uint32_t inBufferLength) {
+OSStatus __wrap_bk_flash_read(
+	bk_partition_t partition,
+	volatile uint32_t off_set,
+	uint8_t *outBuffer,
+	uint32_t inBufferLength
+) {
 	UINT32 status;
 	uint32_t start_addr;
 	DD_HANDLE flash_hdl;

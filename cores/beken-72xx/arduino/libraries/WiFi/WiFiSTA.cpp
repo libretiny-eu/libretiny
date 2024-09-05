@@ -2,8 +2,13 @@
 
 #include "WiFiPrivate.h"
 
-WiFiStatus
-WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
+WiFiStatus WiFiClass::begin(
+	const char *ssid,
+	const char *passphrase,
+	int32_t channel,
+	const uint8_t *bssid,
+	bool connect
+) {
 	if (!enableSTA(true))
 		return WL_CONNECT_FAILED;
 	if (!validate(ssid, passphrase))

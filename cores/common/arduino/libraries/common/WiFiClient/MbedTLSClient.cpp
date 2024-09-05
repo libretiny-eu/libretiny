@@ -86,13 +86,21 @@ int MbedTLSClient::connect(const char *host, uint16_t port, int32_t timeout) {
 }
 
 int MbedTLSClient::connect(
-	IPAddress ip, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
+	IPAddress ip,
+	uint16_t port,
+	const char *rootCABuf,
+	const char *clientCert,
+	const char *clientKey
 ) {
 	return connect(ipToString(ip).c_str(), port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }
 
 int MbedTLSClient::connect(
-	const char *host, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
+	const char *host,
+	uint16_t port,
+	const char *rootCABuf,
+	const char *clientCert,
+	const char *clientKey
 ) {
 	return connect(host, port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }

@@ -81,7 +81,9 @@ class WebServer {
 
 	bool authenticate(const char *username, const char *password);
 	void requestAuthentication(
-		HTTPAuthMethod mode = BASIC_AUTH, const char *realm = NULL, const String &authFailMsg = String("")
+		HTTPAuthMethod mode		  = BASIC_AUTH,
+		const char *realm		  = NULL,
+		const String &authFailMsg = String("")
 	);
 
 	typedef std::function<void(void)> THandlerFunction;

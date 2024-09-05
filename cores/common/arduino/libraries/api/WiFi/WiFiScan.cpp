@@ -3,7 +3,12 @@
 #include "WiFi.h"
 
 bool WiFiClass::getNetworkInfo(
-	uint8_t networkItem, String &ssid, WiFiAuthMode &encType, int32_t &rssi, uint8_t *&bssid, int32_t &channel
+	uint8_t networkItem,
+	String &ssid,
+	WiFiAuthMode &encType,
+	int32_t &rssi,
+	uint8_t *&bssid,
+	int32_t &channel
 ) {
 	ssid	= SSID(networkItem);
 	encType = encryptionType(networkItem);

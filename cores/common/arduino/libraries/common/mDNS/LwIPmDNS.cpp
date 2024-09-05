@@ -166,8 +166,11 @@ static bool enableMDNS(struct netif *netif) {
 }
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
-static void
-mdns_netif_ext_status_callback(struct netif *netif, netif_nsc_reason_t reason, const netif_ext_callback_args_t *args) {
+static void mdns_netif_ext_status_callback(
+	struct netif *netif,
+	netif_nsc_reason_t reason,
+	const netif_ext_callback_args_t *args
+) {
 	if (reason & LWIP_NSC_NETIF_REMOVED) {
 		LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
 		mdns_resp_remove_netif(netif);

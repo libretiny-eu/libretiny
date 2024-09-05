@@ -26,12 +26,22 @@
 
 class IWiFiClientSecure {
   public:
-	virtual int
-	connect(IPAddress ip, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey) = 0;
-	virtual int
-	connect(const char *host, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey) = 0;
-	virtual int connect(IPAddress ip, uint16_t port, const char *pskIdent, const char *psk)						   = 0;
-	virtual int connect(const char *host, uint16_t port, const char *pskIdent, const char *psk)					   = 0;
+	virtual int connect(
+		IPAddress ip,
+		uint16_t port,
+		const char *rootCABuf,
+		const char *clientCert,
+		const char *clientKey
+	) = 0;
+	virtual int connect(
+		const char *host,
+		uint16_t port,
+		const char *rootCABuf,
+		const char *clientCert,
+		const char *clientKey
+	)																							= 0;
+	virtual int connect(IPAddress ip, uint16_t port, const char *pskIdent, const char *psk)		= 0;
+	virtual int connect(const char *host, uint16_t port, const char *pskIdent, const char *psk) = 0;
 
 	virtual int lastError(char *buf, const size_t size) = 0;
 	virtual void setInsecure() = 0; // Don't validate the chain, just accept whatever is given. VERY INSECURE!
