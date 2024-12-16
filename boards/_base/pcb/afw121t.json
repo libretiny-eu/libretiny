@@ -1,6 +1,11 @@
 {
 	"pcb": {
-		"templates": ["99iot-21p", "pcb-blue-light", "rf-type1"],
+		"templates": [
+			"99iot-21p",
+			"pcb-blue-light",
+			"rf-type1"
+		],
+		"scale": 16,
 		"vars": {
 			"TRACE_COLOR": "#FAFD9D"
 		},

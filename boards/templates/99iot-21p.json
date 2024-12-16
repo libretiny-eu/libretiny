@@ -40,7 +40,7 @@
 			"id": "left_b",
 			"name": "r_pins_vert",
 			"repeat": 7,
-			"pos": "0,11.4",
+			"pos": "0,12.8",
 			"vars": {
 				"PINDIR": "left"
 			}
@@ -50,7 +50,7 @@
 			"id": "right_b",
 			"name": "r_pins_vert",
 			"repeat": 10,
-			"pos": "18,8.77",
+			"pos": "18,9.2",
 			"vars": {
 				"PINDIR": "right"
 			}
@@ -60,7 +60,7 @@
 			"id": "right_t",
 			"name": "r_pins_vert",
 			"repeat": 1,
-			"pos": "18,6.57",
+			"pos": "18,7",
 			"vars": {
 				"PINDIR": "right"
 			}
@@ -89,7 +89,7 @@
 			"id": "left_b",
 			"name": "r_pins_vert",
 			"repeat": 7,
-			"pos": "0,11.4",
+			"pos": "0,12.8",
 			"vars": {
 				"PINDIR": "left"
 			}
@@ -99,7 +99,7 @@
 			"id": "right_b",
 			"name": "r_pins_vert",
 			"repeat": 10,
-			"pos": "18,8.77",
+			"pos": "18,9.2",
 			"vars": {
 				"PINDIR": "right"
 			}
@@ -109,7 +109,7 @@
 			"id": "right_t",
 			"name": "r_pins_vert",
 			"repeat": 1,
-			"pos": "18,6.57",
+			"pos": "18,7",
 			"vars": {
 				"PINDIR": "right"
 			}
