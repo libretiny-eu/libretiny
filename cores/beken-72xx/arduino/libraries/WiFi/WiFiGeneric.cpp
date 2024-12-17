@@ -71,7 +71,7 @@ WiFiMode WiFiClass::getMode() {
 
 WiFiStatus WiFiClass::status() {
 	rw_evt_type status = DATA->lastStaEvent;
-	if (status == RW_EVT_STA_CONNECTED && STA_CFG.dhcp_mode == DHCP_DISABLE)
+	if (status == RW_EVT_STA_CONNECTED && STA_ADV_CFG.dhcp_mode == DHCP_DISABLE)
 		status = RW_EVT_STA_GOT_IP;
 	return eventTypeToStatus(status);
 }
