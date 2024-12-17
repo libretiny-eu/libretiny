@@ -1,0 +1,19 @@
+{
+	"build": {
+		"family": "BK7231Q",
+		"bkboot_version": "bk7231q"
+	},
+	"flash": {
+		"bootloader": "0x000000+0x11000",
+		"app": "0x011000+0x121000",
+		"download": "0x132000+0xA6000",
+		"kvs": "0x1D8000+0x8000",
+		"calibration": "0x1E0000+0x1000",
+		"tlv": "0x1E1000+0x1000",
+		"net": "0x1E2000+0x1000",
+		"userdata": "0x1E3000+0x1D000"
+	},
+	"upload": {
+		"speed": 460800
+	}
+}

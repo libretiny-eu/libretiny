@@ -1,0 +1,122 @@
+{
+  "name": "libretiny",
+  "title": "LibreTiny",
+  "description": "PlatformIO development platform for IoT modules",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/libretiny-eu/libretiny.git"
+  },
+  "version": "1.7.0",
+  "frameworks": {
+    "base": {
+      "title": "Base Framework (SDK only)",
+      "script": "builder/frameworks/base.py"
+    },
+    "arduino": {
+      "title": "Arduino Framework",
+      "script": "builder/frameworks/arduino.py"
+    }
+  },
+  "packages": {
+    "framework-realtek-amb1": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/libretiny-eu/framework-realtek-amb1#v2022.06.21",
+      "version_prefix": true,
+      "toolchains": {
+        "any": "gccarmnoneeabi@~1.100301.0"
+      },
+      "libraries": {
+        "freertos": "8.1.2",
+        "lwip": {
+          "1.4.1": "1.4.1-amb1",
+          "2.0.0": "2.0.0-amb1",
+          "2.1.3": "2.1.3-amb1",
+          "default": "2.1.3-amb1"
+        }
+      }
+    },
+    "framework-realtek-ambz2": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/libretiny-eu/framework-realtek-ambz2#v2022.11.17",
+      "version_prefix": true,
+      "toolchains": {
+        "any": "gccarmnoneeabi@~1.100301.0"
+      },
+      "libraries": {
+        "freertos": "10.0.1",
+        "lwip": {
+          "2.0.3": "2.0.3-ambz2",
+          "2.1.3": "2.1.3-ambz2",
+          "default": "2.1.3-ambz2"
+        }
+      }
+    },
+    "framework-beken-bdk": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/libretiny-eu/framework-beken-bdk#v2021.06.07",
+      "version_prefix": true,
+      "toolchains": {
+        "any": "gccarmnoneeabi@~1.100301.0"
+      },
+      "libraries": {
+        "freertos": "9.0.0",
+        "lwip": {
+          "2.0.2": "2.0.2-bdk",
+          "2.1.0": "2.1.0-bdk",
+          "2.1.3": "2.1.3-bdk",
+          "2.2.0": "2.2.0-bdk",
+          "default": "2.2.0-bdk"
+        }
+      }
+    },
+    "framework-arduino-api": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/libretiny-eu/ArduinoCore-API#2022.08.24"
+    },
+    "library-lwip": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/libretiny-eu/lwip"
+    },
+    "library-freertos": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/libretiny-eu/library-freertos"
+    },
+    "library-freertos-port": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-freertos-port#2023.05.23"
+    },
+    "library-flashdb": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-flashdb#1.2.0"
+    },
+    "library-printf": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-printf#6.1.0"
+    },
+    "library-uf2ota": {
+      "type": "framework",
+      "version": "https://github.com/libretiny-eu/library-uf2ota#5.0.0"
+    },
+    "toolchain-gccarmnoneeabi": {
+      "type": "toolchain",
+      "optionalVersions": [
+        "~1.40804.0",
+        "~1.50401.0",
+        "~1.90301.0",
+        "~1.100301.0"
+      ]
+    },
+    "tool-openocd": {
+      "type": "uploader",
+      "optional": true,
+      "owner": "platformio",
+      "version": "~2.1100.0"
+    }
+  }
+}

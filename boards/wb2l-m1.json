@@ -1,0 +1,21 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231n",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/wb2l",
+		"pcb/wb2l-test",
+		"pcb/wb2l-m1-test"
+	],
+	"build": {
+		"mcu": "bk7231n",
+		"variant": "wb2l-m1"
+	},
+	"name": "WB2L_M1 Wi-Fi Module",
+	"url": "https://docs.libretiny.eu/boards/wb2l-m1/",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WB2L_M1"
+	}
+}
