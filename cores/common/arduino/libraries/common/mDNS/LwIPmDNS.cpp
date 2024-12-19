@@ -3,8 +3,8 @@
 #if LT_HAS_LWIP2
 
 #include "mDNS.h"
-#include <vector>
 #include <map>
+#include <vector>
 
 extern "C" {
 #include <errno.h>
@@ -66,15 +66,13 @@ static const char *hostName;
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
 
-enum StateForNetIf
-{
-	DISABLED = 0,	// not yet enabled
-	ENABLED,	// enabled, but no services added
-	CONFIGURED	// enabled and services added
+enum StateForNetIf {
+	DISABLED = 0, // not yet enabled
+	ENABLED,	  // enabled, but no services added
+	CONFIGURED	  // enabled and services added
 };
 
-static std::map<uint8_t, StateForNetIf> sNetIfState;	// netif->num  --> state
-
+static std::map<uint8_t, StateForNetIf> sNetIfState; // netif->num  --> state
 
 mDNS::mDNS() {}
 
@@ -183,30 +181,25 @@ static void mdns_netif_ext_status_callback(
 	const netif_ext_callback_args_t *args
 ) {
 	auto stateIter = sNetIfState.find(netif->num);
-	if (stateIter == sNetIfState.end())
-	{
+	if (stateIter == sNetIfState.end()) {
 		stateIter = sNetIfState.insert(std::make_pair(netif->num, StateForNetIf::DISABLED)).first;
 	}
 	auto currentState = sNetIfState[netif->num];
 	if (reason & LWIP_NSC_NETIF_REMOVED) {
-		if (StateForNetIf::DISABLED != stateIter->second)
-		{
+		if (StateForNetIf::DISABLED != stateIter->second) {
 			LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
 			mdns_resp_remove_netif(netif);
 			sNetIfState.erase(stateIter);
 		}
 	} else if ((reason & LWIP_NSC_STATUS_CHANGED) || (reason & LWIP_NSC_NETIF_ADDED)) {
-		if (StateForNetIf::DISABLED == stateIter->second)
-		{
+		if (StateForNetIf::DISABLED == stateIter->second) {
 			LT_DM(MDNS, "Starting mDNS on netif %u", netif->num);
-			if (enableMDNS(netif))
-			{
+			if (enableMDNS(netif)) {
 				stateIter->second = StateForNetIf::ENABLED;
 			}
 		}
 
-		if ((StateForNetIf::ENABLED == stateIter->second) && (sCachedServices.size() > 0))
-		{
+		if ((StateForNetIf::ENABLED == stateIter->second) && (sCachedServices.size() > 0)) {
 			stateIter->second = StateForNetIf::CONFIGURED;
 			LT_DM(MDNS, "Adding services to netif %u", netif->num);
 			addServices(netif);
@@ -230,8 +223,7 @@ bool mDNS::begin(const char *hostname) {
 	struct netif *netif;
 	for (netif = netif_list; netif != NULL; netif = netif->next) {
 		sNetIfState[netif->num] = StateForNetIf::DISABLED;
-		if (enableMDNS(netif))
-		{
+		if (enableMDNS(netif)) {
 			sNetIfState[netif->num] = StateForNetIf::ENABLED;
 		}
 	}
