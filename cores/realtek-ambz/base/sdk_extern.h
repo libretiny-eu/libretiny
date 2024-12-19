@@ -11,6 +11,7 @@ extern "C" {
 
 int LOGUART_SetBaud(uint32_t BaudRate);	   // from fixups/log_uart.c
 void DumpForOneBytes(void *addr, int cnt); // cnt max 0x70!
+void SSI_SetBaudDiv(SPI_TypeDef *spi_dev, uint32_t ClockDivider);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -62,3 +62,51 @@ inline void pinDisable(PinInfo *pin, uint32_t mask) {
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+// C++ utilities
+#ifdef __cplusplus
+
+template <typename C, typename T>
+static bool ltArrayContains(C &&c, T e) {
+	for (auto x : c) {
+		if (x == e)
+			return true;
+	}
+	return false;
+};
+
+#endif // __cplusplus
+
+// Additional custom structures
+
+typedef union {
+	uint16_t val;
+
+	struct {
+#if BYTE_ORDER == LITTLE_ENDIAN
+		uint8_t lsb;
+		uint8_t msb;
+#else
+		uint8_t msb;
+		uint8_t lsb;
+#endif
+	};
+} ByteUint16;
+
+typedef union {
+	uint32_t val;
+
+	struct {
+#if BYTE_ORDER == LITTLE_ENDIAN
+		uint8_t lsb;
+		uint8_t byte1;
+		uint8_t byte2;
+		uint8_t msb;
+#else
+		uint8_t msb;
+		uint8_t byte2;
+		uint8_t byte1;
+		uint8_t lsb;
+#endif
+	};
+} ByteUint32;

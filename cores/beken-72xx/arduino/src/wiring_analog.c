@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-06-20. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 static GPIO_INDEX pwmToGpio[] = {
 	GPIO6,	// PWM0

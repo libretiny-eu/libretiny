@@ -23,6 +23,8 @@ extern "C" {
 
 #define PIN_MODE_ALL 0xFFFFFFFF
 
+#define PORT_FIXED_BIT (1 << 16)
+
 typedef struct PinData_s PinData;
 
 typedef struct {

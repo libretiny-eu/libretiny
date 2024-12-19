@@ -2,13 +2,8 @@
 
 #pragma once
 
-#include <Arduino.h>
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
 
-typedef struct {
-	RingBuffer buf;
-} SerialData;
-
-#define DATA ((SerialData *)data)
-#define BUF	 (DATA->buf)
-#define pBUF ((RingBuffer *)param)
+struct SerialData {
+	RingBuffer *buf;
+};

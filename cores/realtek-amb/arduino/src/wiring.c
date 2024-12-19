@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 #ifndef portNVIC_SYSTICK_CURRENT_VALUE_REG
 #define portNVIC_SYSTICK_CURRENT_VALUE_REG (*((volatile uint32_t *)0xe000e018))

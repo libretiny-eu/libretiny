@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 static void gpioIrqHandler(uint32_t id, gpio_irq_event event) {
 	// id is pin data

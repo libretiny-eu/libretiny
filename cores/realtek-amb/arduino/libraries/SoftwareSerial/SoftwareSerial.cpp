@@ -2,8 +2,8 @@
 
 #if LT_RTL8710B
 
+#include <ArduinoPrivate.h>
 #include <SoftwareSerial.h>
-#include <sdk_private.h>
 
 #define TIMER_MAX 3
 #define OBJ		  ((gtimer_t *)this->param)
