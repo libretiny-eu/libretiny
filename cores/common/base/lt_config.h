@@ -77,6 +77,10 @@
 #define LT_UART_DEFAULT_SERIAL LT_UART_DEFAULT_PORT
 #endif
 
+#ifndef LT_SERIAL_BUFFER_SIZE
+#define LT_SERIAL_BUFFER_SIZE 256
+#endif
+
 // Misc options
 #ifndef LT_USE_TIME
 #define LT_USE_TIME 0
