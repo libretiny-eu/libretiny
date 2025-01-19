@@ -51,7 +51,7 @@ Digital I/O              | ✔️        | ✔️        | ✔️         | ❓ 
 PWM                      | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
 Interrupts               | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❓
 Analog input (ADC)       | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
-`Wire` (I²C)             | ❌         | ❌         | ❗          | ❌          | ❌         | ❌
+`Wire` (I²C)             | ❌         | ❌         | ❗          | ❌          | ❌         | ❓
 `SPI`                    | ❌         | ❌         | ❌          | ❌          | ❌         | ❌
 `Serial`                 | ✔️        | ✔️        | ✔️         | ✔️         | ❓         | ✔️
 `SoftwareSerial`         | ❌         | ❌         | ✔️         | ❌          | ❌         | ❌
