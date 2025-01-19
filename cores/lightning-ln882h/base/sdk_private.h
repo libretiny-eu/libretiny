@@ -41,6 +41,7 @@ extern "C" {
 #include <hal/hal_gpio.h>
 #include <hal/hal_interrupt.h>
 #include <hal/hal_i2c.h>
+#include <hal/hal_adc.h>
 //#include <hal/hal_flash.h>
 #include <wifi.h>
 #include <wifi_manager.h>

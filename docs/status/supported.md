@@ -50,7 +50,7 @@ Watchdog timer           | ✔️        | ✔️        | ✔️         | ❓ 
 Digital I/O              | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ✔️
 PWM                      | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
 Interrupts               | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❓
-Analog input (ADC)       | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
+Analog input (ADC)       | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ✔️
 `Wire` (I²C)             | ❌         | ❌         | ❗          | ❌          | ❌         | ❓
 `SPI`                    | ❌         | ❌         | ❌          | ❌          | ❌         | ❌
 `Serial`                 | ✔️        | ✔️        | ✔️         | ✔️         | ❓         | ✔️
