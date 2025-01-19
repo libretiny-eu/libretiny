@@ -45,7 +45,7 @@ Wiring Core              | ✔️        | ✔️        | ✔️         | ✔�
 UART I/O                 | ✔️        | ✔️        | ✔️         | ✔️         | ✔️         | ✔️
 Flash I/O                | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ✔️
 Deep sleep               | ❓         | ✔️        | ❌          | ❌          | ❓         | ❌
-Watchdog timer           | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
+Watchdog timer           | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ✔️
 **PERIPHERALS** (Wiring) |           |           |            |            |            |
 Digital I/O              | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ✔️
 PWM                      | ✔️        | ✔️        | ✔️         | ❓          | ❓         | ❌
