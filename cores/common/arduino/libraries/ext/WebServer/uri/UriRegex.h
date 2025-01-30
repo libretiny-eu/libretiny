@@ -6,8 +6,8 @@
 class UriRegex : public Uri {
 
   public:
-	explicit UriRegex(const char *uri) : Uri(uri){};
-	explicit UriRegex(const String &uri) : Uri(uri){};
+	explicit UriRegex(const char *uri) : Uri(uri) {};
+	explicit UriRegex(const String &uri) : Uri(uri) {};
 
 	Uri *clone() const override final {
 		return new UriRegex(_uri);
