@@ -38,11 +38,9 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 
 		//1. sta mac get
 		uint8_t mac_addr[6];
-		sysparam_sta_mac_get(mac_addr);
-		LT_DM(WIFI, "MACADDR: %02x:%02x:%02x:%02x:%02x:%02x", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+		setMacAddress(macAddress(mac_addr));
 
 		//2. net device(lwip)
-		netdev_set_mac_addr(NETIF_IDX_STA, mac_addr);
 		netdev_set_active(NETIF_IDX_STA);
 
 		//3. wifi start
@@ -65,10 +63,9 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		//1. ap mac get
 		uint8_t mac_addr[6];
 		sysparam_softap_mac_get(mac_addr);
-		LT_DM(WIFI, "MACADDR: %02x:%02x:%02x:%02x:%02x:%02x", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+		netdev_set_mac_addr(NETIF_IDX_AP, mac_addr);
 
 		//2. net device(lwip)
-		netdev_set_mac_addr(NETIF_IDX_AP, mac_addr);
 		netdev_set_active(NETIF_IDX_AP);
 
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
@@ -123,9 +120,6 @@ WiFiStatus WiFiClass::status() {
 
 bool WiFiClass::setSleep(bool enable) {
 	LT_DM(WIFI, "WiFi sleep mode %u", enable);
-	/* TODO : plante, SwEr:D�$ NoSizeAlloc : 268878192, mem_base=0x20023d1c
-warning:vhost data/cfg![mem_alloc f](msgtype=0x20023d34)
-rsp wait timeout, cfg_msg_id=(537017716), txmsg_id=(268861436)
 
 	if (enable) {
 		if (wifi_sta_set_powersave(WIFI_MAX_POWERSAVE))
@@ -133,7 +127,7 @@ rsp wait timeout, cfg_msg_id=(537017716), txmsg_id=(268861436)
 	} else {
 		if (wifi_sta_set_powersave(WIFI_NO_POWERSAVE))
 			return false;
-	}*/
+	}
 	DATA->sleep = enable;
 	return true;
 }

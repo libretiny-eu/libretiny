@@ -2,8 +2,6 @@
 
 #include "WiFiPrivate.h"
 
-static uint8_t mac_addr[6]        = {0x00, 0x50, 0xC2, 0x7F, 0xBC, 0x00};
-
 WiFiStatus
 WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
 	if (!enableSTA(true))
@@ -157,18 +155,17 @@ bool WiFiClass::setHostname(const char *hostname) {
 }
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
-	if (SYSPARAM_ERR_NONE == sysparam_sta_mac_get(mac)) 
+	if (SYSPARAM_ERR_NONE == sysparam_sta_mac_get(mac))
 		return mac;
-	else 
-		LT_EM(WIFI, "sta mac get failed!");
+	else
+		LT_WM(WIFI, "sysparam sta mac get failed!");
 
-	if (netdev_get_mac_addr(NETIF_IDX_STA, mac) == 0)
-		return mac;
-
-	return mac_addr;
+	lt_get_device_mac(mac);
+	return mac;
 }
 
 bool WiFiClass::setMacAddress(const uint8_t *mac) {
+	sysparam_sta_mac_update(mac);
 	return netdev_set_mac_addr(NETIF_IDX_STA, (uint8_t *)mac) == 0;
 }
 
