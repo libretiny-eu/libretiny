@@ -3,20 +3,20 @@
 		"lightning-ln882x",
 		"lightning-ln882hki",
 		"ic/ln882hk",
-		"pcb/ln-02",
-		"pcb/ln-02-test"
+		"pcb/wl2s",
+		"pcb/wl2s-test"
 ],
 	"build": {
 		"mcu": "ln882hk",
-		"variant": "ln-02"
+		"variant": "wl2s"
 	},
-	"name": "LN-02 Wi-Fi/Ble Module",
-  "url": "https://docs.libretiny.eu/boards/ln-02/",
+	"name": "WL2S Wi-Fi/Ble Module",
+  "url": "https://docs.libretiny.eu/boards/wl2s/",
   "vendor": "Unknown",
 	"doc": {
 		"fccid": ""
 	},
 	"pcb": {
-		"symbol": "LN-02"
+		"symbol": "WL2S"
 	}
 }

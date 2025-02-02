@@ -11,6 +11,10 @@ static void callback_uart0(void) {
 	char ch;
 	while (serial_read(serial_handles[0], &ch, 1)) {
 		data->buf.store_char(ch);
+#if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN) && PIN_SERIAL0_RX != PIN_INVALID
+		// parse UART protocol commands on UART0
+		SerialClass::adrParse(ch);
+#endif
 	}
 }
 #else
@@ -22,10 +26,6 @@ static void callback_uart1(void) {
 	SerialData *data = (SerialData *)Serial1.data;
 	char ch;
 	while (serial_read(serial_handles[1], &ch, 1)) {
-#if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN) && PIN_SERIAL1_RX != PIN_INVALID
-		// parse UART protocol commands on UART1
-		SerialClass::adrParse(ch);
-#endif
 		data->buf.store_char(ch);
 	}
 }
