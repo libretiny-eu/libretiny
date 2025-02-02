@@ -1,6 +1,10 @@
 {
 	"pcb": {
 		"ic": {
+			"7": {
+				"IO": "I",
+				"CTRL": "CEN"
+			},
 			"8": {
 				"C_NAME": "PA_0",
 				"GPIO": "P0",
@@ -17,13 +21,13 @@
 			"10": {
 				"C_NAME": "PA_2",
 				"GPIO": "P2",
-				"UART": "1_TX",
+				"UART": "0_TX",
 				"I2C": ["0_SCL","0_SDA"]
 			},
 			"11": {
 				"C_NAME": "PA_3",
 				"GPIO": "P3",
-				"UART": "1_RX",
+				"UART": "0_RX",
 				"I2C": ["0_SCL","0_SDA"]
 			},
 			"12": {
@@ -55,6 +59,7 @@
 			"16": {
 				"C_NAME": "PA_8",
 				"GPIO": "P8",
+				"CTRL": "BOOT0",
 				"SD": "CMD",
 				"I2S": "0_WS",
 				"I2C": ["0_SCL","0_SDA"]
@@ -62,6 +67,7 @@
 			"17": {
 				"C_NAME": "PA_9",
 				"GPIO": "P9",
+				"CTRL": "BOOT1",
 				"SD": "CLK",
 				"I2S": "0_SCLK",
 				"I2C": ["0_SCL","0_SDA"]
@@ -124,13 +130,13 @@
 				"C_NAME": "PB_8",
 				"GPIO": "P24",
 				"IRQ": null,
-				"UART": "0_RX",
+				"UART": "1_RX",
 				"I2C": ["0_SCL","0_SDA"]
 			},
 			"30": {
 				"C_NAME": "PB_9",
 				"GPIO": "P25",
-				"UART": "0_TX",
+				"UART": "1_TX",
 				"I2C": ["0_SCL","0_SDA"]
 			}
 		}

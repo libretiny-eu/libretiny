@@ -6,8 +6,8 @@
 
 // Pins
 // ----
-#define PINS_COUNT         8  // Total GPIO count
-#define NUM_DIGITAL_PINS   8  // Digital inputs/outputs
+#define PINS_COUNT         9  // Total GPIO count
+#define NUM_DIGITAL_PINS   9  // Digital inputs/outputs
 #define NUM_ANALOG_INPUTS  2  // ADC inputs
 #define NUM_ANALOG_OUTPUTS 0  // PWM & DAC outputs
 #define PINS_GPIO_MAX      25 // Last usable GPIO number
@@ -22,6 +22,7 @@
 #define PIN_WIRE0_SCL_5 25u // PB_9
 #define PIN_WIRE0_SCL_6 1u  // PA_1
 #define PIN_WIRE0_SCL_7 0u  // PA_0
+#define PIN_WIRE0_SCL_8 9u  // PA_9
 #define PIN_WIRE0_SDA_0 11u // PA_11
 #define PIN_WIRE0_SDA_1 19u // PB_3
 #define PIN_WIRE0_SDA_2 3u  // PA_3
@@ -30,19 +31,20 @@
 #define PIN_WIRE0_SDA_5 25u // PB_9
 #define PIN_WIRE0_SDA_6 1u  // PA_1
 #define PIN_WIRE0_SDA_7 0u  // PA_0
-#define PINS_WIRE0_SCL  (pin_size_t[]){11u, 19u, 3u, 24u, 2u, 25u, 1u, 0u}
-#define PINS_WIRE0_SDA  (pin_size_t[]){11u, 19u, 3u, 24u, 2u, 25u, 1u, 0u}
+#define PIN_WIRE0_SDA_8 9u  // PA_9
+#define PINS_WIRE0_SCL  (pin_size_t[]){11u, 19u, 3u, 24u, 2u, 25u, 1u, 0u, 9u}
+#define PINS_WIRE0_SDA  (pin_size_t[]){11u, 19u, 3u, 24u, 2u, 25u, 1u, 0u, 9u}
 
 // Serial ports
 // ------------
-#define PIN_SERIAL0_RX  24u // PB_8
-#define PIN_SERIAL0_TX  25u // PB_9
-#define PIN_SERIAL1_RX  3u  // PA_3
-#define PIN_SERIAL1_TX  2u  // PA_2
-#define PINS_SERIAL0_RX (pin_size_t[]){24u}
-#define PINS_SERIAL0_TX (pin_size_t[]){25u}
-#define PINS_SERIAL1_RX (pin_size_t[]){3u}
-#define PINS_SERIAL1_TX (pin_size_t[]){2u}
+#define PIN_SERIAL0_RX  3u  // PA_3
+#define PIN_SERIAL0_TX  2u  // PA_2
+#define PIN_SERIAL1_RX  24u // PB_8
+#define PIN_SERIAL1_TX  25u // PB_9
+#define PINS_SERIAL0_RX (pin_size_t[]){3u}
+#define PINS_SERIAL0_TX (pin_size_t[]){2u}
+#define PINS_SERIAL1_RX (pin_size_t[]){24u}
+#define PINS_SERIAL1_TX (pin_size_t[]){25u}
 
 // Pin function macros
 // -------------------
@@ -53,14 +55,17 @@
 #define PIN_P1   1u  // PA_1
 #define PIN_P2   2u  // PA_2
 #define PIN_P3   3u  // PA_3
+#define PIN_P9   9u  // PA_9
 #define PIN_P11  11u // PA_11
 #define PIN_P19  19u // PB_3
 #define PIN_P24  24u // PB_8
 #define PIN_P25  25u // PB_9
-#define PIN_RX0  24u // PB_8
-#define PIN_RX1  3u  // PA_3
-#define PIN_TX0  25u // PB_9
-#define PIN_TX1  2u  // PA_2
+#define PIN_RX0  3u  // PA_3
+#define PIN_RX1  24u // PB_8
+#define PIN_SCL0 9u  // PA_9
+#define PIN_SDA0 9u  // PA_9
+#define PIN_TX0  2u  // PA_2
+#define PIN_TX1  25u // PB_9
 
 // Port availability
 // -----------------
@@ -80,6 +85,7 @@
 #define PIN_D5 25u // PB_9
 #define PIN_D6 1u  // PA_1
 #define PIN_D7 0u  // PA_0
+#define PIN_D8 9u  // PA_9
 #define PIN_A2 0u  // PA_0
 #define PIN_A3 1u  // PA_1
 
@@ -95,3 +101,4 @@ static const unsigned char D4 = PIN_D4;
 static const unsigned char D5 = PIN_D5;
 static const unsigned char D6 = PIN_D6;
 static const unsigned char D7 = PIN_D7;
+static const unsigned char D8 = PIN_D8;

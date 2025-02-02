@@ -54,9 +54,9 @@ void lt_init_family() {
 }
 
 void lt_init_arduino() {
-#if LT_AUTO_DOWNLOAD_REBOOT && LT_ARD_HAS_SERIAL && LT_HW_UART1
+#if LT_AUTO_DOWNLOAD_REBOOT && LT_ARD_HAS_SERIAL && LT_HW_UART0
 	// initialize auto-download-reboot parser
-	Serial1.begin(115200);
+	Serial0.begin(115200);
 #endif
 }
 
