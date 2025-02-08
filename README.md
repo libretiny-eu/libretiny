@@ -19,7 +19,7 @@
 
 </div>
 
-PlatformIO development platform for LN882H, BK7231 and RTL8710 IoT chips.
+PlatformIO development platform for BK7231 and RTL8710 and LN882H IoT chips.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
 the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,
