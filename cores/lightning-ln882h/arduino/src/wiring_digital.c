@@ -18,10 +18,10 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 		pinEnable(pin, PIN_GPIO);
 	}
 
-	gpio->pin = GPIO_GET_PIN(pinNumber);
-	gpio->speed = GPIO_NORMAL_SPEED;
+	gpio->pin		= GPIO_GET_PIN(pinNumber);
+	gpio->speed		= GPIO_NORMAL_SPEED;
 	data->gpio_base = GPIO_GET_BASE(pinNumber);
-	data->gpioMode = pinMode;
+	data->gpioMode	= pinMode;
 
 	switch (pinMode) {
 		case INPUT:

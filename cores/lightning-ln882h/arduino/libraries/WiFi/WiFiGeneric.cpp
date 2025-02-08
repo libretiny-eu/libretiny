@@ -2,7 +2,7 @@
 
 #include "WiFiPrivate.h"
 
-static uint8_t psk_value[40]      = {0x0};
+static uint8_t psk_value[40] = {0x0};
 
 bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	__wrap_ln_printf_disable();
@@ -10,21 +10,21 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (!DATA->initialized) {
 		// rf preprocess,img cal
 		wifi_rf_calibration();
-		//Init wifi stack.
+		// Init wifi stack.
 		wifi_init();
-		//Init lwip stack.
+		// Init lwip stack.
 		LT_IM(WIFI, "Initializing LwIP");
 		lwip_tcpip_init();
-		//Init wifi manager
+		// Init wifi manager
 		wifi_manager_init();
-		//Register event handlers
+		// Register event handlers
 		registerWifiHandlers();
-		DATA->mode = WIFI_MODE_NULL;
+		DATA->mode		  = WIFI_MODE_NULL;
 		DATA->initialized = true;
 	}
 
 	LT_HEAP_I();
-	WiFiMode currentMode     = DATA->mode;
+	WiFiMode currentMode	 = DATA->mode;
 	WiFiNetworkInfo &staInfo = DATA->sta;
 	WiFiNetworkInfo &apInfo	 = DATA->ap;
 
@@ -36,19 +36,18 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (sta == WLMODE_ENABLE) {
 		LT_DM(WIFI, "Enabling STA");
 
-		//1. sta mac get
+		// 1. sta mac get
 		uint8_t mac_addr[6];
 		setMacAddress(macAddress(mac_addr));
 
-		//2. net device(lwip)
+		// 2. net device(lwip)
 		netdev_set_active(NETIF_IDX_STA);
 
-		//3. wifi start
+		// 3. wifi start
 		wifi_sta_start(mac_addr, WIFI_NO_POWERSAVE);
 
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
-	} 
-	else if (sta == WLMODE_DISABLE) {
+	} else if (sta == WLMODE_DISABLE) {
 		LT_DM(WIFI, "Disabling STA");
 		wifi_sta_disconnect();
 		netdev_set_state(NETIF_IDX_STA, NETDEV_DOWN);
@@ -60,17 +59,16 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	if (ap == WLMODE_ENABLE) {
 		LT_DM(WIFI, "Enabling AP");
 
-		//1. ap mac get
+		// 1. ap mac get
 		uint8_t mac_addr[6];
 		sysparam_softap_mac_get(mac_addr);
 		netdev_set_mac_addr(NETIF_IDX_AP, mac_addr);
 
-		//2. net device(lwip)
+		// 2. net device(lwip)
 		netdev_set_active(NETIF_IDX_AP);
 
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_AP_START);
-	} 
-	else if (ap == WLMODE_DISABLE) {
+	} else if (ap == WLMODE_DISABLE) {
 		LT_DM(WIFI, "Disabling AP");
 		wifi_softap_deauth_all();
 		netdev_set_state(NETIF_IDX_AP, NETDEV_DOWN);

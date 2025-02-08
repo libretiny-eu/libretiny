@@ -50,27 +50,28 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 
 	hal_gpio_pin_mode_set(GPIO_GET_BASE(pin->gpio), pin->gpio, GPIO_MODE_ANALOG);
 
-    adc_ch_t ch = pinToAdcCh(pin->gpio);
+	adc_ch_t ch = pinToAdcCh(pin->gpio);
 	adc_init_t_def adc_init;
 
-    memset(&adc_init, 0, sizeof(adc_init_t_def));
-    adc_init.adc_ch        = ch;
-    adc_init.adc_conv_mode = ADC_CONV_MODE_CONTINUE;
-    adc_init.adc_presc     = 80;
-    adc_init.adc_ov_smp_ratio    = ADC_OVER_SAMPLING_RATIO_X8;
-    adc_init.adc_ov_smp_ratio_en = ADC_OVER_SAMPLING_EN_STATUS_BIT0;
-    hal_adc_init(ADC_BASE, &adc_init);
-        
-    hal_adc_en(ADC_BASE, HAL_ENABLE);
-    
-    hal_adc_start_conv(ADC_BASE);
+	memset(&adc_init, 0, sizeof(adc_init_t_def));
+	adc_init.adc_ch				 = ch;
+	adc_init.adc_conv_mode		 = ADC_CONV_MODE_CONTINUE;
+	adc_init.adc_presc			 = 80;
+	adc_init.adc_ov_smp_ratio	 = ADC_OVER_SAMPLING_RATIO_X8;
+	adc_init.adc_ov_smp_ratio_en = ADC_OVER_SAMPLING_EN_STATUS_BIT0;
+	hal_adc_init(ADC_BASE, &adc_init);
 
-    while(hal_adc_get_conv_status(ADC_BASE, ch) == 0); 
-    
-    ret = hal_adc_get_data(ADC_BASE, ch);
-    LT_D("ADC CH(%d) = %d", ch, ret);
+	hal_adc_en(ADC_BASE, HAL_ENABLE);
 
-    hal_adc_clr_conv_status(ADC_BASE, ch);
+	hal_adc_start_conv(ADC_BASE);
+
+	while (hal_adc_get_conv_status(ADC_BASE, ch) == 0)
+		;
+
+	ret = hal_adc_get_data(ADC_BASE, ch);
+	LT_D("ADC CH(%d) = %d", ch, ret);
+
+	hal_adc_clr_conv_status(ADC_BASE, ch);
 
 	return (uint16_t)(3300UL * ret / 4095);
 }

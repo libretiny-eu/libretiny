@@ -2,16 +2,15 @@
 
 #include "wiring_private.h"
 
-void GPIOA_IRQHandler()
-{
+void GPIOA_IRQHandler() {
 	for (pin_size_t pinNumber = 0; pinNumber < 16; pinNumber++) {
 		gpio_pin_t gpio = GPIO_GET_PIN(pinNumber);
 
-		if(hal_gpio_pin_get_it_flag(GPIOA_BASE, gpio) == HAL_SET) {
-        	hal_gpio_pin_clr_it_flag(GPIOA_BASE, gpio);
+		if (hal_gpio_pin_get_it_flag(GPIOA_BASE, gpio) == HAL_SET) {
+			hal_gpio_pin_clr_it_flag(GPIOA_BASE, gpio);
 
 			PinInfo *pin = pinInfo(pinNumber);
-			if (!pin) 
+			if (!pin)
 				continue;
 
 			PinData *data = pinData(pin);
@@ -21,20 +20,19 @@ void GPIOA_IRQHandler()
 				((voidFuncPtr)data->irqHandler)();
 			else
 				((voidFuncPtrParam)data->irqHandler)(data->irqParam);
-    	}
+		}
 	}
 }
 
-void GPIOB_IRQHandler()
-{
+void GPIOB_IRQHandler() {
 	for (pin_size_t pinNumber = 16; pinNumber < 32; pinNumber++) {
 		gpio_pin_t gpio = GPIO_GET_PIN(pinNumber);
 
-		if(hal_gpio_pin_get_it_flag(GPIOB_BASE, gpio) == HAL_SET) {
-        	hal_gpio_pin_clr_it_flag(GPIOB_BASE, gpio);
+		if (hal_gpio_pin_get_it_flag(GPIOB_BASE, gpio) == HAL_SET) {
+			hal_gpio_pin_clr_it_flag(GPIOB_BASE, gpio);
 
 			PinInfo *pin = pinInfo(pinNumber);
-			if (!pin) 
+			if (!pin)
 				continue;
 
 			PinData *data = pinData(pin);
@@ -44,7 +42,7 @@ void GPIOB_IRQHandler()
 				((voidFuncPtr)data->irqHandler)();
 			else
 				((voidFuncPtrParam)data->irqHandler)(data->irqParam);
-    	}
+		}
 	}
 }
 
@@ -73,13 +71,13 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 			event = GPIO_INT_RISING;
 			break;
 		case CHANGE:
-			event  = GPIO_INT_RISING_FALLING;
+			event = GPIO_INT_RISING_FALLING;
 			break;
 		default:
 			return;
 	}
 	pinEnable(pin, PIN_IRQ);
-	data->irqMode	= mode;
+	data->irqMode = mode;
 
 	hal_gpio_pin_it_cfg(data->gpio_base, data->gpio->pin, event);
 	hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_ENABLE);
@@ -87,7 +85,7 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 
 void detachInterrupt(pin_size_t interruptNumber) {
 	pinCheckGetData(interruptNumber, PIN_IRQ, );
-	
+
 	hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_DISABLE);
 	pinModeRemove(interruptNumber, PIN_IRQ);
 }

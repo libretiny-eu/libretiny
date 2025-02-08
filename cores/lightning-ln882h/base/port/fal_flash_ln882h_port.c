@@ -3,8 +3,8 @@
 #include <libretiny.h>
 #include <sdk_private.h>
 
-#include <hal/hal_flash.h>
 #include <fal.h>
+#include <hal/hal_flash.h>
 
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 

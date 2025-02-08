@@ -29,14 +29,9 @@ static void scanHandler(void *arg) {
 	}
 
 	// 2.get all ap info in the list.
-	LN_LIST_FOR_EACH_ENTRY(pnode, ap_info_node_t, list, list)
-	{
-		uint8_t * mac = (uint8_t*)pnode->info.bssid;
+	LN_LIST_FOR_EACH_ENTRY(pnode, ap_info_node_t, list, list) {
+		uint8_t *mac	   = (uint8_t *)pnode->info.bssid;
 		ap_info_t *ap_info = &pnode->info;
-
-		LT_DM(WIFI, "BSSID:[%02X:%02X:%02X:%02X:%02X:%02X], SSID:\"%s\", CH=%d, RSSI=%d", \
-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], \
-					ap_info->ssid, ap_info->channel, ap_info->rssi);
 
 		scan->ap[n].ssid	= strdup(ap_info->ssid);
 		scan->ap[n].auth	= securityTypeToAuthMode(ap_info->authmode);
@@ -60,8 +55,8 @@ end:
 		eventInfo.wifi_scan_done.number = scan->count;
 		pWiFi->postEvent(ARDUINO_EVENT_WIFI_SCAN_DONE, eventInfo);
 	}
-	//wifi_manager_ap_list_update_enable(LN_TRUE);
-	//wifi_sta_disconnect();
+	// wifi_manager_ap_list_update_enable(LN_TRUE);
+	// wifi_sta_disconnect();
 	LT_HEAP_I();
 	return;
 }
@@ -88,9 +83,9 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	wifi_manager_cleanup_scan_results();
 
 	wifi_scan_cfg_t scan_cfg = {
-			.channel   = 0,
-			.scan_type = WIFI_SCAN_TYPE_ACTIVE,
-			.scan_time = 5,
+		.channel   = 0,
+		.scan_type = WIFI_SCAN_TYPE_ACTIVE,
+		.scan_time = 5,
 	};
 	wifi_sta_scan(&scan_cfg);
 

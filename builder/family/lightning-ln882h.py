@@ -1,10 +1,9 @@
 # Copyright (c) Etienne Le Cousin 2024-02-08.
 
-import json
 from os.path import join
 
 from platformio.platform.board import PlatformBoardConfig
-from SCons.Script import Builder, DefaultEnvironment, Environment
+from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()

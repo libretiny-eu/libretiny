@@ -6,7 +6,7 @@
 extern "C" {
 #endif // __cplusplus
 
-//PinNames
+// PinNames
 #include "PinNames.h"
 
 // undefine ROM stdio in favor of printf() library (wrappers)
@@ -19,41 +19,40 @@ extern "C" {
 #include <stdio.h>
 
 // Conflicting types
-#define WIFI_MODE_STATION            LN_WIFI_MODE_STATION
-#define WIFI_MODE_AP                 LN_WIFI_MODE_AP
-#define WIFI_MODE_AP_STATION         LN_WIFI_MODE_AP_STATION
-#define WIFI_MODE_MAX                LN_WIFI_MODE_MAX
-#define WIFI_AUTH_OPEN               LN_WIFI_AUTH_OPEN
-#define WIFI_AUTH_WEP                LN_WIFI_AUTH_WEP
-#define WIFI_AUTH_WPA_PSK            LN_WIFI_AUTH_WPA_PSK
-#define WIFI_AUTH_WPA2_PSK           LN_WIFI_AUTH_WPA2_PSK
-#define WIFI_AUTH_WPA_WPA2_PSK       LN_WIFI_AUTH_WPA_WPA2_PSK
-#define WIFI_AUTH_WPA2_ENTERPRISE    LN_WIFI_AUTH_WPA2_ENTERPRISE
-#define WIFI_AUTH_WPA3_SAE           LN_WIFI_AUTH_WPA3_SAE
-#define WIFI_AUTH_WPA2_PSK_WPA3_SAE  LN_WIFI_AUTH_WPA2_PSK_WPA3_SAE
-#define WIFI_AUTH_MAX                LN_WIFI_AUTH_MAX
-#define wifi_mode_t ln_wifi_mode_t
-#define wifi_auth_mode_t ln_wifi_auth_mode_t
+#define WIFI_MODE_STATION			LN_WIFI_MODE_STATION
+#define WIFI_MODE_AP				LN_WIFI_MODE_AP
+#define WIFI_MODE_AP_STATION		LN_WIFI_MODE_AP_STATION
+#define WIFI_MODE_MAX				LN_WIFI_MODE_MAX
+#define WIFI_AUTH_OPEN				LN_WIFI_AUTH_OPEN
+#define WIFI_AUTH_WEP				LN_WIFI_AUTH_WEP
+#define WIFI_AUTH_WPA_PSK			LN_WIFI_AUTH_WPA_PSK
+#define WIFI_AUTH_WPA2_PSK			LN_WIFI_AUTH_WPA2_PSK
+#define WIFI_AUTH_WPA_WPA2_PSK		LN_WIFI_AUTH_WPA_WPA2_PSK
+#define WIFI_AUTH_WPA2_ENTERPRISE	LN_WIFI_AUTH_WPA2_ENTERPRISE
+#define WIFI_AUTH_WPA3_SAE			LN_WIFI_AUTH_WPA3_SAE
+#define WIFI_AUTH_WPA2_PSK_WPA3_SAE LN_WIFI_AUTH_WPA2_PSK_WPA3_SAE
+#define WIFI_AUTH_MAX				LN_WIFI_AUTH_MAX
+#define wifi_mode_t					ln_wifi_mode_t
+#define wifi_auth_mode_t			ln_wifi_auth_mode_t
 
-//SDK
+// SDK
+#include <hal/hal_adc.h>
+#include <hal/hal_gpio.h>
+#include <hal/hal_i2c.h>
+#include <hal/hal_interrupt.h>
+#include <hal/hal_wdt.h>
 #include <osal/osal.h>
 #include <serial/serial.h>
-#include <hal/hal_gpio.h>
-#include <hal/hal_interrupt.h>
-#include <hal/hal_i2c.h>
-#include <hal/hal_adc.h>
-#include <hal/hal_wdt.h>
-//#include <hal/hal_flash.h>
+#include "ln_kv_api.h"
+#include "ln_nvds.h"
+#include "utils/debug/CmBacktrace/cm_backtrace.h"
+#include "utils/ln_psk_calc.h"
+#include "utils/power_mgmt/ln_pm.h"
+#include "utils/reboot_trace/reboot_trace.h"
+#include "utils/runtime/runtime.h"
+#include "utils/system_parameter.h"
 #include <wifi.h>
 #include <wifi_manager.h>
-#include "utils/system_parameter.h"
-#include "utils/ln_psk_calc.h"
-#include "utils/debug/CmBacktrace/cm_backtrace.h"
-#include "utils/reboot_trace/reboot_trace.h"
-#include "utils/power_mgmt/ln_pm.h"
-#include "utils/runtime/runtime.h"
-#include "ln_nvds.h"
-#include "ln_kv_api.h"
 
 #ifndef LN882H_SDK
 #undef WIFI_MODE_STATION

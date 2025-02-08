@@ -6,11 +6,9 @@
 #include <sdk_private.h>
 
 typedef struct {
-//  Serial_t serial;
 	RingBuffer buf;
-  void (* callback)(void);
+	void (*callback)(void);
 } SerialData;
 
 #define DATA ((SerialData *)this->data)
-//#define SER  (DATA->serial)
 #define BUF	 (DATA->buf)

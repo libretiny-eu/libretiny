@@ -5,7 +5,8 @@
 void wifiEventSendArduino(EventId event) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 	pWiFi->postEvent(event, eventInfo);
 }
 
@@ -16,7 +17,8 @@ static void wifiEventStaStartup(void *arg) {
 static void wifiEventStaConnected(void *arg) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 
 	String ssid							  = pWiFi->SSID();
 	eventInfo.wifi_sta_connected.ssid_len = ssid.length();
@@ -31,10 +33,11 @@ static void wifiEventStaConnected(void *arg) {
 static void wifiEventStaDisconnected(void *arg) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 
 	eventInfo.wifi_sta_disconnected.ssid_len = 0;
-	eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_LEAVE;
+	eventInfo.wifi_sta_disconnected.reason	 = WIFI_REASON_ASSOC_LEAVE;
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_STA_DISCONNECTED, eventInfo);
 }
 
@@ -42,11 +45,12 @@ static void wifiEventStaConnectFailed(void *arg) {
 	wifi_sta_connect_failed_reason_t reason = *(wifi_sta_connect_failed_reason_t *)arg;
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 
 	eventInfo.wifi_sta_disconnected.ssid_len = 0;
-	eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_UNSPECIFIED;
-	switch(reason) {
+	eventInfo.wifi_sta_disconnected.reason	 = WIFI_REASON_UNSPECIFIED;
+	switch (reason) {
 		case WIFI_STA_CONN_WRONG_PWD:
 			eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_AUTH_FAIL;
 			break;
@@ -72,7 +76,8 @@ static void wifiEventSoftAPAssociated(void *arg) {
 	const uint8_t *mac_addr = (const uint8_t *)arg;
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 
 	memcpy(eventInfo.wifi_ap_staconnected.mac, mac_addr, 6);
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_STACONNECTED, eventInfo);
@@ -82,7 +87,8 @@ static void wifiEventSoftAPDisassociated(void *arg) {
 	const uint8_t *mac_addr = (const uint8_t *)arg;
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi)	return; // failsafe
+	if (!pWiFi)
+		return; // failsafe
 
 	memcpy(eventInfo.wifi_ap_staconnected.mac, mac_addr, 6);
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_STADISCONNECTED, eventInfo);
@@ -91,12 +97,13 @@ static void wifiEventSoftAPDisassociated(void *arg) {
 static void wifiEventIpReceived(struct netif *nif) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
-	if (!pWiFi || !nif)	return; // failsafe
+	if (!pWiFi || !nif)
+		return; // failsafe
 
-	eventInfo.got_ip.if_index   = 0;
-	eventInfo.got_ip.ip_changed = true;
-	eventInfo.got_ip.ip_info.ip.addr      = nif->ip_addr.addr;
-	eventInfo.got_ip.ip_info.gw.addr      = nif->gw.addr;
+	eventInfo.got_ip.if_index			  = 0;
+	eventInfo.got_ip.ip_changed			  = true;
+	eventInfo.got_ip.ip_info.ip.addr	  = nif->ip_addr.addr;
+	eventInfo.got_ip.ip_info.gw.addr	  = nif->gw.addr;
 	eventInfo.got_ip.ip_info.netmask.addr = nif->netmask.addr;
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_STA_GOT_IP, eventInfo);
 }
@@ -106,7 +113,7 @@ void registerWifiHandlers() {
 	wifi_manager_reg_event_callback(WIFI_MGR_EVENT_STA_CONNECTED, &wifiEventStaConnected);
 	wifi_manager_reg_event_callback(WIFI_MGR_EVENT_STA_DISCONNECTED, &wifiEventStaDisconnected);
 	wifi_manager_reg_event_callback(WIFI_MGR_EVENT_STA_CONNECT_FAILED, &wifiEventStaConnectFailed);
-	
+
 	netdev_get_ip_cb_set(&wifiEventIpReceived);
 
 	wifi_manager_reg_event_callback(WIFI_MGR_EVENT_SOFTAP_STARTUP, &wifiEventSoftAPStartup);
