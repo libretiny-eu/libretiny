@@ -11,8 +11,6 @@ extern "C" {
 
 struct PinData_s {
 	gpio_init_t_def *gpio;
-//	gpio_irq_t *irq;
-//	pwmout_t *pwm;
 	PinMode gpioMode;
 	uint32_t gpio_base;
 	PinStatus irqMode;

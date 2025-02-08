@@ -11,12 +11,13 @@ static OS_Thread_t g_mainTask_thread;
 
 bool startMainTask() {
 	OS_Status ret = OS_ThreadCreate(
-    &g_mainTask_thread,
-    "main",
-    (OS_ThreadEntry_t)mainTask,
-    NULL,
-    OS_PRIORITY_BELOW_NORMAL,
-    MAIN_TASK_STACK_SIZE);
+		&g_mainTask_thread,
+		"main",
+		(OS_ThreadEntry_t)mainTask,
+		NULL,
+		OS_PRIORITY_BELOW_NORMAL,
+		MAIN_TASK_STACK_SIZE
+	);
 
 	if (ret != OS_OK)
 		return false;

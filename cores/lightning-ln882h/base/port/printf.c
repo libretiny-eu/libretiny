@@ -14,7 +14,7 @@ void putchar_(char c) {
 }
 
 void putchar_p(char c, unsigned long port) {
-	 serial_putchar(serial_handles[port], c);
+	serial_putchar(serial_handles[port], c);
 }
 
 WRAP_PRINTF(ln_printf);

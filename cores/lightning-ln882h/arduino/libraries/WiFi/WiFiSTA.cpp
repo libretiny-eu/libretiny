@@ -2,8 +2,13 @@
 
 #include "WiFiPrivate.h"
 
-WiFiStatus
-WiFiClass::begin(const char *ssid, const char *passphrase, int32_t channel, const uint8_t *bssid, bool connect) {
+WiFiStatus WiFiClass::begin(
+	const char *ssid,
+	const char *passphrase,
+	int32_t channel,
+	const uint8_t *bssid,
+	bool connect
+) {
 	if (!enableSTA(true))
 		return WL_CONNECT_FAILED;
 	if (!validate(ssid, passphrase))
@@ -37,7 +42,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 	if (!enableSTA(true))
 		return false;
 	WiFiNetworkInfo &info = DATA->sta;
-	struct netif *ifs = netdev_get_netif(NETIF_IDX_STA);
+	struct netif *ifs	  = netdev_get_netif(NETIF_IDX_STA);
 
 	ip4_addr_t d1, d2;
 	d1.addr = info.dns1 = dns1;
@@ -67,32 +72,32 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
 
 	if (bssid != info.bssid) {
-		if(!info.bssid)
+		if (!info.bssid)
 			info.bssid = (uint8_t *)malloc(BSSID_LEN);
 		memcpy(info.bssid, bssid, BSSID_LEN);
-	} 
+	}
 
-	uint8_t psk_value[40] = {0x0};
+	uint8_t psk_value[40]	   = {0x0};
 	wifi_sta_connect_t connect = {
-		.ssid = info.ssid,
-		.pwd = info.password,
-		.bssid = NULL, //info.bssid,
+		.ssid	   = info.ssid,
+		.pwd	   = info.password,
+		.bssid	   = NULL, // info.bssid,
 		.psk_value = NULL,
 	};
 	wifi_scan_cfg_t scan_cfg = {
-			.channel   = (uint8_t)info.channel,
-			.scan_type = WIFI_SCAN_TYPE_ACTIVE,
-			.scan_time = 5,
+		.channel   = (uint8_t)info.channel,
+		.scan_type = WIFI_SCAN_TYPE_ACTIVE,
+		.scan_time = 5,
 	};
 
-	if (0 == ln_psk_calc(connect.ssid, connect.pwd, psk_value, sizeof (psk_value)))
+	if (0 == ln_psk_calc(connect.ssid, connect.pwd, psk_value, sizeof(psk_value)))
 		connect.psk_value = psk_value;
 
 	LT_DM(WIFI, "Starting WiFi...");
 
 	__wrap_ln_printf_disable();
 	int ret = wifi_sta_connect(&connect, &scan_cfg);
-	//int ret = wifi_sta_connect_v2(&connect, &scan_cfg, 10);
+	// int ret = wifi_sta_connect_v2(&connect, &scan_cfg, 10);
 	__wrap_ln_printf_enable();
 
 	LT_DM(WIFI, "Start OK (%d)", ret);
@@ -170,7 +175,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 }
 
 const String WiFiClass::SSID() {
-	const char *ssid = NULL;
+	const char *ssid	 = NULL;
 	const uint8_t *bssid = NULL;
 	wifi_get_sta_conn_info(&ssid, &bssid);
 	return ssid;
@@ -183,7 +188,7 @@ const String WiFiClass::psk() {
 }
 
 uint8_t *WiFiClass::BSSID() {
-	const char *ssid = NULL;
+	const char *ssid	 = NULL;
 	const uint8_t *bssid = NULL;
 	wifi_get_sta_conn_info(&ssid, &bssid);
 	return (uint8_t *)bssid;

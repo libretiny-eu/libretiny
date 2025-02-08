@@ -4,7 +4,7 @@
 #include <sdk_private.h>
 
 void lt_get_device_mac(uint8_t *mac) {
-	 ln_fotp_get_mac_val(mac);
+	ln_fotp_get_mac_val(mac);
 }
 
 void lt_reboot() {
