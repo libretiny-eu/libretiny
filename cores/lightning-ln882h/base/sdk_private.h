@@ -36,13 +36,6 @@ extern "C" {
 #define wifi_auth_mode_t			ln_wifi_auth_mode_t
 
 // SDK
-#include <hal/hal_adc.h>
-#include <hal/hal_gpio.h>
-#include <hal/hal_i2c.h>
-#include <hal/hal_interrupt.h>
-#include <hal/hal_wdt.h>
-#include <osal/osal.h>
-#include <serial/serial.h>
 #include "ln_kv_api.h"
 #include "ln_nvds.h"
 #include "utils/debug/CmBacktrace/cm_backtrace.h"
@@ -51,6 +44,13 @@ extern "C" {
 #include "utils/reboot_trace/reboot_trace.h"
 #include "utils/runtime/runtime.h"
 #include "utils/system_parameter.h"
+#include <hal/hal_adc.h>
+#include <hal/hal_gpio.h>
+#include <hal/hal_i2c.h>
+#include <hal/hal_interrupt.h>
+#include <hal/hal_wdt.h>
+#include <osal/osal.h>
+#include <serial/serial.h>
 #include <wifi.h>
 #include <wifi_manager.h>
 
