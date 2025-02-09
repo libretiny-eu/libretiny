@@ -11,8 +11,8 @@
 		"variant": "wl2s"
 	},
 	"name": "WL2S Wi-Fi/Ble Module",
-  "url": "https://docs.libretiny.eu/boards/wl2s/",
-  "vendor": "Unknown",
+	"url": "https://docs.libretiny.eu/boards/wl2s/",
+	"vendor": "Unknown",
 	"doc": {
 		"fccid": ""
 	},
