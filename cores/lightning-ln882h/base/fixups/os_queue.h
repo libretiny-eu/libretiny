@@ -1,7 +1,4 @@
-#ifndef OS_QUEUE_H
-#define OS_QUEUE_H
+#pragma once
 
 #include "queue.h"
-
-#endif /* QUEUE_H */
 
