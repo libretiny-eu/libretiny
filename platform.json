@@ -75,7 +75,7 @@
     "framework-lightning-ln882h": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/lamauny/framework-lightning-ln882h",
+      "version": "https://github.com/libretiny-eu/framework-lightning-ln882h",
       "version_prefix": true,
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
@@ -96,16 +96,16 @@
     "library-lwip": {
       "type": "framework",
       "optional": true,
-      "base_url": "https://github.com/lamauny/lwip"
+      "base_url": "https://github.com/libretiny-eu/lwip"
     },
     "library-freertos": {
       "type": "framework",
       "optional": true,
-      "base_url": "https://github.com/lamauny/library-freertos"
+      "base_url": "https://github.com/libretiny-eu/library-freertos"
     },
     "library-freertos-port": {
       "type": "framework",
-      "version": "https://github.com/lamauny/library-freertos-port"
+      "version": "https://github.com/libretiny-eu/library-freertos-port#2025.01.18"
     },
     "library-flashdb": {
       "type": "framework",

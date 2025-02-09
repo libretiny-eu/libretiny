@@ -109,7 +109,7 @@
 	"lightning-ln882h": {
 		"parent": "lightning-ln882x",
 		"code": "ln882h",
-		"id": "0x12345678",
+		"id": "0xA38090A8",
 		"short_name": "LN882H",
 		"description": "Lightning LN882H",
 		"package": "framework-lightning-ln882h"

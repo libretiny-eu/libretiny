@@ -1,8 +1,5 @@
 {
 	"build": {
-		"family": "LN882X",
-		"ldscript": "ln882x_bsp.ld",
-		"bootfile": "boot_ln882x.bin",
 		"f_cpu": "160000000L",
 		"prefix": "arm-none-eabi-"
 	},

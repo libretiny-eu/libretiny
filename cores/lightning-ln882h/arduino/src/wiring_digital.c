@@ -54,7 +54,7 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 	pinCheckGetData(pinNumber, PIN_GPIO, );
 	pinSetOutputPull(pin, data, pinNumber, status);
-	if (!!status)
+	if (status)
 		hal_gpio_pin_set(data->gpio_base, data->gpio->pin);
 	else
 		hal_gpio_pin_reset(data->gpio_base, data->gpio->pin);
