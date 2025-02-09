@@ -1,9 +1,10 @@
 /* Copyright (c) Etienne Le Cousin 2025-01-19. */
 
-#include "Wire.h"
-
 #include "wiring_private.h"
 #include <sdk_private.h>
+
+#define I2C_PRIV i2c_init_t_def
+#include "Wire.h"
 
 // Functions from I2C demo of SDK
 static uint8_t hal_i2c_master_7bit_write(uint32_t i2c_x_base, uint8_t dev_addr, const uint8_t *buf, uint16_t buf_len);
@@ -14,12 +15,7 @@ static uint8_t hal_i2c_master_7bit_read(uint32_t i2c_x_base, uint8_t dev_addr, u
 TwoWire Wire(PIN_WIRE0_SDA, PIN_WIRE0_SCL);
 #endif
 
-TwoWire::TwoWire() {
-	_timeout = 50;
-}
-
 TwoWire::TwoWire(int8_t sda, int8_t scl) {
-	_timeout = 50;
 	_sda	 = sda;
 	_scl	 = scl;
 }
