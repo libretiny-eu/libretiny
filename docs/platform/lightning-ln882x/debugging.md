@@ -18,13 +18,6 @@ openocd_interface = <interface name>
 ```
 where `<interface name>` is for example `raspberrypi2-native`, `stlink`, etc.
 
-## Remote debugger
-
-Using a Raspberry Pi is probably the easiest option (and cheapest, as everyone has a spare Pi laying around).
-
-!!! 
-	NOT TESTED
-
 ## JLink configuration
 
 ```ini
