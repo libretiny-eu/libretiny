@@ -11,11 +11,15 @@
 #define WIRE_HAS_END	  1
 #define WIRE_DEFAULT_FREQ 100000
 
+#ifndef I2C_PRIV
+#define I2C_PRIV void
+#endif
+
 using arduino::RingBuffer;
 
 class TwoWire : public HardwareI2C {
   private:
-	i2c_init_t_def *_i2c = NULL;
+	I2C_PRIV *_i2c = NULL;
 
 	RingBuffer _rxBuf;
 	RingBuffer _txBuf;
