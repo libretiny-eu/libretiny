@@ -63,11 +63,4 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 		hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_DISABLE);
 		pinDisable(pin, PIN_IRQ);
 	}
-	/*	TODO EL
-		if ((mask & PIN_PWM) && (pin->enabled & PIN_PWM)) {
-			pwmout_free(data->pwm);
-			free(data->pwm);
-			pinDisable(pin, PIN_PWM);
-		}
-	*/
 }

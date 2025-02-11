@@ -69,7 +69,6 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 		;
 
 	ret = hal_adc_get_data(ADC_BASE, ch);
-	LT_D("ADC CH(%d) = %d", ch, ret);
 
 	hal_adc_clr_conv_status(ADC_BASE, ch);
 
