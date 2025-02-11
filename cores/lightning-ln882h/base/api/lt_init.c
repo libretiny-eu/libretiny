@@ -30,7 +30,6 @@ void lt_init_family() {
 	lt_init_log();
 
 	cm_backtrace_init("LibreTiny - LN882H", "HW_V1.0", "SW_V1.0");
-	LT_I("------  LibreTiny - LN882H  ------");
 
 	if (NVDS_ERR_OK != ln_nvds_init(FLASH_NVDS_OFFSET)) {
 		LT_E("NVDS init failed!");
