@@ -3,6 +3,16 @@
 #pragma once
 
 #ifdef __cplusplus
+// Fix to not include SDK reg_xx.h files in C++
+// These files declare inline functions with unallowed volatile assignments in C++
+#define __REG_CACHE_H__
+#define __REG_GPIO_H__
+#define __REG_I2C_H__
+#define __REG_LN_UART_H__
+#define __REG_QSPI_H__
+#define __REG_WDT_H__
+#define __REG_SYSC_AWO_H__
+#define __REG_SYSC_CMP_H__
 extern "C" {
 #endif // __cplusplus
 
