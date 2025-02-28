@@ -23,21 +23,21 @@ queue.AppendPublic(
         "-ffunction-sections",
         "-fdata-sections",
         "-fno-strict-aliasing",
-        "-MD","-MP",
+        "-MD",
+        "-MP",
     ],
     CFLAGS=[
         "-Wpointer-arith",
         "-Wno-write-strings",
         "-Wno-maybe-uninitialized",
     ],
-    CXXFLAGS=[
-    ],
+    CXXFLAGS=[],
     CPPDEFINES=[
         # other options
         "ARM_MATH_CM4",
         "LN882H",
-        ("PLATFORM_LN882H","1"),
-        ("MBEDTLS_CONFIG_FILE",r"\"mbedtls_config.h\""),
+        ("PLATFORM_LN882H", "1"),
+        ("MBEDTLS_CONFIG_FILE", r"\"mbedtls_config.h\""),
     ],
     ASFLAGS=[
         "-mcpu=cortex-m4",
@@ -71,7 +71,8 @@ queue.AppendPrivate(
         "-fdata-sections",
         "-fno-strict-aliasing",
         "-std=gnu99",
-        "-MD","-MP",
+        "-MD",
+        "-MP",
     ],
 )
 
@@ -136,7 +137,7 @@ queue.AddLibrary(
         "+<components/serial>",
         "+<components/utils/debug/CmBacktrace>",
         "+<components/utils/power_mgmt>",
-        #"+<components/utils/runtime>",
+        # "+<components/utils/runtime>",
         "+<components/utils/reboot_trace>",
         "+<components/tencent/qcloud_iot_c_sdk/external_libs/cJSON>",
     ],
@@ -221,7 +222,7 @@ queue.AppendPublic(
         "c",
         "nosys",
         "gcc",
-   ],
+    ],
 )
 
 # Generate linker scripts with correct flash offsets
