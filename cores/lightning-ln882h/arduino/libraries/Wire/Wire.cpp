@@ -16,8 +16,8 @@ TwoWire Wire(PIN_WIRE0_SDA, PIN_WIRE0_SCL);
 #endif
 
 TwoWire::TwoWire(int8_t sda, int8_t scl) {
-	_sda	 = sda;
-	_scl	 = scl;
+	_sda = sda;
+	_scl = scl;
 }
 
 TwoWire::~TwoWire() {}
