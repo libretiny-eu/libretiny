@@ -8,7 +8,7 @@
 // ----
 #define PINS_COUNT         13 // Total GPIO count
 #define NUM_DIGITAL_PINS   13 // Digital inputs/outputs
-#define NUM_ANALOG_INPUTS  1  // ADC inputs
+#define NUM_ANALOG_INPUTS  3  // ADC inputs
 #define NUM_ANALOG_OUTPUTS 0  // PWM & DAC outputs
 #define PINS_GPIO_MAX      25 // Last usable GPIO number
 
@@ -102,10 +102,14 @@
 #define PIN_D10 25u // PB_9
 #define PIN_D11 5u  // PA_5
 #define PIN_D12 1u  // PA_1
-#define PIN_A2  0u  // PA_0
+#define PIN_A0  0u  // PA_0
+#define PIN_A1  19u // PB_3
+#define PIN_A2  1u  // PA_1
 
 // Static pin names
 // ----------------
+static const unsigned char A0 = PIN_A0;
+static const unsigned char A1 = PIN_A1;
 static const unsigned char A2 = PIN_A2;
 static const unsigned char D0 = PIN_D0;
 static const unsigned char D1 = PIN_D1;

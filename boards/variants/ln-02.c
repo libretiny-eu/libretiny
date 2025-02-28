@@ -11,7 +11,7 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: PA11, SD_D1, I2C0_SCL, I2C0_SDA
 	{PA_11, PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
 	// D1: PB03, ADC5, I2C0_SCL, I2C0_SDA
-	{PB_3,  PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PB_3,  PIN_I2C | PIN_ADC | PIN_GPIO,                     PIN_NONE, 0},
 	// D2: PA03, UART0_RX, I2C0_SCL, I2C0_SDA
 	{PA_3,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 	// D3: PB08, UART1_RX, I2C0_SCL, I2C0_SDA
