@@ -55,9 +55,12 @@ queue.AppendPublic(
         "-mfloat-abi=hard",
         "-mfpu=fpv4-sp-d16",
         "--specs=nano.specs",
+        "-Wl,--gc-sections",
+        "-Wl,--whole-archive",
+        "-lcore_ln882h",
+        "-Wl,--no-whole-archive",
         # stdio wrappers (base/port/printf.c)
         "-Wl,-wrap,ln_printf",
-        "-Wl,--gc-sections",
     ],
 )
 queue.AppendPrivate(

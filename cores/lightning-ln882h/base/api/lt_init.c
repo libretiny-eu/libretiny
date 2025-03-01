@@ -56,5 +56,3 @@ void lt_init_arduino() {
 	Serial0.begin(115200);
 #endif
 }
-
-void lt_init_variant() {}
