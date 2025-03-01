@@ -100,5 +100,18 @@
 		"parent": null,
 		"code": "wmiot",
 		"description": "WinnerMicro W60x/W800x"
+	},
+	"lightning-ln882x": {
+		"parent": null,
+		"code": "ln882x",
+		"description": "Lightning LN882x Family"
+	},
+	"lightning-ln882h": {
+		"parent": "lightning-ln882x",
+		"code": "ln882h",
+		"id": "0xA38090A8",
+		"short_name": "LN882H",
+		"description": "Lightning LN882H",
+		"package": "framework-lightning-ln882h"
 	}
 }

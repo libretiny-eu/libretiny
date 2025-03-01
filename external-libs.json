@@ -84,6 +84,28 @@
 			"FREERTOS_PORT_${FREERTOS_PORT_DEFINE}": "1"
 		}
 	},
+	"lwip-ln882h": {
+		"package": "library-lwip",
+		"sources": [
+			"+<src/api/*.c>",
+			"+<src/core/*.c>",
+			"-<src/core/mem.c>",
+			"+<src/core/ipv4/*.c>",
+			"+<src/netif/ethernet.c>",
+			"+<src/netif/etharp.c>",
+			"+<src/apps/mdns/mdns.c>",
+			"+<src/apps/sntp/sntp.c>",
+			"+<port/ln_osal/netif/ethernetif.c>",
+			"+<port/ln_osal/arch/sys_arch.c>"
+		],
+		"includes": [
+			"+<src/include>",
+			"+<src/include/ipv4>",
+			"+<port/ln_osal/include>",
+			"+<port/ln_osal/include/netif>",
+			"+<port/ln_osal/include/arch>"
+		]
+	},
 	"lwip-amb1": {
 		"package": "library-lwip",
 		"sources": [

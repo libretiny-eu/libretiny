@@ -3,6 +3,7 @@ on:
   push:
     branches: ["**"]
   pull_request:
+  workflow_dispatch:
 jobs:
   lint-clang:
     name: Run Clang lint

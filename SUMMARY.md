@@ -19,6 +19,7 @@
 	* [Realtek AmebaZ](docs/platform/realtek-ambz/README.md)
 		* [Debugging](docs/platform/realtek-ambz/debugging.md)
 		* [Exception decoder](docs/platform/realtek-ambz/exception-decoder.md)
+	* [Lightning LN882x](docs/platform/lightning-ln882x/README.md)
 * [🔧 LT Configuration](docs/dev/config.md)
 * 🧑 Programmer's manual
 	* [⚠️ Migration guide](docs/dev/migration_v1.0.0.md)

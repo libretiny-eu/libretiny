@@ -17,6 +17,7 @@ typedef enum {
 	F_BK7231N  = 0x7B3EF230, // Beken 7231N
 	F_BK7251   = 0x6A82CC42, // Beken 7251/7252
 	F_BL60X	   = 0xDE1270B7, // Boufallo 602
+	F_LN882H   = 0xA38090A8, // Lightning LN882H
 } lt_cpu_family_t;
 
 typedef enum {
@@ -44,4 +45,8 @@ typedef enum {
 	BL2028N = BK7231N,
 	BK7231S = BK7231T,
 	BK7231U = BK7231T,
+	// Lightning LN882x
+	LN882HF = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN24
+	LN882HK = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN32
+	LN882HC = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN40
 } lt_cpu_model_t;
