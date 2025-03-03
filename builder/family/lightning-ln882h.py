@@ -1,6 +1,7 @@
 # Copyright (c) Etienne Le Cousin 2024-02-08.
 
 from os.path import join
+from shutil import copyfile
 
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
@@ -228,6 +229,12 @@ queue.AppendPublic(
     ],
 )
 
+# Copy Bootloader
+bootfile = board.get("build.bootfile")
+copyfile(
+    join(env.subst("$MISC_DIR"), bootfile), join(env.subst("$BUILD_DIR"), "boot.bin")
+)
+
 # Generate linker scripts with correct flash offsets
 env.GenerateLinkerScript(board, board.get("build.ldscript"))
 
@@ -235,13 +242,22 @@ env.GenerateLinkerScript(board, board.get("build.ldscript"))
 queue.BuildLibraries()
 
 # Main firmware outputs and actions
-image_fw = "${BUILD_DIR}/image_firmware-ota-xz-v1.0.bin"
+# fmt: off
+image_ota      = "${BUILD_DIR}/image_ota.${FLASH_OTA_OFFSET}.bin"
+image_part_tab = "${BUILD_DIR}/image_part_tab.${FLASH_PART_TAB_OFFSET}.bin"
+image_boot     = "${BUILD_DIR}/image_boot.${FLASH_BOOT_OFFSET}.bin"
+image_app      = "${BUILD_DIR}/image_app.${FLASH_APP_OFFSET}.bin"
+# fmt: on
 env.Replace(
     # linker command
     LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
     # UF2OTA input list
     UF2OTA=[
         # ota binary image for device
-        f"{image_fw}=device:ota",
+        f"{image_ota}=device:ota",
+        # binary image for flasher
+        f"{image_boot}=flasher:boot",
+        f"{image_part_tab}=flasher:part_tab",
+        f"{image_app}=flasher:app",
     ],
 )
