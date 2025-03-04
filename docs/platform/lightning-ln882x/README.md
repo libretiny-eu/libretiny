@@ -74,7 +74,9 @@ If you're getting a `No response received` (or similar) error, this means that:
 Since `ltchiptool` does't support flashing yet, use the official command-line [flashing tool](https://gitee.com/lightningsemi/ln882h-document-collection/blob/master/4.%E7%83%A7%E5%BD%95%E5%B7%A5%E5%85%B7/%E4%B8%B2%E5%8F%A3%E7%83%A7%E5%BD%95/LN882H%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7_V1.0.16.zip)
 
 Examples:
-`LN882H_CMD_Tool.exe COM1 download flash 921600 0x0 image_firmware.bin`
+`LN882H_CMD_Tool.exe COM1 download flash 921600 0x0 image_firmware.0x000000.bin`
+or
+`LN882H_CMD_Tool.exe COM1 download flash 921600 0x7000 image_app.0x007000.bin`
 
 ## Firmware output files
 
@@ -82,8 +84,11 @@ These files are present in the build directory after successful compilation:
 
 File                            | Description
 --------------------------------|----------------------------------------
-**image_firmware.bin**          | **Binary image for UART upload** - flashable at 0x0
-**firmware.uf2**                | **UF2 package for OTA upload**
-image_firmware-ota-xz-v1.0.bin  | Binary OTA package - not for flashing directly
+**firmware.uf2**                | **UF2 package for UART and OTA upload**
+**image_firmware.0x000000.bin** | **Full flash binary image** - flashable at 0x0
+image_boot.0x000000.bin         | Boot partition binary image - flashable at 0x0
+image_part_tab.0x006000.bin     | Partition table binary image - flashable at 0x6000
+image_app.0x007000.bin          | Application partition binary image - flashable at 0x7000
+image_ota.0x133000.bin          | OTA partition binary image - flashable at 0x133000
 
 
