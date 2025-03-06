@@ -60,8 +60,8 @@ extern "C" {
 #include <hal/hal_interrupt.h>
 #include <hal/hal_wdt.h>
 #include <osal/osal.h>
-#include <serial/serial.h>
-#include <wifi.h>
+#include <serial/ln_serial.h>
+#include <ln_wifi.h>
 #include <wifi_manager.h>
 
 #ifndef LN882H_SDK
