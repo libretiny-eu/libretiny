@@ -1,6 +1,6 @@
 #include "proj_config.h"
 #include "hal/hal_uart.h"
-#include "serial/serial.h"
+#include "serial/ln_serial.h"
 #include "serial_hw.h"
 #include "utils/debug/ln_assert.h"
 #include "hal/hal_gpio.h"
