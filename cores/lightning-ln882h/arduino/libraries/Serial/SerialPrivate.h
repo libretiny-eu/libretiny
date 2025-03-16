@@ -6,7 +6,7 @@
 #include <sdk_private.h>
 
 typedef struct {
-	RingBuffer buf;
+	SerialRingBuffer buf;
 	void (*callback)(void);
 } SerialData;
 
