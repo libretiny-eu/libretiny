@@ -71,12 +71,12 @@ If you're getting a `No response received` (or similar) error, this means that:
 
 ### Flashing
 
-Since `ltchiptool` does't support flashing yet, use the official command-line [flashing tool](https://gitee.com/lightningsemi/ln882h-document-collection/blob/master/4.%E7%83%A7%E5%BD%95%E5%B7%A5%E5%85%B7/%E4%B8%B2%E5%8F%A3%E7%83%A7%E5%BD%95/LN882H%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7_V1.0.16.zip)
+The recommended tool to flash (or dump firmware) is `ltchiptool`.
 
-Examples:
-`LN882H_CMD_Tool.exe COM1 download flash 921600 0x0 image_firmware.0x000000.bin`
-or
-`LN882H_CMD_Tool.exe COM1 download flash 921600 0x7000 image_app.0x007000.bin`
+**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
+
+!!! tip
+	Because the UART uploading code is programmed in the ROM of the chip, it can't be software-bricked, even if you damage the bootloader.
 
 ## Firmware output files
 
@@ -92,3 +92,10 @@ image_app.0x007000.bin          | Application partition binary image - flashable
 image_ota.0x133000.bin          | OTA partition binary image - flashable at 0x133000
 
 
+## Other tools/guides
+
+- Official command-line [flashing tool](https://gitee.com/lightningsemi/ln882h-document-collection/blob/master/4.%E7%83%A7%E5%BD%95%E5%B7%A5%E5%85%B7/%E4%B8%B2%E5%8F%A3%E7%83%A7%E5%BD%95/LN882H%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7_V1.0.16.zip)
+
+	 Usage Examples:<br/>
+	 `LN882H_CMD_Tool.exe COM1 download flash 921600 0x0 image_firmware.0x000000.bin`<br/>
+	 `LN882H_CMD_Tool.exe COM1 download flash 921600 0x7000 image_app.0x007000.bin`
