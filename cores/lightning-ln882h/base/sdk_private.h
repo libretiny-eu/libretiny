@@ -59,9 +59,9 @@ extern "C" {
 #include <hal/hal_i2c.h>
 #include <hal/hal_interrupt.h>
 #include <hal/hal_wdt.h>
+#include <ln_wifi.h>
 #include <osal/osal.h>
 #include <serial/ln_serial.h>
-#include <ln_wifi.h>
 #include <wifi_manager.h>
 
 #ifndef LN882H_SDK
