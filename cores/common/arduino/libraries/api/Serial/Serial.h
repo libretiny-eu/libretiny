@@ -8,6 +8,8 @@
 
 using namespace arduino;
 
+typedef RingBufferN<LT_SERIAL_BUFFER_SIZE> SerialRingBuffer;
+
 class SerialClass : public HardwareSerial {
   private:
 	uint32_t port;
@@ -18,7 +20,7 @@ class SerialClass : public HardwareSerial {
 	void *data;
 
   private:
-	RingBuffer *buf;
+	SerialRingBuffer *buf;
 	uint32_t baudrate;
 	uint16_t config;
 

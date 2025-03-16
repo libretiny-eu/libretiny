@@ -7,7 +7,7 @@
 
 typedef struct {
 	hal_uart_adapter_t *uart;
-	RingBuffer buf;
+	SerialRingBuffer buf;
 } SerialData;
 
 #define DATA   ((SerialData *)data)
