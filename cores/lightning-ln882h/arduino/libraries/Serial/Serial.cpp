@@ -45,7 +45,7 @@ static void callback_uart2(void) {
 #endif
 
 // clang-format off
-const serial_rx_callbcak serial_rx_callbcaks[SER_PORT_NUM] = {
+static const serial_rx_callbcak serial_rx_callbacks[SER_PORT_NUM] = {
 	callback_uart0,
 	callback_uart1,
 	callback_uart2
@@ -66,7 +66,7 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	if (!this->data)
 		return;
 
-	serial_init(serial_handles[port], (serial_port_id_t)port, baudrate, serial_rx_callbcaks[port]);
+	serial_init(serial_handles[port], (serial_port_id_t)port, baudrate, serial_rx_callbacks[port]);
 
 	this->baudrate = baudrate;
 	this->config   = config;
