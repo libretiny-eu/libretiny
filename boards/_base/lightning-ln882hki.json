@@ -1,0 +1,31 @@
+{
+	"build": {
+		"family": "LN882H",
+		"ldscript": "ln882hki_bsp.ld",
+		"bootfile": "boot_ln882h.bin"
+	},
+	"flash": {
+		"boot": "0x000000+0x06000",
+		"part_tab": "0x006000+0x01000",
+		"app": "0x007000+0x12C000",
+		"ota": "0x133000+0xAA000",
+		"nvds": "0x1DD000+0x03000",
+		"kv": "0x1E0000+0x04000",
+		"kvs": "0x1E4000+0x08000",
+		"user": "0x1EC000+0x14000"
+	},
+	"upload": {
+		"flash_size": 2097152,
+		"maximum_size": 1228800
+	},
+	"connectivity": [
+		"ble"
+	],
+	"doc": {
+		"params": {
+			"extra": {
+				"Bluetooth": "BLE v5.1"
+			}
+		}
+	}
+}
