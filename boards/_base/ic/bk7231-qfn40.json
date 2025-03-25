@@ -1,0 +1,186 @@
+{
+	"pcb": {
+		"ic": {
+			"10": {
+				"C_NAME": "GPIO25",
+				"GPIO": "P25",
+				"IRQ": null,
+				"USB": "DP"
+			},
+			"11": {
+				"C_NAME": "GPIO33",
+				"GPIO": "P33",
+				"IRQ": null,
+				"DVP": "PD1"
+			},
+			"12": {
+				"C_NAME": "GPIO32",
+				"GPIO": "P32",
+				"IRQ": null,
+				"DVP": "PD0"
+			},
+			"13": {
+				"C_NAME": "GPIO29",
+				"GPIO": "P29",
+				"IRQ": null,
+				"DVP": "PCLK"
+			},
+			"14": {
+				"C_NAME": "GPIO27",
+				"GPIO": "P27",
+				"IRQ": null,
+				"DVP": "MCLK"
+			},
+			"15": {
+				"C_NAME": "GPIO30",
+				"GPIO": "P30",
+				"IRQ": null,
+				"DVP": "HSYNC"
+			},
+			"16": {
+				"C_NAME": "GPIO31",
+				"GPIO": "P31",
+				"IRQ": null,
+				"DVP": "VSYNC"
+			},
+			"17": {
+				"C_NAME": "GPIO34",
+				"GPIO": "P34",
+				"IRQ": null,
+				"DVP": "PD2"
+			},
+			"18": {
+				"C_NAME": "GPIO35",
+				"GPIO": "P35",
+				"IRQ": null,
+				"DVP": "PD3"
+			},
+			"19": {
+				"C_NAME": "GPIO36",
+				"GPIO": "P36",
+				"IRQ": null,
+				"DVP": "PD4"
+			},
+			"20": {
+				"C_NAME": "GPIO37",
+				"GPIO": "P37",
+				"IRQ": null,
+				"DVP": "PD5"
+			},
+			"21": {
+				"C_NAME": "GPIO38",
+				"GPIO": "P38",
+				"IRQ": null,
+				"DVP": "PD6"
+			},
+			"22": {
+				"C_NAME": "GPIO39",
+				"GPIO": "P39",
+				"IRQ": null,
+				"DVP": "PD7"
+			},
+			"23": {
+				"C_NAME": "GPIO14",
+				"GPIO": "P14",
+				"IRQ": null,
+				"SD": "CLK",
+				"SPI": "SCK"
+			},
+			"24": {
+				"C_NAME": "GPIO16",
+				"GPIO": "P16",
+				"IRQ": null,
+				"SD": "D0",
+				"SPI": "MOSI"
+			},
+			"25": {
+				"C_NAME": "GPIO15",
+				"GPIO": "P15",
+				"IRQ": null,
+				"SD": "CMD",
+				"SPI": "CS"
+			},
+			"26": {
+				"C_NAME": "GPIO17",
+				"GPIO": "P17",
+				"IRQ": null,
+				"SD": "D1",
+				"SPI": "MISO"
+			},
+			"27": {
+				"C_NAME": "GPIO23",
+				"GPIO": "P23",
+				"IRQ": null,
+				"ADC": 3,
+				"JTAG": "TDO",
+				"FLASH": "FSO"
+			},
+			"28": {
+				"C_NAME": "GPIO22",
+				"GPIO": "P22",
+				"IRQ": null,
+				"JTAG": "TDI",
+				"FLASH": "FSI"
+			},
+			"29": {
+				"C_NAME": "GPIO21",
+				"GPIO": "P21",
+				"IRQ": null,
+				"I2C": "1_SDA",
+				"JTAG": "TMS",
+				"I2S": "MCLK",
+				"FLASH": "^FCS"
+			},
+			"30": {
+				"C_NAME": "GPIO20",
+				"GPIO": "P20",
+				"IRQ": null,
+				"I2C": "1_SCL",
+				"JTAG": "TCK",
+				"FLASH": "FSCK"
+			},
+			"31": {
+				"IO": "I",
+				"CTRL": "CEN"
+			},
+			"32": {
+				"C_NAME": "GPIO8",
+				"GPIO": "P8",
+				"IRQ": null,
+				"PWM": 2
+			},
+			"33": {
+				"C_NAME": "GPIO9",
+				"GPIO": "P9",
+				"IRQ": null,
+				"PWM": 3
+			},
+			"34": {
+				"C_NAME": "GPIO10",
+				"GPIO": "P10",
+				"IRQ": null,
+				"UART": "1_RX"
+			},
+			"35": {
+				"C_NAME": "GPIO11",
+				"GPIO": "P11",
+				"IRQ": null,
+				"UART": "1_TX"
+			},
+			"36": {
+				"C_NAME": "GPIO1",
+				"GPIO": "P1",
+				"IRQ": null,
+				"UART": "2_RX",
+				"I2C": "2_SDA"
+			},
+			"37": {
+				"C_NAME": "GPIO0",
+				"GPIO": "P0",
+				"IRQ": null,
+				"UART": "2_TX",
+				"I2C": "2_SCL"
+			}
+		}
+	}
+}

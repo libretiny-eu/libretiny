@@ -1,0 +1,30 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TCSN": "cbu.back.csn.anchor"
+		},
+		"back": [
+			{
+				"type": "rect",
+				"pos": "6.3,11.6",
+				"size": "2.9,2.9",
+				"preset": "copper1"
+			},
+			{
+				"id": "csn",
+				"name": "label_line_up",
+				"pos": "3.7,13.5",
+				"vars": {
+					"DIR": "left",
+					"RASTER": 2,
+					"W": 0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "4.4,13.4"
+			}
+		]
+	}
+}

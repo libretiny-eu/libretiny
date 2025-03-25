@@ -1,0 +1,27 @@
+{
+	"name": "tuya-16x24",
+	"title": "Tuya boards; 16x24mm; 16 or 22 pin",
+	"width": 16,
+	"height": 24,
+	"front": [
+		{
+			"comment": "Line below model name",
+			"type": "rect",
+			"pos": "0.5,6.2",
+			"size": "15,0.15",
+			"fill": {
+				"color": "${SILK_COLOR}"
+			}
+		},
+		{
+			"comment": "Board model name",
+			"type": "text",
+			"pos": "7.0,5.5",
+			"text": "${SYMBOL}",
+			"font_size": 1.0,
+			"fill": {
+				"color": "${SILK_COLOR}"
+			}
+		}
+	]
+}

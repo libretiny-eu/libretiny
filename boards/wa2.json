@@ -1,0 +1,20 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231",
+		"beken-7231q",
+		"ic/bk7231q-qfn40",
+		"pcb/wa2",
+		"pcb/wa2-test"
+	],
+	"build": {
+		"mcu": "bk7231q",
+		"variant": "wa2"
+	},
+	"name": "WA2 Wi-Fi Module",
+	"url": "https://docs.libretiny.eu/boards/wa2/",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WA2"
+	}
+}

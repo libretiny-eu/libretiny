@@ -1,0 +1,73 @@
+{
+	"name": "tuya2l",
+	"title": "Tuya boards; 2L series",
+	"width": 15,
+	"height": 17.3,
+	"vars": {
+		"PINTYPE_HORZ": "pin_horz_cast_hole",
+		"PINDIR": "down",
+		"RASTER": 2,
+		"RF_W": 15,
+		"RF_H": 5.5
+	},
+	"front": [
+		{
+			"type": "rect",
+			"pos": "0,0",
+			"size": "15,17.3",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "0.7,6",
+			"size": "13.6,9",
+			"preset": "shield"
+		},
+		{
+			"comment": "Pins (1-7)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "1.5,17.3"
+		},
+		{
+			"comment": "Pin labels (1-7)",
+			"id": "pins",
+			"name": "r_labels_horz",
+			"repeat": 7,
+			"pos": "1.5,17.3"
+		},
+		{
+			"type": "text",
+			"pos": "6.0,5.5",
+			"text": "${SYMBOL}",
+			"font_size": 1.0,
+			"fill": {
+				"color": "${SILK_COLOR}"
+			}
+		}
+	],
+	"back": [
+		{
+			"type": "rect",
+			"pos": "0,0",
+			"size": "15,17.3",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Pins (1-7)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "1.5,17.3"
+		}
+	],
+	"pads": {
+		"1": "tuya2l.front.pins.label1.anchor",
+		"2": "tuya2l.front.pins.label2.anchor",
+		"3": "tuya2l.front.pins.label3.anchor",
+		"4": "tuya2l.front.pins.label4.anchor",
+		"5": "tuya2l.front.pins.label5.anchor",
+		"6": "tuya2l.front.pins.label6.anchor",
+		"7": "tuya2l.front.pins.label7.anchor"
+	}
+}

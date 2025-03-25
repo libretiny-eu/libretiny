@@ -1,0 +1,23 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231",
+		"beken-7231t",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/wb3s"
+	],
+	"build": {
+		"mcu": "bk7231t",
+		"variant": "wb3s"
+	},
+	"name": "WB3S Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WB3S"
+	},
+	"pcb": {
+		"symbol": "WB3S"
+	}
+}

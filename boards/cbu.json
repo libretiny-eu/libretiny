@@ -1,0 +1,23 @@
+{
+  "_base": [
+    "beken-72xx",
+    "beken-7231n",
+    "beken-7231-tuya",
+    "ic/bk7231-qfn32",
+    "pcb/cbu",
+    "pcb/cbu-test"
+  ],
+  "build": {
+    "mcu": "bk7231n",
+    "variant": "cbu"
+  },
+  "name": "CBU Wi-Fi Module",
+  "url": "https://developer.tuya.com/en/docs/iot/cbu-module-datasheet?id=Ka07pykl5dk4u",
+  "vendor": "Tuya Inc.",
+  "doc": {
+    "fccid": "2ANDL-CBU"
+  },
+  "pcb": {
+    "symbol": "CBU"
+  }
+}

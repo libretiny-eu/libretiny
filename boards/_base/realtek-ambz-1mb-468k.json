@@ -1,0 +1,16 @@
+{
+	"build": {
+		"amb_boot_all": "boot_all_77F7.bin"
+	},
+	"flash": {
+		"ota1": "0x00B000+0x75000",
+		"ota2": "0x080000+0x75000",
+		"kvs": "0x0F5000+0x4000",
+		"userdata": "0x0F9000+0x7000"
+	},
+	"upload": {
+		"flash_size": 1048576,
+		"maximum_size": 479232
+	}
+}
+
