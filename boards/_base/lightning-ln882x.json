@@ -3,8 +3,7 @@
 		"f_cpu": "160000000L",
 		"prefix": "arm-none-eabi-"
 	},
-	"flash": {
-	},
+	"flash": {},
 	"connectivity": [
 		"wifi"
 	],

@@ -5,14 +5,14 @@
 		"ic/ln882hk",
 		"pcb/ln-02",
 		"pcb/ln-02-test"
-],
+	],
 	"build": {
 		"mcu": "ln882hk",
 		"variant": "ln-02"
 	},
-	"name": "LN-02 Wi-Fi/Ble Module",
-  "url": "https://docs.libretiny.eu/boards/ln-02/",
-  "vendor": "Unknown",
+	"name": "LN-02 Wi-Fi/BLE Module",
+	"url": "https://docs.libretiny.eu/boards/ln-02/",
+	"vendor": "Unknown",
 	"doc": {
 		"fccid": ""
 	},
