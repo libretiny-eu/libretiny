@@ -21,7 +21,9 @@ extern const struct fal_flash_dev flash0;
 #define FAL_FLASH_DEV_NAME "flash0"
 
 #define FAL_FLASH_DEV_TABLE                                                                                            \
-	{ &flash0, }
+	{                                                                                                                  \
+		&flash0,                                                                                                       \
+	}
 
 #define FAL_DEV_NAME_MAX 16 // no need for 24 chars (default)
 

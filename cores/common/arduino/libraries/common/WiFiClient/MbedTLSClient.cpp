@@ -173,7 +173,7 @@ int MbedTLSClient::connect(
 
 #ifdef MBEDTLS_SSL_ALPN
 	if (_alpnProtocols) {
-		ret = mbedtls_ssl_conf_alpn_protocols(&_sslCfg, _alpnProtocols);
+		ret = mbedtls_ssl_conf_alpn_protocols(_sslCfg, _alpnProtocols);
 		LT_RET_NZ(ret);
 	}
 #endif

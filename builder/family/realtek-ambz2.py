@@ -410,7 +410,7 @@ if not isfile(bootloader_dst):
 image_ota_clear = env.subst("${BUILD_DIR}/raw_ota_clear.bin")
 if not isfile(image_ota_clear):
     with open(image_ota_clear, "wb") as f:
-        f.write(b"\xFF" * 4096)
+        f.write(b"\xff" * 4096)
 
 # Build all libraries
 queue.BuildLibraries()

@@ -29,7 +29,7 @@ void setup() {
 	server.begin();
 	server.setNoDelay(true);
 #else
-	stream	   = &Serial;
+	stream = &Serial;
 #if LT_UART_DEFAULT_SERIAL == 0
 	output	   = 0;
 	pinSkip[0] = PIN_SERIAL0_TX;
