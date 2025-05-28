@@ -43,12 +43,11 @@ static adc_ch_t pinToAdcCh(uint32_t gpio) {
 	return ADC_CH0;
 }
 
-// WARN: adc values are quite bad (zero value of ~ 1000lsb and full scale value ~ 3450lsb)
 uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	uint16_t ret = 0;
 	pinCheckGetInfo(pinNumber, PIN_ADC, 0);
 
-	hal_gpio_pin_mode_set(GPIO_GET_BASE(pin->gpio), pin->gpio, GPIO_MODE_ANALOG);
+	hal_gpio_pin_mode_set(GPIO_GET_BASE(pin->gpio), GPIO_GET_PIN(pin->gpio), GPIO_MODE_ANALOG);
 
 	adc_ch_t ch = pinToAdcCh(pin->gpio);
 	adc_init_t_def adc_init;
@@ -72,7 +71,7 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 
 	hal_adc_clr_conv_status(ADC_BASE, ch);
 
-	return (uint16_t)(3300UL * ret / 4095);
+	return (uint16_t)(3700UL * ret / 4095);
 }
 
 uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
