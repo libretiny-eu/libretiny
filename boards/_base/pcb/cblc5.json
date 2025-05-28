@@ -1,0 +1,78 @@
+{
+	"pcb": {
+		"templates": [
+			"tuyalc5",
+			"pcb-white"
+		],
+		"pinout_hidden": "I2S,JTAG,FLASH,SDA1",
+		"pinout": {
+			"1": {
+				"CTRL": "ANT"
+			},
+			"2": {
+				"GND": null
+			},
+			"3": {
+				"IC": 16,
+				"ARD": "D0"
+			},
+			"4": {
+				"IC": 15,
+				"ARD": "D2"
+			},
+			"5": {
+				"IC": 22,
+				"ARD": "D1"
+			},
+			"6": {
+				"PWR": 3.3
+			},
+			"TRST": {
+				"IC": 21
+			},
+			"TRX1": {
+				"IC": 26,
+				"ARD": "D4"
+			},
+			"TTX1": {
+				"IC": 27,
+				"ARD": "D3"
+			},
+			"TRX2": {
+				"IC": 28,
+				"ARD": "D5"
+			},
+			"TTX2": {
+				"IC": 29,
+				"ARD": "D6"
+			},
+			"TCSN": {
+				"IC": 19,
+				"ARD": "D7"
+			}
+		},
+		"front": [
+			{
+				"name": "chip",
+				"pos": "2.7,3.8",
+				"vars": {
+					"W": 5,
+					"POS": 1
+				}
+			},
+			{
+				"name": "osc",
+				"pos": "2.5,0.5"
+			},
+			{
+				"type": "text",
+				"pos": "0.7,4.2",
+				"text": "${SYMBOL}",
+				"font_size": 1.2,
+				"fill": {
+					"color": "${SILK_COLOR}"
+				}
+			}
+		]
+	}
+}

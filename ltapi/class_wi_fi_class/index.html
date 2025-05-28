@@ -1,0 +1,4728 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/ltapi/class_wi_fi_class/">
+      
+      
+        <link rel="prev" href="../class_software_serial/">
+      
+      
+        <link rel="next" href="../../SUMMARY/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>WiFi - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../docs/style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#class-wificlass" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WiFi
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          WiFi
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        WiFi
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#public-attributes" class="md-nav__link">
+    Public Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions" class="md-nav__link">
+    Public Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions" class="md-nav__link">
+    Public Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-attributes" class="md-nav__link">
+    Protected Static Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-attributes-documentation" class="md-nav__link">
+    Public Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-data" class="md-nav__link">
+    variable data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-scan" class="md-nav__link">
+    variable scan
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-documentation" class="md-nav__link">
+    Public Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-bssid-12" class="md-nav__link">
+    function BSSID [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssid-22" class="md-nav__link">
+    function BSSID [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssidstr-12" class="md-nav__link">
+    function BSSIDstr [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssidstr-22" class="md-nav__link">
+    function BSSIDstr [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rssi-12" class="md-nav__link">
+    function RSSI [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rssi-22" class="md-nav__link">
+    function RSSI [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ssid-12" class="md-nav__link">
+    function SSID [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ssid-22" class="md-nav__link">
+    function SSID [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-wificlass" class="md-nav__link">
+    function WiFiClass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-alllocalipv6" class="md-nav__link">
+    function allLocalIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-12" class="md-nav__link">
+    function begin [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-22" class="md-nav__link">
+    function begin [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-broadcastip" class="md-nav__link">
+    function broadcastIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-channel-12" class="md-nav__link">
+    function channel [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-channel-22" class="md-nav__link">
+    function channel [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-config" class="md-nav__link">
+    function config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-datafree" class="md-nav__link">
+    function dataFree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-datainitialize" class="md-nav__link">
+    function dataInitialize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-disconnect" class="md-nav__link">
+    function disconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-dnsip" class="md-nav__link">
+    function dnsIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enableap" class="md-nav__link">
+    function enableAP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enableipv6" class="md-nav__link">
+    function enableIpV6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablesta" class="md-nav__link">
+    function enableSTA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-encryptiontype" class="md-nav__link">
+    function encryptionType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gatewayip" class="md-nav__link">
+    function gatewayIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getautoreconnect" class="md-nav__link">
+    function getAutoReconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getencryption" class="md-nav__link">
+    function getEncryption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gethostname" class="md-nav__link">
+    function getHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getmode" class="md-nav__link">
+    function getMode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getnetworkinfo" class="md-nav__link">
+    function getNetworkInfo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getsleep" class="md-nav__link">
+    function getSleep
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gettxpower" class="md-nav__link">
+    function getTxPower
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostbyname-12" class="md-nav__link">
+    function hostByName [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostbyname-22" class="md-nav__link">
+    function hostByName [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostname" class="md-nav__link">
+    function hostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isconnected" class="md-nav__link">
+    function isConnected
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-localip" class="md-nav__link">
+    function localIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-localipv6" class="md-nav__link">
+    function localIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-macaddress-12" class="md-nav__link">
+    function macAddress [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-macaddress-22" class="md-nav__link">
+    function macAddress [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mode" class="md-nav__link">
+    function mode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-modepriv" class="md-nav__link">
+    function modePriv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-networkid" class="md-nav__link">
+    function networkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-13" class="md-nav__link">
+    function onEvent [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-23" class="md-nav__link">
+    function onEvent [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-33" class="md-nav__link">
+    function onEvent [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-printdiag" class="md-nav__link">
+    function printDiag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-psk" class="md-nav__link">
+    function psk
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-reconnect" class="md-nav__link">
+    function reconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-13" class="md-nav__link">
+    function removeEvent [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-23" class="md-nav__link">
+    function removeEvent [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-33" class="md-nav__link">
+    function removeEvent [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scanalloc" class="md-nav__link">
+    function scanAlloc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scancomplete" class="md-nav__link">
+    function scanComplete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scandelete" class="md-nav__link">
+    function scanDelete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scaninit" class="md-nav__link">
+    function scanInit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scannetworks" class="md-nav__link">
+    function scanNetworks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setautoreconnect" class="md-nav__link">
+    function setAutoReconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sethostname" class="md-nav__link">
+    function setHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setmacaddress" class="md-nav__link">
+    function setMacAddress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setsleep" class="md-nav__link">
+    function setSleep
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-settxpower" class="md-nav__link">
+    function setTxPower
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softap" class="md-nav__link">
+    function softAP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapbroadcastip" class="md-nav__link">
+    function softAPBroadcastIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapconfig" class="md-nav__link">
+    function softAPConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapip" class="md-nav__link">
+    function softAPIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapipv6" class="md-nav__link">
+    function softAPIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapnetworkid" class="md-nav__link">
+    function softAPNetworkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapssid" class="md-nav__link">
+    function softAPSSID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsubnetcidr" class="md-nav__link">
+    function softAPSubnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsubnetmask" class="md-nav__link">
+    function softAPSubnetMask
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapdisconnect" class="md-nav__link">
+    function softAPdisconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapenableipv6" class="md-nav__link">
+    function softAPenableIpV6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapgethostname" class="md-nav__link">
+    function softAPgetHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapgetstationnum" class="md-nav__link">
+    function softAPgetStationNum
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapmacaddress-12" class="md-nav__link">
+    function softAPmacAddress [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapmacaddress-22" class="md-nav__link">
+    function softAPmacAddress [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsethostname" class="md-nav__link">
+    function softAPsetHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-status" class="md-nav__link">
+    function status
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-subnetcidr" class="md-nav__link">
+    function subnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-subnetmask" class="md-nav__link">
+    function subnetMask
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-validate" class="md-nav__link">
+    function validate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-waitforconnectresult" class="md-nav__link">
+    function waitForConnectResult
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-wificlass_1" class="md-nav__link">
+    function ~WiFiClass
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions-documentation" class="md-nav__link">
+    Public Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatebroadcast" class="md-nav__link">
+    function calculateBroadcast
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatenetworkid" class="md-nav__link">
+    function calculateNetworkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatesubnetcidr" class="md-nav__link">
+    function calculateSubnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mactostring" class="md-nav__link">
+    function macToString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-postevent" class="md-nav__link">
+    function postEvent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resetnetworkinfo" class="md-nav__link">
+    function resetNetworkInfo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-attributes-documentation" class="md-nav__link">
+    Protected Static Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Static Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-handlers" class="md-nav__link">
+    variable handlers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#public-attributes" class="md-nav__link">
+    Public Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions" class="md-nav__link">
+    Public Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions" class="md-nav__link">
+    Public Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-attributes" class="md-nav__link">
+    Protected Static Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-attributes-documentation" class="md-nav__link">
+    Public Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-data" class="md-nav__link">
+    variable data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-scan" class="md-nav__link">
+    variable scan
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-documentation" class="md-nav__link">
+    Public Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-bssid-12" class="md-nav__link">
+    function BSSID [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssid-22" class="md-nav__link">
+    function BSSID [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssidstr-12" class="md-nav__link">
+    function BSSIDstr [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-bssidstr-22" class="md-nav__link">
+    function BSSIDstr [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rssi-12" class="md-nav__link">
+    function RSSI [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-rssi-22" class="md-nav__link">
+    function RSSI [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ssid-12" class="md-nav__link">
+    function SSID [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-ssid-22" class="md-nav__link">
+    function SSID [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-wificlass" class="md-nav__link">
+    function WiFiClass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-alllocalipv6" class="md-nav__link">
+    function allLocalIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-12" class="md-nav__link">
+    function begin [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-22" class="md-nav__link">
+    function begin [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-broadcastip" class="md-nav__link">
+    function broadcastIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-channel-12" class="md-nav__link">
+    function channel [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-channel-22" class="md-nav__link">
+    function channel [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-config" class="md-nav__link">
+    function config
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-datafree" class="md-nav__link">
+    function dataFree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-datainitialize" class="md-nav__link">
+    function dataInitialize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-disconnect" class="md-nav__link">
+    function disconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-dnsip" class="md-nav__link">
+    function dnsIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enableap" class="md-nav__link">
+    function enableAP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enableipv6" class="md-nav__link">
+    function enableIpV6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablesta" class="md-nav__link">
+    function enableSTA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-encryptiontype" class="md-nav__link">
+    function encryptionType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gatewayip" class="md-nav__link">
+    function gatewayIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getautoreconnect" class="md-nav__link">
+    function getAutoReconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getencryption" class="md-nav__link">
+    function getEncryption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gethostname" class="md-nav__link">
+    function getHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getmode" class="md-nav__link">
+    function getMode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getnetworkinfo" class="md-nav__link">
+    function getNetworkInfo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getsleep" class="md-nav__link">
+    function getSleep
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-gettxpower" class="md-nav__link">
+    function getTxPower
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostbyname-12" class="md-nav__link">
+    function hostByName [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostbyname-22" class="md-nav__link">
+    function hostByName [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostname" class="md-nav__link">
+    function hostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-isconnected" class="md-nav__link">
+    function isConnected
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-localip" class="md-nav__link">
+    function localIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-localipv6" class="md-nav__link">
+    function localIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-macaddress-12" class="md-nav__link">
+    function macAddress [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-macaddress-22" class="md-nav__link">
+    function macAddress [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mode" class="md-nav__link">
+    function mode
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-modepriv" class="md-nav__link">
+    function modePriv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-networkid" class="md-nav__link">
+    function networkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-13" class="md-nav__link">
+    function onEvent [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-23" class="md-nav__link">
+    function onEvent [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onevent-33" class="md-nav__link">
+    function onEvent [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-printdiag" class="md-nav__link">
+    function printDiag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-psk" class="md-nav__link">
+    function psk
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-reconnect" class="md-nav__link">
+    function reconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-13" class="md-nav__link">
+    function removeEvent [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-23" class="md-nav__link">
+    function removeEvent [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-removeevent-33" class="md-nav__link">
+    function removeEvent [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scanalloc" class="md-nav__link">
+    function scanAlloc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scancomplete" class="md-nav__link">
+    function scanComplete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scandelete" class="md-nav__link">
+    function scanDelete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scaninit" class="md-nav__link">
+    function scanInit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-scannetworks" class="md-nav__link">
+    function scanNetworks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setautoreconnect" class="md-nav__link">
+    function setAutoReconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sethostname" class="md-nav__link">
+    function setHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setmacaddress" class="md-nav__link">
+    function setMacAddress
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setsleep" class="md-nav__link">
+    function setSleep
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-settxpower" class="md-nav__link">
+    function setTxPower
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softap" class="md-nav__link">
+    function softAP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapbroadcastip" class="md-nav__link">
+    function softAPBroadcastIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapconfig" class="md-nav__link">
+    function softAPConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapip" class="md-nav__link">
+    function softAPIP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapipv6" class="md-nav__link">
+    function softAPIPv6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapnetworkid" class="md-nav__link">
+    function softAPNetworkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapssid" class="md-nav__link">
+    function softAPSSID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsubnetcidr" class="md-nav__link">
+    function softAPSubnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsubnetmask" class="md-nav__link">
+    function softAPSubnetMask
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapdisconnect" class="md-nav__link">
+    function softAPdisconnect
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapenableipv6" class="md-nav__link">
+    function softAPenableIpV6
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapgethostname" class="md-nav__link">
+    function softAPgetHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapgetstationnum" class="md-nav__link">
+    function softAPgetStationNum
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapmacaddress-12" class="md-nav__link">
+    function softAPmacAddress [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapmacaddress-22" class="md-nav__link">
+    function softAPmacAddress [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-softapsethostname" class="md-nav__link">
+    function softAPsetHostname
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-status" class="md-nav__link">
+    function status
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-subnetcidr" class="md-nav__link">
+    function subnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-subnetmask" class="md-nav__link">
+    function subnetMask
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-validate" class="md-nav__link">
+    function validate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-waitforconnectresult" class="md-nav__link">
+    function waitForConnectResult
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-wificlass_1" class="md-nav__link">
+    function ~WiFiClass
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions-documentation" class="md-nav__link">
+    Public Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatebroadcast" class="md-nav__link">
+    function calculateBroadcast
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatenetworkid" class="md-nav__link">
+    function calculateNetworkID
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-calculatesubnetcidr" class="md-nav__link">
+    function calculateSubnetCIDR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mactostring" class="md-nav__link">
+    function macToString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-postevent" class="md-nav__link">
+    function postEvent
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-resetnetworkinfo" class="md-nav__link">
+    function resetNetworkInfo
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-attributes-documentation" class="md-nav__link">
+    Protected Static Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Static Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-handlers" class="md-nav__link">
+    variable handlers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="class-wificlass">Class WiFiClass</h1>
+<p><a href="../annotated/"><strong>ClassList</strong></a> <strong>&gt;</strong> <a href="./"><strong>WiFiClass</strong></a></p>
+<h2 id="public-attributes">Public Attributes</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void *</td>
+<td align="left"><a href="#variable-data"><strong>data</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../struct_wi_fi_scan_data/"><strong>WiFiScanData</strong></a> *</td>
+<td align="left"><a href="#variable-scan"><strong>scan</strong></a>   = = NULL<br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions">Public Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-bssid-12"><strong>BSSID</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-bssid-22"><strong>BSSID</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-bssidstr-12"><strong>BSSIDstr</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-bssidstr-22"><strong>BSSIDstr</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right">int8_t</td>
+<td align="left"><a href="#function-rssi-12"><strong>RSSI</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int32_t</td>
+<td align="left"><a href="#function-rssi-22"><strong>RSSI</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right">const String</td>
+<td align="left"><a href="#function-ssid-12"><strong>SSID</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-ssid-22"><strong>SSID</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-wificlass"><strong>WiFiClass</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">std::vector&lt; <a href="../classarduino_1_1_i_pv6_address/"><strong>IPv6Address</strong></a> &gt;</td>
+<td align="left"><a href="#function-alllocalipv6"><strong>allLocalIPv6</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">WiFiStatus</td>
+<td align="left"><a href="#function-begin-12"><strong>begin</strong></a> (const char * ssid, const char * passphrase=NULL, int32_t channel=0, const uint8_t * bssid=NULL, bool connect=true) <br></td>
+</tr>
+<tr>
+<td align="right">WiFiStatus</td>
+<td align="left"><a href="#function-begin-22"><strong>begin</strong></a> (char * ssid, char * passphrase=NULL, int32_t channel=0, const uint8_t * bssid=NULL, bool connect=true) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-broadcastip"><strong>broadcastIP</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int32_t</td>
+<td align="left"><a href="#function-channel-12"><strong>channel</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int32_t</td>
+<td align="left"><a href="#function-channel-22"><strong>channel</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-config"><strong>config</strong></a> (IPAddress localIP, IPAddress gateway, IPAddress subnet, IPAddress dns1=(uint32_t) 0x00000000, IPAddress dns2=(uint32_t) 0x00000000) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-datafree"><strong>dataFree</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-datainitialize"><strong>dataInitialize</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-disconnect"><strong>disconnect</strong></a> (bool wifiOff=false) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-dnsip"><strong>dnsIP</strong></a> (uint8_t dns_no=0) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-enableap"><strong>enableAP</strong></a> (bool enable) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-enableipv6"><strong>enableIpV6</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-enablesta"><strong>enableSTA</strong></a> (bool enable) <br></td>
+</tr>
+<tr>
+<td align="right">WiFiAuthMode</td>
+<td align="left"><a href="#function-encryptiontype"><strong>encryptionType</strong></a> (uint8_t networkItem) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-gatewayip"><strong>gatewayIP</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-getautoreconnect"><strong>getAutoReconnect</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">WiFiAuthMode</td>
+<td align="left"><a href="#function-getencryption"><strong>getEncryption</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-gethostname"><strong>getHostname</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">WiFiMode</td>
+<td align="left"><a href="#function-getmode"><strong>getMode</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-getnetworkinfo"><strong>getNetworkInfo</strong></a> (uint8_t networkItem, String &amp; ssid, WiFiAuthMode &amp; encryptionType, int32_t &amp; RSSI, uint8_t *&amp; BSSID, int32_t &amp; channel) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-getsleep"><strong>getSleep</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-gettxpower"><strong>getTxPower</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-hostbyname-12"><strong>hostByName</strong></a> (const char * hostname, IPAddress &amp; aResult) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-hostbyname-22"><strong>hostByName</strong></a> (const char * hostname) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-hostname"><strong>hostname</strong></a> (const String &amp; aHostname) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-isconnected"><strong>isConnected</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-localip"><strong>localIP</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../classarduino_1_1_i_pv6_address/"><strong>IPv6Address</strong></a></td>
+<td align="left"><a href="#function-localipv6"><strong>localIPv6</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-macaddress-12"><strong>macAddress</strong></a> (uint8_t * mac) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-macaddress-22"><strong>macAddress</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-mode"><strong>mode</strong></a> (WiFiMode mode) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-modepriv"><strong>modePriv</strong></a> (WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-networkid"><strong>networkID</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-onevent-13"><strong>onEvent</strong></a> (EventCb callback, EventId eventId=ARDUINO_EVENT_MAX) <br></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-onevent-23"><strong>onEvent</strong></a> (EventFuncCb callback, EventId eventId=ARDUINO_EVENT_MAX) <br></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-onevent-33"><strong>onEvent</strong></a> (EventSysCb callback, EventId eventId=ARDUINO_EVENT_MAX) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-printdiag"><strong>printDiag</strong></a> (Print &amp; dest) <br></td>
+</tr>
+<tr>
+<td align="right">const String</td>
+<td align="left"><a href="#function-psk"><strong>psk</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-reconnect"><strong>reconnect</strong></a> (const uint8_t * bssid=NULL) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-removeevent-13"><strong>removeEvent</strong></a> (EventCb callback, EventId eventId) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-removeevent-23"><strong>removeEvent</strong></a> (EventSysCb callback, EventId eventId) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-removeevent-33"><strong>removeEvent</strong></a> (uint16_t id) <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-scanalloc"><strong>scanAlloc</strong></a> (uint8_t count) <br></td>
+</tr>
+<tr>
+<td align="right">int16_t</td>
+<td align="left"><a href="#function-scancomplete"><strong>scanComplete</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-scandelete"><strong>scanDelete</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-scaninit"><strong>scanInit</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int16_t</td>
+<td align="left"><a href="#function-scannetworks"><strong>scanNetworks</strong></a> (bool async=false, bool showHidden=false, bool passive=false, uint32_t maxMsPerChannel=300, uint8_t channel=0) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-setautoreconnect"><strong>setAutoReconnect</strong></a> (bool autoReconnect) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-sethostname"><strong>setHostname</strong></a> (const char * hostname) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-setmacaddress"><strong>setMacAddress</strong></a> (const uint8_t * mac) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-setsleep"><strong>setSleep</strong></a> (bool enable) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-settxpower"><strong>setTxPower</strong></a> (int power) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-softap"><strong>softAP</strong></a> (const char * ssid, const char * passphrase=NULL, int channel=1, bool ssidHidden=false, int maxClients=4) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-softapbroadcastip"><strong>softAPBroadcastIP</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-softapconfig"><strong>softAPConfig</strong></a> (IPAddress localIP, IPAddress gateway, IPAddress subnet) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-softapip"><strong>softAPIP</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../classarduino_1_1_i_pv6_address/"><strong>IPv6Address</strong></a></td>
+<td align="left"><a href="#function-softapipv6"><strong>softAPIPv6</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-softapnetworkid"><strong>softAPNetworkID</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">const String</td>
+<td align="left"><a href="#function-softapssid"><strong>softAPSSID</strong></a> (void) <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-softapsubnetcidr"><strong>softAPSubnetCIDR</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-softapsubnetmask"><strong>softAPSubnetMask</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-softapdisconnect"><strong>softAPdisconnect</strong></a> (bool wifiOff=false) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-softapenableipv6"><strong>softAPenableIpV6</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-softapgethostname"><strong>softAPgetHostname</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-softapgetstationnum"><strong>softAPgetStationNum</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-softapmacaddress-12"><strong>softAPmacAddress</strong></a> (uint8_t * mac) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-softapmacaddress-22"><strong>softAPmacAddress</strong></a> (void) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-softapsethostname"><strong>softAPsetHostname</strong></a> (const char * hostname) <br></td>
+</tr>
+<tr>
+<td align="right">WiFiStatus</td>
+<td align="left"><a href="#function-status"><strong>status</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-subnetcidr"><strong>subnetCIDR</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-subnetmask"><strong>subnetMask</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-validate"><strong>validate</strong></a> (const char * ssid, const char * passphrase) <br></td>
+</tr>
+<tr>
+<td align="right">WiFiStatus</td>
+<td align="left"><a href="#function-waitforconnectresult"><strong>waitForConnectResult</strong></a> (unsigned long timeout) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-wificlass"><strong>~WiFiClass</strong></a> () <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-static-functions">Public Static Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-calculatebroadcast"><strong>calculateBroadcast</strong></a> (IPAddress ip, IPAddress subnet) <br></td>
+</tr>
+<tr>
+<td align="right">IPAddress</td>
+<td align="left"><a href="#function-calculatenetworkid"><strong>calculateNetworkID</strong></a> (IPAddress ip, IPAddress subnet) <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-calculatesubnetcidr"><strong>calculateSubnetCIDR</strong></a> (IPAddress subnetMask) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-mactostring"><strong>macToString</strong></a> (uint8_t * mac) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-postevent"><strong>postEvent</strong></a> (EventId eventId, EventInfo eventInfo) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-resetnetworkinfo"><strong>resetNetworkInfo</strong></a> (<a href="../struct_wi_fi_network_info/"><strong>WiFiNetworkInfo</strong></a> &amp; info) <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="protected-static-attributes">Protected Static Attributes</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">std::vector&lt; <a href="../struct_event_handler__s/"><strong>EventHandler</strong></a> &gt;</td>
+<td align="left"><a href="#variable-handlers"><strong>handlers</strong></a>  <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-attributes-documentation">Public Attributes Documentation</h2>
+<h3 id="variable-data">variable data</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">data</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-scan">variable scan</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">WiFiScanData</span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scan</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+<h3 id="function-bssid-12">function BSSID [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">BSSID</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-bssid-22">function BSSID [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">BSSID</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-bssidstr-12">function BSSIDstr [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">BSSIDstr</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-bssidstr-22">function BSSIDstr [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">BSSIDstr</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-rssi-12">function RSSI [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">int8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">RSSI</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-rssi-22">function RSSI [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">RSSI</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-ssid-12">function SSID [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">SSID</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-ssid-22">function SSID [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">SSID</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-wificlass">function WiFiClass</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">WiFiClass</span><span class="o">::</span><span class="n">WiFiClass</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-alllocalipv6">function allLocalIPv6</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="w"> </span><span class="n">IPv6Address</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">allLocalIPv6</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-begin-12">function begin [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">WiFiStatus</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">begin</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ssid</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">passphrase</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">channel</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">bssid</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">connect</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-begin-22">function begin [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">WiFiStatus</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">begin</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ssid</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">passphrase</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">channel</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">bssid</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">connect</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-broadcastip">function broadcastIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">broadcastIP</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-channel-12">function channel [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">channel</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-channel-22">function channel [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">int32_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">channel</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-config">function config</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">config</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">localIP</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">gateway</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">subnet</span><span class="p">,</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">dns1</span><span class="o">=</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="w"> </span><span class="mh">0x00000000</span><span class="p">,</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">dns2</span><span class="o">=</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">)</span><span class="w"> </span><span class="mh">0x00000000</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-datafree">function dataFree</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">dataFree</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-datainitialize">function dataInitialize</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">dataInitialize</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-disconnect">function disconnect</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">disconnect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">wifiOff</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-dnsip">function dnsIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">dnsIP</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">dns_no</span><span class="o">=</span><span class="mi">0</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enableap">function enableAP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">enableAP</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enableipv6">function enableIpV6</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">enableIpV6</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enablesta">function enableSTA</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">enableSTA</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-encryptiontype">function encryptionType</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="n">WiFiAuthMode</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">encryptionType</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-gatewayip">function gatewayIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">gatewayIP</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getautoreconnect">function getAutoReconnect</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getAutoReconnect</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getencryption">function getEncryption</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">WiFiAuthMode</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getEncryption</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-gethostname">function getHostname</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getHostname</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getmode">function getMode</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">WiFiMode</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getMode</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getnetworkinfo">function getNetworkInfo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getNetworkInfo</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">networkItem</span><span class="p">,</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">ssid</span><span class="p">,</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">    </span><span class="n">WiFiAuthMode</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">encryptionType</span><span class="p">,</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">RSSI</span><span class="p">,</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*&amp;</span><span class="w"> </span><span class="n">BSSID</span><span class="p">,</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">channel</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getsleep">function getSleep</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getSleep</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-gettxpower">function getTxPower</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">getTxPower</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hostbyname-12">function hostByName [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">hostByName</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hostname</span><span class="p">,</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">aResult</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hostbyname-22">function hostByName [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">hostByName</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hostname</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hostname">function hostname</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="kr">inline</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">hostname</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">aHostname</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-isconnected">function isConnected</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">isConnected</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-localip">function localIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">localIP</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-localipv6">function localIPv6</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">IPv6Address</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">localIPv6</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-macaddress-12">function macAddress [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">macAddress</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mac</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-macaddress-22">function macAddress [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">macAddress</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-mode">function mode</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">mode</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">    </span><span class="n">WiFiMode</span><span class="w"> </span><span class="n">mode</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-modepriv">function modePriv</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">modePriv</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">    </span><span class="n">WiFiMode</span><span class="w"> </span><span class="n">mode</span><span class="p">,</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="w">    </span><span class="n">WiFiModeAction</span><span class="w"> </span><span class="n">sta</span><span class="p">,</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="w">    </span><span class="n">WiFiModeAction</span><span class="w"> </span><span class="n">ap</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-networkid">function networkID</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">networkID</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-onevent-13">function onEvent [1/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kt">uint16_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">onEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="n">EventCb</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span>
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span><span class="o">=</span><span class="n">ARDUINO_EVENT_MAX</span>
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-onevent-23">function onEvent [2/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="kt">uint16_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">onEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">    </span><span class="n">EventFuncCb</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span>
+<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span><span class="o">=</span><span class="n">ARDUINO_EVENT_MAX</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-onevent-33">function onEvent [3/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kt">uint16_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">onEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">    </span><span class="n">EventSysCb</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span>
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span><span class="o">=</span><span class="n">ARDUINO_EVENT_MAX</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-printdiag">function printDiag</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">printDiag</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="w">    </span><span class="n">Print</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">dest</span>
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-psk">function psk</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">psk</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-reconnect">function reconnect</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">reconnect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">bssid</span><span class="o">=</span><span class="nb">NULL</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-removeevent-13">function removeEvent [1/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">removeEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">    </span><span class="n">EventCb</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-removeevent-23">function removeEvent [2/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">removeEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a><span class="w">    </span><span class="n">EventSysCb</span><span class="w"> </span><span class="n">callback</span><span class="p">,</span>
+<a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span>
+<a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-removeevent-33">function removeEvent [3/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">removeEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">id</span>
+<a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-scanalloc">function scanAlloc</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scanAlloc</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">count</span>
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-scancomplete">function scanComplete</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="kt">int16_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scanComplete</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-scandelete">function scanDelete</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scanDelete</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-scaninit">function scanInit</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scanInit</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-scannetworks">function scanNetworks</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="kt">int16_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">scanNetworks</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">async</span><span class="o">=</span><span class="nb">false</span><span class="p">,</span>
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">showHidden</span><span class="o">=</span><span class="nb">false</span><span class="p">,</span>
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">passive</span><span class="o">=</span><span class="nb">false</span><span class="p">,</span>
+<a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">maxMsPerChannel</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+<a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">channel</span><span class="o">=</span><span class="mi">0</span>
+<a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-setautoreconnect">function setAutoReconnect</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">setAutoReconnect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">autoReconnect</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sethostname">function setHostname</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">setHostname</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hostname</span>
+<a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-setmacaddress">function setMacAddress</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">setMacAddress</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mac</span>
+<a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-setsleep">function setSleep</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">setSleep</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span>
+<a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-settxpower">function setTxPower</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">setTxPower</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">power</span>
+<a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softap">function softAP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAP</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ssid</span><span class="p">,</span>
+<a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">passphrase</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-64-4" name="__codelineno-64-4" href="#__codelineno-64-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-64-5" name="__codelineno-64-5" href="#__codelineno-64-5"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ssidHidden</span><span class="o">=</span><span class="nb">false</span><span class="p">,</span>
+<a id="__codelineno-64-6" name="__codelineno-64-6" href="#__codelineno-64-6"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">maxClients</span><span class="o">=</span><span class="mi">4</span>
+<a id="__codelineno-64-7" name="__codelineno-64-7" href="#__codelineno-64-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapbroadcastip">function softAPBroadcastIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPBroadcastIP</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapconfig">function softAPConfig</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPConfig</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">localIP</span><span class="p">,</span>
+<a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">gateway</span><span class="p">,</span>
+<a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">subnet</span>
+<a id="__codelineno-66-5" name="__codelineno-66-5" href="#__codelineno-66-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapip">function softAPIP</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPIP</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapipv6">function softAPIPv6</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="n">IPv6Address</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPIPv6</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapnetworkid">function softAPNetworkID</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPNetworkID</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapssid">function softAPSSID</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPSSID</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a><span class="w">    </span><span class="kt">void</span>
+<a id="__codelineno-70-3" name="__codelineno-70-3" href="#__codelineno-70-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapsubnetcidr">function softAPSubnetCIDR</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPSubnetCIDR</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapsubnetmask">function softAPSubnetMask</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPSubnetMask</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapdisconnect">function softAPdisconnect</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPdisconnect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">wifiOff</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapenableipv6">function softAPenableIpV6</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPenableIpV6</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapgethostname">function softAPgetHostname</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPgetHostname</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapgetstationnum">function softAPgetStationNum</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPgetStationNum</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapmacaddress-12">function softAPmacAddress [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPmacAddress</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mac</span>
+<a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapmacaddress-22">function softAPmacAddress [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPmacAddress</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-78-2" name="__codelineno-78-2" href="#__codelineno-78-2"></a><span class="w">    </span><span class="kt">void</span>
+<a id="__codelineno-78-3" name="__codelineno-78-3" href="#__codelineno-78-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-softapsethostname">function softAPsetHostname</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">softAPsetHostname</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">hostname</span>
+<a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-status">function status</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="n">WiFiStatus</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">status</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-subnetcidr">function subnetCIDR</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">subnetCIDR</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-subnetmask">function subnetMask</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">subnetMask</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-validate">function validate</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">validate</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-83-2" name="__codelineno-83-2" href="#__codelineno-83-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ssid</span><span class="p">,</span>
+<a id="__codelineno-83-3" name="__codelineno-83-3" href="#__codelineno-83-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">passphrase</span>
+<a id="__codelineno-83-4" name="__codelineno-83-4" href="#__codelineno-83-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-waitforconnectresult">function waitForConnectResult</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a><span class="n">WiFiStatus</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">waitForConnectResult</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-84-2" name="__codelineno-84-2" href="#__codelineno-84-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">timeout</span>
+<a id="__codelineno-84-3" name="__codelineno-84-3" href="#__codelineno-84-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-wificlass_1">function ~WiFiClass</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="n">WiFiClass</span><span class="o">::~</span><span class="n">WiFiClass</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="public-static-functions-documentation">Public Static Functions Documentation</h2>
+<h3 id="function-calculatebroadcast">function calculateBroadcast</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="k">static</span><span class="w"> </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">calculateBroadcast</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-86-3" name="__codelineno-86-3" href="#__codelineno-86-3"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">subnet</span>
+<a id="__codelineno-86-4" name="__codelineno-86-4" href="#__codelineno-86-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-calculatenetworkid">function calculateNetworkID</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="k">static</span><span class="w"> </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">calculateNetworkID</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-87-2" name="__codelineno-87-2" href="#__codelineno-87-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-87-3" name="__codelineno-87-3" href="#__codelineno-87-3"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">subnet</span>
+<a id="__codelineno-87-4" name="__codelineno-87-4" href="#__codelineno-87-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-calculatesubnetcidr">function calculateSubnetCIDR</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">calculateSubnetCIDR</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-88-2" name="__codelineno-88-2" href="#__codelineno-88-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">subnetMask</span>
+<a id="__codelineno-88-3" name="__codelineno-88-3" href="#__codelineno-88-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-mactostring">function macToString</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">macToString</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mac</span>
+<a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-postevent">function postEvent</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">postEvent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-90-2" name="__codelineno-90-2" href="#__codelineno-90-2"></a><span class="w">    </span><span class="n">EventId</span><span class="w"> </span><span class="n">eventId</span><span class="p">,</span>
+<a id="__codelineno-90-3" name="__codelineno-90-3" href="#__codelineno-90-3"></a><span class="w">    </span><span class="n">EventInfo</span><span class="w"> </span><span class="n">eventInfo</span>
+<a id="__codelineno-90-4" name="__codelineno-90-4" href="#__codelineno-90-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-resetnetworkinfo">function resetNetworkInfo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">resetNetworkInfo</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a><span class="w">    </span><span class="n">WiFiNetworkInfo</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">info</span>
+<a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="protected-static-attributes-documentation">Protected Static Attributes Documentation</h2>
+<h3 id="variable-handlers">variable handlers</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="w"> </span><span class="n">EventHandler</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">WiFiClass</span><span class="o">::</span><span class="n">handlers</span><span class="p">;</span>
+</code></pre></div>
+<hr />
+<p>The documentation for this class was generated from the following file <code>cores/common/arduino/libraries/api/WiFi/WiFi.h</code></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../docs/script.js"></script>
+      
+    
+  </body>
+</html>

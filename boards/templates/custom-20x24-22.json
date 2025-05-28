@@ -1,0 +1,141 @@
+{
+	"name": "custom-20x24-22",
+	"title": "Custom 20x24mm form factor (22-pin)",
+	"width": 20,
+	"height": 24,
+	"vars": {
+		"PINTYPE_VERT": "pin_vert_cast_nohole",
+		"PINTYPE_HORZ": "pin_horz_cast_nohole",
+		"RASTER": 2,
+		"RF_W": 20,
+		"RF_H": 6.5
+	},
+	"front": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "20,24",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Pins (1-7)",
+			"id": "left",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,8.5",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (8-15)",
+			"id": "right",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "20,8.5",
+			"vars": {
+				"PINDIR": "right"
+			}
+		},
+		{
+			"comment": "Pins (16-22)",
+			"name": "r_pins_horz",
+			"repeat": 8,
+			"pos": "3,24",
+			"vars": {
+				"PINDIR": "down"
+			}
+		},
+		{
+			"comment": "Pin labels (16-22)",
+			"id": "down",
+			"name": "r_labels_horz",
+			"repeat": 8,
+			"pos": "3,24",
+			"vars": {
+				"PINDIR": "down"
+			}
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "1.2,6.95",
+			"size": "17.6,15.8",
+			"preset": "shield"
+		}
+	],
+	"back": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "20,24",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Pins (8-15)",
+			"id": "right",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,8.5",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (1-7)",
+			"id": "left",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "20,8.5",
+			"vars": {
+				"PINDIR": "right"
+			}
+		},
+		{
+			"comment": "Pins (16-22)",
+			"name": "r_pins_horz",
+			"repeat": 8,
+			"pos": "3,24",
+			"vars": {
+				"PINDIR": "down"
+			}
+		},
+		{
+			"comment": "Pin labels (16-22)",
+			"id": "down",
+			"name": "r_labels_horz",
+			"repeat": 8,
+			"pos": "3,24",
+			"vars": {
+				"PINDIR": "down"
+			}
+		}
+	],
+	"pads": {
+		"1": "custom-20x24-22.front.left.pin1",
+		"2": "custom-20x24-22.front.left.pin2",
+		"3": "custom-20x24-22.front.left.pin3",
+		"4": "custom-20x24-22.front.left.pin4",
+		"5": "custom-20x24-22.front.left.pin5",
+		"6": "custom-20x24-22.front.left.pin6",
+		"7": "custom-20x24-22.front.left.pin7",
+		"8": "custom-20x24-22.front.right.pin7",
+		"9": "custom-20x24-22.front.right.pin6",
+		"10": "custom-20x24-22.front.right.pin5",
+		"11": "custom-20x24-22.front.right.pin4",
+		"12": "custom-20x24-22.front.right.pin3",
+		"13": "custom-20x24-22.front.right.pin2",
+		"14": "custom-20x24-22.front.right.pin1",
+		"15": "custom-20x24-22.front.down.label1.anchor",
+		"16": "custom-20x24-22.front.down.label2.anchor",
+		"17": "custom-20x24-22.front.down.label3.anchor",
+		"18": "custom-20x24-22.front.down.label4.anchor",
+		"19": "custom-20x24-22.front.down.label5.anchor",
+		"20": "custom-20x24-22.front.down.label6.anchor",
+		"21": "custom-20x24-22.front.down.label7.anchor",
+		"22": "custom-20x24-22.front.down.label8.anchor"
+	},
+	"test_pads": {}
+}

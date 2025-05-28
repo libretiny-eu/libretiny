@@ -1,0 +1,2710 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/src/mkdoxy/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>MkDoxy - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../docs/style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mkdoxy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MkDoxy
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ltapi/files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mkdoxy-mkdocs-doxygen-easy-documentation-with-code-snippets" class="md-nav__link">
+    MkDoxy -&gt; MkDocs + Doxygen. Easy documentation with code snippets.
+  </a>
+  
+    <nav class="md-nav" aria-label="MkDoxy -&gt; MkDocs + Doxygen. Easy documentation with code snippets.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#based-on-matusnovakdoxybook" class="md-nav__link">
+    Based on  matusnovak/doxybook
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    Example usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apt" class="md-nav__link">
+    Apt
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pip" class="md-nav__link">
+    Pip
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional" class="md-nav__link">
+    Optional:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="mkdoxy">MkDoxy</h1>
+<h2 id="mkdoxy-mkdocs-doxygen-easy-documentation-with-code-snippets">MkDoxy -&gt; MkDocs + Doxygen. Easy documentation with code snippets.</h2>
+<h3 id="based-on-matusnovakdoxybook">Based on  <a href="https://matusnovak.github.io/doxybook">matusnovak/doxybook</a></h3>
+<p>This python tool is extension for MkDocs. Extension will take your programme source code and runs Doxygen.
+Than converts exported XML into markdown and create new folder with full generated documentation. 
+Next usage is by snippets inside documentation markdown.</p>
+<h2 id="example-usage">Example usage</h2>
+<ol>
+<li>
+<p>Generate class with name <code>rb::MotorChangeBuilder</code> 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">::</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doxy.Class</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rb::MotorChangeBuilder</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Generate method <code>brake (MotorId id, uint16_t brakingPower)</code> from class with name <code>rb::MotorChangeBuilderA</code>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">::</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doxy.Class.Method</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rb::MotorChangeBuilder</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">method</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">brake (MotorId id, uint16_t brakingPower)</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Generate function with name <code>readUltra (bool async)</code> 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">::</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doxy.Function</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">readUltra (bool async)</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Generate code snippet from file <code>RBCXLeds.cpp</code> 
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">::</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doxy.Code</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">file</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RBCXLeds.cpp</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">start</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">21</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">end</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">35</span>
+</code></pre></div></p>
+</li>
+</ol>
+<p><img alt="Basic-implementation" src="docs/media/Basic-implementation.png" /></p>
+<!-- ## Live Demo
+
+See live demo here for [Gitbook here](https://matusnovak.github.io/doxybook/gitbook/api/classexample_1_1Animal.html), [Vuepress here](https://matusnovak.github.io/doxybook/vuepress/api/classexample_1_1Animal.html), [MkDocs here](https://matusnovak.github.io/doxybook/mkdocs/api/classexample_1_1Animal), or [Original here](https://matusnovak.github.io/doxybook/original/classexample_1_1Animal.html). -->
+
+<h2 id="requirements">Requirements</h2>
+<h3 id="apt">Apt</h3>
+<ul>
+<li>python 3.6 or newer -&gt; <code>sudo apt install python3</code> </li>
+<li>Pip -&gt; <code>sudo apt install python3-pip</code></li>
+<li>Git -&gt; <code>sudo apt install git</code></li>
+<li>Doxygen -&gt; <code>sudo apt install doxygen</code></li>
+</ul>
+<h3 id="pip">Pip</h3>
+<ul>
+<li>Jinja2 -&gt; <code>pip install jinja2</code></li>
+<li>Mkdocs -&gt; <code>pip install mkdocs</code></li>
+<li>ruamel.yaml -&gt; <code>pip install ruamel.yaml</code></li>
+</ul>
+<h3 id="optional">Optional:</h3>
+<ul>
+<li>mkdocs-material -&gt; <code>pip install mkdocs-material</code></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p><strong>Install using Python Pip: <a href="https://pypi.org/project/mkdocs-doxygen-snippets-plugin/">https://pypi.org/project/mkdocs-doxygen-snippets-plugin/</a></strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>mkdocs-doxygen-snippets-plugin
+</code></pre></div>
+<p><strong>Or Install manually:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JakubAndrysek/mkdocs-doxygen-snippets-plugin.git
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">cd</span><span class="w"> </span>mkdocs-doxygen-snippets-plugin
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>python<span class="w"> </span>setup.py<span class="w"> </span>install
+</code></pre></div>
+<!-- ## Compile the example
+
+See the live demo [here](https://matusnovak.github.io/doxybook) or alternatively you can run the examples in the following way:
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Clone this repository</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/matusnovak/doxybook.git
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Go to the example folder</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">cd</span><span class="w"> </span>doxybook/example
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Run doxygen and generate xml folder</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>doxygen<span class="w"> </span>Doxyfile
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># Convert xml to md for Vuepress</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>doxybook<span class="w"> </span>-i<span class="w"> </span>temp/xml<span class="w"> </span>-o<span class="w"> </span>vuepress/api<span class="w"> </span>-t<span class="w"> </span>vuepress
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1"># Note! GitBook requires SUMMARY.md as the following:</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># doxybook -i temp/xml -o gitbook/api -t gitbook -s gitbook/SUMMARY.md</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="c1"># Run vuepress in dev mode</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="nb">cd</span><span class="w"> </span>vuepress
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>vuepress<span class="w"> </span>dev
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="c1"># Open http://localhost:8080</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="sb">```</span><span class="w"> </span>--&gt;
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="c1">## What files are generated?</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>This<span class="w"> </span>tool<span class="w"> </span>was<span class="w"> </span>designed<span class="w"> </span>to<span class="w"> </span>copy<span class="w"> </span>the<span class="w"> </span>file<span class="w"> </span>naming<span class="w"> </span>and<span class="w"> </span>structure<span class="w"> </span>of<span class="w"> </span>Doxygen<span class="w"> </span>html<span class="w"> </span>output.<span class="w"> </span>The<span class="w"> </span>naming<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>files<span class="w"> </span>is<span class="w"> </span>identical<span class="w"> </span>except<span class="w"> </span>tiny<span class="w"> </span>changes<span class="w"> </span>with<span class="w"> </span>Class/Variable/enumeration<span class="w"> </span>Index<span class="w"> </span>pages.
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>All<span class="w"> </span>classes,<span class="w"> </span>namespaces,<span class="w"> </span>structures,<span class="w"> </span>and<span class="w"> </span>interfaces<span class="w"> </span>are<span class="w"> </span>generated,<span class="w"> </span>including<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>additional<span class="w"> </span>files:
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>*<span class="w"> </span>Directories<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>dir_....md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>*<span class="w"> </span>Files<span class="w"> </span>with<span class="w"> </span><span class="nb">source</span><span class="w"> </span>code<span class="w"> </span>+<span class="w"> </span>file<span class="w"> </span>documentation<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>filename_8h.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>*<span class="w"> </span>Markdown<span class="w"> </span>pages<span class="w"> </span>processed<span class="w"> </span>through<span class="w"> </span>doxygen,<span class="w"> </span>highly<span class="w"> </span><span class="k">do</span><span class="w"> </span>not<span class="w"> </span>recommend<span class="w"> </span>using<span class="w"> </span>this!<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>md_src_....md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>*<span class="w"> </span>Members<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>class_xxx_yyy.md<span class="sb">`</span><span class="w"> </span>or<span class="w"> </span><span class="sb">`</span>namespace_xxx_yyy.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>*<span class="w"> </span>Class<span class="w"> </span>List<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>annotated.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>*<span class="w"> </span>Class<span class="w"> </span>Index<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>classes.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>*<span class="w"> </span>Class<span class="w"> </span>Members<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>class_members.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>class_member_enums.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>class_member_functions.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>class_member_typedefs.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>class_member_variables.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>*<span class="w"> </span>Class<span class="w"> </span>Hierarchy<span class="w"> </span><span class="o">(</span>.e.g<span class="w"> </span><span class="sb">`</span>hierarchy.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>*<span class="w"> </span>Namespace<span class="w"> </span>List<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>namespaces.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>*<span class="w"> </span>Namespace<span class="w"> </span>Members<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>namespace_members.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>namespace_member_enums.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>namespace_member_functions.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>namespace_member_typedefs.md<span class="sb">`</span>,<span class="w"> </span><span class="sb">`</span>namespace_member_variables.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>*<span class="w"> </span>Modules/groups<span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>modules.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>*<span class="w"> </span>Index<span class="w"> </span>page<span class="w"> </span><span class="o">(</span><span class="k">if</span><span class="w"> </span>exists<span class="w"> </span>within<span class="w"> </span>Doxygen<span class="w"> </span>output<span class="w"> </span>as<span class="w"> </span><span class="sb">`</span>indexpage.xml<span class="sb">`</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>e.g.<span class="w"> </span><span class="sb">`</span>index.md<span class="sb">`</span><span class="o">)</span>
+<a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a>*<span class="w"> </span>Any<span class="w"> </span>additional<span class="w"> </span>pages<span class="w"> </span>generated<span class="w"> </span>by<span class="w"> </span>Doxygen<span class="w"> </span>such<span class="w"> </span>as<span class="w"> </span>bugs,<span class="w"> </span>todo,<span class="w"> </span>tests
+<a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>
+<a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a>See<span class="w"> </span>the<span class="w"> </span>example<span class="w"> </span>folder<span class="w"> </span>to<span class="w"> </span>see<span class="w"> </span>all<span class="w"> </span>files.
+<a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a>
+<a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a>&lt;!--<span class="w"> </span><span class="c1">## Usage</span>
+</code></pre></div>
+> python -m doxybook -h
+usage: __main__.py [-h] [-t TARGET] -i INPUT -o OUTPUT [-s SUMMARY]
+                   [-l LINK_PREFIX] [-d DEBUG] [--hints HINTS]
+                   [--ignoreerrors IGNOREERRORS]
+
+Convert doxygen XML output into GitBook or Vuepress markdown output.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TARGET, --target TARGET
+                        Select the target: Gitbook (default), Docsify, MkDocs,
+                        or Vuepress, for example: "-t vuepress", "-t docsify",
+                        "-t mkdocs", or "-t gitbook"
+  -i INPUT, --input INPUT
+                        Path to doxygen generated xml folder
+  -o OUTPUT, --output OUTPUT
+                        Path to the destination folder
+  -s SUMMARY, --summary SUMMARY
+                        Path to the summary file which contains a link to
+                        index.md in the folder pointed by --input (default:
+                        false)
+  -l LINK_PREFIX, --link-prefix LINK_PREFIX
+                        Adds a prefix to all links. You can use this to
+                        specify an absolute path if necessary. Docsify might
+                        need this. (default: "")
+  -d DEBUG, --debug DEBUG
+                        Debug the class hierarchy (default: false)
+  --hints HINTS         (Vuepress only) If set to true, hints will be
+                        generated for the sections note, bug, and a warning
+                        (default: true)
+  --ignoreerrors IGNOREERRORS
+                        If set to true, will continue to generate Markdown
+                        files even if an error has been detected (default:
+                        false)
+``` -->
+
+<!-- ## Detailed usage Vuepress
+
+1. First, create your Doxyfile. I am not going to tell you how, there are plenty of tutorials out there.
+2. Set `GENERATE_XML = YES` and `XML_OUTPUT = xml` in the Doxyfile, and don't forget about `OUTPUT_DIRECTORY = temp` (or any other directory).
+3. Run the doxygen via `doxygen Doxyfile` 
+4. Create your initial Vuepress configuration (optional).
+5. Run doxybook as: `doxybook -i temp/xml -o docs/api -t vuepress` (paths are relative).
+6. Then run `vuepress dev` and go to `http://localhost:8080`.
+
+## Detailed usage Docsify or MkDocs
+
+Same as VuePress, except use `-t docsify` or `-t mkdocs` when running doxybook.
+
+## Detailed usage Gitbook
+
+1. First, create your Doxyfile. I am not going to tell you how, there are plenty of tutorials out there.
+2. Set `GENERATE_XML = YES` and `XML_OUTPUT = xml` in the Doxyfile, and don't forget about `OUTPUT_DIRECTORY = temp`.
+3. Run the doxygen via `doxygen Doxyfile` 
+4. Create your initial GitBook.
+6. Create an empty folder where the markdown files should be generated. For the purpose of this example, we will put it in the `docs/api` folder. 
+5. (optional) In your `SUMMARY.md` create a link to the `docs/api/index.md` with any text, for example: `* [Lorem Ipsum](docs/api/index.md)`. This file can be any kind of markdown file. However, the file `index.md` needs to be inside the folder where the markdown files are going to be generated. Doxybook will find this link and will generated a **sub-list** below that markdown link. Anything you have written after the `* [Lorem Ipsum](docs/api/index.md)` will not be affected, only the sub-list items. Note that if you put any list item or sub-lists of `* [Lorem Ipsum](docs/api/index.md)` they will be REMOVED!
+6. Run doxybook as: `doxybook -i temp/xml -o docs/api -s SUMMARY.md -t gitbook` (paths are relative) The `-s SUMMARY.md` is optional, if you provide a vaid path to the SUMMARY.md file then the doxybook will alter the contents with links to generated markdown files.
+7. Then build your GitBook as: `gitbook build`, or serve it as `gitbook serve` and go to `http://localhost:4000`, or upload the contents of `_book` folder into gh-pages on GitHub. -->
+
+<!-- ## Having errors while generating markdown files?
+
+Run doxybook as `doxybook --ignoreerrors true -i ... -o ... -t ...`. The files will be generated, but some things may be missing. -->
+
+<!-- ## How does the SUMMARY.md work here? (Gitbook only)
+
+GitBook has a big fault that anything not listed in `SUMMARY.md` will get ignored. Therefore the doxybook needs to alter the `SUMMARY.md`. Yes, this is optional, in case GitBook will be fixed in the future. 
+
+For example, given this summary file:
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># Summary
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>* [Introduction](README.md)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>* [Documentation](docs/api/index.md)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  * [This will get deleted](whatever.md)
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>* [Something else](something-else.md)
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>* [Go to my website](http://mywebsite.com/)
+</code></pre></div>
+
+After running doxybook, the summary will become this code below. Notice how `* [This will get deleted](whatever.md)` has vanished. The doxybook will only modify anything that is a child item of `* [Documentation](docs/api/index.md)` regardless of the indentation. Also, you do not need to remove any generated links to `docs/api` (or whatever folder you have used) as it will be sraped in any re-run of the doxybook and generated from scratch. -->
+
+<!-- ```
+# Summary
+
+* [Introduction](README.md)
+* [Documentation](api/index.md)
+  * [Related Pages](api/pages.md)
+    ... etc
+  * [Modules](api/modules.md)
+    * [Some organism example](api/group__organism.md)
+      * [An animal group example](api/group__animals.md)
+  * [Class List](api/annotated.md)
+    * [namespace example](api/namespaceexample.md)
+      * [class example::Animal](api/classexample_1_1_animal.md)
+        ... etc
+  * [Namespace List](api/namespaces.md)
+  ... etc
+* [Something else](something-else.md)
+* [Go to my website](http://mywebsite.com/)
+``` -->
+
+<!-- ## Found a bug or want to request a feature?
+
+[Feel free to do it on GitHub issues](https://github.com/matusnovak/doxybook/issues)
+
+## Pull requests
+
+[Pull requests are welcome](https://github.com/matusnovak/doxybook/pulls)
+
+## Contact
+
+Use GitHub issues or contact me through my email (see my GitHub profile page). -->
+
+<h2 id="license">License</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>MIT License
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Copyright (c) 2021 Kuba Andrýsek
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>Permission is hereby granted, free of charge, to any person obtaining a copy
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>of this software and associated documentation files (the &quot;Software&quot;), to deal
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>in the Software without restriction, including without limitation the rights
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>copies of the Software, and to permit persons to whom the Software is
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>furnished to do so, subject to the following conditions:
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>The above copyright notice and this permission notice shall be included in all
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>copies or substantial portions of the Software.
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>SOFTWARE.
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../docs/script.js"></script>
+      
+    
+  </body>
+</html>

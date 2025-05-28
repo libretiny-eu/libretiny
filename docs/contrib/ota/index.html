@@ -1,0 +1,2631 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/docs/contrib/ota/">
+      
+      
+        <link rel="prev" href="../project-structure/">
+      
+      
+        <link rel="next" href="uf2ota/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>✈️ OTA format - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#uf2-based-ota" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ✈️ OTA format
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" checked>
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#firmware-images" class="md-nav__link">
+    Firmware images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extension-tags" class="md-nav__link">
+    Extension tags
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-types" class="md-nav__link">
+    Update types
+  </a>
+  
+    <nav class="md-nav" aria-label="Update types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-ota-scheme-1-2" class="md-nav__link">
+    Single OTA scheme (1, 2)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dual-otasingle-file-scheme-3-4" class="md-nav__link">
+    Dual-OTA/single-file scheme (3, 4)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dual-otadual-file-scheme-5-6" class="md-nav__link">
+    Dual-OTA/dual-file scheme (5, 6)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-patching" class="md-nav__link">
+    Binary patching
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary patching">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diff32" class="md-nav__link">
+    DIFF32
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="uf2-based-ota">UF2-based OTA</h1>
+<p>LibreTiny's OTA updating is based on <a href="https://microsoft.github.io/uf2/">Microsoft's UF2 specification</a>. Some aspects of the process, such as OTA1/2 support and target partition selection, have been customized with extension tags.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Just like in UF2, all values in this format are little-endian.</p>
+</div>
+<h2 id="firmware-images">Firmware images</h2>
+<p>UF2 files may contain multiple firmware images that are to be flashed, i.e. main firmware + bootloader + some config partition.</p>
+<p>Some CPUs support dual-OTA schemes: firmware runs from one image, while the other one is reserved for updated firmware. After applying the update, a reboot causes to run the other image instead.</p>
+<p>Each firmware image may be either applicable:</p>
+<ol>
+<li>only when flashing OTA1 (<code>part;file;;</code>)</li>
+<li>only when flashing OTA2 (<code>;;part;file</code>)</li>
+<li>for both schemes to a single partition (<code>part;file</code>)</li>
+<li>for both schemes but different partitions (<code>part1;file;part2;file</code>)</li>
+<li>for both schemes but with a different binary (<code>part;file1;part;file2</code>)</li>
+<li>for both schemes, with different binaries and target partitions (<code>part1;file1;part2;file2</code>)</li>
+</ol>
+<p>* <em><code>part</code> means partition here</em></p>
+<p>** values in parentheses show the input format to use for <a href="uf2ota/"><code>uf2ota.py</code></a></p>
+<p>For easier understanding, these update types will be referred to in this document using the numbers.</p>
+<h2 id="extension-tags">Extension tags</h2>
+<p>Standard tags are used: <code>VERSION</code>, <code>DEVICE</code> and <code>DEVICE_ID</code>.</p>
+<p>Additionally, custom tags are defined:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>ID</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OTA_VERSION</code></td>
+<td>0x5D57D0</td>
+<td>int 8-bit</td>
+<td>format version (for simple compatibility checks)</td>
+</tr>
+<tr>
+<td><code>BOARD</code></td>
+<td>0xCA25C8</td>
+<td>string</td>
+<td>board name / code (lowercase)</td>
+</tr>
+<tr>
+<td><code>FIRMWARE</code></td>
+<td>0x00DE43</td>
+<td>string</td>
+<td>firmware description / name</td>
+</tr>
+<tr>
+<td><code>BUILD_DATE</code></td>
+<td>0x822F30</td>
+<td>int 32-bit</td>
+<td>build date/time as Unix timestamp</td>
+</tr>
+<tr>
+<td><code>LT_VERSION</code></td>
+<td>0x59563D</td>
+<td>semver</td>
+<td>LT version</td>
+</tr>
+<tr>
+<td><code>LT_PART_1</code></td>
+<td>0x805946</td>
+<td>string</td>
+<td>OTA1 partition name</td>
+</tr>
+<tr>
+<td><code>LT_PART_2</code></td>
+<td>0xA1E4D7</td>
+<td>string</td>
+<td>OTA2 partition name</td>
+</tr>
+<tr>
+<td><code>LT_HAS_OTA1</code></td>
+<td>0xBBD965</td>
+<td>bool 8-bit</td>
+<td>image has any data for OTA1</td>
+</tr>
+<tr>
+<td><code>LT_HAS_OTA2</code></td>
+<td>0x92280E</td>
+<td>bool 8-bit</td>
+<td>image has any data for OTA2</td>
+</tr>
+<tr>
+<td><code>LT_BINPATCH</code></td>
+<td>0xB948DE</td>
+<td>bytes</td>
+<td>binary patch to convert OTA1-&gt;OTA2</td>
+</tr>
+</tbody>
+</table>
+<h2 id="update-types">Update types</h2>
+<h3 id="single-ota-scheme-1-2">Single OTA scheme (1, 2)</h3>
+<p>Image is ignored if the OTA scheme does not match. UF2 has <code>LT_PART_1</code> or <code>LT_PART_2</code> set to target partition name. The other partition tag is present, but empty (0 bytes).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>08 46 59 80 6f 74 61 31 | .FY.ota1 | LT_PART_1
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>04 d7 e4 a1             | ....     | LT_PART_2
+</code></pre></div>
+<h3 id="dual-otasingle-file-scheme-3-4">Dual-OTA/single-file scheme (3, 4)</h3>
+<p>One image is used for both OTA schemes. UF2 has <code>LT_PART_1</code> and <code>LT_PART_2</code> tags set. For type <code>3</code> these two tags contain the same partition name.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>08 46 59 80 6f 74 61 31 | .FY.ota1 | LT_PART_1
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>08 d7 e4 a1 6f 74 61 32 | ....ota2 | LT_PART_2
+</code></pre></div>
+<h3 id="dual-otadual-file-scheme-5-6">Dual-OTA/dual-file scheme (5, 6)</h3>
+<p>Just like types <code>3</code> and <code>4</code>, UF2 has two partition tags set. For type <code>5</code> they have the same name.</p>
+<p>The image stored in UF2 is meant for OTA1 scheme. There is an additional tag <code>LT_BINPATCH</code> present. In OTA1 flashing scheme, it is ignored.</p>
+<h2 id="binary-patching">Binary patching</h2>
+<p>OTA2 images are not stored directly, as that would needlessly double the UF2 file size. Instead, binary patching instructions, embedded into the extension tags area, allow the CPU to convert the OTA1 image from UF2 into OTA2 image.</p>
+<p>There can be at most one binpatch tag in a UF2 block. It has the following format:</p>
+<ul>
+<li>opcode (1 byte) - operation type:<ul>
+<li><code>DIFF32</code> (0xFE) - difference between 32-bit values</li>
+</ul>
+</li>
+<li>length (1 byte) - data length</li>
+<li>data (<code>length</code> bytes)<ul>
+<li>for <code>DIFF32</code>:<ul>
+<li>difference value (signed int 32-bit)</li>
+<li>offset table (<code>length-4</code> bytes)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>The presented structure can be repeated in a single binpatch tag.</p>
+<h3 id="diff32">DIFF32</h3>
+<p>This method works by adding the difference value to a 32-bit integer. It allows to save the most space in OTA1/2 image scenarios, where the only different values are, for example, flash memory addresses. The offset table contains positions within the 256-byte block, to which the difference value should be mathematically added.</p>
+<p>For a block like:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>000  72 71 73 61 76 65 00 00  5f 66 72 65 65 72 74 6f  |rqsave.._freerto|
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>010  73 5f 6d 75 74 65 78 5f  67 65 74 5f 74 69 6d 65  |s_mutex_get_time|
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>020  6f 75 74 00 5d a4 03 08  61 a4 03 08 85 a4 03 08  |out.]...a.......|
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>030  5d a4 03 08 61 a4 03 08  85 a4 03 08 81 a9 03 08  |]...a...........|
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>040  6d a9 03 08 7d a4 03 08  d9 a8 03 08 05 a7 03 08  |m...}...........|
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>050  bd a4 03 08 ad a8 03 08  59 a7 03 08 9d a8 03 08  |........Y.......|
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>060  01 a7 03 08 51 a8 03 08  21 aa 03 08 b9 a4 03 08  |....Q...!.......|
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>070  85 a3 03 08 89 a3 03 08  4d a4 03 08 a1 a8 03 08  |........M.......|
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>080  00 00 00 00 00 00 00 00  19 a8 03 08 c1 a4 03 08  |................|
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>090  8d a8 03 08 ed a6 03 08  dd a7 03 08 ad a4 03 08  |................|
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>0a0  9d a7 03 08 95 a4 03 08  81 a7 03 08 09 a7 03 08  |................|
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>0b0  31 a7 03 08 d1 a6 03 08  dd a5 03 08 61 aa 03 08  |1...........a...|
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>0c0  c5 a2 03 08 d5 a2 03 08  d9 a2 03 08 b1 a6 03 08  |................|
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>0d0  65 aa 03 08 ad a6 03 08  a9 a6 03 08 8d a6 03 08  |e...............|
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>0e0  e5 a2 03 08 e9 a2 03 08  1d a4 03 08 ed a3 03 08  |................|
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>0f0  35 a4 03 08 05 a4 03 08  bd a3 03 08 8d a3 03 08  |5...............|
+</code></pre></div></p>
+<p>a DIFF32 patch containing:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>     fe 39 00 50 0c 00 24 28  2c 30 34 38 3c 40 44 48  |.9.P..$(,048&lt;@DH|
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>     4c 50 54 58 5c 60 64 68  6c 70 74 78 7c 88 8c 90  |LPTX\`dhlptx|...|
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>     94 98 9c a0 a4 a8 ac b0  b4 b8 bc c0 c4 c8 cc d0  |................|
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>     d4 d8 dc e0 e4 e8 ec f0  f4 f8 fc                 |...........     |
+</code></pre></div></p>
+<p>adds 0x000C5000 to 53 values, producing OTA2 output like this:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>000  72 71 73 61 76 65 00 00  5f 66 72 65 65 72 74 6f  |rqsave.._freerto|
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>010  73 5f 6d 75 74 65 78 5f  67 65 74 5f 74 69 6d 65  |s_mutex_get_time|
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>020  6f 75 74 00 5d f4 0f 08  61 f4 0f 08 85 f4 0f 08  |out.]...a.......|
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>030  5d f4 0f 08 61 f4 0f 08  85 f4 0f 08 81 f9 0f 08  |]...a...........|
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>040  6d f9 0f 08 7d f4 0f 08  d9 f8 0f 08 05 f7 0f 08  |m...}...........|
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>050  bd f4 0f 08 ad f8 0f 08  59 f7 0f 08 9d f8 0f 08  |........Y.......|
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>060  01 f7 0f 08 51 f8 0f 08  21 fa 0f 08 b9 f4 0f 08  |....Q...!.......|
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>070  85 f3 0f 08 89 f3 0f 08  4d f4 0f 08 a1 f8 0f 08  |........M.......|
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>080  00 00 00 00 00 00 00 00  19 f8 0f 08 c1 f4 0f 08  |................|
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>090  8d f8 0f 08 ed f6 0f 08  dd f7 0f 08 ad f4 0f 08  |................|
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>0a0  9d f7 0f 08 95 f4 0f 08  81 f7 0f 08 09 f7 0f 08  |................|
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>0b0  31 f7 0f 08 d1 f6 0f 08  dd f5 0f 08 61 fa 0f 08  |1...........a...|
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>0c0  c5 f2 0f 08 d5 f2 0f 08  d9 f2 0f 08 b1 f6 0f 08  |................|
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>0d0  65 fa 0f 08 ad f6 0f 08  a9 f6 0f 08 8d f6 0f 08  |e...............|
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>0e0  e5 f2 0f 08 e9 f2 0f 08  1d f4 0f 08 ed f3 0f 08  |................|
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>0f0  35 f4 0f 08 05 f4 0f 08  bd f3 0f 08 8d f3 0f 08  |5...............|
+</code></pre></div></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../script.js"></script>
+      
+    
+  </body>
+</html>

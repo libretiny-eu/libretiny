@@ -1,0 +1,3334 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/ltapi/class_mbed_t_l_s_client/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>Class MbedTLSClient - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../docs/style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#class-mbedtlsclient" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Class MbedTLSClient
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions" class="md-nav__link">
+    Public Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-inherited-from-lwipclient" class="md-nav__link">
+    Public Functions inherited from LwIPClient
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-inherited-from-iwificlient" class="md-nav__link">
+    Public Functions inherited from IWiFiClient
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-inherited-from-iwificlientsecure" class="md-nav__link">
+    Public Functions inherited from IWiFiClientSecure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-documentation" class="md-nav__link">
+    Public Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-mbedtlsclient-12" class="md-nav__link">
+    function MbedTLSClient [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mbedtlsclient-22" class="md-nav__link">
+    function MbedTLSClient [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-available" class="md-nav__link">
+    function available
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-211" class="md-nav__link">
+    function connect [2/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-311" class="md-nav__link">
+    function connect [3/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-411" class="md-nav__link">
+    function connect [4/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-511" class="md-nav__link">
+    function connect [5/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-611" class="md-nav__link">
+    function connect [6/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-711" class="md-nav__link">
+    function connect [7/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-811" class="md-nav__link">
+    function connect [8/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-911" class="md-nav__link">
+    function connect [9/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-1011" class="md-nav__link">
+    function connect [10/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-connect-1111" class="md-nav__link">
+    function connect [11/11]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-flush" class="md-nav__link">
+    function flush
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-getfingerprintsha256" class="md-nav__link">
+    function getFingerprintSHA256
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-lasterror" class="md-nav__link">
+    function lastError
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-loadcacert" class="md-nav__link">
+    function loadCACert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-loadcertificate" class="md-nav__link">
+    function loadCertificate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-loadprivatekey" class="md-nav__link">
+    function loadPrivateKey
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-peek" class="md-nav__link">
+    function peek
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-read-13" class="md-nav__link">
+    function read [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-read-23" class="md-nav__link">
+    function read [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-read-33" class="md-nav__link">
+    function read [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setalpnprotocols" class="md-nav__link">
+    function setAlpnProtocols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setcacert" class="md-nav__link">
+    function setCACert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setcertificate" class="md-nav__link">
+    function setCertificate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sethandshaketimeout" class="md-nav__link">
+    function setHandshakeTimeout
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setinsecure" class="md-nav__link">
+    function setInsecure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setpresharedkey" class="md-nav__link">
+    function setPreSharedKey
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setprivatekey" class="md-nav__link">
+    function setPrivateKey
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-stop" class="md-nav__link">
+    function stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-verify" class="md-nav__link">
+    function verify
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-write" class="md-nav__link">
+    function write
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-mbedtlsclient" class="md-nav__link">
+    function ~MbedTLSClient
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="class-mbedtlsclient">Class MbedTLSClient</h1>
+<p><a href="../annotated/"><strong>ClassList</strong></a> <strong>&gt;</strong> <a href="./"><strong>MbedTLSClient</strong></a></p>
+<p>Inherits the following classes: <a href="../class_lw_i_p_client/">LwIPClient</a>,  <a href="../class_i_wi_fi_client_secure/">IWiFiClientSecure</a></p>
+<h2 id="public-functions">Public Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-mbedtlsclient-12"><strong>MbedTLSClient</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-mbedtlsclient-22"><strong>MbedTLSClient</strong></a> (int sock) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-available"><strong>available</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-211"><strong>connect</strong></a> (IPAddress ip, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-311"><strong>connect</strong></a> (const char * host, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-411"><strong>connect</strong></a> (IPAddress ip, uint16_t port, const char * rootCABuf, const char * clientCert, const char * clientKey) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-511"><strong>connect</strong></a> (const char * host, uint16_t port, const char * rootCABuf, const char * clientCert, const char * clientKey) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-611"><strong>connect</strong></a> (IPAddress ip, uint16_t port, const char * pskIdent, const char * psk) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-711"><strong>connect</strong></a> (const char * host, uint16_t port, const char * pskIdent, const char * psk) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-connect-811"><strong>connect</strong></a> (IPAddress ip, uint16_t port) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-connect-911"><strong>connect</strong></a> (const char * host, uint16_t port) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-1011"><strong>connect</strong></a> (IPAddress ip, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-1111"><strong>connect</strong></a> (const char * host, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-flush"><strong>flush</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-getfingerprintsha256"><strong>getFingerprintSHA256</strong></a> (uint8_t result) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-lasterror"><strong>lastError</strong></a> (char * buf, const size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadcacert"><strong>loadCACert</strong></a> (Stream &amp; stream, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadcertificate"><strong>loadCertificate</strong></a> (Stream &amp; stream, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadprivatekey"><strong>loadPrivateKey</strong></a> (Stream &amp; stream, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-peek"><strong>peek</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-read-13"><strong>read</strong></a> (uint8_t * buf, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-read-23"><strong>read</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-read-33"><strong>read</strong></a> (uint8_t * buf, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setalpnprotocols"><strong>setAlpnProtocols</strong></a> (const char ** alpnProtocols) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setcacert"><strong>setCACert</strong></a> (const char * rootCA) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setcertificate"><strong>setCertificate</strong></a> (const char * clientCA) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-sethandshaketimeout"><strong>setHandshakeTimeout</strong></a> (unsigned long handshakeTimeout) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setinsecure"><strong>setInsecure</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setpresharedkey"><strong>setPreSharedKey</strong></a> (const char * pskIdent, const char * psk) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setprivatekey"><strong>setPrivateKey</strong></a> (const char * privateKey) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-stop"><strong>stop</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-verify"><strong>verify</strong></a> (const char * fingerprint, const char * domainName) <br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-write"><strong>write</strong></a> (const uint8_t * buf, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-mbedtlsclient"><strong>~MbedTLSClient</strong></a> () <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions-inherited-from-lwipclient">Public Functions inherited from LwIPClient</h2>
+<p>See <a href="../class_lw_i_p_client/">LwIPClient</a></p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-lwipclient-12"><strong>LwIPClient</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-lwipclient-22"><strong>LwIPClient</strong></a> (int sock) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-available"><strong>available</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-connect-14"><strong>connect</strong></a> (IPAddress ip, uint16_t port) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-connect-24"><strong>connect</strong></a> (const char * host, uint16_t port) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-34"><strong>connect</strong></a> (IPAddress ip, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-44"><strong>connect</strong></a> (const char * host, uint16_t port, int32_t timeout) <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-connected"><strong>connected</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-fd"><strong>fd</strong></a> () const<br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-flush"><strong>flush</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-localip-12"><strong>localIP</strong></a> () const<br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-localip-22"><strong>localIP</strong></a> (int sock) const<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-localport-12"><strong>localPort</strong></a> () const<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-localport-22"><strong>localPort</strong></a> (int sock) const<br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_lw_i_p_client/"><strong>LwIPClient</strong></a> &amp;</td>
+<td align="left"><a href="#function-operator"><strong>operator=</strong></a> (const <a href="../class_lw_i_p_client/"><strong>LwIPClient</strong></a> &amp; other) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-peek"><strong>peek</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-read-12"><strong>read</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-read-22"><strong>read</strong></a> (uint8_t * buf, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-remoteip-12"><strong>remoteIP</strong></a> () const<br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-remoteip-22"><strong>remoteIP</strong></a> (int sock) const<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-remoteport-12"><strong>remotePort</strong></a> () const<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-remoteport-22"><strong>remotePort</strong></a> (int sock) const<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-settimeout"><strong>setTimeout</strong></a> (uint32_t seconds) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-socket"><strong>socket</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-stop"><strong>stop</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-write-13"><strong>write</strong></a> (uint8_t data) <br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-write-23"><strong>write</strong></a> (const uint8_t * buf, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">virtual size_t</td>
+<td align="left"><a href="#function-write-33"><strong>write</strong></a> (Stream &amp; stream) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-lwipclient"><strong>~LwIPClient</strong></a> () <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions-inherited-from-iwificlient">Public Functions inherited from IWiFiClient</h2>
+<p>See <a href="../class_i_wi_fi_client/">IWiFiClient</a></p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-iwificlient-12"><strong>IWiFiClient</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-iwificlient-22"><strong>IWiFiClient</strong></a> (int sock) <br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-12"><strong>connect</strong></a> (IPAddress ip, uint16_t port, int32_t timeout) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-22"><strong>connect</strong></a> (const char * host, uint16_t port, int32_t timeout) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-fd"><strong>fd</strong></a> () const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-localip-12"><strong>localIP</strong></a> () const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-localip-22"><strong>localIP</strong></a> (int sock) const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-localport-12"><strong>localPort</strong></a> () const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-localport-22"><strong>localPort</strong></a> (int sock) const = 0<br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-operator-bool"><strong>operator bool</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-operator"><strong>operator!=</strong></a> (const bool value) <br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-operator_1"><strong>operator!=</strong></a> (const <a href="../class_i_wi_fi_client/"><strong>IWiFiClient</strong></a> &amp; other) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-operator_2"><strong>operator==</strong></a> (const <a href="../class_i_wi_fi_client/"><strong>IWiFiClient</strong></a> &amp; other) const<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-operator_3"><strong>operator==</strong></a> (const bool value) <br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-remoteip-12"><strong>remoteIP</strong></a> () const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual IPAddress</td>
+<td align="left"><a href="#function-remoteip-22"><strong>remoteIP</strong></a> (int sock) const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-remoteport-12"><strong>remotePort</strong></a> () const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual uint16_t</td>
+<td align="left"><a href="#function-remoteport-22"><strong>remotePort</strong></a> (int sock) const = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-settimeout"><strong>setTimeout</strong></a> (uint32_t seconds) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-socket"><strong>socket</strong></a> () = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual size_t</td>
+<td align="left"><a href="#function-write"><strong>write</strong></a> (Stream &amp; stream) = 0<br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-write_p"><strong>write_P</strong></a> (PGM_P buffer, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-iwificlient"><strong>~IWiFiClient</strong></a> () <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions-inherited-from-iwificlientsecure">Public Functions inherited from IWiFiClientSecure</h2>
+<p>See <a href="../class_i_wi_fi_client_secure/">IWiFiClientSecure</a></p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-14"><strong>connect</strong></a> (IPAddress ip, uint16_t port, const char * rootCABuf, const char * clientCert, const char * clientKey) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-24"><strong>connect</strong></a> (const char * host, uint16_t port, const char * rootCABuf, const char * clientCert, const char * clientKey) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-34"><strong>connect</strong></a> (IPAddress ip, uint16_t port, const char * pskIdent, const char * psk) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-connect-44"><strong>connect</strong></a> (const char * host, uint16_t port, const char * pskIdent, const char * psk) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-getfingerprintsha256"><strong>getFingerprintSHA256</strong></a> (uint8_t result) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual int</td>
+<td align="left"><a href="#function-lasterror"><strong>lastError</strong></a> (char * buf, const size_t size) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadcacert"><strong>loadCACert</strong></a> (Stream &amp; stream, size_t size) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadcertificate"><strong>loadCertificate</strong></a> (Stream &amp; stream, size_t size) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-loadprivatekey"><strong>loadPrivateKey</strong></a> (Stream &amp; stream, size_t size) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setalpnprotocols"><strong>setAlpnProtocols</strong></a> (const char ** alpnProtocols) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setcacert"><strong>setCACert</strong></a> (const char * rootCA) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setcertificate"><strong>setCertificate</strong></a> (const char * clientCA) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-sethandshaketimeout"><strong>setHandshakeTimeout</strong></a> (unsigned long handshakeTimeout) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setinsecure"><strong>setInsecure</strong></a> () = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setpresharedkey"><strong>setPreSharedKey</strong></a> (const char * pskIdent, const char * psk) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-setprivatekey"><strong>setPrivateKey</strong></a> (const char * privateKey) = 0<br></td>
+</tr>
+<tr>
+<td align="right">virtual bool</td>
+<td align="left"><a href="#function-verify"><strong>verify</strong></a> (const char * fingerprint, const char * domainName) = 0<br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+<h3 id="function-mbedtlsclient-12">function MbedTLSClient [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">MbedTLSClient</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-mbedtlsclient-22">function MbedTLSClient [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">MbedTLSClient</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sock</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-available">function available</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">available</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-connect-211">function connect [2/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">timeout</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_lw_i_p_client/#function-connect-34"><em>LwIPClient::connect</em></a></p>
+<h3 id="function-connect-311">function connect [3/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">timeout</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_lw_i_p_client/#function-connect-44"><em>LwIPClient::connect</em></a></p>
+<h3 id="function-connect-411">function connect [4/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rootCABuf</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">clientCert</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">clientKey</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-connect-14"><em>IWiFiClientSecure::connect</em></a></p>
+<h3 id="function-connect-511">function connect [5/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rootCABuf</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">clientCert</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">clientKey</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-connect-24"><em>IWiFiClientSecure::connect</em></a></p>
+<h3 id="function-connect-611">function connect [6/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pskIdent</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">psk</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-connect-34"><em>IWiFiClientSecure::connect</em></a></p>
+<h3 id="function-connect-711">function connect [7/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pskIdent</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">psk</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-connect-44"><em>IWiFiClientSecure::connect</em></a></p>
+<h3 id="function-connect-811">function connect [8/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-connect-911">function connect [9/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-connect-1011">function connect [10/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">timeout</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_lw_i_p_client/#function-connect-34"><em>LwIPClient::connect</em></a></p>
+<h3 id="function-connect-1111">function connect [11/11]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">connect</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">timeout</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_lw_i_p_client/#function-connect-44"><em>LwIPClient::connect</em></a></p>
+<h3 id="function-flush">function flush</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">flush</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-getfingerprintsha256">function getFingerprintSHA256</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">getFingerprintSHA256</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">result</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-getfingerprintsha256"><em>IWiFiClientSecure::getFingerprintSHA256</em></a></p>
+<h3 id="function-lasterror">function lastError</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">lastError</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-lasterror"><em>IWiFiClientSecure::lastError</em></a></p>
+<h3 id="function-loadcacert">function loadCACert</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">loadCACert</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="n">Stream</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-loadcacert"><em>IWiFiClientSecure::loadCACert</em></a></p>
+<h3 id="function-loadcertificate">function loadCertificate</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">loadCertificate</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="n">Stream</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-loadcertificate"><em>IWiFiClientSecure::loadCertificate</em></a></p>
+<h3 id="function-loadprivatekey">function loadPrivateKey</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">loadPrivateKey</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="n">Stream</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-loadprivatekey"><em>IWiFiClientSecure::loadPrivateKey</em></a></p>
+<h3 id="function-peek">function peek</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">peek</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-read-13">function read [1/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">read</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-read-23">function read [2/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">read</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-read-33">function read [3/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">read</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-setalpnprotocols">function setAlpnProtocols</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setAlpnProtocols</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"> </span><span class="n">alpnProtocols</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setalpnprotocols"><em>IWiFiClientSecure::setAlpnProtocols</em></a></p>
+<h3 id="function-setcacert">function setCACert</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setCACert</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rootCA</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setcacert"><em>IWiFiClientSecure::setCACert</em></a></p>
+<h3 id="function-setcertificate">function setCertificate</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setCertificate</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">clientCA</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setcertificate"><em>IWiFiClientSecure::setCertificate</em></a></p>
+<h3 id="function-sethandshaketimeout">function setHandshakeTimeout</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setHandshakeTimeout</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">handshakeTimeout</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-sethandshaketimeout"><em>IWiFiClientSecure::setHandshakeTimeout</em></a></p>
+<h3 id="function-setinsecure">function setInsecure</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setInsecure</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setinsecure"><em>IWiFiClientSecure::setInsecure</em></a></p>
+<h3 id="function-setpresharedkey">function setPreSharedKey</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setPreSharedKey</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pskIdent</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">psk</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setpresharedkey"><em>IWiFiClientSecure::setPreSharedKey</em></a></p>
+<h3 id="function-setprivatekey">function setPrivateKey</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">setPrivateKey</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">privateKey</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-setprivatekey"><em>IWiFiClientSecure::setPrivateKey</em></a></p>
+<h3 id="function-stop">function stop</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">stop</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-verify">function verify</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">verify</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fingerprint</span><span class="p">,</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">domainName</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<p>Implements <a href="../class_i_wi_fi_client_secure/#function-verify"><em>IWiFiClientSecure::verify</em></a></p>
+<h3 id="function-write">function write</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">MbedTLSClient</span><span class="o">::</span><span class="n">write</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-mbedtlsclient">function ~MbedTLSClient</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">MbedTLSClient</span><span class="o">::~</span><span class="n">MbedTLSClient</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<hr />
+<p>The documentation for this class was generated from the following file <code>cores/common/arduino/libraries/common/WiFiClient/MbedTLSClient.h</code></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../docs/script.js"></script>
+      
+    
+  </body>
+</html>

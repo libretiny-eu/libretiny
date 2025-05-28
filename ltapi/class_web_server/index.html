@@ -1,0 +1,4901 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/ltapi/class_web_server/">
+      
+      
+        <link rel="prev" href="../class_stream_string/">
+      
+      
+        <link rel="next" href="../class_wi_fi_multi/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>WebServer - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../docs/style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#class-webserver" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WebServer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          WebServer
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        WebServer
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#public-types" class="md-nav__link">
+    Public Types
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions" class="md-nav__link">
+    Public Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions" class="md-nav__link">
+    Public Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-attributes" class="md-nav__link">
+    Protected Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-functions" class="md-nav__link">
+    Protected Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-functions" class="md-nav__link">
+    Protected Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-types-documentation" class="md-nav__link">
+    Public Types Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Types Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typedef-thandlerfunction" class="md-nav__link">
+    typedef THandlerFunction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-documentation" class="md-nav__link">
+    Public Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver-12" class="md-nav__link">
+    function WebServer [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver-22" class="md-nav__link">
+    function WebServer [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-addhandler" class="md-nav__link">
+    function addHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-arg-12" class="md-nav__link">
+    function arg [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-arg-22" class="md-nav__link">
+    function arg [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-argname" class="md-nav__link">
+    function argName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-args" class="md-nav__link">
+    function args
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-authenticate" class="md-nav__link">
+    function authenticate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-12" class="md-nav__link">
+    function begin [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-22" class="md-nav__link">
+    function begin [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-client" class="md-nav__link">
+    function client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-close" class="md-nav__link">
+    function close
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectheaders" class="md-nav__link">
+    function collectHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablecors" class="md-nav__link">
+    function enableCORS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablecrossorigin" class="md-nav__link">
+    function enableCrossOrigin
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enabledelay" class="md-nav__link">
+    function enableDelay
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-handleclient" class="md-nav__link">
+    function handleClient
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasarg" class="md-nav__link">
+    function hasArg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasheader" class="md-nav__link">
+    function hasHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-header-12" class="md-nav__link">
+    function header [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-header-22" class="md-nav__link">
+    function header [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-headername" class="md-nav__link">
+    function headerName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-headers" class="md-nav__link">
+    function headers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostheader" class="md-nav__link">
+    function hostHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-method" class="md-nav__link">
+    function method
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-13" class="md-nav__link">
+    function on [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-23" class="md-nav__link">
+    function on [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-33" class="md-nav__link">
+    function on [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onfileupload" class="md-nav__link">
+    function onFileUpload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onnotfound" class="md-nav__link">
+    function onNotFound
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-patharg" class="md-nav__link">
+    function pathArg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-requestauthentication" class="md-nav__link">
+    function requestAuthentication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-13" class="md-nav__link">
+    function send [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-23" class="md-nav__link">
+    function send [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-33" class="md-nav__link">
+    function send [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent-12" class="md-nav__link">
+    function sendContent [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent-22" class="md-nav__link">
+    function sendContent [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent_p-12" class="md-nav__link">
+    function sendContent_P [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent_p-22" class="md-nav__link">
+    function sendContent_P [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendheader" class="md-nav__link">
+    function sendHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send_p-12" class="md-nav__link">
+    function send_P [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send_p-22" class="md-nav__link">
+    function send_P [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-servestatic" class="md-nav__link">
+    function serveStatic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setcontentlength" class="md-nav__link">
+    function setContentLength
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-stop" class="md-nav__link">
+    function stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-streamfile" class="md-nav__link">
+    function streamFile
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-upload" class="md-nav__link">
+    function upload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-uri" class="md-nav__link">
+    function uri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver" class="md-nav__link">
+    function ~WebServer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions-documentation" class="md-nav__link">
+    Public Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-urldecode" class="md-nav__link">
+    function urlDecode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-attributes-documentation" class="md-nav__link">
+    Protected Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-_chunked" class="md-nav__link">
+    variable _chunked
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_contentlength" class="md-nav__link">
+    variable _contentLength
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_corsenabled" class="md-nav__link">
+    variable _corsEnabled
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentargcount" class="md-nav__link">
+    variable _currentArgCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentargs" class="md-nav__link">
+    variable _currentArgs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentclient" class="md-nav__link">
+    variable _currentClient
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currenthandler" class="md-nav__link">
+    variable _currentHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentheaders" class="md-nav__link">
+    variable _currentHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentmethod" class="md-nav__link">
+    variable _currentMethod
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentstatus" class="md-nav__link">
+    variable _currentStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentupload" class="md-nav__link">
+    variable _currentUpload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currenturi" class="md-nav__link">
+    variable _currentUri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentversion" class="md-nav__link">
+    variable _currentVersion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_fileuploadhandler" class="md-nav__link">
+    variable _fileUploadHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_firsthandler" class="md-nav__link">
+    variable _firstHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_headerkeyscount" class="md-nav__link">
+    variable _headerKeysCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_hostheader" class="md-nav__link">
+    variable _hostHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_lasthandler" class="md-nav__link">
+    variable _lastHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_notfoundhandler" class="md-nav__link">
+    variable _notFoundHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_nulldelay" class="md-nav__link">
+    variable _nullDelay
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_postargs" class="md-nav__link">
+    variable _postArgs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_postargslen" class="md-nav__link">
+    variable _postArgsLen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_responseheaders" class="md-nav__link">
+    variable _responseHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_server" class="md-nav__link">
+    variable _server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_snonce" class="md-nav__link">
+    variable _snonce
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_sopaque" class="md-nav__link">
+    variable _sopaque
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_srealm" class="md-nav__link">
+    variable _srealm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_statuschange" class="md-nav__link">
+    variable _statusChange
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-functions-documentation" class="md-nav__link">
+    Protected Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-_addrequesthandler" class="md-nav__link">
+    function _addRequestHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_collectheader" class="md-nav__link">
+    function _collectHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_currentclientwrite" class="md-nav__link">
+    function _currentClientWrite
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_currentclientwrite_p" class="md-nav__link">
+    function _currentClientWrite_P
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_extractparam" class="md-nav__link">
+    function _extractParam
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_finalizeresponse" class="md-nav__link">
+    function _finalizeResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_getrandomhexstring" class="md-nav__link">
+    function _getRandomHexString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_handlerequest" class="md-nav__link">
+    function _handleRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parsearguments" class="md-nav__link">
+    function _parseArguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parseform" class="md-nav__link">
+    function _parseForm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parseformuploadaborted" class="md-nav__link">
+    function _parseFormUploadAborted
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parserequest" class="md-nav__link">
+    function _parseRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_prepareheader" class="md-nav__link">
+    function _prepareHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_streamfilecore" class="md-nav__link">
+    function _streamFileCore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_uploadreadbyte" class="md-nav__link">
+    function _uploadReadByte
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_uploadwritebyte" class="md-nav__link">
+    function _uploadWriteByte
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-functions-documentation" class="md-nav__link">
+    Protected Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-_responsecodetostring" class="md-nav__link">
+    function _responseCodeToString
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../docs/contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs/resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#public-types" class="md-nav__link">
+    Public Types
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions" class="md-nav__link">
+    Public Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions" class="md-nav__link">
+    Public Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-attributes" class="md-nav__link">
+    Protected Attributes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-functions" class="md-nav__link">
+    Protected Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-functions" class="md-nav__link">
+    Protected Static Functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-types-documentation" class="md-nav__link">
+    Public Types Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Types Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#typedef-thandlerfunction" class="md-nav__link">
+    typedef THandlerFunction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-functions-documentation" class="md-nav__link">
+    Public Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver-12" class="md-nav__link">
+    function WebServer [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver-22" class="md-nav__link">
+    function WebServer [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-addhandler" class="md-nav__link">
+    function addHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-arg-12" class="md-nav__link">
+    function arg [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-arg-22" class="md-nav__link">
+    function arg [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-argname" class="md-nav__link">
+    function argName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-args" class="md-nav__link">
+    function args
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-authenticate" class="md-nav__link">
+    function authenticate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-12" class="md-nav__link">
+    function begin [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-begin-22" class="md-nav__link">
+    function begin [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-client" class="md-nav__link">
+    function client
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-close" class="md-nav__link">
+    function close
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-collectheaders" class="md-nav__link">
+    function collectHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablecors" class="md-nav__link">
+    function enableCORS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enablecrossorigin" class="md-nav__link">
+    function enableCrossOrigin
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-enabledelay" class="md-nav__link">
+    function enableDelay
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-handleclient" class="md-nav__link">
+    function handleClient
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasarg" class="md-nav__link">
+    function hasArg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hasheader" class="md-nav__link">
+    function hasHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-header-12" class="md-nav__link">
+    function header [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-header-22" class="md-nav__link">
+    function header [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-headername" class="md-nav__link">
+    function headerName
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-headers" class="md-nav__link">
+    function headers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-hostheader" class="md-nav__link">
+    function hostHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-method" class="md-nav__link">
+    function method
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-13" class="md-nav__link">
+    function on [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-23" class="md-nav__link">
+    function on [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-on-33" class="md-nav__link">
+    function on [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onfileupload" class="md-nav__link">
+    function onFileUpload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-onnotfound" class="md-nav__link">
+    function onNotFound
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-patharg" class="md-nav__link">
+    function pathArg
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-requestauthentication" class="md-nav__link">
+    function requestAuthentication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-13" class="md-nav__link">
+    function send [1/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-23" class="md-nav__link">
+    function send [2/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send-33" class="md-nav__link">
+    function send [3/3]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent-12" class="md-nav__link">
+    function sendContent [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent-22" class="md-nav__link">
+    function sendContent [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent_p-12" class="md-nav__link">
+    function sendContent_P [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendcontent_p-22" class="md-nav__link">
+    function sendContent_P [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-sendheader" class="md-nav__link">
+    function sendHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send_p-12" class="md-nav__link">
+    function send_P [1/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-send_p-22" class="md-nav__link">
+    function send_P [2/2]
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-servestatic" class="md-nav__link">
+    function serveStatic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-setcontentlength" class="md-nav__link">
+    function setContentLength
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-stop" class="md-nav__link">
+    function stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-streamfile" class="md-nav__link">
+    function streamFile
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-upload" class="md-nav__link">
+    function upload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-uri" class="md-nav__link">
+    function uri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-webserver" class="md-nav__link">
+    function ~WebServer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-static-functions-documentation" class="md-nav__link">
+    Public Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-urldecode" class="md-nav__link">
+    function urlDecode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-attributes-documentation" class="md-nav__link">
+    Protected Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-_chunked" class="md-nav__link">
+    variable _chunked
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_contentlength" class="md-nav__link">
+    variable _contentLength
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_corsenabled" class="md-nav__link">
+    variable _corsEnabled
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentargcount" class="md-nav__link">
+    variable _currentArgCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentargs" class="md-nav__link">
+    variable _currentArgs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentclient" class="md-nav__link">
+    variable _currentClient
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currenthandler" class="md-nav__link">
+    variable _currentHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentheaders" class="md-nav__link">
+    variable _currentHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentmethod" class="md-nav__link">
+    variable _currentMethod
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentstatus" class="md-nav__link">
+    variable _currentStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentupload" class="md-nav__link">
+    variable _currentUpload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currenturi" class="md-nav__link">
+    variable _currentUri
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_currentversion" class="md-nav__link">
+    variable _currentVersion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_fileuploadhandler" class="md-nav__link">
+    variable _fileUploadHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_firsthandler" class="md-nav__link">
+    variable _firstHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_headerkeyscount" class="md-nav__link">
+    variable _headerKeysCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_hostheader" class="md-nav__link">
+    variable _hostHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_lasthandler" class="md-nav__link">
+    variable _lastHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_notfoundhandler" class="md-nav__link">
+    variable _notFoundHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_nulldelay" class="md-nav__link">
+    variable _nullDelay
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_postargs" class="md-nav__link">
+    variable _postArgs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_postargslen" class="md-nav__link">
+    variable _postArgsLen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_responseheaders" class="md-nav__link">
+    variable _responseHeaders
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_server" class="md-nav__link">
+    variable _server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_snonce" class="md-nav__link">
+    variable _snonce
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_sopaque" class="md-nav__link">
+    variable _sopaque
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_srealm" class="md-nav__link">
+    variable _srealm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variable-_statuschange" class="md-nav__link">
+    variable _statusChange
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-functions-documentation" class="md-nav__link">
+    Protected Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-_addrequesthandler" class="md-nav__link">
+    function _addRequestHandler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_collectheader" class="md-nav__link">
+    function _collectHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_currentclientwrite" class="md-nav__link">
+    function _currentClientWrite
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_currentclientwrite_p" class="md-nav__link">
+    function _currentClientWrite_P
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_extractparam" class="md-nav__link">
+    function _extractParam
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_finalizeresponse" class="md-nav__link">
+    function _finalizeResponse
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_getrandomhexstring" class="md-nav__link">
+    function _getRandomHexString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_handlerequest" class="md-nav__link">
+    function _handleRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parsearguments" class="md-nav__link">
+    function _parseArguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parseform" class="md-nav__link">
+    function _parseForm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parseformuploadaborted" class="md-nav__link">
+    function _parseFormUploadAborted
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_parserequest" class="md-nav__link">
+    function _parseRequest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_prepareheader" class="md-nav__link">
+    function _prepareHeader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_streamfilecore" class="md-nav__link">
+    function _streamFileCore
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_uploadreadbyte" class="md-nav__link">
+    function _uploadReadByte
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-_uploadwritebyte" class="md-nav__link">
+    function _uploadWriteByte
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protected-static-functions-documentation" class="md-nav__link">
+    Protected Static Functions Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Protected Static Functions Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-_responsecodetostring" class="md-nav__link">
+    function _responseCodeToString
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="class-webserver">Class WebServer</h1>
+<p><a href="../annotated/"><strong>ClassList</strong></a> <strong>&gt;</strong> <a href="./"><strong>WebServer</strong></a></p>
+<h2 id="public-types">Public Types</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">typedef std::function&lt; void(void)&gt;</td>
+<td align="left"><a href="#typedef-thandlerfunction"><strong>THandlerFunction</strong></a>  <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-functions">Public Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-webserver-12"><strong>WebServer</strong></a> (IPAddress addr, int port=80) <br></td>
+</tr>
+<tr>
+<td align="right"></td>
+<td align="left"><a href="#function-webserver-22"><strong>WebServer</strong></a> (int port=80) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-addhandler"><strong>addHandler</strong></a> (<a href="../class_request_handler/"><strong>RequestHandler</strong></a> * handler) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-arg-12"><strong>arg</strong></a> (String name) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-arg-22"><strong>arg</strong></a> (int i) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-argname"><strong>argName</strong></a> (int i) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-args"><strong>args</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-authenticate"><strong>authenticate</strong></a> (const char * username, const char * password) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-begin-12"><strong>begin</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-begin-22"><strong>begin</strong></a> (uint16_t port) <br></td>
+</tr>
+<tr>
+<td align="right">virtual <a href="../class_lw_i_p_client/"><strong>WiFiClient</strong></a></td>
+<td align="left"><a href="#function-client"><strong>client</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-close"><strong>close</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-collectheaders"><strong>collectHeaders</strong></a> (const char * headerKeys, const size_t headerKeysCount) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-enablecors"><strong>enableCORS</strong></a> (boolean value=true) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-enablecrossorigin"><strong>enableCrossOrigin</strong></a> (boolean value=true) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-enabledelay"><strong>enableDelay</strong></a> (boolean value) <br></td>
+</tr>
+<tr>
+<td align="right">virtual void</td>
+<td align="left"><a href="#function-handleclient"><strong>handleClient</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-hasarg"><strong>hasArg</strong></a> (String name) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-hasheader"><strong>hasHeader</strong></a> (String name) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-header-12"><strong>header</strong></a> (String name) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-header-22"><strong>header</strong></a> (int i) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-headername"><strong>headerName</strong></a> (int i) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-headers"><strong>headers</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-hostheader"><strong>hostHeader</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">HTTPMethod</td>
+<td align="left"><a href="#function-method"><strong>method</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-on-13"><strong>on</strong></a> (const <a href="../class_uri/"><strong>Uri</strong></a> &amp; uri, THandlerFunction fn) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-on-23"><strong>on</strong></a> (const <a href="../class_uri/"><strong>Uri</strong></a> &amp; uri, HTTPMethod method, THandlerFunction fn) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-on-33"><strong>on</strong></a> (const <a href="../class_uri/"><strong>Uri</strong></a> &amp; uri, HTTPMethod method, THandlerFunction fn, THandlerFunction ufn) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-onfileupload"><strong>onFileUpload</strong></a> (THandlerFunction ufn) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-onnotfound"><strong>onNotFound</strong></a> (THandlerFunction fn) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-patharg"><strong>pathArg</strong></a> (unsigned int i) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-requestauthentication"><strong>requestAuthentication</strong></a> (HTTPAuthMethod mode=BASIC_AUTH, const char * realm=NULL, const String &amp; authFailMsg=String("")) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-send-13"><strong>send</strong></a> (int code, const char * content_type=NULL, const String &amp; content=String("")) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-send-23"><strong>send</strong></a> (int code, char * content_type, const String &amp; content) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-send-33"><strong>send</strong></a> (int code, const String &amp; content_type, const String &amp; content) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-sendcontent-12"><strong>sendContent</strong></a> (const String &amp; content) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-sendcontent-22"><strong>sendContent</strong></a> (const char * content, size_t contentLength) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-sendcontent_p-12"><strong>sendContent_P</strong></a> (PGM_P content) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-sendcontent_p-22"><strong>sendContent_P</strong></a> (PGM_P content, size_t size) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-sendheader"><strong>sendHeader</strong></a> (const String &amp; name, const String &amp; value, bool first=false) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-send_p-12"><strong>send_P</strong></a> (int code, PGM_P content_type, PGM_P content) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-send_p-22"><strong>send_P</strong></a> (int code, PGM_P content_type, PGM_P content, size_t contentLength) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-servestatic"><strong>serveStatic</strong></a> (const char * uri, <a href="../classfs_1_1_f_s/"><strong>fs::FS</strong></a> &amp; fs, const char * path, const char * cache_header=NULL) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-setcontentlength"><strong>setContentLength</strong></a> (const size_t contentLength) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-stop"><strong>stop</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-streamfile"><strong>streamFile</strong></a> (T &amp; file, const String &amp; contentType) <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../struct_h_t_t_p_upload/"><strong>HTTPUpload</strong></a> &amp;</td>
+<td align="left"><a href="#function-upload"><strong>upload</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-uri"><strong>uri</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">virtual</td>
+<td align="left"><a href="#function-webserver"><strong>~WebServer</strong></a> () <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-static-functions">Public Static Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-urldecode"><strong>urlDecode</strong></a> (const String &amp; text) <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="protected-attributes">Protected Attributes</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#variable-_chunked"><strong>_chunked</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#variable-_contentlength"><strong>_contentLength</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">boolean</td>
+<td align="left"><a href="#variable-_corsenabled"><strong>_corsEnabled</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#variable-_currentargcount"><strong>_currentArgCount</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../struct_web_server_1_1_request_argument/"><strong>RequestArgument</strong></a> *</td>
+<td align="left"><a href="#variable-_currentargs"><strong>_currentArgs</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_lw_i_p_client/"><strong>WiFiClient</strong></a></td>
+<td align="left"><a href="#variable-_currentclient"><strong>_currentClient</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_request_handler/"><strong>RequestHandler</strong></a> *</td>
+<td align="left"><a href="#variable-_currenthandler"><strong>_currentHandler</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../struct_web_server_1_1_request_argument/"><strong>RequestArgument</strong></a> *</td>
+<td align="left"><a href="#variable-_currentheaders"><strong>_currentHeaders</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">HTTPMethod</td>
+<td align="left"><a href="#variable-_currentmethod"><strong>_currentMethod</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">HTTPClientStatus</td>
+<td align="left"><a href="#variable-_currentstatus"><strong>_currentStatus</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">std::unique_ptr&lt; <a href="../struct_h_t_t_p_upload/"><strong>HTTPUpload</strong></a> &gt;</td>
+<td align="left"><a href="#variable-_currentupload"><strong>_currentUpload</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_currenturi"><strong>_currentUri</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#variable-_currentversion"><strong>_currentVersion</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">THandlerFunction</td>
+<td align="left"><a href="#variable-_fileuploadhandler"><strong>_fileUploadHandler</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_request_handler/"><strong>RequestHandler</strong></a> *</td>
+<td align="left"><a href="#variable-_firsthandler"><strong>_firstHandler</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#variable-_headerkeyscount"><strong>_headerKeysCount</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_hostheader"><strong>_hostHeader</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_request_handler/"><strong>RequestHandler</strong></a> *</td>
+<td align="left"><a href="#variable-_lasthandler"><strong>_lastHandler</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">THandlerFunction</td>
+<td align="left"><a href="#variable-_notfoundhandler"><strong>_notFoundHandler</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">boolean</td>
+<td align="left"><a href="#variable-_nulldelay"><strong>_nullDelay</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../struct_web_server_1_1_request_argument/"><strong>RequestArgument</strong></a> *</td>
+<td align="left"><a href="#variable-_postargs"><strong>_postArgs</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#variable-_postargslen"><strong>_postArgsLen</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_responseheaders"><strong>_responseHeaders</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right"><a href="../class_lw_i_p_server/"><strong>WiFiServer</strong></a></td>
+<td align="left"><a href="#variable-_server"><strong>_server</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_snonce"><strong>_snonce</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_sopaque"><strong>_sopaque</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#variable-_srealm"><strong>_srealm</strong></a>  <br></td>
+</tr>
+<tr>
+<td align="right">unsigned long</td>
+<td align="left"><a href="#variable-_statuschange"><strong>_statusChange</strong></a>  <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="protected-functions">Protected Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_addrequesthandler"><strong>_addRequestHandler</strong></a> (<a href="../class_request_handler/"><strong>RequestHandler</strong></a> * handler) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-_collectheader"><strong>_collectHeader</strong></a> (const char * headerName, const char * headerValue) <br></td>
+</tr>
+<tr>
+<td align="right">virtual size_t</td>
+<td align="left"><a href="#function-_currentclientwrite"><strong>_currentClientWrite</strong></a> (const char * b, size_t l) <br></td>
+</tr>
+<tr>
+<td align="right">virtual size_t</td>
+<td align="left"><a href="#function-_currentclientwrite_p"><strong>_currentClientWrite_P</strong></a> (PGM_P b, size_t l) <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-_extractparam"><strong>_extractParam</strong></a> (String &amp; authReq, const String &amp; param, const char delimit='"') <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_finalizeresponse"><strong>_finalizeResponse</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-_getrandomhexstring"><strong>_getRandomHexString</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_handlerequest"><strong>_handleRequest</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_parsearguments"><strong>_parseArguments</strong></a> (String data) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-_parseform"><strong>_parseForm</strong></a> (<a href="../class_lw_i_p_client/"><strong>WiFiClient</strong></a> &amp; client, String boundary, uint32_t len) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-_parseformuploadaborted"><strong>_parseFormUploadAborted</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-_parserequest"><strong>_parseRequest</strong></a> (<a href="../class_lw_i_p_client/"><strong>WiFiClient</strong></a> &amp; client) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_prepareheader"><strong>_prepareHeader</strong></a> (String &amp; response, int code, const char * content_type, size_t contentLength) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_streamfilecore"><strong>_streamFileCore</strong></a> (const size_t fileSize, const String &amp; fileName, const String &amp; contentType) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-_uploadreadbyte"><strong>_uploadReadByte</strong></a> (<a href="../class_lw_i_p_client/"><strong>WiFiClient</strong></a> &amp; client) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-_uploadwritebyte"><strong>_uploadWriteByte</strong></a> (uint8_t b) <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="protected-static-functions">Protected Static Functions</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-_responsecodetostring"><strong>_responseCodeToString</strong></a> (int code) <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-types-documentation">Public Types Documentation</h2>
+<h3 id="typedef-thandlerfunction">typedef THandlerFunction</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">THandlerFunction</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="public-functions-documentation">Public Functions Documentation</h2>
+<h3 id="function-webserver-12">function WebServer [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">WebServer</span><span class="o">::</span><span class="n">WebServer</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">IPAddress</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="o">=</span><span class="mi">80</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-webserver-22">function WebServer [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">WebServer</span><span class="o">::</span><span class="n">WebServer</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="o">=</span><span class="mi">80</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-addhandler">function addHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">addHandler</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="n">RequestHandler</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">handler</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-arg-12">function arg [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">arg</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-arg-22">function arg [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">arg</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-argname">function argName</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">argName</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-args">function args</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">args</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-authenticate">function authenticate</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">authenticate</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">username</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">password</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-begin-12">function begin [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">begin</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-begin-22">function begin [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">begin</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">port</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-client">function client</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kr">inline</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="n">WiFiClient</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">client</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-close">function close</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">close</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-collectheaders">function collectHeaders</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">collectHeaders</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">headerKeys</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">headerKeysCount</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enablecors">function enableCORS</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">enableCORS</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="n">boolean</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enablecrossorigin">function enableCrossOrigin</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">enableCrossOrigin</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="n">boolean</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-enabledelay">function enableDelay</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">enableDelay</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="n">boolean</span><span class="w"> </span><span class="n">value</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-handleclient">function handleClient</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">handleClient</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hasarg">function hasArg</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">hasArg</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hasheader">function hasHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">hasHeader</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-header-12">function header [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">header</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">name</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-header-22">function header [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">header</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-headername">function headerName</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">headerName</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-headers">function headers</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">headers</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-hostheader">function hostHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">hostHeader</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-method">function method</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kr">inline</span><span class="w"> </span><span class="n">HTTPMethod</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">method</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-on-13">function on [1/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">on</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Uri</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">fn</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-on-23">function on [2/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">on</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Uri</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span><span class="n">HTTPMethod</span><span class="w"> </span><span class="n">method</span><span class="p">,</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">fn</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-on-33">function on [3/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">on</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Uri</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="n">HTTPMethod</span><span class="w"> </span><span class="n">method</span><span class="p">,</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">fn</span><span class="p">,</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">ufn</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-onfileupload">function onFileUpload</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">onFileUpload</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">ufn</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-onnotfound">function onNotFound</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">onNotFound</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">    </span><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">fn</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-patharg">function pathArg</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">pathArg</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-requestauthentication">function requestAuthentication</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">requestAuthentication</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">    </span><span class="n">HTTPAuthMethod</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="n">BASIC_AUTH</span><span class="p">,</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">realm</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">authFailMsg</span><span class="o">=</span><span class="n">String</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-send-13">function send [1/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">content_type</span><span class="o">=</span><span class="nb">NULL</span><span class="p">,</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">content</span><span class="o">=</span><span class="n">String</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-send-23">function send [2/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">content_type</span><span class="p">,</span>
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">content</span>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-send-33">function send [3/3]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">send</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">content_type</span><span class="p">,</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">content</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sendcontent-12">function sendContent [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">sendContent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">content</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sendcontent-22">function sendContent [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">sendContent</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">content</span><span class="p">,</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">contentLength</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sendcontent_p-12">function sendContent_P [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">sendContent_P</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sendcontent_p-22">function sendContent_P [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">sendContent_P</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content</span><span class="p">,</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-sendheader">function sendHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">sendHeader</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">first</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-send_p-12">function send_P [1/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">send_P</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content_type</span><span class="p">,</span>
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content</span>
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-send_p-22">function send_P [2/2]</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">send_P</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content_type</span><span class="p">,</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">content</span><span class="p">,</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">contentLength</span>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-servestatic">function serveStatic</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">serveStatic</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">uri</span><span class="p">,</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="w">    </span><span class="n">fs</span><span class="o">::</span><span class="n">FS</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">fs</span><span class="p">,</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">path</span><span class="p">,</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cache_header</span><span class="o">=</span><span class="nb">NULL</span>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-setcontentlength">function setContentLength</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">setContentLength</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">contentLength</span>
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-stop">function stop</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">stop</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-streamfile">function streamFile</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="kr">inline</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">streamFile</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">file</span><span class="p">,</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">contentType</span>
+<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-upload">function upload</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kr">inline</span><span class="w"> </span><span class="n">HTTPUpload</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">upload</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-uri">function uri</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="kr">inline</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">uri</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-webserver">function ~WebServer</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="k">virtual</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::~</span><span class="n">WebServer</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="public-static-functions-documentation">Public Static Functions Documentation</h2>
+<h3 id="function-urldecode">function urlDecode</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">urlDecode</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="protected-attributes-documentation">Protected Attributes Documentation</h2>
+<h3 id="variable-_chunked">variable _chunked</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_chunked</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_contentlength">variable _contentLength</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="kt">size_t</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_contentLength</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_corsenabled">variable _corsEnabled</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="n">boolean</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_corsEnabled</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentargcount">variable _currentArgCount</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentArgCount</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentargs">variable _currentArgs</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="n">RequestArgument</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentArgs</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentclient">variable _currentClient</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="n">WiFiClient</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentClient</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currenthandler">variable _currentHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentHandler</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentheaders">variable _currentHeaders</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">RequestArgument</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentHeaders</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentmethod">variable _currentMethod</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="n">HTTPMethod</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentMethod</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentstatus">variable _currentStatus</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="n">HTTPClientStatus</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentStatus</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentupload">variable _currentUpload</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">HTTPUpload</span><span class="o">&gt;</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentUpload</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currenturi">variable _currentUri</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentUri</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_currentversion">variable _currentVersion</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentVersion</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_fileuploadhandler">variable _fileUploadHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_fileUploadHandler</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_firsthandler">variable _firstHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_firstHandler</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_headerkeyscount">variable _headerKeysCount</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_headerKeysCount</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_hostheader">variable _hostHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_hostHeader</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_lasthandler">variable _lastHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="n">RequestHandler</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_lastHandler</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_notfoundhandler">variable _notFoundHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="n">THandlerFunction</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_notFoundHandler</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_nulldelay">variable _nullDelay</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="n">boolean</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_nullDelay</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_postargs">variable _postArgs</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="n">RequestArgument</span><span class="o">*</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_postArgs</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_postargslen">variable _postArgsLen</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_postArgsLen</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_responseheaders">variable _responseHeaders</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_responseHeaders</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_server">variable _server</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="n">WiFiServer</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_server</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_snonce">variable _snonce</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_snonce</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_sopaque">variable _sopaque</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_sopaque</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_srealm">variable _srealm</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_srealm</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="variable-_statuschange">variable _statusChange</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_statusChange</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="protected-functions-documentation">Protected Functions Documentation</h2>
+<h3 id="function-_addrequesthandler">function _addRequestHandler</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_addRequestHandler</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a><span class="w">    </span><span class="n">RequestHandler</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">handler</span>
+<a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_collectheader">function _collectHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_collectHeader</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">headerName</span><span class="p">,</span>
+<a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">headerValue</span>
+<a id="__codelineno-80-4" name="__codelineno-80-4" href="#__codelineno-80-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_currentclientwrite">function _currentClientWrite</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="kr">inline</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentClientWrite</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-81-2" name="__codelineno-81-2" href="#__codelineno-81-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<a id="__codelineno-81-3" name="__codelineno-81-3" href="#__codelineno-81-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">l</span>
+<a id="__codelineno-81-4" name="__codelineno-81-4" href="#__codelineno-81-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_currentclientwrite_p">function _currentClientWrite_P</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="kr">inline</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_currentClientWrite_P</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-82-2" name="__codelineno-82-2" href="#__codelineno-82-2"></a><span class="w">    </span><span class="n">PGM_P</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<a id="__codelineno-82-3" name="__codelineno-82-3" href="#__codelineno-82-3"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">l</span>
+<a id="__codelineno-82-4" name="__codelineno-82-4" href="#__codelineno-82-4"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_extractparam">function _extractParam</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_extractParam</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-83-2" name="__codelineno-83-2" href="#__codelineno-83-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">authReq</span><span class="p">,</span>
+<a id="__codelineno-83-3" name="__codelineno-83-3" href="#__codelineno-83-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">param</span><span class="p">,</span>
+<a id="__codelineno-83-4" name="__codelineno-83-4" href="#__codelineno-83-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">delimit</span><span class="o">=</span><span class="sc">&#39;&quot;&#39;</span>
+<a id="__codelineno-83-5" name="__codelineno-83-5" href="#__codelineno-83-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_finalizeresponse">function _finalizeResponse</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_finalizeResponse</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_getrandomhexstring">function _getRandomHexString</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_getRandomHexString</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_handlerequest">function _handleRequest</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_handleRequest</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_parsearguments">function _parseArguments</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_parseArguments</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-87-2" name="__codelineno-87-2" href="#__codelineno-87-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">data</span>
+<a id="__codelineno-87-3" name="__codelineno-87-3" href="#__codelineno-87-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_parseform">function _parseForm</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_parseForm</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-88-2" name="__codelineno-88-2" href="#__codelineno-88-2"></a><span class="w">    </span><span class="n">WiFiClient</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">client</span><span class="p">,</span>
+<a id="__codelineno-88-3" name="__codelineno-88-3" href="#__codelineno-88-3"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">boundary</span><span class="p">,</span>
+<a id="__codelineno-88-4" name="__codelineno-88-4" href="#__codelineno-88-4"></a><span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">len</span>
+<a id="__codelineno-88-5" name="__codelineno-88-5" href="#__codelineno-88-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_parseformuploadaborted">function _parseFormUploadAborted</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_parseFormUploadAborted</span><span class="w"> </span><span class="p">()</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_parserequest">function _parseRequest</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_parseRequest</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-90-2" name="__codelineno-90-2" href="#__codelineno-90-2"></a><span class="w">    </span><span class="n">WiFiClient</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">client</span>
+<a id="__codelineno-90-3" name="__codelineno-90-3" href="#__codelineno-90-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_prepareheader">function _prepareHeader</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_prepareHeader</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">response</span><span class="p">,</span>
+<a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<a id="__codelineno-91-4" name="__codelineno-91-4" href="#__codelineno-91-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">content_type</span><span class="p">,</span>
+<a id="__codelineno-91-5" name="__codelineno-91-5" href="#__codelineno-91-5"></a><span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">contentLength</span>
+<a id="__codelineno-91-6" name="__codelineno-91-6" href="#__codelineno-91-6"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_streamfilecore">function _streamFileCore</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_streamFileCore</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">fileSize</span><span class="p">,</span>
+<a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">fileName</span><span class="p">,</span>
+<a id="__codelineno-92-4" name="__codelineno-92-4" href="#__codelineno-92-4"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">contentType</span>
+<a id="__codelineno-92-5" name="__codelineno-92-5" href="#__codelineno-92-5"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_uploadreadbyte">function _uploadReadByte</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_uploadReadByte</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-93-2" name="__codelineno-93-2" href="#__codelineno-93-2"></a><span class="w">    </span><span class="n">WiFiClient</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">client</span>
+<a id="__codelineno-93-3" name="__codelineno-93-3" href="#__codelineno-93-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h3 id="function-_uploadwritebyte">function _uploadWriteByte</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a><span class="kt">void</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_uploadWriteByte</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-94-2" name="__codelineno-94-2" href="#__codelineno-94-2"></a><span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">b</span>
+<a id="__codelineno-94-3" name="__codelineno-94-3" href="#__codelineno-94-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<h2 id="protected-static-functions-documentation">Protected Static Functions Documentation</h2>
+<h3 id="function-_responsecodetostring">function _responseCodeToString</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">WebServer</span><span class="o">::</span><span class="n">_responseCodeToString</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-95-2" name="__codelineno-95-2" href="#__codelineno-95-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span>
+<a id="__codelineno-95-3" name="__codelineno-95-3" href="#__codelineno-95-3"></a><span class="p">)</span><span class="w"> </span>
+</code></pre></div>
+<hr />
+<p>The documentation for this class was generated from the following file <code>cores/common/arduino/libraries/ext/WebServer/WebServer.h</code></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../docs/script.js"></script>
+      
+    
+  </body>
+</html>

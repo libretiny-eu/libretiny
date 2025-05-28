@@ -1,0 +1,3537 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/docs/resources/tuya-pin-config/">
+      
+      
+        <link rel="prev" href="../documents/">
+      
+      
+        <link rel="next" href="../beken-flash/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>Tuya Pinout Config - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tuya-pinout-config" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tuya Pinout Config
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../dev/lt-api/">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dev/libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Tuya Pinout Config
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="tuya-pinout-config">Tuya Pinout Config</h1>
+<p>Device configuration (<code>user_param_key</code>) can be extracted to JSON, using bk7231tools from a full firmware dump.</p>
+<p>Also see:</p>
+<ul>
+<li><a href="https://upk.libretiny.eu/">UPK2ESPHome</a></li>
+</ul>
+<p>Sources:</p>
+<ul>
+<li><a href="https://github.com/tuya/tuya-iotos-embeded-sdk-wifi-ble-bk7231n/blob/master/apps/tuya_demo_light_pwm/include/common/device_config_load.h"><code>tuya_demo_light_pwm</code></a> for <em>Lights/bulbs</em></li>
+<li>Original post <a href="https://discord.com/channels/967863521511608370/983843871320580096/1059286760074530947">by @blakadder</a> on Discord channel #resources</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Key(s)</th>
+<th>Meaning</th>
+<th>Possible values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crc</code></td>
+<td>UPK data checksum</td>
+<td></td>
+</tr>
+<tr>
+<td><code>module</code></td>
+<td>Tuya module used</td>
+<td><code>CB3S</code> / <code>WB3S</code> / <code>CBU</code>, etc.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>Device type as a number</td>
+<td>0502 - CW light<br>0505 - RGBCW light</td>
+</tr>
+<tr>
+<td><code>Jsonver</code><br><code>jv</code></td>
+<td>"JSON" version</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Common</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>netled_pin</code><br><code>netled1_pin</code><br><code>wfst_pin</code></td>
+<td>Status LED for WiFi</td>
+<td></td>
+</tr>
+<tr>
+<td><code>netled_lv</code><br><code>netled1_lv</code><br><code>wfst_lv</code></td>
+<td>Status LED Active Level</td>
+<td>0 - Active low<br>1 - Active high</td>
+</tr>
+<tr>
+<td><code>netled_reuse</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>reset_pin</code> + <code>reset_lv</code></td>
+<td>Reset Button Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reset_t</code></td>
+<td>Button press time to reset the device</td>
+<td>3/5/6/9/10 seconds</td>
+</tr>
+<tr>
+<td><code>iicscl</code></td>
+<td>I²C SCL Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>iicsda</code></td>
+<td>I²C SDA Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>net_trig</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>net_type</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wfct</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Lights/bulbs</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cmod</code></td>
+<td>Color Mode</td>
+<td><code>rgbcw</code> / <code>rgb</code> / <code>cw</code> / <code>c</code> / <code>rgbc</code></td>
+</tr>
+<tr>
+<td><code>dmod</code></td>
+<td>Light driver type</td>
+<td>0 - PWM<br>1 - SM16726B<br>2 - SM2135E<br>3 - SM2135EH<br>4 - SM2135EJ<br>5 - BP1658CJ<br>6 - BP5758D<br>7 - SM2235/2335</td>
+</tr>
+<tr>
+<td><code>cwtype</code></td>
+<td>Color temperature driver</td>
+<td>0 - cool and warm white (CW)<br>1 - correlated color temperature (CCT)</td>
+</tr>
+<tr>
+<td><code>onoffmode</code></td>
+<td>On/off gradient enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>pmemory</code></td>
+<td>Power-off memory enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>defcolor</code></td>
+<td>Default Color</td>
+<td><code>c</code> / <code>r</code></td>
+</tr>
+<tr>
+<td><code>defbright</code></td>
+<td>Default Brightness</td>
+<td>0%-100%</td>
+</tr>
+<tr>
+<td><code>deftemp</code></td>
+<td>Default Color Temperature</td>
+<td>0-100 when defcolor is cool white</td>
+</tr>
+<tr>
+<td><code>cwmaxp</code></td>
+<td>Cold-Warm Max Power</td>
+<td>100-200 with a pitch of 10</td>
+</tr>
+<tr>
+<td><code>brightmin</code>, <code>brightmax</code></td>
+<td>Min/Max Brightness</td>
+<td>0%-100%</td>
+</tr>
+<tr>
+<td><code>colormin</code>, <code>colormax</code></td>
+<td>RGB Min/Max Brightness</td>
+<td>0%-100%</td>
+</tr>
+<tr>
+<td><code>cwmin</code>, <code>cwmax</code></td>
+<td>Cold-Warm Min/Max Brightness</td>
+<td>0%-100%</td>
+</tr>
+<tr>
+<td><code>colormaxp</code></td>
+<td>RGB Max Power</td>
+<td>0%-100%</td>
+</tr>
+<tr>
+<td><code>colorpfun</code></td>
+<td>Color mixing power limit enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>brightstep</code><br><code>bristep</code></td>
+<td>Brightness Step</td>
+<td></td>
+</tr>
+<tr>
+<td><code>hsvstep</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rgbt</code></td>
+<td>Used in prod.tests, not relevant</td>
+<td></td>
+</tr>
+<tr>
+<td><code>title20</code></td>
+<td>"title20/T20" supported</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><strong>Gamma correction</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>gmr</code>, <code>gmg</code>, <code>gmb</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>gmkr</code>, <code>gmkg</code>, <code>gmkb</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>gmwr</code>, <code>gmwg</code>, <code>gmwb</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>PWM Lights</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>r_pin</code> + <code>r_lv</code></td>
+<td>Red Channel Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>g_pin</code> + <code>g_lv</code></td>
+<td>Green Channel Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>b_pin</code> + <code>b_lv</code></td>
+<td>Blue Channel Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>c_pin</code> + <code>c_lv</code></td>
+<td>Cool White Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>w_pin</code> + <code>w_lv</code></td>
+<td>Warm White Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pwmhz</code></td>
+<td>PWM Operating Frequency (Hz)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>I²C Lights</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dccur</code><br><code>ehccur</code><br><code>cjccur</code></td>
+<td>Cold White Current</td>
+<td></td>
+</tr>
+<tr>
+<td><code>dwcur</code><br><code>ehwcur</code><br><code>cjwcur</code></td>
+<td>Warm White Current</td>
+<td></td>
+</tr>
+<tr>
+<td><code>drgbcur</code></td>
+<td>RGB Current</td>
+<td></td>
+</tr>
+<tr>
+<td><code>campere</code></td>
+<td>Max current of SM2135 colored output</td>
+<td>10-45 with a pitch of 5 and defaults to 20</td>
+</tr>
+<tr>
+<td><code>wampere</code></td>
+<td>Max current of SM2135 white output</td>
+<td>10-80 with a pitch of 5 and defaults to 30</td>
+</tr>
+<tr>
+<td><code>iicr</code></td>
+<td>Red Channel Number</td>
+<td>0-5</td>
+</tr>
+<tr>
+<td><code>iicg</code></td>
+<td>Green Channel Number</td>
+<td>0-5</td>
+</tr>
+<tr>
+<td><code>iicb</code></td>
+<td>Blue Channel Number</td>
+<td>0-5</td>
+</tr>
+<tr>
+<td><code>iicc</code></td>
+<td>Cold White Channel Number</td>
+<td>0-5</td>
+</tr>
+<tr>
+<td><code>iicw</code></td>
+<td>Warm White Channel Number</td>
+<td>0-5</td>
+</tr>
+<tr>
+<td><code>iicccur</code></td>
+<td>Cold White Current</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>iicwcur</code></td>
+<td>Warm White Current</td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>Sockets/switches</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>btX_pin</code> + <code>btX_lv</code></td>
+<td>Button X Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>btX_type</code><br><code>bt_type</code></td>
+<td>Button X Trigger Type</td>
+<td>0 - level_trig<br>1 - edge_trig</td>
+</tr>
+<tr>
+<td><code>rlX_pin</code> + <code>rlX_lv</code></td>
+<td>Relay X Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>rlX_type</code><br><code>rl_type</code></td>
+<td>Relay X Type</td>
+<td>0 - Electric holding relay<br>1 - Magnetic holding relay</td>
+</tr>
+<tr>
+<td><code>rl_onX_pin</code> + <code>rl_onX_lv</code></td>
+<td>Relay ON Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>rl_offX_pin</code> + <code>rl_offX_lv</code></td>
+<td>Relay OFF Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>rl1_dr_type</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rl_drvtime</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total_bt_pin</code> + <code>total_bt_lv</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Power monitoring</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ele_fun_en</code></td>
+<td>Power Monitoring Enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>chip_type</code></td>
+<td>Power Monitoring Chip Type</td>
+<td>0 - BL0937<br>1 - HLW8012<br>2 - HLW8032<br>4 - BL0942</td>
+</tr>
+<tr>
+<td><code>ele_pin</code></td>
+<td>CF Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>vi_pin</code></td>
+<td>CF1 Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sel_pin_pin</code> + <code>sel_pin_lv</code></td>
+<td>SEL Pin + Active Level</td>
+<td>Active level is usually 1</td>
+</tr>
+<tr>
+<td><code>lose_vol</code></td>
+<td>Under voltage threshold in V</td>
+<td></td>
+</tr>
+<tr>
+<td><code>over_cur</code></td>
+<td>Overcurrent threshold in mA</td>
+<td></td>
+</tr>
+<tr>
+<td><code>over_vol</code></td>
+<td>Overvoltage threshold in V</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sample_resistor</code></td>
+<td>Current shunt resistor value</td>
+<td>1 - 1mΩ<br>2 - 2mΩ</td>
+</tr>
+<tr>
+<td><code>vol_def</code></td>
+<td>Socket operating voltage</td>
+<td>0 - 220V<br>1 - 110V</td>
+</tr>
+<tr>
+<td><code>work_voltage</code></td>
+<td>Socket operating voltage</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Infrared</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>irfunc</code></td>
+<td>IR Function enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>infre</code></td>
+<td>IR Transmitter Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>infrr</code><br><code>ir</code></td>
+<td>IR Receiver Pin</td>
+<td></td>
+</tr>
+<tr>
+<td><code>irkXfun</code> + <code>irkXval</code></td>
+<td>IR Key X Function + Value</td>
+<td>X in 1..30</td>
+</tr>
+<tr>
+<td><code>irnightt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>irstep</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wgmod</code>, <code>swgmod</code>, <code>scgmod</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>PIR</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>pirmod</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>pirfreq</code></td>
+<td>PWM Operating Frequency (Hz) for PIR</td>
+<td>1000</td>
+</tr>
+<tr>
+<td><code>pirlduty</code></td>
+<td></td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>pirmduty</code></td>
+<td></td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>pirhduty</code></td>
+<td></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>pirin_pin</code> + <code>pirin_lv</code></td>
+<td>Motion reporting GPIO + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pirsense_pin</code> + <code>pirsense_lv</code></td>
+<td>PIR sensitivity (PWM) + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pirrange</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>pirwarn</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Ambient light sensor</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>day</code></td>
+<td>Value to compare against ADC readout</td>
+<td>ADC value range (0-3300)</td>
+</tr>
+<tr>
+<td><code>dusk</code></td>
+<td>Value to compare against ADC readout</td>
+<td>ADC value range (0-3300)</td>
+</tr>
+<tr>
+<td><code>evenfall</code></td>
+<td>Value to compare against ADC readout</td>
+<td>ADC value range (0-3300)</td>
+</tr>
+<tr>
+<td><code>evening</code></td>
+<td>Value to compare against ADC readout</td>
+<td>ADC value range (0-3300)</td>
+</tr>
+<tr>
+<td><code>night</code></td>
+<td>Value to compare against ADC readout</td>
+<td>ADC value range (0-3300)</td>
+</tr>
+<tr>
+<td><strong>Key-controlled</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>key_pin</code> + <code>key_lv</code></td>
+<td>Key Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>kXpin_pin</code> + <code>kXpin_lv</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kXdfunc</code>, <code>kXlfunc</code>, <code>kXsfunc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kXldir</code>, <code>kXsdir</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>keyccfg1</code>, <code>keyccfg2</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>keyfunc</code>, <code>keyglobefunc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>keylt</code>, <code>keynumber</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Pairing-related</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>wfcfg</code></td>
+<td>Wi-Fi pairing config</td>
+<td><code>spcl</code> / <code>spcl_auto</code> / <code>prod</code> / <code>old</code> / <code>low</code></td>
+</tr>
+<tr>
+<td><code>remdmode</code></td>
+<td>"light reset pairing mode"</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>rstnum</code></td>
+<td>On/off cycles to reset</td>
+<td></td>
+</tr>
+<tr>
+<td><code>rstcor</code></td>
+<td>Light color while connecting</td>
+<td><code>c</code> / <code>r</code></td>
+</tr>
+<tr>
+<td><code>rstbr</code></td>
+<td>Light brightness while connecting</td>
+<td>10-100</td>
+</tr>
+<tr>
+<td><code>rsttemp</code></td>
+<td>Light temperature while connecting</td>
+<td>0-100</td>
+</tr>
+<tr>
+<td><code>remdtime</code></td>
+<td>Pairing mode timeout</td>
+<td>seconds</td>
+</tr>
+<tr>
+<td><code>wfptime</code></td>
+<td>Light pairing time</td>
+<td>minutes</td>
+</tr>
+<tr>
+<td><code>cagt</code></td>
+<td>Used in prod.tests, not relevant</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><code>prodagain</code></td>
+<td>Used in prod.tests, not relevant</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>rstmode</code></td>
+<td>Pairing related - not relevant</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pairt</code></td>
+<td>Pairing related - not relevant</td>
+<td>6-600</td>
+</tr>
+<tr>
+<td><code>wt</code></td>
+<td>Used in prod.tests, not relevant</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><strong>Other</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>buzzer_pwm</code></td>
+<td>Buzzer working PWM frequency</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ismusic</code></td>
+<td></td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>ledX_pin</code> + <code>ledX_lv</code></td>
+<td>LED X Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><code>led_pin</code> + <code>led_lv</code></td>
+<td>LED Pin + Active Level</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Unknown</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>0err</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1err</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>adclimit</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>aging</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>alarm1_time</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>alarm_t1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>backlit_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>backlit_select</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>bitseq</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>bleonoff</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>blindt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>buzzer</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cctseg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cd_flag2</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cdsval</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ch1_stat</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ch_cddpidX</code></td>
+<td></td>
+<td>X in 1..4</td>
+</tr>
+<tr>
+<td><code>ch_dpidX</code></td>
+<td></td>
+<td>X in 1..4</td>
+</tr>
+<tr>
+<td><code>ch_flagX</code></td>
+<td></td>
+<td>X in 1..4</td>
+</tr>
+<tr>
+<td><code>ch_num</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>clean_t</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cntdown1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ctrl_lv</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ctrl_pin</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>customcode</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>cyc_dpid</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dctrl_select</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dimmod</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dimt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>dimval</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>door1_magt_lv</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>door1_magt_pin</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>door_alarm_st1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>door_mag1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ffc_select</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>inch_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>indep_cfgbt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>init_conf</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>knum</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>ktime</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>leaderr</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>led_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>lfunc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>light_status_select</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>lock_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>lockt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>micpin</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mixway</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mutex</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mxcl_led_m</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>netn_led</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>netnc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>nety_led</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>netyc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>nightbrig</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>nightcct</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>nightled</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>notdisturb</code></td>
+<td>Do not disturb (DND) mode enabled</td>
+<td>0 / 1</td>
+</tr>
+<tr>
+<td><code>on_off_cnt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff_clear_t</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff_n</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff_rst_m</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff_rst_type</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onoff_type</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onofftime</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>owm</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>preheatt</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rand_dpid</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>remote_add_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>remote_list_dp</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>remote_select</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>resistor</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>reuse_led_m</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rsthold</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>scenespct</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>series_ctrl</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sfunc</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>standtime</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>starterr</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>step_rate</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>switch1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>tempmix</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>tempstep</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total_stat</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>tracetime1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>trigdelay</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>trigmod</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>trl1_time</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>voice_ctrl1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>voice_ctrl_set1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>whiteseg</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>zero_select</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../script.js"></script>
+      
+    
+  </body>
+</html>
