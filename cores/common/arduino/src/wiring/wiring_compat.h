@@ -35,6 +35,7 @@ extern "C" {
 
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
+extern const String emptyString;
 #endif
 
 #ifdef __cplusplus
