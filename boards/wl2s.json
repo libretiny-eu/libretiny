@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"ic/ln882hk",
+		"pcb/wl2s",
+		"pcb/wl2s-test"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "wl2s"
+	},
+	"name": "WL2S Wi-Fi/BLE Module",
+	"url": "https://docs.libretiny.eu/boards/wl2s/",
+	"vendor": "Unknown",
+	"doc": {
+		"fccid": ""
+	},
+	"pcb": {
+		"symbol": "WL2S"
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231",
+		"beken-7231t",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/wb2l",
+		"pcb/wb2l-test"
+	],
+	"build": {
+		"mcu": "bk7231t",
+		"variant": "wb2l"
+	},
+	"name": "WB2L Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wb2l-datasheet?id=K9duegc9bualu",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WB2L"
+	},
+	"pcb": {
+		"symbol": "WB2L"
+	}
+}

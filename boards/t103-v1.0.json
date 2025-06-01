@@ -1,0 +1,26 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-788k",
+		"realtek-ambz-bx",
+		"ic/rtl8710bn",
+		"pcb/t103"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "t103-v1.0"
+	},
+	"name": "T103_V1.0",
+	"url": "https://docs.libretiny.eu/boards/t103-v1.0/",
+	"vendor": "Unknown",
+	"doc": {
+		"fccid": "2AU7O-T102V11",
+		"extra": [
+			"## Source",
+			"Pinout information sourced from [teardown post by @p.kaczmarek2 from Elektroda](https://www.elektroda.pl/rtvforum/topic3984148.html)."
+		]
+	},
+	"pcb": {
+		"symbol": "T103_V1.0"
+	}
+}

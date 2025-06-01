@@ -1,0 +1,17 @@
+---
+header: False
+breadcrumbs: False
+---
+
+# {{node.kind.value|title}} {{node.name_long}}
+
+[**File List**](files.md)
+{%- for child in node.parents -%}
+{{'**>**'|indent(1, true)}} [**{{child.name_long if node.is_group else child.name_short}}**]({{child.url}})
+{%- endfor %}
+
+[Go to the documentation of this file.]({{node.url}}) 
+
+```{{ node.code_language }}
+{{node.programlisting}}
+```

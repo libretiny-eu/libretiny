@@ -1,0 +1,118 @@
+{
+	"_base": [
+		"generic",
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"ic/ln882hk"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "generic-ln882hki"
+	},
+	"name": "Generic - LN882HKI",
+	"symbol": "LN882HKI",
+	"url": "https://docs.libretiny.eu/boards/generic-ln882hki/",
+	"vendor": "Generic",
+	"pcb": {
+		"pinout": {
+			"1": {
+				"IC": 8,
+				"ARD": [
+					 "D0",
+					 "A2"
+				]
+			},
+			"2": {
+				"IC": 9,
+				"ARD": [
+					 "D1",
+					 "A3"
+				]
+			},
+			"3": {
+				"IC": 10,
+				"ARD": "D2"
+			},
+			"4": {
+				"IC": 11,
+				"ARD": "D3"
+			},
+			"5": {
+				"IC": 12,
+				"ARD": [
+					"D4",
+					"A4"
+				]
+			},
+			"6": {
+				"IC": 13,
+				"ARD": "D5"
+			},
+			"7": {
+				"IC": 14,
+				"ARD": "D6"
+			},
+			"8": {
+				"IC": 15,
+				"ARD": "D7"
+			},
+			"9": {
+				"IC": 16,
+				"ARD": "D8"
+			},
+			"10": {
+				"IC": 17,
+				"ARD": "D9"
+			},
+			"11": {
+				"IC": 21,
+				"ARD": "D10"
+			},
+			"12": {
+				"IC": 22,
+				"ARD": "D11"
+			},
+			"13": {
+				"IC": 23,
+				"ARD": "D12"
+			},
+			"14": {
+				"IC": 24,
+				"ARD": [
+					 "D13",
+					 "A5"
+				]
+			},
+			"15": {
+				"IC": 25,
+				"ARD": [
+					 "D14",
+					 "A6"
+				]
+			},
+			"16": {
+				"IC": 26,
+				"ARD": [
+					 "D15",
+					 "A7"
+				]
+			},
+			"17": {
+				"IC": 27,
+				"ARD": "D16"
+			},
+			"18": {
+				"IC": 28,
+				"ARD": "D17"
+			},
+			"19": {
+				"IC": 29,
+				"ARD": "D18"
+			},
+			"20": {
+				"IC": 30,
+				"ARD": "D19"
+			}
+		}
+	}
+}

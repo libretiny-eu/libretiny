@@ -1,0 +1,50 @@
+{
+	"build": {
+		"f_cpu": "120000000L",
+		"prefix": "arm-none-eabi-",
+		"bkota": {
+			"encryption": "aes256",
+			"compression": "gzip",
+			"key": "0123456789ABCDEF0123456789ABCDEF",
+			"iv": "0123456789ABCDEF"
+		}
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "bk72xx.cfg",
+		"gdb_init": [
+			"mem 0x000000 0x200000 ro"
+		]
+	},
+	"upload": {
+		"maximum_ram_size": 262144,
+		"flash_size": 2097152,
+		"require_upload_port": true,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Beken",
+			"series": "BK72XX",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		},
+		"links": {
+			"Info & flashing guide": "../../docs/platform/beken-72xx/README.md"
+		},
+		"extra": [
+			"Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes."
+		]
+	}
+}

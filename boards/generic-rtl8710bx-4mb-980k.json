@@ -1,0 +1,100 @@
+{
+	"_base": [
+		"generic",
+		"realtek-ambz",
+		"realtek-ambz-4mb-980k",
+		"realtek-ambz-bx",
+		"ic/rtl8710bn"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "generic-rtl8710bx-4mb-980k"
+	},
+	"name": "Generic - RTL8710BX (4M/980k)",
+	"symbol": "RTL8710BX (4M/980k)",
+	"url": "https://docs.libretiny.eu/boards/generic-rtl8710bx-4mb-980k/",
+	"vendor": "Generic",
+	"doc": {
+		"extra": [
+			"## Information",
+			"This is a generic board definition for RTL8710BX with 4 MiB of flash. It has a bigger application partition size (980 KiB). The used bootloader is also different from the standard Tuya one.",
+			"It can be found in [Ezviz T31 smart plug](https://www.ezviz.com/product/T31/2021) - bare chip soldered onto the manufacturer-made PCB. The plug is not Tuya/SmartLife-compatible and has a 25Q32CSIG flash chip. Refer to [libretiny#23](https://github.com/libretiny-eu/libretiny/issues/23) for photos and more information.",
+			"Note that stock firmware seems to use smaller app images (0x80000 / 512 KiB). After 0x180000 some product-test data and device logs can be found. Because the OTA2 offset is 0x100000, the board definition was configured to use all available space."
+		]
+	},
+	"pcb": {
+		"pinout": {
+			"1": {
+				"IC": 16,
+				"ARD": "D0"
+			},
+			"2": {
+				"IC": 28,
+				"ARD": "D1"
+			},
+			"3": {
+				"IC": 18,
+				"ARD": "D2"
+			},
+			"4": {
+				"IC": 19,
+				"ARD": "D3"
+			},
+			"5": {
+				"IC": 20,
+				"ARD": "D4"
+			},
+			"6": {
+				"IC": 21,
+				"ARD": "D5"
+			},
+			"7": {
+				"IC": 22,
+				"ARD": "D6"
+			},
+			"8": {
+				"IC": 23,
+				"ARD": "D7"
+			},
+			"9": {
+				"IC": 17,
+				"ARD": "D8"
+			},
+			"10": {
+				"IC": 13,
+				"ARD": "D9"
+			},
+			"11": {
+				"IC": 14,
+				"ARD": "D10"
+			},
+			"12": {
+				"IC": 29,
+				"ARD": "D11"
+			},
+			"13": {
+				"IC": 30,
+				"ARD": [
+					"D12",
+					"A0"
+				]
+			},
+			"14": {
+				"IC": 31,
+				"ARD": "D13"
+			},
+			"15": {
+				"IC": 32,
+				"ARD": "D14"
+			},
+			"16": {
+				"IC": 2,
+				"ARD": "D15"
+			},
+			"17": {
+				"IC": 1,
+				"ARD": "D16"
+			}
+		}
+	}
+}
