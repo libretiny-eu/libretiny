@@ -61,7 +61,7 @@ bool WiFiClass::validate(const char *ssid, const char *passphrase) {
 			LT_WM(WIFI, "Passphrase too short (%u)", length);
 			return false;
 		}
-		if (length > 63) {
+		if (length > 64) {
 			LT_WM(WIFI, "Passphrase too long (%u)", length);
 			return false;
 		}
