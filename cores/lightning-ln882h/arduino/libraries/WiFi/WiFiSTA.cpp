@@ -175,7 +175,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 }
 
 const String WiFiClass::SSID() {
-	const char *ssid	 = NULL;
+	const char *ssid	 = "";
 	const uint8_t *bssid = NULL;
 	wifi_get_sta_conn_info(&ssid, &bssid);
 	return ssid;

@@ -26,7 +26,7 @@ extern "C" {
 #define digitalPinToInterrupt(pin) (pin)
 
 // FreeRTOS utilities
-#define xTaskCreateUniversal(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask, xCoreID)       \
+#define xTaskCreateUniversal(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask, xCoreID) \
 	xTaskCreate(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask)
 #define xTaskCreatePinnedToCore xTaskCreateUniversal
 
@@ -35,6 +35,7 @@ extern "C" {
 
 #ifdef __cplusplus
 String ipToString(const IPAddress &ip);
+extern const String emptyString;
 #endif
 
 #ifdef __cplusplus

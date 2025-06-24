@@ -69,27 +69,27 @@ typedef struct {
 #define cDATA ((WiFiData *)cls->data)
 
 #if LT_RTL8710B // Realtek AmebaZ
-#define DIAG_PRINTF_ENABLE()                                                                                           \
-	do {                                                                                                               \
-		__wrap_rtl_printf_enable();                                                                                    \
-		__wrap_DiagPrintf_enable();                                                                                    \
+#define DIAG_PRINTF_ENABLE()        \
+	do {                            \
+		__wrap_rtl_printf_enable(); \
+		__wrap_DiagPrintf_enable(); \
 	} while (0);
-#define DIAG_PRINTF_DISABLE()                                                                                          \
-	do {                                                                                                               \
-		__wrap_rtl_printf_disable();                                                                                   \
-		__wrap_DiagPrintf_disable();                                                                                   \
+#define DIAG_PRINTF_DISABLE()        \
+	do {                             \
+		__wrap_rtl_printf_disable(); \
+		__wrap_DiagPrintf_disable(); \
 	} while (0);
 
 #elif LT_RTL8720C // Realtek AmebaZ2
-#define DIAG_PRINTF_ENABLE()                                                                                           \
-	do {                                                                                                               \
-		__wrap_rt_printf_enable();                                                                                     \
-		__wrap_rt_log_printf_enable();                                                                                 \
+#define DIAG_PRINTF_ENABLE()           \
+	do {                               \
+		__wrap_rt_printf_enable();     \
+		__wrap_rt_log_printf_enable(); \
 	} while (0);
-#define DIAG_PRINTF_DISABLE()                                                                                          \
-	do {                                                                                                               \
-		__wrap_rt_printf_disable();                                                                                    \
-		__wrap_rt_log_printf_disable();                                                                                \
+#define DIAG_PRINTF_DISABLE()           \
+	do {                                \
+		__wrap_rt_printf_disable();     \
+		__wrap_rt_log_printf_disable(); \
 	} while (0);
 
 #else

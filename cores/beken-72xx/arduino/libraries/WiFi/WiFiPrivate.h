@@ -79,34 +79,34 @@ typedef struct {
 #define IP_STATUS	(DATA->statusIp)
 #define LINK_STATUS (DATA->statusLink)
 
-#define STA_GET_LINK_STATUS_RETURN(ret)                                                                                \
-	{                                                                                                                  \
-		if (!sta_ip_is_start())                                                                                        \
-			return ret;                                                                                                \
-		memset(&LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef));                                                         \
-		bk_wlan_get_link_status(&LINK_STATUS);                                                                         \
+#define STA_GET_LINK_STATUS_RETURN(ret)                        \
+	{                                                          \
+		if (!sta_ip_is_start())                                \
+			return ret;                                        \
+		memset(&LINK_STATUS, 0x00, sizeof(LinkStatusTypeDef)); \
+		bk_wlan_get_link_status(&LINK_STATUS);                 \
 	}
 
-#define STA_GET_IP_STATUS_RETURN(ret)                                                                                  \
-	{                                                                                                                  \
-		if (!sta_ip_is_start())                                                                                        \
-			return ret;                                                                                                \
-		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                             \
-		bk_wlan_get_ip_status(&IP_STATUS, BK_STATION);                                                                 \
+#define STA_GET_IP_STATUS_RETURN(ret)                      \
+	{                                                      \
+		if (!sta_ip_is_start())                            \
+			return ret;                                    \
+		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef)); \
+		bk_wlan_get_ip_status(&IP_STATUS, BK_STATION);     \
 	}
 
-#define AP_GET_LINK_STATUS_RETURN(ret)                                                                                 \
-	{                                                                                                                  \
-		if (!uap_ip_is_start())                                                                                        \
-			return ret;                                                                                                \
+#define AP_GET_LINK_STATUS_RETURN(ret) \
+	{                                  \
+		if (!uap_ip_is_start())        \
+			return ret;                \
 	}
 
-#define AP_GET_IP_STATUS_RETURN(ret)                                                                                   \
-	{                                                                                                                  \
-		if (!uap_ip_is_start())                                                                                        \
-			return ret;                                                                                                \
-		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef));                                                             \
-		bk_wlan_get_ip_status(&IP_STATUS, BK_SOFT_AP);                                                                 \
+#define AP_GET_IP_STATUS_RETURN(ret)                       \
+	{                                                      \
+		if (!uap_ip_is_start())                            \
+			return ret;                                    \
+		memset(&IP_STATUS, 0x00, sizeof(IPStatusTypedef)); \
+		bk_wlan_get_ip_status(&IP_STATUS, BK_SOFT_AP);     \
 	}
 
 } // extern "C"

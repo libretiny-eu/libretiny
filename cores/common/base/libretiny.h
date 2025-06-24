@@ -25,10 +25,10 @@
 #define STRINGIFY_MACRO(x) STRINGIFY(x)
 #define LT_VERSION_STR	   STRINGIFY_MACRO(LT_VERSION)
 #define LT_BOARD_STR	   STRINGIFY_MACRO(LT_BOARD)
-#define GCC_VERSION_STR                                                                                                \
+#define GCC_VERSION_STR \
 	STRINGIFY_MACRO(__GNUC__) "." STRINGIFY_MACRO(__GNUC_MINOR__) "." STRINGIFY_MACRO(__GNUC_PATCHLEVEL__)
-#define LT_BANNER_STR                                                                                                  \
-	"LibreTiny v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__ ", GCC " GCC_VERSION_STR   \
+#define LT_BANNER_STR                                                                                                \
+	"LibreTiny v" LT_VERSION_STR " on " LT_BOARD_STR ", compiled at " __DATE__ " " __TIME__ ", GCC " GCC_VERSION_STR \
 	" (-O" STRINGIFY_MACRO(__OPTIMIZE_LEVEL__) ")"
 
 // Functional macros
