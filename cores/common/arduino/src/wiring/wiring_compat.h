@@ -22,7 +22,9 @@ extern "C" {
 #define voidFuncPtrArg		voidFuncPtrParam
 
 // Additional Arduino compatibility macros
+#ifndef __cplusplus
 #define round(x)				   ((x) >= 0 ? (long)((x) + 0.5) : (long)((x) - 0.5))
+#endif
 #define digitalPinToInterrupt(pin) (pin)
 
 // FreeRTOS utilities
