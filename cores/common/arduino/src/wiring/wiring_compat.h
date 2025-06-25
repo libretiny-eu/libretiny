@@ -23,7 +23,7 @@ extern "C" {
 
 // Additional Arduino compatibility macros
 #ifndef __cplusplus
-#define round(x)   ((x) >= 0 ? (long)((x) + 0.5) : (long)((x) - 0.5))
+#define round(x) ((x) >= 0 ? (long)((x) + 0.5) : (long)((x) - 0.5))
 #endif
 #define digitalPinToInterrupt(pin) (pin)
 
