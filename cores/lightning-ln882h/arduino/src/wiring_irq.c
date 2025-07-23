@@ -92,14 +92,14 @@ void detachInterrupt(pin_size_t interruptNumber) {
 	hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_DISABLE);
 	pinModeRemove(interruptNumber, PIN_IRQ);
 
-	//only call NVIC_DisableIRQ if no gpio in the same bank is using the interrupt
-	for (pin_size_t pinNumber = (interruptNumber < 16 ? 0 : 16); pinNumber < (interruptNumber < 16 ? 16 : 32); pinNumber++) {
+	for (pin_size_t pinNumber = (interruptNumber < 16 ? 0 : 16); pinNumber < (interruptNumber < 16 ? 16 : 32);
+		 pinNumber++) {
 		PinInfo *pin = pinInfo(pinNumber);
 		if (!pin)
 			continue;
 		if (pinEnabled(pin, PIN_IRQ))
 			return;
 	}
-	uint16_t IRQForPin=interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
+	uint16_t IRQForPin = interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
 	NVIC_DisableIRQ(IRQForPin);
 }
