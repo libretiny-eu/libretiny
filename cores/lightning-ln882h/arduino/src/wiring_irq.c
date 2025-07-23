@@ -81,15 +81,15 @@ void attachInterruptParam(pin_size_t interruptNumber, voidFuncPtrParam callback,
 
 	hal_gpio_pin_it_cfg(data->gpio_base, data->gpio->pin, event);
 	hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_ENABLE);
-	uint16_t IRQForPin=interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
-	NVIC_SetPriority(IRQForPin,1);
+	uint16_t IRQForPin = interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
+	NVIC_SetPriority(IRQForPin, 1);
 	NVIC_EnableIRQ(IRQForPin);
 }
 
 void detachInterrupt(pin_size_t interruptNumber) {
 	pinCheckGetData(interruptNumber, PIN_IRQ, );
 
-	uint16_t IRQForPin=interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
+	uint16_t IRQForPin = interruptNumber < 16 ? GPIOA_IRQn : GPIOB_IRQn;
 	NVIC_DisableIRQ(IRQForPin);
 	hal_gpio_pin_it_en(data->gpio_base, data->gpio->pin, HAL_DISABLE);
 	pinModeRemove(interruptNumber, PIN_IRQ);
