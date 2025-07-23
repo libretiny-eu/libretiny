@@ -25,27 +25,27 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D7: PA07, SD_D3, I2S0_RX, I2C0_SCL, I2C0_SDA
 	{PA_7,  PIN_I2S | PIN_I2C | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D8: PA08, BOOT0, SD_CMD, I2S0_WS, I2C0_SCL, I2C0_SDA
-	{PA_8,  PIN_I2S | PIN_I2C | PIN_GPIO,                     PIN_NONE, 0},
+	{PA_8,  PIN_I2S | PIN_I2C | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D9: PA09, BOOT1, SD_CLK, I2S0_SCLK, I2C0_SCL, I2C0_SDA
-	{PA_9,  PIN_I2S | PIN_I2C | PIN_GPIO,                     PIN_NONE, 0},
+	{PA_9,  PIN_I2S | PIN_I2C | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D10: PA10, SD_D0, I2S0_TX, I2C0_SCL, I2C0_SDA
-	{PA_10, PIN_I2S | PIN_I2C | PIN_GPIO,                     PIN_NONE, 0},
+	{PA_10, PIN_I2S | PIN_I2C | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D11: PA11, SD_D1, I2C0_SCL, I2C0_SDA
-	{PA_11, PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PA_11, PIN_I2C | PIN_IRQ | PIN_GPIO,                     PIN_NONE, 0},
 	// D12: PA12, I2C0_SCL, I2C0_SDA
-	{PA_12, PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PA_12, PIN_I2C | PIN_IRQ | PIN_GPIO,                     PIN_NONE, 0},
 	// D13: PB03, ADC5, I2C0_SCL, I2C0_SDA
-	{PB_3,  PIN_I2C | PIN_ADC | PIN_GPIO,                     PIN_NONE, 0},
+	{PB_3,  PIN_I2C | PIN_ADC | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D14: PB04, ADC6, I2C0_SCL, I2C0_SDA
-	{PB_4,  PIN_I2C | PIN_ADC | PIN_GPIO,                     PIN_NONE, 0},
+	{PB_4,  PIN_I2C | PIN_ADC | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D15: PB05, ADC7, I2C0_SCL, I2C0_SDA
-	{PB_5,  PIN_I2C | PIN_ADC | PIN_GPIO,                     PIN_NONE, 0},
+	{PB_5,  PIN_I2C | PIN_ADC | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D16: PB06, I2C0_SCL, I2C0_SDA
-	{PB_6,  PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PB_6,  PIN_I2C | PIN_IRQ | PIN_GPIO,                     PIN_NONE, 0},
 	// D17: PB07, I2C0_SCL, I2C0_SDA
-	{PB_7,  PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PB_7,  PIN_I2C | PIN_IRQ | PIN_GPIO,                     PIN_NONE, 0},
 	// D18: PB08, UART1_RX, I2C0_SCL, I2C0_SDA
-	{PB_8,  PIN_UART | PIN_I2C | PIN_GPIO,                    PIN_NONE, 0},
+	{PB_8,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 	// D19: PB09, UART1_TX, I2C0_SCL, I2C0_SDA
 	{PB_9,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 };
