@@ -1,0 +1,3619 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.libretiny.eu/docs/dev/lt-api/">
+      
+      
+        <link rel="prev" href="../../../examples/PinScan/">
+      
+      
+        <link rel="next" href="../../../ltapi/dir_c7e317b16142bccc961a83c0babf0065/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.1">
+    
+    
+      
+        <title>📖 LibreTiny API - LibreTiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.3bd4f189.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#libretiny-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="LibreTiny" class="md-header__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LibreTiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              📖 LibreTiny API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="LibreTiny" class="md-nav__button md-logo" aria-label="LibreTiny" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LibreTiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libretiny-eu/libretiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../getting-started/">😊 Getting started</a>
+          
+            <label for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="😊 Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          😊 Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/gpio/" class="md-nav__link">
+        ➡️ Info on accessing GPIOs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://www.youtube.com/watch?v=sSj8f-HCHQ0" class="md-nav__link">
+        📺 Cloudcutter & ESPHome video guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../projects/esphome/" class="md-nav__link">
+        💡 ESPHome setup guide
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/libretiny-eu/esphome-hass-addon/pkgs/container/libretiny-esphome-hassio" class="md-nav__link">
+        🛖 ESPHome Hassio Add-On
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          📲 Flashing/dumping guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📲 Flashing/dumping guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          📲 Flashing/dumping guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/ltchiptool/" class="md-nav__link">
+        ltchiptool GUI manual
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/platformio/" class="md-nav__link">
+        Flashing PlatformIO projects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/esphome/" class="md-nav__link">
+        Flashing ESPHome
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/dumping/" class="md-nav__link">
+        Dumping stock firmware
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/cloudcutter/" class="md-nav__link">
+        Converting with tuya-cloudcutter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../flashing/tools/adr/" class="md-nav__link">
+        Auto-download-reboot
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          🔌 How to flash/enter download mode?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔌 How to flash/enter download mode?" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          🔌 How to flash/enter download mode?
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/" class="md-nav__link">
+        Beken BK72xx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/" class="md-nav__link">
+        Realtek RTL8710Bx
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../status/supported/">💻 Chips, boards, features</a>
+          
+            <label for="__nav_11">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="💻 Chips, boards, features" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Chips, boards, features
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11_1" type="checkbox" id="__nav_11_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11_1">
+          All boards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="All boards" data-md-level="2">
+        <label class="md-nav__title" for="__nav_11_1">
+          <span class="md-nav__icon md-icon"></span>
+          All boards
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231n-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231N (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7231t-qfn32-tuya/" class="md-nav__link">
+        Generic - BK7231T (Tuya QFN32)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-bk7252/" class="md-nav__link">
+        Generic - BK7252
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-ln882hki/" class="md-nav__link">
+        Generic - LN882HKI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-468k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/468k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bn-2mb-788k/" class="md-nav__link">
+        Generic - RTL8710BN (2M/788k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8710bx-4mb-980k/" class="md-nav__link">
+        Generic - RTL8710BX (4M/980k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/generic-rtl8720cf-2mb-992k/" class="md-nav__link">
+        Generic - RTL8720CF (2M/992k)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/afw121t/" class="md-nav__link">
+        AFW121T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw12/" class="md-nav__link">
+        BW12
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/bw15/" class="md-nav__link">
+        BW15
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb1s/" class="md-nav__link">
+        CB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2l/" class="md-nav__link">
+        CB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb2s/" class="md-nav__link">
+        CB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3l/" class="md-nav__link">
+        CB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3s/" class="md-nav__link">
+        CB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cb3se/" class="md-nav__link">
+        CB3SE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cblc5/" class="md-nav__link">
+        CBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/cbu/" class="md-nav__link">
+        CBU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l-m1/" class="md-nav__link">
+        WB2L-M1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wa2/" class="md-nav__link">
+        WA2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb1s/" class="md-nav__link">
+        WB1S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2l/" class="md-nav__link">
+        WB2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb2s/" class="md-nav__link">
+        WB2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3l/" class="md-nav__link">
+        WB3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb3s/" class="md-nav__link">
+        WB3S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wblc5/" class="md-nav__link">
+        WBLC5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1/" class="md-nav__link">
+        WR1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr1e/" class="md-nav__link">
+        WR1E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2/" class="md-nav__link">
+        WR2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2e/" class="md-nav__link">
+        WR2E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3/" class="md-nav__link">
+        WR3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3e/" class="md-nav__link">
+        WR3E
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3n/" class="md-nav__link">
+        WR3N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2l/" class="md-nav__link">
+        WR2L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr2le/" class="md-nav__link">
+        WR2LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3l/" class="md-nav__link">
+        WR3L
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wr3le/" class="md-nav__link">
+        WR3LE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35/" class="md-nav__link">
+        LSC LMA35 N
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/lsc-lma35-t/" class="md-nav__link">
+        LSC LMA35 T
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/ln-02/" class="md-nav__link">
+        LN-02
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wb02a/" class="md-nav__link">
+        WB02A
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/wl2s/" class="md-nav__link">
+        WL2S
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t102-v1.1/" class="md-nav__link">
+        T102-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t112-v1.1/" class="md-nav__link">
+        T112-V1.1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../boards/t103-v1.0/" class="md-nav__link">
+        T103-V1.0
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13" type="checkbox" id="__nav_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_13">
+          🍪 Chip family docs & info
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🍪 Chip family docs & info" data-md-level="1">
+        <label class="md-nav__title" for="__nav_13">
+          <span class="md-nav__icon md-icon"></span>
+          🍪 Chip family docs & info
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_1" type="checkbox" id="__nav_13_1" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/beken-72xx/">Beken BK72xx</a>
+          
+            <label for="__nav_13_1">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Beken BK72xx" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_1">
+          <span class="md-nav__icon md-icon"></span>
+          Beken BK72xx
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/beken-72xx/keys/" class="md-nav__link">
+        Finding encryption keys
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-amb/" class="md-nav__link">
+        Realtek Ameba - info
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_13_3" type="checkbox" id="__nav_13_3" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../platform/realtek-ambz/">Realtek AmebaZ</a>
+          
+            <label for="__nav_13_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Realtek AmebaZ" data-md-level="2">
+        <label class="md-nav__title" for="__nav_13_3">
+          <span class="md-nav__icon md-icon"></span>
+          Realtek AmebaZ
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/debugging/" class="md-nav__link">
+        Debugging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/realtek-ambz/exception-decoder/" class="md-nav__link">
+        Exception decoder
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../platform/lightning-ln882x/" class="md-nav__link">
+        Lightning LN882x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        🔧 LT Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15" type="checkbox" id="__nav_15" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15">
+          🧑 Programmer's manual
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🧑 Programmer's manual" data-md-level="1">
+        <label class="md-nav__title" for="__nav_15">
+          <span class="md-nav__icon md-icon"></span>
+          🧑 Programmer's manual
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration_v1.0.0/" class="md-nav__link">
+        ⚠️ Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_2" type="checkbox" id="__nav_15_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_2">
+          🔋 PlatformIO Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔋 PlatformIO Examples" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_2">
+          <span class="md-nav__icon md-icon"></span>
+          🔋 PlatformIO Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/PinScan/" class="md-nav__link">
+        PinScan
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_3" type="checkbox" id="__nav_15_3" checked>
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="./">📖 LibreTiny API</a>
+          
+            <label for="__nav_15_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="📖 LibreTiny API" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_3">
+          <span class="md-nav__icon md-icon"></span>
+          📖 LibreTiny API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_c7e317b16142bccc961a83c0babf0065/" class="md-nav__link">
+        C API
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/dir_930634efd5dc4a957bbb6e685a3ccda1/" class="md-nav__link">
+        C++ API
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_4" type="checkbox" id="__nav_15_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_4">
+          📚 Arduino Libraries
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="📚 Arduino Libraries" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_4">
+          <span class="md-nav__icon md-icon"></span>
+          📚 Arduino Libraries
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_software_serial/" class="md-nav__link">
+        SoftwareSerial
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_class/" class="md-nav__link">
+        WiFi
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_flash_class/" class="md-nav__link">
+        Flash
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classarduino_1_1_i_pv6_address/" class="md-nav__link">
+        IPv6Address
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/libraries_2common_2_m_d5_2_m_d5_8h/" class="md-nav__link">
+        MD5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classm_d_n_s/" class="md-nav__link">
+        mDNS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_update_class/" class="md-nav__link">
+        Update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client/" class="md-nav__link">
+        WiFiClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_client_secure/" class="md-nav__link">
+        WiFiClientSecure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_server/" class="md-nav__link">
+        WiFiServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_i_wi_fi_u_d_p/" class="md-nav__link">
+        WiFiUDP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_h_t_t_p_client/" class="md-nav__link">
+        HTTPClient
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_stream_string/" class="md-nav__link">
+        StreamString
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_web_server/" class="md-nav__link">
+        WebServer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/class_wi_fi_multi/" class="md-nav__link">
+        WiFiMulti
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../libs-3rd-party/" class="md-nav__link">
+        External compatible libraries
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_15_5" type="checkbox" id="__nav_15_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_15_5">
+          Full documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Full documentation" data-md-level="2">
+        <label class="md-nav__title" for="__nav_15_5">
+          <span class="md-nav__icon md-icon"></span>
+          Full documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/classes/" class="md-nav__link">
+        Classes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/functions/" class="md-nav__link">
+        Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/macros/" class="md-nav__link">
+        Macros
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ltapi/files/" class="md-nav__link">
+        File list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16" type="checkbox" id="__nav_16" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_16">
+          👷 Contributor's manual (WIP)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="👷 Contributor's manual (WIP)" data-md-level="1">
+        <label class="md-nav__title" for="__nav_16">
+          <span class="md-nav__icon md-icon"></span>
+          👷 Contributor's manual (WIP)
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/porting/" class="md-nav__link">
+        Porting new families
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/lt-api/" class="md-nav__link">
+        API functions guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/stdlib/" class="md-nav__link">
+        C standard library
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/project-structure/" class="md-nav__link">
+        📁 Project structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_16_5" type="checkbox" id="__nav_16_5" >
+      
+      
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contrib/ota/">✈️ OTA format</a>
+          
+            <label for="__nav_16_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="✈️ OTA format" data-md-level="2">
+        <label class="md-nav__title" for="__nav_16_5">
+          <span class="md-nav__icon md-icon"></span>
+          ✈️ OTA format
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/ota/uf2ota/" class="md-nav__link">
+        uf2ota.py tool
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contrib/ota/library/" class="md-nav__link">
+        uf2ota.h library
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TODO/" class="md-nav__link">
+        📓 TODO
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../SUMMARY/" class="md-nav__link">
+        
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_18" type="checkbox" id="__nav_18" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_18">
+          🔗 Resources
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="🔗 Resources" data-md-level="1">
+        <label class="md-nav__title" for="__nav_18">
+          <span class="md-nav__icon md-icon"></span>
+          🔗 Resources
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/documents/" class="md-nav__link">
+        Documents
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/tuya-pin-config/" class="md-nav__link">
+        Tuya Pinout Config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/beken-flash/" class="md-nav__link">
+        Beken Flash Chip List
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#c-api" class="md-nav__link">
+    C API
+  </a>
+  
+    <nav class="md-nav" aria-label="C API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpu" class="md-nav__link">
+    CPU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device" class="md-nav__link">
+    Device
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macros" class="md-nav__link">
+    Macros
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-types-documentation" class="md-nav__link">
+    Public Types Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Types Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enum-lt_debug_mode_t" class="md-nav__link">
+    enum lt_debug_mode_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enum-lt_reboot_reason_t" class="md-nav__link">
+    enum lt_reboot_reason_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flash" class="md-nav__link">
+    Flash
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ota" class="md-nav__link">
+    OTA
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-types-documentation_1" class="md-nav__link">
+    Public Types Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Types Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enum-lt_ota_type_t" class="md-nav__link">
+    enum lt_ota_type_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utilities" class="md-nav__link">
+    Utilities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#watchdog" class="md-nav__link">
+    Watchdog
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logger" class="md-nav__link">
+    Logger
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posix-compatibility-api" class="md-nav__link">
+    POSIX compatibility API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c-api_1" class="md-nav__link">
+    C++ API
+  </a>
+  
+    <nav class="md-nav" aria-label="C++ API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#libretiny" class="md-nav__link">
+    LibreTiny
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#libretinyota" class="md-nav__link">
+    LibreTinyOTA
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#libretinywdt" class="md-nav__link">
+    LibreTinyWDT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esp-compatibility-class" class="md-nav__link">
+    ESP (compatibility class)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arduino-custom-api" class="md-nav__link">
+    Arduino custom API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arduino-compatibility-api" class="md-nav__link">
+    Arduino compatibility API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-attributes-documentation" class="md-nav__link">
+    Public Attributes Documentation
+  </a>
+  
+    <nav class="md-nav" aria-label="Public Attributes Documentation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variable-emptystring" class="md-nav__link">
+    variable emptyString
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chip-family-types" class="md-nav__link">
+    Chip &amp; family types
+  </a>
+  
+    <nav class="md-nav" aria-label="Chip &amp; family types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enum-lt_cpu_family_t" class="md-nav__link">
+    enum lt_cpu_family_t
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enum-lt_cpu_model_t" class="md-nav__link">
+    enum lt_cpu_model_t
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="libretiny-api">LibreTiny API</h1>
+<p>The LibreTiny API is divided in two parts:</p>
+<ul>
+<li>the C API, available in all families and frameworks</li>
+<li>the C++ API, available in the Arduino framework only.</li>
+</ul>
+<p>The C++ API is a thin wrapper around the C API (using classes with inline functions).
+It's provided for less-experienced users, who are used to Arduino IDE's classes like <code>ESP</code> (and for backwards compatibility).
+It's recommended to use the C API wherever possible.</p>
+<h2 id="c-api">C API</h2>
+<p>This API is available using:</p>
+<ul>
+<li><code>#include &lt;libretiny.h&gt;</code></li>
+<li><code>#include &lt;Arduino.h&gt;</code></li>
+</ul>
+<h3 id="cpu">CPU</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-lt_cpu_get_core_count"><strong>lt_cpu_get_core_count</strong></a> () <br><em>Get CPU core count.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_cpu_get_core_type"><strong>lt_cpu_get_core_type</strong></a> () <br><em>Get CPU core type name as string.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_cpu_get_cycle_count"><strong>lt_cpu_get_cycle_count</strong></a> () <br><em>Get CPU cycle count.</em></td>
+</tr>
+<tr>
+<td align="right">lt_cpu_family_t</td>
+<td align="left"><a href="#function-lt_cpu_get_family"><strong>lt_cpu_get_family</strong></a> () <br><em>Get CPU family ID (as lt_cpu_family_t enum member).</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_cpu_get_family_name"><strong>lt_cpu_get_family_name</strong></a> () <br><em>Get CPU family name as string.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_cpu_get_freq"><strong>lt_cpu_get_freq</strong></a> () <br><em>Get CPU frequency in Hz.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_cpu_get_freq_mhz"><strong>lt_cpu_get_freq_mhz</strong></a> () <br><em>Get CPU frequency in MHz.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_cpu_get_mac_id"><strong>lt_cpu_get_mac_id</strong></a> () <br><em>Get CPU ID based on the last three octets of MAC address. Note: the number is 24-bit (with the MSB being zero). The 3rd-to-last octet is least-significant, the last octet is most-significant.</em></td>
+</tr>
+<tr>
+<td align="right">lt_cpu_model_t</td>
+<td align="left"><a href="#function-lt_cpu_get_model"><strong>lt_cpu_get_model</strong></a> () <br><em>Get CPU model ID (as lt_cpu_model_t enum member).</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_cpu_get_model_code"><strong>lt_cpu_get_model_code</strong></a> () <br><em>Get CPU model name as string (lowercase).</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_cpu_get_model_name"><strong>lt_cpu_get_model_name</strong></a> () <br><em>Get CPU model name as string (uppercase).</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_cpu_get_unique_id"><strong>lt_cpu_get_unique_id</strong></a> () <br><em>Get CPU unique ID. This may be based on MAC, eFuse, etc. (family-specific). Note: the number is 24-bit (with the MSB being zero).</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="device">Device</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_get_board_code"><strong>lt_get_board_code</strong></a> () <br><em>Get board code.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_get_device_mac"><strong>lt_get_device_mac</strong></a> (uint8_t * mac) <br><em>Read device's</em> <em>default</em> <em>MAC address into 'mac' array. This can be used even without Wi-Fi enabled, and will ignore user-changed Wi-Fi MAC (if changing is possible).</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_get_device_name"><strong>lt_get_device_name</strong></a> () <br><em>Get device friendly name in format "LT-&lt;chip model&gt;-&lt;MAC ID&gt;". Can be used as hostname.</em></td>
+</tr>
+<tr>
+<td align="right">lt_reboot_reason_t</td>
+<td align="left"><a href="#function-lt_get_reboot_reason"><strong>lt_get_reboot_reason</strong></a> () <br><em>Get the reason of last chip reboot.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_get_reboot_reason_name"><strong>lt_get_reboot_reason_name</strong></a> (lt_reboot_reason_t reason) <br><em>Get a textual representation of a reboot reason.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-lt_get_version"><strong>lt_get_version</strong></a> () <br><em>Get</em> <a href="../../../ltapi/class_libre_tiny/"><em><strong>LibreTiny</strong></em></a> <em>version string.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_gpio_recover"><strong>lt_gpio_recover</strong></a> () <br><em>Reconfigure GPIO pins used for debugging (SWD/JTAG), so that they can be used as normal I/O.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_reboot"><strong>lt_reboot</strong></a> () <br><em>Reboot the CPU.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_reboot_download_mode"><strong>lt_reboot_download_mode</strong></a> () <br><em>Reboot the CPU and stay in download mode (if possible).</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_reboot_wdt"><strong>lt_reboot_wdt</strong></a> () <br><em>Reboot the CPU with a watchdog timeout (if possible).</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_set_debug_mode"><strong>lt_set_debug_mode</strong></a> (lt_debug_mode_t mode) <br><em>Set debugger mode (JTAG, SWD or OFF).</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="macros">Macros</h2>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reboot_reason_sleep"><strong>REBOOT_REASON_SLEEP</strong></a>  REBOOT_REASON_SLEEP_GPIO<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_brownout"><strong>RESET_REASON_BROWNOUT</strong></a>  REBOOT_REASON_BROWNOUT<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_crash"><strong>RESET_REASON_CRASH</strong></a>  REBOOT_REASON_CRASH<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_hardware"><strong>RESET_REASON_HARDWARE</strong></a>  REBOOT_REASON_HARDWARE<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_max"><strong>RESET_REASON_MAX</strong></a>  REBOOT_REASON_MAX<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_power"><strong>RESET_REASON_POWER</strong></a>  REBOOT_REASON_POWER<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_sleep"><strong>RESET_REASON_SLEEP</strong></a>  REBOOT_REASON_SLEEP_GPIO<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_sleep_gpio"><strong>RESET_REASON_SLEEP_GPIO</strong></a>  REBOOT_REASON_SLEEP_GPIO<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_sleep_rtc"><strong>RESET_REASON_SLEEP_RTC</strong></a>  REBOOT_REASON_SLEEP_RTC<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_sleep_usb"><strong>RESET_REASON_SLEEP_USB</strong></a>  REBOOT_REASON_SLEEP_USB<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_software"><strong>RESET_REASON_SOFTWARE</strong></a>  REBOOT_REASON_SOFTWARE<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_unknown"><strong>RESET_REASON_UNKNOWN</strong></a>  REBOOT_REASON_UNKNOWN<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/lt__device_8h/#define-reset_reason_watchdog"><strong>RESET_REASON_WATCHDOG</strong></a>  REBOOT_REASON_WATCHDOG<br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-types-documentation">Public Types Documentation</h2>
+<h3 id="enum-lt_debug_mode_t">enum lt_debug_mode_t</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">enum</span><span class="w"> </span><span class="nc">lt_debug_mode_t</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">DEBUG_MODE_OFF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">DEBUG_MODE_JTAG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">DEBUG_MODE_SWD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">};</span>
+</code></pre></div>
+<h3 id="enum-lt_reboot_reason_t">enum lt_reboot_reason_t</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">enum</span><span class="w"> </span><span class="nc">lt_reboot_reason_t</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">REBOOT_REASON_UNKNOWN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">REBOOT_REASON_POWER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">REBOOT_REASON_BROWNOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">REBOOT_REASON_HARDWARE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">REBOOT_REASON_SOFTWARE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">REBOOT_REASON_WATCHDOG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">REBOOT_REASON_CRASH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">REBOOT_REASON_SLEEP_GPIO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">REBOOT_REASON_SLEEP_RTC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">REBOOT_REASON_SLEEP_USB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">REBOOT_REASON_DEBUGGER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">REBOOT_REASON_MAX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">};</span>
+</code></pre></div>
+<h3 id="flash">Flash</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_flash_erase"><strong>lt_flash_erase</strong></a> (uint32_t offset, size_t length) <br><em>Erase flash area. Flash can only be erased in blocks (usually 4 KiB).</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_flash_erase_block"><strong>lt_flash_erase_block</strong></a> (uint32_t offset) <br><em>Erase a single block of flash (usually 4 KiB).</em></td>
+</tr>
+<tr>
+<td align="right"><a href="../../../ltapi/structlt__flash__id__t/"><strong>lt_flash_id_t</strong></a></td>
+<td align="left"><a href="#function-lt_flash_get_id"><strong>lt_flash_get_id</strong></a> () <br><em>Read flash chip ID and return a</em> <a href="../../../ltapi/structlt__flash__id__t/"><em><strong>lt_flash_id_t</strong></em></a> <em>struct.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_flash_get_size"><strong>lt_flash_get_size</strong></a> () <br><em>Get flash chip total size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_flash_read"><strong>lt_flash_read</strong></a> (uint32_t offset, uint8_t * data, size_t length) <br><em>Read data from the flash.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_flash_write"><strong>lt_flash_write</strong></a> (uint32_t offset, const uint8_t * data, size_t length) <br><em>Write data to the flash.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="memory">Memory</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_heap_get_free"><strong>lt_heap_get_free</strong></a> () <br><em>Get free heap size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_heap_get_max_alloc"><strong>lt_heap_get_max_alloc</strong></a> () <br><em>Get largest block of heap that can be allocated at once.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_heap_get_min_free"><strong>lt_heap_get_min_free</strong></a> () <br><em>Get lowest level of free heap memory.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_heap_get_size"><strong>lt_heap_get_size</strong></a> () <br><em>Get total heap size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-lt_ram_get_size"><strong>lt_ram_get_size</strong></a> () <br><em>Get total RAM size.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ota">OTA</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_ota_begin"><strong>lt_ota_begin</strong></a> (<a href="../../../ltapi/structlt__ota__ctx__t/"><strong>lt_ota_ctx_t</strong></a> * ctx, size_t size) <br><em>Initialize the update context to begin OTA process.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_ota_can_rollback"><strong>lt_ota_can_rollback</strong></a> () <br><em>Check if OTA rollback is possible (switching the stored index to another partition).</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-lt_ota_dual_get_current"><strong>lt_ota_dual_get_current</strong></a> () <br><em>Get the currently running firmware's OTA index.</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-lt_ota_dual_get_stored"><strong>lt_ota_dual_get_stored</strong></a> () <br><em>Read the currently active OTA index, i.e. the one that will boot upon restart.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_ota_end"><strong>lt_ota_end</strong></a> (<a href="../../../ltapi/structlt__ota__ctx__t/"><strong>lt_ota_ctx_t</strong></a> * ctx) <br><em>Finish the update process. If the update has been written completely, try to activate the target image. Free allocated internal structures, regardless of the activation result.</em></td>
+</tr>
+<tr>
+<td align="right">lt_ota_type_t</td>
+<td align="left"><a href="#function-lt_ota_get_type"><strong>lt_ota_get_type</strong></a> () <br><em>Get OTA type of the device's chip.</em></td>
+</tr>
+<tr>
+<td align="right">uf2_ota_scheme_t</td>
+<td align="left"><a href="#function-lt_ota_get_uf2_scheme"><strong>lt_ota_get_uf2_scheme</strong></a> () <br><em>Check which UF2 OTA scheme should be used for applying firmware updates.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_ota_is_valid"><strong>lt_ota_is_valid</strong></a> (uint8_t index) <br><em>Check if the specified OTA image is valid.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_ota_set_write_protect"><strong>lt_ota_set_write_protect</strong></a> (uf2_ota_t * uf2) <br><em>Set family-specific, write-protected flash areas in the OTA update context. This shouldn't be called manually, as it's done by lt_ota_begin().</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_ota_switch"><strong>lt_ota_switch</strong></a> (bool revert) <br><em>Try to switch OTA index to the other image. For single-OTA chips, only check if the upgrade image is valid.</em></td>
+</tr>
+<tr>
+<td align="right">size_t</td>
+<td align="left"><a href="#function-lt_ota_write"><strong>lt_ota_write</strong></a> (<a href="../../../ltapi/structlt__ota__ctx__t/"><strong>lt_ota_ctx_t</strong></a> * ctx, const uint8_t * data, size_t len) <br><em>Process a chunk of data.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_ota_write_block"><strong>lt_ota_write_block</strong></a> (<a href="../../../ltapi/structlt__ota__ctx__t/"><strong>lt_ota_ctx_t</strong></a> * ctx, uf2_block_t * block) <br><em>Try to write the block. In case of UF2 errors, error code is set in the context. Note: use lt_ota_write() instead. This is for internal usage only.</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-types-documentation_1">Public Types Documentation</h2>
+<h3 id="enum-lt_ota_type_t">enum lt_ota_type_t</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">enum</span><span class="w"> </span><span class="nc">lt_ota_type_t</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">OTA_TYPE_SINGLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">OTA_TYPE_DUAL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">OTA_TYPE_FILE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">};</span>
+</code></pre></div>
+<h3 id="utilities">Utilities</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-hexdump"><strong>hexdump</strong></a> (const uint8_t * buf, size_t len, uint32_t offset=0, uint8_t width=16) <br><em>Print data pointed to by buf in hexdump-like format (hex+ASCII).</em></td>
+</tr>
+<tr>
+<td align="right">char *</td>
+<td align="left"><a href="#function-lt_btox"><strong>lt_btox</strong></a> (const uint8_t * src, int len, char * dest) <br><em>Convert a byte array to hexadecimal string.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_rand_bytes"><strong>lt_rand_bytes</strong></a> (uint8_t * buf, size_t len) <br><em>Generate random bytes using rand().</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-lt_xtob"><strong>lt_xtob</strong></a> (const char * src, int len, uint8_t * dest) <br><em>Convert a hexadecimal string to byte array.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="watchdog">Watchdog</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_wdt_disable"><strong>lt_wdt_disable</strong></a> () <br><em>Disable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-lt_wdt_enable"><strong>lt_wdt_enable</strong></a> (uint32_t timeout) <br><em>Enable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_wdt_feed"><strong>lt_wdt_feed</strong></a> () <br><em>Feed/reset the hardware watchdog timer.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="logger">Logger</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_log"><strong>lt_log</strong></a> (const uint8_t level, const char * format, ...) <br></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-lt_log_disable"><strong>lt_log_disable</strong></a> () <br><em>Disable LT logger. Enable it back using lt_log_set_port(LT_UART_DEFAULT_LOGGER).</em></td>
+</tr>
+<tr>
+<td align="right">void void</td>
+<td align="left"><a href="#function-lt_log_set_port"><strong>lt_log_set_port</strong></a> (uint8_t port) <br><em>Change log output port.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="posix-compatibility-api">POSIX compatibility API</h3>
+<p>A small subset of POSIX functions, commonly present in other Arduino cores, is provided for compatibility.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-strcasecmp"><strong>strcasecmp</strong></a> (const char * s1, const char * s2) <br></td>
+</tr>
+<tr>
+<td align="right">char *</td>
+<td align="left"><a href="#function-strdup"><strong>strdup</strong></a> (const char *) <br></td>
+</tr>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-strncasecmp"><strong>strncasecmp</strong></a> (const char * s1, const char * s2, size_t n) <br></td>
+</tr>
+<tr>
+<td align="right">char *</td>
+<td align="left"><a href="#function-strptime"><strong>strptime</strong></a> (const char * buf, const char * fmt, struct tm * tm) <br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="c-api_1">C++ API</h2>
+<p>This API is available using:</p>
+<ul>
+<li><code>#include &lt;Arduino.h&gt;</code></li>
+</ul>
+<h3 id="libretiny">LibreTiny</h3>
+<p>Since v1.0.0, this class only consists of inline functions, which wrap the <a href="../../../ltapi/class_libre_tiny/"><strong>LibreTiny</strong></a> C API (lt_api.h). Refer to the docs of the C API for more information.</p>
+<p>The class is accessible using the <code>LT</code> global object. </p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getboard"><strong>getBoard</strong></a> () <br><em>Get board code.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getchipcoretype"><strong>getChipCoreType</strong></a> () <br><em>Get CPU core type name as string.</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getchipcores"><strong>getChipCores</strong></a> () <br><em>Get CPU core count.</em></td>
+</tr>
+<tr>
+<td align="right">ChipFamily</td>
+<td align="left"><a href="#function-getchipfamily"><strong>getChipFamily</strong></a> () <br><em>Get CPU family ID (as lt_cpu_family_t enum member).</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getchipfamilyname"><strong>getChipFamilyName</strong></a> () <br><em>Get CPU family name as string.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getchipid"><strong>getChipId</strong></a> () <br><em>Get CPU ID based on the last three octets of MAC address. Note: the number is 24-bit (with the MSB being zero). The 3rd-to-last octet is least-significant, the last octet is most-significant.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getchipmodel"><strong>getChipModel</strong></a> () <br><em>Get CPU model name as string (uppercase).</em></td>
+</tr>
+<tr>
+<td align="right">ChipType</td>
+<td align="left"><a href="#function-getchiptype"><strong>getChipType</strong></a> () <br><em>Get CPU model ID (as lt_cpu_model_t enum member).</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getcpufreq"><strong>getCpuFreq</strong></a> () <br><em>Get CPU frequency in Hz.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getcpufreqmhz"><strong>getCpuFreqMHz</strong></a> () <br><em>Get CPU frequency in MHz.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getcyclecount"><strong>getCycleCount</strong></a> () <br><em>Get CPU cycle count.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getdevicename"><strong>getDeviceName</strong></a> () <br><em>Get device friendly name in format "LT-&lt;chip model&gt;-&lt;MAC ID&gt;". Can be used as hostname.</em></td>
+</tr>
+<tr>
+<td align="right">FlashId</td>
+<td align="left"><a href="#function-getflashchipid"><strong>getFlashChipId</strong></a> () <br><em>Read flash chip ID and return a</em> <a href="../../../ltapi/structlt__flash__id__t/"><em><strong>lt_flash_id_t</strong></em></a> <em>struct.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchipsize"><strong>getFlashChipSize</strong></a> () <br><em>Get flash chip total size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getfreeheap"><strong>getFreeHeap</strong></a> () <br><em>Get free heap size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getheapsize"><strong>getHeapSize</strong></a> () <br><em>Get total heap size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getmaxallocheap"><strong>getMaxAllocHeap</strong></a> () <br><em>Get largest block of heap that can be allocated at once.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getmaxfreeblocksize"><strong>getMaxFreeBlockSize</strong></a> () <br><em>Get largest block of heap that can be allocated at once.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getminfreeheap"><strong>getMinFreeHeap</strong></a> () <br><em>Get lowest level of free heap memory.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getramsize"><strong>getRamSize</strong></a> () <br><em>Get total RAM size.</em></td>
+</tr>
+<tr>
+<td align="right">ResetReason</td>
+<td align="left"><a href="#function-getresetreason"><strong>getResetReason</strong></a> () <br><em>Get the reason of last chip reboot.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getresetreasonname"><strong>getResetReasonName</strong></a> (ResetReason reason=lt_get_reboot_reason()) <br><em>Get a textual representation of a reboot reason.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getversion"><strong>getVersion</strong></a> () <br><em>Reset reason enumeration.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-gpiorecover"><strong>gpioRecover</strong></a> () <br><em>Reconfigure GPIO pins used for debugging (SWD/JTAG), so that they can be used as normal I/O.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-restart"><strong>restart</strong></a> () <br><em>Reboot the CPU.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-restartdownloadmode"><strong>restartDownloadMode</strong></a> () <br><em>Reboot the CPU and stay in download mode (if possible).</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="libretinyota">LibreTinyOTA</h3>
+<p>This class only consists of inline functions, which wrap the <a href="../../../ltapi/class_libre_tiny/"><strong>LibreTiny</strong></a> C API (lt_api.h). Refer to the docs of the C API for more information.</p>
+<p>The class is accessible using the <code>OTA</code> global object. </p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-canrollback"><strong>canRollback</strong></a> () <br><em>Check if OTA rollback is possible (switching the stored index to another partition).</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getcurrentindex"><strong>getCurrentIndex</strong></a> () <br><em>Get the currently running firmware's OTA index.</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getstoredindex"><strong>getStoredIndex</strong></a> () <br><em>Read the currently active OTA index, i.e. the one that will boot upon restart.</em></td>
+</tr>
+<tr>
+<td align="right">lt_ota_type_t</td>
+<td align="left"><a href="#function-gettype"><strong>getType</strong></a> () <br><em>Get OTA type of the device's chip.</em></td>
+</tr>
+<tr>
+<td align="right">uf2_ota_scheme_t</td>
+<td align="left"><a href="#function-getuf2scheme"><strong>getUF2Scheme</strong></a> () <br><em>Check which UF2 OTA scheme should be used for applying firmware updates.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-isvalid"><strong>isValid</strong></a> (uint8_t index) <br><em>Check if the specified OTA image is valid.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-switchimage"><strong>switchImage</strong></a> (bool revert=false) <br><em>Try to switch OTA index to the other image. For single-OTA chips, only check if the upgrade image is valid.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="libretinywdt">LibreTinyWDT</h3>
+<p>This class only consists of inline functions, which wrap the <a href="../../../ltapi/class_libre_tiny/"><strong>LibreTiny</strong></a> C API (lt_api.h). Refer to the docs of the C API for more information.</p>
+<p>The class is accessible using the <code>WDT</code> global object. </p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-disable"><strong>disable</strong></a> () <br><em>Disable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-enable"><strong>enable</strong></a> (uint32_t timeout=10000) <br><em>Enable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-feed"><strong>feed</strong></a> () <br><em>Feed/reset the hardware watchdog timer.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="esp-compatibility-class">ESP (compatibility class)</h3>
+<p>This class only consists of inline functions, which wrap the <a href="../../../ltapi/class_libre_tiny/"><strong>LibreTiny</strong></a> C API (lt_api.h). Refer to the docs of the C API for more information.</p>
+<p>The class is accessible using the <code>ESP</code> global object. </p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-flasherasesector"><strong>flashEraseSector</strong></a> (uint32_t sector) <br><em>Erase a single block of flash (usually 4 KiB).</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-flashread"><strong>flashRead</strong></a> (uint32_t address, uint8_t * data, size_t size) <br><em>Read data from the flash.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-flashwrite"><strong>flashWrite</strong></a> (uint32_t address, const uint8_t * data, size_t size) <br><em>Write data to the flash.</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getbootmode"><strong>getBootMode</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getbootversion"><strong>getBootVersion</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getchipid"><strong>getChipId</strong></a> () <br><em>Get CPU ID based on the last three octets of MAC address. Note: the number is 24-bit (with the MSB being zero). The 3rd-to-last octet is least-significant, the last octet is most-significant.</em></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-getcoreversion"><strong>getCoreVersion</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getcpufreqmhz"><strong>getCpuFreqMHz</strong></a> () <br><em>Get CPU frequency in MHz.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getcyclecount"><strong>getCycleCount</strong></a> () <br><em>Get CPU cycle count.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchipid"><strong>getFlashChipId</strong></a> () <br><em>Flash chip ID structure.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchipmode"><strong>getFlashChipMode</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchiprealsize"><strong>getFlashChipRealSize</strong></a> () <br><em>Get flash chip total size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchipsize"><strong>getFlashChipSize</strong></a> () <br><em>Get flash chip total size.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getflashchipsizebychipid"><strong>getFlashChipSizeByChipId</strong></a> () <br><em>Get flash chip total size.</em></td>
+</tr>
+<tr>
+<td align="right">uint8_t</td>
+<td align="left"><a href="#function-getflashchipvendorid"><strong>getFlashChipVendorId</strong></a> () <br><em>Flash chip ID structure.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-getfreeheap"><strong>getFreeHeap</strong></a> () <br><em>Get free heap size.</em></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-getfullversion"><strong>getFullVersion</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-getmaxfreeblocksize"><strong>getMaxFreeBlockSize</strong></a> () <br><em>Get largest block of heap that can be allocated at once.</em></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-getresetinfo"><strong>getResetInfo</strong></a> () <br><em>Get a textual representation of a reboot reason.</em></td>
+</tr>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-getresetreason"><strong>getResetReason</strong></a> () <br><em>Get a textual representation of a reboot reason.</em></td>
+</tr>
+<tr>
+<td align="right">const char *</td>
+<td align="left"><a href="#function-getsdkversion"><strong>getSdkVersion</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-getvcc"><strong>getVcc</strong></a> () <br></td>
+</tr>
+<tr>
+<td align="right">uint8_t *</td>
+<td align="left"><a href="#function-random-12"><strong>random</strong></a> (uint8_t * resultArray, const size_t outputSizeBytes) <br><em>Generate random bytes using rand().</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-random-22"><strong>random</strong></a> () <br><em>Generate random bytes using rand().</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-rebootintouartdownloadmode"><strong>rebootIntoUartDownloadMode</strong></a> () <br><em>Reboot the CPU and stay in download mode (if possible).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-reset"><strong>reset</strong></a> () <br><em>Reboot the CPU.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-restart"><strong>restart</strong></a> () <br><em>Reboot the CPU.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-wdtdisable"><strong>wdtDisable</strong></a> () <br><em>Disable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-wdtenable"><strong>wdtEnable</strong></a> (uint32_t timeout_ms=0) <br><em>Enable the hardware watchdog.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-wdtfeed"><strong>wdtFeed</strong></a> () <br><em>Feed/reset the hardware watchdog timer.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="arduino-custom-api">Arduino custom API</h3>
+<p>These functions extend the standard Wiring (Arduino) library, to provide additional features.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">int</td>
+<td align="left"><a href="#function-analogread"><strong>analogRead</strong></a> (pin_size_t pinNumber) <br><em>Read voltage from ADC and return a value between 0 and the current reading resolution.</em></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-analogreadmaxvoltage"><strong>analogReadMaxVoltage</strong></a> (pin_size_t pinNumber) <br><em>Get max reading voltage for the specified pin (millivolts).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-analogreadresolution"><strong>analogReadResolution</strong></a> (int res) <br><em>Set resolution of values (in bits) returned by analogRead(). Defaults to 10 bit (0-1023).</em></td>
+</tr>
+<tr>
+<td align="right">uint16_t</td>
+<td align="left"><a href="#function-analogreadvoltage"><strong>analogReadVoltage</strong></a> (pin_size_t pinNumber) <br><em>Read voltage from analog input (in millivolts).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-analogwritefrequency"><strong>analogWriteFrequency</strong></a> (int hz) <br><em>Set PWM output frequency (in Hz). Defaults to 50 Hz (20,000 uS).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-analogwriteperiod"><strong>analogWritePeriod</strong></a> (int us) <br><em>Set PWM output frequency (cycle period) in microseconds. Defaults to 20,000 uS (50 Hz).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-analogwriteresolution"><strong>analogWriteResolution</strong></a> (int res) <br><em>Set resolution of values (in bits) expected by analogWrite(). Defaults to 8 bit (0-255).</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-maintask"><strong>mainTask</strong></a> (const void * arg) <br><em>Main setup() and loop() task. Not to be called directly.</em></td>
+</tr>
+<tr>
+<td align="right"><a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> *</td>
+<td align="left"><a href="#function-pinbygpio"><strong>pinByGpio</strong></a> (uint32_t gpio) <br><em>Find</em> <a href="../../../ltapi/struct_pin_info/"><em><strong>PinInfo</strong></em></a> <em>struct by GPIO number. Returns NULL if not found.</em></td>
+</tr>
+<tr>
+<td align="right"><a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> *</td>
+<td align="left"><a href="#function-pinbyindex"><strong>pinByIndex</strong></a> (uint32_t index) <br><em>Get</em> <a href="../../../ltapi/struct_pin_info/"><em><strong>PinInfo</strong></em></a> <em>struct for the specified index. Returns NULL if pin index is invalid.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-pinenabled"><strong>pinEnabled</strong></a> (<a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> * pin, uint32_t mask) <br><em>Check if pin has all features represented by 'mask' enabled.</em></td>
+</tr>
+<tr>
+<td align="right">uint32_t</td>
+<td align="left"><a href="#function-pinindex"><strong>pinIndex</strong></a> (<a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> * pin) <br><em>Get index of</em> <a href="../../../ltapi/struct_pin_info/"><em><strong>PinInfo</strong></em></a> <em>in the global pin info table.</em></td>
+</tr>
+<tr>
+<td align="right"><a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> *</td>
+<td align="left"><a href="#function-pininfo"><strong>pinInfo</strong></a> (pin_size_t pinNumber) <br><em>Get</em> <a href="../../../ltapi/struct_pin_info/"><em><strong>PinInfo</strong></em></a> <em>struct for the specified number. Returns NULL if pin number is invalid.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-pinmodenone"><strong>pinModeNone</strong></a> (pin_size_t pinNumber) <br><em>Deinitialize the pin, by removing all enabled modes.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-pinmoderemove"><strong>pinModeRemove</strong></a> (pin_size_t pinNumber, uint32_t mask) <br><em>Disable modes specified by 'mask'.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-pinremovemode"><strong>pinRemoveMode</strong></a> (<a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> * pin, uint32_t mask) <br></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-pinsupported"><strong>pinSupported</strong></a> (<a href="../../../ltapi/struct_pin_info/"><strong>PinInfo</strong></a> * pin, uint32_t mask) <br><em>Check if pin supports all features represented by 'mask'.</em></td>
+</tr>
+<tr>
+<td align="right">void</td>
+<td align="left"><a href="#function-runperiodictasks"><strong>runPeriodicTasks</strong></a> () <br><em>Run periodic tasks, like printing free heap or checking millis() overflow.</em></td>
+</tr>
+<tr>
+<td align="right">bool</td>
+<td align="left"><a href="#function-startmaintask"><strong>startMainTask</strong></a> (void) <br><em>Run mainTask &amp; start OS kernel (family-defined). Return false if an error occured; else do not return and and keep the OS kernel running.</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="arduino-compatibility-api">Arduino compatibility API</h3>
+<p>These functions and macros provide compatibility between LT and other Arduino cores, such as ESP32.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">String</td>
+<td align="left"><a href="#function-iptostring"><strong>ipToString</strong></a> (const IPAddress &amp; ip) <br></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th align="right">Type</th>
+<th align="left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-config_lwip_max_active_tcp"><strong>CONFIG_LWIP_MAX_ACTIVE_TCP</strong></a>  16<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-esp_fail"><strong>ESP_FAIL</strong></a>  -1<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-esp_ok"><strong>ESP_OK</strong></a>  0<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-fpstr"><strong>FPSTR</strong></a> (pstr_pointer) (reinterpret_cast&lt;const __FlashStringHelper *&gt;(pstr_pointer))<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-output_open_drain"><strong>OUTPUT_OPEN_DRAIN</strong></a>  OUTPUT_OPENDRAIN<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-pgm_void_p"><strong>PGM_VOID_P</strong></a>  const void *<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-attachinterruptarg"><strong>attachInterruptArg</strong></a>  attachInterruptParam<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-digitalpintointerrupt"><strong>digitalPinToInterrupt</strong></a> (pin) (pin)<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-esp_err_t"><strong>esp_err_t</strong></a>  int<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-voidfuncptrarg"><strong>voidFuncPtrArg</strong></a>  voidFuncPtrParam<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-vsnprintf_p"><strong>vsnprintf_P</strong></a>  vsnprintf<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-xtaskcreatepinnedtocore"><strong>xTaskCreatePinnedToCore</strong></a>  xTaskCreateUniversal<br></td>
+</tr>
+<tr>
+<td align="right">define</td>
+<td align="left"><a href="../../../ltapi/wiring__compat_8h/#define-xtaskcreateuniversal"><strong>xTaskCreateUniversal</strong></a> (pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask, xCoreID)   xTaskCreate(pxTaskCode, pcName, usStackDepth, pvParameters, uxPriority, pxCreatedTask)<br></td>
+</tr>
+</tbody>
+</table>
+<h2 id="public-attributes-documentation">Public Attributes Documentation</h2>
+<h3 id="variable-emptystring">variable emptyString</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">const</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">emptyString</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="chip-family-types">Chip &amp; family types</h2>
+<h3 id="enum-lt_cpu_family_t">enum lt_cpu_family_t</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">enum</span><span class="w"> </span><span class="nc">lt_cpu_family_t</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">F_RTL8710A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x9FFFD543</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">F_RTL8710B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x22E0D6FC</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">F_RTL8720C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xE08F7564</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">F_RTL8720D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x3379CFE2</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">F_BK7231Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAFE81D49</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">F_BK7231T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x675A40B0</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="n">F_BK7231N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x7B3EF230</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="n">F_BK7251</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x6A82CC42</span><span class="p">,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">F_BL60X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xDE1270B7</span><span class="p">,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="n">F_LN882H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xA38090A8</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">};</span>
+</code></pre></div>
+<h3 id="enum-lt_cpu_model_t">enum lt_cpu_model_t</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">enum</span><span class="w"> </span><span class="nc">lt_cpu_model_t</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">RTL8710BL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xE0</span><span class="p">),</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">RTL8710BN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">),</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">RTL8710BU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFE</span><span class="p">),</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">RTL8710BX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xF6</span><span class="p">),</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="n">RTL8710L0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFB</span><span class="p">),</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="n">RTL8711BN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFD</span><span class="p">),</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="n">RTL8711BU</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8710B</span><span class="p">,</span><span class="w"> </span><span class="mh">0xFC</span><span class="p">),</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="n">MX1290</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RTL8710BN</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="n">MX1290V2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RTL8710BX</span><span class="p">,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="n">W302</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RTL8710BN</span><span class="p">,</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="n">RTL8720CM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8720C</span><span class="p">,</span><span class="w"> </span><span class="mh">0xEC</span><span class="p">),</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="n">RTL8720CF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_RTL8720C</span><span class="p">,</span><span class="w"> </span><span class="mh">0xED</span><span class="p">),</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="n">RTL8720CX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RTL8720CM</span><span class="p">,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="n">BK7231Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_BK7231Q</span><span class="p">,</span><span class="w"> </span><span class="mh">0x31</span><span class="p">),</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="n">BK7231T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_BK7231T</span><span class="p">,</span><span class="w"> </span><span class="mh">0x1A</span><span class="p">),</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="n">BK7231N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_BK7231N</span><span class="p">,</span><span class="w"> </span><span class="mh">0x1C</span><span class="p">),</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="n">BK7252</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_BK7251</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">),</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="n">BL2028N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BK7231N</span><span class="p">,</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="n">BK7231S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BK7231T</span><span class="p">,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="n">BK7231U</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BK7231T</span><span class="p">,</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="n">LN882HF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_LN882H</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">),</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">    </span><span class="n">LN882HK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_LN882H</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">),</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="n">LN882HC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CPU_MODEL</span><span class="p">(</span><span class="n">F_LN882H</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">)</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="p">};</span>
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../script.js"></script>
+      
+    
+  </body>
+</html>

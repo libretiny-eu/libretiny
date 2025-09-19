@@ -1,0 +1,21 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231",
+		"beken-7231t",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/wblc5",
+		"pcb/wblc5-test"
+	],
+	"build": {
+		"mcu": "bk7231t",
+		"variant": "wblc5"
+	},
+	"name": "WBLC5 Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wblc5-module-datasheet?id=K9duilns1f3gi",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WBLC5"
+	}
+}

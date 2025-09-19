@@ -1,0 +1,31 @@
+---
+brief: True
+details: True
+implements: True
+---
+{# This template is used inside of member.py #}
+
+### {{node.kind.value}} {{node.name_long if node.is_group else node.name_short}} {{node.overload_suffix}}
+
+{% if configMemDef.get('brief') -%}
+{% if node.has_brief -%}
+{{node.brief + "\n"}}
+{%- endif -%}
+{%- endif -%}
+
+```{{node.code_language}}
+{{node.codeblock}}
+```
+
+
+{% if configMemDef.get('details') -%}
+{% if node.has_details -%}
+{{node.details}}
+{%- endif -%}
+{%- endif -%}
+
+{% if configMemDef.get('implements') -%}
+{% if node.reimplements %}
+Implements [*{{node.reimplements.name_long}}*]({{node.reimplements.url}})
+{% endif %}
+{%- endif -%}

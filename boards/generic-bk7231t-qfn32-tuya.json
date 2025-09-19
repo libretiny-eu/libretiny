@@ -1,0 +1,101 @@
+{
+	"_base": [
+		"generic",
+		"beken-72xx",
+		"beken-7231",
+		"beken-7231t",
+		"beken-7231-tuya",
+		"ic/bk7231-qfn32"
+	],
+	"build": {
+		"mcu": "bk7231t",
+		"variant": "generic-bk7231t-qfn32-tuya"
+	},
+	"name": "Generic - BK7231T (Tuya QFN32)",
+	"symbol": "BK7231T (Tuya QFN32)",
+	"url": "https://docs.libretiny.eu/boards/generic-bk7231t-qfn32-tuya/",
+	"vendor": "Generic",
+	"pcb": {
+		"pinout": {
+			"1": {
+				"IC": 29,
+				"ARD": "D0"
+			},
+			"2": {
+				"IC": 28,
+				"ARD": "D1"
+			},
+			"3": {
+				"IC": 22,
+				"ARD": "D2"
+			},
+			"4": {
+				"IC": 23,
+				"ARD": "D3"
+			},
+			"5": {
+				"IC": 24,
+				"ARD": "D4"
+			},
+			"6": {
+				"IC": 25,
+				"ARD": "D5"
+			},
+			"7": {
+				"IC": 26,
+				"ARD": "D6"
+			},
+			"8": {
+				"IC": 27,
+				"ARD": "D7"
+			},
+			"9": {
+				"IC": 11,
+				"ARD": "D8"
+			},
+			"10": {
+				"IC": 13,
+				"ARD": "D9"
+			},
+			"11": {
+				"IC": 12,
+				"ARD": "D10"
+			},
+			"12": {
+				"IC": 14,
+				"ARD": "D11"
+			},
+			"13": {
+				"IC": 20,
+				"ARD": "D12"
+			},
+			"14": {
+				"IC": 19,
+				"ARD": "D13"
+			},
+			"15": {
+				"IC": 18,
+				"ARD": "D14"
+			},
+			"16": {
+				"IC": 17,
+				"ARD": [
+					"D15",
+					"A0"
+				]
+			},
+			"17": {
+				"IC": 16,
+				"ARD": "D16"
+			},
+			"18": {
+				"IC": 15,
+				"ARD": "D17"
+			},
+			"19": {
+				"IC": 10,
+				"ARD": "D18"
+			}
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TBOOT": "ln-02.back.boot.anchor"
+		},
+		"back": [
+			{
+				"id": "boot",
+				"name": "label_line_up",
+				"pos": "12,12.1",
+				"vars": {
+					"DIR": "right",
+					"W": 2.5,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "11,12"
+			}
+		]
+	}
+}

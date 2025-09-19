@@ -1,0 +1,52 @@
+{
+	"build": {
+		"family": "RTL8710B",
+		"ldscript": "rlx8711B-symbol-v02-img2_xip1.ld",
+		"f_cpu": "125000000L",
+		"prefix": "arm-none-eabi-",
+		"amb_flash_addr": "0x08000000"
+	},
+	"flash": {
+		"boot_xip": "0x000000+0x4000",
+		"boot_ram": "0x004000+0x4000",
+		"system": "0x009000+0x1000",
+		"calibration": "0x00A000+0x1000",
+		"rdp": "0x1FF000+0x1000"
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "amebaz.cfg",
+		"gdb_init": [
+			"mem 0x8000000 0x8200000 ro"
+		]
+	},
+	"upload": {
+		"maximum_ram_size": 262144,
+		"require_upload_port": true,
+		"speed": 1500000,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "AmebaZ",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		},
+		"links": {
+			"Info & flashing guide": "../../docs/platform/realtek-ambz/README.md",
+			"Debugging": "../../docs/platform/realtek-ambz/debugging.md"
+		}
+	}
+}

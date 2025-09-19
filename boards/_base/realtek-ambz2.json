@@ -1,0 +1,41 @@
+{
+	"build": {
+		"family": "RTL8720C",
+		"f_cpu": "100000000L",
+		"prefix": "arm-none-eabi-",
+		"ldscript": "rtl8710c_ram.ld"
+	},
+	"flash": {
+		"part_table": "0x000000+0x1000",
+		"system": "0x001000+0x1000",
+		"calibration": "0x002000+0x1000",
+		"boot": "0x004000+0x8000"
+	},
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "amebaz2.cfg",
+		"gdb_init": [
+			"mem 0x9b000000 0x9c000000 ro"
+		]
+	},
+	"upload": {
+		"maximum_ram_size": 262144,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "AmebaZ2",
+			"voltage": "3.0V - 3.6V"
+		},
+		"links": {
+			"General info": "../../docs/platform/realtek-amb/README.md"
+		}
+	}
+}

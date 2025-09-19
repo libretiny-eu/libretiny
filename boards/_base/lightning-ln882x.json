@@ -1,0 +1,43 @@
+{
+	"build": {
+		"f_cpu": "160000000L",
+		"prefix": "arm-none-eabi-"
+	},
+	"flash": {},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "ln882x.cfg",
+		"gdb_init": [
+			"mem 0x00000000 0x10000000 ro"
+		]
+	},
+	"upload": {
+		"maximum_ram_size": 302080,
+		"require_upload_port": true,
+		"speed": 115200,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Lightning",
+			"series": "LN882X",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		},
+		"links": {
+			"Info & flashing guide": "../../docs/platform/lightning-ln882x/README.md",
+			"Debugging": "../../docs/platform/lightning-ln882x/debugging.md"
+		}
+	}
+}

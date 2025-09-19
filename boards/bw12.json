@@ -1,0 +1,25 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-468k",
+		"realtek-ambz-bx",
+		"ic/rtl8710bn",
+		"pcb/bw12"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "bw12"
+	},
+	"name": "BW12",
+	"url": "http://www.ai-thinker.com/pro_view-13.html",
+	"vendor": "Ai-Thinker Co., Ltd.",
+	"pcb": {
+		"symbol": "BW12"
+	},
+	"doc": {
+		"fccid": "2ARI3-BW1X",
+		"links": {
+			"Vendor datasheet": "https://docs.ai-thinker.com/_media/rtl8710/hardware/bw12_datasheet_en.pdf"
+		}
+	}
+}

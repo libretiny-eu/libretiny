@@ -1,0 +1,186 @@
+{
+	"pcb": {
+		"ic": {
+			"1": {
+				"C_NAME": "PIN_A20",
+				"GPIO": "PA20",
+				"IRQ": null,
+				"SD": "D1",
+				"SPI":
+					"0_MISO"
+				,
+				"UART": "2_RTS",
+				"I2C": "0_SDA",
+				"PWM": 0
+			},
+			"3": {
+				"C_NAME": "PIN_A23",
+				"GPIO": "PA23",
+				"IRQ": null,
+				"PWM": 7
+			},
+			"14": {
+				"IO": "I",
+				"CTRL": "CEN"
+			},
+			"15": {
+				"C_NAME": "PIN_A0",
+				"GPIO": "PA00",
+				"IRQ": null,
+				"JTAG": "TCK",
+				"UART": "1_RX",
+				"PWM": 0,
+				"SWD": "CLK"
+			},
+			"16": {
+				"C_NAME": "PIN_A1",
+				"GPIO": "PA01",
+				"IRQ": null,
+				"JTAG": "TMS",
+				"UART": "1_TX",
+				"PWM": 1,
+				"SWD": "DIO"
+			},
+			"18": {
+				"C_NAME": "PIN_A2",
+				"GPIO": "PA02",
+				"IRQ": null,
+				"JTAG": "TDO",
+				"UART": "1_RX",
+				"SPI": "0_CS",
+				"I2C": "0_SCL",
+				"PWM": 2
+			},
+			"19": {
+				"C_NAME": "PIN_A3",
+				"GPIO": "PA03",
+				"IRQ": null,
+				"JTAG": "TDI",
+				"UART": "1_TX",
+				"SPI": "0_SCK",
+				"I2C": "0_SDA",
+				"PWM": 3
+			},
+			"20": {
+				"C_NAME": "PIN_A4",
+				"GPIO": "PA04",
+				"IRQ": null,
+				"JTAG": "tRST",
+				"UART": "1_CTS",
+				"SPI": "0_MOSI",
+				"PWM": 4
+			},
+			"21": {
+				"C_NAME": "PIN_A7",
+				"GPIO": "PA07",
+				"IRQ": null,
+				"FLASH": "^FCS",
+				"SPI": "0_CS"
+			},
+			"22": {
+				"C_NAME": "PIN_A8",
+				"GPIO": "PA08",
+				"IRQ": null,
+				"FLASH": "FSCK",
+				"SPI": "0_SCK"
+			},
+			"23": {
+				"C_NAME": "PIN_A9",
+				"GPIO": "PA09",
+				"IRQ": null,
+				"FLASH": "FD2",
+				"SPI":  "0_MOSI",
+				"UART": "0_RTS"
+			},
+			"24": {
+				"C_NAME": "PIN_A10",
+				"GPIO": "PA10",
+				"IRQ": null,
+				"FLASH": "FD1",
+				"SPI":  "0_MISO",
+				"UART": "0_CTS"
+			},
+			"25": {
+				"C_NAME": "PIN_A11",
+				"GPIO": "PA11",
+				"IRQ": null,
+				"FLASH": "FD0",
+				"UART": "0_TX",
+				"I2C": "0_SCL",
+				"PWM": 0
+			},
+			"26": {
+				"C_NAME": "PIN_A12",
+				"GPIO": "PA12",
+				"IRQ": null,
+				"FLASH": "FD3",
+				"UART": "0_RX",
+				"I2C": "0_SDA",
+				"PWM": 1
+			},
+			"30": {
+				"IO": "I",
+				"C_NAME": "VBAT_IN"
+			},
+			"33": {
+				"C_NAME": "PIN_A13",
+				"GPIO": "PA13",
+				"IRQ": null,
+				"UART": "0_RX",
+				"PWM": 7
+			},
+			"34": {
+				"C_NAME": "PIN_A14",
+				"GPIO": "PA14",
+				"IRQ": null,
+				"SD": "INT",
+				"UART": "0_TX",
+				"PWM": 2
+			},
+			"36": {
+				"C_NAME": "PIN_A15",
+				"GPIO": "PA15",
+				"IRQ": null,
+				"SD": "D2",
+				"SPI": "0_CS",
+				"UART": "2_RX",
+				"I2C": "0_SCL",
+				"PWM": 3
+			},
+			"37": {
+				"C_NAME": "PIN_A16",
+				"GPIO": "PA16",
+				"IRQ": null,
+				"SD": "D3",
+				"SPI": "0_SCK",
+				"UART": "2_TX",
+				"I2C": "0_SDA",
+				"PWM": 4
+			},
+			"38": {
+				"C_NAME": "PIN_A17",
+				"GPIO": "PA17",
+				"IRQ": null,
+				"SD": "CMD",
+				"PWM": 5
+			},
+			"39": {
+				"C_NAME": "PIN_A18",
+				"GPIO": "PA18",
+				"IRQ": null,
+				"SD": "CLK",
+				"PWM": 6
+			},
+			"40": {
+				"C_NAME": "PIN_A19",
+				"GPIO": "PA19",
+				"IRQ": null,
+				"SD": "D0",
+				"SPI": "0_MOSI",
+				"UART": "2_CTS",
+				"I2C": "0_SCL",
+				"PWM": 7
+			}
+		}
+	}
+}
