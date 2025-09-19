@@ -13,9 +13,6 @@
 	"name": "WB02A Wi-Fi/BLE Module",
 	"url": "https://docs.libretiny.eu/boards/wb02a/",
 	"vendor": "Unknown",
-	"doc": {
-		"fccid": ""
-	},
 	"pcb": {
 		"symbol": ""
 	}

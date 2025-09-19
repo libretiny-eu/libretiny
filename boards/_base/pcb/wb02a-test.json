@@ -4,7 +4,7 @@
 			"TA9": "wb02a.back.a9.anchor",
 			"TGND": "wb02a.back.gnd.anchor",
 			"TRX1": "wb02a.back.rx1.anchor",
-			"TTX1": "wb02a.back.tx1.anchor",
+			"TTX1": "wb02a.back.tx1.anchor"
 		},
 		"back": [
 			{
