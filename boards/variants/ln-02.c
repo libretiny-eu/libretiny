@@ -9,13 +9,13 @@
 // clang-format off
 PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D0: PA11, SD_D1, I2C0_SCL, I2C0_SDA
-	{PA_11, PIN_I2C | PIN_GPIO,                               PIN_NONE, 0},
+	{PA_11, PIN_I2C | PIN_IRQ | PIN_GPIO,                     PIN_NONE, 0},
 	// D1: PB03, ADC5, I2C0_SCL, I2C0_SDA
-	{PB_3,  PIN_I2C | PIN_ADC | PIN_GPIO,                     PIN_NONE, 0},
+	{PB_3,  PIN_I2C | PIN_ADC | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D2: PA03, UART0_RX, I2C0_SCL, I2C0_SDA
 	{PA_3,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 	// D3: PB08, UART1_RX, I2C0_SCL, I2C0_SDA
-	{PB_8,  PIN_UART | PIN_I2C | PIN_GPIO,                    PIN_NONE, 0},
+	{PB_8,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 	// D4: PA02, UART0_TX, I2C0_SCL, I2C0_SDA
 	{PA_2,  PIN_UART | PIN_I2C | PIN_IRQ | PIN_GPIO,          PIN_NONE, 0},
 	// D5: PB09, UART1_TX, I2C0_SCL, I2C0_SDA
@@ -25,7 +25,7 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	// D7: PA00, ADC2, I2C0_SCL, I2C0_SDA
 	{PA_0,  PIN_I2C | PIN_ADC | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 	// D8: PA09, BOOT1, SD_CLK, I2S0_SCLK, I2C0_SCL, I2C0_SDA
-	{PA_9,  PIN_I2S | PIN_I2C | PIN_GPIO,                     PIN_NONE, 0},
+	{PA_9,  PIN_I2S | PIN_I2C | PIN_IRQ | PIN_GPIO,           PIN_NONE, 0},
 };
 
 PinInfo *lt_arduino_pin_gpio_map[] = {
