@@ -44,7 +44,6 @@ bool UpdateClass::begin(
 	if (this->ctx) {
 		LT_W("OTA context unclean!");
 		this->cleanup(true);
-		return false;
 	}
 	this->clearError();
 	if (size == 0) {
