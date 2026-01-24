@@ -1,9 +1,9 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-05-22. */
 
-#include <libretiny.h>
-#include <sdk_private.h>
-#include <osdep_service.h>
 #include <device_lock.h>
+#include <libretiny.h>
+#include <osdep_service.h>
+#include <sdk_private.h>
 
 // from SDK
 extern uint32_t sys_update_ota_get_curr_fw_idx(void);
