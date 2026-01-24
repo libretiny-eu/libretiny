@@ -26,8 +26,8 @@ def get_public_key(private: bytes) -> bytes:
 
 
 def encode_for_define(data: bytes) -> str:
-    # we need to escape both shell and the C string
-    return '\\"' + "".join(f"\\\\x{byte:02x}" for byte in data) + '\\"'
+    # use C array initializer syntax to avoid shell escaping issues on Windows
+    return "{" + ",".join(f"0x{byte:02x}" for byte in data) + "}"
 
 
 public_key_bytes = get_public_key(ImageConfig(**board.get("image")).keys.decryption)

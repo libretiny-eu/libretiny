@@ -9,9 +9,11 @@
 extern uint32_t sys_update_ota_get_curr_fw_idx(void);
 
 #define FLASH_SECTOR_SIZE		0x1000
-// IMAGE_PUBLIC_KEY is defined by the build script
+// IMAGE_PUBLIC_KEY is defined by the build script as an array initializer
 #define IMAGE_PUBLIC_KEY_OFFSET 32
 #define IMAGE_PUBLIC_KEY_LENGTH 32
+
+static const uint8_t lt_image_public_key[] = IMAGE_PUBLIC_KEY;
 
 typedef enum {
 	INVALID	 = 0,
@@ -47,11 +49,11 @@ static lt_ota_image_state_t lt_ota_get_image_state(uint8_t index) {
 	if (num_read != sizeof(public_key))
 		return INVALID;
 
-	if (memcmp(public_key, IMAGE_PUBLIC_KEY, sizeof(public_key)) == 0)
+	if (memcmp(public_key, lt_image_public_key, sizeof(public_key)) == 0)
 		return ENABLED;
 
 	public_key[0] = ~(public_key[0]);
-	if (memcmp(public_key, IMAGE_PUBLIC_KEY, sizeof(public_key)) == 0)
+	if (memcmp(public_key, lt_image_public_key, sizeof(public_key)) == 0)
 		return DISABLED;
 
 	return INVALID;
@@ -69,7 +71,7 @@ static bool lt_ota_set_image_enabled(uint8_t index, bool new_enabled) {
 	device_mutex_lock(RT_DEV_LOCK_FLASH);
 	flash_stream_read(&lt_flash_obj, offset, FLASH_SECTOR_SIZE, header);
 
-	bool enabled = header[IMAGE_PUBLIC_KEY_OFFSET] == IMAGE_PUBLIC_KEY[0];
+	bool enabled = header[IMAGE_PUBLIC_KEY_OFFSET] == lt_image_public_key[0];
 	if (enabled != new_enabled) {
 		// negate first byte of OTA signature
 		header[0] = ~(header[0]);
