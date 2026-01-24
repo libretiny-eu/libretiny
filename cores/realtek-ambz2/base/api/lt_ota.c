@@ -1,4 +1,4 @@
-/* Copyright (c) Kuba Szczodrzyński 2023-05-22. */
+/* Copyright (c) Martin Prokopič 2024-12-03. */
 
 #include <device_lock.h>
 #include <libretiny.h>
