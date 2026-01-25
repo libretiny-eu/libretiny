@@ -1,6 +1,7 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
 #include "WiFiPrivate.h"
+#include <libretiny.h>
 
 WiFiStatus WiFiClass::begin(
 	const char *ssid,
@@ -76,6 +77,18 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 
 	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
 
+	// If we know the channel, limit scan to just that channel for faster connection
+	bool pscan_set = false;
+	if (info.channel > 0) {
+		uint8_t channel_list[1] = {(uint8_t)info.channel};
+		uint8_t pscan_config[1] = {PSCAN_ENABLE | PSCAN_FAST_SURVEY};
+		wifi_set_pscan_chan(channel_list, pscan_config, 1);
+		pscan_set = true;
+	}
+
+	// Feed watchdog before potentially long-blocking connect
+	lt_wdt_feed();
+
 	if (!bssid) {
 		ret = wifi_connect(
 			info.ssid,
@@ -105,8 +118,19 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		);
 	}
 
+	// Reset partial scan config to allow normal scanning again
+	if (pscan_set) {
+		uint8_t pscan_config[1] = {0};
+		wifi_set_pscan_chan(NULL, pscan_config, 0);
+	}
+
+	// Feed watchdog after connect, before DHCP
+	lt_wdt_feed();
+
 	if (ret == RTW_SUCCESS) {
 		dhcpRet = LwIP_DHCP(0, DHCP_START);
+		// Feed watchdog after DHCP
+		lt_wdt_feed();
 		if (dhcpRet == DHCP_ADDRESS_ASSIGNED) {
 			LT_HEAP_I();
 			EventInfo *eventInfo				   = (EventInfo *)calloc(1, sizeof(EventInfo));
