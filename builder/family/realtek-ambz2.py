@@ -25,12 +25,18 @@ def get_public_key(private: bytes) -> bytes:
     return key.public_key()
 
 
-def encode_for_define(data: bytes) -> str:
-    # use C array initializer syntax to avoid shell escaping issues on Windows
-    return "{" + ",".join(f"0x{byte:02x}" for byte in data) + "}"
+def write_public_key_header(data: bytes, build_dir: str) -> None:
+    """Write public key to a header file to avoid command-line escaping issues."""
+    header_path = join(build_dir, "image_public_key.h")
+    array_content = ",".join(f"0x{byte:02x}" for byte in data)
+    with open(header_path, "w") as f:
+        f.write("// Auto-generated - do not edit\n")
+        f.write("#pragma once\n")
+        f.write(f"static const uint8_t lt_image_public_key[] = {{{array_content}}};\n")
 
 
 public_key_bytes = get_public_key(ImageConfig(**board.get("image")).keys.decryption)
+write_public_key_header(public_key_bytes, env.subst("$BUILD_DIR"))
 
 # Flags
 queue.AppendPublic(
@@ -56,7 +62,6 @@ queue.AppendPublic(
         ("__ARM_ARCH_8M_MAIN__", "1"),
         ("CONFIG_BUILD_RAM", "1"),
         "V8M_STKOVF",
-        ("IMAGE_PUBLIC_KEY", encode_for_define(public_key_bytes)),
     ],
     CPPPATH=[
         # allow including <ctype.h> from GCC instead of RTL SDK
@@ -65,6 +70,8 @@ queue.AppendPublic(
             "arm-none-eabi",
             "include",
         ),
+        # for image_public_key.h
+        "$BUILD_DIR",
     ],
     LINKFLAGS=[
         "-march=armv8-m.main+dsp",
