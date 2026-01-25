@@ -1,9 +1,11 @@
 /* Copyright (c) Martin Prokopič 2024-12-03. */
 
-#include <device_lock.h>
+// clang-format off
 #include <libretiny.h>
-#include <osdep_service.h>
 #include <sdk_private.h>
+// clang-format on
+#include <device_lock.h>
+#include <osdep_service.h>
 
 // from SDK
 extern uint32_t sys_update_ota_get_curr_fw_idx(void);
