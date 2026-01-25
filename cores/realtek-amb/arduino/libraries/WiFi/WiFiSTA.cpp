@@ -67,6 +67,13 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 	return true;
 }
 
+// Enable or disable partial scan for a specific channel
+static void set_pscan_channel(uint8_t channel, bool enable) {
+	uint8_t channel_list[1] = {channel};
+	uint8_t pscan_config[1] = {enable ? (PSCAN_ENABLE | PSCAN_FAST_SURVEY) : 0};
+	wifi_set_pscan_chan(channel_list, pscan_config, 1);
+}
+
 bool WiFiClass::reconnect(const uint8_t *bssid) {
 	int ret;
 	uint8_t dhcpRet;
@@ -76,15 +83,6 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	DIAG_PRINTF_DISABLE();
 
 	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
-
-	// If we know the channel, limit scan to just that channel for faster connection
-	bool pscan_set = false;
-	if (info.channel > 0) {
-		uint8_t channel_list[1] = {(uint8_t)info.channel};
-		uint8_t pscan_config[1] = {PSCAN_ENABLE | PSCAN_FAST_SURVEY};
-		wifi_set_pscan_chan(channel_list, pscan_config, 1);
-		pscan_set = true;
-	}
 
 	// Feed watchdog before potentially long-blocking connect
 	lt_wdt_feed();
@@ -105,6 +103,10 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			info.bssid = (uint8_t *)malloc(ETH_ALEN);
 			memcpy(info.bssid, bssid, ETH_ALEN);
 		}
+		// If we have both BSSID and channel, use partial scan for faster connection
+		if (info.channel > 0) {
+			set_pscan_channel(info.channel, true);
+		}
 		ret = wifi_connect_bssid(
 			(unsigned char *)bssid,
 			info.ssid,
@@ -116,12 +118,10 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			-1,
 			NULL
 		);
-	}
-
-	// Reset partial scan config to allow normal scanning again
-	if (pscan_set) {
-		uint8_t pscan_config[1] = {0};
-		wifi_set_pscan_chan(NULL, pscan_config, 0);
+		// Reset partial scan config
+		if (info.channel > 0) {
+			set_pscan_channel(info.channel, false);
+		}
 	}
 
 	// Feed watchdog after connect, before DHCP
