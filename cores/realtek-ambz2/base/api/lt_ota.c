@@ -1,5 +1,6 @@
 /* Copyright (c) Martin Prokopič 2024-12-03. */
 
+#include <stdint.h> // needed by device_lock.h
 #include <device_lock.h>
 #include <libretiny.h>
 #include <osdep_service.h>
