@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/libretiny-eu/libretiny.git"
   },
-  "version": "1.9.2",
+  "version": "1.10.0",
   "frameworks": {
     "base": {
       "title": "Base Framework (SDK only)",

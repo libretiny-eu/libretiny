@@ -126,7 +126,7 @@ def env_print_info(
     if env.get("FLASH_IS_CUSTOM", False):
         print("CUSTOM FLASH LAYOUT:")
         for name, layout in board.get("flash").items():
-            (_, _, length) = layout.partition("+")
+            _, _, length = layout.partition("+")
             length = int(length, 16)
             print(f" - {name}: {layout} ({sizeof(length)})")
 

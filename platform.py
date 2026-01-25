@@ -143,7 +143,7 @@ class LibretinyPlatform(PlatformBase):
                 raise RuntimeError(
                     f"Toolchain not found for the current platform: {specifiers}"
                 )
-            (toolchain, version) = toolchain_version.split("@")
+            toolchain, version = toolchain_version.split("@")
             self.packages[f"toolchain-{toolchain}"]["version"] = version
 
         # gather library dependencies
