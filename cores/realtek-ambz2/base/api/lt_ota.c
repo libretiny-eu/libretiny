@@ -1,9 +1,8 @@
 /* Copyright (c) Martin Prokopič 2024-12-03. */
 
-// clang-format off
 #include <libretiny.h>
 #include <sdk_private.h>
-// clang-format on
+
 #include <device_lock.h>
 #include <osdep_service.h>
 
