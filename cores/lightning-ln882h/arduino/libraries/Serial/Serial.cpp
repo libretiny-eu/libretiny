@@ -5,14 +5,13 @@
 #include "SerialPrivate.h"
 
 extern Serial_t *serial_handles[SER_PORT_NUM];
-static SerialData *serial_data[SER_PORT_NUM];
+static SerialRingBuffer *serial_buf[SER_PORT_NUM];
 
 #if LT_HW_UART0
 static void callback_uart0(void) {
-	SerialData *data = serial_data[0];
 	char ch;
 	while (serial_read(serial_handles[0], &ch, 1)) {
-		data->buf.store_char(ch);
+		serial_buf[0]->store_char(ch);
 	}
 }
 #else
@@ -21,10 +20,9 @@ static void callback_uart0(void) {
 
 #if LT_HW_UART1
 static void callback_uart1(void) {
-	SerialData *data = serial_data[1];
 	char ch;
 	while (serial_read(serial_handles[1], &ch, 1)) {
-		data->buf.store_char(ch);
+		serial_buf[1]->store_char(ch);
 	}
 }
 #else
@@ -33,10 +31,9 @@ static void callback_uart1(void) {
 
 #if LT_HW_UART2
 static void callback_uart2(void) {
-	SerialData *data = serial_data[2];
 	char ch;
 	while (serial_read(serial_handles[2], &ch, 1)) {
-		data->buf.store_char(ch);
+		serial_buf[2]->store_char(ch);
 	}
 }
 #else
@@ -49,14 +46,10 @@ static const serial_rx_callbcak serial_rx_callbacks[SER_PORT_NUM] = {
 	callback_uart2,
 };
 
-void SerialClass::begin(unsigned long baudrate, uint16_t config) {
-	if (!this->data) {
-		this->data = new SerialData();
-		this->buf  = &this->data->buf;
-	}
-
-	if (this->baudrate != baudrate || this->config != config)
-		this->configure(baudrate, config);
+void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
+	if (!this->data)
+		return;
+	serial_buf[this->port] = this->rxBuf;
 }
 
 void SerialClass::configure(unsigned long baudrate, uint16_t config) {
@@ -64,22 +57,16 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		return;
 
 	serial_init(serial_handles[this->port], (serial_port_id_t)this->port, baudrate, serial_rx_callbacks[this->port]);
-	serial_data[this->port] = this->data;
 
 	this->baudrate = baudrate;
 	this->config   = config;
 }
 
-void SerialClass::end() {
+void SerialClass::endPrivate() {
 	if (!this->data)
 		return;
 
 	serial_deinit(serial_handles[this->port]);
-
-	delete this->data;
-	this->data	   = nullptr;
-	this->buf	   = nullptr;
-	this->baudrate = 0;
 }
 
 void SerialClass::flush() {

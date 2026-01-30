@@ -5,6 +5,4 @@
 #include <ArduinoPrivate.h>
 #include <Serial.h>
 
-struct SerialData {
-	SerialRingBuffer buf;
-};
+struct SerialData {};

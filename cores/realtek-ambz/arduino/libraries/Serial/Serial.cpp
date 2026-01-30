@@ -18,40 +18,36 @@ static uint32_t callback(SerialData *data) {
 		if (uart == UART2_DEV)
 			SerialClass::adrParse(c);
 #endif
-		data->buf.store_char(c);
+		data->buf->store_char(c);
 	}
 
 	uart->DLH_INTCR = intcr;
 	return 0;
 }
 
-void SerialClass::begin(unsigned long baudrate, uint16_t config) {
-	if (!this->data) {
-		this->data		 = new SerialData();
-		this->buf		 = &this->data->buf;
-		this->data->uart = UART_DEV_TABLE[this->port].UARTx;
-		this->data->irq	 = (IRQn)UART_DEV_TABLE[this->port].IrqNum;
+void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
+	if (!this->data)
+		return;
+	this->data->buf	 = this->rxBuf;
+	this->data->uart = UART_DEV_TABLE[this->port].UARTx;
+	this->data->irq	 = (IRQn)UART_DEV_TABLE[this->port].IrqNum;
 
-		switch (this->port) {
-			case 0:
-				RCC_PeriphClockCmd(APBPeriph_UART0, APBPeriph_UART0_CLOCK, ENABLE);
-				break;
-			case 1:
-				RCC_PeriphClockCmd(APBPeriph_UART1, APBPeriph_UART1_CLOCK, ENABLE);
-				break;
-		}
-
-		if (this->tx != PIN_INVALID) {
-			Pinmux_Config(this->tx, PINMUX_FUNCTION_UART);
-		}
-		if (this->rx != PIN_INVALID) {
-			Pinmux_Config(this->rx, PINMUX_FUNCTION_UART);
-			PAD_PullCtrl(this->rx, GPIO_PuPd_UP);
-		}
+	switch (this->port) {
+		case 0:
+			RCC_PeriphClockCmd(APBPeriph_UART0, APBPeriph_UART0_CLOCK, ENABLE);
+			break;
+		case 1:
+			RCC_PeriphClockCmd(APBPeriph_UART1, APBPeriph_UART1_CLOCK, ENABLE);
+			break;
 	}
 
-	if (this->baudrate != baudrate || this->config != config)
-		this->configure(baudrate, config);
+	if (this->tx != PIN_INVALID) {
+		Pinmux_Config(this->tx, PINMUX_FUNCTION_UART);
+	}
+	if (this->rx != PIN_INVALID) {
+		Pinmux_Config(this->rx, PINMUX_FUNCTION_UART);
+		PAD_PullCtrl(this->rx, GPIO_PuPd_UP);
+	}
 
 	if (this->rx != PIN_INVALID) {
 		UART_TypeDef *uart = this->data->uart;
@@ -92,7 +88,7 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	this->config   = config;
 }
 
-void SerialClass::end() {
+void SerialClass::endPrivate() {
 	if (!this->data)
 		return;
 	UART_TypeDef *uart = this->data->uart;
@@ -108,11 +104,6 @@ void SerialClass::end() {
 		// restore command line mode
 		DIAG_UartReInit((IRQ_FUN)UartLogIrqHandle);
 	}
-
-	delete this->data;
-	this->data	   = nullptr;
-	this->buf	   = nullptr;
-	this->baudrate = 0;
 }
 
 void SerialClass::flush() {
