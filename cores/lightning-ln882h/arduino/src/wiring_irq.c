@@ -1,6 +1,6 @@
 /* Copyright (c) Etienne Le Cousin 2024-03-04. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 void GPIOA_IRQHandler() {
 	for (pin_size_t pinNumber = 0; pinNumber < 16; pinNumber++) {

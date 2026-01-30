@@ -24,8 +24,10 @@ using std::min;
 // Arduino Core and LT class
 #include <api/ArduinoAPI.h>
 #ifdef __cplusplus
-#include <LT.h>
+#include <api/HardwareSerial.h>
+#include <api/RingBuffer.h>
 using namespace arduino;
+#include <LT.h>
 #endif
 
 // Include family-specific code

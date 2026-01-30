@@ -1,7 +1,6 @@
 /* Copyright (c) Etienne Le Cousin 2025-01-19. */
 
-#include "wiring_private.h"
-#include <sdk_private.h>
+#include <ArduinoPrivate.h>
 
 #define I2C_PRIV i2c_init_t_def
 #include "Wire.h"

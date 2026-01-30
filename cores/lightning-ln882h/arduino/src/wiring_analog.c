@@ -1,6 +1,6 @@
 /* Copyright (c) Etienne Le Cousin 2025-01-19. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 #ifndef PIN_ADC1
 #define PIN_ADC1 -1

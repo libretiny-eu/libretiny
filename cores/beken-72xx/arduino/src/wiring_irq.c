@@ -1,6 +1,6 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-07-31. */
 
-#include "wiring_private.h"
+#include <ArduinoPrivate.h>
 
 static void irqHandler(unsigned char gpio) {
 	PinInfo *pin = pinByGpio(gpio);

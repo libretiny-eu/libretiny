@@ -2,8 +2,8 @@
 
 #pragma once
 
+#include <ArduinoPrivate.h>
 #include <WiFi.h>
-#include <sdk_private.h>
 
 extern "C" {
 

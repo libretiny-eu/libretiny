@@ -7,8 +7,6 @@
 #endif
 
 #include <Arduino.h>
-#include <api/HardwareSerial.h>
-#include <api/RingBuffer.h>
 
 typedef struct SerialData SerialData;
 typedef RingBufferN<LT_SERIAL_BUFFER_SIZE> SerialRingBuffer;

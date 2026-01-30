@@ -2,9 +2,9 @@
 
 #if LT_RTL8710B
 
-#include "Wire.h"
+#include <ArduinoPrivate.h>
 
-#include <sdk_private.h>
+#include "Wire.h"
 
 extern "C" {
 extern int i2c_write_timeout(i2c_t *obj, int address, char *data, int length, int stop, int timeout_ms);
