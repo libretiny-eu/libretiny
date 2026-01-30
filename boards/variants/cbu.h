@@ -12,16 +12,27 @@
 #define NUM_ANALOG_OUTPUTS 6  // PWM & DAC outputs
 #define PINS_GPIO_MAX      28 // Last usable GPIO number
 
+// SPI Interfaces
+// --------------
+#define PIN_SPI0_CS    15u // GPIO15
+#define PIN_SPI0_MISO  17u // GPIO17
+#define PIN_SPI0_MOSI  16u // GPIO16
+#define PIN_SPI0_SCK   14u // GPIO14
+#define PINS_SPI0_CS   {15u}
+#define PINS_SPI0_MISO {17u}
+#define PINS_SPI0_MOSI {16u}
+#define PINS_SPI0_SCK  {14u}
+
 // Wire Interfaces
 // ---------------
 #define PIN_WIRE1_SCL  20u // GPIO20
 #define PIN_WIRE1_SDA  21u // GPIO21
 #define PIN_WIRE2_SCL  0u  // GPIO0
 #define PIN_WIRE2_SDA  1u  // GPIO1
-#define PINS_WIRE1_SCL (pin_size_t[]){20u}
-#define PINS_WIRE1_SDA (pin_size_t[]){21u}
-#define PINS_WIRE2_SCL (pin_size_t[]){0u}
-#define PINS_WIRE2_SDA (pin_size_t[]){1u}
+#define PINS_WIRE1_SCL {20u}
+#define PINS_WIRE1_SDA {21u}
+#define PINS_WIRE2_SCL {0u}
+#define PINS_WIRE2_SDA {1u}
 
 // Serial ports
 // ------------
@@ -29,10 +40,10 @@
 #define PIN_SERIAL1_TX  11u // GPIO11
 #define PIN_SERIAL2_RX  1u  // GPIO1
 #define PIN_SERIAL2_TX  0u  // GPIO0
-#define PINS_SERIAL1_RX (pin_size_t[]){10u}
-#define PINS_SERIAL1_TX (pin_size_t[]){11u}
-#define PINS_SERIAL2_RX (pin_size_t[]){1u}
-#define PINS_SERIAL2_TX (pin_size_t[]){0u}
+#define PINS_SERIAL1_RX {10u}
+#define PINS_SERIAL1_TX {11u}
+#define PINS_SERIAL2_RX {1u}
+#define PINS_SERIAL2_TX {0u}
 
 // Pin function macros
 // -------------------
@@ -79,9 +90,11 @@
 // -----------------
 #define HAS_SERIAL1             1
 #define HAS_SERIAL2             1
+#define HAS_SPI0                1
 #define HAS_WIRE1               1
 #define HAS_WIRE2               1
 #define SERIAL_INTERFACES_COUNT 2
+#define SPI_INTERFACES_COUNT    1
 #define WIRE_INTERFACES_COUNT   2
 
 // Arduino pin names

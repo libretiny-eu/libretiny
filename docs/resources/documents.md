@@ -16,5 +16,3 @@ UM0150 | [Realtek Ameba CoAP User Guide](https://raw.githubusercontent.com/ambio
 UM0201 | [Ameba Common BT Application User Manual EN](https://raw.githubusercontent.com/ambiot/ambd_sdk/12dab4363fd0087eb4874461f8d3f6094110595f/doc/UM0201%20Ameba%20Common%20BT%20Application%20User%20Manual%20EN.pdf)
 &nbsp; | Found elsewhere
 AN0400 | [Ameba-D Application Note_v3_watermark](https://files.seeedstudio.com/products/102110419/Basic%20documents/AN0400%20Ameba-D%20Application%20Note_v3_watermark.pdf)
-AN0500 | [Realtek Ameba-ZII application note](https://www.e-paper-display.com/99IOT/00015797-AN0500-Realtek-Ameba-ZII-application-note.en_233850.pdf)
-&nbsp; | [Realtek Ameba-ZII datasheet v0.8](https://web.archive.org/web/20230523175304if_/https://cetest02.cn-bj.ufileos.com/100001_2110255103/RTL872xZ2%20IC%20Datasheet.pdf)

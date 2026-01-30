@@ -21,6 +21,7 @@
 	],
 	"doc": {
 		"params": {
+			"layout": "**Tuya default** for T (OTA 0x132000)",
 			"extra": {
 				"Bluetooth": "BLE v4.2"
 			}

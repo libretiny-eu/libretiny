@@ -10,21 +10,21 @@ extern "C" {
 
 #if LT_LOGGER_CALLER
 #define LT_LOG(level, caller, line, ...) lt_log(level, caller, line, __VA_ARGS__)
-#define LT_LOGM(level, module, caller, line, ...)                                                                      \
-	do {                                                                                                               \
-		if (LT_DEBUG_##module) {                                                                                       \
-			lt_log(level, caller, line, #module ": " __VA_ARGS__);                                                     \
-		}                                                                                                              \
+#define LT_LOGM(level, module, caller, line, ...)                  \
+	do {                                                           \
+		if (LT_DEBUG_##module) {                                   \
+			lt_log(level, caller, line, #module ": " __VA_ARGS__); \
+		}                                                          \
 	} while (0)
 void lt_log(const uint8_t level, const char *caller, const unsigned short line, const char *format, ...)
 	__attribute__((format(printf, 4, 5)));
 #else
 #define LT_LOG(level, caller, line, ...) lt_log(level, __VA_ARGS__)
-#define LT_LOGM(level, module, caller, line, ...)                                                                      \
-	do {                                                                                                               \
-		if (LT_DEBUG_##module) {                                                                                       \
-			lt_log(level, #module ": " __VA_ARGS__);                                                                   \
-		}                                                                                                              \
+#define LT_LOGM(level, module, caller, line, ...)    \
+	do {                                             \
+		if (LT_DEBUG_##module) {                     \
+			lt_log(level, #module ": " __VA_ARGS__); \
+		}                                            \
 	} while (0)
 void lt_log(const uint8_t level, const char *format, ...) __attribute__((format(printf, 2, 3)));
 #endif
@@ -100,73 +100,73 @@ void lt_log_disable();
 #endif
 
 // ESP32 compat
-#define log_printf(...)		LT_I(__VA_ARGS__)
-#define log_v(...)			LT_V(__VA_ARGS__)
-#define log_d(...)			LT_D(__VA_ARGS__)
-#define log_i(...)			LT_I(__VA_ARGS__)
-#define log_w(...)			LT_W(__VA_ARGS__)
-#define log_e(...)			LT_E(__VA_ARGS__)
-#define log_n(...)			LT_E(__VA_ARGS__)
-#define isr_log_v(...)		LT_V(__VA_ARGS__)
-#define isr_log_d(...)		LT_D(__VA_ARGS__)
-#define isr_log_i(...)		LT_I(__VA_ARGS__)
-#define isr_log_w(...)		LT_W(__VA_ARGS__)
-#define isr_log_e(...)		LT_E(__VA_ARGS__)
-#define isr_log_n(...)		LT_E(__VA_ARGS__)
-#define ESP_LOGV(...)		LT_V(__VA_ARGS__)
-#define ESP_LOGD(...)		LT_D(__VA_ARGS__)
-#define ESP_LOGI(...)		LT_I(__VA_ARGS__)
-#define ESP_LOGW(...)		LT_W(__VA_ARGS__)
-#define ESP_LOGE(...)		LT_E(__VA_ARGS__)
-#define ESP_EARLY_LOGV(...) LT_V(__VA_ARGS__)
-#define ESP_EARLY_LOGD(...) LT_D(__VA_ARGS__)
-#define ESP_EARLY_LOGI(...) LT_I(__VA_ARGS__)
-#define ESP_EARLY_LOGW(...) LT_W(__VA_ARGS__)
-#define ESP_EARLY_LOGE(...) LT_E(__VA_ARGS__)
-#define ets_printf(...)		LT_I(__VA_ARGS__)
-#define ETS_PRINTF(...)		LT_I(__VA_ARGS__)
+#define log_printf(...)			 LT_I(__VA_ARGS__)
+#define log_v(...)				 LT_V(__VA_ARGS__)
+#define log_d(...)				 LT_D(__VA_ARGS__)
+#define log_i(...)				 LT_I(__VA_ARGS__)
+#define log_w(...)				 LT_W(__VA_ARGS__)
+#define log_e(...)				 LT_E(__VA_ARGS__)
+#define log_n(...)				 LT_E(__VA_ARGS__)
+#define isr_log_v(...)			 LT_V(__VA_ARGS__)
+#define isr_log_d(...)			 LT_D(__VA_ARGS__)
+#define isr_log_i(...)			 LT_I(__VA_ARGS__)
+#define isr_log_w(...)			 LT_W(__VA_ARGS__)
+#define isr_log_e(...)			 LT_E(__VA_ARGS__)
+#define isr_log_n(...)			 LT_E(__VA_ARGS__)
+#define ESP_LOGV(tag, ...)		 LT_V(__VA_ARGS__)
+#define ESP_LOGD(tag, ...)		 LT_D(__VA_ARGS__)
+#define ESP_LOGI(tag, ...)		 LT_I(__VA_ARGS__)
+#define ESP_LOGW(tag, ...)		 LT_W(__VA_ARGS__)
+#define ESP_LOGE(tag, ...)		 LT_E(__VA_ARGS__)
+#define ESP_EARLY_LOGV(tag, ...) LT_V(__VA_ARGS__)
+#define ESP_EARLY_LOGD(tag, ...) LT_D(__VA_ARGS__)
+#define ESP_EARLY_LOGI(tag, ...) LT_I(__VA_ARGS__)
+#define ESP_EARLY_LOGW(tag, ...) LT_W(__VA_ARGS__)
+#define ESP_EARLY_LOGE(tag, ...) LT_E(__VA_ARGS__)
+#define ets_printf(...)			 LT_I(__VA_ARGS__)
+#define ETS_PRINTF(...)			 LT_I(__VA_ARGS__)
 
-#define LT_RET(ret)                                                                                                    \
-	LT_E("ret=%d", ret);                                                                                               \
+#define LT_RET(ret)      \
+	LT_E("ret=%d", ret); \
 	return ret;
 
-#define LT_RET_NZ(ret)                                                                                                 \
-	if (ret) {                                                                                                         \
-		LT_E("ret=%d", ret);                                                                                           \
-		return ret;                                                                                                    \
+#define LT_RET_NZ(ret)       \
+	if (ret) {               \
+		LT_E("ret=%d", ret); \
+		return ret;          \
 	}
-#define LT_RET_LZ(ret)                                                                                                 \
-	if (ret < 0) {                                                                                                     \
-		LT_E("ret=%d", ret);                                                                                           \
-		return ret;                                                                                                    \
+#define LT_RET_LZ(ret)       \
+	if (ret < 0) {           \
+		LT_E("ret=%d", ret); \
+		return ret;          \
 	}
-#define LT_RET_LEZ(ret)                                                                                                \
-	if (ret <= 0) {                                                                                                    \
-		LT_E("ret=%d", ret);                                                                                           \
-		return ret;                                                                                                    \
+#define LT_RET_LEZ(ret)      \
+	if (ret <= 0) {          \
+		LT_E("ret=%d", ret); \
+		return ret;          \
 	}
 
-#define LT_ERRNO_NZ(ret)                                                                                               \
-	if (ret) {                                                                                                         \
-		LT_E("errno=%d, ret=%d", errno, ret);                                                                          \
-		return ret;                                                                                                    \
+#define LT_ERRNO_NZ(ret)                      \
+	if (ret) {                                \
+		LT_E("errno=%d, ret=%d", errno, ret); \
+		return ret;                           \
 	}
-#define LT_ERRNO_LZ(ret)                                                                                               \
-	if (ret < 0) {                                                                                                     \
-		LT_E("errno=%d, ret=%d", errno, ret);                                                                          \
-		return ret;                                                                                                    \
+#define LT_ERRNO_LZ(ret)                      \
+	if (ret < 0) {                            \
+		LT_E("errno=%d, ret=%d", errno, ret); \
+		return ret;                           \
 	}
-#define LT_ERRNO_LEZ(ret)                                                                                              \
-	if (ret <= 0) {                                                                                                    \
-		LT_E("errno=%d, ret=%d", errno, ret);                                                                          \
-		return ret;                                                                                                    \
+#define LT_ERRNO_LEZ(ret)                     \
+	if (ret <= 0) {                           \
+		LT_E("errno=%d, ret=%d", errno, ret); \
+		return ret;                           \
 	}
 
 #if LT_LOG_ERRNO
-#define LT_ERRNO()                                                                                                     \
-	if (errno) {                                                                                                       \
-		LT_E("errno=%d", errno);                                                                                       \
-		errno = 0;                                                                                                     \
+#define LT_ERRNO()               \
+	if (errno) {                 \
+		LT_E("errno=%d", errno); \
+		errno = 0;               \
 	}
 #else
 #define LT_ERRNO()

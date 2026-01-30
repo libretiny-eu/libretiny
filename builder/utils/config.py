@@ -53,7 +53,7 @@ def env_load_config(env: Environment, path: str):
         if not line.startswith("#define"):
             continue
         line = line[7:].strip(STRIP_CHARS)
-        (key, value) = line.split(None, 2)
+        key, value = line.split(None, 2)
         value = value.strip(STRIP_CHARS)
         if value.isnumeric():
             value = int(value, 0)

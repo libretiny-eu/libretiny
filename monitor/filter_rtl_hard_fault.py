@@ -38,13 +38,11 @@ class RtlHardFaultDecoder(DeviceMonitorFilter):
         self.enabled = self.setup_paths()
 
         if self.config.get("env:" + self.environment, "build_type") != "debug":
-            print(
-                """
+            print("""
 Please build project in debug configuration to get more details about an exception.
 See https://docs.platformio.org/page/projectconf/build_configurations.html
 
-"""
-            )
+""")
 
         return self
 

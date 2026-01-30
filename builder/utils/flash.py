@@ -26,7 +26,7 @@ def env_parse_custom_flash_layout(
     partitions: Dict[str, int] = {}
     flash_size = 0
     for name, layout in flash_layout.items():
-        (offset, _, length) = layout.partition("+")
+        offset, _, length = layout.partition("+")
         offset = int(offset, 16)
         length = int(length, 16)
         partitions[name] = offset
@@ -59,7 +59,7 @@ def env_add_flash_layout(env: Environment, board: PlatformBoardConfig):
         # add all partitions
         for name, layout in flash_layout.items():
             name = name.upper()
-            (offset, _, length) = layout.partition("+")
+            offset, _, length = layout.partition("+")
             offset = int(offset, 16)
             length = int(length, 16)
             defines[f"FLASH_{name}_OFFSET"] = f"0x{offset:06X}"

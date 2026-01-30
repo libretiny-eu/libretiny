@@ -20,8 +20,6 @@ env.ParseCustomOptions(platform)
 env.ParseCustomFlashLayout(platform, board)
 # Add flash layout C defines
 env.AddFlashLayout(board)
-# Write custom header options
-env.ApplyCustomOptions(platform)
 # Export board manifest for ltchiptool
 env.ExportBoardData(board)
 # Print information about versions and custom options

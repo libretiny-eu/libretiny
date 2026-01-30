@@ -8,7 +8,7 @@ RTL8710BX seems to be the same chip but clocked at 62.5 MHz (instead of 125 MHz 
 
 Features:
 
-- ARM Cortex M4 CPU (up to 125 MHz)
+- ARM Cortex-M4F (ARMv7E-M) CPU (up to 125 MHz)
 - 512 KiB ROM
 - 256 KiB SRAM
 - SPI flash interface with XiP
@@ -31,7 +31,11 @@ Resources:
 
 ## Flashing
 
-Realtek RTL8710B has two UART ports - UART2 (sometimes called LOG_UART) and UART0. The port used for flashing and viewing logs is UART2.
+{%
+	include-markdown "../../inc/flashing-note.md"
+%}
+
+Realtek RTL8710B has two UART ports - UART2 (sometimes called LOG_UART) and UART0. **The port used for flashing and viewing logs is UART2**.
 
 You need to find which pins correspond to UART2 TX and RX. If your board is supported, you'll find the pinout on its documentation page. Otherwise (and for generic boards), you'll have to find the pinout online.
 
@@ -73,20 +77,19 @@ Note that you will not see any characters before you release TX2 from GND.
 
 ### Partition layout
 
-When you compile firmware for Realtek with LibreTiny (either ESPHome or other PlatformIO projects), you need to choose a **board**. Different Realtek boards have different partition layouts - the main difference is the OTA2 firmware address. Choosing a board with wrong address will make it harder to flash OTA updates.
-
-Flashing over UART will update (set) the on-chip OTA address to match the firmware being flashed. **OTA flashing will not update the address** - so make sure to choose the correct board, and **keep using the same board** for OTA flashing.
-
-Using incorrect boards may result in OTA updates having no effect, or (worst case) bricking the device completely.
+{%
+	include-markdown "../../inc/partition-layout.md"
+%}
 
 ### Flashing
 
-The recommended tool to flash (or dump firmware) is `ltchiptool`.
+{%
+	include-markdown "../../inc/flashing.md"
+%}
 
-**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
-
-!!! tip
-	Because the UART uploading code is programmed in the ROM of the chip, it can't be software-bricked, even if you damage the bootloader.
+{%
+	include-markdown "../../inc/uart-rom.md"
+%}
 
 ---
 

@@ -1,11 +1,14 @@
+# 2025-02-12
 Language: Cpp
 BasedOnStyle: LLVM
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left
 AlignConsecutiveAssignments: true
 AlignConsecutiveMacros: AcrossComments
+AlignEscapedNewlinesLeft: true
 AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Empty
 AllowShortFunctionsOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: Yes
@@ -21,7 +24,7 @@ IndentCaseLabels: true
 IndentWidth: 4
 LambdaBodyIndentation: Signature
 MaxEmptyLinesToKeep: 1
-# PointerAlignment: Left # TODO enable this and reformat project
+PenaltyReturnTypeOnItsOwnLine: 1000
 QualifierAlignment: Left
 ReflowComments: true
 SeparateDefinitionBlocks: Always

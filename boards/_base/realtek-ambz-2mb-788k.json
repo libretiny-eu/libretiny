@@ -11,5 +11,10 @@
 	"upload": {
 		"flash_size": 2097152,
 		"maximum_size": 806912
+	},
+	"doc": {
+		"params": {
+			"layout": "**Tuya** (2x 788k apps)"
+		}
 	}
 }

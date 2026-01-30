@@ -18,7 +18,7 @@ platform: PlatformBase = env.PioPlatform()
 board: PlatformBoardConfig = env.BoardConfig()
 
 python_deps = {
-    "ltchiptool": ">=4.5.1,<5.0",
+    "ltchiptool": ">=4.12.2,<5.0",
 }
 env.SConscript("python-venv.py", exports="env")
 env.ConfigurePythonVenv()

@@ -22,27 +22,27 @@
 #define PIN_SPI1_MISO  22u // PA_22
 #define PIN_SPI1_MOSI  23u // PA_23
 #define PIN_SPI1_SCK   18u // PA_18
-#define PINS_SPI0_CS   (pin_size_t[]){19u}
-#define PINS_SPI0_MISO (pin_size_t[]){22u}
-#define PINS_SPI0_MOSI (pin_size_t[]){23u}
-#define PINS_SPI0_SCK  (pin_size_t[]){18u}
-#define PINS_SPI1_CS   (pin_size_t[]){19u}
-#define PINS_SPI1_MISO (pin_size_t[]){22u}
-#define PINS_SPI1_MOSI (pin_size_t[]){23u}
-#define PINS_SPI1_SCK  (pin_size_t[]){18u}
+#define PINS_SPI0_CS   {19u}
+#define PINS_SPI0_MISO {22u}
+#define PINS_SPI0_MOSI {23u}
+#define PINS_SPI0_SCK  {18u}
+#define PINS_SPI1_CS   {19u}
+#define PINS_SPI1_MISO {22u}
+#define PINS_SPI1_MOSI {23u}
+#define PINS_SPI1_SCK  {18u}
 
 // Wire Interfaces
 // ---------------
-#define PIN_WIRE0_SCL_0 29u // PA_29
-#define PIN_WIRE0_SCL_1 22u // PA_22
+#define PIN_WIRE0_SCL_0 22u // PA_22
+#define PIN_WIRE0_SCL_1 29u // PA_29
 #define PIN_WIRE0_SDA_0 19u // PA_19
 #define PIN_WIRE0_SDA_1 30u // PA_30
 #define PIN_WIRE1_SCL   18u // PA_18
 #define PIN_WIRE1_SDA   23u // PA_23
-#define PINS_WIRE0_SCL  (pin_size_t[]){29u, 22u}
-#define PINS_WIRE0_SDA  (pin_size_t[]){19u, 30u}
-#define PINS_WIRE1_SCL  (pin_size_t[]){18u}
-#define PINS_WIRE1_SDA  (pin_size_t[]){23u}
+#define PINS_WIRE0_SCL  {22u, 29u}
+#define PINS_WIRE0_SDA  {19u, 30u}
+#define PINS_WIRE1_SCL  {18u}
+#define PINS_WIRE1_SDA  {23u}
 
 // Serial ports
 // ------------
@@ -52,12 +52,12 @@
 #define PIN_SERIAL0_TX   23u // PA_23
 #define PIN_SERIAL2_RX   29u // PA_29
 #define PIN_SERIAL2_TX   30u // PA_30
-#define PINS_SERIAL0_CTS (pin_size_t[]){19u}
-#define PINS_SERIAL0_RTS (pin_size_t[]){22u}
-#define PINS_SERIAL0_RX  (pin_size_t[]){18u}
-#define PINS_SERIAL0_TX  (pin_size_t[]){23u}
-#define PINS_SERIAL2_RX  (pin_size_t[]){29u}
-#define PINS_SERIAL2_TX  (pin_size_t[]){30u}
+#define PINS_SERIAL0_CTS {19u}
+#define PINS_SERIAL0_RTS {22u}
+#define PINS_SERIAL0_RX  {18u}
+#define PINS_SERIAL0_TX  {23u}
+#define PINS_SERIAL2_RX  {29u}
+#define PINS_SERIAL2_TX  {30u}
 
 // Pin function macros
 // -------------------

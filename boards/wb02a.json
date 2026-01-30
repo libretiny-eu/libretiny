@@ -1,0 +1,19 @@
+{
+	"_base": [
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"ic/ln882hk",
+		"pcb/wb02a",
+		"pcb/wb02a-test"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "wb02a"
+	},
+	"name": "WB02A Wi-Fi/BLE Module",
+	"url": "https://docs.libretiny.eu/boards/wb02a/",
+	"vendor": "Unknown",
+	"pcb": {
+		"symbol": ""
+	}
+}

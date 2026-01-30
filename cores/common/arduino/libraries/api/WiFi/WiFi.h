@@ -97,8 +97,13 @@ class WiFiClass {
 		const uint8_t *bssid   = NULL,
 		bool connect		   = true
 	);
-	WiFiStatus
-	begin(char *ssid, char *passphrase = NULL, int32_t channel = 0, const uint8_t *bssid = NULL, bool connect = true);
+	WiFiStatus begin(
+		char *ssid,
+		char *passphrase	 = NULL,
+		int32_t channel		 = 0,
+		const uint8_t *bssid = NULL,
+		bool connect		 = true
+	);
 
 	bool config(
 		IPAddress localIP,
@@ -129,6 +134,8 @@ class WiFiClass {
 	uint8_t subnetCIDR();
 	bool enableIpV6();
 	IPv6Address localIPv6();
+	std::vector<IPv6Address> allLocalIPv6();
+
 	const char *getHostname();
 	bool setHostname(const char *hostname);
 	bool setMacAddress(const uint8_t *mac);
@@ -176,7 +183,11 @@ class WiFiClass {
 
   public: /* WiFiAP.cpp */
 	bool softAP(
-		const char *ssid, const char *passphrase = NULL, int channel = 1, bool ssidHidden = false, int maxClients = 4
+		const char *ssid,
+		const char *passphrase = NULL,
+		int channel			   = 1,
+		bool ssidHidden		   = false,
+		int maxClients		   = 4
 	);
 	bool softAPConfig(IPAddress localIP, IPAddress gateway, IPAddress subnet);
 	bool softAPdisconnect(bool wifiOff = false);

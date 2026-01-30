@@ -14,20 +14,19 @@
 
 // Wire Interfaces
 // ---------------
-#define PIN_WIRE1_SCL   20u // GPIO20
-#define PIN_WIRE1_SDA_0 21u // GPIO21
-#define PIN_WIRE1_SDA_1 21u // GPIO21
-#define PINS_WIRE1_SCL  (pin_size_t[]){20u}
-#define PINS_WIRE1_SDA  (pin_size_t[]){21u, 21u}
+#define PIN_WIRE1_SCL  20u // GPIO20
+#define PIN_WIRE1_SDA  21u // GPIO21
+#define PINS_WIRE1_SCL {20u}
+#define PINS_WIRE1_SDA {21u}
 
 // Serial ports
 // ------------
 #define PIN_SERIAL1_RX  10u // GPIO10
 #define PIN_SERIAL1_TX  11u // GPIO11
 #define PIN_SERIAL2_TX  0u  // GPIO0
-#define PINS_SERIAL1_RX (pin_size_t[]){10u}
-#define PINS_SERIAL1_TX (pin_size_t[]){11u}
-#define PINS_SERIAL2_TX (pin_size_t[]){0u}
+#define PINS_SERIAL1_RX {10u}
+#define PINS_SERIAL1_TX {11u}
+#define PINS_SERIAL2_TX {0u}
 
 // Pin function macros
 // -------------------

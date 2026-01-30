@@ -10,7 +10,10 @@ using namespace mime;
 class FunctionRequestHandler : public RequestHandler {
   public:
 	FunctionRequestHandler(
-		WebServer::THandlerFunction fn, WebServer::THandlerFunction ufn, const Uri &uri, HTTPMethod method
+		WebServer::THandlerFunction fn,
+		WebServer::THandlerFunction ufn,
+		const Uri &uri,
+		HTTPMethod method
 	)
 		: _fn(fn), _ufn(ufn), _uri(uri.clone()), _method(method) {
 		_uri->initPathArgs(pathArgs);

@@ -184,6 +184,9 @@ class LibraryQueue:
         else:
             self.env.Append(CPPPATH=self.includes)
 
+        # prepend headers with custom options
+        self.env.ApplyCustomOptions(self.env.PioPlatform())
+
         # clone the environment for the whole library queue
         queue_env = self.env.Clone()
         # add private options to the cloned environment

@@ -27,36 +27,36 @@ inline void pinDisable(PinInfo *pin, uint32_t mask) {
 	pin->enabled &= ~mask;
 }
 
-#define pinCheckGetInfo(pinNumber, mask, ret)                                                                          \
-	PinInfo *pin = pinInfo(pinNumber);                                                                                 \
-	if (!pin)                                                                                                          \
-		return ret;                                                                                                    \
-	if (!pinSupported(pin, mask))                                                                                      \
+#define pinCheckGetInfo(pinNumber, mask, ret) \
+	PinInfo *pin = pinInfo(pinNumber);        \
+	if (!pin)                                 \
+		return ret;                           \
+	if (!pinSupported(pin, mask))             \
 		return ret;
 
-#define pinCheckGetData(pinNumber, mask, ret)                                                                          \
-	PinInfo *pin = pinInfo(pinNumber);                                                                                 \
-	if (!pin)                                                                                                          \
-		return ret;                                                                                                    \
-	if (!pinSupported(pin, mask))                                                                                      \
-		return ret;                                                                                                    \
+#define pinCheckGetData(pinNumber, mask, ret) \
+	PinInfo *pin = pinInfo(pinNumber);        \
+	if (!pin)                                 \
+		return ret;                           \
+	if (!pinSupported(pin, mask))             \
+		return ret;                           \
 	PinData *data = pinData(pin);
 
 #define pinIsOutput(pin, data) (pinEnabled(pin, PIN_GPIO) && (data->gpioMode ^ 0b101) < 5)
 #define pinIsInput(pin, data)  (pinEnabled(pin, PIN_GPIO) && (data->gpioMode ^ 0b101) > 4)
 
-#define pinSetOutputPull(pin, data, pinNumber, status)                                                                 \
-	do {                                                                                                               \
-		if (!pinIsOutput(pin, data)) {                                                                                 \
-			pinMode(pinNumber, INPUT_PULLDOWN ^ !!status);                                                             \
-			return;                                                                                                    \
-		}                                                                                                              \
+#define pinSetOutputPull(pin, data, pinNumber, status)     \
+	do {                                                   \
+		if (!pinIsOutput(pin, data)) {                     \
+			pinMode(pinNumber, INPUT_PULLDOWN ^ !!status); \
+			return;                                        \
+		}                                                  \
 	} while (0);
 
-#define pinSetInputMode(pin, data, pinNumber)                                                                          \
-	do {                                                                                                               \
-		if (!pinIsInput(pin, data))                                                                                    \
-			pinMode(pinNumber, INPUT);                                                                                 \
+#define pinSetInputMode(pin, data, pinNumber) \
+	do {                                      \
+		if (!pinIsInput(pin, data))           \
+			pinMode(pinNumber, INPUT);        \
 	} while (0);
 
 #ifdef __cplusplus

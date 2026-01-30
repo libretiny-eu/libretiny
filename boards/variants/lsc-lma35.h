@@ -16,8 +16,8 @@
 // ---------------
 #define PIN_WIRE2_SCL  0u // GPIO0
 #define PIN_WIRE2_SDA  1u // GPIO1
-#define PINS_WIRE2_SCL (pin_size_t[]){0u}
-#define PINS_WIRE2_SDA (pin_size_t[]){1u}
+#define PINS_WIRE2_SCL {0u}
+#define PINS_WIRE2_SDA {1u}
 
 // Serial ports
 // ------------
@@ -25,10 +25,10 @@
 #define PIN_SERIAL1_TX  11u // GPIO11
 #define PIN_SERIAL2_RX  1u  // GPIO1
 #define PIN_SERIAL2_TX  0u  // GPIO0
-#define PINS_SERIAL1_RX (pin_size_t[]){10u}
-#define PINS_SERIAL1_TX (pin_size_t[]){11u}
-#define PINS_SERIAL2_RX (pin_size_t[]){1u}
-#define PINS_SERIAL2_TX (pin_size_t[]){0u}
+#define PINS_SERIAL1_RX {10u}
+#define PINS_SERIAL1_TX {11u}
+#define PINS_SERIAL2_RX {1u}
+#define PINS_SERIAL2_TX {0u}
 
 // Pin function macros
 // -------------------

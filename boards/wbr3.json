@@ -4,7 +4,7 @@
 		"realtek-ambz2-8720",
 		"realtek-ambz2-tuya",
 		"realtek-ambz2-image",
-		"realtek-ambz2-2mb-900k",
+		"realtek-ambz2-2mb-896k",
 		"ic/rtl8720cf",
 		"pcb/wbr3",
 		"pcb/wbr3-test"
@@ -17,7 +17,12 @@
 	"url": "https://developer.tuya.com/en/docs/iot/wbr3-module-datasheet?id=K9dujs2k5nriy",
 	"vendor": "Tuya Inc.",
 	"doc": {
-		"fccid": "2ANDL-WBR3"
+		"fccid": "2ANDL-WBR3",
+		"extra": [
+			"# Flashing notes (download mode)",
+			"To enter the download mode it's required to use the strapping pin PA00. However, on the WBR3 that pin is on the bottom side of the PCB.",
+			"This means it is usually **not** possible to flash this module (via UART) without desoldering it."
+		]
 	},
 	"pcb": {
 		"symbol": "WBR3"

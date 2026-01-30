@@ -4,5 +4,10 @@
 	},
 	"flash": {
 		"tuya": "0x1ED000+0x13000"
+	},
+	"doc": {
+		"params": {
+			"keys": "Beken and Tuya defaults"
+		}
 	}
 }

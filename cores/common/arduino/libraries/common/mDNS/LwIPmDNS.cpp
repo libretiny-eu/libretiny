@@ -3,6 +3,7 @@
 #if LT_HAS_LWIP2
 
 #include "mDNS.h"
+#include <map>
 #include <vector>
 
 extern "C" {
@@ -20,22 +21,58 @@ extern "C" {
 
 #if LWIP_MDNS_RESPONDER
 
-static std::vector<char *> services_name;
-static std::vector<char *> services;
-static std::vector<uint8_t> protos;
-static std::vector<uint16_t> ports;
-static std::vector<std::vector<char *>> records;
+struct CachedService {
+	CachedService(const char *_name, const char *_service, mdns_sd_proto _proto, uint16_t _port)
+		: name(strdup(_name)), service(strdup(_service)), proto(_proto), port(_port) {}
+
+	CachedService(const CachedService &)			= delete;
+	CachedService &operator=(const CachedService &) = delete;
+
+	CachedService(CachedService &&other)
+		: name(other.name), service(other.service), proto(other.proto), port(other.port),
+		  records(std::move(other.records)) {
+		other.name	  = nullptr;
+		other.service = nullptr;
+		other.records.clear();
+	}
+
+	~CachedService() {
+		if (name) {
+			free(name);
+		}
+
+		if (service) {
+			free(service);
+		}
+
+		for (auto &str : records) {
+			if (str) {
+				free(str);
+			}
+		}
+	}
+
+	char *name;
+	char *service;
+	mdns_sd_proto proto;
+	uint16_t port;
+	std::vector<char *> records;
+};
+
+static std::vector<CachedService> sCachedServices;
 
 static const char *hostName;
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
 
-static inline void freeAllocatedStrings(const std::vector<char *> &strings) {
-	for (auto &str : strings) {
-		free(str);
-	}
-}
+enum StateForNetIf {
+	DISABLED = 0, // not yet enabled
+	ENABLED,	  // enabled, but no services added
+	CONFIGURED	  // enabled and services added
+};
+
+static std::map<uint8_t, StateForNetIf> sNetIfState; // netif->num  --> state
 
 mDNS::mDNS() {}
 
@@ -44,14 +81,7 @@ mDNS::~mDNS() {
 }
 
 void mDNS::cleanup() {
-	freeAllocatedStrings(services_name);
-	services_name.clear();
-	freeAllocatedStrings(services);
-	services.clear();
-	for (auto &record : records) {
-		freeAllocatedStrings(record);
-	}
-	records.clear();
+	sCachedServices.clear();
 
 	free((void *)hostName);
 	hostName = NULL;
@@ -62,10 +92,10 @@ void mDNS::cleanup() {
 
 static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	size_t index = (size_t)userdata;
-	if (index >= records.size())
+	if (index >= sCachedServices.size())
 		return;
 
-	for (const auto record : records[index]) {
+	for (const auto &record : sCachedServices[index].records) {
 		err_t err = mdns_resp_add_service_txtitem(service, record, strlen(record));
 		if (err != ERR_OK) {
 			LT_DM(MDNS, "Error %d while adding txt record: %s", err, record);
@@ -73,32 +103,45 @@ static void mdnsTxtCallback(struct mdns_service *service, void *userdata) {
 	}
 }
 
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 static void mdnsStatusCallback(struct netif *netif, uint8_t result) {
 	LT_DM(MDNS, "Status: netif %u, status %u", netif->num, result);
 }
+#else
+static void mdnsStatusCallback(struct netif *netif, uint8_t result, int8_t slot) {
+	LT_DM(MDNS, "Status: netif %u, status %u slot %d", netif->num, result, slot);
+}
+#endif
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void addServices(struct netif *netif) {
-	for (uint8_t i = 0; i < services.size(); i++) {
+	for (uint8_t i = 0; i < sCachedServices.size(); i++) {
+		const auto &cachedService = sCachedServices[i];
 		LT_DM(
 			MDNS,
 			"Add service: netif %u / %s / %s / %u / %u",
 			netif->num,
-			services_name[i],
-			services[i],
-			protos[i],
-			ports[i]
+			cachedService.name,
+			cachedService.service,
+			cachedService.proto,
+			cachedService.port
 		);
-		mdns_resp_add_service(
+		s8_t slot = mdns_resp_add_service(
 			netif,
-			services_name[i],
-			services[i],
-			(mdns_sd_proto)protos[i],
-			ports[i],
+			cachedService.name,
+			cachedService.service,
+			cachedService.proto,
+			cachedService.port,
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 			255,
+#endif
 			mdnsTxtCallback,
 			reinterpret_cast<void *>(i) // index of newly added service
 		);
+
+		if (slot < 0) {
+			LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
+		}
 	}
 }
 #endif
@@ -111,7 +154,11 @@ static bool enableMDNS(struct netif *netif) {
 			igmp_start(netif);
 			LT_DM(MDNS, "Added IGMP to netif %u", netif->num);
 		}
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 		err_t ret = mdns_resp_add_netif(netif, hostName, 255);
+#else
+		err_t ret = mdns_resp_add_netif(netif, hostName);
+#endif
 		if (ret == ERR_OK) {
 			LT_DM(MDNS, "mDNS started on netif %u, announcing it to network", netif->num);
 #if LWIP_VERSION_SIMPLE >= 20100
@@ -128,14 +175,32 @@ static bool enableMDNS(struct netif *netif) {
 }
 
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
-static void
-mdns_netif_ext_status_callback(struct netif *netif, netif_nsc_reason_t reason, const netif_ext_callback_args_t *args) {
+static void mdns_netif_ext_status_callback(
+	struct netif *netif,
+	netif_nsc_reason_t reason,
+	const netif_ext_callback_args_t *args
+) {
+	auto stateIter = sNetIfState.find(netif->num);
+	if (stateIter == sNetIfState.end()) {
+		stateIter = sNetIfState.insert(std::make_pair(netif->num, StateForNetIf::DISABLED)).first;
+	}
+	auto currentState = sNetIfState[netif->num];
 	if (reason & LWIP_NSC_NETIF_REMOVED) {
-		LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
-		mdns_resp_remove_netif(netif);
-	} else if (reason & LWIP_NSC_STATUS_CHANGED) {
-		LT_DM(MDNS, "Netif changed, starting mDNS on netif %u", netif->num);
-		if (enableMDNS(netif) && services.size() > 0) {
+		if (StateForNetIf::DISABLED != stateIter->second) {
+			LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
+			mdns_resp_remove_netif(netif);
+			sNetIfState.erase(stateIter);
+		}
+	} else if ((reason & LWIP_NSC_STATUS_CHANGED) || (reason & LWIP_NSC_NETIF_ADDED)) {
+		if (StateForNetIf::DISABLED == stateIter->second) {
+			LT_DM(MDNS, "Starting mDNS on netif %u", netif->num);
+			if (enableMDNS(netif)) {
+				stateIter->second = StateForNetIf::ENABLED;
+			}
+		}
+
+		if ((StateForNetIf::ENABLED == stateIter->second) && (sCachedServices.size() > 0)) {
+			stateIter->second = StateForNetIf::CONFIGURED;
 			LT_DM(MDNS, "Adding services to netif %u", netif->num);
 			addServices(netif);
 		}
@@ -154,9 +219,13 @@ bool mDNS::begin(const char *hostname) {
 	mdns_resp_register_name_result_cb(mdnsStatusCallback);
 #endif
 	mdns_resp_init();
+
 	struct netif *netif;
 	for (netif = netif_list; netif != NULL; netif = netif->next) {
-		enableMDNS(netif);
+		sNetIfState[netif->num] = StateForNetIf::DISABLED;
+		if (enableMDNS(netif)) {
+			sNetIfState[netif->num] = StateForNetIf::ENABLED;
+		}
 	}
 	return true;
 }
@@ -179,51 +248,54 @@ void mDNS::end() {
 bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port) {
 	bool added			= false;
 	struct netif *netif = netif_list;
+
+	std::size_t serviceIndex = sCachedServices.size();
+	// add the service to TXT record arrays
+	sCachedServices.emplace_back(name, service, (mdns_sd_proto)proto, port);
+
 	while (netif != NULL) {
 		if (netif_is_up(netif)) {
 			// register TXT callback;
 			// pass service index as userdata parameter
 			LT_DM(MDNS, "Add service: netif %u / %s / %s / %u / %u", netif->num, name, service, proto, port);
-			mdns_resp_add_service(
+			s8_t slot = mdns_resp_add_service(
 				netif,
 				name,
 				service,
 				(mdns_sd_proto)proto,
 				port,
+#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
 				255,
+#endif
 				mdnsTxtCallback,
-				(void *)services.size() // index of newly added service
+				(void *)serviceIndex // index of newly added service
 			);
+
+			if (slot < 0) {
+				LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
+			}
+
 			added = true;
 		}
 		netif = netif->next;
 	}
 
-	if (!added)
-		return false;
-
-	// add the service to TXT record arrays
-	services_name.push_back(strdup(name));
-	services.push_back(strdup(service));
-	protos.push_back(proto);
-	ports.push_back(port);
-	records.emplace_back();
-
-	return true;
+	return added;
 }
 
 bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *item) {
 	uint8_t i;
-	for (i = 0; i < services.size(); i++) {
+	for (i = 0; i < sCachedServices.size(); i++) {
+		const auto &cachedService = sCachedServices[i];
 		// find a matching service
-		if (strcmp(services[i], service) == 0 && protos[i] == proto) {
+		if (strcmp(cachedService.service, service) == 0 && cachedService.proto == proto) {
 			break;
 		}
 	}
-	if (i == services.size())
+	if (i == sCachedServices.size())
 		return false;
 
-	records[i].push_back(strdup(item));
+	sCachedServices[i].records.push_back(strdup(item));
 	return true;
 }
 

@@ -86,13 +86,21 @@ int MbedTLSClient::connect(const char *host, uint16_t port, int32_t timeout) {
 }
 
 int MbedTLSClient::connect(
-	IPAddress ip, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
+	IPAddress ip,
+	uint16_t port,
+	const char *rootCABuf,
+	const char *clientCert,
+	const char *clientKey
 ) {
 	return connect(ipToString(ip).c_str(), port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }
 
 int MbedTLSClient::connect(
-	const char *host, uint16_t port, const char *rootCABuf, const char *clientCert, const char *clientKey
+	const char *host,
+	uint16_t port,
+	const char *rootCABuf,
+	const char *clientCert,
+	const char *clientKey
 ) {
 	return connect(host, port, 0, rootCABuf, clientCert, clientKey, NULL, NULL) == 0;
 }
@@ -165,7 +173,7 @@ int MbedTLSClient::connect(
 
 #ifdef MBEDTLS_SSL_ALPN
 	if (_alpnProtocols) {
-		ret = mbedtls_ssl_conf_alpn_protocols(&_sslCfg, _alpnProtocols);
+		ret = mbedtls_ssl_conf_alpn_protocols(_sslCfg, _alpnProtocols);
 		LT_RET_NZ(ret);
 	}
 #endif

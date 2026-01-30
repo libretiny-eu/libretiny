@@ -30,3 +30,12 @@ a[href="../../../../../SUMMARY/"]
 	height: 8px;
 	pointer-events: none;
 }
+
+/* reduce padding in table cells */
+.md-typeset table:not([class]) th {
+	padding: 1.5em 1em;
+}
+
+.md-typeset table:not([class]) td {
+	padding: 0.5em 1em;
+}

@@ -34,8 +34,27 @@
 			"series": "AmebaZ2",
 			"voltage": "3.0V - 3.6V"
 		},
+		"flashing": {
+			"links": {
+				"ltchiptool user guide": "../../docs/flashing/tools/ltchiptool.md",
+				"full flashing guide": "../../docs/platform/realtek-ambz2/README.md#flashing"
+			},
+			"pins": {
+				"PA15 / RX2": "TX of USB-UART adapter",
+				"PA16 / TX2": "RX of USB-UART adapter",
+				"PA00 (strapping pin)": "3.3V to enter download mode",
+				"PA13 (strapping pin)": "3.3V or floating",
+				"CEN (Chip-Enable)": "GND to reset the chip"
+			},
+			"guide": [
+				"Connect the USB-UART adapter.",
+				"Connect PA00 to 3.3V.",
+				"Power-cycle the device or briefly short CEN to GND.",
+				"Start the flashing process."
+			]
+		},
 		"links": {
-			"General info": "../../docs/platform/realtek-amb/README.md"
+			"Info & flashing guide": "../../docs/platform/realtek-ambz2/README.md"
 		}
 	}
 }

@@ -11,5 +11,10 @@
 	"upload": {
 		"flash_size": 4194304,
 		"maximum_size": 1003520
+	},
+	"doc": {
+		"params": {
+			"layout": "**Large Custom** (2x 980k apps)"
+		}
 	}
 }

@@ -79,9 +79,9 @@ If you're getting a `No response received` (or similar) error, this means that:
 
 ### Flashing
 
-The recommended tool to flash (or dump firmware) is `ltchiptool`.
-
-**Read [Using ltchiptool](../../flashing/tools/ltchiptool.md) to learn the flashing procedure**
+{%
+	include-markdown "../../inc/flashing.md"
+%}
 
 !!! tip
 	BK7231N can't be software-bricked, because it has a ROM that contains the download mode. **BK7231T doesn't contain it, so be careful with this one**.

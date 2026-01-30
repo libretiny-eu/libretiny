@@ -7,3 +7,6 @@ String ipToString(const IPAddress &ip) {
 	sprintf(szRet, "%hhu.%hhu.%hhu.%hhu", ip[0], ip[1], ip[2], ip[3]);
 	return String(szRet);
 }
+
+// global empty string to allow returning const String& with nothing
+const String emptyString;

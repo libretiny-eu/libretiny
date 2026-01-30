@@ -321,7 +321,12 @@ bool HTTPClient::begin(String host, uint16_t port, String uri, const char *CAcer
 }
 
 bool HTTPClient::begin(
-	String host, uint16_t port, String uri, const char *CAcert, const char *cli_cert, const char *cli_key
+	String host,
+	uint16_t port,
+	String uri,
+	const char *CAcert,
+	const char *cli_cert,
+	const char *cli_key
 ) {
 	if (_client && !_tcpDeprecated) {
 		log_d("mix up of new and deprecated api");

@@ -15,10 +15,11 @@
 
 ![RTL8710BN](https://img.shields.io/badge/-rtl8710bn-blue)
 ![BK7231](https://img.shields.io/badge/-bk7231-blue)
+![LN882H](https://img.shields.io/badge/-ln882h-blue)
 
 </div>
 
-PlatformIO development platform for BK7231 and RTL8710 IoT chips.
+PlatformIO development platform for BK7231, RTL8710 and LN882H IoT chips.
 
 The main goal of this project is to provide a usable build environment for IoT developers. While also providing vendor SDKs as PlatformIO cores,
 the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,

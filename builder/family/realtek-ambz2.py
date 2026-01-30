@@ -3,6 +3,7 @@
 from os.path import isfile, join
 from shutil import copyfile
 
+from ltchiptool.soc.ambz2.util.models.config import ImageConfig
 from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
@@ -14,6 +15,23 @@ queue = env.AddLibraryQueue("realtek-ambz2")
 env.ConfigureFamily()
 
 COMPONENT_DIR = join("$SDK_DIR", "component")
+
+
+# Get image decryption public key
+def get_public_key(private: bytes) -> bytes:
+    from ltchiptool.util.curve25519 import X25519PrivateKey
+
+    key = X25519PrivateKey.from_private_bytes(private)
+    return key.public_key()
+
+
+def encode_public_key(data: bytes) -> str:
+    # Output without braces - the C code wraps it in braces
+    # This avoids shell escaping issues with {} on different platforms
+    return ",".join(f"0x{byte:02x}" for byte in data)
+
+
+public_key_bytes = get_public_key(ImageConfig(**board.get("image")).keys.decryption)
 
 # Flags
 queue.AppendPublic(
@@ -39,6 +57,7 @@ queue.AppendPublic(
         ("__ARM_ARCH_8M_MAIN__", "1"),
         ("CONFIG_BUILD_RAM", "1"),
         "V8M_STKOVF",
+        ("IMAGE_PUBLIC_KEY", encode_public_key(public_key_bytes)),
     ],
     CPPPATH=[
         # allow including <ctype.h> from GCC instead of RTL SDK
@@ -410,7 +429,7 @@ if not isfile(bootloader_dst):
 image_ota_clear = env.subst("${BUILD_DIR}/raw_ota_clear.bin")
 if not isfile(image_ota_clear):
     with open(image_ota_clear, "wb") as f:
-        f.write(b"\xFF" * 4096)
+        f.write(b"\xff" * 4096)
 
 # Build all libraries
 queue.BuildLibraries()
@@ -424,12 +443,14 @@ env.Replace(
     LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
     # UF2OTA input list
     UF2OTA=[
-        # same OTA images for flasher and device
-        f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2;flasher:ota1,ota2",
+        # use unmodified image for flasher
+        f"{image_firmware_is},{image_firmware_is}=flasher:ota1,ota2",
+        # use same image for device OTA
+        f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2",
         # having flashed an application image, update the bootloader and partition table (incl. keys)
-        f"{image_bootloader}=device:boot;flasher:boot",
-        f"{image_part_table}=device:part_table;flasher:part_table",
+        f"{image_bootloader},{image_bootloader}=flasher:boot,boot",
+        f"{image_part_table},{image_part_table}=flasher:part_table,part_table",
         # clearing headers of the "other" OTA image (hence the indexes are swapped)
-        f"{image_ota_clear},{image_ota_clear}=device:ota2,ota1;flasher:ota2,ota1",
+        f"{image_ota_clear},{image_ota_clear}=flasher:ota2,ota1",
     ],
 )

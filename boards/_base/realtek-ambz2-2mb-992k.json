@@ -7,5 +7,10 @@
 	"upload": {
 		"flash_size": 2097152,
 		"maximum_size": 1015808
+	},
+	"doc": {
+		"params": {
+			"layout": "**Realtek/OEM** (2x 992k apps)"
+		}
 	}
 }

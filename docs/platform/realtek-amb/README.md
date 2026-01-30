@@ -4,7 +4,7 @@ The logic behind naming of Realtek chips and their series took me some time to f
 
 - RTL8xxxA - Ameba1/Ameba Series
 - RTL8xxxB - [AmebaZ Series](../realtek-ambz/README.md)
-- RTL8xxxC - AmebaZ2/ZII Series
+- RTL8xxxC - [AmebaZ2/ZII Series](../realtek-ambz2/README.md)
 - RTL8xxxCS - Ameba CS Series
 - RTL8xxxD - AmebaD Series
 - [Realtek product pages](https://www.realtek.com/en/products/communications-network-ics/category/802-11b-g-n)

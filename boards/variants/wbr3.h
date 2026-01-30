@@ -14,15 +14,15 @@
 
 // Wire Interfaces
 // ---------------
-#define PIN_WIRE0_SCL_0 11u // PIN_A11
-#define PIN_WIRE0_SCL_1 2u  // PIN_A2
-#define PIN_WIRE0_SCL_2 19u // PIN_A19
-#define PIN_WIRE0_SCL_3 15u // PIN_A15
+#define PIN_WIRE0_SCL_0 2u  // PIN_A2
+#define PIN_WIRE0_SCL_1 11u // PIN_A11
+#define PIN_WIRE0_SCL_2 15u // PIN_A15
+#define PIN_WIRE0_SCL_3 19u // PIN_A19
 #define PIN_WIRE0_SDA_0 3u  // PIN_A3
 #define PIN_WIRE0_SDA_1 12u // PIN_A12
 #define PIN_WIRE0_SDA_2 16u // PIN_A16
-#define PINS_WIRE0_SCL  (pin_size_t[]){11u, 2u, 19u, 15u}
-#define PINS_WIRE0_SDA  (pin_size_t[]){3u, 12u, 16u}
+#define PINS_WIRE0_SCL  {2u, 11u, 15u, 19u}
+#define PINS_WIRE0_SDA  {3u, 12u, 16u}
 
 // Serial ports
 // ------------
@@ -33,21 +33,21 @@
 #define PIN_SERIAL0_TX_1 14u // PIN_A14
 #define PIN_SERIAL0_TX   14u // PIN_A14
 #define PIN_SERIAL1_CTS  4u  // PIN_A4
-#define PIN_SERIAL1_RX_0 2u  // PIN_A2
-#define PIN_SERIAL1_RX_1 0u  // PIN_A0
-#define PIN_SERIAL1_TX_0 3u  // PIN_A3
-#define PIN_SERIAL1_TX_1 1u  // PIN_A1
+#define PIN_SERIAL1_RX_0 0u  // PIN_A0
+#define PIN_SERIAL1_RX_1 2u  // PIN_A2
+#define PIN_SERIAL1_TX_0 1u  // PIN_A1
+#define PIN_SERIAL1_TX_1 3u  // PIN_A3
 #define PIN_SERIAL2_CTS  19u // PIN_A19
 #define PIN_SERIAL2_RX   15u // PIN_A15
 #define PIN_SERIAL2_TX   16u // PIN_A16
-#define PINS_SERIAL0_RX  (pin_size_t[]){12u, 13u}
-#define PINS_SERIAL0_TX  (pin_size_t[]){11u, 14u}
-#define PINS_SERIAL1_CTS (pin_size_t[]){4u}
-#define PINS_SERIAL1_RX  (pin_size_t[]){2u, 0u}
-#define PINS_SERIAL1_TX  (pin_size_t[]){3u, 1u}
-#define PINS_SERIAL2_CTS (pin_size_t[]){19u}
-#define PINS_SERIAL2_RX  (pin_size_t[]){15u}
-#define PINS_SERIAL2_TX  (pin_size_t[]){16u}
+#define PINS_SERIAL0_RX  {12u, 13u}
+#define PINS_SERIAL0_TX  {11u, 14u}
+#define PINS_SERIAL1_CTS {4u}
+#define PINS_SERIAL1_RX  {0u, 2u}
+#define PINS_SERIAL1_TX  {1u, 3u}
+#define PINS_SERIAL2_CTS {19u}
+#define PINS_SERIAL2_RX  {15u}
+#define PINS_SERIAL2_TX  {16u}
 
 // Pin function macros
 // -------------------
