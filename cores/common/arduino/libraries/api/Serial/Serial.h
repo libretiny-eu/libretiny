@@ -23,6 +23,8 @@ class SerialClass : public HardwareSerial {
 	uint32_t baudrate{0};			  //!< currently set baudrate
 	uint16_t config{0};				  //!< currently set configuration
 
+	bool validatePins(pin_size_t rx, pin_size_t tx);
+
   private: /* family core */
 	void beginPrivate(unsigned long baudrate, uint16_t config);
 	void endPrivate();
@@ -35,11 +37,15 @@ class SerialClass : public HardwareSerial {
   public: /* common core */
 	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID) : port(port), rx(rx), tx(tx) {}
 
-	void begin(unsigned long baudrate, uint16_t config);
+	void begin(unsigned long baudrate, uint16_t config, pin_size_t rx, pin_size_t tx);
 	void end();
 	int available();
 	int peek();
 	int read();
+
+	inline void begin(unsigned long baudrate, uint16_t config) {
+		begin(baudrate, config, PIN_INVALID, PIN_INVALID);
+	}
 
 	inline void begin(unsigned long baudrate) {
 		begin(baudrate, SERIAL_8N1);
