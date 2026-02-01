@@ -2,13 +2,6 @@
 
 #include "SerialPrivate.h"
 
-#if LT_HW_UART1
-SerialClass Serial1(UART1_PORT);
-#endif
-#if LT_HW_UART2
-SerialClass Serial2(UART2_PORT);
-#endif
-
 static void callback(int port, SerialRingBuffer *buf) {
 	int ch;
 	while ((ch = uart_read_byte(port)) != -1) {
@@ -29,6 +22,10 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config) {
 
 	if (this->baudrate != baudrate || this->config != config)
 		this->configure(baudrate, config);
+
+	if (this->rx != PIN_INVALID) {
+		uart_rx_callback_set(this->port - 1, (uart_callback)callback, &this->data->buf);
+	}
 }
 
 void SerialClass::configure(unsigned long baudrate, uint16_t config) {
@@ -51,8 +48,7 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		uart1_init();
 	else if (this->port == 2)
 		uart2_init();
-	uart_hw_set_change(this->port, &cfg);
-	uart_rx_callback_set(this->port, (uart_callback)callback, &this->data->buf);
+	uart_hw_set_change(this->port - 1, &cfg);
 
 	this->baudrate = baudrate;
 	this->config   = config;
@@ -62,7 +58,7 @@ void SerialClass::end() {
 	if (!this->data)
 		return;
 
-	uart_rx_callback_set(this->port, NULL, NULL);
+	uart_rx_callback_set(this->port - 1, NULL, NULL);
 	switch (this->port) {
 		case 1:
 			uart1_exit();
@@ -87,6 +83,6 @@ void SerialClass::flush() {
 size_t SerialClass::write(uint8_t c) {
 	if (!this->data)
 		return 0;
-	bk_send_byte(this->port, c);
+	bk_send_byte(this->port - 1, c);
 	return 1;
 }

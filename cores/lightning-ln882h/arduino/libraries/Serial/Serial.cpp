@@ -6,8 +6,6 @@ extern Serial_t *serial_handles[SER_PORT_NUM];
 static SerialData *serial_data[SER_PORT_NUM];
 
 #if LT_HW_UART0
-SerialClass Serial0(0, PIN_SERIAL0_RX, PIN_SERIAL0_TX);
-
 static void callback_uart0(void) {
 	SerialData *data = serial_data[0];
 	char ch;
@@ -20,8 +18,6 @@ static void callback_uart0(void) {
 #endif
 
 #if LT_HW_UART1
-SerialClass Serial1(1, PIN_SERIAL1_RX, PIN_SERIAL1_TX);
-
 static void callback_uart1(void) {
 	SerialData *data = serial_data[1];
 	char ch;
@@ -34,8 +30,6 @@ static void callback_uart1(void) {
 #endif
 
 #if LT_HW_UART2
-SerialClass Serial2(2, PIN_SERIAL2_RX, PIN_SERIAL2_TX);
-
 static void callback_uart2(void) {
 	SerialData *data = serial_data[2];
 	char ch;
