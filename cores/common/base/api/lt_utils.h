@@ -18,6 +18,13 @@
 		_a < _b ? _a : _b;      \
 	})
 
+#define LT_MEM32(addr) (*((volatile uint32_t *)(addr)))
+
+// from https://scaryreasoner.wordpress.com/2009/02/28/checking-sizeof-at-compile-time/
+// (include/linux/kernel.h)
+#define LT_BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2 * !!(condition)]))
+#define LT_BUILD_CHECK(condition)  ((void)sizeof(char[1 - 2 * !(condition)]))
+
 /**
  * @brief Generate random bytes using rand().
  *
