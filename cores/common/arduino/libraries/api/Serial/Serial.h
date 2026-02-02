@@ -38,6 +38,7 @@ class SerialClass : public HardwareSerial {
 	SerialClass(uint32_t port, pin_size_t rx = PIN_INVALID, pin_size_t tx = PIN_INVALID) : port(port), rx(rx), tx(tx) {}
 
 	void begin(unsigned long baudrate, uint16_t config, pin_size_t rx, pin_size_t tx);
+	bool setPins(pin_size_t rx, pin_size_t tx);
 	void end();
 	int available();
 	int peek();

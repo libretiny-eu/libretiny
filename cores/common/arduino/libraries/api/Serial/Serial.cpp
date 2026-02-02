@@ -89,6 +89,17 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config, pin_size_t rx, 
 		this->rxBuf = new SerialRingBuffer();
 	}
 
+	if (!this->setPins(rx, tx)) {
+		this->end();
+		return;
+	}
+
+	this->beginPrivate(baudrate, config);
+	// if (this->baudrate != baudrate || this->config != config)
+	this->configure(baudrate, config);
+}
+
+bool SerialClass::setPins(pin_size_t rx, pin_size_t tx) {
 	// use provided pins or those used previously
 	if (rx == PIN_INVALID)
 		rx = this->rx;
@@ -96,19 +107,24 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config, pin_size_t rx, 
 		tx = this->tx;
 	// nothing to configure if RX and TX are invalid
 	if (rx == PIN_INVALID && tx == PIN_INVALID)
-		return;
+		return false;
 	// validate if provided pins are valid for this UART port
 	if (!this->validatePins(rx, tx)) {
 		LT_E("Serial pin numbers RX=%d,TX=%d invalid for port %u", rx, tx, this->port);
-		return;
+		return false;
 	}
 	// store in SerialClass for family code to use
 	this->rx = rx;
 	this->tx = tx;
 
-	this->beginPrivate(baudrate, config);
-	// if (this->baudrate != baudrate || this->config != config)
-	this->configure(baudrate, config);
+	// reinitialize Serial with changed pins if already started
+	if (this->data) {
+		this->endPrivate();
+		this->beginPrivate(this->baudrate, this->config);
+		this->configure(this->baudrate, this->config);
+	}
+
+	return true;
 }
 
 void SerialClass::end() {
