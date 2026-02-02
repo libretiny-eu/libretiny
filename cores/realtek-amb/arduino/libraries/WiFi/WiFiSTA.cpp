@@ -78,6 +78,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	int ret;
 	uint8_t dhcpRet;
 	WiFiNetworkInfo &info = DATA->sta;
+	EventInfo *eventInfo  = nullptr;
 
 	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
 	DIAG_PRINTF_DISABLE();
@@ -127,31 +128,38 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	// Feed watchdog after connect, before DHCP
 	lt_wdt_feed();
 
-	if (ret == RTW_SUCCESS) {
+	if (ret != RTW_SUCCESS) {
+		LT_EM(WIFI, "Connection failed; ret=%d", ret);
+		goto error;
+	}
+
+	// Run DHCP only if not using static IP configuration
+	if (!DATA->sta.localIP) {
 		dhcpRet = LwIP_DHCP(0, DHCP_START);
 		// Feed watchdog after DHCP
 		lt_wdt_feed();
-		if (dhcpRet == DHCP_ADDRESS_ASSIGNED) {
-			LT_HEAP_I();
-			EventInfo *eventInfo				   = (EventInfo *)calloc(1, sizeof(EventInfo));
-			eventInfo->got_ip.if_index			   = 0;
-			eventInfo->got_ip.esp_netif			   = NULL;
-			eventInfo->got_ip.ip_info.ip.addr	   = localIP();
-			eventInfo->got_ip.ip_info.gw.addr	   = gatewayIP();
-			eventInfo->got_ip.ip_info.netmask.addr = subnetMask();
-			eventInfo->got_ip.ip_changed		   = true;
-			// pass the event through the queue
-			wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
-			// free memory as wifi_indication creates a copy
-			free(eventInfo);
-			DIAG_PRINTF_ENABLE();
-			return true;
+		if (dhcpRet != DHCP_ADDRESS_ASSIGNED) {
+			LT_EM(WIFI, "DHCP failed; dhcpRet=%d", dhcpRet);
+			wifi_disconnect();
+			goto error;
 		}
-		LT_EM(WIFI, "DHCP failed; dhcpRet=%d", dhcpRet);
-		wifi_disconnect();
-		goto error;
 	}
-	LT_EM(WIFI, "Connection failed; ret=%d", ret);
+
+	LT_HEAP_I();
+	eventInfo							   = (EventInfo *)calloc(1, sizeof(EventInfo));
+	eventInfo->got_ip.if_index			   = 0;
+	eventInfo->got_ip.esp_netif			   = NULL;
+	eventInfo->got_ip.ip_info.ip.addr	   = localIP();
+	eventInfo->got_ip.ip_info.gw.addr	   = gatewayIP();
+	eventInfo->got_ip.ip_info.netmask.addr = subnetMask();
+	eventInfo->got_ip.ip_changed		   = true;
+	// pass the event through the queue
+	wifi_indication(WIFI_EVENT_CONNECT, (char *)eventInfo, ARDUINO_EVENT_WIFI_STA_GOT_IP, -2);
+	// free memory as wifi_indication creates a copy
+	free(eventInfo);
+
+	DIAG_PRINTF_ENABLE();
+	return true;
 error:
 	DIAG_PRINTF_ENABLE();
 	return false;
