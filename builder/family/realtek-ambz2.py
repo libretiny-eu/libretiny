@@ -438,15 +438,16 @@ queue.BuildLibraries()
 image_part_table = "${BUILD_DIR}/image_part_table.${FLASH_PART_TABLE_OFFSET}.bin"
 image_bootloader = "${BUILD_DIR}/image_bootloader.${FLASH_BOOT_OFFSET}.bin"
 image_firmware_is = "${BUILD_DIR}/image_firmware_is.${FLASH_OTA1_OFFSET}.bin"
+part_firmware_is_header = "${BUILD_DIR}/part_firmware_is.header.${FLASH_OTA1_OFFSET}.bin"
+part_firmware_is_data = "${BUILD_DIR}/part_firmware_is.data.${FLASH_OTA1_OFFSET}.bin"
 env.Replace(
     # linker command (dual .bin outputs)
     LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
     # UF2OTA input list
     UF2OTA=[
-        # use unmodified image for flasher
-        f"{image_firmware_is},{image_firmware_is}=flasher:ota1,ota2",
-        # use same image for device OTA
-        f"{image_firmware_is},{image_firmware_is}=device:ota1,ota2",
+        # use the same image for flasher and device, but flash the 1st sector last
+        f"{part_firmware_is_data},{part_firmware_is_data}=device:ota1,ota2;flasher:ota1,ota2",
+        f"{part_firmware_is_header},{part_firmware_is_header}=device:ota1,ota2;flasher:ota1,ota2",
         # having flashed an application image, update the bootloader and partition table (incl. keys)
         f"{image_bootloader},{image_bootloader}=flasher:boot,boot",
         f"{image_part_table},{image_part_table}=flasher:part_table,part_table",
