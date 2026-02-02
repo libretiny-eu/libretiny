@@ -83,15 +83,14 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config, pin_size_t rx, 
 	// let family code cleanup any resources
 	this->end();
 
+	// apply pin configuration
+	if (!this->setPins(rx, tx))
+		return;
+
 	// allocate data structure and ring buffer
 	if (!this->data) {
 		this->data	= new SerialData();
 		this->rxBuf = new SerialRingBuffer();
-	}
-
-	if (!this->setPins(rx, tx)) {
-		this->end();
-		return;
 	}
 
 	this->beginPrivate(baudrate, config);
@@ -100,6 +99,9 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config, pin_size_t rx, 
 }
 
 bool SerialClass::setPins(pin_size_t rx, pin_size_t tx) {
+	// return early if configured pins are the same
+	if (rx == this->rx && tx == this->tx)
+		return true;
 	// use provided pins or those used previously
 	if (rx == PIN_INVALID)
 		rx = this->rx;
