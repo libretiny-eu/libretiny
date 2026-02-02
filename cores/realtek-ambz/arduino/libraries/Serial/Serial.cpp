@@ -93,6 +93,8 @@ void SerialClass::endPrivate() {
 		return;
 	UART_TypeDef *uart = this->data->uart;
 	IRQn irq		   = this->data->irq;
+	if (!uart)
+		return;
 
 	UART_INTConfig(uart, RUART_IER_ERBI, DISABLE);
 	UART_RxCmd(uart, DISABLE);

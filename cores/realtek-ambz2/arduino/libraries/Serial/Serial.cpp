@@ -63,6 +63,9 @@ void SerialClass::endPrivate() {
 		return;
 
 	hal_uart_adapter_t *uart = this->data->uart;
+	if (!uart)
+		return;
+
 	if (this->port == 2) {
 		uart->base_addr->ier_b.erbi = 0;
 		hal_uart_rxind_hook(uart, nullptr, 0, RxIrq);

@@ -19,7 +19,6 @@ static void callback(int port, SerialRingBuffer *buf) {
 void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
 	if (!this->data)
 		return;
-	this->data->buf = this->rxBuf;
 
 	if (this->rx != PIN_INVALID) {
 		uart_rx_callback_set(this->port - 1, (uart_callback)callback, this->rxBuf);

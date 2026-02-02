@@ -6,6 +6,6 @@
 #include <Serial.h>
 
 struct SerialData {
-	SerialRingBuffer *buf;
-	hal_uart_adapter_t *uart;
+	SerialRingBuffer *buf{nullptr};
+	hal_uart_adapter_t *uart{nullptr};
 };

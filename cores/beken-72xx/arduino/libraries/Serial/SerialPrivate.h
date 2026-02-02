@@ -4,6 +4,4 @@
 
 #include <ArduinoPrivate.h>
 
-struct SerialData {
-	SerialRingBuffer *buf;
-};
+struct SerialData {};
