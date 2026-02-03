@@ -26,6 +26,9 @@ SOC_BK7251 = 3
 SOC_BK7271 = 4
 SOC_BK7231N = 5
 SOC_BK7236 = 6
+SOC_BK7238 = 7
+SOC_BK7252N = 8
+SOC_BK7253 = 8
 SOC_NAMES = {
     SOC_BK7231: "bk7231u",
     SOC_BK7231U: "bk7231u",
@@ -33,9 +36,21 @@ SOC_NAMES = {
     SOC_BK7271: "bk7271",
     SOC_BK7231N: "bk7231n",
     SOC_BK7236: "bk7236",
+    SOC_BK7238: "bk7238",
+    SOC_BK7252N: "bk7252n",
 }
 SOC = env.Cfg("CFG_SOC_NAME")
 WPA_VERSION = "wpa_supplicant_2_9" if env.Cfg("CFG_USE_WPA_29") else "hostapd-2.5"
+
+BLE_VERSION_4_2 = 1
+BLE_VERSION_5_1 = 2
+BLE_VERSION_5_2 = 3
+BLE_VERSIONS = {
+    BLE_VERSION_4_2: "ble_4_2",
+    BLE_VERSION_5_1: "ble_5_1",
+    BLE_VERSION_5_2: "ble_5_2",
+}
+BLE = env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION")
 
 # Flags
 queue.AppendPublic(
@@ -157,31 +172,43 @@ queue.AddLibrary(
     base_dir=DRIVER_DIR,
     srcs=[
         "+<driver.c>",
-        "+<calendar/*.c>",
         "+<common/*.c>",
         "+<dma/*.c>",
         "+<fft/*.c>",
         "+<flash/*.c>",
-        "+<general_dma/*.c>",
         "+<gpio/*.c>",
-        "+<i2c/*.c>",
-        "+<i2s/*.c>",
+        "+<i2c/i2c2.c>",
         "+<icu/*.c>",
-        "+<irda/*.c>",
-        "+<jpeg/*.c>",
         "+<macphy_bypass/*.c>",
         "+<phy/*.c>",
         "+<pwm/*.c>",
         "-<pwm/pwm_bk7271.c>",
         "-<pwm/pwm_new.c>",
-        "+<qspi/*.c>",
         "+<rw_pub/*.c>",
         "+<saradc/*.c>",
         "+<security/*.c>",
+        "+<spi/*.c>",
+        "-<spi/spi_psram.c>",
         "+<spidma/*.c>",
         "+<sys_ctrl/*.c>",
         "+<uart/uart.c>",
         "+<wdt/*.c>",
+        # BK7252N-specific
+        SOC == SOC_BK7252N and "+<general_dma/general_dma_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<i2c/i2c1_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<i2s/i2s_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<irda/irda_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<jpeg/jpeg.c>",
+        SOC == SOC_BK7252N and "+<qspi/qspi_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<rtc/rtc_reg.c>",
+        # All other SoCs
+        SOC != SOC_BK7252N and "+<calendar/calendar.c>",
+        SOC != SOC_BK7252N and "+<general_dma/general_dma.c>",
+        SOC != SOC_BK7252N and "+<i2c/i2c1.c>",
+        SOC != SOC_BK7252N and "+<i2s/i2s.c>",
+        SOC != SOC_BK7252N and "+<irda/irda.c>",
+        SOC != SOC_BK7252N and "+<jpeg/jpeg_encoder.c>",
+        SOC != SOC_BK7252N and "+<qspi/qspi.c>",
     ],
     includes=[
         "+<common>",
@@ -216,15 +243,19 @@ queue.AddLibrary(
         "+<func.c>",
         "+<airkiss/*.c>",
         "+<base64/*.c>",
+        "+<bk7011_cal/*.c>",
         SOC != SOC_BK7231 and "+<ble_wifi_exchange/*.c>",
         "+<camera_intf/*.c>",
+        "+<force_sleep/*.c>",
         "+<hostapd_intf/*.c>",
         "+<joint_up/*.c>",
         "+<lwip_intf/dhcpd/*.c>",
         "+<misc/*.c>",
         "-<misc/fake_clock.c>",  # fixups
         "+<net_param_intf/*.c>",
+        "+<ntp/*.c>",
         "+<power_save/*.c>",
+        "+<rtc/*.c>",
         "+<rwnx_intf/*.c>",
         "+<saradc_intf/*.c>",
         "+<security/*.c>",
@@ -236,18 +267,23 @@ queue.AddLibrary(
         "-<user_driver/BkDriverQspi.c>",
         "+<utf8/*.c>",
         "+<video_transfer/*.c>",
+        f"+<{WPA_VERSION}/src/crypto/crypto_mbedtls.c>",
     ],
     includes=[
         "+<base64>",
         "+<ble_wifi_exchange>",
         "+<camera_intf>",
         "+<ethernet_intf>",
+        "+<force_sleep>",
         "+<include>",
         "+<joint_up>",
         "+<lwip_intf>",  # for config/lwipopts.h
+        "+<misc>",
+        "+<ntp>",
         "+<power_save>",
         "+<rf_test>",
         "+<rf_use>",
+        "+<rtc>",
         "+<rwnx_intf>",
         "+<saradc_intf>",
         "+<sensor>",
@@ -265,6 +301,7 @@ queue.AddLibrary(
         f"+<{WPA_VERSION}/src/common>",
         f"+<{WPA_VERSION}/src/drivers>",
         f"+<{WPA_VERSION}/src/utils>",
+        f"+<{WPA_VERSION}/src/wps>",
         f"+<{WPA_VERSION}/wpa_supplicant>",
     ],
 )
@@ -316,43 +353,6 @@ queue.AddLibrary(
     ),
 )
 
-# Sources - chip-specific drivers
-if SOC in [SOC_BK7231, SOC_BK7231U, SOC_BK7251]:
-    queue.AddLibrary(
-        name="bdk_driver_spi",
-        base_dir=join(DRIVER_DIR, "spi"),
-        srcs=[
-            "+<spi.c>",
-            "+<spi_master.c>",
-            "+<spi_slave.c>",
-        ],
-    )
-if SOC in [SOC_BK7231N]:
-    queue.AddLibrary(
-        name="bdk_driver_spi",
-        base_dir=join(DRIVER_DIR, "spi"),
-        srcs=[
-            "+<spi_bk7231n.c>",
-            "+<spi_master_bk7231n.c>",
-            "+<spi_slave_bk7231n.c>",
-        ],
-    )
-if SOC in [SOC_BK7251]:
-    queue.AddLibrary(
-        name="bdk_bk7251",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/audio/*.c>",
-            "+<driver/sdcard/*.c>",
-            "+<func/audio/*.c>",
-            "+<func/sd_music/*.c>",
-        ],
-        includes=[
-            "+<driver/audio>",
-            "+<driver/sdcard>",
-        ],
-    )
-
 # Sources - WPA3 (optional)
 if env.Cfg("CFG_WPA3"):
     queue.AddLibrary(
@@ -372,48 +372,73 @@ if env.Cfg("CFG_WPA3"):
     )
 
 # Sources - BLE version
-if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
-    "BLE_VERSION_4_2"
-):
-    queue.AddLibrary(
-        name="bdk_ble_4_2",
-        base_dir=join(DRIVER_DIR, "ble"),
-        srcs=[
-            "+<**/*.c>",
-        ],
-        includes=[
-            "+<.>",
-            "+<**/include>",
-            "+<beken_ble_sdk/mesh/src/dbg>",
-            "+<config>",
-            "+<modules/**>",
-            "+<plactform/arch>",
-            "+<plactform/driver/*>",
-            "+<profiles/*/api>",
-        ],
+if env.Cfg("CFG_SUPPORT_BLE"):
+    platform = (
+        "bk7238" if SOC == SOC_BK7238 else "bk7252n" if SOC == SOC_BK7252N else "7231n"
     )
-if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
-    "BLE_VERSION_5_x"
-):
     queue.AddLibrary(
-        name="bdk_ble_5_x",
-        base_dir=join(DRIVER_DIR, "ble_5_x_rw"),
+        name=f"bdk_{BLE_VERSIONS[BLE]}",
+        base_dir=join(DRIVER_DIR, "ble", BLE_VERSIONS[BLE]),
         srcs=[
-            "+<**/*.c>",
+            # BLE 4.2 (BK7231U, BK7251, BK7271)
+            BLE == BLE_VERSION_4_2 and "+<**/*.c>",
+            # BLE 5.x
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/app/src/*.c>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/ui/ble_ui.c>",
+            # BLE 5.1 (BK7231N, BK7236)
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/prf/*.c>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/comm/src/*.c>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/sdp/src/*.c>",
+            # BLE 5.2 (BK7238, BK7252N, BK7253)
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bas/bass/src/bass.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_comm/src/*.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_sdp/src/sdp_common.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/dis/diss/src/diss.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/find/findt/src/findt.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp/hogpd/src/hogpd.c>",
+            BLE == BLE_VERSION_5_2 and "+<hci/controller_hci.c>",
+            # SoC-specific (BLE 5.x)
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/**/*.c>",
             "-<ble_pub/app/src/app_ble_task.c>",
-            "-<platform/7231n/nvds/src/nvds.c>",
+            f"-<platform/{platform}/nvds/src/nvds.c>",
         ],
         includes=[
-            "+<**/api>",
-            "+<arch/**>",
-            "+<ble_lib/ip/ble/**>",
-            "+<ble_lib/ip/hci/src>",
-            "+<ble_lib/ip/sch/import>",
-            "+<ble_lib/modules/*/src>",
-            "+<ble_pub/prf>",
-            "+<ble_pub/ui>",
-            "+<platform/7231n/**>",
-            "-<platform/7231n/nvds/**>",
+            # BLE 4.2
+            BLE == BLE_VERSION_4_2 and "+<.>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/*/include>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/mesh/src/dbg>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/mesh/src/models/include>",
+            BLE == BLE_VERSION_4_2 and "+<config>",
+            BLE == BLE_VERSION_4_2 and "+<modules/**>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/arch>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/driver/*>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/api>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/include>",
+            # BLE 5.x
+            BLE != BLE_VERSION_4_2 and "+<arch/**>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/ip/ble/**>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/ip/*/*>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/modules/*/*>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/app/api>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/ui>",
+            # BLE 5.1
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/prf>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/*/api>",
+            # BLE 5.2
+            BLE == BLE_VERSION_5_2 and "+<ble_lib/modules/rwip/import/reg>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bas/bass/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_comm/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_sdp/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/dis/diss/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/find/findt/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp/hogpd/api>",
+            # SoC-specific (BLE 5.x)
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/config>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/driver/*>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/entry>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/rwip/api>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/rwip/import/reg>",
         ],
     )
 
@@ -426,9 +451,9 @@ queue.AppendPublic(
     LIBS=[
         "airkiss",
         "sensor",
-        "usb",
         # "wpa", # this is compiled from func/hostapd_intf/hostapd_intf.c
         SOC != SOC_BK7231 and f"ble_{SOC_NAMES[SOC]}",
+        SOC == SOC_BK7251 and "usb",
         f"cal_{SOC_NAMES[SOC]}",
         f"rf_test_{SOC_NAMES[SOC]}",
         f"rf_use_{SOC_NAMES[SOC]}",
