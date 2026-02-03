@@ -241,9 +241,6 @@ queue.AddLibrary(
         "+<base64>",
         "+<ble_wifi_exchange>",
         "+<camera_intf>",
-        "+<easy_flash>",
-        "+<easy_flash/inc>",
-        "+<easy_flash/port>",
         "+<ethernet_intf>",
         "+<include>",
         "+<joint_up>",
@@ -356,40 +353,7 @@ if SOC in [SOC_BK7251]:
         ],
     )
 
-# Sources - enabled through config
-if env.Cfg("CFG_SDIO"):
-    queue.AddLibrary(
-        name="bdk_driver_sdio",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/sdio/*.c>",
-            "+<func/sdio_intf/*.c>",
-        ],
-    )
-if env.Cfg("CFG_BK_AWARE"):
-    queue.AddLibrary(
-        name="bdk_driver_sdio",
-        base_dir="$SDK_DIR",
-        srcs=[
-            "+<beken378/func/bk_aware/*.c>",
-            "+<demos/wifi/bk_aware/*.c>",
-        ],
-        includes=[
-            "+<beken378/func/bk_aware>",
-        ],
-    )
-if env.Cfg("CFG_USE_SDCARD_HOST"):
-    queue.AddLibrary(
-        name="bdk_func_fatfs",
-        base_dir=join(FUNC_DIR, "fatfs"),
-        srcs=[
-            "+<*.c>",
-            "-<test_fatfs.c>",
-        ],
-        includes=[
-            "+<.>",
-        ],
-    )
+# Sources - WPA3 (optional)
 if env.Cfg("CFG_WPA3"):
     queue.AddLibrary(
         name="bdk_wolfssl",
@@ -406,6 +370,8 @@ if env.Cfg("CFG_WPA3"):
             "+<.>",
         ],
     )
+
+# Sources - BLE version
 if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
     "BLE_VERSION_4_2"
 ):
@@ -448,30 +414,6 @@ if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
             "+<ble_pub/ui>",
             "+<platform/7231n/**>",
             "-<platform/7231n/nvds/**>",
-        ],
-    )
-if env.Cfg("ATSVR_CFG"):
-    queue.AddLibrary(
-        name="bdk_atsvr",
-        base_dir=join(FUNC_DIR, "at_server"),
-        srcs=[
-            "+<**/*.c>",
-        ],
-        includes=[
-            "+<.>",
-            "+<*>",
-        ],
-    )
-if env.Cfg("CFG_USB") or env.Cfg("CFG_USE_SDCARD_HOST"):
-    queue.AddLibrary(
-        name="bdk_driver_usb",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/usb/*.c>",
-            "+<func/usb/*.c>",
-        ],
-        includes=[
-            "+<driver/usb/**>",
         ],
     )
 
