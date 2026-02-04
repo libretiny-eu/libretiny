@@ -13,7 +13,7 @@
 #define CFG_BK_AWARE					0
 #define CFG_BK_AWARE_OUI				"\xC8\x47\x8C"
 #define CFG_BLE_VERSION					BLE_VERSION_4_2
-#define CFG_EASY_FLASH					1
+#define CFG_EASY_FLASH					0
 #define CFG_ENABLE_BUTTON				0
 #define CFG_ENABLE_DEMO_TEST			0
 #define CFG_ENABLE_WPA_LOG				0
