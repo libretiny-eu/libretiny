@@ -56,8 +56,7 @@
     "framework-beken-bdk": {
       "type": "framework",
       "optional": true,
-      "version": "https://github.com/libretiny-eu/framework-beken-bdk#v2021.06.07",
-      "version_prefix": true,
+      "version": "https://github.com/libretiny-eu/framework-beken-bdk#3.0.33",
       "toolchains": {
         "any": "gccarmnoneeabi@~1.100301.0"
       },
@@ -105,7 +104,7 @@
     },
     "library-freertos-port": {
       "type": "framework",
-      "version": "https://github.com/libretiny-eu/library-freertos-port#2025.01.18"
+      "version": "https://github.com/libretiny-eu/library-freertos-port#2026.02.04"
     },
     "library-flashdb": {
       "type": "framework",
