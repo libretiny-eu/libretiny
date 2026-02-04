@@ -254,7 +254,10 @@ queue.AddLibrary(
         "+<net_param_intf/*.c>",
         "+<ntp/*.c>",
         "+<power_save/*.c>",
+        "-<power_save/low_voltage_compensation.c>",
+        "-<power_save/low_voltage_ps.c>",
         "+<rtc/*.c>",
+        "-<rtc/alarm.c>",
         "+<rwnx_intf/*.c>",
         "+<saradc_intf/*.c>",
         "+<security/*.c>",
@@ -303,6 +306,12 @@ queue.AddLibrary(
         "+<wpa_supplicant_2_9/src/wps>",
         "+<wpa_supplicant_2_9/wpa_supplicant>",
     ],
+    options=dict(
+        CPPDEFINES=[
+            # only used in func.c
+            ("SDK_COMMIT_ID", "NULL"),
+        ]
+    ),
 )
 
 # Sources - FreeRTOS
