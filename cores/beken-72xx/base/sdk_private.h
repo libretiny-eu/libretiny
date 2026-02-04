@@ -24,7 +24,12 @@ extern "C" {
 #include <sys_rtos.h>
 #include <uart_pub.h>
 #include <wdt_pub.h>
+
+// BDK 3.0.76+ has a conflicting structure
+// (but it's not actually used in source code)
+#define wifi_event_sta_disconnected_t bk_wifi_event_sta_disconnected_t
 #include <wlan_ui_pub.h>
+#undef wifi_event_sta_disconnected_t
 
 #include <sdk_extern.h>
 

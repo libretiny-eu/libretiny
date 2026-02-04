@@ -7,7 +7,7 @@
 
 #define FLASH_ERASE_MIN_SIZE (4 * 1024)
 
-extern uint32_t flash_ctrl(uint32_t cmd, void *param);
+extern UINT32 flash_ctrl(UINT32 cmd, void *parm);
 extern PROTECT_TYPE get_flash_protect();
 extern void flash_protection_op(uint8_t mode, PROTECT_TYPE type);
 

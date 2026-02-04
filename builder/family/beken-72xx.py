@@ -2,11 +2,14 @@
 
 from os.path import join
 
+import click
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
+platform: PlatformBase = env.PioPlatform()
 queue = env.AddLibraryQueue("beken-72xx")
 env.ConfigureFamily()
 
@@ -17,6 +20,18 @@ FUNC_DIR = join(ROOT_DIR, "func")
 
 # Load sys_config.h into env
 env.LoadConfig(join("$FAMILY_DIR", "base", "config", "sys_config.h"))
+
+# Check used version of BDK
+bdk_version = platform.versions["framework-beken-bdk"]
+if not bdk_version.startswith("3.0."):
+    click.secho(
+        "Only 3.0.x versions of 'framework-beken-bdk' are supported "
+        f"(found '{bdk_version}'). Please modify or remove the custom "
+        "version specification.",
+        fg="red",
+    )
+    exit(1)
+BDK = 30000 + int(bdk_version.rpartition(".")[2])
 
 # Define vars used during build
 SOC_BK7231 = 1
@@ -73,6 +88,8 @@ queue.AppendPublic(
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
         ("INCLUDE_xTaskGetHandle", "1"),
+        # Provide BDK version to code
+        ("CFG_BDK_VERSION", BDK),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
@@ -335,6 +352,12 @@ queue.AddLibrary(
     includes=[
         "+<os/*>",
     ],
+    options=dict(
+        CPPDEFINES=[
+            # Make FreeRTOS modifications visible
+            ("FREERTOS_PORT_BEKEN_BDK", "1"),
+        ]
+    ),
 )
 
 # Sources - lwIP
@@ -384,9 +407,15 @@ if env.Cfg("CFG_SUPPORT_BLE"):
     platform = (
         "bk7238" if SOC == SOC_BK7238 else "bk7252n" if SOC == SOC_BK7252N else "7231n"
     )
+    if BDK >= 30056:
+        ble_base_dir = join(DRIVER_DIR, "ble", BLE_VERSIONS[BLE])
+    elif BLE == BLE_VERSION_4_2:
+        ble_base_dir = join(DRIVER_DIR, "ble")
+    elif BLE == BLE_VERSION_5_1:
+        ble_base_dir = join(DRIVER_DIR, "ble_5_x_rw")
     queue.AddLibrary(
         name=f"bdk_{BLE_VERSIONS[BLE]}",
-        base_dir=join(DRIVER_DIR, "ble", BLE_VERSIONS[BLE]),
+        base_dir=ble_base_dir,
         srcs=[
             # BLE 4.2 (BK7231U, BK7251, BK7271)
             BLE == BLE_VERSION_4_2 and "+<**/*.c>",

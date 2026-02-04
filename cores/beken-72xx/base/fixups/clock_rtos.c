@@ -93,8 +93,12 @@ static void fclk_hdl(UINT8 param) {
 #endif
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
+#if CFG_BDK_VERSION >= 30045
+	if (xTaskIncrementTick() != pdFALSE) {
+#else
 	if (xTaskIncrementTick() != pdFALSE || preempt_delayed_schedule_get_flag()) {
 		preempt_delayed_schedule_clear_flag();
+#endif
 		/* Select a new task to run. */
 		vTaskSwitchContext();
 	}

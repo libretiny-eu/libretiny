@@ -101,14 +101,23 @@ void wifiEventHandler(rw_evt_type event) {
 		case RW_EVT_STA_PASSWORD_WRONG:
 		case RW_EVT_STA_NO_AP_FOUND:
 		case RW_EVT_STA_ASSOC_FULL:
+#if CFG_BDK_VERSION >= 30076
+		case RW_EVT_STA_AUTH_FAILED:
+		case RW_EVT_STA_DISASSOC:
+		case RW_EVT_STA_ASSOC_FAILED:
+#else
 		case RW_EVT_STA_DISCONNECTED:
 		case RW_EVT_STA_CONNECT_FAILED:
+#endif
 			eventId									 = ARDUINO_EVENT_WIFI_STA_DISCONNECTED;
 			eventInfo.wifi_sta_disconnected.ssid_len = 0;
 			switch (event) {
 				case RW_EVT_STA_BEACON_LOSE:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_BEACON_TIMEOUT;
 					break;
+#if CFG_BDK_VERSION >= 30076
+				case RW_EVT_STA_AUTH_FAILED:
+#endif
 				case RW_EVT_STA_PASSWORD_WRONG:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_AUTH_FAIL;
 					break;
@@ -118,12 +127,21 @@ void wifiEventHandler(rw_evt_type event) {
 				case RW_EVT_STA_ASSOC_FULL:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_TOOMANY;
 					break;
+#if CFG_BDK_VERSION >= 30076
+				case RW_EVT_STA_DISASSOC:
+					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_LEAVE;
+					break;
+				case RW_EVT_STA_ASSOC_FAILED:
+					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_CONNECTION_FAIL;
+					break;
+#else
 				case RW_EVT_STA_DISCONNECTED:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_LEAVE;
 					break;
 				case RW_EVT_STA_CONNECT_FAILED:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_CONNECTION_FAIL;
 					break;
+#endif
 				default:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_UNSPECIFIED;
 					break;
