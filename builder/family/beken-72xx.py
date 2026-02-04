@@ -449,6 +449,8 @@ if env.Cfg("CFG_SUPPORT_BLE"):
             BLE == BLE_VERSION_4_2 and "+<modules/**>",
             BLE == BLE_VERSION_4_2 and "+<plactform/arch>",
             BLE == BLE_VERSION_4_2 and "+<plactform/driver/*>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/include>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/modules/include>",
             BLE == BLE_VERSION_4_2 and "+<profiles/*/api>",
             BLE == BLE_VERSION_4_2 and "+<profiles/*/include>",
             # BLE 5.x
