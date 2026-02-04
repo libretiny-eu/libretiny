@@ -40,7 +40,6 @@ SOC_NAMES = {
     SOC_BK7252N: "bk7252n",
 }
 SOC = env.Cfg("CFG_SOC_NAME")
-WPA_VERSION = "wpa_supplicant_2_9" if env.Cfg("CFG_USE_WPA_29") else "hostapd-2.5"
 
 BLE_VERSION_4_2 = 1
 BLE_VERSION_5_1 = 2
@@ -267,7 +266,7 @@ queue.AddLibrary(
         "-<user_driver/BkDriverQspi.c>",
         "+<utf8/*.c>",
         "+<video_transfer/*.c>",
-        f"+<{WPA_VERSION}/src/crypto/crypto_mbedtls.c>",
+        "+<wpa_supplicant_2_9/src/crypto/crypto_mbedtls.c>",
     ],
     includes=[
         "+<base64>",
@@ -294,15 +293,15 @@ queue.AddLibrary(
         "+<user_driver>",
         "+<utf8>",
         "+<video_transfer>",
-        f"+<{WPA_VERSION}/bk_patch>",
-        f"+<{WPA_VERSION}/hostapd>",
-        f"+<{WPA_VERSION}/src>",
-        f"+<{WPA_VERSION}/src/ap>",
-        f"+<{WPA_VERSION}/src/common>",
-        f"+<{WPA_VERSION}/src/drivers>",
-        f"+<{WPA_VERSION}/src/utils>",
-        f"+<{WPA_VERSION}/src/wps>",
-        f"+<{WPA_VERSION}/wpa_supplicant>",
+        "+<wpa_supplicant_2_9/bk_patch>",
+        "+<wpa_supplicant_2_9/hostapd>",
+        "+<wpa_supplicant_2_9/src>",
+        "+<wpa_supplicant_2_9/src/ap>",
+        "+<wpa_supplicant_2_9/src/common>",
+        "+<wpa_supplicant_2_9/src/drivers>",
+        "+<wpa_supplicant_2_9/src/utils>",
+        "+<wpa_supplicant_2_9/src/wps>",
+        "+<wpa_supplicant_2_9/wpa_supplicant>",
     ],
 )
 
