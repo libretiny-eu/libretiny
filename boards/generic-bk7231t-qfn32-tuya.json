@@ -2,7 +2,6 @@
 	"_base": [
 		"generic",
 		"beken-72xx",
-		"beken-7231",
 		"beken-7231t",
 		"beken-7231-tuya",
 		"ic/bk7231-qfn32"

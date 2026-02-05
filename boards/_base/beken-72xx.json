@@ -2,6 +2,7 @@
 	"build": {
 		"f_cpu": "120000000L",
 		"prefix": "arm-none-eabi-",
+		"bkoffset_app": "0x10000",
 		"bkota": {
 			"encryption": "aes256",
 			"compression": "gzip",
@@ -38,7 +39,8 @@
 			"voltage": "3.0V - 3.6V",
 			"extra": {
 				"Wi-Fi": "802.11 b/g/n"
-			}
+			},
+			"keys": "*-- no encryption --*"
 		},
 		"flashing": {
 			"links": {
