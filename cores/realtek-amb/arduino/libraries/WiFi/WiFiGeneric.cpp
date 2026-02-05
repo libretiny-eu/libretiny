@@ -219,9 +219,10 @@ bool WiFiClass::setTxPower(int power) {
 
 int WiFiClass::getTxPower() {
 	return 0;
-	int power = 0;
-	wifi_get_txpower(&power);
-	return power;
+	// not implemented in realtek SDK
+	// int power = 0;
+	// wifi_get_txpower(&power);
+	// return power;
 }
 
 IPAddress WiFiClass::hostByName(const char *hostname) {
