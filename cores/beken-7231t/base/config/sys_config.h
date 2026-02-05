@@ -90,7 +90,7 @@
 #define CFG_USE_FTPD_UPGRADE			0
 #define CFG_USE_HSLAVE_SPI				0
 #define CFG_USE_LWIP_NETSTACK			1
-#define CFG_USE_MBEDTLS					1
+#define CFG_USE_MBEDTLS					0
 #define CFG_USE_MCU_PS					1
 #define CFG_USE_PTA						0
 #define CFG_USE_SDCARD_HOST				0

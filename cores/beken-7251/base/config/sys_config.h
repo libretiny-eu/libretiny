@@ -101,7 +101,7 @@
 #define CFG_USE_I2S						0
 #define CFG_USE_IRDA					0
 #define CFG_USE_LWIP_NETSTACK			1
-#define CFG_USE_MBEDTLS					1
+#define CFG_USE_MBEDTLS					0
 #define CFG_USE_MCU_PS					1
 #define CFG_USE_PTA						0
 #define CFG_USE_QSPI					1

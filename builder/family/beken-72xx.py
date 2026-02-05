@@ -410,16 +410,32 @@ queue.AddLibrary(
     ),
 )
 
-# Sources - WPA3 (optional)
-if env.Cfg("CFG_WPA3"):
+# Sources - wolfSSL (for WPA3)
+# * BDK 3.0.56 added an option whether to use mbedTLS or wolfSSL for crypto
+#   in wpa_supplicant, but it wasn't used yet because WPA3 was disabled.
+# * BDK 3.0.62 enabled WPA3 on BK7231N/U/7238/7251, which added a dependency on
+#   an external crypto library (wolfSSL by default).
+# * BDK 3.0.70 switched BK7231N and BK7238 to mbedTLS.
+use_wpa_wolfssl = False
+if BDK >= (3, 0, 62) and SOC in (SOC_BK7231N, SOC_BK7231U, SOC_BK7238, SOC_BK7251):
+    use_wpa_wolfssl = True
+if BDK >= (3, 0, 70) and SOC in (SOC_BK7231N, SOC_BK7238):
+    use_wpa_wolfssl = False
+if env.Cfg("CFG_USE_MBEDTLS"):
+    use_wpa_wolfssl = False
+if use_wpa_wolfssl:
     queue.AddLibrary(
         name="bdk_wolfssl",
         base_dir=join(FUNC_DIR, "wolfssl"),
         srcs=[
             "+<wolfcrypt/src/ecc.c>",
+            "+<wolfcrypt/src/hmac.c>",
+            "+<wolfcrypt/src/md5.c>",
             "+<wolfcrypt/src/memory.c>",
             "+<wolfcrypt/src/random.c>",
+            "+<wolfcrypt/src/sha.c>",
             "+<wolfcrypt/src/sha256.c>",
+            "+<wolfcrypt/src/sha512.c>",
             "+<wolfcrypt/src/tfm.c>",
             "+<wolfcrypt/src/wolfmath.c>",
         ],
