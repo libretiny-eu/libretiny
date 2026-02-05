@@ -31,21 +31,19 @@ if not bdk_version.startswith("3.0."):
         fg="red",
     )
     exit(1)
-BDK = 30000 + int(bdk_version.rpartition(".")[2])
 
-# Define vars used during build
+# Supported SoC types
 SOC_BK7231 = 1
 SOC_BK7231U = 2
-SOC_BK7221U = 3
-SOC_BK7251 = 3
+SOC_BK7251 = 3  # also: BK7221U, BK7252
 SOC_BK7271 = 4
 SOC_BK7231N = 5
 SOC_BK7236 = 6
 SOC_BK7238 = 7
-SOC_BK7252N = 8
-SOC_BK7253 = 8
+SOC_BK7252N = 8  # also: BK7253
+# Library names for each SoC
 SOC_NAMES = {
-    SOC_BK7231: "bk7231u",
+    SOC_BK7231: "bk7231",
     SOC_BK7231U: "bk7231u",
     SOC_BK7251: "bk7251",
     SOC_BK7271: "bk7271",
@@ -54,17 +52,45 @@ SOC_NAMES = {
     SOC_BK7238: "bk7238",
     SOC_BK7252N: "bk7252n",
 }
-SOC = env.Cfg("CFG_SOC_NAME")
+# Minimum BDK version for each SoC
+SOC_BDK = {
+    SOC_BK7231: None,
+    SOC_BK7231U: (3, 0, 21),
+    SOC_BK7251: (3, 0, 11),
+    SOC_BK7271: (3, 1, 5),
+    SOC_BK7231N: (3, 0, 4),
+    SOC_BK7236: None,
+    SOC_BK7238: (3, 0, 56),
+    SOC_BK7252N: (3, 0, 76),
+}
 
+# Supported BLE versions
 BLE_VERSION_4_2 = 1
 BLE_VERSION_5_1 = 2
 BLE_VERSION_5_2 = 3
+# BLE source code directory names
 BLE_VERSIONS = {
     BLE_VERSION_4_2: "ble_4_2",
     BLE_VERSION_5_1: "ble_5_1",
     BLE_VERSION_5_2: "ble_5_2",
 }
+
+# Define constants used for choosing sources
+SOC = env.Cfg("CFG_SOC_NAME")
 BLE = env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION")
+BDK = tuple(map(int, bdk_version.split(".")))
+
+# Validate SoC support in BDK
+if not SOC_BDK[SOC]:
+    click.secho(f"Selected chip '{SOC_NAMES[SOC]}' is not supported in BDK.", fg="red")
+    exit(1)
+if BDK < SOC_BDK[SOC]:
+    click.secho(
+        f"Selected chip '{SOC_NAMES[SOC]}' is not supported in BDK {bdk_version}. "
+        f"The minimum supported version is 3.0.{SOC_BDK[SOC] % 100}.",
+        fg="red",
+    )
+    exit(1)
 
 # Flags
 queue.AppendPublic(
@@ -89,7 +115,7 @@ queue.AppendPublic(
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
         ("INCLUDE_xTaskGetHandle", "1"),
         # Provide BDK version to code
-        ("CFG_BDK_VERSION", BDK),
+        ("CFG_BDK_VERSION", f"{BDK[0]}{BDK[1]:02d}{BDK[2]:02d}"),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
@@ -407,7 +433,7 @@ if env.Cfg("CFG_SUPPORT_BLE"):
     platform = (
         "bk7238" if SOC == SOC_BK7238 else "bk7252n" if SOC == SOC_BK7252N else "7231n"
     )
-    if BDK >= 30056:
+    if BDK >= (3, 0, 56):
         ble_base_dir = join(DRIVER_DIR, "ble", BLE_VERSIONS[BLE])
     elif BLE == BLE_VERSION_4_2:
         ble_base_dir = join(DRIVER_DIR, "ble")
