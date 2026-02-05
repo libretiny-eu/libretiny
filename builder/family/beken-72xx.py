@@ -444,7 +444,11 @@ if env.Cfg("CFG_SUPPORT_BLE"):
         base_dir=ble_base_dir,
         srcs=[
             # BLE 4.2 (BK7231U, BK7251, BK7271)
-            BLE == BLE_VERSION_4_2 and "+<**/*.c>",
+            BLE == BLE_VERSION_4_2 and "+<ble.c>",
+            BLE == BLE_VERSION_4_2 and "+<modules/app/src/*.c>",
+            BLE == BLE_VERSION_4_2 and "-<modules/app/src/app_mesh.c>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/**/*.c>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/src/*.c>",
             # BLE 5.x
             BLE != BLE_VERSION_4_2 and "+<ble_pub/app/src/*.c>",
             BLE != BLE_VERSION_4_2 and "+<ble_pub/ui/ble_ui.c>",
