@@ -109,10 +109,15 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 	}
 	if ((mask & PIN_PWM) && (pin->enabled & PIN_PWM)) {
 		if (data->pwmState != LT_PWM_STOPPED) {
-			data->pwmState		  = LT_PWM_STOPPED;
-			data->pwm.cfg.bits.en = PWM_DISABLE;
+			data->pwmState = LT_PWM_STOPPED;
 			__wrap_bk_printf_disable();
+#if CFG_BDK_USE_NEW_PWM_DRIVER
+			// no way to deinit it?
+			pwm_stop(data->pwm.chan);
+#else
+			data->pwm.cfg.bits.en = PWM_DISABLE;
 			sddev_control(PWM_DEV_NAME, CMD_PWM_DEINIT_PARAM, &data->pwm);
+#endif
 			__wrap_bk_printf_enable();
 		}
 		pinDisable(pin, PIN_PWM);

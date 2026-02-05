@@ -88,6 +88,55 @@ uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
 	return 3300;
 }
 
+#if CFG_BDK_USE_NEW_PWM_DRIVER
+void analogWrite(pin_size_t pinNumber, int value) {
+	pinCheckGetData(pinNumber, PIN_PWM, );
+
+	// GPIO can't be used together with PWM
+	pinRemoveMode(pin, PIN_GPIO | PIN_IRQ);
+
+	uint32_t frequency = 26 * _analogWritePeriod - 1;
+
+	if (!pinEnabled(pin, PIN_PWM)) {
+		pinEnable(pin, PIN_PWM);
+		data->pwmState = LT_PWM_STOPPED;
+		data->pwm.chan = gpioToPwm(pin->gpio);
+		data->pwm.t4   = frequency;
+	}
+
+	float percent		 = value * 1.0 / ((1 << _analogWriteResolution) - 1);
+	uint32_t dutyCycle	 = percent * frequency;
+	uint32_t channel	 = data->pwm.chan;
+	data->pwm.t1		 = dutyCycle;
+	data->pwm.init_level = dutyCycle ? 1 : 0;
+
+	if ((data->pwmState == LT_PWM_STOPPED) || (data->pwmState == LT_PWM_PAUSED)) {
+		if (dutyCycle) {
+			// enable PWM and set its value
+
+			__wrap_bk_printf_disable();
+			pwm_init_param(&data->pwm);
+			pwm_start(channel);
+			__wrap_bk_printf_enable();
+
+			data->pwmState = LT_PWM_RUNNING;
+		}
+	} else if (data->pwmState == LT_PWM_RUNNING) {
+		if (dutyCycle) {
+			__wrap_bk_printf_disable();
+			pwm_update_param(&data->pwm);
+			__wrap_bk_printf_enable();
+		} else {
+			__wrap_bk_printf_disable();
+			pwm_update_param(&data->pwm);
+			pwm_stop(channel);
+			__wrap_bk_printf_enable();
+
+			data->pwmState = LT_PWM_PAUSED;
+		}
+	}
+}
+#else
 void analogWrite(pin_size_t pinNumber, int value) {
 	pinCheckGetData(pinNumber, PIN_PWM, );
 
@@ -148,3 +197,4 @@ void analogWrite(pin_size_t pinNumber, int value) {
 		}
 	}
 }
+#endif
