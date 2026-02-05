@@ -1,8 +1,14 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-03-14. */
 
-#include_next "include.h"
-
 #pragma once
+
+// BDK will always redefine these in "generic.h"
+#undef htons
+#undef ntohs
+#undef htonl
+#undef ntohl
+
+#include_next "include.h"
 
 // force including fixups/generic.h, even by BDK/include.h
 #include "generic.h"
