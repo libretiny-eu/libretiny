@@ -7,13 +7,11 @@
 		"bkrbl_size_app": "0x1A0000"
 	},
 	"flash": {
-		"bootloader": "0x000000+0x11000",
 		"app": "0x011000+0x1BA000",
-		"filesystem": "0x1CB000+0x119000",
+		"userdata": "0x1CB000+0x119000",
 		"kvs": "0x2E4000+0x8000",
 		"download": "0x2EC000+0x112000",
-		"calibration": "0x3FE000+0x1000",
-		"tlv": "0x3FF000+0x1000"
+		"calibration": "0x3FE000+0x1000"
 	},
 	"debug": {
 		"gdb_init": [
@@ -31,6 +29,7 @@
 	],
 	"doc": {
 		"params": {
+			"layout": "**BK7252 4 MiB** (OTA 0x2EC000, RF 0x3FE000)",
 			"extra": {
 				"Bluetooth": "BLE v5.0"
 			}

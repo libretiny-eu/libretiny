@@ -5,6 +5,8 @@
 #include "uart_pub.h"
 
 static const bk_logic_partition_t bk7231_partitions[BK_PARTITION_MAX] = {
+	[BK_PARTITION_BOOTLOADER] =
+		/**/
 	{
 		.partition_owner	   = BK_FLASH_EMBEDDED,
 		.partition_description = "Bootloader",
@@ -12,6 +14,8 @@ static const bk_logic_partition_t bk7231_partitions[BK_PARTITION_MAX] = {
 		.partition_length	   = FLASH_BOOTLOADER_LENGTH,
 		.partition_options	   = PAR_OPT_READ_EN | PAR_OPT_WRITE_DIS,
 	 },
+	[BK_PARTITION_APPLICATION] =
+		/**/
 	{
 		.partition_owner	   = BK_FLASH_EMBEDDED,
 		.partition_description = "Application",
@@ -19,6 +23,8 @@ static const bk_logic_partition_t bk7231_partitions[BK_PARTITION_MAX] = {
 		.partition_length	   = FLASH_APP_LENGTH,
 		.partition_options	   = PAR_OPT_READ_EN | PAR_OPT_WRITE_DIS,
 	 },
+	[BK_PARTITION_OTA] =
+		/**/
 	{
 		.partition_owner	   = BK_FLASH_EMBEDDED,
 		.partition_description = "ota",
@@ -26,6 +32,8 @@ static const bk_logic_partition_t bk7231_partitions[BK_PARTITION_MAX] = {
 		.partition_length	   = FLASH_DOWNLOAD_LENGTH,
 		.partition_options	   = PAR_OPT_READ_EN | PAR_OPT_WRITE_DIS,
 	 },
+	[BK_PARTITION_RF_FIRMWARE] =
+		/**/
 	{
 		.partition_owner	   = BK_FLASH_EMBEDDED,
 		.partition_description = "RF Firmware",
@@ -33,11 +41,13 @@ static const bk_logic_partition_t bk7231_partitions[BK_PARTITION_MAX] = {
 		.partition_length	   = FLASH_CALIBRATION_LENGTH,
 		.partition_options	   = PAR_OPT_READ_EN | PAR_OPT_WRITE_DIS,
 	 },
+	[BK_PARTITION_NET_PARAM] =
+		/**/
 	{
 		.partition_owner	   = BK_FLASH_EMBEDDED,
 		.partition_description = "NET info",
-		.partition_start_addr  = FLASH_TLV_OFFSET,
-		.partition_length	   = FLASH_TLV_LENGTH,
+		.partition_start_addr  = 0x1FF000,
+		.partition_length	   = 0,
 		.partition_options	   = PAR_OPT_READ_EN | PAR_OPT_WRITE_DIS,
 	 },
 };

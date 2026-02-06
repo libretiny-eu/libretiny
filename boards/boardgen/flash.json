@@ -12,8 +12,6 @@
 	"bootloader": "Bootloader",
 	"app": "App Image",
 	"download": "OTA Image",
-	"tlv": "TLV Store",
-	"net": "Network Data",
 	"rf": "RF Data",
 	"boot": "Boot Image",
 	"part_table": "Partition Table",
