@@ -29,6 +29,7 @@ void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
 	if (this->port == 2) {
 		this->data->uart = uart = &log_uart;
 	} else {
+		delete this->data->uart;
 		this->data->uart = uart = new hal_uart_adapter_t();
 		// TODO handle PIN_INVALID
 		hal_uart_init(uart, this->tx, this->rx, nullptr);
@@ -51,8 +52,11 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	uint8_t parity	  = (config & SERIAL_PARITY_MASK) ^ 0b11;
 	uint8_t stopBits  = (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1;
 
-	hal_uart_set_baudrate(this->data->uart, baudrate);
-	hal_uart_set_format(this->data->uart, dataWidth, parity, stopBits);
+	if (this->data->uart)
+	{
+		hal_uart_set_baudrate(this->data->uart, baudrate);
+		hal_uart_set_format(this->data->uart, dataWidth, parity, stopBits);
+	}
 
 	this->baudrate = baudrate;
 	this->config   = config;
@@ -78,13 +82,13 @@ void SerialClass::endPrivate() {
 }
 
 void SerialClass::flush() {
-	if (!this->data)
+	if ((!this->data) || (!this->data->uart))
 		return;
 	while (this->data->uart->base_addr->tflvr_b.tx_fifo_lv != 0) {}
 }
 
 size_t SerialClass::write(uint8_t c) {
-	if (!this->data)
+	if ((!this->data) || (!this->data->uart))
 		return 0;
 	while (!hal_uart_writeable(this->data->uart)) {}
 	hal_uart_putc(this->data->uart, c);
