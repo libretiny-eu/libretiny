@@ -74,6 +74,7 @@ void SerialClass::endPrivate() {
 		hal_uart_deinit(uart);
 		delete this->data->uart;
 	}
+	this->data->uart = nullptr;
 }
 
 void SerialClass::flush() {
