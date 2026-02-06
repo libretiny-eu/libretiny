@@ -66,10 +66,11 @@ void SerialClass::endPrivate() {
 	if (!uart)
 		return;
 
-	if (this->port == 2) {
-		uart->base_addr->ier_b.erbi = 0;
-		hal_uart_rxind_hook(uart, nullptr, 0, RxIrq);
-	} else {
+	hal_uart_enter_critical();
+	uart->base_addr->ier_b.erbi = 0;
+	hal_uart_rxind_hook(uart, nullptr, 0, RxIrq);
+	hal_uart_exit_critical();
+	if (this->port != 2) {
 		hal_uart_deinit(uart);
 		delete this->data->uart;
 	}
