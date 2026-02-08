@@ -537,8 +537,8 @@ queue.AppendPublic(
         "airkiss",
         "sensor",
         # "wpa", # this is compiled from func/hostapd_intf/hostapd_intf.c
-        SOC != SOC_BK7231 and env.Cfg("CFG_SUPPORT_BLE") and f"ble_{SOC_NAMES[SOC]}",
-        SOC == SOC_BK7251 and env.Cfg("CFG_USE_USB_DEVICE") and f"usb_{SOC_NAMES[SOC]}",
+        SOC != SOC_BK7231 and f"ble_{SOC_NAMES[SOC]}",
+        SOC == SOC_BK7251 and f"usb_{SOC_NAMES[SOC]}",
         f"cal_{SOC_NAMES[SOC]}",
         f"rf_test_{SOC_NAMES[SOC]}",
         f"rf_use_{SOC_NAMES[SOC]}",
