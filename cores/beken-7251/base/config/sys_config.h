@@ -83,9 +83,9 @@
 #define CFG_USE_AP_IDLE					0
 #define CFG_USE_AP_PS					0
 #define CFG_USE_APP_DEMO_VIDEO_TRANSFER 0
-#define CFG_USE_AUD_ADC					1
-#define CFG_USE_AUD_DAC					1
-#define CFG_USE_AUDIO					1
+#define CFG_USE_AUD_ADC					0
+#define CFG_USE_AUD_DAC					0
+#define CFG_USE_AUDIO					0
 #define CFG_USE_BLE_PS					1
 #define CFG_USE_CAMERA_INTF				0
 #define CFG_USE_CONV_UTF8				0
@@ -104,8 +104,8 @@
 #define CFG_USE_MBEDTLS					0
 #define CFG_USE_MCU_PS					1
 #define CFG_USE_PTA						0
-#define CFG_USE_QSPI					1
-#define CFG_USE_SDCARD_HOST				1
+#define CFG_USE_QSPI					0
+#define CFG_USE_SDCARD_HOST				0
 #define CFG_USE_SECURITY				0
 #define CFG_USE_SPI						1
 #define CFG_USE_SPI_MASTER				1
@@ -118,8 +118,8 @@
 #define CFG_USE_TICK_CAL				1
 #define CFG_USE_UART1					1
 #define CFG_USE_USB_CHARGE				0
-#define CFG_USE_USB_DEVICE				1
-#define CFG_USE_USB_DEVICE_CARD_READER	1
+#define CFG_USE_USB_DEVICE				0
+#define CFG_USE_USB_DEVICE_CARD_READER	0
 #define CFG_USE_USB_HOST				0
 #define CFG_USE_WPA_29					1
 #define CFG_WFA_CERT					0
