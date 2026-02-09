@@ -25,7 +25,8 @@ The main goal of this project is to provide a usable build environment for IoT d
 the project focuses on developing working Arduino-compatible cores for supported families. The cores are inspired by Espressif's official core for ESP32,
 which should make it easier to port/run existing ESP apps on less-common, unsupported IoT modules.
 
-**There's an [ESPHome port](https://docs.libretiny.eu/docs/projects/esphome/) based on LibreTiny, which supports BK7231 and RTL8710B chips.**
+~~There's an [ESPHome port](https://docs.libretiny.eu/docs/projects/esphome/) based on LibreTiny, which supports BK7231 and RTL8710B chips.~~
+<br />LibreTiny is now natively supported by ESPHome in versions 2023.9.0 and later, there is no need to use the above fork anymore.**
 
 **Note:** this project is work-in-progress.
 
