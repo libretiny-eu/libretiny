@@ -24,6 +24,8 @@ extern "C" {
 #include <hal.h>
 #include <hal_sys_ctrl.h>
 #include <rtl8710c.h>
+#include <serial_api.h>
+#include <serial_ex_api.h>
 #endif
 
 #include <cmsis_os.h>

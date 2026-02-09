@@ -3,8 +3,6 @@
 #if LT_ARD_HAS_SERIAL || DOXYGEN
 
 #include "SerialPrivate.h"
-#include "serial_api.h"
-#include "serial_ex_api.h"
 
 static void disable_syslog_on_port(const uint8_t port) {
 	static bool s_syslogger_enabled = true;
@@ -35,18 +33,17 @@ static uint8_t stopbits_from_config(const uint16_t config) {
 	return (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1;
 }
 
-void SerialClass::irq_callback(uint32_t id, int event) {
+static void irq_callback(SerialData *sd, int event) {
 	if (event != RxIrq)
 		return;
-	SerialClass *sc = reinterpret_cast<SerialClass *>(id);
 
-	uint8_t c = serial_getc(sc->data->uart);
+	uint8_t c = serial_getc(sd->uart);
 #if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN) && PIN_SERIAL2_RX != PIN_INVALID
 	// parse UART protocol commands on UART2
-	if (sc->port == 2)
+	if (sd->port == 2)
 		SerialClass::adrParse(c);
 #endif
-	sc->data->buf->store_char(c);
+	sd->buf->store_char(c);
 }
 
 void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
@@ -55,7 +52,8 @@ void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
 
 	hal_uart_en_ctrl(this->port, 1);
 
-	this->data->buf = this->rxBuf;
+	this->data->port = this->port;
+	this->data->buf	 = this->rxBuf;
 
 	delete this->data->uart;
 	this->data->uart = new serial_t;
@@ -81,7 +79,7 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		serial_irq_handler(
 			this->data->uart,
 			reinterpret_cast<uart_irq_handler>(irq_callback),
-			reinterpret_cast<uint32_t>(this)
+			reinterpret_cast<uint32_t>(this->data)
 		);
 		serial_irq_set(this->data->uart, RxIrq, 1);
 	}

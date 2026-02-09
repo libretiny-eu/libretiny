@@ -6,6 +6,7 @@
 #include <Serial.h>
 
 struct SerialData {
+	uint32_t port{0};
 	SerialRingBuffer *buf{nullptr};
 	serial_t *uart{nullptr};
 };

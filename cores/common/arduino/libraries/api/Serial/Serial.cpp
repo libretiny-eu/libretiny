@@ -24,15 +24,13 @@ bool SerialClass::validatePins(pin_size_t rx, pin_size_t tx) {
 	switch (this->port) {
 #if LT_HW_UART0
 		case 0:
-			if (
-				rx != PIN_INVALID
+			if (rx != PIN_INVALID
 #ifdef PINS_SERIAL0_RX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL0_RX, rx)
 #endif
 			)
 				return false;
-			if (
-				tx != PIN_INVALID
+			if (tx != PIN_INVALID
 #ifdef PINS_SERIAL0_TX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL0_TX, tx)
 #endif
@@ -43,15 +41,13 @@ bool SerialClass::validatePins(pin_size_t rx, pin_size_t tx) {
 
 #if LT_HW_UART1
 		case 1:
-			if (
-				rx != PIN_INVALID
+			if (rx != PIN_INVALID
 #ifdef PINS_SERIAL1_RX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL1_RX, rx)
 #endif
 			)
 				return false;
-			if (
-				tx != PIN_INVALID
+			if (tx != PIN_INVALID
 #ifdef PINS_SERIAL1_TX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL1_TX, tx)
 #endif
@@ -62,15 +58,13 @@ bool SerialClass::validatePins(pin_size_t rx, pin_size_t tx) {
 
 #if LT_HW_UART2
 		case 2:
-			if (
-				rx != PIN_INVALID
+			if (rx != PIN_INVALID
 #ifdef PINS_SERIAL2_RX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL2_RX, rx)
 #endif
 			)
 				return false;
-			if (
-				tx != PIN_INVALID
+			if (tx != PIN_INVALID
 #ifdef PINS_SERIAL2_TX
 				&& !ltArrayContains((pin_size_t[])PINS_SERIAL2_TX, tx)
 #endif
