@@ -7,5 +7,5 @@
 
 struct SerialData {
 	SerialRingBuffer *buf{nullptr};
-	hal_uart_adapter_t *uart{nullptr};
+	serial_t *uart{nullptr};
 };

@@ -173,6 +173,10 @@ void lt_log_set_port(uint8_t port) {
 	uart_port = port;
 }
 
+uint8_t lt_log_get_port() {
+	return uart_port;
+}
+
 void lt_log_disable() {
 	uart_port = 0xFF;
 }

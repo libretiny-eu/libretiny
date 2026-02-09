@@ -3,96 +3,128 @@
 #if LT_ARD_HAS_SERIAL || DOXYGEN
 
 #include "SerialPrivate.h"
+#include "serial_api.h"
 
-static void callback(SerialData *data, uint32_t event) {
-	if (event != RxIrq)
-		return;
-	hal_uart_adapter_t *uart = data->uart;
+static void disable_syslog_on_port(const uint8_t port)
+{
+   static bool s_syslogger_enabled = true;
+   if (s_syslogger_enabled && (port == 2))
+   {
+      sys_log_uart_off();
+      s_syslogger_enabled = false;
+   }
+}
 
-	uint8_t c;
-	while (hal_uart_rgetc(uart, (char *)&c)) {
+static void empty_irq_callback(uint32_t, int) {}
+
+static SerialParity parity_from_config(const uint16_t config){
+   switch (config & SERIAL_PARITY_MASK) {
+      case SERIAL_PARITY_NONE:
+         return ParityNone;
+      case SERIAL_PARITY_ODD:
+         return ParityOdd;
+      case SERIAL_PARITY_EVEN:
+         return ParityEven;
+      default:
+         return ParityNone;
+   }
+}
+
+static uint8_t datawidth_from_config(const uint16_t config){
+   return (config & SERIAL_DATA_MASK) == SERIAL_DATA_7 ? 7 : 8;
+}
+
+static uint8_t stopbits_from_config(const uint16_t config){
+   return (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1;
+}
+
+
+void SerialClass::irq_callback(uint32_t id, int event) {
+   if (event != RxIrq)
+      return;
+   SerialClass* sc = reinterpret_cast<SerialClass*>(id);
+
+   uint8_t c = serial_getc(sc->data->uart);
 #if LT_AUTO_DOWNLOAD_REBOOT && defined(LT_UART_ADR_PATTERN) && PIN_SERIAL2_RX != PIN_INVALID
-		// parse UART protocol commands on UART2
-		if (uart->base_addr == UART2)
-			SerialClass::adrParse(c);
+   // parse UART protocol commands on UART2
+   if (sc->port == 2)
+      SerialClass::adrParse(c);
 #endif
-		data->buf->store_char(c);
-	}
+   sc->data->buf->store_char(c);
 }
 
 void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
-	if (!this->data)
-		return;
-	this->data->buf = this->rxBuf;
+   if (!this->data)
+      return;
 
-	hal_uart_adapter_t *uart;
-	if (this->port == 2) {
-		this->data->uart = uart = &log_uart;
-	} else {
-		delete this->data->uart;
-		this->data->uart = uart = new hal_uart_adapter_t();
-		// TODO handle PIN_INVALID
-		hal_uart_init(uart, this->tx, this->rx, nullptr);
-	}
+   hal_uart_en_ctrl (this->port, 1);
 
-	if (this->rx != PIN_INVALID) {
-		hal_uart_enter_critical();
-		hal_uart_rxind_hook(uart, (uart_irq_callback_t)callback, (uint32_t)this->data, RxIrq);
-		uart->base_addr->ier_b.erbi	 = 1;
-		uart->base_addr->ier_b.etbei = 0;
-		hal_uart_exit_critical();
-	}
+   this->data->buf = this->rxBuf;
+
+   delete this->data->uart;
+   this->data->uart = new serial_t;
+   memset(this->data->uart, 0, sizeof(serial_t));
+
+   // TODO handle PIN_INVALID
+   serial_init(this->data->uart, static_cast<PinName>(this->tx), static_cast<PinName>(this->rx));
 }
 
 void SerialClass::configure(unsigned long baudrate, uint16_t config) {
-	if (!this->data)
-		return;
+   if (!this->data)
+      return;
 
-	uint8_t dataWidth = (config & SERIAL_DATA_MASK) == SERIAL_DATA_7 ? 7 : 8;
-	uint8_t parity	  = (config & SERIAL_PARITY_MASK) ^ 0b11;
-	uint8_t stopBits  = (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1;
+   if (this->data->uart)
+   {
+      serial_baud(this->data->uart, baudrate);
+      serial_format(this->data->uart,
+                    datawidth_from_config(config),
+                    parity_from_config(config),
+                    stopbits_from_config(config));
 
-	if (this->data->uart)
-	{
-		hal_uart_set_baudrate(this->data->uart, baudrate);
-		hal_uart_set_format(this->data->uart, dataWidth, parity, stopBits);
-	}
+      serial_irq_handler(this->data->uart, reinterpret_cast<uart_irq_handler>(irq_callback), reinterpret_cast<uint32_t>(this));
+      serial_irq_set(this->data->uart, RxIrq, 1);
+   }
 
-	this->baudrate = baudrate;
-	this->config   = config;
+   this->baudrate = baudrate;
+   this->config   = config;
 }
 
 void SerialClass::endPrivate() {
-	if (!this->data)
-		return;
+   disable_syslog_on_port(this->port);
+   if (lt_log_get_port() == this->port)
+   {
+      lt_log_disable();
+   }
 
-	hal_uart_adapter_t *uart = this->data->uart;
-	if (!uart)
-		return;
+   if (!this->data)
+      return;
 
-	hal_uart_enter_critical();
-	uart->base_addr->ier_b.erbi = 0;
-	hal_uart_rxind_hook(uart, nullptr, 0, RxIrq);
-	hal_uart_exit_critical();
-	if (this->port != 2) {
-		hal_uart_deinit(uart);
-		delete this->data->uart;
-	}
-	this->data->uart = nullptr;
+   if (!this->data->uart)
+      return;
+
+   serial_irq_set(this->data->uart, RxIrq, 0);
+   serial_irq_handler(this->data->uart, reinterpret_cast<uart_irq_handler>(empty_irq_callback), 0);
+   flush();
+   serial_free(this->data->uart);
+
+   hal_uart_en_ctrl (this->port, 0);
+
+   delete this->data->uart;
+   this->data->uart = nullptr;
+   this->data->buf = nullptr;
 }
 
 void SerialClass::flush() {
-	if ((!this->data) || (!this->data->uart))
-		return;
-	while (this->data->uart->base_addr->tflvr_b.tx_fifo_lv != 0) {}
+   if ((!this->data) || (!this->data->uart))
+      return;
+   serial_clear_tx(this->data->uart);
 }
 
 size_t SerialClass::write(uint8_t c) {
-	if ((!this->data) || (!this->data->uart))
-		return 0;
-	while (!hal_uart_writeable(this->data->uart)) {}
-	hal_uart_putc(this->data->uart, c);
-	return 1;
+   if ((!this->data) || (!this->data->uart))
+      return 0;
+   serial_putc(this->data->uart, c);
+   return 1;
 }
 
 #endif
