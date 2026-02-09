@@ -84,9 +84,8 @@ void SerialClass::begin(unsigned long baudrate, uint16_t config, pin_size_t rx, 
 	this->end();
 
 	// apply pin configuration
-	if (!this->setPins(rx, tx)) {
+	if (!this->setPins(rx, tx))
 		return;
-	}
 
 	// allocate data structure and ring buffer
 	if (!this->data) {

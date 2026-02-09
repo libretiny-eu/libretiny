@@ -41,7 +41,7 @@ void lt_log_set_port(uint8_t port);
  *
  * @return UART port index or 0xFF if logging is disabled
  */
- uint8_t lt_log_get_port();
+uint8_t lt_log_get_port();
 
 /**
  * @brief Disable LT logger. Enable it back using lt_log_set_port(LT_UART_DEFAULT_LOGGER).
