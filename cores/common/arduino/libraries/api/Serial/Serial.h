@@ -26,7 +26,7 @@ class SerialClass : public HardwareSerial {
 	bool validatePins(pin_size_t rx, pin_size_t tx);
 
   private: /* family core */
-   static void irq_callback(uint32_t id, int event);
+	static void irq_callback(uint32_t id, int event);
 	void beginPrivate(unsigned long baudrate, uint16_t config);
 	void endPrivate();
 
