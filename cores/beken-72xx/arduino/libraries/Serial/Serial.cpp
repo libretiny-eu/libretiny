@@ -79,4 +79,6 @@ size_t SerialClass::write(uint8_t c) {
 	return 1;
 }
 
+void SerialClass::restore_boot_state() {}
+
 #endif

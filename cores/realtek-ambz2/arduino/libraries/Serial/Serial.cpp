@@ -4,6 +4,7 @@
 
 #include "SerialPrivate.h"
 #include "serial_api.h"
+#include "serial_ex_api.h"
 
 static void disable_syslog_on_port(const uint8_t port)
 {
@@ -103,7 +104,7 @@ void SerialClass::endPrivate() {
       return;
 
    serial_irq_set(this->data->uart, RxIrq, 0);
-   serial_irq_handler(this->data->uart, reinterpret_cast<uart_irq_handler>(empty_irq_callback), 0);
+   serial_irq_handler(this->data->uart, nullptr, 0);
    flush();
    serial_free(this->data->uart);
 
@@ -125,6 +126,10 @@ size_t SerialClass::write(uint8_t c) {
       return 0;
    serial_putc(this->data->uart, c);
    return 1;
+}
+
+void SerialClass::restore_boot_state(){
+   sys_log_uart_on();
 }
 
 #endif
