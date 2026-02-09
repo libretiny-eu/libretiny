@@ -66,8 +66,6 @@ class SerialClass : public HardwareSerial {
 	static void adrParse(uint8_t c);
 #endif
 
-	static void restore_boot_state();
-
 	using Print::write;
 };
 
