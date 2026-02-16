@@ -15,6 +15,32 @@ WiFiClass::~WiFiClass() {
 	data = NULL;
 }
 
+#if CFG_BDK_VERSION >= 30076
+WiFiStatus eventTypeToStatus(uint8_t type) {
+	// rw_msg_pub.h:9
+	switch (type) {
+		case RW_EVT_STA_IDLE:
+			return WL_IDLE_STATUS;
+		case RW_EVT_STA_NO_AP_FOUND:
+			return WL_NO_SSID_AVAIL;
+		case RW_EVT_STA_CONNECTING:
+		case RW_EVT_STA_CONNECTED:
+			return WL_SCAN_COMPLETED;
+		case RW_EVT_STA_GOT_IP:
+			return WL_CONNECTED;
+		case RW_EVT_STA_PASSWORD_WRONG:
+		case RW_EVT_STA_ASSOC_FULL:
+		case RW_EVT_STA_AUTH_FAILED:
+		case RW_EVT_STA_ASSOC_FAILED:
+			return WL_CONNECT_FAILED;
+		case RW_EVT_STA_BEACON_LOSE:
+			return WL_CONNECTION_LOST;
+		case RW_EVT_STA_DISASSOC:
+			return WL_DISCONNECTED;
+	}
+	return WL_IDLE_STATUS;
+}
+#else
 WiFiStatus eventTypeToStatus(uint8_t type) {
 	// rw_msg_pub.h:9
 	switch (type) {
@@ -38,6 +64,7 @@ WiFiStatus eventTypeToStatus(uint8_t type) {
 	}
 	return WL_IDLE_STATUS;
 }
+#endif
 
 WiFiAuthMode securityTypeToAuthMode(uint8_t type) {
 	// wlan_ui_pub.h:62

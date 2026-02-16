@@ -11,8 +11,8 @@
 		"mcu": "bk7231t",
 		"variant": "generic-bk7231t-qfn32-tuya"
 	},
-	"name": "Generic - BK7231T (Tuya QFN32)",
-	"symbol": "BK7231T (Tuya QFN32)",
+	"name": "Generic - BK7231T (Tuya)",
+	"symbol": "BK7231T (Tuya)",
 	"url": "https://docs.libretiny.eu/boards/generic-bk7231t-qfn32-tuya/",
 	"vendor": "Generic",
 	"pcb": {

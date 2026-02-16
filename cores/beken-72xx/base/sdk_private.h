@@ -24,7 +24,20 @@ extern "C" {
 #include <sys_rtos.h>
 #include <uart_pub.h>
 #include <wdt_pub.h>
+
+// BDK 3.0.76+ has a conflicting structure
+// (but it's not actually used in source code)
+#define wifi_event_sta_disconnected_t bk_wifi_event_sta_disconnected_t
 #include <wlan_ui_pub.h>
+#undef wifi_event_sta_disconnected_t
+
+// BDK 3.0.70 removes sddev_control support from the BK7231N driver
+#if (CFG_BDK_VERSION >= 30070) && ((CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236) || \
+								   (CFG_SOC_NAME == SOC_BK7238) || (CFG_SOC_NAME == SOC_BK7252N))
+#define CFG_BDK_USE_NEW_PWM_DRIVER 1
+#else
+#define CFG_BDK_USE_NEW_PWM_DRIVER 0
+#endif
 
 #include <sdk_extern.h>
 

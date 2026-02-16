@@ -64,7 +64,12 @@ static void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id) {
 #endif
 		param.end_value = fclk_cal_endvalue((UINT32)param.cfg.bits.clk);
 
+#if CFG_BDK_USE_NEW_PWM_DRIVER
+		// should never be true, since the PWM timer is only used on BK7231Q
+		LT_E("Fake clock with PWM timer not implemented on BK7231N");
+#else
 		sddev_control(PWM_DEV_NAME, CMD_PWM_INIT_PARAM, &param);
+#endif
 	} else { // timer
 		timer_param_t param;
 		param.channel = fclk_id;
@@ -93,8 +98,12 @@ static void fclk_hdl(UINT8 param) {
 #endif
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
+#if CFG_BDK_VERSION >= 30045
+	if (xTaskIncrementTick() != pdFALSE) {
+#else
 	if (xTaskIncrementTick() != pdFALSE || preempt_delayed_schedule_get_flag()) {
 		preempt_delayed_schedule_clear_flag();
+#endif
 		/* Select a new task to run. */
 		vTaskSwitchContext();
 	}

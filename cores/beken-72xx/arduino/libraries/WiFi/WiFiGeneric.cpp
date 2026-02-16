@@ -111,11 +111,11 @@ IPAddress WiFiClass::hostByName(const char *hostname) {
 bool WiFiClass::setSleep(bool enable) {
 	LT_DM(WIFI, "WiFi sleep mode %u", enable);
 	if (enable) {
-		// Replicating OpenBeken PowerSave feature
-		// https://github.com/openshwprojects/OpenBK7231T_App/blob/567c5756b489f0670988fad1c2742a19f0f217ea/src/cmnds/cmd_main.c#L58
-		bk_wlan_power_save_set_level((BK_PS_LEVEL)(PS_RF_SLEEP_BIT | PS_MCU_SLEEP_BIT));
+		bk_wlan_dtim_rf_ps_mode_enable();
+		bk_wlan_mcu_ps_mode_enable();
 	} else {
-		bk_wlan_power_save_set_level((BK_PS_LEVEL)0);
+		bk_wlan_dtim_rf_ps_mode_disable();
+		bk_wlan_mcu_ps_mode_disable();
 	}
 	DATA->sleep = enable;
 	return true;

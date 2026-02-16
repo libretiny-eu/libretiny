@@ -2,11 +2,14 @@
 
 from os.path import join
 
+import click
+from platformio.platform.base import PlatformBase
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
+platform: PlatformBase = env.PioPlatform()
 queue = env.AddLibraryQueue("beken-72xx")
 env.ConfigureFamily()
 
@@ -18,24 +21,76 @@ FUNC_DIR = join(ROOT_DIR, "func")
 # Load sys_config.h into env
 env.LoadConfig(join("$FAMILY_DIR", "base", "config", "sys_config.h"))
 
-# Define vars used during build
+# Check used version of BDK
+bdk_version = platform.versions["framework-beken-bdk"]
+if not bdk_version.startswith("3.0."):
+    click.secho(
+        "Only 3.0.x versions of 'framework-beken-bdk' are supported "
+        f"(found '{bdk_version}'). Please modify or remove the custom "
+        "version specification.",
+        fg="red",
+    )
+    exit(1)
+
+# Supported SoC types
 SOC_BK7231 = 1
 SOC_BK7231U = 2
-SOC_BK7221U = 3
-SOC_BK7251 = 3
+SOC_BK7251 = 3  # also: BK7221U, BK7252
 SOC_BK7271 = 4
 SOC_BK7231N = 5
 SOC_BK7236 = 6
+SOC_BK7238 = 7
+SOC_BK7252N = 8  # also: BK7253
+# Library names for each SoC
 SOC_NAMES = {
-    SOC_BK7231: "bk7231u",
+    SOC_BK7231: "bk7231",
     SOC_BK7231U: "bk7231u",
     SOC_BK7251: "bk7251",
     SOC_BK7271: "bk7271",
     SOC_BK7231N: "bk7231n",
     SOC_BK7236: "bk7236",
+    SOC_BK7238: "bk7238",
+    SOC_BK7252N: "bk7252n",
 }
+# Minimum BDK version for each SoC
+SOC_BDK = {
+    SOC_BK7231: None,
+    SOC_BK7231U: (3, 0, 21),
+    SOC_BK7251: (3, 0, 11),
+    SOC_BK7271: (3, 1, 5),
+    SOC_BK7231N: (3, 0, 4),
+    SOC_BK7236: None,
+    SOC_BK7238: (3, 0, 56),
+    SOC_BK7252N: (3, 0, 76),
+}
+
+# Supported BLE versions
+BLE_VERSION_4_2 = 1
+BLE_VERSION_5_1 = 2
+BLE_VERSION_5_2 = 3
+# BLE source code directory names
+BLE_VERSIONS = {
+    BLE_VERSION_4_2: "ble_4_2",
+    BLE_VERSION_5_1: "ble_5_1",
+    BLE_VERSION_5_2: "ble_5_2",
+}
+
+# Define constants used for choosing sources
 SOC = env.Cfg("CFG_SOC_NAME")
-WPA_VERSION = "wpa_supplicant_2_9" if env.Cfg("CFG_USE_WPA_29") else "hostapd-2.5"
+BLE = env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION")
+BDK = tuple(map(int, bdk_version.split(".")))
+
+# Validate SoC support in BDK
+if not SOC_BDK[SOC]:
+    click.secho(f"Selected chip '{SOC_NAMES[SOC]}' is not supported in BDK.", fg="red")
+    exit(1)
+if BDK < SOC_BDK[SOC]:
+    click.secho(
+        f"Selected chip '{SOC_NAMES[SOC]}' is not supported in BDK {bdk_version}. "
+        f"The minimum supported version is 3.0.{SOC_BDK[SOC] % 100}.",
+        fg="red",
+    )
+    exit(1)
 
 # Flags
 queue.AppendPublic(
@@ -59,6 +114,8 @@ queue.AppendPublic(
         ("WOLFSSL_BEKEN", env.Cfg("CFG_WPA3")),
         "MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED",
         ("INCLUDE_xTaskGetHandle", "1"),
+        # Provide BDK version to code
+        ("CFG_BDK_VERSION", f"{BDK[0]}{BDK[1]:02d}{BDK[2]:02d}"),
     ],
     ASFLAGS=[
         "-mcpu=arm968e-s",
@@ -157,31 +214,43 @@ queue.AddLibrary(
     base_dir=DRIVER_DIR,
     srcs=[
         "+<driver.c>",
-        "+<calendar/*.c>",
         "+<common/*.c>",
         "+<dma/*.c>",
         "+<fft/*.c>",
         "+<flash/*.c>",
-        "+<general_dma/*.c>",
         "+<gpio/*.c>",
-        "+<i2c/*.c>",
-        "+<i2s/*.c>",
+        "+<i2c/i2c2.c>",
         "+<icu/*.c>",
-        "+<irda/*.c>",
-        "+<jpeg/*.c>",
         "+<macphy_bypass/*.c>",
         "+<phy/*.c>",
         "+<pwm/*.c>",
         "-<pwm/pwm_bk7271.c>",
         "-<pwm/pwm_new.c>",
-        "+<qspi/*.c>",
         "+<rw_pub/*.c>",
         "+<saradc/*.c>",
         "+<security/*.c>",
+        "+<spi/*.c>",
+        "-<spi/spi_psram.c>",
         "+<spidma/*.c>",
         "+<sys_ctrl/*.c>",
         "+<uart/uart.c>",
         "+<wdt/*.c>",
+        # BK7252N-specific
+        SOC == SOC_BK7252N and "+<general_dma/general_dma_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<i2c/i2c1_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<i2s/i2s_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<irda/irda_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<jpeg/jpeg.c>",
+        SOC == SOC_BK7252N and "+<qspi/qspi_bk7252n.c>",
+        SOC == SOC_BK7252N and "+<rtc/rtc_reg.c>",
+        # All other SoCs
+        SOC != SOC_BK7252N and "+<calendar/calendar.c>",
+        SOC != SOC_BK7252N and "+<general_dma/general_dma.c>",
+        SOC != SOC_BK7252N and "+<i2c/i2c1.c>",
+        SOC != SOC_BK7252N and "+<i2s/i2s.c>",
+        SOC != SOC_BK7252N and "+<irda/irda.c>",
+        SOC != SOC_BK7252N and "+<jpeg/jpeg_encoder.c>",
+        SOC != SOC_BK7252N and "+<qspi/qspi.c>",
     ],
     includes=[
         "+<common>",
@@ -216,15 +285,22 @@ queue.AddLibrary(
         "+<func.c>",
         "+<airkiss/*.c>",
         "+<base64/*.c>",
+        "+<bk7011_cal/*.c>",
         SOC != SOC_BK7231 and "+<ble_wifi_exchange/*.c>",
         "+<camera_intf/*.c>",
+        "+<force_sleep/*.c>",
         "+<hostapd_intf/*.c>",
         "+<joint_up/*.c>",
         "+<lwip_intf/dhcpd/*.c>",
         "+<misc/*.c>",
         "-<misc/fake_clock.c>",  # fixups
         "+<net_param_intf/*.c>",
+        "+<ntp/*.c>",
         "+<power_save/*.c>",
+        "-<power_save/low_voltage_compensation.c>",
+        "-<power_save/low_voltage_ps.c>",
+        "+<rtc/*.c>",
+        "-<rtc/alarm.c>",
         "+<rwnx_intf/*.c>",
         "+<saradc_intf/*.c>",
         "+<security/*.c>",
@@ -236,21 +312,23 @@ queue.AddLibrary(
         "-<user_driver/BkDriverQspi.c>",
         "+<utf8/*.c>",
         "+<video_transfer/*.c>",
+        "+<wpa_supplicant_2_9/src/crypto/crypto_mbedtls.c>",
     ],
     includes=[
         "+<base64>",
         "+<ble_wifi_exchange>",
         "+<camera_intf>",
-        "+<easy_flash>",
-        "+<easy_flash/inc>",
-        "+<easy_flash/port>",
         "+<ethernet_intf>",
+        "+<force_sleep>",
         "+<include>",
         "+<joint_up>",
         "+<lwip_intf>",  # for config/lwipopts.h
+        "+<misc>",
+        "+<ntp>",
         "+<power_save>",
         "+<rf_test>",
         "+<rf_use>",
+        "+<rtc>",
         "+<rwnx_intf>",
         "+<saradc_intf>",
         "+<sensor>",
@@ -261,15 +339,22 @@ queue.AddLibrary(
         "+<user_driver>",
         "+<utf8>",
         "+<video_transfer>",
-        f"+<{WPA_VERSION}/bk_patch>",
-        f"+<{WPA_VERSION}/hostapd>",
-        f"+<{WPA_VERSION}/src>",
-        f"+<{WPA_VERSION}/src/ap>",
-        f"+<{WPA_VERSION}/src/common>",
-        f"+<{WPA_VERSION}/src/drivers>",
-        f"+<{WPA_VERSION}/src/utils>",
-        f"+<{WPA_VERSION}/wpa_supplicant>",
+        "+<wpa_supplicant_2_9/bk_patch>",
+        "+<wpa_supplicant_2_9/hostapd>",
+        "+<wpa_supplicant_2_9/src>",
+        "+<wpa_supplicant_2_9/src/ap>",
+        "+<wpa_supplicant_2_9/src/common>",
+        "+<wpa_supplicant_2_9/src/drivers>",
+        "+<wpa_supplicant_2_9/src/utils>",
+        "+<wpa_supplicant_2_9/src/wps>",
+        "+<wpa_supplicant_2_9/wpa_supplicant>",
     ],
+    options=dict(
+        CPPDEFINES=[
+            # only used in func.c
+            ("SDK_COMMIT_ID", "NULL"),
+        ]
+    ),
 )
 
 # Sources - FreeRTOS
@@ -293,6 +378,12 @@ queue.AddLibrary(
     includes=[
         "+<os/*>",
     ],
+    options=dict(
+        CPPDEFINES=[
+            # Make FreeRTOS modifications visible
+            ("FREERTOS_PORT_BEKEN_BDK", "1"),
+        ]
+    ),
 )
 
 # Sources - lwIP
@@ -319,86 +410,32 @@ queue.AddLibrary(
     ),
 )
 
-# Sources - chip-specific drivers
-if SOC in [SOC_BK7231, SOC_BK7231U, SOC_BK7251]:
-    queue.AddLibrary(
-        name="bdk_driver_spi",
-        base_dir=join(DRIVER_DIR, "spi"),
-        srcs=[
-            "+<spi.c>",
-            "+<spi_master.c>",
-            "+<spi_slave.c>",
-        ],
-    )
-if SOC in [SOC_BK7231N]:
-    queue.AddLibrary(
-        name="bdk_driver_spi",
-        base_dir=join(DRIVER_DIR, "spi"),
-        srcs=[
-            "+<spi_bk7231n.c>",
-            "+<spi_master_bk7231n.c>",
-            "+<spi_slave_bk7231n.c>",
-        ],
-    )
-if SOC in [SOC_BK7251]:
-    queue.AddLibrary(
-        name="bdk_bk7251",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/audio/*.c>",
-            "+<driver/sdcard/*.c>",
-            "+<func/audio/*.c>",
-            "+<func/sd_music/*.c>",
-        ],
-        includes=[
-            "+<driver/audio>",
-            "+<driver/sdcard>",
-        ],
-    )
-
-# Sources - enabled through config
-if env.Cfg("CFG_SDIO"):
-    queue.AddLibrary(
-        name="bdk_driver_sdio",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/sdio/*.c>",
-            "+<func/sdio_intf/*.c>",
-        ],
-    )
-if env.Cfg("CFG_BK_AWARE"):
-    queue.AddLibrary(
-        name="bdk_driver_sdio",
-        base_dir="$SDK_DIR",
-        srcs=[
-            "+<beken378/func/bk_aware/*.c>",
-            "+<demos/wifi/bk_aware/*.c>",
-        ],
-        includes=[
-            "+<beken378/func/bk_aware>",
-        ],
-    )
-if env.Cfg("CFG_USE_SDCARD_HOST"):
-    queue.AddLibrary(
-        name="bdk_func_fatfs",
-        base_dir=join(FUNC_DIR, "fatfs"),
-        srcs=[
-            "+<*.c>",
-            "-<test_fatfs.c>",
-        ],
-        includes=[
-            "+<.>",
-        ],
-    )
-if env.Cfg("CFG_WPA3"):
+# Sources - wolfSSL (for WPA3)
+# * BDK 3.0.56 added an option whether to use mbedTLS or wolfSSL for crypto
+#   in wpa_supplicant, but it wasn't used yet because WPA3 was disabled.
+# * BDK 3.0.62 enabled WPA3 on BK7231N/U/7238/7251, which added a dependency on
+#   an external crypto library (wolfSSL by default).
+# * BDK 3.0.70 switched BK7231N and BK7238 to mbedTLS.
+use_wpa_wolfssl = False
+if BDK >= (3, 0, 62) and SOC in (SOC_BK7231N, SOC_BK7231U, SOC_BK7238, SOC_BK7251):
+    use_wpa_wolfssl = True
+if BDK >= (3, 0, 70) and SOC in (SOC_BK7231N, SOC_BK7238):
+    use_wpa_wolfssl = False
+if env.Cfg("CFG_USE_MBEDTLS"):
+    use_wpa_wolfssl = False
+if use_wpa_wolfssl:
     queue.AddLibrary(
         name="bdk_wolfssl",
         base_dir=join(FUNC_DIR, "wolfssl"),
         srcs=[
             "+<wolfcrypt/src/ecc.c>",
+            "+<wolfcrypt/src/hmac.c>",
+            "+<wolfcrypt/src/md5.c>",
             "+<wolfcrypt/src/memory.c>",
             "+<wolfcrypt/src/random.c>",
+            "+<wolfcrypt/src/sha.c>",
             "+<wolfcrypt/src/sha256.c>",
+            "+<wolfcrypt/src/sha512.c>",
             "+<wolfcrypt/src/tfm.c>",
             "+<wolfcrypt/src/wolfmath.c>",
         ],
@@ -406,72 +443,87 @@ if env.Cfg("CFG_WPA3"):
             "+<.>",
         ],
     )
-if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
-    "BLE_VERSION_4_2"
-):
-    queue.AddLibrary(
-        name="bdk_ble_4_2",
-        base_dir=join(DRIVER_DIR, "ble"),
-        srcs=[
-            "+<**/*.c>",
-        ],
-        includes=[
-            "+<.>",
-            "+<**/include>",
-            "+<beken_ble_sdk/mesh/src/dbg>",
-            "+<config>",
-            "+<modules/**>",
-            "+<plactform/arch>",
-            "+<plactform/driver/*>",
-            "+<profiles/*/api>",
-        ],
+
+# Sources - BLE version
+if env.Cfg("CFG_SUPPORT_BLE"):
+    platform = (
+        "bk7238" if SOC == SOC_BK7238 else "bk7252n" if SOC == SOC_BK7252N else "7231n"
     )
-if env.Cfg("CFG_SUPPORT_BLE") and env.Cfg("CFG_BLE_VERSION") == env.Cfg(
-    "BLE_VERSION_5_x"
-):
+    if BDK >= (3, 0, 56):
+        ble_base_dir = join(DRIVER_DIR, "ble", BLE_VERSIONS[BLE])
+    elif BLE == BLE_VERSION_4_2:
+        ble_base_dir = join(DRIVER_DIR, "ble")
+    elif BLE == BLE_VERSION_5_1:
+        ble_base_dir = join(DRIVER_DIR, "ble_5_x_rw")
     queue.AddLibrary(
-        name="bdk_ble_5_x",
-        base_dir=join(DRIVER_DIR, "ble_5_x_rw"),
+        name=f"bdk_{BLE_VERSIONS[BLE]}",
+        base_dir=ble_base_dir,
         srcs=[
-            "+<**/*.c>",
+            # BLE 4.2 (BK7231U, BK7251, BK7271)
+            BLE == BLE_VERSION_4_2 and "+<ble.c>",
+            BLE == BLE_VERSION_4_2 and "+<modules/app/src/*.c>",
+            BLE == BLE_VERSION_4_2 and "-<modules/app/src/app_mesh.c>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/**/*.c>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/src/*.c>",
+            # BLE 5.x
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/app/src/*.c>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/ui/ble_ui.c>",
+            # BLE 5.1 (BK7231N, BK7236)
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/prf/*.c>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/comm/src/*.c>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/sdp/src/*.c>",
+            # BLE 5.2 (BK7238, BK7252N, BK7253)
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bas/bass/src/bass.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_comm/src/*.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_sdp/src/sdp_common.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/dis/diss/src/diss.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/find/findt/src/findt.c>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp/hogpd/src/hogpd.c>",
+            BLE == BLE_VERSION_5_2 and "+<hci/controller_hci.c>",
+            # SoC-specific (BLE 5.x)
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/**/*.c>",
             "-<ble_pub/app/src/app_ble_task.c>",
-            "-<platform/7231n/nvds/src/nvds.c>",
+            f"-<platform/{platform}/nvds/src/nvds.c>",
         ],
         includes=[
-            "+<**/api>",
-            "+<arch/**>",
-            "+<ble_lib/ip/ble/**>",
-            "+<ble_lib/ip/hci/src>",
-            "+<ble_lib/ip/sch/import>",
-            "+<ble_lib/modules/*/src>",
-            "+<ble_pub/prf>",
-            "+<ble_pub/ui>",
-            "+<platform/7231n/**>",
-            "-<platform/7231n/nvds/**>",
-        ],
-    )
-if env.Cfg("ATSVR_CFG"):
-    queue.AddLibrary(
-        name="bdk_atsvr",
-        base_dir=join(FUNC_DIR, "at_server"),
-        srcs=[
-            "+<**/*.c>",
-        ],
-        includes=[
-            "+<.>",
-            "+<*>",
-        ],
-    )
-if env.Cfg("CFG_USB") or env.Cfg("CFG_USE_SDCARD_HOST"):
-    queue.AddLibrary(
-        name="bdk_driver_usb",
-        base_dir=ROOT_DIR,
-        srcs=[
-            "+<driver/usb/*.c>",
-            "+<func/usb/*.c>",
-        ],
-        includes=[
-            "+<driver/usb/**>",
+            # BLE 4.2
+            BLE == BLE_VERSION_4_2 and "+<.>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/*/include>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/mesh/src/dbg>",
+            BLE == BLE_VERSION_4_2 and "+<beken_ble_sdk/mesh/src/models/include>",
+            BLE == BLE_VERSION_4_2 and "+<config>",
+            BLE == BLE_VERSION_4_2 and "+<modules/**>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/arch>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/driver/*>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/include>",
+            BLE == BLE_VERSION_4_2 and "+<plactform/modules/include>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/api>",
+            BLE == BLE_VERSION_4_2 and "+<profiles/*/include>",
+            # BLE 5.x
+            BLE != BLE_VERSION_4_2 and "+<arch/**>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/ip/ble/**>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/ip/*/*>",
+            BLE != BLE_VERSION_4_2 and "+<ble_lib/modules/*/*>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/app/api>",
+            BLE != BLE_VERSION_4_2 and "+<ble_pub/ui>",
+            # BLE 5.1
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/prf>",
+            BLE == BLE_VERSION_5_1 and "+<ble_pub/profiles/*/api>",
+            # BLE 5.2
+            BLE == BLE_VERSION_5_2 and "+<ble_lib/modules/rwip/import/reg>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bas/bass/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_comm/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/bk_sdp/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/dis/diss/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/find/findt/api>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp>",
+            BLE == BLE_VERSION_5_2 and "+<ble_pub/profiles/hogp/hogpd/api>",
+            # SoC-specific (BLE 5.x)
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/config>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/driver/*>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/entry>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/rwip/api>",
+            BLE != BLE_VERSION_4_2 and f"+<platform/{platform}/rwip/import/reg>",
         ],
     )
 
@@ -484,9 +536,9 @@ queue.AppendPublic(
     LIBS=[
         "airkiss",
         "sensor",
-        "usb",
         # "wpa", # this is compiled from func/hostapd_intf/hostapd_intf.c
         SOC != SOC_BK7231 and f"ble_{SOC_NAMES[SOC]}",
+        SOC == SOC_BK7251 and f"usb_{SOC_NAMES[SOC]}",
         f"cal_{SOC_NAMES[SOC]}",
         f"rf_test_{SOC_NAMES[SOC]}",
         f"rf_use_{SOC_NAMES[SOC]}",
