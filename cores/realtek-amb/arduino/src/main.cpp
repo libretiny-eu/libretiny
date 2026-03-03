@@ -14,7 +14,7 @@ void lt_init_arduino() {
 #endif
 
 bool startMainTask() {
-	osThreadDef(mainTask, osPriorityRealtime, 1, 4096 * 4);
+	osThreadDef(mainTask, osPriorityRealtime, 1, 8192);
 	main_tid = osThreadCreate(osThread(mainTask), NULL);
 	osKernelStart();
 	return true;
