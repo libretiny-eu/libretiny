@@ -1,7 +1,6 @@
 {
 	"_base": [
 		"beken-72xx",
-		"beken-7231",
 		"beken-7231q",
 		"ic/bk7231q-qfn40",
 		"pcb/wa2",

@@ -1,9 +1,8 @@
 {
 	"_base": [
 		"beken-72xx",
-		"beken-7231",
 		"beken-7231t",
-		"beken-7231-tuya",
+		"beken-7231t-tuya",
 		"ic/bk7231-qfn32",
 		"pcb/lsc-lma35"
 	],
