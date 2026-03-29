@@ -1,0 +1,14 @@
+{
+	"build": {
+		"bkcrypt_coeffs": "510fb093a3cbeadc5993a17ec7adeb03"
+	},
+	"flash": {
+		"tuya": "0x1ED000+0x13000"
+	},
+	"doc": {
+		"params": {
+			"layout": "**Tuya default** for T (OTA 0x132000, RF 0x1E0000)",
+			"keys": "Beken and Tuya defaults"
+		}
+	}
+}

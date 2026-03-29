@@ -1,0 +1,9 @@
+{
+	"pcb": {
+		"templates": [
+			"tuya2l",
+			"pcb-blue-light",
+			"rf-type1"
+		]
+	}
+}

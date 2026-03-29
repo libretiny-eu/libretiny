@@ -1,0 +1,61 @@
+{
+	"build": {
+		"f_cpu": "160000000L",
+		"prefix": "arm-none-eabi-"
+	},
+	"flash": {},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "ln882x.cfg",
+		"gdb_init": [
+			"mem 0x00000000 0x10000000 ro"
+		]
+	},
+	"upload": {
+		"maximum_ram_size": 302080,
+		"require_upload_port": true,
+		"speed": 115200,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Lightning",
+			"series": "LN882X",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		},
+		"flashing": {
+			"links": {
+				"ltchiptool user guide": "../../docs/flashing/tools/ltchiptool.md",
+				"full flashing guide": "../../docs/platform/lightning-ln882x/README.md#flashing"
+			},
+			"pins": {
+				"PA03 / RX0": "TX of USB-UART adapter",
+				"PA02 / TX0": "RX of USB-UART adapter",
+				"PA09 / BOOT1 (strapping pin)": "GND to enter download mode",
+				"CEN (Chip-Enable)": "GND to reset the chip"
+			},
+			"guide": [
+				"Connect the USB-UART adapter.",
+				"Start the flashing process.",
+				"Connect PA09 (BOOT1) to GND.",
+				"Power-cycle the device or briefly short CEN to GND."
+			]
+		},
+		"links": {
+			"Info & flashing guide": "../../docs/platform/lightning-ln882x/README.md",
+			"Debugging": "../../docs/platform/lightning-ln882x/debugging.md"
+		}
+	}
+}

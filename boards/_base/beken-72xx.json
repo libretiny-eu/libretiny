@@ -1,0 +1,79 @@
+{
+	"build": {
+		"f_cpu": "120000000L",
+		"prefix": "arm-none-eabi-",
+		"bkoffset_app": "0x10000",
+		"bkrbl_size_app": "0x108700",
+		"bkota": {
+			"encryption": "aes256",
+			"compression": "gzip",
+			"key": "0123456789ABCDEF0123456789ABCDEF",
+			"iv": "0123456789ABCDEF"
+		}
+	},
+	"flash": {
+		"bootloader": "0x000000+0x11000",
+		"app": "0x011000+0x121000",
+		"download": "0x132000+0xA6000",
+		"kvs": "0x1D8000+0x8000",
+		"calibration": "0x1E0000+0x1000",
+		"userdata": "0x1E3000+0x1D000"
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"debug": {
+		"protocol": "openocd",
+		"protocols": [
+			"openocd"
+		],
+		"openocd_config": "bk72xx.cfg",
+		"gdb_init": [
+			"mem 0x000000 0x200000 ro"
+		]
+	},
+	"upload": {
+		"maximum_size": 1083136,
+		"maximum_ram_size": 262144,
+		"flash_size": 2097152,
+		"require_upload_port": true,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Beken",
+			"series": "BK72XX",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			},
+			"layout": "**Beken default** (OTA 0x132000, RF 0x1E0000)",
+			"keys": "*-- no encryption --*"
+		},
+		"flashing": {
+			"links": {
+				"ltchiptool user guide": "../../docs/flashing/tools/ltchiptool.md",
+				"full flashing guide": "../../docs/platform/beken-72xx/README.md#flashing"
+			},
+			"pins": {
+				"P10 / RX1": "TX of USB-UART adapter",
+				"P11 / TX1": "RX of USB-UART adapter",
+				"CEN (Chip-Enable)": "GND to reset the chip"
+			},
+			"guide": [
+				"Connect the USB-UART adapter.",
+				"Start the flashing process.",
+				"Keep shorting CEN to GND or power-cycling the device, until flashing starts."
+			]
+		},
+		"links": {
+			"Info & flashing guide": "../../docs/platform/beken-72xx/README.md"
+		},
+		"extra": [
+			"Bootloader and app partitions contain CRC16 sums every 32 bytes. That results in the actual flash offsets/sizes not aligned to sector boundaries. To simplify calculations, the values shown in the table (extracted from bootloader's partition table) were aligned to 4096 bytes."
+		]
+	}
+}

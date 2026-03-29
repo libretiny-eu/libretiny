@@ -1,0 +1,86 @@
+{
+	"mask_black": {
+		"fill": {
+			"lgrad": [
+				"1,0",
+				"#4D4D4D",
+				"0,1",
+				"#0F0F0F"
+			]
+		},
+		"stroke": {
+			"color": "#B5A739",
+			"width": 0.1
+		}
+	},
+	"mask_blue_light": {
+		"fill": {
+			"lgrad": [
+				"1,0",
+				"#47A8CD",
+				"0,1",
+				"#008FB5"
+			]
+		},
+		"stroke": {
+			"color": "#B5A739",
+			"width": 0.1
+		}
+	},
+	"mask_white": {
+		"fill": {
+			"lgrad": [
+				"1,0",
+				"#F9F9F9",
+				"0,1",
+				"#EDEDED"
+			]
+		},
+		"stroke": {
+			"color": "#B5A739",
+			"width": 0.1
+		}
+	},
+	"shield": {
+		"rx": 0.5,
+		"ry": 0.5,
+		"fill": {
+			"lgrad": [
+				"1,0",
+				"#F5F5F5",
+				"0,1",
+				"#999999"
+			]
+		}
+	},
+	"copper1": {
+		"fill": {
+			"color": "#E5B472"
+		}
+	},
+	"copper2": {
+		"fill": {
+			"color": "#CE7823"
+		}
+	},
+	"trace": {
+		"fill": {
+			"color": "${TRACE_COLOR}"
+		}
+	},
+	"ioline": {
+		"fill": {
+			"color": "#4E4C4C"
+		}
+	},
+	"pcb_stroke": {
+		"fill": {
+			"color": "#B5A739"
+		}
+	},
+	"stroke_clear": {
+		"stroke": {
+			"width": 0
+		}
+	}
+}

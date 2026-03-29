@@ -1,0 +1,88 @@
+{
+	"ADC": {
+		"title": "Analog-to-Digital Converter",
+		"color": "#8AD039"
+	},
+	"CTRL": {
+		"title": "Control pin",
+		"color": "#ED602E"
+	},
+	"GPIO": {
+		"title": "GPIO",
+		"color": "#800000"
+	},
+	"I2C": {
+		"title": "I2C bus",
+		"color": "#FF9955"
+	},
+	"I2S": {
+		"title": "I2S peripheral",
+		"color": "#FF8080"
+	},
+	"DVP": {
+		"title": "Camera interface",
+		"color": "#66D9EF"
+	},
+	"IO": {
+		"title": "Input/Output",
+		"color": "#4E4C4C",
+		"ratio": 1.8
+	},
+	"JTAG": {
+		"title": "JTAG interface",
+		"color": "#FFE680"
+	},
+	"PHYSICAL": {
+		"title": "Physical pin",
+		"color": "#4E4C4C",
+		"ratio": 1
+	},
+	"PWM": {
+		"title": "PWM output",
+		"color": "#AFA35E"
+	},
+	"PWR": {
+		"title": "Power pin",
+		"color": "#CD3C24"
+	},
+	"GND": {
+		"title": "Ground",
+		"color": "#000000"
+	},
+	"SD": {
+		"title": "SD card interface/SDIO",
+		"color": "#F4DE51"
+	},
+	"SPI": {
+		"title": "SPI bus",
+		"color": "#E9BA33"
+	},
+	"IRDA": {
+		"title": "IrDA port",
+		"color": "#AEAFC1"
+	},
+	"FLASH": {
+		"title": "Programming port",
+		"color": "#F68A1E"
+	},
+	"SWD": {
+		"title": "SWD interface",
+		"color": "#FFE680"
+	},
+	"TMR": {
+		"title": "",
+		"color": "#DD913C"
+	},
+	"UART": {
+		"title": "UART I/O",
+		"color": "#DCD4EE"
+	},
+	"USB": {
+		"title": "USB port data",
+		"color": "#0F9D58"
+	},
+	"WAKE": {
+		"title": "",
+		"color": "#CF90B3"
+	}
+}

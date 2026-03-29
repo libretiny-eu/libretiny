@@ -1,0 +1,60 @@
+{
+	"pcb": {
+		"scale": 10,
+		"test_pads": {
+			"TA_15": "wbr3.back.a_15.anchor",
+			"TA_0": "wbr3.back.a_0.anchor",
+			"TA_1": "wbr3.back.a_1.anchor"
+		},
+		"back": [
+			{
+				"type": "rect",
+				"pos": "5.8,14.6",
+				"size": "3.6,3.6",
+				"preset": "copper1"
+			},
+			{
+				"id": "a_15",
+				"name": "label_line_up",
+				"pos": "2.4,11.5",
+				"vars": {
+					"DIR": "left",
+					"W": 0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "3.2,11.4"
+			},
+			{
+				"id": "a_0",
+				"name": "label_line_up",
+				"pos": "11.6,17.6",
+				"vars": {
+					"DIR": "left",
+					"W": 0.7,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "12.4,17.5"
+			},
+			{
+				"id": "a_1",
+				"name": "label_line_up",
+				"pos": "10.9,19.6",
+				"vars": {
+					"DIR": "left",
+					"W": 0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "11.7,19.5"
+			}
+		]
+	}
+}

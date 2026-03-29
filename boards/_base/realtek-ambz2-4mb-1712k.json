@@ -1,0 +1,16 @@
+{
+	"flash": {
+		"ota1": "0x010000+0x1AC000",
+		"ota2": "0x1BC000+0x1AC000",
+		"kvs": "0x3F8000+0x8000"
+	},
+	"upload": {
+		"flash_size": 4194304,
+		"maximum_size": 1753088
+	},
+	"doc": {
+		"params": {
+			"layout": "**Tuya** (2x 1712k apps)"
+		}
+	}
+}
