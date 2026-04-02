@@ -10,7 +10,14 @@ static void lt_init_log(void) {
 	// default LT print port
 	uart_print_port = LT_UART_DEFAULT_LOGGER;
 	// default SDK print port
+	// Skip serial_init() when all UART output is silenced (LT_UART_SILENT_ALL=1,
+	// which is the default ESPHome sdk_silent: all setting). This prevents the
+	// default UART port from claiming its TX/RX pins via AFIO, allowing them to
+	// be used as GPIO. When output is needed, ESPHome's logger or explicit
+	// Serial.begin() will initialize the hardware instead.
+#if !LT_UART_SILENT_ALL
 	serial_init(&m_LogSerial, LT_UART_DEFAULT_PORT, CFG_UART_BAUDRATE_LOG, NULL);
+#endif
 }
 
 void lt_init_family() {
