@@ -48,7 +48,15 @@ extern "C" {
 // SDK
 #include "ln_kv_api.h"
 #include "ln_nvds.h"
+// cmb_def.h uses 'register' (removed in C++17); suppress -Wregister in C++ only
+#ifdef __cplusplus
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wregister"
+#endif
 #include "utils/debug/CmBacktrace/cm_backtrace.h"
+#ifdef __cplusplus
+#pragma GCC diagnostic pop
+#endif
 #include "utils/ln_psk_calc.h"
 #include "utils/power_mgmt/ln_pm.h"
 #include "utils/reboot_trace/reboot_trace.h"
