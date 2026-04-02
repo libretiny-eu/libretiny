@@ -2,6 +2,8 @@
 
 #include "WiFiPrivate.h"
 
+static void wifiEventIpReceived(struct netif *nif);
+
 void wifiEventSendArduino(EventId event) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
