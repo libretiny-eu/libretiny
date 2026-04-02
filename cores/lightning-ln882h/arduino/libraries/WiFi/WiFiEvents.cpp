@@ -28,6 +28,22 @@ static void wifiEventStaConnected(void *arg) {
 	memcpy(eventInfo.wifi_sta_connected.bssid, pWiFi->BSSID(), 6);
 
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_STA_CONNECTED, eventInfo);
+
+	// If static IP is configured, apply it now and stop DHCP before the SDK
+	// starts it. wifi_sta_connect() always starts DHCP internally; we have no
+	// way to pass dhcp_mode to it (unlike BK72XX's bk_wlan_start_sta_adv_fix).
+	WiFiNetworkInfo &info = pDATA->sta;
+	if (info.localIP) {
+		struct netif *ifs = netdev_get_netif(NETIF_IDX_STA);
+		ip4_addr_t ipaddr, netmask, gw;
+		ipaddr.addr	 = info.localIP;
+		netmask.addr = info.subnet;
+		gw.addr		 = info.gateway;
+		netif_set_addr(ifs, &ipaddr, &netmask, &gw);
+		netifapi_dhcp_release_and_stop(ifs);
+		// Emit GOT_IP manually — DHCP is stopped so the netdev callback won't fire
+		wifiEventIpReceived(ifs);
+	}
 }
 
 static void wifiEventStaDisconnected(void *arg) {
