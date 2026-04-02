@@ -1,0 +1,21 @@
+{
+	"_base": [
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"ic/ln882hk",
+		"pcb/wl2h-u"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "wl2h-u"
+	},
+	"name": "WL2H-U Wi-Fi/BLE Module",
+	"url": "https://docs.libretiny.eu/boards/wl2h-u/",
+	"vendor": "Tuya",
+	"doc": {
+		"fccid": "2ANDL-WL2H-U"
+	},
+	"pcb": {
+		"symbol": "WL2H-U"
+	}
+}
