@@ -22,6 +22,17 @@ static GPIO_INDEX adcToGpio[] = {
 	GPIONUM, // ADC6
 	GPIONUM, // ADC7
 };
+#elif CFG_SOC_NAME == SOC_BK7238
+static GPIO_INDEX adcToGpio[] = {
+	-1,		 // ADC0 - VBAT
+	GPIO26,	 // ADC1
+	GPIO24,	 // ADC2
+	GPIO20,	 // ADC3
+	GPIO28,	 // ADC4
+	GPIO1,	 // ADC5
+	GPIO10,	 // ADC6
+	GPIONUM, // ADC7
+};
 #else
 static GPIO_INDEX adcToGpio[] = {
 	-1,		// ADC0 - VBAT

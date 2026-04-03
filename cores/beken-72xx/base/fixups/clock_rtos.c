@@ -57,7 +57,7 @@ static void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id) {
 		param.cfg.bits.mode	  = PWM_TIMER_MODE;
 		param.cfg.bits.clk	  = PWM_CLK_26M;
 		param.p_Int_Handler	  = fclk_hdl;
-#if (CFG_SOC_NAME == SOC_BK7231N)
+#if (CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7238) || (CFG_SOC_NAME == SOC_BK7252N)
 		param.duty_cycle1 = 0;
 #else
 		param.duty_cycle = 0;
@@ -77,14 +77,14 @@ static void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id) {
 #if LT_MICROS_HIGH_RES
 		param.period = FCLK_DURATION_MS * 1000;
 #else
-		param.period	 = FCLK_DURATION_MS;
+		param.period = FCLK_DURATION_MS;
 #endif
 		param.t_Int_Handler = fclk_hdl;
 
 #if LT_MICROS_HIGH_RES
 		UINT32 ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM_US, &param);
 #else
-		UINT32 ret		 = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM, &param);
+		UINT32 ret = sddev_control(TIMER_DEV_NAME, CMD_TIMER_INIT_PARAM, &param);
 #endif
 		ASSERT(BK_TIMER_SUCCESS == ret);
 		sddev_control(TIMER_DEV_NAME, CMD_TIMER_UNIT_ENABLE, &param.channel);
@@ -92,7 +92,7 @@ static void fclk_timer_hw_init(BK_HW_TIMER_INDEX timer_id) {
 }
 
 static void fclk_hdl(UINT8 param) {
-#if CFG_USE_TICK_CAL
+#if CFG_USE_TICK_CAL && !CFG_LOW_VOLTAGE_PS
 	if (!mcu_ps_need_pstick())
 		return;
 #endif
@@ -107,6 +107,7 @@ static void fclk_hdl(UINT8 param) {
 		/* Select a new task to run. */
 		vTaskSwitchContext();
 	}
+
 	GLOBAL_INT_RESTORE();
 }
 
@@ -115,7 +116,9 @@ UINT32 fclk_update_tick(UINT32 tick) {
 	if (tick == 0)
 		return 0;
 	GLOBAL_INT_DISABLE();
+#if CFG_USE_TICK_CAL && !CFG_LOW_VOLTAGE_PS
 	mcu_ps_increase_clr();
+#endif
 	vTaskStepTick(tick);
 	GLOBAL_INT_RESTORE();
 	return 0;
