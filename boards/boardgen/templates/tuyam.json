@@ -1,0 +1,78 @@
+{
+	"name": "tuyam",
+	"title": "Tuya boards; M series",
+	"width": 13,
+	"height": 12.5,
+	"vars": {
+		"PINTYPE_HORZ": "pad_10x25",
+		"PINDIR": "down",
+		"RASTER": 2
+	},
+	"front": [
+		{
+			"name": "tuyam_pcb",
+			"pos": "0,0"
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "5.0,0.6",
+			"size": "7.4,8.8",
+			"preset": "shield"
+		},
+		{
+			"comment": "Pins (10,8,6,4,2)",
+			"name": "r_pins_horz",
+			"repeat": 5,
+			"pos": "2.5,11.1"
+		},
+		{
+			"comment": "Pin labels (10,8,6,4,2)",
+			"id": "pins",
+			"name": "r_labels_horz",
+			"repeat": 5,
+			"pos": "2.5,12.7"
+		}
+	],
+	"back": [
+		{
+			"name": "tuyam_pcb",
+			"pos": "0,0"
+		},
+		{
+			"comment": "Pins (1,3,5,7,9,11)",
+			"name": "r_pins_horz",
+			"repeat": 6,
+			"pos": "1.5,11.1"
+		},
+		{
+			"comment": "Pin labels (1,3,5,7,9,11)",
+			"id": "pins",
+			"name": "r_labels_horz",
+			"repeat": 6,
+			"pos": "1.5,12.7"
+		},
+		{
+			"type": "text",
+			"pos": "0.5,1.7",
+			"text": "${SYMBOL}",
+			"font_size": 1.5,
+			"fill": {
+				"color": "${SILK_COLOR}"
+			}
+		}
+	],
+	"pads": {
+		"1": "tuyam.back.pins.label1.anchor",
+		"2": "tuyam.front.pins.label5.anchor",
+		"3": "tuyam.back.pins.label2.anchor",
+		"4": "tuyam.front.pins.label4.anchor",
+		"5": "tuyam.back.pins.label3.anchor",
+		"6": "tuyam.front.pins.label3.anchor",
+		"7": "tuyam.back.pins.label4.anchor",
+		"8": "tuyam.front.pins.label2.anchor",
+		"9": "tuyam.back.pins.label5.anchor",
+		"10": "tuyam.front.pins.label1.anchor",
+		"11": "tuyam.back.pins.label6.anchor"
+	}
+}
