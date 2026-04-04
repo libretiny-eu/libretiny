@@ -32,6 +32,14 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	{GPIO10, PIN_GPIO | PIN_IRQ | PIN_ADC | PIN_UART,          PIN_NONE, 0},
 	// D11: P11, UART1_TX
 	{GPIO11, PIN_GPIO | PIN_IRQ | PIN_UART,                    PIN_NONE, 0},
+	// D12: P17, MISO, I2C2_SDA
+	{GPIO17, PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_SPI,           PIN_NONE, 0},
+	// D13: P16, MOSI
+	{GPIO16, PIN_GPIO | PIN_IRQ | PIN_SPI,                     PIN_NONE, 0},
+	// D14: P15, CS, I2C2_SCL
+	{GPIO15, PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_SPI,           PIN_NONE, 0},
+	// D15: P14, SCK
+	{GPIO14, PIN_GPIO | PIN_IRQ | PIN_SPI,                     PIN_NONE, 0},
 };
 
 PinInfo *lt_arduino_pin_gpio_map[] = {
@@ -42,6 +50,10 @@ PinInfo *lt_arduino_pin_gpio_map[] = {
 	[9]  = &(lt_arduino_pin_info_list[4]),  // GPIO9 (D4)
 	[10] = &(lt_arduino_pin_info_list[10]), // GPIO10 (D10)
 	[11] = &(lt_arduino_pin_info_list[11]), // GPIO11 (D11)
+	[14] = &(lt_arduino_pin_info_list[15]), // GPIO14 (D15)
+	[15] = &(lt_arduino_pin_info_list[14]), // GPIO15 (D14)
+	[16] = &(lt_arduino_pin_info_list[13]), // GPIO16 (D13)
+	[17] = &(lt_arduino_pin_info_list[12]), // GPIO17 (D12)
 	[20] = &(lt_arduino_pin_info_list[0]),  // GPIO20 (D0)
 	[22] = &(lt_arduino_pin_info_list[1]),  // GPIO22 (D1)
 	[23] = &(lt_arduino_pin_info_list[5]),  // GPIO23 (D5)
