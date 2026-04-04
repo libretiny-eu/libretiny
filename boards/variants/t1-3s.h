@@ -6,18 +6,31 @@
 
 // Pins
 // ----
-#define PINS_COUNT         12 // Total GPIO count
-#define NUM_DIGITAL_PINS   12 // Digital inputs/outputs
+#define PINS_COUNT         16 // Total GPIO count
+#define NUM_DIGITAL_PINS   16 // Digital inputs/outputs
 #define NUM_ANALOG_INPUTS  5  // ADC inputs
 #define NUM_ANALOG_OUTPUTS 5  // PWM & DAC outputs
 #define PINS_GPIO_MAX      26 // Last usable GPIO number
 
+// SPI Interfaces
+// --------------
+#define PIN_SPI0_CS    15u // GPIO15
+#define PIN_SPI0_MISO  17u // GPIO17
+#define PIN_SPI0_MOSI  16u // GPIO16
+#define PIN_SPI0_SCK   14u // GPIO14
+#define PINS_SPI0_CS   {15u}
+#define PINS_SPI0_MISO {17u}
+#define PINS_SPI0_MOSI {16u}
+#define PINS_SPI0_SCK  {14u}
+
 // Wire Interfaces
 // ---------------
-#define PIN_WIRE2_SCL  24u // GPIO24
-#define PIN_WIRE2_SDA  26u // GPIO26
-#define PINS_WIRE2_SCL {24u}
-#define PINS_WIRE2_SDA {26u}
+#define PIN_WIRE2_SCL_0 15u // GPIO15
+#define PIN_WIRE2_SCL_1 24u // GPIO24
+#define PIN_WIRE2_SDA_0 17u // GPIO17
+#define PIN_WIRE2_SDA_1 26u // GPIO26
+#define PINS_WIRE2_SCL  {15u, 24u}
+#define PINS_WIRE2_SDA  {17u, 26u}
 
 // Serial ports
 // ------------
@@ -37,6 +50,9 @@
 #define PIN_ADC3 20u // GPIO20
 #define PIN_ADC5 1u  // GPIO1
 #define PIN_ADC6 10u // GPIO10
+#define PIN_CS   15u // GPIO15
+#define PIN_MISO 17u // GPIO17
+#define PIN_MOSI 16u // GPIO16
 #define PIN_P0   0u  // GPIO0
 #define PIN_P1   1u  // GPIO1
 #define PIN_P6   6u  // GPIO6
@@ -44,6 +60,10 @@
 #define PIN_P9   9u  // GPIO9
 #define PIN_P10  10u // GPIO10
 #define PIN_P11  11u // GPIO11
+#define PIN_P14  14u // GPIO14
+#define PIN_P15  15u // GPIO15
+#define PIN_P16  16u // GPIO16
+#define PIN_P17  17u // GPIO17
 #define PIN_P20  20u // GPIO20
 #define PIN_P22  22u // GPIO22
 #define PIN_P23  23u // GPIO23
@@ -56,8 +76,7 @@
 #define PIN_PWM5 26u // GPIO26
 #define PIN_RX1  10u // GPIO10
 #define PIN_RX2  1u  // GPIO1
-#define PIN_SCL2 24u // GPIO24
-#define PIN_SDA2 26u // GPIO26
+#define PIN_SCK  14u // GPIO14
 #define PIN_TX1  11u // GPIO11
 #define PIN_TX2  0u  // GPIO0
 
@@ -65,8 +84,10 @@
 // -----------------
 #define HAS_SERIAL1             1
 #define HAS_SERIAL2             1
+#define HAS_SPI0                1
 #define HAS_WIRE2               1
 #define SERIAL_INTERFACES_COUNT 2
+#define SPI_INTERFACES_COUNT    1
 #define WIRE_INTERFACES_COUNT   1
 
 // Arduino pin names
@@ -83,6 +104,10 @@
 #define PIN_D9  26u // GPIO26
 #define PIN_D10 10u // GPIO10
 #define PIN_D11 11u // GPIO11
+#define PIN_D12 17u // GPIO17
+#define PIN_D13 16u // GPIO16
+#define PIN_D14 15u // GPIO15
+#define PIN_D15 14u // GPIO14
 #define PIN_A0  20u // GPIO20
 #define PIN_A1  1u  // GPIO1
 #define PIN_A2  24u // GPIO24
@@ -108,3 +133,7 @@ static const unsigned char D8 = PIN_D8;
 static const unsigned char D9 = PIN_D9;
 static const unsigned char D10 = PIN_D10;
 static const unsigned char D11 = PIN_D11;
+static const unsigned char D12 = PIN_D12;
+static const unsigned char D13 = PIN_D13;
+static const unsigned char D14 = PIN_D14;
+static const unsigned char D15 = PIN_D15;
