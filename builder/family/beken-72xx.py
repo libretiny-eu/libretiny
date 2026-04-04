@@ -87,7 +87,7 @@ if not SOC_BDK[SOC]:
 if BDK < SOC_BDK[SOC]:
     click.secho(
         f"Selected chip '{SOC_NAMES[SOC]}' is not supported in BDK {bdk_version}. "
-        f"The minimum supported version is 3.0.{SOC_BDK[SOC] % 100}.",
+        f"The minimum supported version is {'.'.join(str(x) for x in SOC_BDK[SOC])}.",
         fg="red",
     )
     exit(1)
@@ -297,8 +297,8 @@ queue.AddLibrary(
         "+<net_param_intf/*.c>",
         "+<ntp/*.c>",
         "+<power_save/*.c>",
-        "-<power_save/low_voltage_compensation.c>",
-        "-<power_save/low_voltage_ps.c>",
+        SOC != SOC_BK7238 and "-<power_save/low_voltage_compensation.c>",
+        SOC != SOC_BK7238 and "-<power_save/low_voltage_ps.c>",
         "+<rtc/*.c>",
         "-<rtc/alarm.c>",
         "+<rwnx_intf/*.c>",
