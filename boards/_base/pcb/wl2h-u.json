@@ -1,6 +1,9 @@
 {
 	"pcb": {
-		"templates": ["tuya2", "pcb-blue-light", "rf-type1"],
+		"templates": ["esp12e-22", "pcb-blue-light", "tuya-16x24", "rf-type1"],
+		"vars": {
+			"PINHOLE": 0
+		},
 		"scale": 10.5,
 		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD,SPI,I2C",
 		"pinout": {
@@ -21,6 +24,7 @@
 			"15": {"IC": 10, "ARD": "D2"},
 			"16": {"IC": 11, "ARD": "D3"},
 			"17": {"IC": 25, "ARD": ["D14", "A6"]},
+			"18": {"NC": null},
 			"19": {"IC": 26, "ARD": ["D15", "A7"]},
 			"20": {"IC": 27, "ARD": "D16"},
 			"21": {"IC": 28, "ARD": "D17"},
