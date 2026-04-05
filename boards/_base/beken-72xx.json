@@ -5,6 +5,7 @@
 		"bkoffset_app": "0x10000",
 		"bkrbl_size_app": "0x108700",
 		"bkota": {
+			"format": "rbl",
 			"encryption": "aes256",
 			"compression": "gzip",
 			"key": "0123456789ABCDEF0123456789ABCDEF",

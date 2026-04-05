@@ -77,6 +77,13 @@
 		"id": "0x7B3EF230",
 		"short_name": "BK7231N"
 	},
+	"beken-7238": {
+		"parent": "beken-72xx-gen1",
+		"description": "Beken 7238",
+		"code": "bk7238",
+		"id": "0x159AC324",
+		"short_name": "BK7238"
+	},
 	"beken-7251": {
 		"parent": "beken-72xx-gen1",
 		"code": "bk7251",
