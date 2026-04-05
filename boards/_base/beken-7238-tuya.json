@@ -1,6 +1,9 @@
 {
 	"build": {
-		"bkboot_version": "2.0.0-t1"
+		"bkboot_version": "2.0.0-t1",
+		"bkota": {
+			"format": "diff2ya"
+		}
 	},
 	"flash": {
 		"app": "0x11000+0x11B000",
