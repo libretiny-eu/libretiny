@@ -37,6 +37,16 @@ static void wifiApplyStaticIpCallback(void *arg) {
 	// is now stopped dhcp_supplied_address() returns false, so g_get_ip_cb is
 	// NOT re-entered — no infinite recursion.
 
+	// Restore configured DNS servers — DHCP may have overwritten them via option 6
+	// before we could stop it (reconnect/roam fallback path only).
+	ip4_addr_t d1, d2;
+	d1.addr = info.dns1;
+	d2.addr = info.dns2;
+	if (d1.addr)
+		dns_setserver(0, &d1);
+	if (d2.addr)
+		dns_setserver(1, &d2);
+
 	// Emit GOT_IP with the correct static address
 	wifiEventIpReceived(nif);
 }
