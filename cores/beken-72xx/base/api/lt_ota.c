@@ -14,7 +14,11 @@ bool lt_ota_is_valid(uint8_t index) {
 	// TODO: maybe check header CRC or even binary hashes
 	uint32_t magic;
 	lt_flash_read(FLASH_DOWNLOAD_OFFSET, (uint8_t *)&magic, 4);
-	return magic == 0x004C4252; // "RBL\0", little-endian
+	if (magic == 0x004C4252) // "RBL\0", little-endian
+		return true;
+	if (magic == 0x004D4D4D) // "MMM\0", little-endian
+		return true;
+	return false;
 }
 
 uint8_t lt_ota_dual_get_current() {

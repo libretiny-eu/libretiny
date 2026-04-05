@@ -584,10 +584,15 @@ env.Append(
     ],
 )
 
+# Check used OTA format
+ota_format = board.get("build.bkota.format")
+
 # Main firmware outputs and actions
 image_app_crc = "${BUILD_DIR}/image_${MCULC}_app.${FLASH_APP_OFFSET}.crc"
 image_app_rblh = "${BUILD_DIR}/image_${MCULC}_app.${FLASH_RBL_OFFSET}.rblh"
 image_ota_rbl = "${BUILD_DIR}/image_${MCULC}_app.ota.rbl"
+image_ota_ug = "${BUILD_DIR}/image_${MCULC}_app.ota.ug.bin"
+image_diff2ya_info = "${BUILD_DIR}/image_${MCULC}_app.diff2ya.dat"
 env.Replace(
     # linker command (encryption + packaging)
     LINK='${LTCHIPTOOL} link2bin ${BOARD_JSON} "" ""',
@@ -598,6 +603,9 @@ env.Replace(
         # app RBL header (with crc) for flasher
         f"{image_app_rblh}+{rbl_offs}=flasher:app",
         # OTA RBL package for device only
-        f"{image_ota_rbl}=device:download",
+        ota_format in ["rbl", "rbl-ug"] and f"{image_ota_rbl}=device:download",
+        # diff2ya format - use UG image for 'download' and flash info partition
+        ota_format == "diff2ya" and f"{image_ota_ug}=device:download",
+        ota_format == "diff2ya" and f"{image_diff2ya_info}=device:diff2ya",
     ],
 )
