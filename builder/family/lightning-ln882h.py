@@ -32,7 +32,9 @@ queue.AppendPublic(
         "-Wno-write-strings",
         "-Wno-maybe-uninitialized",
     ],
-    CXXFLAGS=[],
+    CXXFLAGS=[
+        "-Wno-register",  # cmb_def.h uses 'register' keyword (removed in C++17)
+    ],
     CPPDEFINES=[
         # other options
         "ARM_MATH_CM4",
