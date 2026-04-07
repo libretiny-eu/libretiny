@@ -1,0 +1,18 @@
+{
+	"_base": [
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"ic/ln882hk",
+		"pcb/ln-cb3s-v1.0"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "ln-cb3s-v1.0"
+	},
+	"name": "LN-CB3S V1.0",
+	"url": "https://docs.libretiny.eu/boards/ln-cb3s-v1.0/",
+	"vendor": "Unknown",
+	"pcb": {
+		"symbol": "LN-CB3S_V1.0"
+	}
+}
