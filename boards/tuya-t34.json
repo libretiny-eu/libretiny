@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231n",
+		"beken-7231n-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/tuya-t34"
+	],
+	"build": {
+		"mcu": "bk7231n",
+		"variant": "tuya-t34"
+	},
+	"name": "Tuya T34 Wi-Fi/BLE Module",
+	"url": "https://developer.tuya.com/en/docs/iot/t34-module-datasheet?id=Ka0l4h5zvg6j8",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-T34"
+	},
+	"pcb": {
+		"symbol": "T34"
+	}
+}
