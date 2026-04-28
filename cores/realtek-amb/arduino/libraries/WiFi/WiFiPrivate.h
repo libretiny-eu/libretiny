@@ -33,9 +33,9 @@ extern void dns_server_deinit(void);
 // wifi_util.c
 #if !LT_RTL8720C
 extern void rltk_stop_softap(const char *ifname);
-#endif
 extern void rltk_suspend_softap(const char *ifname);
 extern void rltk_suspend_softap_beacon(const char *ifname);
+#endif
 
 } // extern "C"
 
