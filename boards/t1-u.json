@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7238",
+		"beken-7238-tuya",
+		"ic/bk7238-qfn32",
+		"pcb/t1-u"
+	],
+	"build": {
+		"mcu": "bk7238",
+		"variant": "t1-u"
+	},
+	"name": "T1-U Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/T1-U-HL-Module-Datasheet?id=Kdfp5j893qwxg",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-T1-U-HL"
+	},
+	"pcb": {
+		"symbol": "T1-U-HL"
+	}
+}

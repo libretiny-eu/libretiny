@@ -50,7 +50,7 @@ def env_uf2ota(env: Environment, *args, **kwargs):
         f'--fw "{project_name}:{project_version}"',
         f"--date {int(now.timestamp())}",
         "--legacy",
-        *(f'"{arg}"' for arg in env["UF2OTA"]),
+        *(f'"{arg}"' for arg in env["UF2OTA"] if arg),
     ]
 
     for output in outputs:
