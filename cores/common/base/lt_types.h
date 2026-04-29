@@ -1,4 +1,4 @@
-/* Copyright (c) Kuba Szczodrzyński 2022-05-28. */
+/* Copyright (c) Kuba SzczodrzyÅ„ski 2022-05-28. */
 
 #pragma once
 
@@ -47,6 +47,7 @@ typedef enum {
 	BL2028N = BK7231N,
 	BK7231S = BK7231T,
 	BK7231U = BK7231T,
+	T34		= BK7231N,
 	// Lightning LN882x
 	LN882HF = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN24
 	LN882HK = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN32
