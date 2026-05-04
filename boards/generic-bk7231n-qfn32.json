@@ -7,8 +7,7 @@
 	],
 	"build": {
 		"mcu": "bk7231n",
-		"variant": "generic-bk7231n-qfn32-tuya",
-		"bkcrypt_coeffs": "00000000000000000000000000000000"
+		"variant": "generic-bk7231n-qfn32"
 	},
 	"name": "Generic - BK7231N",
 	"symbol": "BK7231N",
