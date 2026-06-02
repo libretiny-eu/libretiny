@@ -28,18 +28,21 @@ PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
 	{PB_8,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
 	// D9: PB09, UART1_TX, I2C0_SCL, I2C0_SDA
 	{PB_9,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
+	// D10: PA06, SD_D2, I2S0_RX, I2C0_SCL, I2C0_SDA
+	{PA_6,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_I2S,           PIN_NONE, 0},
 };
 
 PinInfo *lt_arduino_pin_gpio_map[] = {
-	[1]  = &(lt_arduino_pin_info_list[5]), // PA_1 (D5)
-	[2]  = &(lt_arduino_pin_info_list[4]), // PA_2 (D4)
-	[3]  = &(lt_arduino_pin_info_list[2]), // PA_3 (D2)
-	[4]  = &(lt_arduino_pin_info_list[6]), // PA_4 (D6)
-	[5]  = &(lt_arduino_pin_info_list[1]), // PA_5 (D1)
-	[7]  = &(lt_arduino_pin_info_list[0]), // PA_7 (D0)
-	[9]  = &(lt_arduino_pin_info_list[7]), // PA_9 (D7)
-	[10] = &(lt_arduino_pin_info_list[3]), // PA_10 (D3)
-	[24] = &(lt_arduino_pin_info_list[8]), // PB_8 (D8)
-	[25] = &(lt_arduino_pin_info_list[9]), // PB_9 (D9)
+	[1]  = &(lt_arduino_pin_info_list[5]),  // PA_1 (D5)
+	[2]  = &(lt_arduino_pin_info_list[4]),  // PA_2 (D4)
+	[3]  = &(lt_arduino_pin_info_list[2]),  // PA_3 (D2)
+	[4]  = &(lt_arduino_pin_info_list[6]),  // PA_4 (D6)
+	[5]  = &(lt_arduino_pin_info_list[1]),  // PA_5 (D1)
+	[6]  = &(lt_arduino_pin_info_list[10]), // PA_6 (D10)
+	[7]  = &(lt_arduino_pin_info_list[0]),  // PA_7 (D0)
+	[9]  = &(lt_arduino_pin_info_list[7]),  // PA_9 (D7)
+	[10] = &(lt_arduino_pin_info_list[3]),  // PA_10 (D3)
+	[24] = &(lt_arduino_pin_info_list[8]),  // PB_8 (D8)
+	[25] = &(lt_arduino_pin_info_list[9]),  // PB_9 (D9)
 };
 // clang-format on
