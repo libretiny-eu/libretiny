@@ -87,6 +87,18 @@
         }
       }
     },
+    "framework-silabs-gecko-sdk": {
+      "type": "framework",
+      "optional": true,
+      "version": "https://github.com/RAR/framework-silabs-gecko-sdk#v4.5.0-libretiny.0",
+      "version_prefix": true,
+      "toolchains": {
+        "any": "gccarmnoneeabi@~1.100301.0"
+      },
+      "libraries": {
+        "wfx-fmac-driver": "3.7.0"
+      }
+    },
     "framework-arduino-api": {
       "type": "framework",
       "optional": true,
@@ -96,6 +108,12 @@
       "type": "framework",
       "optional": true,
       "base_url": "https://github.com/libretiny-eu/lwip"
+    },
+    "library-wfx-fmac-driver": {
+      "type": "framework",
+      "optional": true,
+      "base_url": "https://github.com/RAR/framework-wfx-fmac-driver",
+      "version_prefix": true
     },
     "library-freertos": {
       "type": "framework",

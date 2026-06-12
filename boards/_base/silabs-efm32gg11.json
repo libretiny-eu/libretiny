@@ -1,0 +1,24 @@
+{
+	"build": {
+		"core": "silabs-efm32gg11",
+		"cpu": "cortex-m4",
+		"f_cpu": "72000000L",
+		"family": "EFM32GG11",
+		"ldscript": "efm32gg11b820.ld",
+		"mcu": "efm32gg11",
+		"prefix": "arm-none-eabi-"
+	},
+	"flash": {
+		"app": "0x000000+0x200000"
+	},
+	"frameworks": ["base", "arduino"],
+	"platform": "libretiny",
+	"upload": {
+		"flash_size": 2097152,
+		"maximum_ram_size": 524288,
+		"maximum_size": 2097152,
+		"protocol": "commander",
+		"protocols": ["commander", "pyocd"]
+	},
+	"vendor": "Silicon Labs"
+}

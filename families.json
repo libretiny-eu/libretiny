@@ -28,6 +28,14 @@
 		"short_name": "RTL8720C",
 		"package": "framework-realtek-ambz2"
 	},
+	"silabs-efm32gg11": {
+		"parent": null,
+		"code": "efm32gg11",
+		"description": "Silicon Labs EFM32 Giant Gecko 11",
+		"id": "0xEF326611",
+		"short_name": "EFM32GG11",
+		"package": "framework-silabs-gecko-sdk"
+	},
 	"realtek-ambd": {
 		"parent": "realtek-amb",
 		"code": "ambd",
