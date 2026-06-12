@@ -1,7 +1,10 @@
 /* This file is hand-written for the Enel X JuiceBox 40 (WGM160P host).
  *
- * See wgm160p-slwstk6121a.h for why boardgen 0.12.0 cannot autogenerate the
- * EFM32 variant (port-collapsing pin model + ARD label assumptions).
+ * boardgen 0.12.0 cannot autogenerate the EFM32 variant: its pin model derives
+ * the pin number as re.sub(r"\D","",GPIO_name), so PA4/PB4/PD4/PE4 all collapse
+ * to "4" (EFM32 needs port-aware encoding), and its Arduino label field 'ARD'
+ * only accepts D0/D1/.../A0/A1 (LibreTiny board-specific names like LED0/BTN0
+ * are silently dropped). Both gaps are upstream-boardgen work.
  *
  * Pin roles come from the bench-confirmed Gecko OS GPIO usage map of a live
  * JuiceBox 40 (probed via gpio_get/gpio_set over the unauthenticated runtime
