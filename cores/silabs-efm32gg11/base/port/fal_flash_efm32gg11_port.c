@@ -14,6 +14,7 @@
 #include "em_device.h"
 #include "em_msc.h"
 #include "lt_family.h"
+#include "lt_ota_meta.h"
 
 #include <fal.h>
 #include <libretiny.h>
@@ -23,6 +24,30 @@
 #ifndef FLASH_LENGTH
 #define FLASH_LENGTH (2 * 1024 * 1024) // EFM32GG11B820 internal flash
 #endif
+
+// --- OTA write-extent tracking -------------------------------------------
+// uf2ota and direct OTA staging both funnel image bytes through write() below
+// (FAL partitions delegate to this device's ops). Track the highest written
+// offset within each app bank so lt_ota_switch can learn a freshly-staged
+// image's length without the image self-describing. erase() of a bank base
+// clears it. ota_hi[b] == 0 means "nothing staged since the last erase".
+static uint32_t ota_hi[LT_OTA_BANK_COUNT];
+
+static int ota_bank_of(long off) {
+	if (off >= (long)LT_OTA_BANK_A_OFF && off < (long)(LT_OTA_BANK_A_OFF + LT_OTA_BANK_LEN))
+		return 0;
+	if (off >= (long)LT_OTA_BANK_B_OFF && off < (long)(LT_OTA_BANK_B_OFF + LT_OTA_BANK_LEN))
+		return 1;
+	return -1;
+}
+
+// Bytes staged into a bank since its last erase (0 if none).
+uint32_t lt_fal_ota_written(uint8_t bank) {
+	if (bank >= LT_OTA_BANK_COUNT || ota_hi[bank] == 0)
+		return 0;
+	uint32_t base = bank ? LT_OTA_BANK_B_OFF : LT_OTA_BANK_A_OFF;
+	return ota_hi[bank] - base;
+}
 
 static int init(void) {
 	MSC_Init();
@@ -60,6 +85,12 @@ static int write(long offset, const uint8_t *buf, size_t size) {
 		src += copy;
 		rem -= n;
 	}
+	int wb = ota_bank_of(offset);
+	if (wb >= 0) {
+		uint32_t end = (uint32_t)(offset + (long)size);
+		if (end > ota_hi[wb])
+			ota_hi[wb] = end;
+	}
 	return (int)size;
 }
 
@@ -69,6 +100,11 @@ static int erase(long offset, size_t size) {
 	for (long a = start; a < end; a += FLASH_PAGE_SIZE) {
 		if (MSC_ErasePage((uint32_t *)(uintptr_t)a) != mscReturnOk)
 			return -1;
+	}
+	for (int eb = 0; eb < LT_OTA_BANK_COUNT; eb++) {
+		long base = eb ? (long)LT_OTA_BANK_B_OFF : (long)LT_OTA_BANK_A_OFF;
+		if (start <= base && base < end)
+			ota_hi[eb] = 0;
 	}
 	return (int)(end - start);
 }

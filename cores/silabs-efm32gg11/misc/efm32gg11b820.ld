@@ -108,6 +108,10 @@ SECTIONS
 
     _sidata = LOADADDR(.data);   /* compat alias; vendor startup uses __etext */
 
+    /* Loadable-image body length (text+rodata+data init), used by lt_ota.c to
+       record the RUNNING app's own length into OTA metadata at confirm time. */
+    _lt_image_size = LOADADDR(.data) + SIZEOF(.data) - ORIGIN(FLASH);
+
     .bss : {
         . = ALIGN(4);
         _sbss = .;

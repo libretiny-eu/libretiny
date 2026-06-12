@@ -90,6 +90,9 @@ env.Append(
         join(CMSIS_DIR, "Include"),
         join(COMMON_DIR, "inc"),
         join("$FAMILY_DIR", "base"),
+        # OTA metadata + CRC32 headers (lt_ota_meta.h / lt_crc32.h) used by the
+        # family's base/api/lt_ota.c and base/port/fal_flash_efm32gg11_port.c.
+        join("$FAMILY_DIR", "base", "ota"),
     ],
 )
 
