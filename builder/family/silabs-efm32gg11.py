@@ -100,6 +100,20 @@ env.Append(
 # board.build.ldscript ("efm32gg11b820.ld") and frameworks/base.py prepends
 # $CORES_DIR/<family>/misc to LIBPATH so the linker can find the script.
 
+# Shared OTA logic (lt_ota_meta.c, lt_crc32.c) lives in base/ota/. AddCoreSources()
+# only globs a fixed subdir set (api/, common/, port/, wiring/, ... — NOT ota/), so
+# these would never compile into the family core; register them explicitly. The
+# host-only RAM-flash shim (lt_meta_hostshim.c) is deliberately excluded — it's
+# for the cores/silabs-efm32gg11/test/ota unit tests, not the device build.
+queue.AddLibrary(
+    name="silabs-ota",
+    base_dir=join("$FAMILY_DIR", "base", "ota"),
+    srcs=[
+        "+<lt_ota_meta.c>",
+        "+<lt_crc32.c>",
+    ],
+)
+
 # Add SDK sources: minimum (vendor startup + system) — enough to link a C main().
 queue.AddLibrary(
     name="silabs-device",
