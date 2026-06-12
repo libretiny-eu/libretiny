@@ -33,4 +33,20 @@ typedef enum {
 // digitalWrite(), which lowers to an atomic GPIO set/clear, and the one-time
 // pin init always runs first from the app thread (modePriv) before any other
 // thread can reach a call site.
+//
+// When disabled (see ltWifiStatusLedEnable) every call is a no-op.
 void ltWifiStatusLed(LtWifiLedStage stage);
+
+// Enable or disable the WiFi backend's use of the RGB status LED at runtime.
+// Enabled by default. Pass false to release LED_R/LED_G/LED_B so the
+// application can own them (e.g. an EVSE charge-state indicator): once
+// disabled, ltWifiStatusLed() touches no GPIO until re-enabled, leaving the
+// pins for the app to drive with pinMode()/digitalWrite(). Re-enabling forces
+// the next ltWifiStatusLed() call to reconfigure the channels as outputs.
+//
+// Call from the app thread before handing the LEDs off. WiFi LED writes only
+// happen on connection-state changes (infrequent), so a disable issued before
+// the app first drives the LEDs reliably wins; there is no need to coordinate
+// with the WiFi event task. On boards without LED_R/LED_G/LED_B this is a
+// no-op.
+void ltWifiStatusLedEnable(bool enabled);

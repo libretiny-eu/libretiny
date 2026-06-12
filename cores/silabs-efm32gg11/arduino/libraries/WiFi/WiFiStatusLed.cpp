@@ -6,10 +6,27 @@
 
 #if defined(LED_R) && defined(LED_G) && defined(LED_B)
 
+// Runtime gate. Written from the app thread (ltWifiStatusLedEnable), read from
+// every ltWifiStatusLed() call site. Single-byte access is atomic on Cortex-M4,
+// so no lock is needed; volatile keeps the read at each call site.
+static volatile bool s_enabled = true;
+static bool inited			   = false;
+
+void ltWifiStatusLedEnable(bool enabled) {
+	s_enabled = enabled;
+	// Force pin re-init on the next enabled call so handing the LEDs back from
+	// the application (which may have changed their mode) restores outputs.
+	if (!enabled)
+		inited = false;
+}
+
 void ltWifiStatusLed(LtWifiLedStage stage) {
+	// Disabled: the application owns the LEDs — touch no GPIO.
+	if (!s_enabled)
+		return;
+
 	// First call (always from the app thread via modePriv) configures the
 	// channels; later calls only flip the atomic GPIO set/clear registers.
-	static bool inited = false;
 	if (!inited) {
 		pinMode(LED_R, OUTPUT);
 		pinMode(LED_G, OUTPUT);
@@ -55,6 +72,10 @@ void ltWifiStatusLed(LtWifiLedStage stage) {
 
 void ltWifiStatusLed(LtWifiLedStage stage) {
 	(void)stage;
+}
+
+void ltWifiStatusLedEnable(bool enabled) {
+	(void)enabled;
 }
 
 #endif
