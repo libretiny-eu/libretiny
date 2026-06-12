@@ -64,6 +64,12 @@ SECTIONS
         LONG (__etext)
         LONG (__data_start__)
         LONG ((__data_end__ - __data_start__) / 4)
+        /* .ram (SL_RAMFUNC code, e.g. emlib MSC flash routines) is copied to RAM
+         * before main() too: on EFM32GG11 (Series 1) the MSC write loop MUST
+         * execute from RAM, else a sustained flash write hangs mid-transfer. */
+        LONG (LOADADDR(.ram))
+        LONG (__ram_start__)
+        LONG ((__ram_end__ - __ram_start__) / 4)
         __copy_table_end__ = .;
     } > FLASH
 
@@ -108,9 +114,22 @@ SECTIONS
 
     _sidata = LOADADDR(.data);   /* compat alias; vendor startup uses __etext */
 
-    /* Loadable-image body length (text+rodata+data init), used by lt_ota.c to
-       record the RUNNING app's own length into OTA metadata at confirm time. */
-    _lt_image_size = LOADADDR(.data) + SIZEOF(.data) - ORIGIN(FLASH);
+    /* RAM-resident code (SL_RAMFUNC). emlib MSC flash routines land here when
+     * EM_MSC_RUN_FROM_RAM is defined; the copy table above copies it to RAM and
+     * the startup runs it from there. LMA in FLASH (part of the flash image),
+     * VMA in RAM. Always emitted (small/empty if no ramfuncs in a build). */
+    .ram : AT (LOADADDR(.data) + SIZEOF(.data)) {
+        . = ALIGN(4);
+        __ram_start__ = .;
+        *(.ram .ram.*)
+        . = ALIGN(4);
+        __ram_end__ = .;
+    } > RAM
+
+    /* Loadable-image body length (text+rodata+data init+ram init), used by
+       lt_ota.c to record the RUNNING app's own length into OTA metadata at
+       confirm time. .ram is the last flash-LMA section, so it bounds the image. */
+    _lt_image_size = LOADADDR(.ram) + SIZEOF(.ram) - ORIGIN(FLASH);
 
     .bss : {
         . = ALIGN(4);

@@ -29,6 +29,13 @@ env.Append(
         "ARM_MATH_CM4",
         ("F_CPU", "72000000L"),
         "LT_HAS_FREERTOS=1",
+        # EFM32GG11 (Series 1) is not in emlib's default RAMFUNC allowlist, so
+        # the MSC flash write loop would run from flash and HANG mid-transfer on
+        # a sustained write (e.g. staging a multi-KB OTA image). This forces the
+        # MSC routines into the .ram section (placed in RAM + copied by startup;
+        # see efm32gg11b820.ld). Bench-confirmed: without it an 85 KB FAL write
+        # stalls inside MSC_LoadWriteData.
+        "EM_MSC_RUN_FROM_RAM=1",
         # Redirect the GSDK startup's `bl __START` to LibreTiny's lt_main(),
         # which calls lt_init_family() + __libc_init_array() + main(). The
         # default is _start (newlib), which would skip lt_init_family — leaving
