@@ -56,6 +56,9 @@ class TransportTraits {
 	}
 };
 
+#if LT_HAS_MBEDTLS
+// WiFiClientSecure only exists with mbedTLS; families without it (e.g.
+// silabs-efm32gg11 Phase 2) still get plain-HTTP support.
 class TLSTraits : public TransportTraits {
   public:
 	TLSTraits(const char *CAcert, const char *clicert = nullptr, const char *clikey = nullptr)
@@ -82,6 +85,7 @@ class TLSTraits : public TransportTraits {
 	const char *_clicert;
 	const char *_clikey;
 };
+#endif // LT_HAS_MBEDTLS
 #endif // HTTPCLIENT_1_1_COMPATIBLE
 
 /**
@@ -180,6 +184,10 @@ bool HTTPClient::begin(WiFiClient &client, String host, uint16_t port, String ur
 
 #ifdef HTTPCLIENT_1_1_COMPATIBLE
 bool HTTPClient::begin(String url, const char *CAcert) {
+#if !LT_HAS_MBEDTLS
+	log_e("HTTPS unsupported: mbedTLS not available (LT_HAS_MBEDTLS=0)");
+	return false;
+#else
 	if (_client && !_tcpDeprecated) {
 		log_d("mix up of new and deprecated api");
 		_canReuse = false;
@@ -199,6 +207,7 @@ bool HTTPClient::begin(String url, const char *CAcert) {
 	}
 
 	return true;
+#endif // LT_HAS_MBEDTLS
 }
 
 /**
@@ -301,6 +310,10 @@ bool HTTPClient::begin(String host, uint16_t port, String uri) {
 }
 
 bool HTTPClient::begin(String host, uint16_t port, String uri, const char *CAcert) {
+#if !LT_HAS_MBEDTLS
+	log_e("HTTPS unsupported: mbedTLS not available (LT_HAS_MBEDTLS=0)");
+	return false;
+#else
 	if (_client && !_tcpDeprecated) {
 		log_d("mix up of new and deprecated api");
 		_canReuse = false;
@@ -318,6 +331,7 @@ bool HTTPClient::begin(String host, uint16_t port, String uri, const char *CAcer
 	_secure			 = true;
 	_transportTraits = TransportTraitsPtr(new TLSTraits(CAcert));
 	return true;
+#endif // LT_HAS_MBEDTLS
 }
 
 bool HTTPClient::begin(
@@ -328,6 +342,10 @@ bool HTTPClient::begin(
 	const char *cli_cert,
 	const char *cli_key
 ) {
+#if !LT_HAS_MBEDTLS
+	log_e("HTTPS unsupported: mbedTLS not available (LT_HAS_MBEDTLS=0)");
+	return false;
+#else
 	if (_client && !_tcpDeprecated) {
 		log_d("mix up of new and deprecated api");
 		_canReuse = false;
@@ -345,6 +363,7 @@ bool HTTPClient::begin(
 	_secure			 = true;
 	_transportTraits = TransportTraitsPtr(new TLSTraits(CAcert, cli_cert, cli_key));
 	return true;
+#endif // LT_HAS_MBEDTLS
 }
 #endif // HTTPCLIENT_1_1_COMPATIBLE
 
