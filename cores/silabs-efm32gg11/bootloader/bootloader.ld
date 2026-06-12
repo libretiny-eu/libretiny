@@ -56,6 +56,13 @@ SECTIONS
         LONG (__etext)
         LONG (__data_start__)
         LONG ((__data_end__ - __data_start__) / 4)
+        /* .ram holds SL_RAMFUNC code (emlib MSC). On EFM32GG11 (Series 1) the
+         * MSC write loop MUST run from RAM, else a flash write can hang — the
+         * bootloader writes the OTA metadata page (trial-attempt countdown), so
+         * it needs the same RAM-exec guarantee as the app. */
+        LONG (LOADADDR(.ram))
+        LONG (__ram_start__)
+        LONG ((__ram_end__ - __ram_start__) / 4)
         __copy_table_end__ = .;
     } > FLASH
 
@@ -99,6 +106,16 @@ SECTIONS
     } > RAM
 
     _sidata = LOADADDR(.data);   /* compat alias; vendor startup uses __etext */
+
+    /* RAM-resident code (SL_RAMFUNC): emlib MSC flash routines, copied to RAM by
+     * the startup copy table above. LMA in FLASH, VMA in RAM. */
+    .ram : AT (LOADADDR(.data) + SIZEOF(.data)) {
+        . = ALIGN(4);
+        __ram_start__ = .;
+        *(.ram .ram.*)
+        . = ALIGN(4);
+        __ram_end__ = .;
+    } > RAM
 
     .bss : {
         . = ALIGN(4);

@@ -563,6 +563,10 @@ def _build_bootloader(target, source, env):
     defines = [
         "-DEFM32GG11B820F2048GM64=1",
         "-D__START=main",
+        # Run emlib MSC from RAM (see bootloader.ld .ram section): the bootloader
+        # rewrites the OTA metadata page on every trial boot, and the GG11 MSC
+        # write loop hangs if executed from flash.
+        "-DEM_MSC_RUN_FROM_RAM=1",
     ]
     incs = [
         "-I" + env.subst(join(DEVICE_DIR, "Include")),
