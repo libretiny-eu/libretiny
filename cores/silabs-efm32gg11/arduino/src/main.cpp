@@ -51,7 +51,8 @@ void vApplicationStackOverflowHook(TaskHandle_t task, char *name) {
 }
 
 void vApplicationMallocFailedHook(void) {
-	printf("*** FreeRTOS malloc failed ***\r\n");
+	printf("*** FreeRTOS malloc failed *** task='%s' free=%u\r\n",
+	       pcTaskGetName(NULL), (unsigned) xPortGetFreeHeapSize());
 	NVIC_SystemReset();
 }
 
