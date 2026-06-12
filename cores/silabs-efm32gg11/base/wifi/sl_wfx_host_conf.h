@@ -54,6 +54,11 @@ typedef struct {
 		struct {
 			uint32_t status;
 		} scan_complete;
+
+		struct {
+			uint8_t mac[6];
+			uint8_t reason; // disconnect only; 0 for connect
+		} ap_client;
 	} u;
 } lt_wfx_event_t;
 

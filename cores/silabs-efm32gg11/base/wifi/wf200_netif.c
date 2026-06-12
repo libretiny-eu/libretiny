@@ -38,11 +38,22 @@
 // calls lt_wf200_netif_create() after sl_wfx_init() returns.  Anyone reordering
 // the init sequence must re-verify this ordering guarantee.
 static struct netif s_sta_netif;
-static bool s_tcpip_up;			// tcpip_init must run at most once, even across retries
-static volatile bool s_created; // volatile: compiler-reorder guard for the create-before-traffic invariant
+// Non-static and named `ap_netif` so the reused GSDK Apache-2.0 dhcp_server.c
+// can bind its UDP :67 socket to this exact netif (it takes &ap_netif via the
+// compat/app_webpage.h shim). MUST be the same object that carries softAP
+// traffic, which it is — ap_netif_init/low_level_output_ap below are wired onto
+// it. Declared extern in compat/app_webpage.h.
+struct netif ap_netif;
+static bool s_tcpip_up;			  // tcpip_init must run at most once, even across retries
+static volatile bool s_created;	  // volatile: compiler-reorder guard for the create-before-traffic invariant
+static volatile bool s_ap_active; // gates RX demux: AP frames are dropped until the AP netif is up
 
 struct netif *lt_wf200_netif_sta(void) {
 	return s_created ? &s_sta_netif : NULL;
+}
+
+struct netif *lt_wf200_netif_ap(void) {
+	return s_ap_active ? &ap_netif : NULL;
 }
 
 // --- TX: lwIP -> FMAC ---------------------------------------------------------
@@ -62,7 +73,10 @@ struct netif *lt_wf200_netif_sta(void) {
 // when the chip's buffers are full, send_request fails fast with
 // SL_STATUS_WOULD_OVERFLOW instead of blocking.
 
-static err_t low_level_output(struct netif *netif, struct pbuf *p) {
+// Shared low-level sender. The per-netif linkoutput wrappers below fix the
+// interface so a frame queued on the AP netif is transmitted on the softAP
+// interface and one queued on the STA netif on the station interface.
+static err_t low_level_output_iface(struct netif *netif, struct pbuf *p, sl_wfx_interface_t iface) {
 	(void)netif;
 	sl_wfx_send_frame_req_t *req = NULL;
 	uint32_t frame_len			 = SL_WFX_ROUND_UP(p->tot_len, 2);
@@ -78,13 +92,21 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p) {
 	if (frame_len != p->tot_len)
 		req->body.packet_data[p->tot_len] = 0; // don't transmit a heap byte as pad
 
-	sl_status_t st = sl_wfx_send_ethernet_frame(req, frame_len, SL_WFX_STA_INTERFACE, 0);
+	sl_status_t st = sl_wfx_send_ethernet_frame(req, frame_len, iface, 0);
 	sl_wfx_host_free_buffer(req, SL_WFX_TX_FRAME_BUFFER);
 	// ERR_IF on WOULD_OVERFLOW: tcp_output_segment treats a non-OK linkoutput as
 	// TF_NAGLEMEMERR and schedules a timer-driven retry — not a connection abort.
 	// Transient chip-buffer exhaustion therefore self-heals.  ERR_IF is used
 	// (not ERR_MEM) to distinguish chip/bus errors from heap exhaustion.
 	return (st == SL_STATUS_OK) ? ERR_OK : ERR_IF;
+}
+
+static err_t low_level_output_sta(struct netif *netif, struct pbuf *p) {
+	return low_level_output_iface(netif, p, SL_WFX_STA_INTERFACE);
+}
+
+static err_t low_level_output_ap(struct netif *netif, struct pbuf *p) {
+	return low_level_output_iface(netif, p, SL_WFX_SOFTAP_INTERFACE);
 }
 
 // --- RX: FMAC -> lwIP (bus task context; copy into a pbuf, hand to tcpip) ------
@@ -96,7 +118,13 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p) {
 // threads: SYS_LIGHTWEIGHT_PROT=1), and tcpip_input only tryposts a pointer.
 
 void lt_wf200_netif_input(sl_wfx_received_ind_t *ind) {
-	if (!s_created || !netif_is_link_up(&s_sta_netif))
+	// Demux on the interface bits in the message header: STA-interface frames go
+	// to the STA netif, softAP-interface frames to the AP netif.  The accessors
+	// return NULL when the target interface isn't up (s_created / s_ap_active),
+	// so frames for a down interface are dropped here.
+	uint8_t iface	  = (ind->header.info & SL_WFX_MSG_INFO_INTERFACE_MASK) >> SL_WFX_MSG_INFO_INTERFACE_OFFSET;
+	struct netif *nif = (iface == SL_WFX_SOFTAP_INTERFACE) ? lt_wf200_netif_ap() : lt_wf200_netif_sta();
+	if (nif == NULL || !netif_is_link_up(nif))
 		return;
 	uint8_t *frame = ind->body.frame + ind->body.frame_padding;
 	uint16_t len   = ind->body.frame_length;
@@ -105,7 +133,7 @@ void lt_wf200_netif_input(sl_wfx_received_ind_t *ind) {
 	if (p == NULL)
 		return; // drop; TCP retransmits
 	pbuf_take(p, frame, len);
-	if (s_sta_netif.input(p, &s_sta_netif) != ERR_OK)
+	if (nif->input(p, nif) != ERR_OK)
 		pbuf_free(p); // tcpip mbox full -> trypost ERR_MEM; drop, don't block
 }
 
@@ -119,7 +147,7 @@ static err_t sta_netif_init(struct netif *netif) {
 	memcpy(netif->hwaddr, wfx_context.mac_addr_0.octet, 6);
 	netif->flags	  = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
 	netif->output	  = etharp_output;
-	netif->linkoutput = low_level_output;
+	netif->linkoutput = low_level_output_sta;
 	return ERR_OK;
 }
 
@@ -157,6 +185,73 @@ bool lt_wf200_netif_create(void) {
 	netif_set_up(&s_sta_netif);
 	s_created = true;
 	return true;
+}
+
+// --- AP netif (static IP, no DHCP client) ------------------------------------------
+//
+// Unlike the STA netif (created once at bring-up before any traffic), the AP
+// netif is added/removed at runtime — while the tcpip thread is already running
+// and the STA netif may be carrying traffic. So every netif core call here is
+// wrapped in LOCK_TCPIP_CORE()/UNLOCK_TCPIP_CORE() to serialize against the
+// tcpip thread, rather than relying on the STA path's "before any traffic"
+// guarantee. The MAC for ap_netif_init is staged in s_ap_mac because netif_add's
+// init callback only receives the netif pointer; create is the only writer and
+// is serialized by the core lock it holds across netif_add.
+
+static uint8_t s_ap_mac[6];
+
+static err_t ap_netif_init(struct netif *netif) {
+	netif->name[0]	  = 'w';
+	netif->name[1]	  = 'a';
+	netif->mtu		  = 1500;
+	netif->hwaddr_len = 6;
+	memcpy(netif->hwaddr, s_ap_mac, 6);
+	netif->flags	  = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
+	netif->output	  = etharp_output;
+	netif->linkoutput = low_level_output_ap;
+	return ERR_OK;
+}
+
+bool lt_wf200_netif_ap_create(uint32_t ip, uint32_t mask, uint32_t gw, const uint8_t mac[6]) {
+	if (s_ap_active)
+		return true;
+	if (!s_tcpip_up) // STA create runs tcpip_init; AP cannot come up before it
+		return false;
+
+	memcpy(s_ap_mac, mac, 6);
+	ip4_addr_t ip4, mask4, gw4;
+	ip4.addr   = ip;
+	mask4.addr = mask;
+	gw4.addr   = gw;
+
+	LOCK_TCPIP_CORE();
+	struct netif *added = netif_add(&ap_netif, &ip4, &mask4, &gw4, NULL, ap_netif_init, tcpip_input);
+	if (added != NULL) {
+		netif_set_up(&ap_netif);
+		netif_set_link_up(&ap_netif);
+	}
+	UNLOCK_TCPIP_CORE();
+	if (added == NULL)
+		return false;
+
+	s_ap_active = true;
+	return true;
+}
+
+// Teardown race (benign): the lock-free RX demux (lt_wf200_netif_input, bus
+// task) may have already loaded nif=&ap_netif via lt_wf200_netif_ap() before
+// we clear s_ap_active below.  Delivering that stale pointer is safe: ap_netif
+// is statically allocated and never freed, and netif_remove only unlinks it from
+// the lwIP list.  AP teardown is user-initiated and rare, so the one-frame window
+// is acceptable; revisit if teardown ever becomes frequent.
+void lt_wf200_netif_ap_destroy(void) {
+	if (!s_ap_active)
+		return;
+	s_ap_active = false; // stop RX demux from selecting the AP netif first
+	LOCK_TCPIP_CORE();
+	netif_set_down(&ap_netif);
+	netif_remove(&ap_netif);
+	UNLOCK_TCPIP_CORE();
 }
 
 // --- Thread-safe link/DHCP helpers (callable from the WiFi event task) -------------

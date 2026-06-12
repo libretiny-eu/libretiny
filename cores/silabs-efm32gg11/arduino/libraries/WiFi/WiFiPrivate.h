@@ -43,6 +43,14 @@ typedef struct {
 	SemaphoreHandle_t scanSem;
 	WiFiNetworkInfo sta;
 	WiFiNetworkInfo ap; // unused in Phase 2 (softAP is a follow-on)
+	// softAP state (consumed by later softAP tasks; dormant until then).
+	bool apActive;		   // softAP currently started
+	uint8_t apClientCount; // tracked via AP_CLIENT_(DIS)CONNECTED_IND
+	char *apSsid;		   // strdup'd; freed on disable
+	char *apPassword;	   // strdup'd or NULL (open); freed on disable
+	uint32_t apLocalIP;	   // default 192.168.4.1 (network byte order)
+	uint32_t apSubnet;	   // default 255.255.255.0
+	int32_t apChannel;	   // requested channel (0/unset = follow STA or default 1)
 } WiFiData;
 
 #define DATA  ((WiFiData *)data)

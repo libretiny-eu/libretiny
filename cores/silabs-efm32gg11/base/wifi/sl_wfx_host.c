@@ -369,6 +369,38 @@ sl_status_t sl_wfx_host_post_event(sl_wfx_generic_message_t *event_payload) {
 			break;
 		}
 
+		case SL_WFX_START_AP_IND_ID: {
+			lt_wfx_event_t ev = {.id = SL_WFX_START_AP_IND_ID};
+			if (lt_wfx_host.event_queue)
+				xQueueSend(lt_wfx_host.event_queue, &ev, 0);
+			break;
+		}
+
+		case SL_WFX_STOP_AP_IND_ID: {
+			lt_wfx_event_t ev = {.id = SL_WFX_STOP_AP_IND_ID};
+			if (lt_wfx_host.event_queue)
+				xQueueSend(lt_wfx_host.event_queue, &ev, 0);
+			break;
+		}
+
+		case SL_WFX_AP_CLIENT_CONNECTED_IND_ID: {
+			sl_wfx_ap_client_connected_ind_t *ind = (sl_wfx_ap_client_connected_ind_t *)event_payload;
+			lt_wfx_event_t ev					  = {.id = SL_WFX_AP_CLIENT_CONNECTED_IND_ID};
+			memcpy(ev.u.ap_client.mac, ind->body.mac, 6);
+			if (lt_wfx_host.event_queue)
+				xQueueSend(lt_wfx_host.event_queue, &ev, 0);
+			break;
+		}
+
+		case SL_WFX_AP_CLIENT_DISCONNECTED_IND_ID: {
+			sl_wfx_ap_client_disconnected_ind_t *ind = (sl_wfx_ap_client_disconnected_ind_t *)event_payload;
+			lt_wfx_event_t ev						 = {.id = SL_WFX_AP_CLIENT_DISCONNECTED_IND_ID};
+			memcpy(ev.u.ap_client.mac, ind->body.mac, 6);
+			if (lt_wfx_host.event_queue)
+				xQueueSend(lt_wfx_host.event_queue, &ev, 0);
+			break;
+		}
+
 		default:
 			break;
 	}

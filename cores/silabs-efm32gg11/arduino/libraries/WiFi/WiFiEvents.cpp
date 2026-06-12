@@ -106,6 +106,31 @@ static void wifiEventTask(void *arg) {
 				xSemaphoreGive(pDATA->scanSem);
 				pWiFi->postEvent(ARDUINO_EVENT_WIFI_SCAN_DONE, info);
 				break;
+
+			case SL_WFX_START_AP_IND_ID:
+				pDATA->apActive = true;
+				pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_START, info);
+				break;
+
+			case SL_WFX_STOP_AP_IND_ID:
+				pDATA->apActive		 = false;
+				pDATA->apClientCount = 0;
+				pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_STOP, info);
+				break;
+
+			case SL_WFX_AP_CLIENT_CONNECTED_IND_ID:
+				if (pDATA->apClientCount < 255)
+					pDATA->apClientCount++;
+				memcpy(info.wifi_ap_staconnected.mac, ev.u.ap_client.mac, 6);
+				pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_STACONNECTED, info);
+				break;
+
+			case SL_WFX_AP_CLIENT_DISCONNECTED_IND_ID:
+				if (pDATA->apClientCount > 0)
+					pDATA->apClientCount--;
+				memcpy(info.wifi_ap_stadisconnected.mac, ev.u.ap_client.mac, 6);
+				pWiFi->postEvent(ARDUINO_EVENT_WIFI_AP_STADISCONNECTED, info);
+				break;
 		}
 	}
 }

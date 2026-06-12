@@ -18,6 +18,17 @@ bool lt_wf200_netif_create(void);
 // Read-only queries or tcpip_callback context only — direct netif mutation from
 // other threads races the tcpip thread.
 struct netif *lt_wf200_netif_sta(void);
+struct netif *lt_wf200_netif_ap(void);
+
+// AP netif lifecycle (static IP, no DHCP client). Self-serializes against the
+// tcpip thread via LOCK_TCPIP_CORE. Needs lt_wf200_netif_create() to have run
+// first (it performs the one-time tcpip_init). ip/mask/gw are network-order
+// (lwIP ip4_addr_t.addr) words. create/destroy are expected to be called from a
+// single thread (the WiFi event task) — they are not serialized against each
+// other, only against the tcpip thread. Both are idempotent.
+bool lt_wf200_netif_ap_create(uint32_t ip, uint32_t mask, uint32_t gw, const uint8_t mac[6]);
+// Idempotent.
+void lt_wf200_netif_ap_destroy(void);
 
 // Link state from the WiFi event task (thread-safe: defers to tcpip thread).
 void lt_wf200_netif_set_link(bool up);

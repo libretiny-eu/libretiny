@@ -61,12 +61,28 @@
 #define LWIP_TCP_KEEPALIVE	  1
 
 // --- Protocols -----------------------------------------------------------------
-#define LWIP_ARP  1
-#define LWIP_ICMP 1
-#define LWIP_DHCP 1
-#define LWIP_DNS  1
-#define LWIP_IGMP 1
-#define LWIP_IPV6 0
+#define LWIP_ARP					  1
+// The reused GSDK Apache-2.0 dhcp_server.c (softAP) calls
+// etharp_add_static_entry() to pin each leased client's IP->MAC, so the AP can
+// reply before the client has ARP'd the gateway. That symbol is only compiled
+// into lwIP when this option is on (defaults to 0 in opt.h). Matches the GSDK
+// wifi_commissioning example's lwipopts.h.
+#define ETHARP_SUPPORT_STATIC_ENTRIES 1
+#define LWIP_ICMP					  1
+#define LWIP_DHCP					  1
+#define LWIP_DNS					  1
+#define LWIP_IGMP					  1
+#define LWIP_IPV6					  0
+
+// --- Apps ---------------------------------------------------------------------
+// lwIP httpd, enabled for the softAP concurrent-server bench demo (Task 9):
+// prove a client on the device's AP reaches an HTTP server ON the device while
+// the device is also a STA. Serves lwIP's built-in fsdata.c page set
+// (/index.html) via fs.c; needs LWIP_TCP (on, the STA path already uses it).
+// SSI/CGI kept off — a single static page is all the demo needs.
+#define LWIP_HTTPD	   1
+#define LWIP_HTTPD_SSI 0
+#define LWIP_HTTPD_CGI 0
 
 // --- Memory ----------------------------------------------------------------------
 #define MEM_LIBC_MALLOC			0

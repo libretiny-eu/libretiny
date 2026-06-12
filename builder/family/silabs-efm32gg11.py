@@ -176,7 +176,11 @@ env.Append(
 # brd4321a set (= the WGM160P radio board), not duplicated into the repo.
 # sl_wfx_host.c does `#include "sl_wfx_pds.h"`; this puts the Apache-2.0 brd4321a
 # copy on the include path so it resolves without an in-tree copy.
-env.Append(CPPPATH=[join(GSDK, "platform", "radio", "wifi", "wfx_fmac_driver", "pds", "brd4321a")])
+env.Append(
+    CPPPATH=[
+        join(GSDK, "platform", "radio", "wifi", "wfx_fmac_driver", "pds", "brd4321a")
+    ]
+)
 
 # lwIP 2.1.2 from the GSDK wrapper (BSD-3) + its FreeRTOS sys_arch port.
 # Config comes from cores/silabs-efm32gg11/base/config/lwipopts.h, which is
@@ -193,6 +197,12 @@ queue.AddLibrary(
         "+<lwip/src/core/*.c>",
         "+<lwip/src/core/ipv4/*.c>",
         "+<lwip/src/netif/ethernet.c>",
+        # httpd app (softAP concurrent-server bench, Task 8/9). fs.c textually
+        # #includes the stock fsdata.c (HTTPD_FSDATA_FILE default) relative to
+        # its own dir — so fsdata.c is NOT listed here. Served page is lwIP's
+        # built-in /index.html from lwip/src/apps/http/fs/.
+        "+<lwip/src/apps/http/httpd.c>",
+        "+<lwip/src/apps/http/fs.c>",
         "+<lwip-contrib/ports/freertos/sys_arch.c>",
     ],
     includes=[
@@ -281,12 +291,47 @@ queue.AddLibrary(
         "+<wifi/*.c*>",
     ],
     includes=[
+        # compat/ FIRST so our app_webpage.h shim shadows the GSDK example's
+        # (which lives one dir up from the apps/ dir we add below — and which we
+        # deliberately do NOT put on the path). The GSDK dhcp_server.c picks up
+        # this shim's app_webpage.h, not the example's webpage-coupled header.
+        "+<wifi/compat>",
         "+<wifi>",
         # lt_sdio.h: the core_* libraries' include paths live in base.py's
         # queue (built after this one), so port/ must be re-added here.
         # NOTE: <libretiny.h> can NOT be used by this library — the family
         # queue builds before base.py appends the public defines it needs.
         "+<port>",
+    ],
+)
+
+# AP DHCP server: reuse the GSDK Apache-2.0 dhcp_server.c UNMODIFIED from the
+# framework package (not vendored into this repo). Its own library (its base_dir
+# is the GSDK apps/ dir). It #include "app_webpage.h" but uses only the AP
+# IP/netmask octet globals + the global `ap_netif` from it; the
+# wifi/compat/app_webpage.h shim added to the wifi-port include path above (and
+# thus on the global CPPPATH once this queue builds) shadows the example's
+# header so none of the Micrium/webpage example deps come along. The lt_dhcpserver.c
+# glue (in wifi/*.c above) defines the octet globals and calls dhcpserver_start/stop.
+DHCP_SERVER_APPS_DIR = join(
+    GSDK,
+    "app",
+    "common",
+    "example",
+    "wifi_commissioning_micriumos",
+    "lwip_host",
+    "apps",
+)
+queue.AddLibrary(
+    name="silabs-dhcp-server",
+    base_dir=DHCP_SERVER_APPS_DIR,
+    srcs=[
+        "+<dhcp_server.c>",
+    ],
+    includes=[
+        # dhcp_server.h lives next to dhcp_server.c; expose ONLY apps/ (NOT its
+        # parent, which holds the real app_webpage.h we are shadowing).
+        "+<.>",
     ],
 )
 
