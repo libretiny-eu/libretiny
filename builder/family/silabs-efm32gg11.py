@@ -497,6 +497,89 @@ env.Depends(
     target_fw_a_bin + target_fw_b_elf + target_fw_b_bin,
 )
 
+# ----------------------------------------------------------------------------
+# MIT first-stage bootloader (OTA T5) @ flash 0x0, 32 KB.
+#
+# Built STANDALONE — a single arm-none-eabi-gcc compile+link invocation over a
+# handful of small C sources — NOT threaded through the app's SCons link env
+# (which carries FreeRTOS/Arduino/lwIP/mbedtls). The bootloader shares the SAME
+# OTA modules (lt_ota_meta.c / lt_crc32.c) as the app, so the on-flash metadata
+# format is byte-identical. -D__START=main routes the GSDK startup's
+# `bl __START` straight into the bootloader's main() after SystemInit + .data/.bss
+# init (no newlib _start / libc_init_array).
+# ----------------------------------------------------------------------------
+BOOTLOADER_DIR = join("$FAMILY_DIR", "bootloader")
+OTA_DIR = join("$FAMILY_DIR", "base", "ota")
+bootloader_elf = "${BUILD_DIR}/bootloader.elf"
+bootloader_bin = "${BUILD_DIR}/bootloader.bin"
+
+
+def _build_bootloader(target, source, env):
+    import subprocess
+
+    cc = env.subst("$CC")
+    objcopy = env.subst("$OBJCOPY")
+    out_elf = env.subst(bootloader_elf)
+    out_bin = str(target[0])
+    ld = env.subst(join(BOOTLOADER_DIR, "bootloader.ld"))
+
+    arch = [
+        "-mcpu=cortex-m4",
+        "-mthumb",
+        "-mfloat-abi=hard",
+        "-mfpu=fpv4-sp-d16",
+    ]
+    cflags = arch + [
+        "-Os",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "--specs=nano.specs",
+        "--specs=nosys.specs",
+    ]
+    defines = [
+        "-DEFM32GG11B820F2048GM64=1",
+        "-D__START=main",
+    ]
+    incs = [
+        "-I" + env.subst(join(DEVICE_DIR, "Include")),
+        "-I" + env.subst(join(EMLIB_DIR, "inc")),
+        "-I" + env.subst(join(CMSIS_DIR, "Include")),
+        # emlib sources #include "sl_common.h"/"sl_assert.h" from platform/common.
+        "-I" + env.subst(join(COMMON_DIR, "inc")),
+        "-I" + env.subst(OTA_DIR),
+        "-I" + env.subst(join("$FAMILY_DIR", "base")),
+    ]
+    srcs = [
+        env.subst(join(BOOTLOADER_DIR, "main.c")),
+        env.subst(join(OTA_DIR, "lt_ota_meta.c")),
+        env.subst(join(OTA_DIR, "lt_crc32.c")),
+        env.subst(join(DEVICE_DIR, "Source", "system_efm32gg11b.c")),
+        env.subst(join(DEVICE_DIR, "Source", "GCC", "startup_efm32gg11b.S")),
+        env.subst(join(EMLIB_DIR, "src", "em_msc.c")),
+        env.subst(join(EMLIB_DIR, "src", "em_core.c")),
+        env.subst(join(EMLIB_DIR, "src", "em_system.c")),
+    ]
+    link = arch + ["-Wl,--gc-sections", "-T", ld]
+    cmd = [cc] + cflags + defines + incs + srcs + link + ["-o", out_elf]
+    rc = subprocess.call(cmd)
+    if rc != 0:
+        return rc
+    return subprocess.call([objcopy, "-O", "binary", out_elf, out_bin])
+
+
+target_bootloader_bin = env.Command(
+    bootloader_bin,
+    [
+        join(BOOTLOADER_DIR, "main.c"),
+        join(BOOTLOADER_DIR, "bootloader.ld"),
+        join(OTA_DIR, "lt_ota_meta.c"),
+        join(OTA_DIR, "lt_crc32.c"),
+    ],
+    env.VerboseAction(_build_bootloader, "Building bootloader.bin (MIT FSBL @ 0x0)"),
+)
+# Pull the bootloader into the default build graph alongside the bank artifacts.
+env.Depends("${BUILD_DIR}/firmware.uf2", target_bootloader_bin)
+
 
 # Override main.py's BuildUF2OTA for Phase 1: skip the ltchiptool UF2 packer
 # (no SocInterface yet — see comment block above) and just copy firmware.bin to
