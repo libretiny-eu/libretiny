@@ -410,6 +410,93 @@ target_fw_elf = env.Command(
 # dependency is real, not just a graph trick).
 env.Depends("${BUILD_DIR}/firmware.uf2", target_fw_bin + target_fw_elf)
 
+# ----------------------------------------------------------------------------
+# OTA dual-bank link (Task OTA T4)
+#
+# OTA links the SAME sources at two independent bank bases:
+#   - bank A @ 0x008000 (this is the DEFAULT build: raw_firmware.elf already
+#     links here via efm32gg11b820.ld's __flash_origin default)
+#   - bank B @ 0x100000 (a second link of the SAME object files)
+#
+# Mechanism: the linker script reads FLASH ORIGIN/LENGTH from defsym symbols
+# (__flash_origin / __flash_length) with bank-A defaults. arm-none-eabi-ld
+# accepts `ORIGIN = <symbol>` in a MEMORY block (link-verified), so no
+# per-bank generated .ld is needed — bank B is produced by re-linking with
+# -Wl,--defsym overriding those symbols. (realtek-ambz needs the
+# template-substitution route because its template embeds literal arithmetic
+# the assembler-style defsym can't express; this toolchain does not.)
+#
+# We do NOT append CRC/length to the bins here — those live in the OTA
+# metadata page and are computed at switch time (see lt_ota_meta.*).
+#
+# firmware_a.bin is just the bank-A firmware.bin under the OTA-conventional
+# name (a later bench task consumes firmware_a.bin / firmware_b.bin).
+firmware_a_bin = "${BUILD_DIR}/firmware_a.bin"
+firmware_b_elf = "${BUILD_DIR}/firmware_b.elf"
+firmware_b_bin = "${BUILD_DIR}/firmware_b.bin"
+
+# Bank A: copy of the default (bank-A-linked) firmware.bin.
+target_fw_a_bin = env.Command(
+    firmware_a_bin,
+    firmware_bin,
+    env.VerboseAction("cp $SOURCE $TARGET", "Producing firmware_a.bin (bank A)"),
+)
+
+
+# Bank B: re-link the SAME objects at 0x100000. The object files are the
+# children of the bank-A ELF node; reuse the env's standard link command with
+# the defsym override prepended to LINKFLAGS. Resolved at action time so the
+# full (possibly framework-extended) object/lib list is captured.
+def _link_bank_b(target, source, env):
+    import subprocess
+
+    elf_node = env.File("${BUILD_DIR}/${PROGNAME}.elf")
+    objs = [str(c) for c in elf_node.children() if str(c).endswith(".o")]
+    out = str(target[0])
+    link = env.subst("$LINK")
+    # Drop the bank-A -Map flag: it carries the raw_firmware.map path (and the
+    # subst-then-split mangles its embedded value), and we don't want bank B to
+    # clobber the bank-A map. Re-point it at a bank-B map instead.
+    flags = [f for f in env.subst("$LINKFLAGS").split() if "-Wl,-Map=" not in f]
+    flags.append("-Wl,-Map=" + env.subst("${BUILD_DIR}/firmware_b.map"))
+    libdirs = env.subst("$_LIBDIRFLAGS").split()
+    libflags = env.subst("$_LIBFLAGS").split()
+    cmd = (
+        [link]
+        + flags
+        + [
+            "-Wl,--defsym=__flash_origin=0x100000",
+            "-Wl,--defsym=__flash_length=0x000F8000",
+        ]
+        + ["-o", out]
+        + objs
+        + libdirs
+        + libflags
+    )
+    return subprocess.call(cmd)
+
+
+target_fw_b_elf = env.Command(
+    firmware_b_elf,
+    "${BUILD_DIR}/${PROGNAME}.elf",
+    env.VerboseAction(_link_bank_b, "Linking firmware_b.elf (bank B @ 0x100000)"),
+)
+# The bank-B link consumes the SAME .ld (with the defsym override); declare the
+# dependency explicitly — same stale-relink rationale as the bank-A ELF above.
+env.Depends(
+    target_fw_b_elf,
+    join("$MISC_DIR", env.BoardConfig().get("build.ldscript")),
+)
+target_fw_b_bin = env.Command(
+    firmware_b_bin,
+    firmware_b_elf,
+    env.VerboseAction("$OBJCOPY -O binary $SOURCE $TARGET", "Producing firmware_b.bin"),
+)
+env.Depends(
+    "${BUILD_DIR}/firmware.uf2",
+    target_fw_a_bin + target_fw_b_elf + target_fw_b_bin,
+)
+
 
 # Override main.py's BuildUF2OTA for Phase 1: skip the ltchiptool UF2 packer
 # (no SocInterface yet — see comment block above) and just copy firmware.bin to
