@@ -45,6 +45,13 @@ env.Append(
         # lightning-ln882h (which patch Reset_Handler directly; the GSDK startup
         # exposes a __START hook so we redirect via preprocessor instead).
         ("__START", "lt_main"),
+        # FlashDB on internal flash: EFM32GG11 is word-writable (emlib MSC
+        # writes 4-byte words; the FAL port rejects sub-word offsets). The
+        # FlashDB default FDB_WRITE_GRAN=8 (STM32F2/F4 byte granularity) packs
+        # KV status markers as sub-word bytes, which corrupt on this flash, so
+        # KVs never persist (the kvs partition reformats every boot). 32 is the
+        # stm32f1-class word-write setting fdb_cfg.h calls out. Bench-confirmed.
+        ("FDB_WRITE_GRAN", "32"),
     ],
     CCFLAGS=[
         "-mcpu=cortex-m4",
