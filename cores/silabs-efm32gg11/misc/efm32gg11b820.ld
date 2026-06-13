@@ -1,5 +1,6 @@
 /* OTA linker script for EFM32GG11B820F2048GM64.
- * A/B dual-bank app: bank A @ 0x008000, bank B @ 0x100000 (each 0x0F8000).
+ * A/B dual-bank app: bank A @ 0x008000, bank B @ 0x100000 (each 0x0F0000;
+ * the 32 KB below metadata is the `kvs` FlashDB partition).
  * Vector table at start of the bank. Heap above .bss; stack at top of RAM.
  *
  * The FLASH origin/length are parameterized via -Wl,--defsym so the SAME
@@ -18,7 +19,7 @@
 /* Origin/length injected by the builder via -Wl,--defsym for each bank.
    Defaults keep a plain `pio run` linking bank A. */
 __flash_origin = DEFINED(__flash_origin) ? __flash_origin : 0x00008000;
-__flash_length = DEFINED(__flash_length) ? __flash_length : 0x000F8000;
+__flash_length = DEFINED(__flash_length) ? __flash_length : 0x000F0000;
 MEMORY
 {
     FLASH (rx) : ORIGIN = __flash_origin, LENGTH = __flash_length

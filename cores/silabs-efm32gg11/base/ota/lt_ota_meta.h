@@ -44,7 +44,12 @@ typedef struct {
 #define LT_OTA_META_SLOT_LEN  0x1000u // one 4 KB page per slot
 #define LT_OTA_BANK_A_OFF	  0x008000u
 #define LT_OTA_BANK_B_OFF	  0x100000u
-#define LT_OTA_BANK_LEN		  0x0F8000u
+// 0x0F0000 (960 KB), not the 0x0F8000 the bank spacing would allow: the last
+// 32 KB before metadata is carved out for the `kvs` FlashDB partition
+// (0x1F0000+0x8000), which lives outside both banks so it survives OTA. Bank A
+// is shrunk to match (its freed tail 0x0F8000..0x100000 is left unused) so the
+// same-sized image links into either bank. Mirrors the board JSON flash map.
+#define LT_OTA_BANK_LEN		  0x0F0000u
 
 uint32_t lt_ota_bank_offset(uint8_t bank);								  // 0->A,1->B
 bool lt_ota_meta_load(const lt_ota_flash_ops_t *ops, lt_ota_meta_t *out); // newest valid slot

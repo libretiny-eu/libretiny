@@ -490,7 +490,7 @@ def _link_bank_b(target, source, env):
         + flags
         + [
             "-Wl,--defsym=__flash_origin=0x100000",
-            "-Wl,--defsym=__flash_length=0x000F8000",
+            "-Wl,--defsym=__flash_length=0x000F0000",
         ]
         + ["-o", out]
         + objs
