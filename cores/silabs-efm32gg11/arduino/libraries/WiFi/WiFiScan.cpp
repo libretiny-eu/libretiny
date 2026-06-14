@@ -17,6 +17,18 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 	if (!enableSTA(true))
 		return WIFI_SCAN_FAILED;
 
+#if LT_WFX_RX_TRACE
+	// Bug-2 probe: log the CALLING context + the RX counters maintained by the
+	// netif layer. task='tcpip' means scanNetworks() is being driven from the
+	// lwIP thread (hypothesis 1: sync scan blocks tcpip ~750ms holding the core
+	// lock). rx_ap>0 confirms AP-client traffic is flowing during the scan (the
+	// Bug-2 trigger condition); drop>0 / a large maxlen flags hypothesis 2.
+	extern volatile uint32_t lt_wfx_rx_sta, lt_wfx_rx_ap, lt_wfx_rx_drop, lt_wfx_rx_maxlen;
+	LT_WM(WIFI, "scan: ctx task='%s' rx_sta=%lu rx_ap=%lu drop=%lu maxlen=%lu", pcTaskGetName(NULL),
+		  (unsigned long)lt_wfx_rx_sta, (unsigned long)lt_wfx_rx_ap, (unsigned long)lt_wfx_rx_drop,
+		  (unsigned long)lt_wfx_rx_maxlen);
+#endif
+
 	scanDelete();
 	scanInit();
 	if (!scan)

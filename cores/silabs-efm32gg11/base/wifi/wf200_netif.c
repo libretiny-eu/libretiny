@@ -32,6 +32,17 @@
 #include <lwip/tcpip.h>
 #include <string.h>
 
+#if LT_WFX_RX_TRACE
+#include <stdio.h> // printf -> USART0 (family printf.c); LT_ macros unavailable in base/wifi
+// Bug-2 instrumentation (opt-in via -DLT_WFX_RX_TRACE=1). Single writer (the
+// bus task) updates these; the scan path reads them. Torn reads are cosmetic.
+// Read by WiFiScan.cpp via the externs there.
+volatile uint32_t lt_wfx_rx_sta;	// data frames demuxed to the STA netif
+volatile uint32_t lt_wfx_rx_ap;		// data frames demuxed to the AP netif
+volatile uint32_t lt_wfx_rx_drop;	// frames dropped by the length guard below
+volatile uint32_t lt_wfx_rx_maxlen; // largest frame_length seen
+#endif
+
 // INVARIANT: lt_wf200_netif_create() must complete before the bus task processes
 // its first frame.  Today this is naturally enforced: WIRQ is armed inside
 // sl_wfx_init(), but RX traffic only flows after a successful join, and modePriv
@@ -128,6 +139,28 @@ void lt_wf200_netif_input(sl_wfx_received_ind_t *ind) {
 		return;
 	uint8_t *frame = ind->body.frame + ind->body.frame_padding;
 	uint16_t len   = ind->body.frame_length;
+
+#if LT_WFX_RX_TRACE
+	// Bug-2 probe + guard: frame_length is taken straight from the indication.
+	// If a malformed/secure-link-desynced frame carries a bogus length, the
+	// pbuf_take(p, frame, len) below writes past the pbuf and corrupts a
+	// neighbouring pbuf's ref field -> lwIP "pbuf_free: p->ref > 0" double-free
+	// assert. Bound it to a max Ethernet II frame (1500 MTU + 14 hdr); record
+	// and drop rather than corrupt. If Bug 2 is THIS path, enabling the trace
+	// makes the crash stop and prints the offending length + interface.
+	if (len == 0 || len > 1514) {
+		lt_wfx_rx_drop++;
+		printf("$WFXRX bogus len=%u iface=%u pad=%u -> dropped\r\n", (unsigned)len, (unsigned)iface,
+			   (unsigned)ind->body.frame_padding);
+		return;
+	}
+	if (iface == SL_WFX_SOFTAP_INTERFACE)
+		lt_wfx_rx_ap++;
+	else
+		lt_wfx_rx_sta++;
+	if (len > lt_wfx_rx_maxlen)
+		lt_wfx_rx_maxlen = len;
+#endif
 
 	struct pbuf *p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
 	if (p == NULL)
