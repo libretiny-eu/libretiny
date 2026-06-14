@@ -4,6 +4,88 @@
 
 static TaskHandle_t s_eventTask;
 
+// --- STA auto-reconnect supervisor -------------------------------------------
+// Rejoins a link that was established (reached GOT_IP) and then dropped, so the
+// app needn't run its own WiFi.status() supervisor. Acts ONLY when s_armed —
+// set on GOT_IP, cleared by a fresh begin()/intentional disconnect() — so a
+// never-succeeded join (e.g. wrong password) is never looped; that stays the
+// app's call via begin()'s return. Driven from the event task's idle tick, so
+// the rejoin runs off the app thread and is non-blocking: it fires one join
+// command and lets the normal CONNECT->GOT_IP ladder update staStatus.
+static volatile bool s_autoReconnect = true; // ESP32 parity: default ON
+static volatile bool s_armed		 = false;
+static uint32_t s_lastJoinMs		 = 0; // 0 = no attempt since arm/disarm
+static uint32_t s_backoffMs			 = 0; // ramps 2s -> 30s so a vanished AP isn't hammered
+
+#define LT_WIFI_RECONNECT_POLL_MS 1000u // event-task idle wake to run the tick
+#define LT_WIFI_RECONNECT_MIN_MS  2000u
+#define LT_WIFI_RECONNECT_MAX_MS  30000u
+
+void ltWifiSetAutoReconnect(bool enable) {
+	s_autoReconnect = enable;
+}
+
+bool ltWifiGetAutoReconnect() {
+	return s_autoReconnect;
+}
+
+void ltWifiReconnectArm() {
+	s_armed		 = true;
+	s_backoffMs	 = 0;
+	s_lastJoinMs = 0;
+}
+
+void ltWifiReconnectDisarm() {
+	s_armed		 = false;
+	s_backoffMs	 = 0;
+	s_lastJoinMs = 0;
+}
+
+void ltWifiReconnectTick() {
+	if (!pWiFi || !s_autoReconnect || !s_armed)
+		return;
+	// Retryable = a link that went down. WL_DISCONNECTED is included because an
+	// *intentional* teardown disarms (s_armed=false) before setting it, so an
+	// armed WL_DISCONNECTED is the DHCP-lease-lost case, not a user disconnect.
+	// WL_IDLE_STATUS (join in flight) and WL_CONNECTED are left alone.
+	WiFiStatus st = pDATA->staStatus;
+	if (st != WL_CONNECTION_LOST && st != WL_CONNECT_FAILED && st != WL_DISCONNECTED)
+		return;
+	if (!pDATA->sta.ssid)
+		return;
+	uint32_t now = millis();
+	if (s_lastJoinMs != 0 && (now - s_lastJoinMs) < s_backoffMs)
+		return;
+	s_lastJoinMs = now ? now : 1; // keep 0 reserved as the "no attempt yet" sentinel
+	s_backoffMs	 = s_backoffMs ? (s_backoffMs < LT_WIFI_RECONNECT_MAX_MS ? s_backoffMs * 2 : LT_WIFI_RECONNECT_MAX_MS)
+								   : LT_WIFI_RECONNECT_MIN_MS;
+
+	WiFiNetworkInfo &info			= pDATA->sta;
+	sl_wfx_security_mode_t security = info.password ? WFM_SECURITY_MODE_WPA2_PSK : WFM_SECURITY_MODE_OPEN;
+	LT_IM(WIFI, "auto-reconnect: rejoining %s", info.ssid);
+	pDATA->staStatus = WL_IDLE_STATUS;
+	ltWifiStatusLed(LT_WIFI_LED_JOINING);
+	WIFI_CMD_TAKE(pDATA);
+	sl_status_t s = sl_wfx_send_join_command(
+		(const uint8_t *)info.ssid,
+		strlen(info.ssid),
+		NULL,
+		0 /* channel: any */,
+		security,
+		1 /* prevent_roaming */,
+		WFM_MGMT_FRAME_PROTECTION_OPTIONAL,
+		(const uint8_t *)(info.password ? info.password : ""),
+		info.password ? strlen(info.password) : 0,
+		NULL,
+		0
+	);
+	WIFI_CMD_GIVE(pDATA);
+	if (s != SL_STATUS_OK) {
+		LT_EM(WIFI, "auto-reconnect join cmd failed: 0x%08lX", (unsigned long)s);
+		pDATA->staStatus = WL_CONNECTION_LOST; // stay retryable for the next tick
+	}
+}
+
 // Map the WF200 scan-result security bitmask to Arduino auth modes.
 // The host port (sl_wfx_host.c) memcpy's the raw 1-byte packed bitfield
 // (sl_wfx_security_mode_bitmask_t, sl_wfx_cmd_api.h) into the event's
@@ -36,8 +118,10 @@ static void wifiEventTask(void *arg) {
 	(void)arg;
 	lt_wfx_event_t ev;
 	for (;;) {
-		if (xQueueReceive(lt_wfx_host.event_queue, &ev, portMAX_DELAY) != pdTRUE)
+		if (xQueueReceive(lt_wfx_host.event_queue, &ev, pdMS_TO_TICKS(LT_WIFI_RECONNECT_POLL_MS)) != pdTRUE) {
+			ltWifiReconnectTick(); // idle wake: supervise STA auto-reconnect
 			continue;
+		}
 		if (!pWiFi)
 			continue;
 		EventInfo info;
@@ -146,6 +230,9 @@ static void netifStatusCb(struct netif *nif) {
 	memset(&info, 0, sizeof(info));
 	if (!ip4_addr_isany_val(*netif_ip4_addr(nif))) {
 		pDATA->staStatus = WL_CONNECTED;
+		// Link is up end-to-end (L2 + IP): eligible for backend auto-rejoin if it
+		// later drops. Also resets the retry backoff after a clean connect.
+		ltWifiReconnectArm();
 		// End-to-end up (L2 + IP): green.
 		ltWifiStatusLed(LT_WIFI_LED_JOINED);
 		info.got_ip.ip_info.ip.addr		 = netif_ip4_addr(nif)->addr;

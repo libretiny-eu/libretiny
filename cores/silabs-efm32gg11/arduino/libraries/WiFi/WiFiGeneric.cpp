@@ -162,6 +162,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	if (sta == WLMODE_DISABLE && DATA->stackUp && (DATA->mode & WIFI_MODE_STA)) {
+		ltWifiReconnectDisarm(); // intentional STA teardown: no auto-rejoin
 		WIFI_CMD_TAKE(DATA);
 		sl_wfx_send_disconnect_command();
 		WIFI_CMD_GIVE(DATA);

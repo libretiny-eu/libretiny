@@ -19,6 +19,11 @@ WiFiStatus WiFiClass::begin(
 	if (!validate(ssid, passphrase))
 		return WL_CONNECT_FAILED;
 
+	// A fresh begin() is a new attempt: disarm auto-reconnect until this one
+	// actually reaches GOT_IP. Keeps a wrong-credential begin() from looping in
+	// the supervisor — a failed initial join stays the caller's to handle.
+	ltWifiReconnectDisarm();
+
 	// Re-begin while associated must deassociate first (SSID may have changed)
 	// — standard family behavior; avoids a duplicate-join WRONG_STATE rejection
 	// leaving WL_CONNECT_FAILED with a live link.
@@ -148,6 +153,9 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		// Static IP: link-up alone is success.
 		if (info.localIP && s == WL_IDLE_STATUS && netif_is_link_up(lt_wf200_netif_sta())) {
 			DATA->staStatus = WL_CONNECTED;
+			// Static IP: netifStatusCb won't fire (no DHCP) — arm auto-reconnect
+			// here, the equivalent of the GOT_IP arm on the DHCP path.
+			ltWifiReconnectArm();
 			// Static IP: netifStatusCb won't fire (no DHCP), so green here.
 			ltWifiStatusLed(LT_WIFI_LED_JOINED);
 			return true;
@@ -170,6 +178,9 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 }
 
 bool WiFiClass::disconnect(bool wifiOff) {
+	// Intentional teardown: disarm first so a concurrent supervisor tick can't
+	// rejoin between the status write below and the command.
+	ltWifiReconnectDisarm();
 	// Mark the disconnect as intentional BEFORE sending the command: the
 	// DISCONNECT indication handler (WiFiEvents.cpp) only flags
 	// WL_CONNECTION_LOST when status is CONNECTED/IDLE, so setting
@@ -184,15 +195,16 @@ bool WiFiClass::disconnect(bool wifiOff) {
 	return true;
 }
 
-// WF200 FMAC has no autonomous rejoin; an Arduino-level reconnect supervisor
-// is a Phase 2 follow-on. Report "not supported" honestly.
+// The WF200 FMAC has no autonomous rejoin, so the backend supervises it itself:
+// a link that reached GOT_IP and then dropped is auto-rejoined from the WiFi
+// event task (ESP32 parity; default ON). See ltWifiReconnect* in WiFiEvents.cpp.
 bool WiFiClass::setAutoReconnect(bool autoReconnect) {
-	(void)autoReconnect;
-	return false;
+	ltWifiSetAutoReconnect(autoReconnect);
+	return true;
 }
 
 bool WiFiClass::getAutoReconnect() {
-	return false;
+	return ltWifiGetAutoReconnect();
 }
 
 // --- getters (netif/driver state) ---------------------------------------------
