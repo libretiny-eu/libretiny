@@ -17,7 +17,15 @@ extern uint32_t SystemCoreClock;
 #define configTICK_RATE_HZ						(1000)
 #define configMAX_PRIORITIES					(7)
 #define configMINIMAL_STACK_SIZE				(128)
+// Overridable from build flags (-DconfigTOTAL_HEAP_SIZE=...) so a heap-hungry
+// app can grow it: __wrap_malloc routes ALL allocations (Arduino String,
+// ArduinoJson, mongoose mbufs, lwIP pbufs) to this single heap_4 ucHeap[], and
+// ~350 KB of the part's 512 KB SRAM is otherwise idle. heap_4's ucHeap is a
+// static BSS array, so a larger value just grows BSS (no linker change). Default
+// stays 64 KB; e.g. web-serving firmware passes -DconfigTOTAL_HEAP_SIZE=262144.
+#ifndef configTOTAL_HEAP_SIZE
 #define configTOTAL_HEAP_SIZE					(64 * 1024)
+#endif
 #define configMAX_TASK_NAME_LEN					(16)
 #define configUSE_16_BIT_TICKS					0
 #define configIDLE_SHOULD_YIELD					1
