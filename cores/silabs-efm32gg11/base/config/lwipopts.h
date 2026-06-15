@@ -84,6 +84,24 @@
 #define LWIP_HTTPD_SSI 0
 #define LWIP_HTTPD_CGI 0
 
+// lwIP SNTP app (opt-in). The app firmware drives it
+// (sntp_setoperatingmode/sntp_setservername/sntp_init) and supplies the
+// time-set hook below. SNTP_SERVER_DNS lets it take a hostname (pool.ntp.org);
+// LWIP_DNS is already on above. SNTP_SET_SYSTEM_TIME runs on the tcpip thread
+// each successful sync — the firmware hook (web_server_lite.cpp) just stashes
+// the epoch. Defaults otherwise: OPMODE set by the firmware, 1 h update delay
+// (15 s min). No behaviour change unless the firmware compiles in the hook.
+#define SNTP_SUPPORT	1
+#define SNTP_SERVER_DNS 1
+#define SNTP_SET_SYSTEM_TIME(sec) lite_sntp_set_system_time(sec)
+#ifdef __cplusplus
+extern "C" {
+#endif
+void lite_sntp_set_system_time(unsigned int sec);
+#ifdef __cplusplus
+}
+#endif
+
 // --- Memory ----------------------------------------------------------------------
 #define MEM_LIBC_MALLOC			0
 #define MEM_ALIGNMENT			4

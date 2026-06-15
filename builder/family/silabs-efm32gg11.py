@@ -234,6 +234,10 @@ queue.AddLibrary(
         # built-in /index.html from lwip/src/apps/http/fs/.
         "+<lwip/src/apps/http/httpd.c>",
         "+<lwip/src/apps/http/fs.c>",
+        # SNTP app (opt-in via SNTP_SUPPORT in lwipopts.h). The app firmware
+        # drives sntp_init/setservername/setoperatingmode and provides the
+        # SNTP_SET_SYSTEM_TIME hook; this just compiles the app in.
+        "+<lwip/src/apps/sntp/sntp.c>",
         "+<lwip-contrib/ports/freertos/sys_arch.c>",
     ],
     includes=[
