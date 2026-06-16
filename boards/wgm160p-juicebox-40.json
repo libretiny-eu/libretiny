@@ -17,7 +17,7 @@
       "PC4":  { "GPIO": "PC4",  "ARD": "BTN0",   "PHYSICAL": "factory_reset line (Gecko GPIO 16; SPI16 CS)" },
       "PE6":  { "GPIO": "PE6",  "ARD": "RX",     "PHYSICAL": "console UART RX, module pin 47 (USART0 LOC1)" },
       "PE7":  { "GPIO": "PE7",  "ARD": "TX",     "PHYSICAL": "console UART TX, module pin 46 (USART0 LOC1)" },
-      "PB3":  { "GPIO": "PB3",  "PHYSICAL": "no visible function (Gecko OS table said RGB; drives nothing — bench-verified 2026-06-11)" },
+      "PF11": { "GPIO": "PF11", "PHYSICAL": "ATmega328P EVSE-controller RESET, active-low (module pin 42, nominally USB_DP; repurposed on JuiceBox, USB unused). Host drives push-pull HIGH to run the controller, pulses LOW to reset it. Continuity-confirmed 2026-06-13." },
       "PB13": { "GPIO": "PB13", "PHYSICAL": "HFXO_P (50 MHz crystal)" },
       "PB14": { "GPIO": "PB14", "PHYSICAL": "HFXO_N (50 MHz crystal)" }
     },

@@ -20,7 +20,7 @@
  *
  * EFM32 pin encoding: (port_index << 4) | pin_number
  *   port A=0, B=1, C=2, D=3, E=4, F=5
- *   PB5=0x15 PB6=0x16 PD8=0x38 PC4=0x24 PE6=0x46 PE7=0x47 PB3=0x13
+ *   PB5=0x15 PB6=0x16 PD8=0x38 PC4=0x24 PE6=0x46 PE7=0x47 PB3=0x13 PF11=0x5B
  * This matches cores/silabs-efm32gg11/arduino/src/ArduinoFamily.h.
  */
 
@@ -34,7 +34,7 @@
 #define NUM_DIGITAL_PINS   7    // Digital inputs/outputs
 #define NUM_ANALOG_INPUTS  0    // ADC inputs (none mapped in Phase 1)
 #define NUM_ANALOG_OUTPUTS 0    // PWM & DAC outputs (none in Phase 1)
-#define PINS_GPIO_MAX      0x47 // Last usable encoded GPIO number (PE7)
+#define PINS_GPIO_MAX      0x5B // Last usable encoded GPIO number (PF11, ATmega RESET)
 
 // Serial ports
 // ------------
@@ -53,6 +53,7 @@
 #define PIN_PE6 0x46u // PE6 (USART0 LOC1 RX)
 #define PIN_PE7 0x47u // PE7 (USART0 LOC1 TX)
 #define PIN_PB3 0x13u // PB3 (no visible function; Gecko OS table said RGB)
+#define PIN_PF11 0x5Bu // PF11 (ATmega328P EVSE-controller RESET, active-low)
 #define PIN_RX  0x46u // PE6
 #define PIN_TX  0x47u // PE7
 
@@ -80,6 +81,7 @@
 #define LED_G       PIN_D1 // PB6 — bench-verified green, active-high
 #define LED_B       PIN_D2 // PD8 — bench-verified blue, active-high
 #define BTN0        PIN_D3
+#define EVSE_RESET  PIN_PF11 // PF11 — ATmega328P RESET, active-low (HIGH=run, LOW=reset; continuity-confirmed 2026-06-13)
 #define LED_BUILTIN PIN_D0
 
 // Static pin names
