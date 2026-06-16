@@ -73,3 +73,17 @@ void ltWifiAttachNetifCallback();
 // Maps the WF200 scan-result security bitmask to Arduino auth modes.
 // Lives in WiFiEvents.cpp (consolidated there; Task 13 must NOT duplicate it).
 WiFiAuthMode wfxSecurityToAuthMode(uint32_t security);
+
+// --- STA auto-reconnect supervisor (WiFiEvents.cpp) --------------------------
+// Backend-side rejoin of a link that was established and then lost, so the app
+// need not poll WiFi.status() itself (ESP32 setAutoReconnect parity, default ON).
+void ltWifiSetAutoReconnect(bool enable);
+bool ltWifiGetAutoReconnect();
+// Arm: a connection reached GOT_IP (or static-IP link-up) — eligible for auto-
+// rejoin if it later drops. Disarm: a fresh begin() / intentional disconnect() /
+// STA disable — do NOT auto-rejoin (never loops a never-succeeded or closed join).
+void ltWifiReconnectArm();
+void ltWifiReconnectDisarm();
+// Idle tick from the event task: if armed + enabled + the link is lost, fire a
+// rate-limited, non-blocking rejoin (lets the normal CONNECT->GOT_IP ladder run).
+void ltWifiReconnectTick();

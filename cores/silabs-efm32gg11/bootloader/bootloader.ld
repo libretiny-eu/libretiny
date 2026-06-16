@@ -1,35 +1,26 @@
-/* OTA linker script for EFM32GG11B820F2048GM64.
- * A/B dual-bank app: bank A @ 0x008000, bank B @ 0x100000 (each 0x0F0000;
- * the 32 KB below metadata is the `kvs` FlashDB partition).
- * Vector table at start of the bank. Heap above .bss; stack at top of RAM.
- *
- * The FLASH origin/length are parameterized via -Wl,--defsym so the SAME
- * sources can link at either bank base (the builder re-links bank B). The
- * defaults below keep a plain `pio run` linking bank A (origin 0x008000),
- * which is a valid bank-A image. See efm32gg11b820.template.ld (the kept
- * copy of this script) for the bank-B link path.
+/* Linker script for the MIT first-stage bootloader (EFM32GG11B820F2048GM64).
+ * The bootloader is ALWAYS at flash 0x0, so FLASH is hard-coded here (the app
+ * script parameterizes its base via -Wl,--defsym for the A/B banks; the
+ * bootloader has no such need). Derived from misc/efm32gg11b820.ld so it keeps
+ * the exact symbol names the GSDK startup walks (__copy_table_*, __zero_table_*,
+ * __StackTop, .vectors placement). Keeps RAM exactly as the app script has it.
  *
  * The vendor startup file (Source/GCC/startup_efm32gg11b.S) initialises .data
  * and .bss via CMSIS-style table-driven loops in Reset_Handler, indexing
  * __copy_table_{start,end}__ and __zero_table_{start,end}__. Those symbols
- * MUST be provided here even if our project happens to have no .data — the
- * startup code unconditionally walks the tables. Empty tables are valid.
+ * MUST be provided here even if the bootloader has no .data — the startup code
+ * unconditionally walks the tables. Empty tables are valid.
  */
 
-/* Origin/length injected by the builder via -Wl,--defsym for each bank.
-   Defaults keep a plain `pio run` linking bank A. */
-__flash_origin = DEFINED(__flash_origin) ? __flash_origin : 0x00008000;
-__flash_length = DEFINED(__flash_length) ? __flash_length : 0x000F0000;
 MEMORY
 {
-    FLASH (rx) : ORIGIN = __flash_origin, LENGTH = __flash_length
+    FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 0x00008000   /* 32 KB bootloader */
     RAM  (rwx) : ORIGIN = 0x20000000, LENGTH = 512K
 }
 
 ENTRY(Reset_Handler)
 
-_stack_size = 4096;   /* main stack (interrupt context); FreeRTOS task stacks
-                       * are allocated separately from the FreeRTOS heap. */
+_stack_size = 4096;   /* main stack (interrupt context) */
 
 SECTIONS
 {
@@ -65,9 +56,10 @@ SECTIONS
         LONG (__etext)
         LONG (__data_start__)
         LONG ((__data_end__ - __data_start__) / 4)
-        /* .ram (SL_RAMFUNC code, e.g. emlib MSC flash routines) is copied to RAM
-         * before main() too: on EFM32GG11 (Series 1) the MSC write loop MUST
-         * execute from RAM, else a sustained flash write hangs mid-transfer. */
+        /* .ram holds SL_RAMFUNC code (emlib MSC). On EFM32GG11 (Series 1) the
+         * MSC write loop MUST run from RAM, else a flash write can hang — the
+         * bootloader writes the OTA metadata page (trial-attempt countdown), so
+         * it needs the same RAM-exec guarantee as the app. */
         LONG (LOADADDR(.ram))
         LONG (__ram_start__)
         LONG ((__ram_end__ - __ram_start__) / 4)
@@ -78,7 +70,7 @@ SECTIONS
      * table on purpose: the startup zero loop consumes the count directly as
      * bytes (no `lsls #2`), unlike the copy loop which takes words. The vendor
      * .ld leaves this table empty and lets newlib crt0 zero the main .bss, but
-     * we redirect __START to lt_main (no crt0), so this entry is the ONLY .bss
+     * we redirect __START to main (no crt0), so this entry is the ONLY .bss
      * zeroing — a word count here leaves 3/4 of .bss as power-on garbage. */
     .zero.table : {
         . = ALIGN(4);
@@ -115,10 +107,8 @@ SECTIONS
 
     _sidata = LOADADDR(.data);   /* compat alias; vendor startup uses __etext */
 
-    /* RAM-resident code (SL_RAMFUNC). emlib MSC flash routines land here when
-     * EM_MSC_RUN_FROM_RAM is defined; the copy table above copies it to RAM and
-     * the startup runs it from there. LMA in FLASH (part of the flash image),
-     * VMA in RAM. Always emitted (small/empty if no ramfuncs in a build). */
+    /* RAM-resident code (SL_RAMFUNC): emlib MSC flash routines, copied to RAM by
+     * the startup copy table above. LMA in FLASH, VMA in RAM. */
     .ram : AT (LOADADDR(.data) + SIZEOF(.data)) {
         . = ALIGN(4);
         __ram_start__ = .;
@@ -126,11 +116,6 @@ SECTIONS
         . = ALIGN(4);
         __ram_end__ = .;
     } > RAM
-
-    /* Loadable-image body length (text+rodata+data init+ram init), used by
-       lt_ota.c to record the RUNNING app's own length into OTA metadata at
-       confirm time. .ram is the last flash-LMA section, so it bounds the image. */
-    _lt_image_size = LOADADDR(.ram) + SIZEOF(.ram) - ORIGIN(FLASH);
 
     .bss : {
         . = ALIGN(4);

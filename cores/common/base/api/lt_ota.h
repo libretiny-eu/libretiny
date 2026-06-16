@@ -133,3 +133,10 @@ uf2_ota_scheme_t lt_ota_get_uf2_scheme();
  * @return false if the second image (or upgrade image) is not valid; false if writing failed; true otherwise
  */
 bool lt_ota_switch(bool revert);
+
+/**
+ * @brief Commit the currently-running OTA image as healthy, stopping the
+ * bootloader's automatic rollback. Weak no-op default; dual-OTA families with
+ * a trial/rollback scheme override it.
+ */
+void lt_ota_confirm(void);

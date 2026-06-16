@@ -113,6 +113,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 										 ? DATA->staChannel
 										 : (DATA->apChannel ? (uint16_t)DATA->apChannel : 1);
 		sl_wfx_security_mode_t sec = DATA->apPassword ? WFM_SECURITY_MODE_WPA2_PSK : WFM_SECURITY_MODE_OPEN;
+		// PMF (802.11w management-frame protection) is only valid on an RSN
+		// (WPA2/WPA3) BSS — it has no key hierarchy to protect on an OPEN
+		// network, and the WF200 rejects START_AP with 0x21 (INVALID_PARAMETER)
+		// if it's requested there. Gate it on the security mode: OPTIONAL on a
+		// secured AP, DISABLED on an open one.
+		uint8_t mfp = DATA->apPassword ? WFM_MGMT_FRAME_PROTECTION_OPTIONAL : WFM_MGMT_FRAME_PROTECTION_DISABLED;
 
 		WIFI_CMD_TAKE(DATA);
 		sl_status_t st = sl_wfx_start_ap_command(
@@ -122,7 +128,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 			0, // hidden_ssid
 			0, // client_isolation
 			sec,
-			WFM_MGMT_FRAME_PROTECTION_OPTIONAL,
+			mfp,
 			(const uint8_t *)(DATA->apPassword ? DATA->apPassword : ""),
 			(uint16_t)(DATA->apPassword ? strlen(DATA->apPassword) : 0),
 			NULL,
@@ -156,6 +162,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 	}
 
 	if (sta == WLMODE_DISABLE && DATA->stackUp && (DATA->mode & WIFI_MODE_STA)) {
+		ltWifiReconnectDisarm(); // intentional STA teardown: no auto-rejoin
 		WIFI_CMD_TAKE(DATA);
 		sl_wfx_send_disconnect_command();
 		WIFI_CMD_GIVE(DATA);

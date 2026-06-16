@@ -3,13 +3,14 @@
  * Phase 1 watchdog API for silabs-efm32gg11.
  */
 
+#include "em_cmu.h"
 #include "em_wdog.h"
 #include "lt_family.h"
 #include <libretiny.h>
 
 bool lt_wdt_enable(uint32_t timeout_ms) {
-	// Map ms -> WDOG period select. WDOG ticks at LFRCO (~1 kHz),
-	// so timeout_ms ~= period count. PERSEL is a power-of-2 enum.
+	// Map ms -> WDOG period select. The counter is clocked from ULFRCO
+	// (~1 kHz), so timeout_ms ~= period count. PERSEL is a power-of-2 enum.
 	WDOG_PeriodSel_TypeDef per;
 	if (timeout_ms <= 9)
 		per = wdogPeriod_9;
@@ -36,9 +37,21 @@ bool lt_wdt_enable(uint32_t timeout_ms) {
 	else
 		per = wdogPeriod_16k;
 
+	// WDOG is a low-energy peripheral on GG11; its registers live behind the LE
+	// bus clock. Gate it on, else WDOGn_Init writes are dropped and the watchdog
+	// never arms. (GG11/Series 1 has no cmuClock_WDOG0 enum — the LE branch
+	// clock is cmuClock_CORELE.)
+	CMU_ClockEnable(cmuClock_CORELE, true);
+
 	WDOG_Init_TypeDef init = WDOG_INIT_DEFAULT;
 	init.perSel			   = per;
-	init.enable			   = true;
+	// WDOG_INIT_DEFAULT selects LFRCO (32 kHz), which lt_init never enables — so
+	// the counter would not tick and the watchdog would never fire. Use ULFRCO
+	// (always-on ~1 kHz) instead: no oscillator setup needed and it matches the
+	// ms->period mapping above. debugRun stays false so a debugger halt freezes
+	// the counter (lets SWD reads happen without spurious resets).
+	init.clkSel = wdogClkSelULFRCO;
+	init.enable = true;
 	WDOGn_Init(DEFAULT_WDOG, &init);
 	return true;
 }

@@ -29,6 +29,13 @@ env.Append(
         "ARM_MATH_CM4",
         ("F_CPU", "72000000L"),
         "LT_HAS_FREERTOS=1",
+        # EFM32GG11 (Series 1) is not in emlib's default RAMFUNC allowlist, so
+        # the MSC flash write loop would run from flash and HANG mid-transfer on
+        # a sustained write (e.g. staging a multi-KB OTA image). This forces the
+        # MSC routines into the .ram section (placed in RAM + copied by startup;
+        # see efm32gg11b820.ld). Bench-confirmed: without it an 85 KB FAL write
+        # stalls inside MSC_LoadWriteData.
+        "EM_MSC_RUN_FROM_RAM=1",
         # Redirect the GSDK startup's `bl __START` to LibreTiny's lt_main(),
         # which calls lt_init_family() + __libc_init_array() + main(). The
         # default is _start (newlib), which would skip lt_init_family — leaving
@@ -38,6 +45,13 @@ env.Append(
         # lightning-ln882h (which patch Reset_Handler directly; the GSDK startup
         # exposes a __START hook so we redirect via preprocessor instead).
         ("__START", "lt_main"),
+        # FlashDB on internal flash: EFM32GG11 is word-writable (emlib MSC
+        # writes 4-byte words; the FAL port rejects sub-word offsets). The
+        # FlashDB default FDB_WRITE_GRAN=8 (STM32F2/F4 byte granularity) packs
+        # KV status markers as sub-word bytes, which corrupt on this flash, so
+        # KVs never persist (the kvs partition reformats every boot). 32 is the
+        # stm32f1-class word-write setting fdb_cfg.h calls out. Bench-confirmed.
+        ("FDB_WRITE_GRAN", "32"),
     ],
     CCFLAGS=[
         "-mcpu=cortex-m4",
@@ -90,12 +104,29 @@ env.Append(
         join(CMSIS_DIR, "Include"),
         join(COMMON_DIR, "inc"),
         join("$FAMILY_DIR", "base"),
+        # OTA metadata + CRC32 headers (lt_ota_meta.h / lt_crc32.h) used by the
+        # family's base/api/lt_ota.c and base/port/fal_flash_efm32gg11_port.c.
+        join("$FAMILY_DIR", "base", "ota"),
     ],
 )
 
 # Do NOT override LDSCRIPT_PATH here: env_configure() sets it from
 # board.build.ldscript ("efm32gg11b820.ld") and frameworks/base.py prepends
 # $CORES_DIR/<family>/misc to LIBPATH so the linker can find the script.
+
+# Shared OTA logic (lt_ota_meta.c, lt_crc32.c) lives in base/ota/. AddCoreSources()
+# only globs a fixed subdir set (api/, common/, port/, wiring/, ... — NOT ota/), so
+# these would never compile into the family core; register them explicitly. The
+# host-only RAM-flash shim (lt_meta_hostshim.c) is deliberately excluded — it's
+# for the cores/silabs-efm32gg11/test/ota unit tests, not the device build.
+queue.AddLibrary(
+    name="silabs-ota",
+    base_dir=join("$FAMILY_DIR", "base", "ota"),
+    srcs=[
+        "+<lt_ota_meta.c>",
+        "+<lt_crc32.c>",
+    ],
+)
 
 # Add SDK sources: minimum (vendor startup + system) — enough to link a C main().
 queue.AddLibrary(
@@ -203,6 +234,10 @@ queue.AddLibrary(
         # built-in /index.html from lwip/src/apps/http/fs/.
         "+<lwip/src/apps/http/httpd.c>",
         "+<lwip/src/apps/http/fs.c>",
+        # SNTP app (opt-in via SNTP_SUPPORT in lwipopts.h). The app firmware
+        # drives sntp_init/setservername/setoperatingmode and provides the
+        # SNTP_SET_SYSTEM_TIME hook; this just compiles the app in.
+        "+<lwip/src/apps/sntp/sntp.c>",
         "+<lwip-contrib/ports/freertos/sys_arch.c>",
     ],
     includes=[
@@ -409,6 +444,180 @@ target_fw_elf = env.Command(
 # main.py from the ELF; its stub action also copies firmware.bin, so the
 # dependency is real, not just a graph trick).
 env.Depends("${BUILD_DIR}/firmware.uf2", target_fw_bin + target_fw_elf)
+
+# ----------------------------------------------------------------------------
+# OTA dual-bank link (Task OTA T4)
+#
+# OTA links the SAME sources at two independent bank bases:
+#   - bank A @ 0x008000 (this is the DEFAULT build: raw_firmware.elf already
+#     links here via efm32gg11b820.ld's __flash_origin default)
+#   - bank B @ 0x100000 (a second link of the SAME object files)
+#
+# Mechanism: the linker script reads FLASH ORIGIN/LENGTH from defsym symbols
+# (__flash_origin / __flash_length) with bank-A defaults. arm-none-eabi-ld
+# accepts `ORIGIN = <symbol>` in a MEMORY block (link-verified), so no
+# per-bank generated .ld is needed — bank B is produced by re-linking with
+# -Wl,--defsym overriding those symbols. (realtek-ambz needs the
+# template-substitution route because its template embeds literal arithmetic
+# the assembler-style defsym can't express; this toolchain does not.)
+#
+# We do NOT append CRC/length to the bins here — those live in the OTA
+# metadata page and are computed at switch time (see lt_ota_meta.*).
+#
+# firmware_a.bin is just the bank-A firmware.bin under the OTA-conventional
+# name (a later bench task consumes firmware_a.bin / firmware_b.bin).
+firmware_a_bin = "${BUILD_DIR}/firmware_a.bin"
+firmware_b_elf = "${BUILD_DIR}/firmware_b.elf"
+firmware_b_bin = "${BUILD_DIR}/firmware_b.bin"
+
+# Bank A: copy of the default (bank-A-linked) firmware.bin.
+target_fw_a_bin = env.Command(
+    firmware_a_bin,
+    firmware_bin,
+    env.VerboseAction("cp $SOURCE $TARGET", "Producing firmware_a.bin (bank A)"),
+)
+
+
+# Bank B: re-link the SAME objects at 0x100000. The object files are the
+# children of the bank-A ELF node; reuse the env's standard link command with
+# the defsym override prepended to LINKFLAGS. Resolved at action time so the
+# full (possibly framework-extended) object/lib list is captured.
+def _link_bank_b(target, source, env):
+    import subprocess
+
+    elf_node = env.File("${BUILD_DIR}/${PROGNAME}.elf")
+    objs = [str(c) for c in elf_node.children() if str(c).endswith(".o")]
+    out = str(target[0])
+    link = env.subst("$LINK")
+    # Drop the bank-A -Map flag: it carries the raw_firmware.map path (and the
+    # subst-then-split mangles its embedded value), and we don't want bank B to
+    # clobber the bank-A map. Re-point it at a bank-B map instead.
+    flags = [f for f in env.subst("$LINKFLAGS").split() if "-Wl,-Map=" not in f]
+    flags.append("-Wl,-Map=" + env.subst("${BUILD_DIR}/firmware_b.map"))
+    libdirs = env.subst("$_LIBDIRFLAGS").split()
+    libflags = env.subst("$_LIBFLAGS").split()
+    cmd = (
+        [link]
+        + flags
+        + [
+            "-Wl,--defsym=__flash_origin=0x100000",
+            "-Wl,--defsym=__flash_length=0x000F0000",
+        ]
+        + ["-o", out]
+        + objs
+        + libdirs
+        + libflags
+    )
+    return subprocess.call(cmd)
+
+
+target_fw_b_elf = env.Command(
+    firmware_b_elf,
+    "${BUILD_DIR}/${PROGNAME}.elf",
+    env.VerboseAction(_link_bank_b, "Linking firmware_b.elf (bank B @ 0x100000)"),
+)
+# The bank-B link consumes the SAME .ld (with the defsym override); declare the
+# dependency explicitly — same stale-relink rationale as the bank-A ELF above.
+env.Depends(
+    target_fw_b_elf,
+    join("$MISC_DIR", env.BoardConfig().get("build.ldscript")),
+)
+target_fw_b_bin = env.Command(
+    firmware_b_bin,
+    firmware_b_elf,
+    env.VerboseAction("$OBJCOPY -O binary $SOURCE $TARGET", "Producing firmware_b.bin"),
+)
+env.Depends(
+    "${BUILD_DIR}/firmware.uf2",
+    target_fw_a_bin + target_fw_b_elf + target_fw_b_bin,
+)
+
+# ----------------------------------------------------------------------------
+# MIT first-stage bootloader (OTA T5) @ flash 0x0, 32 KB.
+#
+# Built STANDALONE — a single arm-none-eabi-gcc compile+link invocation over a
+# handful of small C sources — NOT threaded through the app's SCons link env
+# (which carries FreeRTOS/Arduino/lwIP/mbedtls). The bootloader shares the SAME
+# OTA modules (lt_ota_meta.c / lt_crc32.c) as the app, so the on-flash metadata
+# format is byte-identical. -D__START=main routes the GSDK startup's
+# `bl __START` straight into the bootloader's main() after SystemInit + .data/.bss
+# init (no newlib _start / libc_init_array).
+# ----------------------------------------------------------------------------
+BOOTLOADER_DIR = join("$FAMILY_DIR", "bootloader")
+OTA_DIR = join("$FAMILY_DIR", "base", "ota")
+bootloader_elf = "${BUILD_DIR}/bootloader.elf"
+bootloader_bin = "${BUILD_DIR}/bootloader.bin"
+
+
+def _build_bootloader(target, source, env):
+    import subprocess
+
+    cc = env.subst("$CC")
+    objcopy = env.subst("$OBJCOPY")
+    out_elf = env.subst(bootloader_elf)
+    out_bin = str(target[0])
+    ld = env.subst(join(BOOTLOADER_DIR, "bootloader.ld"))
+
+    arch = [
+        "-mcpu=cortex-m4",
+        "-mthumb",
+        "-mfloat-abi=hard",
+        "-mfpu=fpv4-sp-d16",
+    ]
+    cflags = arch + [
+        "-Os",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "--specs=nano.specs",
+        "--specs=nosys.specs",
+    ]
+    defines = [
+        "-DEFM32GG11B820F2048GM64=1",
+        "-D__START=main",
+        # Run emlib MSC from RAM (see bootloader.ld .ram section): the bootloader
+        # rewrites the OTA metadata page on every trial boot, and the GG11 MSC
+        # write loop hangs if executed from flash.
+        "-DEM_MSC_RUN_FROM_RAM=1",
+    ]
+    incs = [
+        "-I" + env.subst(join(DEVICE_DIR, "Include")),
+        "-I" + env.subst(join(EMLIB_DIR, "inc")),
+        "-I" + env.subst(join(CMSIS_DIR, "Include")),
+        # emlib sources #include "sl_common.h"/"sl_assert.h" from platform/common.
+        "-I" + env.subst(join(COMMON_DIR, "inc")),
+        "-I" + env.subst(OTA_DIR),
+        "-I" + env.subst(join("$FAMILY_DIR", "base")),
+    ]
+    srcs = [
+        env.subst(join(BOOTLOADER_DIR, "main.c")),
+        env.subst(join(OTA_DIR, "lt_ota_meta.c")),
+        env.subst(join(OTA_DIR, "lt_crc32.c")),
+        env.subst(join(DEVICE_DIR, "Source", "system_efm32gg11b.c")),
+        env.subst(join(DEVICE_DIR, "Source", "GCC", "startup_efm32gg11b.S")),
+        env.subst(join(EMLIB_DIR, "src", "em_msc.c")),
+        env.subst(join(EMLIB_DIR, "src", "em_core.c")),
+        env.subst(join(EMLIB_DIR, "src", "em_system.c")),
+    ]
+    link = arch + ["-Wl,--gc-sections", "-T", ld]
+    cmd = [cc] + cflags + defines + incs + srcs + link + ["-o", out_elf]
+    rc = subprocess.call(cmd)
+    if rc != 0:
+        return rc
+    return subprocess.call([objcopy, "-O", "binary", out_elf, out_bin])
+
+
+target_bootloader_bin = env.Command(
+    bootloader_bin,
+    [
+        join(BOOTLOADER_DIR, "main.c"),
+        join(BOOTLOADER_DIR, "bootloader.ld"),
+        join(OTA_DIR, "lt_ota_meta.c"),
+        join(OTA_DIR, "lt_crc32.c"),
+    ],
+    env.VerboseAction(_build_bootloader, "Building bootloader.bin (MIT FSBL @ 0x0)"),
+)
+# Pull the bootloader into the default build graph alongside the bank artifacts.
+env.Depends("${BUILD_DIR}/firmware.uf2", target_bootloader_bin)
 
 
 # Override main.py's BuildUF2OTA for Phase 1: skip the ltchiptool UF2 packer
