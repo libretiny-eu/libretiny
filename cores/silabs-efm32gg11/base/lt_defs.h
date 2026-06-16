@@ -13,6 +13,10 @@
 #define LT_HAS_FREERTOS 1
 #define LT_HAS_LWIP		1
 #define LT_HAS_MBEDTLS	0
+// Arduino Update/OTA gate (cores/common Update.cpp). The dual-bank engine
+// (lt_ota_* + uf2ota + FAL + bootloader switch/rollback) is implemented and
+// bench-proven, so the standard Update.begin/write/end path is enabled.
+#define LT_HAS_OTA		1
 
 // __wrap_realloc strategy (common fixups/malloc.c): FreeRTOS heap_4 has no
 // realloc, so use the malloc+copy+free fallback. Same choice as beken-72xx.
