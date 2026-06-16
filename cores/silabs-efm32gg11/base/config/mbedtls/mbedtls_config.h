@@ -30,6 +30,7 @@
 
 // ---- Hashes + MAC ---------------------------------------------------------
 #define MBEDTLS_MD_C
+#define MBEDTLS_MD5_C // Arduino Update/OTA digest (LT_ARD_MD5_MBEDTLS=1); md5.c in builder
 #define MBEDTLS_SHA256_C
 #define MBEDTLS_SHA512_C // also provides SHA-384; needed for HMAC-SHA512
 

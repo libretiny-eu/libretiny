@@ -293,6 +293,7 @@ queue.AddLibrary(
         "+<library/bignum_core.c>",
         # hashes + MAC
         "+<library/md.c>",
+        "+<library/md5.c>", # Arduino Update/OTA digest (LT_ARD_MD5_MBEDTLS=1)
         "+<library/sha256.c>",
         "+<library/sha512.c>",
         # AES-CCM (CCM_C needs the cipher layer in mbedtls 3.x)
@@ -620,15 +621,50 @@ target_bootloader_bin = env.Command(
 env.Depends("${BUILD_DIR}/firmware.uf2", target_bootloader_bin)
 
 
-# Override main.py's BuildUF2OTA for Phase 1: skip the ltchiptool UF2 packer
-# (no SocInterface yet — see comment block above) and just copy firmware.bin to
-# firmware.uf2 so downstream Depends() resolves.
-def _phase1_uf2_stub(env, *args, **kwargs):
+# Override main.py's BuildUF2OTA: build the real dual-bank OTA artifact
+# (firmware.uf2) via ltchiptool's EFM32GG11 SocInterface (ota_type=DUAL).
+# DEVICE_DUAL_1 -> ota1 (bank A); DEVICE_DUAL_2 -> ota2 (bank B, carried as a
+# diff32 binpatch over bank A) so the single .uf2 stages onto whichever bank is
+# currently inactive.
+#
+# Deliberately NOT the generic env_uf2ota (builder/utils/ltchiptool-util.py):
+# that lists firmware.bin among the `uf2 write` --outputs, but `uf2 write`
+# always emits UF2-format bytes — which would clobber the raw bank-A image this
+# family flashes over SWD/commander. Here only firmware.uf2 is produced;
+# firmware.bin / firmware_a.bin stay raw. Inputs are the two bank binaries
+# already built above; firmware.uf2 Depends() on them (declared earlier).
+#
+# The EFM32GG11 SocInterface that `uf2 write` needs lives in ltchiptool; until a
+# release carrying it is installed, `uf2 write` raises NotImplementedError. To
+# avoid breaking the build on stock ltchiptool, fall back to the raw-image stub
+# (firmware.bin copy, as in Phase 1) — not OTA-applicable, but it keeps the
+# build green. With a SoC-enabled ltchiptool the real dual-bank UF2 is produced.
+def _efm32_uf2(env, *args, **kwargs):
     import shutil
+    from datetime import datetime
+    from os.path import basename, normpath
 
-    print("|-- firmware.uf2 (Phase 1 stub: copy of firmware.bin; proper UF2")
-    print("|   packaging deferred until ltchiptool SoC plugin lands)")
-    shutil.copy(env.subst(firmware_bin), env.subst("${BUILD_DIR}/firmware.uf2"))
+    platform = env.PioPlatform()
+    now = datetime.now()
+    fw_name = platform.custom("fw_name") or basename(normpath(env.subst("$PROJECT_DIR")))
+    fw_version = platform.custom("fw_version") or now.strftime("%y.%m.%d")
+
+    print("|-- firmware.uf2 (dual-bank OTA: ota1<-bank A, ota2<-bank B binpatch)")
+    cmd = [
+        "${LTCHIPTOOL} uf2 write",
+        '--output "${BUILD_DIR}/firmware.uf2"',
+        "--board ${BOARD}",
+        f"--lt-version {platform.version}",
+        f'--fw "{fw_name}:{fw_version}"',
+        f"--date {int(now.timestamp())}",
+        "--legacy",
+        f'"{firmware_a_bin},{firmware_b_bin}=device:ota1,ota2"',
+    ]
+    if env.Execute(" ".join(cmd)):
+        print("|-- ltchiptool uf2 write failed (EFM32GG11 SoC plugin missing?) —")
+        print("|   falling back to a raw firmware.bin copy. Update/OTA needs a")
+        print("|   ltchiptool build with the EFM32GG11 SocInterface.")
+        shutil.copy(env.subst(firmware_bin), env.subst("${BUILD_DIR}/firmware.uf2"))
 
 
 from SCons.Script import Builder  # noqa: E402
@@ -636,7 +672,7 @@ from SCons.Script import Builder  # noqa: E402
 env.Append(
     BUILDERS=dict(
         BuildUF2OTA=Builder(
-            action=[env.VerboseAction(_phase1_uf2_stub, "Phase 1: UF2 stub")]
+            action=[env.VerboseAction(_efm32_uf2, "Building dual-bank OTA UF2")]
         )
     )
 )
