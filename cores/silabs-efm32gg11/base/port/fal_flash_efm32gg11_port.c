@@ -95,18 +95,30 @@ static int write(long offset, const uint8_t *buf, size_t size) {
 }
 
 static int erase(long offset, size_t size) {
-	long start = offset & ~((long)FLASH_PAGE_SIZE - 1);
-	long end   = offset + (long)size;
-	for (long a = start; a < end; a += FLASH_PAGE_SIZE) {
+	long start	   = offset & ~((long)FLASH_PAGE_SIZE - 1);
+	long end	   = offset + (long)size;
+	// Round the erased extent UP to a full page: MSC_ErasePage clears whole 4 KB
+	// pages, so the region [start, end_pages) is actually blank afterwards.
+	long end_pages = (end + (long)FLASH_PAGE_SIZE - 1) & ~((long)FLASH_PAGE_SIZE - 1);
+	for (long a = start; a < end_pages; a += FLASH_PAGE_SIZE) {
 		if (MSC_ErasePage((uint32_t *)(uintptr_t)a) != mscReturnOk)
 			return -1;
 	}
 	for (int eb = 0; eb < LT_OTA_BANK_COUNT; eb++) {
 		long base = eb ? (long)LT_OTA_BANK_B_OFF : (long)LT_OTA_BANK_A_OFF;
-		if (start <= base && base < end)
+		if (start <= base && base < end_pages)
 			ota_hi[eb] = 0;
 	}
-	return (int)(end - start);
+	// Return bytes erased AT/AFTER the caller's offset, not from the page-aligned
+	// start. uf2ota records {erased_offset = offset, erased_length = <ret>} and
+	// then skips re-erasing any sub-block whose [offset, offset+len) falls inside
+	// that window. Returning (end - start) understates the window for a
+	// page-aligned offset (reports 256 B when the whole 4 KB page is blank),
+	// making every later block in the page trigger a re-erase that wipes the
+	// blocks already written. Match the other FAL ports: report the full erased
+	// span measured from offset. (OTA images are page-aligned, so this is
+	// ceil(size/page)*page.)
+	return (int)(end_pages - offset);
 }
 
 const struct fal_flash_dev flash0 = {
