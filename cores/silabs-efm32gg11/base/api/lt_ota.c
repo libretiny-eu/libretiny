@@ -118,13 +118,26 @@ bool lt_ota_switch(bool revert) {
 }
 
 void lt_ota_confirm(void) {
-	uint8_t cur	 = running_bank();
+	uint8_t cur = running_bank();
+	lt_ota_meta_t m;
+	// Idempotent + side-effect-free unless there is genuinely a pending TRIAL
+	// for the running bank to confirm. Confirm a 4 KB metadata-page erase+write
+	// (MSC) — a real cost that, on a live system, can stall the core long enough
+	// to disrupt the WF200 SDIO link. So bail out without touching flash when:
+	//   - metadata is blank/invalid (e.g. just after an SWD flash that erased
+	//     the meta region) — the bootloader already defaults to bank A, there is
+	//     no trial to confirm; OR
+	//   - the running bank is not in TRIAL state (already CONFIRMED, or not the
+	//     staged bank) — nothing to do.
+	// This makes lt_ota_confirm() safe to call unconditionally on every boot:
+	// it writes flash at most once, on the actual post-OTA trial boot.
+	if (!lt_ota_meta_load(&ota_flash_ops, &m))
+		return;
+	if (m.bank[cur].state != LT_OTA_BANK_TRIAL)
+		return;
 	uint32_t len = (uint32_t)_lt_image_size;
 	if (len == 0 || len > LT_OTA_BANK_LEN)
 		return;
-	lt_ota_meta_t m;
-	if (!lt_ota_meta_load(&ota_flash_ops, &m))
-		memset(&m, 0, sizeof(m));
 	m.bank[cur].length = len;
 	m.bank[cur].crc32  = bank_crc(cur, len);
 	m.bank[cur].state  = LT_OTA_BANK_CONFIRMED;
