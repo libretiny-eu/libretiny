@@ -45,7 +45,7 @@ void analogWrite(pin_size_t pin, int value) {
 	int idx = pwm_index(pin);
 	if (idx < 0) {
 		// Not PWM-capable: emulate with a digital level (reference-family behavior).
-		uint32_t half = 1u << (_analogWriteResolution - 1);
+		uint32_t half = (_analogWriteResolution > 0) ? (1u << (_analogWriteResolution - 1)) : 1u;
 		pinMode(pin, OUTPUT);
 		digitalWrite(pin, ((uint32_t)value >= half) ? HIGH : LOW);
 		return;
@@ -65,13 +65,13 @@ void analogWrite(pin_size_t pin, int value) {
 		ccInit.mode					= timerCCModePWM;
 		TIMER_InitCC(p->timer, p->cc, &ccInit);
 
+		TIMER_TopSet(p->timer, cfg.top);
+		TIMER_CompareSet(p->timer, p->cc, cfg.compare); // arm values before routing the pin
+
 		// Route CCx -> pin. CCxLOC fields are 8 bits apart; ROUTEPEN bit = cc.
 		p->timer->ROUTELOC0 =
 			(p->timer->ROUTELOC0 & ~(0xFFu << (8u * p->cc))) | ((uint32_t)p->loc << (8u * p->cc));
 		p->timer->ROUTEPEN |= (1u << p->cc);
-
-		TIMER_TopSet(p->timer, cfg.top);
-		TIMER_CompareSet(p->timer, p->cc, cfg.compare); // initial (timer not running yet)
 
 		TIMER_Init_TypeDef tInit = TIMER_INIT_DEFAULT;
 		tInit.prescale			 = (TIMER_Prescale_TypeDef)__builtin_ctz(cfg.prescale_div);
