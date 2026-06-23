@@ -11,6 +11,7 @@
 #include <Arduino.h>
 
 void pinMode(pin_size_t pin, PinMode mode) {
+	ltPwmDetach(pin); // reclaim the pin if it was under PWM
 	GPIO_Mode_TypeDef gm;
 	uint32_t out = 0U;
 	switch (mode) {
@@ -39,6 +40,7 @@ void pinMode(pin_size_t pin, PinMode mode) {
 }
 
 void digitalWrite(pin_size_t pin, PinStatus value) {
+	ltPwmDetach(pin); // reclaim the pin if it was under PWM
 	if (value == HIGH) {
 		GPIO_PinOutSet(pin_port(pin), pin_index(pin));
 	} else {
