@@ -1,0 +1,10 @@
+{
+	"flash": {
+		"tuya_kv": "0x1C5000+0x4000"
+	},
+	"doc": {
+		"params": {
+			"layout": "TuyaOpen LN882H default: KV partition starts at 0x001C5000 and size is 16 KB / 0x4000"
+		}
+	}
+}
