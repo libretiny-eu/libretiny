@@ -9,7 +9,14 @@
 // Runtime gate. Written from the app thread (ltWifiStatusLedEnable), read from
 // every ltWifiStatusLed() call site. Single-byte access is atomic on Cortex-M4,
 // so no lock is needed; volatile keeps the read at each call site.
-static volatile bool s_enabled = true;
+// Compile-time default is enabled (upstream behavior). An application that owns the RGB LED
+// itself (e.g. the OpenEVSE-lite EVSE-state indicator) can default this OFF with
+// -D LT_WIFI_STATUS_LED_DEFAULT=0, so the WiFi ladder never touches the LED at all — not even
+// during boot/WiFi-connect, before the app's runtime ltWifiStatusLedEnable(false) would run.
+#ifndef LT_WIFI_STATUS_LED_DEFAULT
+#define LT_WIFI_STATUS_LED_DEFAULT 1
+#endif
+static volatile bool s_enabled = LT_WIFI_STATUS_LED_DEFAULT;
 static bool inited			   = false;
 
 void ltWifiStatusLedEnable(bool enabled) {
