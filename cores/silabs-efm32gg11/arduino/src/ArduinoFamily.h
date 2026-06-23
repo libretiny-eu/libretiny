@@ -20,3 +20,15 @@ static inline GPIO_Port_TypeDef pin_port(uint32_t pin) {
 static inline uint32_t pin_index(uint32_t pin) {
 	return pin & 0xFu;
 }
+
+/* PWM teardown hook (wiring_analog.c): if `pin` is currently driven by a TIMER
+ * CC channel, disable its route so the pin reverts to plain GPIO. Returns true
+ * if it was PWM. Called by wiring_digital.c on pinMode()/digitalWrite(). */
+#include <api/Common.h> // pin_size_t — needed here because .c files include ArduinoFamily.h before Arduino.h
+#ifdef __cplusplus
+extern "C" {
+#endif
+bool ltPwmDetach(pin_size_t pin);
+#ifdef __cplusplus
+}
+#endif
