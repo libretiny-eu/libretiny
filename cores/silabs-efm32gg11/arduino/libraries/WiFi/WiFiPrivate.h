@@ -6,6 +6,7 @@
 #include "WiFiStatusLed.h"
 
 extern "C" {
+#include "lt_wifi_reconnect.h"
 #include "sl_wfx_host_conf.h"
 #include "wf200_netif.h"
 

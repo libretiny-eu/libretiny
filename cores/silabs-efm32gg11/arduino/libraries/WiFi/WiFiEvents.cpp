@@ -12,14 +12,20 @@ static TaskHandle_t s_eventTask;
 // app's call via begin()'s return. Driven from the event task's idle tick, so
 // the rejoin runs off the app thread and is non-blocking: it fires one join
 // command and lets the normal CONNECT->GOT_IP ladder update staStatus.
+//
+// All the policy (when to join, back off, demote a dead link) lives in the pure
+// lt_wifi_rc_decide() (base/wifi/lt_wifi_reconnect.c), which is host-unit-tested.
+// This file is the thin wrapper: it keeps the timers, runs the link-health
+// probe, and performs the hardware action the decision returns.
 static volatile bool s_autoReconnect = true; // ESP32 parity: default ON
 static volatile bool s_armed		 = false;
 static uint32_t s_lastJoinMs		 = 0; // 0 = no attempt since arm/disarm
 static uint32_t s_backoffMs			 = 0; // ramps 2s -> 30s so a vanished AP isn't hammered
+static uint32_t s_lastProbeMs		 = 0; // last link-health probe (CONNECTED only)
+static uint32_t s_healthBadMs		 = 0; // running time the probe has reported bad while CONNECTED
 
 #define LT_WIFI_RECONNECT_POLL_MS 1000u // event-task idle wake to run the tick
-#define LT_WIFI_RECONNECT_MIN_MS  2000u
-#define LT_WIFI_RECONNECT_MAX_MS  30000u
+#define LT_WIFI_HEALTH_PROBE_MS	  5000u // link-health probe cadence (gentler than the tick)
 
 void ltWifiSetAutoReconnect(bool enable) {
 	s_autoReconnect = enable;
@@ -30,35 +36,59 @@ bool ltWifiGetAutoReconnect() {
 }
 
 void ltWifiReconnectArm() {
-	s_armed		 = true;
-	s_backoffMs	 = 0;
-	s_lastJoinMs = 0;
+	s_armed		  = true;
+	s_backoffMs	  = 0;
+	s_lastJoinMs  = 0;
+	s_healthBadMs = 0;
+	s_lastProbeMs = 0;
 }
 
 void ltWifiReconnectDisarm() {
-	s_armed		 = false;
-	s_backoffMs	 = 0;
-	s_lastJoinMs = 0;
+	s_armed		  = false;
+	s_backoffMs	  = 0;
+	s_lastJoinMs  = 0;
+	s_healthBadMs = 0;
+	s_lastProbeMs = 0;
 }
 
-void ltWifiReconnectTick() {
-	if (!pWiFi || !s_autoReconnect || !s_armed)
+// Cheap firmware liveness query. NOTE (bench-validate): this treats a failed
+// signal-strength command as a dead link. If the WF200 keeps returning OK with
+// a stale RCPI after the AP vanishes, swap this probe for an active reachability
+// check (e.g. a gateway ARP) — lt_wifi_rc_decide() is probe-agnostic and the
+// host tests stay valid, only this function changes.
+static bool ltWifiLinkHealthy() {
+	uint32_t rcpi = 0;
+	WIFI_CMD_TAKE(pDATA);
+	sl_status_t s = sl_wfx_get_signal_strength(&rcpi);
+	WIFI_CMD_GIVE(pDATA);
+	return s == SL_STATUS_OK;
+}
+
+// Maintain s_healthBadMs: while CONNECTED, probe at LT_WIFI_HEALTH_PROBE_MS
+// cadence and accrue the elapsed interval for each consecutive bad result;
+// reset on a good result or whenever we are not CONNECTED.
+static void ltWifiUpdateHealth(uint32_t now) {
+	if (pDATA->staStatus != WL_CONNECTED) {
+		s_healthBadMs = 0;
+		s_lastProbeMs = now ? now : 1;
 		return;
-	// Retryable = a link that went down. WL_DISCONNECTED is included because an
-	// *intentional* teardown disarms (s_armed=false) before setting it, so an
-	// armed WL_DISCONNECTED is the DHCP-lease-lost case, not a user disconnect.
-	// WL_IDLE_STATUS (join in flight) and WL_CONNECTED are left alone.
-	WiFiStatus st = pDATA->staStatus;
-	if (st != WL_CONNECTION_LOST && st != WL_CONNECT_FAILED && st != WL_DISCONNECTED)
+	}
+	if (s_lastProbeMs != 0 && (now - s_lastProbeMs) < LT_WIFI_HEALTH_PROBE_MS)
 		return;
-	if (!pDATA->sta.ssid)
-		return;
-	uint32_t now = millis();
-	if (s_lastJoinMs != 0 && (now - s_lastJoinMs) < s_backoffMs)
-		return;
+	uint32_t interval = s_lastProbeMs ? (now - s_lastProbeMs) : 0;
+	s_lastProbeMs	  = now ? now : 1;
+	if (ltWifiLinkHealthy())
+		s_healthBadMs = 0;
+	else
+		s_healthBadMs += interval;
+}
+
+// Fire one (re)join command. Non-blocking: leaves staStatus in WL_IDLE_STATUS
+// and lets the normal CONNECT->GOT_IP ladder finish it (or the join-timeout in
+// lt_wifi_rc_decide() abandon it).
+static void ltWifiFireRejoin(uint32_t now) {
 	s_lastJoinMs = now ? now : 1; // keep 0 reserved as the "no attempt yet" sentinel
-	s_backoffMs	 = s_backoffMs ? (s_backoffMs < LT_WIFI_RECONNECT_MAX_MS ? s_backoffMs * 2 : LT_WIFI_RECONNECT_MAX_MS)
-								   : LT_WIFI_RECONNECT_MIN_MS;
+	s_backoffMs	 = lt_wifi_rc_next_backoff(s_backoffMs);
 
 	WiFiNetworkInfo &info			= pDATA->sta;
 	sl_wfx_security_mode_t security = info.password ? WFM_SECURITY_MODE_WPA2_PSK : WFM_SECURITY_MODE_OPEN;
@@ -83,6 +113,50 @@ void ltWifiReconnectTick() {
 	if (s != SL_STATUS_OK) {
 		LT_EM(WIFI, "auto-reconnect join cmd failed: 0x%08lX", (unsigned long)s);
 		pDATA->staStatus = WL_CONNECTION_LOST; // stay retryable for the next tick
+	}
+}
+
+// Synthesize a disconnect for a link the firmware never told us was gone (a
+// silently-dead CONNECTED link, or a rejoin stuck in WL_IDLE_STATUS). Clears the
+// firmware association so the next tick's join starts clean, then drops to the
+// retry path. Mirrors reconnect()'s timeout teardown.
+static void ltWifiDemoteLink() {
+	LT_IM(WIFI, "auto-reconnect: link down with no indication — forcing retry");
+	WIFI_CMD_TAKE(pDATA);
+	sl_wfx_send_disconnect_command();
+	WIFI_CMD_GIVE(pDATA);
+	lt_wf200_netif_set_link(false);
+	pDATA->staStatus = WL_CONNECTION_LOST;
+	s_healthBadMs	 = 0;
+	ltWifiStatusLed(LT_WIFI_LED_IDLE);
+}
+
+void ltWifiReconnectTick() {
+	if (!pWiFi)
+		return;
+	uint32_t now = millis();
+	ltWifiUpdateHealth(now);
+
+	lt_wifi_rc_input_t in = {
+		.enabled	   = s_autoReconnect,
+		.armed		   = s_armed,
+		.have_ssid	   = pDATA->sta.ssid != NULL,
+		.status		   = (int)pDATA->staStatus,
+		.now_ms		   = now,
+		.last_join_ms  = s_lastJoinMs,
+		.backoff_ms	   = s_backoffMs,
+		.health_bad_ms = s_healthBadMs,
+	};
+	switch (lt_wifi_rc_decide(&in)) {
+		case LT_WIFI_RC_ACTION_JOIN:
+			ltWifiFireRejoin(now);
+			break;
+		case LT_WIFI_RC_ACTION_DEMOTE:
+			ltWifiDemoteLink(); // next tick fires the join
+			break;
+		case LT_WIFI_RC_ACTION_NONE:
+		default:
+			break;
 	}
 }
 
