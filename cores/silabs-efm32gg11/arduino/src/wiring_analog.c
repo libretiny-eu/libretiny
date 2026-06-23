@@ -25,12 +25,26 @@ typedef struct {
 	uint8_t timer_bits;		   // 16 (TIMER2) or 32 (WTIMER)
 } lt_pwm_pin_t;
 
+// INVARIANT: every row in pwm_pins[] MUST have cc in {0, 1, 2}.
+// The routing code at lines 72-74 assumes:
+//  - CCxLOC fields are 8 bits apart: (loc << 8*cc)
+//  - ROUTEPEN bit index equals cc: (1u << cc)
+// A row with cc > 2 will mis-route the pin at runtime.
+// When adding a row, verify that cc is in range 0..2.
 static const lt_pwm_pin_t pwm_pins[] = {
 	{PIN_PB5, WTIMER0, cmuClock_WTIMER0, 2, 6, 32}, // red   (WTIMER0_CC2 LOC6)
 	{PIN_PB6, TIMER2, cmuClock_TIMER2, 0, 4, 16},	// green (TIMER2_CC0  LOC4)
 	{PIN_PD8, WTIMER1, cmuClock_WTIMER1, 2, 2, 32}, // blue  (WTIMER1_CC2 LOC2)
 };
 #define LT_PWM_NPINS (sizeof(pwm_pins) / sizeof(pwm_pins[0]))
+
+// Compile-time assertion: cc values must be in range 0..2.
+// When table size grows, add a literal per-row cc check: /* row N */ <cc_value> <= 2u
+_Static_assert(LT_PWM_NPINS == 3, "update cc-range asserts when PWM table size changes");
+_Static_assert(
+	/* row 0 */ 2u <= 2u && /* row 1 */ 0u <= 2u && /* row 2 */ 2u <= 2u,
+	"PWM table: all cc values must be 0..2 (ROUTEPEN bit index and CCxLOC field offset)"
+);
 
 static bool pwm_inited[LT_PWM_NPINS];
 
