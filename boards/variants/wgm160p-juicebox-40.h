@@ -33,7 +33,7 @@
 #define PINS_COUNT         7    // Arduino-named pins exposed on the JuiceBox host
 #define NUM_DIGITAL_PINS   7    // Digital inputs/outputs
 #define NUM_ANALOG_INPUTS  0    // ADC inputs (none mapped in Phase 1)
-#define NUM_ANALOG_OUTPUTS 0    // PWM & DAC outputs (none in Phase 1)
+#define NUM_ANALOG_OUTPUTS 3    // PWM on the 3 RGB LED pins (PB5/PB6/PD8) via analogWrite
 #define PINS_GPIO_MAX      0x5B // Last usable encoded GPIO number (PF11, ATmega RESET)
 
 // Serial ports
