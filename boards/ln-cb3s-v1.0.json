@@ -2,6 +2,7 @@
 	"_base": [
 		"lightning-ln882x",
 		"lightning-ln882hki",
+		"lightning-ln882hki-tuya",
 		"ic/ln882hk",
 		"pcb/ln-cb3s-v1.0"
 	],

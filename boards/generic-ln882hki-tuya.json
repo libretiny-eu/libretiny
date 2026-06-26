@@ -1,0 +1,16 @@
+{
+	"_base": [
+		"generic",
+		"lightning-ln882x",
+		"lightning-ln882hki",
+		"lightning-ln882hki-tuya",
+		"ic/ln882hk"
+	],
+	"build": {
+		"mcu": "ln882hk",
+		"variant": "generic-ln882hki-tuya"
+	},
+	"name": "Generic - LN882HKI (Tuya)",
+	"symbol": "LN882HKI_TUYA",
+	"vendor": "Tuya"
+}
