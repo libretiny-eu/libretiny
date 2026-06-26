@@ -166,5 +166,20 @@
 			"+<port/realtek>",
 			"+<port/realtek/freertos>"
 		]
+	},
+	"wfx-fmac-driver": {
+		"package": "library-wfx-fmac-driver",
+		"sources": [
+			"+<wfx_fmac_driver/sl_wfx.c>",
+			"+<wfx_fmac_driver/bus/sl_wfx_bus.c>",
+			"+<wfx_fmac_driver/bus/sl_wfx_bus_sdio.c>",
+			"+<wfx_fmac_driver/secure_link/sl_wfx_secure_link.c>"
+		],
+		"includes": [
+			"+<wfx_fmac_driver>",
+			"+<wfx_fmac_driver/bus>",
+			"+<wfx_fmac_driver/firmware>",
+			"+<wfx_fmac_driver/secure_link>"
+		]
 	}
 }

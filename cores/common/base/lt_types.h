@@ -8,16 +8,17 @@
 #define CPU_MODEL_ENUM(family, chip_id) (lt_cpu_model_t) CPU_MODEL(family, chip_id)
 
 typedef enum {
-	F_RTL8710A = 0x9FFFD543, // Realtek Ameba1
-	F_RTL8710B = 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
-	F_RTL8720C = 0xE08F7564, // Realtek AmebaZ2
-	F_RTL8720D = 0x3379CFE2, // Realtek AmebaD
-	F_BK7231Q  = 0xAFE81D49, // Beken 7231Q
-	F_BK7231T  = 0x675A40B0, // Beken 7231T
-	F_BK7231N  = 0x7B3EF230, // Beken 7231N
-	F_BK7251   = 0x6A82CC42, // Beken 7251/7252
-	F_BL60X	   = 0xDE1270B7, // Boufallo 602
-	F_LN882H   = 0xA38090A8, // Lightning LN882H
+	F_RTL8710A	= 0x9FFFD543, // Realtek Ameba1
+	F_RTL8710B	= 0x22E0D6FC, // Realtek AmebaZ (realtek-ambz)
+	F_RTL8720C	= 0xE08F7564, // Realtek AmebaZ2
+	F_RTL8720D	= 0x3379CFE2, // Realtek AmebaD
+	F_BK7231Q	= 0xAFE81D49, // Beken 7231Q
+	F_BK7231T	= 0x675A40B0, // Beken 7231T
+	F_BK7231N	= 0x7B3EF230, // Beken 7231N
+	F_BK7251	= 0x6A82CC42, // Beken 7251/7252
+	F_BL60X		= 0xDE1270B7, // Boufallo 602
+	F_LN882H	= 0xA38090A8, // Lightning LN882H
+	F_EFM32GG11 = 0xEF326611, // Silicon Labs EFM32 Giant Gecko 11
 } lt_cpu_family_t;
 
 typedef enum {
@@ -52,4 +53,11 @@ typedef enum {
 	LN882HF = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN24
 	LN882HK = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN32
 	LN882HC = CPU_MODEL(F_LN882H, 0x00), // TODO / QFN40
+	// Silicon Labs EFM32GG11
+	// Board build.mcu is "efm32gg11" -> upper-cased to MCU=EFM32GG11; common
+	// lt_cpu_get_model() returns MCU cast to lt_cpu_model_t, so the bare
+	// uppercase token must exist as an enum entry. EFM32GG11B is a hint name
+	// for the family chip; Phase 1 has no per-part DEVINFO read yet.
+	EFM32GG11  = CPU_MODEL(F_EFM32GG11, 0x00), // TODO: read DEVINFO chip ID
+	EFM32GG11B = EFM32GG11,
 } lt_cpu_model_t;

@@ -13,6 +13,33 @@
 // no such thing in FreeRTOS, but present on most vendor SDKs
 extern void *LT_REALLOC_FUNC(void *pv, size_t xWantedSize);
 
+#if LT_REMALLOC
+// malloc+copy+free realloc fallback for SDKs without a native realloc.
+// realloc(ptr, 0) must NOT reach pvPortMalloc(): heap_4 returns NULL for a
+// 0-byte request and (with configUSE_MALLOC_FAILED_HOOK) fires the
+// malloc-failed hook on ANY NULL return — on ports whose hook resets the SoC,
+// a perfectly legal shrink-to-zero (e.g. Mongoose's mbuf_trim of an emptied
+// buffer) becomes a reboot loop. Free and return NULL instead (C99
+// implementation-defined, matches glibc). Also skip the copy when ptr is NULL
+// (realloc-as-malloc): memcpy from NULL reads whatever sits at address 0.
+static void *lt_remalloc(void *ptr, size_t new_size) {
+	void *nptr;
+	if (new_size == 0) {
+		vPortFree(ptr);
+		return NULL;
+	}
+	nptr = pvPortMalloc(new_size);
+	if (nptr) {
+		if (ptr)
+			// NOTE: the old block size isn't known here; copying new_size
+			// bytes over-reads the old block on grow (pre-existing behavior).
+			memcpy(nptr, ptr, new_size);
+		vPortFree(ptr);
+	}
+	return nptr;
+}
+#endif
+
 void *__wrap_malloc(size_t size) {
 	return pvPortMalloc(size);
 }
@@ -29,12 +56,7 @@ void *__wrap_calloc(size_t num, size_t size) {
 
 void *__wrap_realloc(void *ptr, size_t new_size) {
 #if LT_REMALLOC
-	void *nptr = pvPortMalloc(new_size);
-	if (nptr) {
-		memcpy(nptr, ptr, new_size);
-		vPortFree(ptr);
-	}
-	return nptr;
+	return lt_remalloc(ptr, new_size);
 #else
 	return LT_REALLOC_FUNC(ptr, new_size);
 #endif
@@ -62,12 +84,7 @@ void *__wrap__calloc_r(void *reent, size_t num, size_t size) {
 
 void *__wrap__realloc_r(void *reent, void *ptr, size_t new_size) {
 #if LT_REMALLOC
-	void *nptr = pvPortMalloc(new_size);
-	if (nptr) {
-		memcpy(nptr, ptr, new_size);
-		vPortFree(ptr);
-	}
-	return nptr;
+	return lt_remalloc(ptr, new_size);
 #else
 	return LT_REALLOC_FUNC(ptr, new_size);
 #endif
