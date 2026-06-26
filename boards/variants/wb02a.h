@@ -83,16 +83,16 @@
 // Arduino pin names
 // -----------------
 #define PIN_D0  7u  // PA_7
-#define PIN_D1  5u  // PA_5
+#define PIN_D1  6u  // PA_6
 #define PIN_D2  3u  // PA_3
 #define PIN_D3  10u // PA_10
 #define PIN_D4  2u  // PA_2
 #define PIN_D5  1u  // PA_1
 #define PIN_D6  4u  // PA_4
-#define PIN_D7  9u  // PA_9
-#define PIN_D8  24u // PB_8
-#define PIN_D9  25u // PB_9
-#define PIN_D10 6u  // PA_6
+#define PIN_D7  5u  // PA_5
+#define PIN_D8  9u  // PA_9
+#define PIN_D9  24u // PB_8
+#define PIN_D10 25u // PB_9
 #define PIN_A0  1u  // PA_1
 #define PIN_A1  4u  // PA_4
 
