@@ -1,0 +1,22 @@
+{
+	"build": {
+		"bkboot_version": "2.0.0-t1",
+		"bkota": {
+			"format": "diff2ya"
+		}
+	},
+	"flash": {
+		"app": "0x11000+0x11B000",
+		"download": "0x12C000+0xB5000",
+		"diff2ya": "0x1E1000+0x1000",
+		"calibration": "0x1E3000+0x1000",
+		"kvs": "0x1E4000+0x8000",
+		"userdata": "0x1EC000+0x14000",
+		"tuya": "0x1F5000+0xB000"
+	},
+	"doc": {
+		"params": {
+			"layout": "**Tuya default** for T1/BK7238 (dynamic OTA, RF 0x1E3000)"
+		}
+	}
+}

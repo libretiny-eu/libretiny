@@ -1,0 +1,29 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TTX2": "t1-m.back.u2_txd.anchor"
+		},
+		"back": [
+			{
+				"type": "rect",
+				"pos": "4.2,2.7",
+				"size": "1.7,1.7",
+				"preset": "copper1"
+			},
+			{
+				"id": "u2_txd",
+				"name": "label_line_down",
+				"pos": "6.85,1.9",
+				"vars": {
+					"DIR": "left",
+					"W": 2.5,
+					"H": 1.5
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "6.85,1.1"
+			}
+		]
+	}
+}
