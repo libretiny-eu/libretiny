@@ -16,7 +16,7 @@ void lt_rand_bytes(uint8_t *buf, size_t len) {
 }
 
 void hexdump(const uint8_t *buf, size_t len, uint32_t offset, uint8_t width) {
-	uint16_t pos = 0;
+	uint32_t pos = 0;
 	while (pos < len) {
 		// print hex offset
 		printf("%06lx ", offset + pos);
