@@ -31,11 +31,11 @@ void lt_init_family() {
 
 	cm_backtrace_init("LibreTiny - LN882H", "HW_V1.0", "SW_V1.0");
 
-	if (NVDS_ERR_OK != ln_nvds_init(FLASH_NVDS_OFFSET)) {
+	if (NVDS_ERR_OK != ln_nvds_init(FLASH_LN_NVDS_OFFSET)) {
 		LT_E("NVDS init failed!");
 	}
 
-	if (KV_ERR_NONE != ln_kv_port_init(FLASH_KV_OFFSET, (FLASH_KV_OFFSET + FLASH_KV_LENGTH))) {
+	if (KV_ERR_NONE != ln_kv_port_init(FLASH_LN_KV_OFFSET, (FLASH_LN_KV_OFFSET + FLASH_LN_KV_LENGTH))) {
 		LT_E("KV init failed!");
 	}
 

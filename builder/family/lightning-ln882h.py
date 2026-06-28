@@ -245,10 +245,10 @@ queue.BuildLibraries()
 
 # Main firmware outputs and actions
 # fmt: off
-image_ota      = "${BUILD_DIR}/image_ota.${FLASH_OTA_OFFSET}.bin"
-image_part_tab = "${BUILD_DIR}/image_part_tab.${FLASH_PART_TAB_OFFSET}.bin"
-image_boot     = "${BUILD_DIR}/image_boot.${FLASH_BOOT_OFFSET}.bin"
-image_app      = "${BUILD_DIR}/image_app.${FLASH_APP_OFFSET}.bin"
+image_ota        = "${BUILD_DIR}/image_ota.${FLASH_OTA_OFFSET}.bin"
+image_part_table = "${BUILD_DIR}/image_part_table.${FLASH_PART_TABLE_OFFSET}.bin"
+image_boot       = "${BUILD_DIR}/image_boot.${FLASH_BOOT_OFFSET}.bin"
+image_app        = "${BUILD_DIR}/image_app.${FLASH_APP_OFFSET}.bin"
 # fmt: on
 env.Replace(
     # linker command
@@ -259,7 +259,7 @@ env.Replace(
         f"{image_ota}=device:ota",
         # binary image for flasher
         f"{image_boot}=flasher:boot",
-        f"{image_part_tab}=flasher:part_tab",
+        f"{image_part_table}=flasher:part_table",
         f"{image_app}=flasher:app",
     ],
 )

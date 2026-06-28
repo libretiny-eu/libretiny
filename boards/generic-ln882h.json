@@ -1,17 +1,16 @@
 {
 	"_base": [
 		"generic",
-		"lightning-ln882x",
-		"lightning-ln882hki",
+		"lightning-ln882h",
 		"ic/ln882hk"
 	],
 	"build": {
 		"mcu": "ln882hk",
-		"variant": "generic-ln882hki"
+		"variant": "generic-ln882h"
 	},
-	"name": "Generic - LN882HKI",
-	"symbol": "LN882HKI",
-	"url": "https://docs.libretiny.eu/boards/generic-ln882hki/",
+	"name": "Generic - LN882H",
+	"symbol": "LN882H",
+	"url": "https://docs.libretiny.eu/boards/generic-ln882h/",
 	"vendor": "Generic",
 	"pcb": {
 		"pinout": {

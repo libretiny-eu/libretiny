@@ -1,11 +1,24 @@
 {
 	"build": {
+		"family": "LN882H",
 		"f_cpu": "160000000L",
-		"prefix": "arm-none-eabi-"
+		"prefix": "arm-none-eabi-",
+		"ldscript": "ln882hki_bsp.ld",
+		"bootfile": "boot_ln882h.bin"
 	},
-	"flash": {},
+	"flash": {
+		"boot": "0x000000+0x6000",
+		"part_table": "0x006000+0x1000",
+		"app": "0x007000+0x12C000",
+		"ota": "0x133000+0xAA000",
+		"ln_nvds": "0x1DD000+0x3000",
+		"ln_kv": "0x1E0000+0x4000",
+		"kvs": "0x1E4000+0x8000",
+		"userdata": "0x1EC000+0x14000"
+	},
 	"connectivity": [
-		"wifi"
+		"wifi",
+		"ble"
 	],
 	"debug": {
 		"protocol": "openocd",
@@ -18,7 +31,9 @@
 		]
 	},
 	"upload": {
+		"maximum_size": 1228800,
 		"maximum_ram_size": 302080,
+		"flash_size": 2097152,
 		"require_upload_port": true,
 		"speed": 115200,
 		"protocol": "uart",
@@ -32,8 +47,10 @@
 			"series": "LN882X",
 			"voltage": "3.0V - 3.6V",
 			"extra": {
-				"Wi-Fi": "802.11 b/g/n"
-			}
+				"Wi-Fi": "802.11 b/g/n",
+				"Bluetooth": "BLE v5.1"
+			},
+			"layout": "**SDK default** (OTA 0x133000, KV 0x1E0000)"
 		},
 		"flashing": {
 			"links": {
