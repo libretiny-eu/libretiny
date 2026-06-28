@@ -29,6 +29,7 @@ a[href="../../../../../SUMMARY/"]
 {
 	height: 8px;
 	pointer-events: none;
+	opacity: 0;
 }
 
 /* reduce padding in table cells */
