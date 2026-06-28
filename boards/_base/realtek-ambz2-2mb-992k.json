@@ -10,7 +10,7 @@
 	},
 	"doc": {
 		"params": {
-			"layout": "**Realtek/OEM** (2x 992k apps)"
+			"layout": "**SDK default** for CF (2x 992k apps)"
 		}
 	}
 }

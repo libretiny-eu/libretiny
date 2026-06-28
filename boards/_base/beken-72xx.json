@@ -50,7 +50,7 @@
 			"extra": {
 				"Wi-Fi": "802.11 b/g/n"
 			},
-			"layout": "**Beken default** (OTA 0x132000, RF 0x1E0000)",
+			"layout": "**SDK default** (OTA 0x132000, RF 0x1E0000)",
 			"keys": "*-- no encryption --*"
 		},
 		"flashing": {

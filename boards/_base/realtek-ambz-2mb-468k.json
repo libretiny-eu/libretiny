@@ -14,7 +14,7 @@
 	},
 	"doc": {
 		"params": {
-			"layout": "**Realtek/OEM** (2x 468k apps)"
+			"layout": "**SDK default** for BN (2x 468k apps)"
 		}
 	}
 }
