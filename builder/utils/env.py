@@ -138,7 +138,6 @@ def env_parse_custom_options(env: Environment, platform: PlatformBase):
     headers = {
         "lwip": "lwipopts.h",
         "freertos": "FreeRTOSConfig.h",
-        "proj_config": "proj_config.h",
     }
     for header, options in list(opts.items()):
         if not isinstance(options, str):
