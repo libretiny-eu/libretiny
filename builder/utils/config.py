@@ -54,8 +54,13 @@ def env_load_config(env: Environment, path: str):
         if not line.startswith("#define"):
             continue
         line = line[7:].strip(STRIP_CHARS)
-        key, value = line.split(None, 2)
-        value = value.strip(STRIP_CHARS)
+        parts = line.split(None, 2)
+        if len(parts) == 2:
+            key, value = parts
+            value = value.strip(STRIP_CHARS)
+        else:
+            key = parts[0]
+            value = "1"
         if value.isnumeric():
             value = int(value, 0)
         elif value.startswith('"') and value.endswith('"'):
