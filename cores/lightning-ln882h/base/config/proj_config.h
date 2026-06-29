@@ -52,11 +52,7 @@
 #define SOC_CRP_FLAG		  0
 
 /*
- * BLE support.
- * All LN882H variants have integrated BLE hardware.  Set to 1 to include the
- * BLE SDK; leave at 0 for WiFi-only builds.
- * Guard allows custom_options.proj_config to override this via -D on the
- * command line without triggering a redefinition warning.
+ * LibreTiny-specific: set to 1 to compile the BLE library.
  */
 #ifndef CFG_SUPPORT_BLE
 #define CFG_SUPPORT_BLE 0
