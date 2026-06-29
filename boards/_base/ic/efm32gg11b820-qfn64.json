@@ -1,0 +1,6 @@
+{
+	"build": {
+		"ic": "efm32gg11b820f2048gm64",
+		"package": "QFN64"
+	}
+}
