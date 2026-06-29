@@ -250,6 +250,7 @@ image_ota        = "${BUILD_DIR}/image_ota.${FLASH_OTA_OFFSET}.bin"
 image_part_table = "${BUILD_DIR}/image_part_table.${FLASH_PART_TABLE_OFFSET}.bin"
 image_boot       = "${BUILD_DIR}/image_boot.${FLASH_BOOT_OFFSET}.bin"
 image_app        = "${BUILD_DIR}/image_app.${FLASH_APP_OFFSET}.bin"
+image_ln_nvds    = "${BUILD_DIR}/image_ln_nvds.${FLASH_LN_NVDS_OFFSET}.bin"
 # fmt: on
 env.Replace(
     # linker command
@@ -258,6 +259,11 @@ env.Replace(
     UF2OTA=[
         # ota binary image for device
         f"{image_ota}=device:ota",
+        # flash partition table if OTA succeeds (to update offsets for bootloader)
+        # NOTE: only SDK bootloader is currently supported in LibreTiny
+        f"{image_part_table}=device:part_table",
+        # also flash an updated NVDS, to indicate that OTA succeeded
+        f"{image_ln_nvds}=device:ln_nvds",
         # binary image for flasher
         f"{image_boot}=flasher:boot",
         f"{image_part_table}=flasher:part_table",
