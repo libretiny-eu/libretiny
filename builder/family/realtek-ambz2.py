@@ -202,6 +202,9 @@ queue.AddLibrary(
             "-Wno-return-type",
             "-Wno-unused-variable",
         ],
+        LINKFLAGS=[
+            "-nostartfiles",
+        ]
     ),
 )
 
@@ -297,7 +300,7 @@ queue.AddLibrary(
     ],
     includes=[
         "+<.>",
-        "+<board/amebaz2/lib>",
+        "+<board/amebaz2/lib/GCC>",
         "+<board/amebaz2/src/data_uart>",
         "+<board/amebaz2/src/hci>",
         "+<board/amebaz2/src/os>",
@@ -386,7 +389,7 @@ queue.AppendPublic(
         # fmt: off
         join(COMPONENT_DIR, "soc", "realtek", "8710c", "misc", "bsp", "lib", "common", "GCC"),
         join(COMPONENT_DIR, "soc", "realtek", "8710c", "fwlib", "lib", "lib"),
-        join(COMPONENT_DIR, "common", "bluetooth", "realtek", "sdk", "board", "amebaz2", "lib"),
+        join(COMPONENT_DIR, "common", "bluetooth", "realtek", "sdk", "board", "amebaz2", "lib", "GCC"),
         join(COMPONENT_DIR, "soc", "realtek", "8710c", "misc", "bsp", "ROM"),
         # fmt: on
     ],
@@ -396,7 +399,6 @@ queue.AppendPublic(
         "_http",
         "_dct",
         "_eap",
-        "_p2p",
         "_websocket",
         "_wps",
         "m",
