@@ -1,7 +1,6 @@
 {
 	"_base": [
 		"lightning-ln882h",
-		"lightning-ln882h-tuya",
 		"ic/ln882hk",
 		"pcb/ln-02",
 		"pcb/ln-02-test"
