@@ -11,6 +11,9 @@ board: PlatformBoardConfig = env.BoardConfig()
 queue = env.AddLibraryQueue("lightning-ln882h")
 env.ConfigureFamily()
 
+# Load proj_config.h into env
+env.LoadConfig(join("$FAMILY_DIR", "base", "config", "proj_config.h"))
+
 # Flags
 queue.AppendPublic(
     CCFLAGS=[
@@ -180,6 +183,84 @@ queue.AddLibrary(
         CFLAGS=["-w"],
     ),
 )
+
+# Sources - BLE SDK
+if env.Cfg("CFG_SUPPORT_BLE", "proj_config.h"):
+    queue.AddLibrary(
+        name="ln882h_ble",
+        base_dir=join("$SDK_DIR", "components", "ble"),
+        srcs=[
+            "+<ble_lib_import/ble_port.c>",
+            "+<ble_arch/ble_arch_main.c>",
+            "+<ble_profiles/prf_common/prf_ble.c>",
+            "+<ble_profiles/prf_common/prf_utils.c>",
+            "+<ble_app/ble_store/ln_ble_app_kv.c>",
+            "+<ble_app/ble_event/ln_ble_event_manager.c>",
+            "+<ble_app/ble_gap/gap_misc/ln_ble_gap.c>",
+            "+<ble_app/ble_gap/gap_misc/ln_ble_gap_ind_handler.c>",
+            "+<ble_app/ble_gap/gap_scan/ln_ble_scan.c>",
+            "+<ble_app/ble_gap/gap_advertising/*.c>",
+            "+<ble_app/ble_gatt/gatt_common/ln_ble_gatt.c>",
+            "+<ble_app/ble_gatt/gatt_common/ln_ble_gatt_ind_handler.c>",
+            "+<ble_app/ble_connection_manager/ln_ble_connection_manager.c>",
+            "+<ble_app/ble_device_manager/*.c>",
+            "+<ble_app/ble_smp/ln_ble_smp.c>",
+            "+<ble_app/ble_import/ln_ble_rw_app_task.c>",
+        ],
+        includes=[
+            # base_dir itself so that #include "ble_arch/arch.h" resolves correctly
+            "+<.>",
+            "+<ble_arch>",
+            "+<ble_lib_import>",
+            "+<ble_profiles/prf_common>",
+            "+<ble_app/ble_common>",
+            "+<ble_app/ble_connection_manager>",
+            "+<ble_app/ble_device_manager>",
+            "+<ble_app/ble_event>",
+            "+<ble_app/ble_gap/gap_advertising>",
+            "+<ble_app/ble_gap/gap_misc>",
+            "+<ble_app/ble_gap/gap_scan>",
+            "+<ble_app/ble_gatt/gatt_client>",
+            "+<ble_app/ble_gatt/gatt_common>",
+            "+<ble_app/ble_gatt/gatt_server>",
+            "+<ble_app/ble_import>",
+            "+<ble_app/ble_smp>",
+            "+<ble_app/ble_store>",
+            "+<ble_app/ble_test>",
+            "+<mac/ble/hl/api>",
+            "+<mac/ble/hl/inc>",
+            "+<mac/ble/ll/api>",
+            "+<mac/ble/ll/import>",
+            "+<mac/ble/ll/src>",
+            "+<mac/ble/ll/src/llm>",
+            "+<mac/em/api>",
+            "+<mac/hci/api>",
+            "+<mac/sch/api>",
+            "+<mac/sch/import>",
+            "+<modules/aes/api>",
+            "+<modules/common/api>",
+            "+<modules/dbg/api>",
+            "+<modules/ecc_p256/api>",
+            "+<modules/h4tl/api>",
+            "+<modules/ke/api>",
+            "+<modules/lib_ver/api>",
+            "+<modules/nvds/api>",
+            "+<modules/rf/api>",
+            "+<modules/rwip/api>",
+        ],
+        options=dict(
+            CPPDEFINES=["LN882H_SDK", "CFG_SUPPORT_BLE=1"],
+            CFLAGS=["-w"],
+        ),
+    )
+    queue.AppendPublic(
+        CPPDEFINES=["CFG_SUPPORT_BLE=1"],
+        LINKFLAGS=[
+            "-Wl,--whole-archive",
+            "-lln882h_ble_full_stack",
+            "-Wl,--no-whole-archive",
+        ],
+    )
 
 
 # Sources - FreeRTOS

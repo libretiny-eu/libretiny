@@ -52,6 +52,13 @@
 #define SOC_CRP_FLAG		  0
 
 /*
+ * LibreTiny-specific: set to 1 to compile the BLE library.
+ */
+#ifndef CFG_SUPPORT_BLE
+#define CFG_SUPPORT_BLE 0
+#endif
+
+/*
  * Hardware config
  */
 #define CFG_UART0_TX_BUF_SIZE 256

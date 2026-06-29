@@ -2,6 +2,7 @@
 
 from os.path import isfile
 
+from platformio.platform.base import PlatformBase
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
@@ -53,8 +54,13 @@ def env_load_config(env: Environment, path: str):
         if not line.startswith("#define"):
             continue
         line = line[7:].strip(STRIP_CHARS)
-        key, value = line.split(None, 2)
-        value = value.strip(STRIP_CHARS)
+        parts = line.split(None, 2)
+        if len(parts) == 2:
+            key, value = parts
+            value = value.strip(STRIP_CHARS)
+        else:
+            key = parts[0]
+            value = "1"
         if value.isnumeric():
             value = int(value, 0)
         elif value.startswith('"') and value.endswith('"'):
@@ -69,7 +75,19 @@ def env_load_config(env: Environment, path: str):
     f.close()
 
 
-def env_get_config(env: Environment, key: str):
+def env_get_config(env: Environment, key: str, header: str = None):
+    if header:
+        # read from custom options first, if 'header' specified
+        header = header.replace(".", "#")
+        platform: PlatformBase = env.PioPlatform()
+        opts: dict = platform.custom_opts.get("options", {})
+        custom_opts: dict = opts.get(header, {})
+        if key in custom_opts:
+            value = custom_opts[key]
+            if isinstance(value, str) and value.isnumeric():
+                value = int(value, 0)
+            return value
+
     config: dict = env["CONFIG"]
     if not config:
         return None
