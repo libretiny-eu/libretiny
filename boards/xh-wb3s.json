@@ -1,0 +1,18 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7238",
+		"ic/bk7238-qfn32",
+		"pcb/xh-wb3s"
+	],
+	"build": {
+		"mcu": "bk7238",
+		"variant": "xh-wb3s"
+	},
+	"name": "NiceMCU XH-WB3S",
+	"url": "https://github.com/Sparkleiot",
+	"vendor": "SparkleIoT",
+	"pcb": {
+		"symbol": "XH-WB3S"
+	}
+}

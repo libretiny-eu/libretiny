@@ -32,41 +32,60 @@ static UINT32 timer_cal_init(void) {
 	fclk = BK_TICKS_TO_MS(fclk_get_tick());
 
 	cal_tick_save.fclk_tick = fclk;
-	cal_tick_save.tmp1		= 0;
+#if CFG_LOW_VOLTAGE_PS && (CFG_SOC_NAME == SOC_BK7252N)
+	cal_tick_save.time_us = rtc_reg_get_time_us();
+#elif CFG_LOW_VOLTAGE_PS
+	cal_tick_save.time_us = cal_get_time_us();
+#else
+	cal_tick_save.tmp1 = 0;
+#endif
 	return 0;
 }
 
 extern int increase_tick;
 
 static UINT32 timer_cal_tick(void) {
-	UINT32 fclk, tmp2;
 	UINT32 machw = 0;
 	INT32 lost;
-	GLOBAL_INT_DECLARATION();
 
+	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 
-	fclk = BK_TICKS_TO_MS(fclk_get_tick());
+#if CFG_LOW_VOLTAGE_PS
+	UINT64 delta_fclk = fclk_get_tick() - cal_tick_save.fclk_tick;
+#if (CFG_SOC_NAME == SOC_BK7252N)
+	UINT64 delta_time = rtc_reg_get_time_us() - cal_tick_save.time_us;
+#else
+	UINT64 delta_time = cal_get_time_us() - cal_tick_save.time_us;
+#endif
+	lost = (INT32)(delta_time / 1000 - BK_TICKS_TO_MS(delta_fclk));
+#else
+	UINT32 fclk = BK_TICKS_TO_MS(fclk_get_tick());
 	cal_tick_save.tmp1 += ONE_CAL_TIME;
-
-	tmp2 = fclk;
-
-	lost = (INT32)(cal_tick_save.tmp1 - (UINT32)tmp2);
+	UINT32 tmp2 = fclk;
+	lost		= (INT32)(cal_tick_save.tmp1 - (UINT32)tmp2);
+#endif
 
 	if ((lost >= (2 * FCLK_DURATION_MS))) {
 		lost -= FCLK_DURATION_MS;
 		fclk_update_tick(BK_MS_TO_TICKS(lost));
+#if !CFG_LOW_VOLTAGE_PS
 		increase_tick = 0;
+#endif
 	} else {
 		if (lost <= (-(2 * FCLK_DURATION_MS))) {
 			if (lost < (-50000)) {
 				os_printf("m reset:%x %x\r\n", lost, machw);
 			}
+#if !CFG_LOW_VOLTAGE_PS
 			increase_tick = lost + FCLK_DURATION_MS;
+#endif
 		}
 	}
 
+#if !CFG_LOW_VOLTAGE_PS
 	mcu_ps_machw_init();
+#endif
 	GLOBAL_INT_RESTORE();
 	return 0;
 }
@@ -104,20 +123,32 @@ static void cal_timer_deset(void) {
 	timer_cal_init();
 }
 
+void fclk_cal_tick(void) {
+	timer_cal_tick();
+}
+
 UINT32 bk_cal_init(UINT32 setting) {
 	GLOBAL_INT_DECLARATION();
 	GLOBAL_INT_DISABLE();
 
 	if (1 == setting) {
-		cal_timer_deset();
 		use_cal_net = 1;
+#if !CFG_LOW_VOLTAGE_PS
+		cal_timer_deset();
 		mcu_ps_machw_init();
+#else
+		timer_cal_init();
+#endif
 		os_printf("decset:%d %d %d %d\r\n", use_cal_net, fclk_get_tick(), fclk_get_second(), xTaskGetTickCount());
 	} else {
+		use_cal_net = 0;
+#if !CFG_LOW_VOLTAGE_PS
 		mcu_ps_machw_cal();
 		cal_timer_set();
-		use_cal_net = 0;
 		mcu_ps_machw_reset();
+#else
+		timer_cal_init();
+#endif
 		os_printf("cset:%d %d %d %d\r\n", use_cal_net, fclk_get_tick(), fclk_get_second(), xTaskGetTickCount());
 	}
 	GLOBAL_INT_RESTORE();

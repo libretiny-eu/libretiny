@@ -87,7 +87,7 @@ void sctrl_enter_rtos_deep_sleep_fix(PS_DEEP_CTRL_PARAM *deep_param)
     REG_WRITE(SCTRL_GPIO_WAKEUP_EN,0x0);  //sys_ctrl : 0x48;
     REG_WRITE(SCTRL_GPIO_WAKEUP_INT_STATUS,0xFFFFFFFF);  //sys_ctrl : 0x4a;
 
-#if (CFG_SOC_NAME != SOC_BK7231N)
+#if (CFG_SOC_NAME != SOC_BK7231N) && (CFG_SOC_NAME != SOC_BK7238)
     /*	disable gpio32~39*/
     REG_WRITE(SCTRL_GPIO_WAKEUP_EN1,0x0);  //sys_ctrl : 0x51;
     REG_WRITE(SCTRL_GPIO_WAKEUP_INT_STATUS1,0xFF);  //sys_ctrl : 0x53;
@@ -235,7 +235,7 @@ void sctrl_enter_rtos_deep_sleep_fix(PS_DEEP_CTRL_PARAM *deep_param)
         }
     }
 
-#if ((CFG_SOC_NAME != SOC_BK7231N) && (CFG_SOC_NAME != SOC_BK7236))
+#if ((CFG_SOC_NAME != SOC_BK7231N) && (CFG_SOC_NAME != SOC_BK7236) && (CFG_SOC_NAME != SOC_BK7238))
     if ((deep_param->wake_up_way & PS_DEEP_WAKEUP_GPIO))
     {
         for (i = 0; i < BITS_INT; i++)
@@ -338,7 +338,7 @@ void sctrl_enter_rtos_deep_sleep_fix(PS_DEEP_CTRL_PARAM *deep_param)
         reg = deep_param->gpio_last_index_map;
         REG_WRITE(SCTRL_GPIO_WAKEUP_EN1,reg);
     }
-#elif ((CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236))
+#elif ((CFG_SOC_NAME == SOC_BK7231N) || (CFG_SOC_NAME == SOC_BK7236) || (CFG_SOC_NAME == SOC_BK7238))
     if(( deep_param->wake_up_way & PS_DEEP_WAKEUP_GPIO ))
     {
         for ( i = 0; i < BITS_INT; i++ )
@@ -394,7 +394,7 @@ void sctrl_enter_rtos_deep_sleep_fix(PS_DEEP_CTRL_PARAM *deep_param)
     }
 #endif
 
-#if (CFG_SOC_NAME != SOC_BK7231N)
+#if (CFG_SOC_NAME != SOC_BK7231N) && (CFG_SOC_NAME != SOC_BK7238) && (CFG_SOC_NAME != SOC_BK7252N)
     REG_WRITE(SCTRL_USB_PLUG_WAKEUP,USB_PLUG_IN_INT_BIT|USB_PLUG_OUT_INT_BIT);
     if(deep_param->wake_up_way & PS_DEEP_WAKEUP_USB)
     {
@@ -420,6 +420,13 @@ void sctrl_enter_rtos_deep_sleep_fix(PS_DEEP_CTRL_PARAM *deep_param)
     BK_DEEP_SLEEP_PRT("SCTRL_GPIO_WAKEUP_TYPE1=0x%08X\r\n", REG_READ(SCTRL_GPIO_WAKEUP_TYPE1));
     BK_DEEP_SLEEP_PRT("SCTRL_GPIO_WAKEUP_EN1=0x%08X\r\n", REG_READ(SCTRL_GPIO_WAKEUP_EN1));
 #endif
+
+    /* center bias power down*/
+    #if (CFG_SOC_NAME == SOC_BK7238) || (CFG_SOC_NAME == SOC_BK7252N)
+    reg = sctrl_analog_get(SCTRL_ANALOG_CTRL2);
+    reg &= (~CENTRAL_BAIS_ENABLE_BIT);
+    sctrl_analog_set(SCTRL_ANALOG_CTRL2, reg);
+    #endif
 
     /* enter deep_sleep mode */
     reg = REG_READ(SCTRL_SLEEP);
