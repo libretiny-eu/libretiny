@@ -1,0 +1,21 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-tuya",
+		"realtek-ambz-2mb-788k",
+		"realtek-ambz-bx",
+		"ic/rtl8710bn",
+		"pcb/wr2l-base",
+		"pcb/wr2le"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "wr2le"
+	},
+	"name": "WR2LE Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wr2le?id=K9eio9y9e8i8c",
+	"vendor": "Tuya Inc.",
+	"pcb": {
+		"symbol": "WR2LE"
+	}
+}

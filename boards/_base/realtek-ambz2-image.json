@@ -1,0 +1,96 @@
+{
+	"image": {
+		"keys": {
+			"decryption": "a0d6dae7e062ca94cbb294bf896b9f68cf8438774256ac7403ca4fd9a1c9564f",
+			"keyblock": {
+				"part_table": "882aa16c8c44a7760aa8c9ab22e3568c6fa16c2afa4f0cea29a10abcdf60e44f",
+				"boot": "882aa16c8c44a7760aa8c9ab22e3568c6fa16c2afa4f0cea29a10abcdf60e44f"
+			},
+			"hash_keys": {
+				"part_table": "47e5661335a4c5e0a94d69f3c737d54f2383791332939753ef24279608f6d72b",
+				"boot": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+				"ota1": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e5f",
+				"ota2": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e5f"
+			},
+			"user_keys": {
+				"boot": "aa0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+				"ota1": "bb0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+				"ota2": "bb0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+			},
+			"xip_sce_key": "a0d6dae7e062ca94cbb294bf896b9f68",
+			"xip_sce_iv": "94879487948794879487948794879487"
+		},
+		"ptable": {
+			"boot": "BOOT",
+			"ota1": "FW1",
+			"ota2": "FW2"
+		},
+		"boot": {
+			"name": "boot.sram",
+			"type": "SRAM",
+			"entry": "__ram_start_table_start__",
+			"elf": [
+				".ram.func.table",
+				".data",
+				".ram.code_text",
+				".ram.code_rodata"
+			],
+			"is_boot": true
+		},
+		"fw": [
+			{
+				"type": "FWHS_S",
+				"sections": [
+					{
+						"name": "fwhs.sram",
+						"type": "SRAM",
+						"entry": "__ram_start_table_start__",
+						"elf": [
+							".ram.img.signature",
+							".ram.func.table",
+							".data",
+							".ram.code_text",
+							".ram.code_rodata"
+						]
+					},
+					{
+						"name": "fwhs.psram",
+						"type": "PSRAM",
+						"entry": "__psram_start__",
+						"elf": [
+							".psram.data",
+							".psram.code_text",
+							".psram.code_rodata"
+						]
+					}
+				]
+			},
+			{
+				"type": "XIP",
+				"sections": [
+					{
+						"name": "fwhs.xip_c",
+						"entry": "XIP_RamImgSignature_s",
+						"type": "XIP",
+						"elf": [
+							".xip.code_c"
+						]
+					}
+				]
+			},
+			{
+				"type": "XIP",
+				"sections": [
+					{
+						"name": "fwhs.xip_p",
+						"entry": "__xip_code_rodata_start__",
+						"type": "XIP",
+						"elf": [
+							".xip.code_p"
+						]
+					}
+				]
+			}
+		]
+	}
+}

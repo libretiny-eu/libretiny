@@ -1,0 +1,30 @@
+{
+	"_base": [
+		"realtek-ambz2",
+		"realtek-ambz2-8720",
+		"realtek-ambz2-tuya",
+		"realtek-ambz2-image",
+		"realtek-ambz2-2mb-896k",
+		"ic/rtl8720cf",
+		"pcb/wbr1",
+		"pcb/wbr1-test"
+	],
+	"build": {
+		"mcu": "rtl8720cf",
+		"variant": "wbr1"
+	},
+	"name": "WBR1 Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wbr1-module-datasheet?id=K9duisiao4qpa",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WBR1",
+		"extra": [
+			"# Flashing notes (download mode)",
+			"To enter the download mode it's required to use the strapping pin PA00. However, on the WBR1 that pin is on the bottom side of the PCB.",
+			"This means it is usually **not** possible to flash this module (via UART) without desoldering it."
+		]
+	},
+	"pcb": {
+		"symbol": "WBR1"
+	}
+}

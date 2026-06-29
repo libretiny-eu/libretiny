@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7238",
+		"beken-7238-tuya",
+		"ic/bk7238-qfn32",
+		"pcb/t1-3s"
+	],
+	"build": {
+		"mcu": "bk7238",
+		"variant": "t1-3s"
+	},
+	"name": "T1-3S Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/T1-3S-Module-Datasheet?id=Keesax53r0r2d",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-T1-3S"
+	},
+	"pcb": {
+		"symbol": "T1-3S"
+	}
+}

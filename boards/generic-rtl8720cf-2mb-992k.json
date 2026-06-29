@@ -1,0 +1,102 @@
+{
+	"_base": [
+		"generic",
+		"realtek-ambz2",
+		"realtek-ambz2-8720",
+		"realtek-ambz2-image",
+		"realtek-ambz2-2mb-992k",
+		"ic/rtl8720cf"
+	],
+	"build": {
+		"mcu": "rtl8720cf",
+		"variant": "generic-rtl8720cf-2mb-992k"
+	},
+	"name": "Generic - RTL8720CF (2M/992k)",
+	"symbol": "RTL8720CF (2M/992k)",
+	"url": "https://docs.libretiny.eu/boards/generic-rtl8720cf-2mb-992k/",
+	"vendor": "Generic",
+	"pcb": {
+		"pinout": {
+			"1": {
+				"IC": 15,
+				"ARD": "D0"
+			},
+			"2": {
+				"IC": 16,
+				"ARD": "D1"
+			},
+			"3": {
+				"IC": 18,
+				"ARD": "D2"
+			},
+			"4": {
+				"IC": 19,
+				"ARD": "D3"
+			},
+			"5": {
+				"IC": 20,
+				"ARD": "D4"
+			},
+			"6": {
+				"IC": 21,
+				"ARD": "D5"
+			},
+			"7": {
+				"IC": 22,
+				"ARD": "D6"
+			},
+			"8": {
+				"IC": 23,
+				"ARD": "D7"
+			},
+			"9": {
+				"IC": 24,
+				"ARD": "D8"
+			},
+			"10": {
+				"IC": 25,
+				"ARD": "D9"
+			},
+			"11": {
+				"IC": 26,
+				"ARD": "D10"
+			},
+			"12": {
+				"IC": 33,
+				"ARD": "D11"
+			},
+			"13": {
+				"IC": 34,
+				"ARD": "D12"
+			},
+			"14": {
+				"IC": 36,
+				"ARD": "D13"
+			},
+			"15": {
+				"IC": 37,
+				"ARD": "D14"
+			},
+			"16": {
+				"IC": 38,
+				"ARD": "D15"
+			},
+			"17": {
+				"IC": 39,
+				"ARD": "D16"
+			},
+			"18": {
+				"IC": 40,
+				"ARD": "D17"
+			},
+			"19": {
+				"IC": 1,
+				"ARD": "D18"
+			},
+			"20": {
+				"IC": 3,
+				"ARD": "D19"
+			}
+		}
+	}
+}

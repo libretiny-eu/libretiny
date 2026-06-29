@@ -1,0 +1,24 @@
+{
+	"_base": [
+		"realtek-ambz2",
+		"realtek-ambz2-8720",
+		"realtek-ambz2-tuya-4mb",
+		"realtek-ambz2-image",
+		"realtek-ambz2-4mb-1712k",
+		"ic/rtl8720cf",
+		"pcb/cr3l"
+	],
+	"build": {
+		"mcu": "rtl8720cm",
+		"variant": "cr3l"
+	},
+	"name": "CR3L Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/cr3l-module-datasheet?id=Ka3gl6ria8f1t",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CR3L"
+	},
+	"pcb": {
+		"symbol": "CR3L"
+	}
+}

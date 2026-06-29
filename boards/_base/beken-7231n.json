@@ -1,0 +1,20 @@
+{
+	"build": {
+		"family": "BK7231N",
+		"ldscript": "bk7231n_bsp.ld",
+		"bkboot_version": "1.0.1-bk7231n"
+	},
+	"upload": {
+		"speed": 460800
+	},
+	"connectivity": [
+		"ble"
+	],
+	"doc": {
+		"params": {
+			"extra": {
+				"Bluetooth": "BLE v5.1"
+			}
+		}
+	}
+}

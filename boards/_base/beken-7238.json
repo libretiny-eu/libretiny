@@ -1,0 +1,20 @@
+{
+	"build": {
+		"family": "BK7238",
+		"ldscript": "bk7238_bsp.ld",
+		"bkboot_version": "1.0.14-bk7238"
+	},
+	"upload": {
+		"speed": 460800
+	},
+	"connectivity": [
+		"ble"
+	],
+	"doc": {
+		"params": {
+			"extra": {
+				"Bluetooth": "BLE v5.2"
+			}
+		}
+	}
+}

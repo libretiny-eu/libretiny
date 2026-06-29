@@ -1,0 +1,142 @@
+{
+	"name": "99iot-21p",
+	"title": "99iot 21-pin modules",
+	"width": 18,
+	"height": 22,
+	"vars": {
+		"PINTYPE_VERT": "pin_vert_cast_nohole",
+		"PINTYPE_HORZ": "pin_horz_cast_nohole",
+		"RASTER": 1.2,
+		"RF_W": 18,
+		"RF_H": 3.9
+	},
+	"front": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "18,22",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "1.105,7",
+			"size": "15.79,14.58",
+			"preset": "shield"
+		},
+		{
+			"comment": "Pins (1-3)",
+			"id": "left_t",
+			"name": "r_pins_vert",
+			"repeat": 3,
+			"pos": "0,3.9",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (3-10)",
+			"id": "left_b",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,12.8",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (10-20)",
+			"id": "right_b",
+			"name": "r_pins_vert",
+			"repeat": 10,
+			"pos": "18,9.2",
+			"vars": {
+				"PINDIR": "right"
+			}
+		},
+		{
+			"comment": "Pin 21",
+			"id": "right_t",
+			"name": "r_pins_vert",
+			"repeat": 1,
+			"pos": "18,7",
+			"vars": {
+				"PINDIR": "right"
+			}
+		}
+	],
+	"back": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "18,22",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Pins (1-3)",
+			"id": "left_t",
+			"name": "r_pins_vert",
+			"repeat": 3,
+			"pos": "0,3.9",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (3-10)",
+			"id": "left_b",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,12.8",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (10-20)",
+			"id": "right_b",
+			"name": "r_pins_vert",
+			"repeat": 10,
+			"pos": "18,9.2",
+			"vars": {
+				"PINDIR": "right"
+			}
+		},
+		{
+			"comment": "Pin 21",
+			"id": "right_t",
+			"name": "r_pins_vert",
+			"repeat": 1,
+			"pos": "18,7",
+			"vars": {
+				"PINDIR": "right"
+			}
+		}
+	],
+	"pads": {
+		"1": "99iot-21p.front.left_t.pin1",
+		"2": "99iot-21p.front.left_t.pin2",
+		"3": "99iot-21p.front.left_t.pin3",
+		"4": "99iot-21p.front.left_b.pin1",
+		"5": "99iot-21p.front.left_b.pin2",
+		"6": "99iot-21p.front.left_b.pin3",
+		"7": "99iot-21p.front.left_b.pin4",
+		"8": "99iot-21p.front.left_b.pin5",
+		"9": "99iot-21p.front.left_b.pin6",
+		"10": "99iot-21p.front.left_b.pin7",
+		"11": "99iot-21p.front.right_b.pin10",
+		"12": "99iot-21p.front.right_b.pin9",
+		"13": "99iot-21p.front.right_b.pin8",
+		"14": "99iot-21p.front.right_b.pin7",
+		"15": "99iot-21p.front.right_b.pin6",
+		"16": "99iot-21p.front.right_b.pin5",
+		"17": "99iot-21p.front.right_b.pin4",
+		"18": "99iot-21p.front.right_b.pin3",
+		"19": "99iot-21p.front.right_b.pin2",
+		"20": "99iot-21p.front.right_b.pin1",
+		"21": "99iot-21p.front.right_t.pin1"
+	},
+	"test_pads": {}
+}

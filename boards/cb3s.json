@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231n",
+		"beken-7231n-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/cb3s"
+	],
+	"build": {
+		"mcu": "bk7231n",
+		"variant": "cb3s"
+	},
+	"name": "CB3S Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/cb3s?id=Kai94mec0s076",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB3S"
+	},
+	"pcb": {
+		"symbol": "CB3S"
+	}
+}

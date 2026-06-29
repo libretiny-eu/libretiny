@@ -1,0 +1,255 @@
+{
+	"name": "tuyalc5",
+	"title": "Tuya boards; LC5 series",
+	"width": 15.8,
+	"height": 20.3,
+	"vars": {
+		"RASTER": 2
+	},
+	"front": [
+		{
+			"type": "rect",
+			"pos": "0,0",
+			"size": "8.5,12.7",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Middle cut background",
+			"type": "rect",
+			"pos": "4,10.3",
+			"size": "2.5,2.4",
+			"fill": {
+				"color": "white"
+			}
+		},
+		{
+			"comment": "Middle cut stroke top",
+			"type": "rect",
+			"pos": "3.9,10.2",
+			"size": "2.7,0.1",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Middle cut stroke left",
+			"type": "rect",
+			"pos": "3.9,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Middle cut stroke right",
+			"type": "rect",
+			"pos": "6.5,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Right cut background",
+			"type": "rect",
+			"pos": "7.7,10.3",
+			"size": "0.8,2.4",
+			"fill": {
+				"color": "white"
+			}
+		},
+		{
+			"comment": "Right cut stroke top",
+			"type": "rect",
+			"pos": "7.6,10.2",
+			"size": "0.9,0.1",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Right cut stroke left",
+			"type": "rect",
+			"pos": "7.6,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Pins (1-2)",
+			"id": "left",
+			"name": "r_pins_horz",
+			"repeat": 2,
+			"pos": "1.26,11.58",
+			"vars": {
+				"PINTYPE_HORZ": "pad",
+				"PINDIR": "down",
+				"RASTER": 2,
+				"W": 1,
+				"H": 2,
+				"R": 0.3
+			}
+		},
+		{
+			"comment": "Pins (3)",
+			"name": "pad",
+			"pos": "7.13,11.58",
+			"vars": {
+				"W": 1,
+				"H": 2,
+				"R": 0.3
+			}
+		},
+		{
+			"comment": "Pin label (1)",
+			"id": "pin1",
+			"name": "label_line_down",
+			"pos": "1.26,12.7",
+			"vars": {
+				"DIR": "left",
+				"W": 0,
+				"H": 2
+			}
+		},
+		{
+			"comment": "Pin label (2)",
+			"id": "pin2",
+			"name": "label_line_down",
+			"pos": "3.26,12.7",
+			"vars": {
+				"DIR": "left",
+				"W": 2,
+				"H": 4
+			}
+		},
+		{
+			"comment": "Pin label (3)",
+			"id": "pin3",
+			"name": "label_line_down",
+			"pos": "7.13,12.7",
+			"vars": {
+				"DIR": "left",
+				"W": 5.87,
+				"H": 6
+			}
+		}
+	],
+	"back": [
+		{
+			"type": "rect",
+			"pos": "0,0",
+			"size": "8.5,12.7",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Middle cut background",
+			"type": "rect",
+			"pos": "8.5-4-2.5,10.3",
+			"size": "2.5,2.4",
+			"fill": {
+				"color": "white"
+			}
+		},
+		{
+			"comment": "Middle cut stroke top",
+			"type": "rect",
+			"pos": "8.5-3.9-2.7,10.2",
+			"size": "2.7,0.1",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Middle cut stroke left",
+			"type": "rect",
+			"pos": "8.5-3.9-0.1,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Middle cut stroke right",
+			"type": "rect",
+			"pos": "8.5-6.5-0.1,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Right cut background",
+			"type": "rect",
+			"pos": "8.5-7.7-0.8,10.3",
+			"size": "0.8,2.4",
+			"fill": {
+				"color": "white"
+			}
+		},
+		{
+			"comment": "Right cut stroke top",
+			"type": "rect",
+			"pos": "8.5-7.6-0.9,10.2",
+			"size": "0.9,0.1",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Right cut stroke left",
+			"type": "rect",
+			"pos": "8.5-7.6-0.1,10.3",
+			"size": "0.1,2.4",
+			"preset": "pcb_stroke"
+		},
+		{
+			"comment": "Pins (1-2)",
+			"id": "left",
+			"name": "r_pins_horz",
+			"repeat": 2,
+			"pos": "8.5-1.26-2,11.58",
+			"vars": {
+				"PINTYPE_HORZ": "pad",
+				"PINDIR": "down",
+				"RASTER": 2,
+				"W": 1,
+				"H": 2,
+				"R": 0.3
+			}
+		},
+		{
+			"comment": "Pins (3)",
+			"name": "pad",
+			"pos": "8.5-7.13,11.58",
+			"vars": {
+				"W": 1,
+				"H": 2,
+				"R": 0.3
+			}
+		},
+		{
+			"comment": "Pin label (1)",
+			"id": "pin1",
+			"name": "label_line_down",
+			"pos": "8.5-1.26,12.7",
+			"vars": {
+				"DIR": "right",
+				"W": 0,
+				"H": 2
+			}
+		},
+		{
+			"comment": "Pin label (2)",
+			"id": "pin2",
+			"name": "label_line_down",
+			"pos": "8.5-3.26,12.7",
+			"vars": {
+				"DIR": "right",
+				"W": 2,
+				"H": 4
+			}
+		},
+		{
+			"comment": "Pin label (3)",
+			"id": "pin3",
+			"name": "label_line_down",
+			"pos": "8.5-7.13,12.7",
+			"vars": {
+				"DIR": "right",
+				"W": 5.87,
+				"H": 6
+			}
+		}
+	],
+	"pads": {
+		"1": "tuyalc5.front.pin1.anchor",
+		"2": "tuyalc5.back.pin1.anchor",
+		"3": "tuyalc5.front.pin2.anchor",
+		"4": "tuyalc5.back.pin2.anchor",
+		"5": "tuyalc5.front.pin3.anchor",
+		"6": "tuyalc5.back.pin3.anchor"
+	}
+}

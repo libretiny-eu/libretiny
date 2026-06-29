@@ -1,0 +1,24 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-1mb-468k",
+		"realtek-ambz-bx",
+		"ic/rtl8710bn",
+		"pcb/afw121t"
+	],
+	"build": {
+		"mcu": "rtl8710bx",
+		"variant": "afw121t"
+	},
+	"name": "AFW121T",
+	"url": "https://item.szlcsc.com/357903.html?fromZone=l_b__%2522brand%2522",
+	"vendor": "99iot(Shenzhen)co.,ltd",
+	"pcb": {
+		"symbol": "AFW121T"
+	},
+	"doc": {
+		"links": {
+			"Vendor datasheet": "https://item.szlcsc.com/datasheet/AFW121TI-AY1LED1/357903.html"
+		}
+	}
+}

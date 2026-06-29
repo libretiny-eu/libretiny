@@ -1,0 +1,132 @@
+site_name: RBCX Docs Test
+theme:
+  name: material
+
+#use_directory_urls: True
+use_directory_urls: False
+
+plugins:
+    - mkdoxy:
+        projects:
+            esp:
+                src-dirs: src-esp
+                full-doc: True
+                doxy-cfg:
+                    FILE_PATTERNS: "*.cpp *.h*"
+                    EXAMPLE_PATH: examples
+                    RECURSIVE: True
+            animal:
+                src-dirs: src-animal
+                full-doc: True
+                doxy-cfg:
+                    FILE_PATTERNS: "*.cpp *.h*"
+                    EXAMPLE_PATH: examples
+                    RECURSIVE: True
+            stm:
+                src-dirs: src-stm32
+                full-doc: True
+            jac:
+                src-dirs: src-jac/components src-jac/main
+                doxy-cfg:
+                    FILE_PATTERNS: "*.c* *.h*"
+
+        save-api: .mkdoxy
+        full-doc: True
+        debug: False
+        ignore-errors: False
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+    - 'Home': 'index.md'
+    - API:
+        - ESP-32:
+            - 'Links': 'esp/links.md'
+            - 'Classes':
+                - 'Class List': 'esp/annotated.md'
+                - 'Class Index': 'esp/classes.md'
+                - 'Class Hierarchy': 'esp/hierarchy.md'
+                - 'Class Members': 'esp/class_members.md'
+                - 'Class Member Functions': 'esp/class_member_functions.md'
+                - 'Class Member Variables': 'esp/class_member_variables.md'
+                - 'Class Member Typedefs': 'esp/class_member_typedefs.md'
+                - 'Class Member Enumerations': 'esp/class_member_enums.md'
+            - 'Namespaces':
+                - 'Namespace List': 'esp/namespaces.md'
+                - 'Namespace Members': 'esp/namespace_members.md'
+                - 'Namespace Member Functions': 'esp/namespace_member_functions.md'
+                - 'Namespace Member Variables': 'esp/namespace_member_variables.md'
+                - 'Namespace Member Typedefs': 'esp/namespace_member_typedefs.md'
+                - 'Namespace Member Enumerations': 'esp/namespace_member_enums.md'
+            - 'Functions': 'esp/functions.md'
+            - 'Variables': 'esp/variables.md'
+            - 'Macros': 'esp/macros.md'
+            - 'Files': 'esp/files.md'
+        - STM-32:
+            - 'Links': 'stm/links.md'
+            - 'Classes':
+                - 'Class List': 'stm/annotated.md'
+                - 'Class Index': 'stm/classes.md'
+                - 'Class Hierarchy': 'stm/hierarchy.md'
+                - 'Class Members': 'stm/class_members.md'
+                - 'Class Member Functions': 'stm/class_member_functions.md'
+                - 'Class Member Variables': 'stm/class_member_variables.md'
+                - 'Class Member Typedefs': 'stm/class_member_typedefs.md'
+                - 'Class Member Enumerations': 'stm/class_member_enums.md'
+            - 'Namespaces':
+                - 'Namespace List': 'stm/namespaces.md'
+                - 'Namespace Members': 'stm/namespace_members.md'
+                - 'Namespace Member Functions': 'stm/namespace_member_functions.md'
+                - 'Namespace Member Variables': 'stm/namespace_member_variables.md'
+                - 'Namespace Member Typedefs': 'stm/namespace_member_typedefs.md'
+                - 'Namespace Member Enumerations': 'stm/namespace_member_enums.md'
+            - 'Functions': 'stm/functions.md'
+            - 'Variables': 'stm/variables.md'
+            - 'Macros': 'stm/macros.md'
+            - 'Files': 'stm/files.md'
+        - Jaculus:
+            - 'Links': 'jac/links.md'
+            - 'Classes':
+                - 'Class List': 'jac/annotated.md'
+                - 'Class Index': 'jac/classes.md'
+                - 'Class Hierarchy': 'jac/hierarchy.md'
+                - 'Class Members': 'jac/class_members.md'
+                - 'Class Member Functions': 'jac/class_member_functions.md'
+                - 'Class Member Variables': 'jac/class_member_variables.md'
+                - 'Class Member Typedefs': 'jac/class_member_typedefs.md'
+                - 'Class Member Enumerations': 'jac/class_member_enums.md'
+            - 'Namespaces':
+                - 'Namespace List': 'jac/namespaces.md'
+                - 'Namespace Members': 'jac/namespace_members.md'
+                - 'Namespace Member Functions': 'jac/namespace_member_functions.md'
+                - 'Namespace Member Variables': 'jac/namespace_member_variables.md'
+                - 'Namespace Member Typedefs': 'jac/namespace_member_typedefs.md'
+                - 'Namespace Member Enumerations': 'jac/namespace_member_enums.md'
+            - 'Functions': 'jac/functions.md'
+            - 'Variables': 'jac/variables.md'
+            - 'Macros': 'jac/macros.md'
+            - 'Files': 'jac/files.md'
+        - Animal:
+            - 'Links': 'animal/links.md'
+            - 'Classes':
+                - 'Class List': 'animal/annotated.md'
+                - 'Class Index': 'animal/classes.md'
+                - 'Class Hierarchy': 'animal/hierarchy.md'
+                - 'Class Members': 'animal/class_members.md'
+                - 'Class Member Functions': 'animal/class_member_functions.md'
+                - 'Class Member Variables': 'animal/class_member_variables.md'
+                - 'Class Member Typedefs': 'animal/class_member_typedefs.md'
+                - 'Class Member Enumerations': 'animal/class_member_enums.md'
+            - 'Namespaces':
+                - 'Namespace List': 'animal/namespaces.md'
+                - 'Namespace Members': 'animal/namespace_members.md'
+                - 'Namespace Member Functions': 'animal/namespace_member_functions.md'
+                - 'Namespace Member Variables': 'animal/namespace_member_variables.md'
+                - 'Namespace Member Typedefs': 'animal/namespace_member_typedefs.md'
+                - 'Namespace Member Enumerations': 'animal/namespace_member_enums.md'
+            - 'Functions': 'animal/functions.md'
+            - 'Variables': 'animal/variables.md'
+            - 'Macros': 'animal/macros.md'
+            - 'Files': 'animal/files.md'

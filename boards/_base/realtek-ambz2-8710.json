@@ -1,0 +1,12 @@
+{
+	"connectivity": [
+		"wifi"
+	],
+	"doc": {
+		"params": {
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		}
+	}
+}

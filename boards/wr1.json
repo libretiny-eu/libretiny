@@ -1,0 +1,21 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-788k",
+		"ic/rtl8710bn",
+		"pcb/wr1"
+	],
+	"build": {
+		"mcu": "rtl8710bn",
+		"variant": "wr1"
+	},
+	"name": "WR1 Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/wifiwr1module?id=K9605tc0k90t3",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-WR1"
+	},
+	"pcb": {
+		"symbol": "WR1"
+	}
+}
