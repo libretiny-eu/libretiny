@@ -2,6 +2,8 @@
 
 #include "WiFiPrivate.h"
 
+static void wifiEventIpReceived(struct netif *nif);
+
 void wifiEventSendArduino(EventId event) {
 	EventInfo eventInfo;
 	memset(&eventInfo, 0, sizeof(EventInfo));
@@ -26,6 +28,19 @@ static void wifiEventStaConnected(void *arg) {
 	eventInfo.wifi_sta_connected.authmode = pWiFi->getEncryption();
 	memcpy(eventInfo.wifi_sta_connected.ssid, ssid.c_str(), eventInfo.wifi_sta_connected.ssid_len + 1);
 	memcpy(eventInfo.wifi_sta_connected.bssid, pWiFi->BSSID(), 6);
+
+	WiFiNetworkInfo &info = pDATA->sta;
+	if (info.localIP) {
+		struct netif *ifs = netdev_get_netif(NETIF_IDX_STA);
+		ip4_addr_t ipaddr, netmask, gw;
+		ipaddr.addr	 = info.localIP;
+		netmask.addr = info.subnet;
+		gw.addr		 = info.gateway;
+		netifapi_dhcp_release_and_stop(ifs);
+		netif_set_addr(ifs, &ipaddr, &netmask, &gw);
+		// Emit GOT_IP manually - DHCP is stopped so the netdev callback won't fire
+		wifiEventIpReceived(ifs);
+	}
 
 	pWiFi->postEvent(ARDUINO_EVENT_WIFI_STA_CONNECTED, eventInfo);
 }
