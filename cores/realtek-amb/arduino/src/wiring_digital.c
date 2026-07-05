@@ -66,6 +66,13 @@ void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 
 PinStatus digitalRead(pin_size_t pinNumber) {
 	pinCheckGetData(pinNumber, PIN_GPIO, LOW);
+#if LT_RTL8720C
+	// a pin can't be in GPIO and IRQ mode at the same time (pinmux conflict),
+	// so read IRQ-mode pins through the IRQ object instead; falling through
+	// to pinMode(INPUT) here would detach the interrupt and free its object.
+	if (pinEnabled(pin, PIN_IRQ) && data->irq)
+		return gpio_irq_read(data->irq) ? HIGH : LOW;
+#endif
 	pinSetInputMode(pin, data, pinNumber);
 	return gpio_read(data->gpio);
 }
