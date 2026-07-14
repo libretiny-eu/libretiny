@@ -164,12 +164,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
  * the threshold can be set at build time via -DLT_BK_NOHT_RSSI_THRESHOLD.
  *
  * The blob truncates the return value to signed 8-bit, so valid values are
- * -128..-1. This lives in wlan_ui.c (not its own file) so that it is always
+ * -128..-1. The default of -100 keeps HT enabled at any usable signal
+ * level; override with -DLT_BK_NOHT_RSSI_THRESHOLD=-50 to restore the
+ * vendor behavior. This lives in wlan_ui.c (not its own file) so that it is always
  * extracted from the fixups archive: the blob's reference to the hook is
  * weak and would not pull a standalone object out of the library.
  */
 #ifndef LT_BK_NOHT_RSSI_THRESHOLD
-#define LT_BK_NOHT_RSSI_THRESHOLD -50
+#define LT_BK_NOHT_RSSI_THRESHOLD -100
 #endif
 
 __attribute__((weak)) int rwnx_get_noht_rssi_thresold(void) {
