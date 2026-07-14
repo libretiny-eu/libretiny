@@ -147,3 +147,31 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 
     return 0;
 }
+
+/*
+ * Make the SDK's 802.11n weak-RSSI fallback threshold configurable.
+ *
+ * The rwnx MAC blob (scanu.o: scanu_change_ht_supported) compares the RSSI
+ * of the join-scan result against a threshold, and if the frame is weaker,
+ * clears the STA's HT capability (me_env.ht_supported) before associating.
+ * The device then associates as 802.11g-only. HT is only restored at the
+ * start of the next scan (scanu_recover_ht_supported), so whether a given
+ * association ends up 11n or 11g is effectively racy across reboots.
+ *
+ * The threshold defaults to -50 dBm unless the weak hook
+ * rwnx_get_noht_rssi_thresold() (declared in
+ * beken378/ip/lmac/src/rwnx/rwnx_config.h) is defined. Define it here so
+ * the threshold can be set at build time via -DLT_BK_NOHT_RSSI_THRESHOLD.
+ *
+ * The blob truncates the return value to signed 8-bit, so valid values are
+ * -128..-1. This lives in wlan_ui.c (not its own file) so that it is always
+ * extracted from the fixups archive: the blob's reference to the hook is
+ * weak and would not pull a standalone object out of the library.
+ */
+#ifndef LT_BK_NOHT_RSSI_THRESHOLD
+#define LT_BK_NOHT_RSSI_THRESHOLD -50
+#endif
+
+__attribute__((weak)) int rwnx_get_noht_rssi_thresold(void) {
+    return LT_BK_NOHT_RSSI_THRESHOLD;
+}
