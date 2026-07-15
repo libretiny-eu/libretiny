@@ -40,8 +40,21 @@ void digitalWrite(pin_size_t pinNumber, PinStatus status) {
 	gpio_output(pin->gpio, !!status);
 }
 
+#if LT_BK7238
+// Set by the GPIO ISR (wiring_irq.c) so digitalRead() can return the true
+// just-transitioned level of the pin being serviced, which is otherwise
+// unreliable to read from the GPIO registers inside a fast-pulse ISR on BK7238.
+extern volatile int lt_isr_level;
+extern volatile unsigned char lt_isr_gpio;
+#endif
+
 PinStatus digitalRead(pin_size_t pinNumber) {
 	pinCheckGetData(pinNumber, PIN_GPIO, LOW);
+#if LT_BK7238
+	// If we're inside this pin's interrupt handler, return the edge-implied level.
+	if (lt_isr_level >= 0 && pin->gpio == lt_isr_gpio)
+		return (PinStatus)lt_isr_level;
+#endif
 	pinSetInputMode(pin, data, pinNumber);
 	return gpio_input(pin->gpio);
 }
