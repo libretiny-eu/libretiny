@@ -16,10 +16,10 @@ Features:
 
 Resources:
 
-- [BK7231U Datasheet v0.71](https://cdn.discordapp.com/attachments/983843871320580096/1050461302537064508/BK7231Uv0.71.zh-CN.en.pdf) (Machine-translated to English)
-- [BL2028N Datasheet v1.0](https://cdn.discordapp.com/attachments/983843871320580096/1050461346111697028/BL2028N_Datasheet_v1.0.pdf) (BL2028N is a "clone" of BK7231N)
-- [BK72XX SDK User Manual 3.0.3](https://cdn.discordapp.com/attachments/983843871320580096/1003661237730672730/BK72XX_SDK_User_Manual-3.0.3.pdf) (Machine-translated to English)
-- [BEKEN WiFi SDK API Reference 3.0.27](https://cdn.discordapp.com/attachments/983843871320580096/1003661237349003355/BEKEN_WiFi_SDK_API_Reference-3.0.27_compressed.pdf) (Machine-translated to English)
+- [BK7231U Datasheet v0.71](https://web.archive.org/web/20230717045828/https://cdn.discordapp.com/attachments/983843871320580096/1050461302537064508/BK7231Uv0.71.zh-CN.en.pdf) (Machine-translated to English)
+- [BL2028N Datasheet v1.0](https://web.archive.org/web/20230717045704/https://cdn.discordapp.com/attachments/983843871320580096/1050461346111697028/BL2028N_Datasheet_v1.0.pdf) (BL2028N is a "clone" of BK7231N)
+- [BK72XX SDK User Manual 3.0.3](https://web.archive.org/web/20231212040216/https://cdn.discordapp.com/attachments/983843871320580096/1003661237730672730/BK72XX_SDK_User_Manual-3.0.3.pdf) (Machine-translated to English)
+- [BEKEN WiFi SDK API Reference 3.0.27](https://web.archive.org/web/20230717045822/https://cdn.discordapp.com/attachments/983843871320580096/1003661237349003355/BEKEN_WiFi_SDK_API_Reference-3.0.27_compressed.pdf) (Machine-translated to English)
 - [Beken SDK documentation (online)](http://docs.bekencorp.com/backup/v3.0/)
 - [`encrypt v0.3` source code](https://github.com/ghsecuritylab/tysdk_for_bk7231/tree/master/toolchain/encrypt_crc) (Encryption routines and FPGA code used on the chip)
 - [`ota_tools` source code](https://github.com/tiancj/rtt_ota_tools)
