@@ -1,6 +1,9 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-23. */
 
 #include <ArduinoPrivate.h>
+#if LT_RTL8720D
+#include <sdk_private.h> // Pinmux_Swdoff()
+#endif
 
 void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 	pinCheckGetData(pinNumber, PIN_GPIO, );
@@ -19,6 +22,14 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 
 	gpio_t *gpio = data->gpio;
 	if (!gpio) {
+#if LT_RTL8720D
+		// PA27 (SWD_DATA) and PB3 (SWD_CLK) stay claimed by the SWD debug
+		// function until it is released - GPIO writes never reach the pad
+		// (bench: PA27 output reads flat 0 V with SWD on)
+		if (pinNumber == 27 || pinNumber == 35) {
+			Pinmux_Swdoff();
+		}
+#endif
 		// allocate memory if pin not used before
 		data->gpio = gpio = malloc(sizeof(gpio_t));
 		gpio_init(gpio, pin->gpio);
@@ -46,8 +57,14 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 			mode = PullNone;
 			break;
 		case OUTPUT_OPENDRAIN:
-			dir	 = PIN_OUTPUT;
+			dir = PIN_OUTPUT;
+#if LT_RTL8720D
+			// AmebaD's mbed PinMode enum has no OpenDrain member; the GPIO
+			// block drives open-drain via PullNone + OUT with the bit low.
+			mode = PullNone;
+#else
 			mode = OpenDrain;
+#endif
 			break;
 		default:
 			return;

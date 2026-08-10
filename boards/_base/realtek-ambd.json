@@ -1,0 +1,22 @@
+{
+	"build": {
+		"family": "RTL8720D",
+		"f_cpu": "200000000L",
+		"prefix": "arm-none-eabi-",
+		"ldscript": "rlx8721d_img2_all.ld"
+	},
+	"upload": {
+		"maximum_ram_size": 524288,
+		"protocol": "uart",
+		"protocols": [
+			"uart"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "AmebaD",
+			"voltage": "3.0V - 3.6V"
+		}
+	}
+}

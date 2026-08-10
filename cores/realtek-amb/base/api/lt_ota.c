@@ -3,6 +3,10 @@
 #include <libretiny.h>
 #include <sdk_private.h>
 
+// AmebaD selects OTA slots by image signature, not the bit flag;
+// see cores/realtek-ambd/base/api/lt_ota.c
+#if !LT_RTL8720D
+
 #define SYSTEM_DATA_LENGTH 128
 
 /**
@@ -73,3 +77,5 @@ bool lt_ota_dual_switch_flag() {
 	bit_flag <<= 1;
 	return lt_flash_write(FLASH_SYSTEM_OFFSET + 4, (void *)&bit_flag, 4) == 4;
 }
+
+#endif // !LT_RTL8720D

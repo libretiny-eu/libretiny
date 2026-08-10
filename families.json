@@ -33,7 +33,8 @@
 		"code": "ambd",
 		"description": "Realtek AmebaD",
 		"id": "0x3379CFE2",
-		"short_name": "RTL8720D"
+		"short_name": "RTL8720D",
+		"package": "framework-realtek-ambd"
 	},
 	"beken-72xx": {
 		"parent": null,
