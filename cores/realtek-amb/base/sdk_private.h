@@ -25,6 +25,13 @@ extern "C" {
 #include <hal_sys_ctrl.h>
 #include <rtl8710c.h>
 #endif
+#if LT_RTL8720D
+#include <ameba_soc.h>
+// AmebaD's osdep/wireless.h renames the wext mode enum (RTK_IW_MODE) with
+// RTW_-prefixed members; same values and order as the IW_ names used here.
+#define IW_MODE_INFRA  RTW_MODE_INFRA
+#define IW_MODE_MASTER RTW_MODE_MASTER
+#endif
 
 #include <cmsis_os.h>
 #undef malloc
@@ -89,4 +96,5 @@ extern flash_t lt_flash_obj;
 
 #ifdef __cplusplus
 } // extern "C"
+
 #endif
