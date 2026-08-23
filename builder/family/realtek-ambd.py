@@ -229,6 +229,69 @@ env.Append(
     LIBS=["_pmc_hp", "_wlan", "_websocket", "_wps"],
 )
 
+# Bluetooth LE: compile and link the Realtek GAP stack (btgap.a) and its HCI/coex
+# glue when CONFIG_BT=1 is set in the platform_opts_bt.h custom options; LibreTiny
+# provides no BLE API, the consumer drives the vendor SDK directly.
+BT = env.Cfg("CONFIG_BT", "platform_opts_bt.h")
+if BT:
+    BT_DIR = join(COMPONENT_DIR, "common", "bluetooth", "realtek", "sdk")
+    queue.AppendPublic(
+        CPPDEFINES=[("CONFIG_BT", 1)],
+        CPPPATH=[
+            join(BT_DIR),
+            join(BT_DIR, "inc"),
+            join(BT_DIR, "inc", "app"),
+            join(BT_DIR, "inc", "bluetooth", "gap"),
+            join(BT_DIR, "inc", "bluetooth", "gap", "gap_lib"),
+            join(BT_DIR, "inc", "os"),
+            join(BT_DIR, "inc", "platform"),
+            join(BT_DIR, "inc", "bluetooth", "profile"),
+            join(BT_DIR, "inc", "bluetooth", "profile", "client"),
+            join(BT_DIR, "inc", "bluetooth", "profile", "server"),
+            join(BT_DIR, "inc", "stack"),
+            join(BT_DIR, "board", "amebad", "src"),
+            join(BT_DIR, "board", "amebad", "src", "hci"),
+            join(BT_DIR, "board", "amebad", "src", "vendor_cmd"),
+            join(BT_DIR, "board", "amebad", "lib"),
+            join(BT_DIR, "board", "common", "inc"),
+        ],
+    )
+    queue.AddLibrary(
+        name="ambd_bluetooth",
+        base_dir=BT_DIR,
+        srcs=[
+            "+<board/common/os/freertos/osif_freertos.c>",
+            "+<board/amebad/src/platform_utils.c>",
+            "+<board/common/src/cycle_queue.c>",
+            "+<board/common/src/trace_task.c>",
+            "+<board/common/src/hci_process.c>",
+            "+<board/common/src/hci_adapter.c>",
+            "+<board/amebad/src/trace_uart.c>",
+            "+<board/amebad/src/rtk_coex.c>",
+            "+<board/amebad/src/vendor_cmd/vendor_cmd.c>",
+            "+<board/amebad/src/hci/hci_uart.c>",
+            "+<board/amebad/src/hci/hci_board.c>",
+            "+<board/amebad/src/hci/bt_fwconfig.c>",
+            "+<board/amebad/src/hci/bt_normal_patch.c>",
+            "+<board/amebad/src/hci/bt_mp_patch.c>",
+        ],
+        includes=[],
+        options=dict(CFLAGS=["-w"]),
+    )
+    # FTL (flash) storage the BT stack uses for pairing keys.
+    queue.AddLibrary(
+        name="ambd_ftl",
+        base_dir=join(COMPONENT_DIR, "common", "file_system", "ftl"),
+        srcs=["+<ftl.c>"],
+        includes=[],
+        options=dict(CFLAGS=["-w", "-I", join(BT_DIR, "board", "common", "inc")]),
+    )
+    env.Append(
+        LIBPATH=[join(BT_DIR, "board", "amebad", "lib")],
+        # SCons trims one .a; ld gets -l:btgap.a (the archive has no lib prefix)
+        LIBS=[":btgap.a.a"],
+    )
+
 # FreeRTOS from the SDK (vendor port + heap_5, per the KM4 project makefile).
 queue.AddLibrary(
     name="ambd_freertos",
