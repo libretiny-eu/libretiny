@@ -21,6 +21,7 @@
 	"param1": "Param 1",
 	"param2": "Param 2",
 	"tuya": "Tuya Storage",
+	"ble_bonding": "BLE Bonding",
 	"ln_kv": "Lightning KV Store",
 	"ln_nvds": "Lightning NV Store",
 	"diff2ya": "OTA Info (Tuya)",
