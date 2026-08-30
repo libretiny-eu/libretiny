@@ -34,6 +34,10 @@
 #include <WiFiServer.h>
 #include <WiFiUdp.h>
 
+/* Hostnames are copied into fixed storage owned by WiFiClass; see
+ * storeHostname(). 64 covers the 63-octet practical DNS label limit plus NUL. */
+#define LT_HOSTNAME_SIZE 64
+
 class WiFiClass {
   public:
 	// must be public for WiFiEvents & WiFiScan static handlers
@@ -143,6 +147,24 @@ class WiFiClass {
 	inline bool hostname(const String &aHostname) {
 		return setHostname(aHostname.c_str());
 	}
+
+  protected: /* WiFiGeneric.cpp */
+	/**
+	 * @brief Copy a hostname into storage owned by WiFiClass, returning the
+	 * stored copy.
+	 *
+	 * netif_set_hostname() assigns the pointer it is given; it does not copy.
+	 * The buffer must therefore outlive the netif, which callers cannot
+	 * reasonably guarantee -- hostname(const String &) in particular passes
+	 * .c_str() of a temporary that is destroyed on return, leaving
+	 * netif->hostname dangling and advertising whatever the heap reuses.
+	 */
+	static const char *storeHostname(char *dst, const char *src);
+
+	static char staHostname[LT_HOSTNAME_SIZE];
+	static char apHostname[LT_HOSTNAME_SIZE];
+
+  public: /* WiFiSTA.cpp */
 
 	const String SSID();
 	const String psk();

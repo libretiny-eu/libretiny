@@ -220,7 +220,7 @@ const char *WiFiClass::getHostname() {
 }
 
 bool WiFiClass::setHostname(const char *hostname) {
-	netif_set_hostname(NETIF_RTW_STA, (char *)hostname);
+	netif_set_hostname(NETIF_RTW_STA, (char *)storeHostname(staHostname, hostname));
 	return true;
 }
 

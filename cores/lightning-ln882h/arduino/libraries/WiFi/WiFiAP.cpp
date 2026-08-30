@@ -113,7 +113,7 @@ const char *WiFiClass::softAPgetHostname() {
 }
 
 bool WiFiClass::softAPsetHostname(const char *hostname) {
-	netif_set_hostname(netdev_get_netif(NETIF_IDX_AP), (char *)hostname);
+	netif_set_hostname(netdev_get_netif(NETIF_IDX_AP), (char *)storeHostname(apHostname, hostname));
 	return true;
 }
 

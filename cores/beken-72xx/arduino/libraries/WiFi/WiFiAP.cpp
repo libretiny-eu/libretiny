@@ -105,7 +105,7 @@ const char *WiFiClass::softAPgetHostname() {
 
 bool WiFiClass::softAPsetHostname(const char *hostname) {
 	struct netif *ifs = (struct netif *)net_get_uap_handle();
-	netif_set_hostname(ifs, (char *)hostname);
+	netif_set_hostname(ifs, (char *)storeHostname(apHostname, hostname));
 	return true;
 }
 

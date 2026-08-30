@@ -4,6 +4,20 @@
 
 #if LT_HAS_FREERTOS
 #include <FreeRTOS.h>
+
+char WiFiClass::staHostname[LT_HOSTNAME_SIZE] = {0};
+char WiFiClass::apHostname[LT_HOSTNAME_SIZE]  = {0};
+
+const char *WiFiClass::storeHostname(char *dst, const char *src) {
+	if (!src) {
+		dst[0] = '\0';
+		return dst;
+	}
+	strncpy(dst, src, LT_HOSTNAME_SIZE - 1);
+	dst[LT_HOSTNAME_SIZE - 1] = '\0';
+	return dst;
+}
+
 #endif
 
 bool WiFiClass::mode(WiFiMode mode) {
