@@ -33,6 +33,10 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 #if CFG_WPA_CTRL_IFACE
 		wlan_sta_enable();
 #endif
+		if (DATA->sleep) {
+			// bk_wlan_stop(BK_STATION) turns the DTIM sleep off, nothing turns it back on
+			setSleep(true);
+		}
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
 	} else if (sta == WLMODE_DISABLE) {
 		LT_DM(WIFI, "Disabling STA");
@@ -111,8 +115,9 @@ IPAddress WiFiClass::hostByName(const char *hostname) {
 bool WiFiClass::setSleep(bool enable) {
 	LT_DM(WIFI, "WiFi sleep mode %u", enable);
 	if (enable) {
+		// DTIM sleep only: MCU sleep stops the main loop (WDT reset), and with BLE
+		// running it halts the chip for good once the station is stopped
 		bk_wlan_dtim_rf_ps_mode_enable();
-		bk_wlan_mcu_ps_mode_enable();
 	} else {
 		bk_wlan_dtim_rf_ps_mode_disable();
 		bk_wlan_mcu_ps_mode_disable();
