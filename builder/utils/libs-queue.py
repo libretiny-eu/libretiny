@@ -1,7 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2023-02-28.
 
 import fnmatch
-from dataclasses import InitVar, dataclass, field
+from dataclasses import dataclass, field
 from glob import glob
 from os.path import isdir, join
 from typing import Dict, Generator, List, Tuple
@@ -69,17 +69,11 @@ def apply_options(env: Environment, options: Dict[str, List[str]]):
 
 @dataclass
 class Library:
-    env: InitVar[Environment]
     name: str
     base_dir: str
     srcs: List[str]
     includes: List[str] = field(default_factory=lambda: [])
     options: Dict[str, List[str]] = field(default_factory=lambda: {})
-
-    def __post_init__(self, env: Environment):
-        # add base dir to all globs
-        self.srcs = add_base_dir(env, self.base_dir, self.srcs)
-        self.includes = add_base_dir(env, self.base_dir, self.includes, subst=True)
 
 
 class LibraryQueue:
@@ -107,7 +101,13 @@ class LibraryQueue:
         self.prepend_includes = prepend_includes
 
     def AddLibrary(self, **kwargs):
-        lib = Library(env=self.env, **kwargs)
+        lib = Library(**kwargs)
+        # add base dir to all globs (done here rather than in an InitVar
+        # __post_init__: SCons 4.11 compiles build scripts with its own
+        # "from __future__ import annotations", which hides InitVar from
+        # dataclasses)
+        lib.srcs = add_base_dir(self.env, lib.base_dir, lib.srcs)
+        lib.includes = add_base_dir(self.env, lib.base_dir, lib.includes, subst=True)
         # search all include paths
         for dir, expr in iter_expressions(lib.includes):
             if dir == "-":
