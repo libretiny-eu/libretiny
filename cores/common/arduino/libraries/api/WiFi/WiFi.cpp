@@ -69,6 +69,16 @@ bool WiFiClass::validate(const char *ssid, const char *passphrase) {
 	return true;
 }
 
+const char *WiFiClass::storeHostname(char *dst, const char *src, size_t size) {
+	if (!src) {
+		dst[0] = '\0';
+		return dst;
+	}
+	strncpy(dst, src, size - 1);
+	dst[size - 1] = '\0';
+	return dst;
+}
+
 __attribute__((weak)) void WiFiClass::dataInitialize() {}
 
 __attribute__((weak)) void WiFiClass::dataFree() {}
