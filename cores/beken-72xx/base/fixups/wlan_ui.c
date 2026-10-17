@@ -49,14 +49,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
      * transient argument.
      */
     {
-        char key_buffer[PMK_LEN + 1];
+        char key_buffer[PMK_LEN_MAX + 1];
 
         /* Make copy with a guaranteed null terminator. */
         memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
         key_buffer[g_sta_param_ptr->key_len] = '\0';
 
         /*
-         * let wpa_psk_cal thread to caculate psk.
+         * let wpa_psk_cal thread to calculate psk.
          * XXX: If you know psk value, fill last two parameters of `wpa_psk_request()'.
          */
         wpa_psk_request(g_sta_param_ptr->ssid.array, g_sta_param_ptr->ssid.length,
@@ -88,14 +88,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
      * transient argument.
      */
     {
-        char key_buffer[PMK_LEN + 1];
+        char key_buffer[PMK_LEN_MAX + 1];
 
         /* Make copy with a guaranteed null terminator. */
         memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
         key_buffer[g_sta_param_ptr->key_len] = '\0';
 
         /*
-         * let wpa_psk_cal thread to caculate psk.
+         * let wpa_psk_cal thread to calculate psk.
          * XXX: If you know psk value, fill last two parameters of `wpa_psk_request()'.
          */
         wpa_psk_request(g_sta_param_ptr->ssid.array, g_sta_param_ptr->ssid.length,
