@@ -92,16 +92,20 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	uint8_t run_stop = 0; // stop
 	ddev_control(handle, SARADC_CMD_RUN_OR_STOP_ADC, &run_stop);
 	ddev_close(handle);
+
+	// BK7231N and BK7231T have use Vref of 1.2V, which ranges the ADC between 0V and 2.4V
+	// The ADC resolution differs depending on the particular chip
 #if CFG_SOC_NAME == SOC_BK7231N
-	// the SDK sets GPIO channels to a 2048-count scale over 2.4 V
 	return (uint32_t)adcData[0] * 2400 / 2048;
+#elif CFG_SOC_NAME == SOC_BK7231U
+	return (uint32_t)adcData[0] * 2400 / 4096;
 #else
 	return adcData[0];
 #endif
 }
 
 uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
-#if CFG_SOC_NAME == SOC_BK7231N
+#if CFG_SOC_NAME == SOC_BK7231N || CFG_SOC_NAME == SOC_BK7231U
 	return 2400;
 #else
 	return 3300;
