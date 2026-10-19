@@ -101,8 +101,8 @@
 #define PIN_D9  22u // PB_6
 #define PIN_D10 3u  // PA_3
 #define PIN_D11 2u  // PA_2
-#define PIN_D12 11u // PA_11
-#define PIN_D13 10u // PA_10
+#define PIN_D12 10u // PA_10
+#define PIN_D13 11u // PA_11
 #define PIN_A0  0u  // PA_0
 #define PIN_A1  1u  // PA_1
 #define PIN_A2  4u  // PA_4
