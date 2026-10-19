@@ -6,10 +6,6 @@
 
 #define WIFI_EVENT_MAX_ROW 3
 
-// Lowest address treated as a real pointer in wifi_indication(). Drivers on
-// some families pass a small integer in buf instead of a pointer.
-#define WIFI_EVENT_BUF_MIN_ADDR 0x1000
-
 static xQueueHandle wifiEventQueueHandle = NULL;
 static xTaskHandle wifiEventTaskHandle	 = NULL;
 
@@ -74,36 +70,33 @@ void wifi_unreg_event_handler(unsigned int event_cmds, rtw_event_handler_t handl
 void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int flags) {
 	if (event >= WIFI_EVENT_MAX)
 		return;
+
+	// some drivers pass a value instead of a pointer in buf - discard such buffers
+	if ((uintptr_t)buf < 0x1000)
+		buf = NULL;
+
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {
 		rtw_event_t *ev = (rtw_event_t *)malloc(sizeof(rtw_event_t));
 		if (!ev) {
 			LT_EM(WIFI, "Event %u dropped: no heap for event record", event);
 			return;
 		}
-		// flags == -2 is an Arduino event: buf points to an EventInfo and buf_len is
-		// the event id. Some drivers pass a value instead of a pointer in buf, so copy
-		// only from a real address; test buf_len signed before the cast.
-		char *bufCopy = NULL;
-		if ((uintptr_t)buf >= WIFI_EVENT_BUF_MIN_ADDR && (flags == -2 || buf_len > 0)) {
-			size_t copyLen = flags == -2 ? sizeof(EventInfo) : (size_t)buf_len;
+		if (buf && buf_len > 0) {
 			// copy data to allow freeing from calling scopes
-			bufCopy = (char *)malloc(copyLen);
+			size_t copyLen = flags == -2 ? sizeof(EventInfo) : (size_t)buf_len;
+			char *bufCopy  = (char *)malloc(copyLen);
 			if (!bufCopy) {
-				// drop the event instead of queueing a NULL payload: !bufCopy
-				// below then means exactly "no payload was supplied"
 				LT_EM(WIFI, "Event %u dropped: no heap for %u byte payload", event, (unsigned)copyLen);
 				free(ev);
 				return;
 			}
 			memcpy(bufCopy, buf, copyLen);
+			ev->buf = bufCopy;
+		} else {
+			ev->buf = NULL;
 		}
-		ev->buf = bufCopy;
-		if (!bufCopy && flags != -2)
-			// no payload survived, so the length must not be forwarded either;
-			// on flags == -2 buf_len is the event id, not a length — keep it
-			buf_len = 0;
 		ev->event	= event;
-		ev->buf_len = buf_len;
+		ev->buf_len = ev->buf || flags == -2 ? buf_len : 0;
 		ev->flags	= flags;
 		xQueueSend(wifiEventQueueHandle, &ev, portMAX_DELAY);
 	} else {
@@ -116,11 +109,8 @@ static void wifiEventTask(void *arg) {
 	for (;;) {
 		if (xQueueReceive(wifiEventQueueHandle, &data, portMAX_DELAY) == pdTRUE) {
 			handleRtwEvent(data->event, data->buf, data->buf_len, data->flags);
-			// the queue owns the copy made in wifi_indication, for every flags
-			// value; handleRtwEvent() never frees what it is passed
-			if (data->buf) {
-				free(data->buf);
-			}
+			// free memory allocated in wifi_indication
+			free(data->buf);
 			free(data);
 		}
 	}
@@ -139,7 +129,7 @@ void startWifiTask() {
 	}
 }
 
-void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
+void handleRtwEvent(uint16_t event, const char *data, int len, int flags) {
 	if (!pWiFi)
 		return; // failsafe
 	if (flags == -2) {
@@ -147,8 +137,7 @@ void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 		EventId eventId		 = (EventId)len;
 		EventInfo *eventInfo = (EventInfo *)data;
 		EventInfo empty		 = {};
-		// the caller owns data: the queue frees its copy in wifiEventTask(),
-		// and direct callers free their own buffer after wifi_indication()
+		// avoid dereferencing NULL data, and don't free it (handled in wifiEventTask)
 		pWiFi->postEvent(eventId, eventInfo ? *eventInfo : empty);
 		return;
 	}
@@ -158,7 +147,7 @@ void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 		rtw_event_handler_t handler = event_callback_list[event][i].handler;
 		if (!handler)
 			continue;
-		handler(data, len, flags, event_callback_list[event][i].handler_user_data);
+		handler((char *)data, len, flags, event_callback_list[event][i].handler_user_data);
 	}
 
 	if (pWiFi == NULL)
