@@ -14,4 +14,4 @@ extern char *strptime(const char *buf, const char *fmt, struct tm *tm);
 
 #ifdef __cplusplus
 } // extern "C"
-#endif // __cplusplus
+#endif
