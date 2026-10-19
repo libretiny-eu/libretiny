@@ -56,6 +56,7 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 	if ((mask & PIN_GPIO) && (pin->enabled & PIN_GPIO)) {
 		hal_gpio_pin_direction_set(data->gpio_base, data->gpio->pin, GPIO_INPUT);
 		free(data->gpio);
+		data->gpio = NULL;
 		pinDisable(pin, PIN_GPIO);
 	}
 	if ((mask & PIN_IRQ) && (pin->enabled & PIN_IRQ)) {
