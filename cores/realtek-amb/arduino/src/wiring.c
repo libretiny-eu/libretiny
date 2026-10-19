@@ -56,9 +56,6 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 	if ((mask & PIN_GPIO) && (pin->enabled & PIN_GPIO)) {
 		gpio_deinit(data->gpio);
 		free(data->gpio);
-		// attach paths (re)initialize on a NULL pointer, not the enabled
-		// mask - a dangling pointer here means the next attach reuses the
-		// freed object instead of allocating a fresh one
 		data->gpio = NULL;
 		pinDisable(pin, PIN_GPIO);
 	}
