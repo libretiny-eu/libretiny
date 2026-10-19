@@ -93,8 +93,10 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 	ddev_control(handle, SARADC_CMD_RUN_OR_STOP_ADC, &run_stop);
 	ddev_close(handle);
 
-	// BK7231N and BK7231T have use Vref of 1.2V, which ranges the ADC between 0V and 2.4V
-	// The ADC resolution differs depending on the particular chip
+	// BK7231N and BK7231T have use Vref of 1.2V, which ranges the ADC between 0V and 2.4V.
+	// BK7238 uses 1.8V instead (so ADC reads 0V to 3.6V),
+	// but SDK seems to reports millivolts already (although inaccurately).
+	// The ADC resolution differs depending on the particular chip.
 #if CFG_SOC_NAME == SOC_BK7231N
 	return (uint32_t)adcData[0] * 2400 / 2048;
 #elif CFG_SOC_NAME == SOC_BK7231U
@@ -107,6 +109,8 @@ uint16_t analogReadVoltage(pin_size_t pinNumber) {
 uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
 #if CFG_SOC_NAME == SOC_BK7231N || CFG_SOC_NAME == SOC_BK7231U
 	return 2400;
+#elif CFG_SOC_NAME == SOC_BK7238
+	return 3600;
 #else
 	return 3300;
 #endif
