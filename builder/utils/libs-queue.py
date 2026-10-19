@@ -102,10 +102,7 @@ class LibraryQueue:
 
     def AddLibrary(self, **kwargs):
         lib = Library(**kwargs)
-        # add base dir to all globs (done here rather than in an InitVar
-        # __post_init__: SCons 4.11 compiles build scripts with its own
-        # "from __future__ import annotations", which hides InitVar from
-        # dataclasses)
+        # add base dir to all globs
         lib.srcs = add_base_dir(self.env, lib.base_dir, lib.srcs)
         lib.includes = add_base_dir(self.env, lib.base_dir, lib.includes, subst=True)
         # search all include paths
