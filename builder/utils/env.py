@@ -3,8 +3,9 @@
 import json
 import sys
 from hashlib import sha1
-from os import getpid, makedirs, replace
-from os.path import isdir, isfile, join
+from os import getpid
+from os.path import isdir, join
+from pathlib import Path
 from subprocess import PIPE, Popen
 from typing import Dict
 
@@ -172,17 +173,17 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
     # no-longer-used option sets are left behind on purpose; they are
     # inert (never on CPPPATH) and pruning them here would race against
     # a concurrent build of another env.
-    opts_key = sha1(json.dumps(opts, sort_keys=True).encode()).hexdigest()[:12]
-    header_dir = join("${PROJECT_BUILD_DIR}", "include", opts_key)
-    real_dir = env.subst(header_dir)
-    makedirs(real_dir, exist_ok=True)
+    opts_hash = sha1(json.dumps(opts, sort_keys=True).encode()).hexdigest()[:12]
+    headers_dir = join("${PROJECT_BUILD_DIR}", "include", opts_hash)
+    headers_path = Path(env.subst(headers_dir))
+    headers_path.mkdir(parents=True, exist_ok=True)
 
     for header, options in opts.items():
         header: str
         options: Dict[str, str]
         # build the header content in memory
-        header = header.replace("#", ".")
-        text = f'#include_next "{header}"\n' "\n" "#pragma once\n" "\n"
+        header_name = header.replace("#", ".")
+        text = f'#include_next "{header_name}"\n' "\n" "#pragma once\n" "\n"
         # write all #defines
         for k, v in options.items():
             text += (
@@ -196,17 +197,14 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
         # existing file never needs rewriting; writing through a temp file
         # keeps the swap atomic, so a concurrent build of another env with
         # identical options can never see a partially written header
-        path = join(real_dir, header)
-        if isfile(path):
-            with open(path, "r") as f:
-                if f.read() == text:
-                    continue
-        tmp = f"{path}.{getpid()}.tmp"
-        with open(tmp, "w") as f:
-            f.write(text)
-        replace(tmp, path)
+        header_path = headers_path / header_name
+        if header_path.is_file() and header_path.read_text() == text:
+            continue
+        tmp_path = headers_path / f"{header_name}.{getpid()}.tmp"
+        tmp_path.write_text(text)
+        tmp_path.replace(header_path)
     # prepend newly created headers before any other
-    env.Prepend(CPPPATH=[header_dir])
+    env.Prepend(CPPPATH=[headers_dir])
 
 
 env.AddMethod(env_configure, "ConfigureEnvironment")
