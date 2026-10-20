@@ -122,6 +122,7 @@ Options for controlling default UART log output.
 - `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer (if possible); disable if your application doesn't need `micros()`
 - `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../flashing/tools/adr.md)
 - `LT_BUILD_TIMESTAMP` (`__DATE__ " " __TIME__`) - overrides the compile timestamp logged at boot and returned by `lt_get_build_timestamp()` for deterministic builds; strings need quoting: `-D LT_BUILD_TIMESTAMP='"Jan  1 2024 00:00:00"'`
+- `LT_BK_NOHT_RSSI_THRESHOLD` (-100) - BK72xx only - threshold for disabling HT capability during Wi-Fi connection (RSSI in dBm)
 
 ### Family configuration
 
