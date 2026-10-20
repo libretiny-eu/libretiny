@@ -33,9 +33,9 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 #if CFG_WPA_CTRL_IFACE
 		wlan_sta_enable();
 #endif
-		if (DATA->sleep) {
+		if (getSleep()) {
 			// bk_wlan_stop(BK_STATION) turns the DTIM sleep off, nothing turns it back on
-			setSleep(true);
+			bk_wlan_dtim_rf_ps_mode_enable();
 		}
 		wifiEventSendArduino(ARDUINO_EVENT_WIFI_STA_START);
 	} else if (sta == WLMODE_DISABLE) {
