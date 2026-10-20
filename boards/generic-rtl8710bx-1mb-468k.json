@@ -14,12 +14,6 @@
 	"symbol": "RTL8710BX (1M/468k)",
 	"url": "https://docs.libretiny.eu/boards/generic-rtl8710bx-1mb-468k/",
 	"vendor": "Generic",
-	"doc": {
-		"extra": [
-			"## Information",
-			"Generic RTL8710BX board with 1 MiB flash and two 468 KiB application partitions."
-		]
-	},
 	"pcb": {
 		"pinout": {
 			"1": {
