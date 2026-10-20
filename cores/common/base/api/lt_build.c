@@ -6,7 +6,7 @@ const char *lt_get_version() {
 	return LT_VERSION_STR;
 }
 
-// this is defined here so that compiler caches can work
+// this is defined here (rather than in a header) so that compiler caches can work
 #ifndef LT_BUILD_TIMESTAMP
 #define LT_BUILD_TIMESTAMP __DATE__ " " __TIME__
 #endif
