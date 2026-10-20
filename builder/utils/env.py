@@ -164,16 +164,10 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
     opts = platform.custom_opts.get("options", None)
     if not opts:
         return
-    # Note: deliberately not ${BUILD_DIR}, which embeds the env name; keeping
-    # the -I path identical across envs lets compiler caches (ccache with
-    # base_dir) share results between projects that differ only by env name.
-    # The directory is keyed on the option content instead, so envs with
-    # different options can never pick up each other's generated headers,
-    # while envs with identical options share one path. Directories of
-    # no-longer-used option sets are left behind on purpose; they are
-    # inert (never on CPPPATH) and pruning them here would race against
-    # a concurrent build of another env.
+    # calculate a stable hash of the custom options
     opts_hash = sha1(json.dumps(opts, sort_keys=True).encode()).hexdigest()[:12]
+    # write headers outside of the current build environment, so that paths depend
+    # solely on used options, allowing to share compiler caches between environments
     headers_dir = join("${PROJECT_BUILD_DIR}", "libretiny-include", opts_hash)
     headers_path = Path(env.subst(headers_dir))
     headers_path.mkdir(parents=True, exist_ok=True)
@@ -193,10 +187,7 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
                 f"#endif\n"
                 f"#define {k} {v}\n"
             )
-        # the content is fully determined by the directory key, so an
-        # existing file never needs rewriting; writing through a temp file
-        # keeps the swap atomic, so a concurrent build of another env with
-        # identical options can never see a partially written header
+        # rewrite the header file atomically if its contents differ
         header_path = headers_path / header_name
         if header_path.is_file() and header_path.read_text() == text:
             continue
