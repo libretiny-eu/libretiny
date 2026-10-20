@@ -174,7 +174,7 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
     # inert (never on CPPPATH) and pruning them here would race against
     # a concurrent build of another env.
     opts_hash = sha1(json.dumps(opts, sort_keys=True).encode()).hexdigest()[:12]
-    headers_dir = join("${PROJECT_BUILD_DIR}", "include", opts_hash)
+    headers_dir = join("${PROJECT_BUILD_DIR}", "libretiny-include", opts_hash)
     headers_path = Path(env.subst(headers_dir))
     headers_path.mkdir(parents=True, exist_ok=True)
 
