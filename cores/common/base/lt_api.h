@@ -10,6 +10,7 @@
 extern "C" {
 #endif // __cplusplus
 
+#include "api/lt_build.h"
 #include "api/lt_cpu.h"
 #include "api/lt_device.h"
 #include "api/lt_flash.h"

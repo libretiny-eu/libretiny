@@ -50,9 +50,7 @@ class EspClass {
 	/** @copydoc LT_VERSION_STR() */
 	inline String getCoreVersion() { return LT_VERSION_STR; }
 
-	/** @brief Full version string; the compile timestamp is appended at
-	 * runtime so that __DATE__/__TIME__ stay out of this header, which
-	 * would otherwise defeat compiler caches (see libretiny.h). */
+	/** @copydoc LT_BANNER_STR() */
 	inline String getFullVersion() { return String(LT_BANNER_STR ", compiled at ") + lt_get_build_timestamp(); }
 
 	inline uint8_t getBootVersion() { return 0; }

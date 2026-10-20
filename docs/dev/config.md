@@ -121,7 +121,7 @@ Options for controlling default UART log output.
 - `LT_USE_TIME` (0) - enables implementation of `gettimeofday()` and `settimeofday()`; checks for `millis()` overflows periodically
 - `LT_MICROS_HIGH_RES` (1) - count runtime microseconds using a high-resolution timer (if possible); disable if your application doesn't need `micros()`
 - `LT_AUTO_DOWNLOAD_REBOOT` (1) - automatically reboot into "download mode" after detecting a flashing protocol command; [read more](../flashing/tools/adr.md)
-- `LT_BUILD_TIMESTAMP` (`__DATE__ " " __TIME__`) - overrides the compile timestamp logged at boot and returned by `lt_get_build_timestamp()`; lets reproducible builds set a deterministic value, e.g. derived from `SOURCE_DATE_EPOCH`. This is a string, so it needs quoting: `-D LT_BUILD_TIMESTAMP='"Jan  1 2024 00:00:00"'`
+- `LT_BUILD_TIMESTAMP` (`__DATE__ " " __TIME__`) - overrides the compile timestamp logged at boot and returned by `lt_get_build_timestamp()` for deterministic builds; strings need quoting: `-D LT_BUILD_TIMESTAMP='"Jan  1 2024 00:00:00"'`
 
 ### Family configuration
 
