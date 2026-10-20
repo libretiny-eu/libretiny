@@ -1,5 +1,11 @@
 # Flashing ESPHome
 
+{%
+	include-markdown "../inc/outdated-esphome.md"
+%}
+
+---
+
 !!! tip
 	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../projects/esphome.md). **Includes Home Assistant Add-On setup.**
 
