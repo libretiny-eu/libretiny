@@ -17,6 +17,9 @@ env: Environment = DefaultEnvironment()
 platform: PlatformBase = env.PioPlatform()
 board: PlatformBoardConfig = env.BoardConfig()
 
+# Required by other scripts
+env.SConscript("utils/command.py", exports="env")
+
 python_deps = {
     "ltchiptool": ">=4.14.3,<5.0",
 }

@@ -1,6 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2023-09-07.
 
 import json
+import shutil
 import site
 import subprocess
 import sys
@@ -35,21 +36,30 @@ def env_configure_python_venv(env: Environment):
         "site-packages",
     )
 
-    if not pip_path.is_file():
+    # uv (much faster than pip) is used when available, e.g. in the ESPHome docker image
+    uv_path = shutil.which("uv")
+
+    if not (pip_path.is_file() or (uv_path and python_path.is_file())):
         # Use the built-in PlatformIO Python to create a standalone virtual env
-        result = env.Execute(
-            env.VerboseAction(
-                f'"$PYTHONEXE" -m venv --clear "{venv_path.absolute()}"',
-                "LibreTiny: Creating a virtual environment for Python dependencies",
+        python_str = env["PYTHONEXE"]
+        venv_str = str(venv_path.absolute())
+        if uv_path:
+            venv_cmd = [uv_path, "venv", "--python", python_str, "--clear", venv_str]
+        else:
+            venv_cmd = [python_str, "-m", "venv", "--clear", venv_str]
+
+        try:
+            env.RunCommand(
+                *venv_cmd,
+                message="LibreTiny: Creating a virtual environment for Python dependencies",
             )
-        )
-        if not python_path.is_file():
-            # Creating the venv failed
-            raise RuntimeError(
-                f"Failed to create virtual environment. Error code {result}"
-            )
-        if not pip_path.is_file():
-            # Creating the venv succeeded but pip didn't get installed
+        except Exception as e:
+            env.PrintCommandError(e, message="Failed to create virtual environment")
+            raise SystemExit(1)
+
+        if not (pip_path.is_file() or uv_path):
+            # Creating the venv succeeded but pip didn't get installed,
+            # and uv is not available
             # (i.e. Debian/Ubuntu without ensurepip)
             print(
                 "LibreTiny: Failed to install pip, running get-pip.py", file=sys.stderr
@@ -65,7 +75,7 @@ def env_configure_python_venv(env: Environment):
                 p.wait()
 
     assert (
-        pip_path.is_file()
+        pip_path.is_file() or uv_path
     ), f"Error: Missing the pip binary in virtual environment `{pip_path.absolute()}`"
     assert (
         python_path.is_file()
@@ -74,33 +84,42 @@ def env_configure_python_venv(env: Environment):
         site_path.is_dir()
     ), f"Error: Missing site-packages directory `{site_path.absolute()}`"
 
-    env.Replace(LTPYTHONEXE=python_path.absolute(), LTPYTHONENV=venv_path.absolute())
+    python_str = str(python_path.absolute())
+    if uv_path:
+        pip_cmd = lambda *args: [uv_path, "pip", *args, "--python", python_str]
+    else:
+        pip_cmd = lambda *args: [
+            python_str,
+            "-m",
+            "pip",
+            "--disable-pip-version-check",
+            *args,
+        ]
+
+    env.Replace(
+        LTPYTHONEXE=python_path.absolute(),
+        LTPYTHONENV=venv_path.absolute(),
+        LTPIPCMD=pip_cmd,
+    )
     site.addsitedir(str(site_path.absolute()))
 
 
 def env_install_python_dependencies(env: Environment, dependencies: dict):
+    pip_cmd = env["LTPIPCMD"]
     try:
-        pip_output = subprocess.check_output(
-            [
-                env.subst("${LTPYTHONEXE}"),
-                "-m",
-                "pip",
-                "list",
-                "--format=json",
-                "--disable-pip-version-check",
-            ]
-        )
+        pip_output = env.RunCommand(*pip_cmd("list", "--format=json"))
         pip_data = json.loads(pip_output)
         packages = {p["name"]: pepver_to_semver(p["version"]) for p in pip_data}
     except:
         print(
-            "LibreTiny: Warning! Couldn't extract the list of installed Python packages"
+            "LibreTiny: Warning! Couldn't extract the list of installed Python packages",
+            file=sys.stderr,
         )
         packages = {}
 
     to_install = []
     for name, spec in dependencies.items():
-        install_spec = f'"{name}{dependencies[name]}"'
+        install_spec = f"{name}{dependencies[name]}"
         if name not in packages:
             to_install.append(install_spec)
         elif spec:
@@ -108,14 +127,20 @@ def env_install_python_dependencies(env: Environment, dependencies: dict):
             if not version_spec.match(packages[name]):
                 to_install.append(install_spec)
 
-    if to_install:
-        env.Execute(
-            env.VerboseAction(
-                '"${LTPYTHONEXE}" -m pip install --prefer-binary -U '
-                + " ".join(to_install),
-                "LibreTiny: Installing Python dependencies",
-            )
+    if not to_install:
+        return
+
+    try:
+        env.RunCommand(
+            *pip_cmd("install", "-U", *to_install),
+            message="LibreTiny: Installing Python dependencies",
         )
+    except Exception as e:
+        env.PrintCommandError(
+            e,
+            message="LibreTiny: Error! Couldn't install Python dependencies, exiting",
+        )
+        raise SystemExit(1)
 
 
 env.AddMethod(env_configure_python_venv, "ConfigurePythonVenv")
