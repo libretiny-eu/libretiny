@@ -45,7 +45,7 @@ extern wifi_mode_t wifi_mode;
 extern WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 // WiFiEvents.cpp
 extern void startWifiTask();
-extern void handleRtwEvent(uint16_t event, char *data, int len, int flags);
+extern void handleRtwEvent(uint16_t event, const char *data, int len, int flags);
 
 #define WLAN0_NETIF &xnetif[RTW_STA_INTERFACE]
 #define WLAN1_NETIF &xnetif[RTW_AP_INTERFACE]
