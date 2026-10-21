@@ -56,17 +56,20 @@ void pinRemoveMode(PinInfo *pin, uint32_t mask) {
 	if ((mask & PIN_GPIO) && (pin->enabled & PIN_GPIO)) {
 		gpio_deinit(data->gpio);
 		free(data->gpio);
+		data->gpio = NULL;
 		pinDisable(pin, PIN_GPIO);
 	}
 	if ((mask & PIN_IRQ) && (pin->enabled & PIN_IRQ)) {
 		data->irqHandler = NULL;
 		gpio_irq_free(data->irq);
 		free(data->irq);
+		data->irq = NULL;
 		pinDisable(pin, PIN_IRQ);
 	}
 	if ((mask & PIN_PWM) && (pin->enabled & PIN_PWM)) {
 		pwmout_free(data->pwm);
 		free(data->pwm);
+		data->pwm = NULL;
 		pinDisable(pin, PIN_PWM);
 	}
 }
