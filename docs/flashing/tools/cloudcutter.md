@@ -1,5 +1,11 @@
 # Converting with tuya-cloudcutter
 
+{%
+	include-markdown "../../inc/outdated-cloudcutter.md"
+%}
+
+---
+
 !!! tip
 	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../../projects/esphome.md). **Includes Home Assistant Add-On setup.**
 
@@ -7,9 +13,6 @@
 	This currently applies to BK7231T and BK7231N only. `tuya-cloudcutter` can't be used for other chips.
 
 [`tuya-cloudcutter`](https://github.com/tuya-cloudcutter/tuya-cloudcutter) is a tool that disconnects IoT devices from the Tuya cloud, while also allowing **remote firmware flashing**. This means you can flash ESPHome without even disassembling it.
-
-!!! warning
-	This guide might be outdated. For an up-to-date guide, always refer to [tuya-cloudcutter/INSTRUCTIONS.md](https://github.com/tuya-cloudcutter/tuya-cloudcutter/blob/main/INSTRUCTIONS.md).
 
 If your device doesn't have a profile yet, it will probably not work. You can contribute by [taking a device dump](https://github.com/tuya-cloudcutter/tuya-cloudcutter#device-dumps) and posting it on cloudcutter's issues page.
 

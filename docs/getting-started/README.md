@@ -6,9 +6,9 @@ Using LibreTiny is simple, just like every other PlatformIO development platform
 2. `pio pkg install --platform libretiny`
 
 !!! tip
-	See the [Cloudcutter video guide](https://www.youtube.com/watch?v=sSj8f-HCHQ0) for a complete tutorial on flashing with [Cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and installing [LibreTiny-ESPHome](../projects/esphome.md). **Includes Home Assistant Add-On setup.**
+	Support for LibreTiny has been merged to ESPHome in version 2023.9.0. See [ESPHome documentation](https://esphome.io/components/libretiny/) for up-to-date instructions.
 
-	More information on Cloudcutter can be found in the [Tuya Cloudcutter GitHub repository](https://github.com/tuya-cloudcutter/tuya-cloudcutter).
+	Also see [tuya-cloudcutter](https://github.com/tuya-cloudcutter/tuya-cloudcutter) and [UnTuyaOS3](https://github.com/tuya-cloudcutter/UnTuyaOS3) for alternative ways of flashing custom firmware to certain devices.
 
 ## Board selection
 
@@ -22,7 +22,9 @@ Using LibreTiny is simple, just like every other PlatformIO development platform
 
 LibreTiny was developed with popular community projects in mind.
 
-There is an official [ESPHome port](../projects/esphome.md) available and integrated into the ESPHome project. No extra downloads or code compilations are needed to use ESPHome with LibreTiny-supported platforms.
+[ESPHome](https://esphome.io/) supports building with LibreTiny natively, starting in version 2023.9.0. No extra downloads or code compilations are needed to use ESPHome with LibreTiny-supported platforms.
+
+Check out the [Getting Started](https://esphome.io/install/getting-started/) page, as well as the unified [LibreTiny component](https://esphome.io/components/libretiny/) documentation.
 
 ## Develop your own project
 
