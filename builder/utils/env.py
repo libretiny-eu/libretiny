@@ -2,8 +2,10 @@
 
 import json
 import sys
-from os import makedirs
+from hashlib import sha1
+from os import getpid
 from os.path import isdir, join
+from pathlib import Path
 from subprocess import PIPE, Popen
 from typing import Dict
 
@@ -162,29 +164,38 @@ def env_apply_custom_options(env: Environment, platform: PlatformBase):
     opts = platform.custom_opts.get("options", None)
     if not opts:
         return
-    header_dir = join("${BUILD_DIR}", "include")
-    real_dir = env.subst(header_dir)
-    makedirs(real_dir, exist_ok=True)
+    # calculate a stable hash of the custom options
+    opts_hash = sha1(json.dumps(opts, sort_keys=True).encode()).hexdigest()[:12]
+    # write headers outside of the current build environment, so that paths depend
+    # solely on used options, allowing to share compiler caches between environments
+    headers_dir = join("${PROJECT_BUILD_DIR}", "libretiny-include", opts_hash)
+    headers_path = Path(env.subst(headers_dir))
+    headers_path.mkdir(parents=True, exist_ok=True)
 
     for header, options in opts.items():
         header: str
         options: Dict[str, str]
-        # open the header file for writing
-        header = header.replace("#", ".")
-        f = open(join(real_dir, header), "w")
-        f.write(f'#include_next "{header}"\n' "\n" "#pragma once\n" "\n")
+        # build the header content in memory
+        header_name = header.replace("#", ".")
+        text = f'#include_next "{header_name}"\n' "\n" "#pragma once\n" "\n"
         # write all #defines
         for k, v in options.items():
-            f.write(
+            text += (
                 f"// {k} = {v}\n"
                 f"#ifdef {k}\n"
                 f"#undef {k}\n"
                 f"#endif\n"
                 f"#define {k} {v}\n"
             )
-        f.close()
+        # rewrite the header file atomically if its contents differ
+        header_path = headers_path / header_name
+        if header_path.is_file() and header_path.read_text() == text:
+            continue
+        tmp_path = headers_path / f"{header_name}.{getpid()}.tmp"
+        tmp_path.write_text(text)
+        tmp_path.replace(header_path)
     # prepend newly created headers before any other
-    env.Prepend(CPPPATH=[header_dir])
+    env.Prepend(CPPPATH=[headers_dir])
 
 
 env.AddMethod(env_configure, "ConfigureEnvironment")
