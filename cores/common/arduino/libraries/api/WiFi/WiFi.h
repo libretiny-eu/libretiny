@@ -40,11 +40,19 @@ class WiFiClass {
 	void *data;
 	WiFiScanData *scan = NULL;
 
+  protected:
+	// DNS label length limit + NULL-terminator
+	char staHostname[64] = {0};
+	char apHostname[64]	 = {0};
+
   public: /* WiFi.cpp */
 	WiFiClass();
 	~WiFiClass();
+
+  protected: /* WiFi.cpp */
 	void printDiag(Print &dest);
 	bool validate(const char *ssid, const char *passphrase);
+	const char *storeHostname(char *dst, const char *src, size_t size = 64);
 	void dataInitialize();
 	void dataFree();
 

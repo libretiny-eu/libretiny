@@ -155,7 +155,7 @@ const char *WiFiClass::getHostname() {
 
 bool WiFiClass::setHostname(const char *hostname) {
 	struct netif *ifs = netdev_get_netif(NETIF_IDX_STA);
-	netif_set_hostname(ifs, (char *)hostname);
+	netif_set_hostname(ifs, (char *)storeHostname(staHostname, hostname));
 	return true;
 }
 
