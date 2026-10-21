@@ -70,18 +70,33 @@ void wifi_unreg_event_handler(unsigned int event_cmds, rtw_event_handler_t handl
 void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int flags) {
 	if (event >= WIFI_EVENT_MAX)
 		return;
+
+	// some drivers pass a value instead of a pointer in buf - discard such buffers
+	if ((uintptr_t)buf < 0x1000)
+		buf = NULL;
+
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {
 		rtw_event_t *ev = (rtw_event_t *)malloc(sizeof(rtw_event_t));
-		if (buf_len > 0) {
+		if (!ev) {
+			LT_EM(WIFI, "Event %u dropped: no heap for event record", event);
+			return;
+		}
+		if (buf && buf_len > 0) {
 			// copy data to allow freeing from calling scopes
-			char *bufCopy = (char *)malloc(buf_len);
-			memcpy(bufCopy, buf, buf_len);
+			size_t copyLen = flags == -2 ? sizeof(EventInfo) : (size_t)buf_len;
+			char *bufCopy  = (char *)malloc(copyLen);
+			if (!bufCopy) {
+				LT_EM(WIFI, "Event %u dropped: no heap for %u byte payload", event, (unsigned)copyLen);
+				free(ev);
+				return;
+			}
+			memcpy(bufCopy, buf, copyLen);
 			ev->buf = bufCopy;
 		} else {
 			ev->buf = NULL;
 		}
 		ev->event	= event;
-		ev->buf_len = buf_len;
+		ev->buf_len = ev->buf || flags == -2 ? buf_len : 0;
 		ev->flags	= flags;
 		xQueueSend(wifiEventQueueHandle, &ev, portMAX_DELAY);
 	} else {
@@ -94,10 +109,8 @@ static void wifiEventTask(void *arg) {
 	for (;;) {
 		if (xQueueReceive(wifiEventQueueHandle, &data, portMAX_DELAY) == pdTRUE) {
 			handleRtwEvent(data->event, data->buf, data->buf_len, data->flags);
-			if (data->buf) {
-				// free memory allocated in wifi_indication
-				free(data->buf);
-			}
+			// free memory allocated in wifi_indication
+			free(data->buf);
 			free(data);
 		}
 	}
@@ -116,15 +129,16 @@ void startWifiTask() {
 	}
 }
 
-void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
+void handleRtwEvent(uint16_t event, const char *data, int len, int flags) {
 	if (!pWiFi)
 		return; // failsafe
 	if (flags == -2) {
 		// already an Arduino event, just pass it
 		EventId eventId		 = (EventId)len;
 		EventInfo *eventInfo = (EventInfo *)data;
-		pWiFi->postEvent(eventId, *eventInfo);
-		free(eventInfo);
+		EventInfo empty		 = {};
+		// avoid dereferencing NULL data, and don't free it (handled in wifiEventTask)
+		pWiFi->postEvent(eventId, eventInfo ? *eventInfo : empty);
 		return;
 	}
 
@@ -133,7 +147,7 @@ void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 		rtw_event_handler_t handler = event_callback_list[event][i].handler;
 		if (!handler)
 			continue;
-		handler(data, len, flags, event_callback_list[event][i].handler_user_data);
+		handler((char *)data, len, flags, event_callback_list[event][i].handler_user_data);
 	}
 
 	if (pWiFi == NULL)
@@ -183,6 +197,8 @@ void handleRtwEvent(uint16_t event, char *data, int len, int flags) {
 
 		case WIFI_EVENT_STA_DISASSOC:
 			// data(6) is MAC
+			if (!data || len < 6)
+				return;
 			eventId = ARDUINO_EVENT_WIFI_AP_STADISCONNECTED;
 			memcpy(eventInfo.wifi_ap_stadisconnected.mac, (const char *)data, 6);
 			break;
