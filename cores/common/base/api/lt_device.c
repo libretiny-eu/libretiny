@@ -4,14 +4,6 @@
 
 static char *device_name = NULL;
 
-const char *lt_get_version() {
-	return LT_VERSION_STR;
-}
-
-const char *lt_get_board_code() {
-	return LT_BOARD_STR;
-}
-
 const char *lt_get_device_name() {
 	if (device_name)
 		return device_name;

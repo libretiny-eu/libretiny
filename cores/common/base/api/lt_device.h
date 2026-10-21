@@ -48,16 +48,6 @@ typedef enum {
 } lt_debug_mode_t;
 
 /**
- * @brief Get LibreTiny version string.
- */
-const char *lt_get_version();
-
-/**
- * @brief Get board code.
- */
-const char *lt_get_board_code();
-
-/**
  * @brief Get device friendly name in format "LT-<chip model>-<MAC ID>".
  * Can be used as hostname.
  */

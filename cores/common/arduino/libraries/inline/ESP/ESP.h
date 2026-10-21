@@ -51,7 +51,7 @@ class EspClass {
 	inline String getCoreVersion() { return LT_VERSION_STR; }
 
 	/** @copydoc LT_BANNER_STR() */
-	inline String getFullVersion() { return LT_BANNER_STR; }
+	inline String getFullVersion() { return String(LT_BANNER_STR ", compiled at ") + lt_get_build_timestamp(); }
 
 	inline uint8_t getBootVersion() { return 0; }
 
