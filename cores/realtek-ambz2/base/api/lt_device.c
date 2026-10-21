@@ -8,6 +8,7 @@ void lt_get_device_mac(uint8_t *mac) {
 }
 
 void lt_reboot() {
+	sys_log_uart_on();
 	sys_cpu_reset();
 	while (1) {}
 }

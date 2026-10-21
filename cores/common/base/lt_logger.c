@@ -37,9 +37,9 @@
 #define COLOR_BRIGHT_WHITE	 0x17
 
 #ifdef LT_UART_DEFAULT_PORT
-static uint32_t uart_port = LT_UART_DEFAULT_LOGGER;
+uint32_t lt_uart_port = LT_UART_DEFAULT_LOGGER;
 #else
-static uint32_t uart_port = 0;
+uint32_t lt_uart_port = 0;
 #endif
 static const char levels[] = {'V', 'D', 'I', 'W', 'E', 'F'};
 
@@ -64,7 +64,7 @@ void lt_log(const uint8_t level, const char *caller, const unsigned short line, 
 void lt_log(const uint8_t level, const char *format, ...) {
 #endif
 
-	if (uart_port == 0xFF)
+	if (lt_uart_port == 0xFF)
 		return;
 
 #if LT_LOGGER_TIMESTAMP
@@ -100,7 +100,7 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #if LT_HAS_PRINTF
 	fctprintf(
 		(void (*)(char, void *))putchar_p,
-		(void *)uart_port,
+		(void *)lt_uart_port,
 #else
 	printf(
 #endif
@@ -155,10 +155,10 @@ void lt_log(const uint8_t level, const char *format, ...) {
 #if LT_HAS_PRINTF
 	va_list va_args;
 	va_start(va_args, format);
-	vfctprintf((void (*)(char, void *))putchar_p, (void *)uart_port, format, va_args);
+	vfctprintf((void (*)(char, void *))putchar_p, (void *)lt_uart_port, format, va_args);
 	va_end(va_args);
-	putchar_p('\r', uart_port);
-	putchar_p('\n', uart_port);
+	putchar_p('\r', lt_uart_port);
+	putchar_p('\n', lt_uart_port);
 #else
 	va_list va_args;
 	va_start(va_args, format);
@@ -170,9 +170,13 @@ void lt_log(const uint8_t level, const char *format, ...) {
 }
 
 void lt_log_set_port(uint8_t port) {
-	uart_port = port;
+	lt_uart_port = port;
+}
+
+uint8_t lt_log_get_port() {
+	return lt_uart_port;
 }
 
 void lt_log_disable() {
-	uart_port = 0xFF;
+	lt_uart_port = 0xFF;
 }
