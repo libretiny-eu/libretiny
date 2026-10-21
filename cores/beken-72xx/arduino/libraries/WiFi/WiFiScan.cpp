@@ -48,6 +48,10 @@ static void scanHandler(void *ctx, uint8_t param) {
 	wifiEventSendArduino(ARDUINO_EVENT_WIFI_SCAN_DONE);
 
 end:
+	// bk_wlan_start_scan() turns the DTIM sleep off, nothing turns it back on
+	if (cls->getSleep()) {
+		bk_wlan_dtim_rf_ps_mode_enable();
+	}
 	scan->timeout = 0;
 	if (scan->running) {
 		// running == false means it was discarded (timeout)
