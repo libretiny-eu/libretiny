@@ -147,3 +147,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 
     return 0;
 }
+
+// Allow changing the SDK's RSSI threshold for disabling HT capability
+// This defaults to -50 in BDK, which most devices don't even reach
+#ifndef LT_BK_NOHT_RSSI_THRESHOLD
+#define LT_BK_NOHT_RSSI_THRESHOLD -100
+#endif
+
+// Declared in beken378/ip/lmac/src/rwnx/rwnx_config.h
+__attribute__((weak)) int rwnx_get_noht_rssi_thresold(void) {
+    return LT_BK_NOHT_RSSI_THRESHOLD;
+}
