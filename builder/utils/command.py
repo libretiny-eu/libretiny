@@ -3,13 +3,14 @@
 import subprocess
 import sys
 from subprocess import CalledProcessError
+from typing import List
 
 from SCons.Script import DefaultEnvironment, Environment
 
 env: Environment = DefaultEnvironment()
 
 
-def env_run_command(env: Environment, *args: list[str], message: str = None):
+def env_run_command(env: Environment, *args: List[str], message: str = None):
     if message:
         print(message, file=sys.stderr)
     return subprocess.check_output(args)
