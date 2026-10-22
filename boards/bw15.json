@@ -1,0 +1,26 @@
+{
+	"_base": [
+		"realtek-ambz2",
+		"realtek-ambz2-8720",
+		"realtek-ambz2-image",
+		"realtek-ambz2-2mb-992k",
+		"ic/rtl8720cf",
+		"pcb/bw15"
+	],
+	"build": {
+		"mcu": "rtl8720cf",
+		"variant": "bw15"
+	},
+	"name": "BW15",
+	"url": "https://docs.ai-thinker.com/_media/rtl8710/docs/bw15_datasheet_en.pdf",
+	"vendor": "Ai-Thinker Co., Ltd.",
+	"pcb": {
+		"symbol": "BW15"
+	},
+	"doc": {
+		"fccid": "2AXVG-BW15",
+		"links": {
+			"Vendor datasheet": "https://docs.ai-thinker.com/_media/rtl8710/docs/bw15_datasheet_en.pdf"
+		}
+	}
+}

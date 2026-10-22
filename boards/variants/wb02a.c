@@ -1,0 +1,48 @@
+/* This file was auto-generated from wb02a.json using boardgen */
+
+#include <Arduino.h>
+
+#ifdef LT_VARIANT_INCLUDE
+#include LT_VARIANT_INCLUDE
+#endif
+
+// clang-format off
+PinInfo lt_arduino_pin_info_list[PINS_COUNT] = {
+	// D0: PA07, SD_D3, I2S0_RX, I2C0_SCL, I2C0_SDA
+	{PA_7,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_I2S,           PIN_NONE, 0},
+	// D1: PA06, SD_D2, I2C0_SCL, I2C0_SDA
+	{PA_6,  PIN_GPIO | PIN_IRQ | PIN_I2C,                     PIN_NONE, 0},
+	// D2: PA03, UART0_RX, I2C0_SCL, I2C0_SDA
+	{PA_3,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
+	// D3: PA10, SD_D0, I2S0_TX, I2C0_SCL, I2C0_SDA
+	{PA_10, PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_I2S,           PIN_NONE, 0},
+	// D4: PA02, UART0_TX, I2C0_SCL, I2C0_SDA
+	{PA_2,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
+	// D5: PA01, ADC3, SWDIO, I2C0_SCL, I2C0_SDA
+	{PA_1,  PIN_GPIO | PIN_IRQ | PIN_ADC | PIN_I2C | PIN_SWD, PIN_NONE, 0},
+	// D6: PA04, ADC4, SWCLK, I2C0_SCL, I2C0_SDA
+	{PA_4,  PIN_GPIO | PIN_IRQ | PIN_ADC | PIN_I2C | PIN_SWD, PIN_NONE, 0},
+	// D7: PA05, I2C0_SCL, I2C0_SDA
+	{PA_5,  PIN_GPIO | PIN_IRQ | PIN_I2C,                     PIN_NONE, 0},
+	// D8: PA09, BOOT1, SD_CLK, I2S0_SCLK, I2C0_SCL, I2C0_SDA
+	{PA_9,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_I2S,           PIN_NONE, 0},
+	// D9: PB08, UART1_RX, I2C0_SCL, I2C0_SDA
+	{PB_8,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
+	// D10: PB09, UART1_TX, I2C0_SCL, I2C0_SDA
+	{PB_9,  PIN_GPIO | PIN_IRQ | PIN_I2C | PIN_UART,          PIN_NONE, 0},
+};
+
+PinInfo *lt_arduino_pin_gpio_map[] = {
+	[1]  = &(lt_arduino_pin_info_list[5]),  // PA_1 (D5)
+	[2]  = &(lt_arduino_pin_info_list[4]),  // PA_2 (D4)
+	[3]  = &(lt_arduino_pin_info_list[2]),  // PA_3 (D2)
+	[4]  = &(lt_arduino_pin_info_list[6]),  // PA_4 (D6)
+	[5]  = &(lt_arduino_pin_info_list[7]),  // PA_5 (D7)
+	[6]  = &(lt_arduino_pin_info_list[1]),  // PA_6 (D1)
+	[7]  = &(lt_arduino_pin_info_list[0]),  // PA_7 (D0)
+	[9]  = &(lt_arduino_pin_info_list[8]),  // PA_9 (D8)
+	[10] = &(lt_arduino_pin_info_list[3]),  // PA_10 (D3)
+	[24] = &(lt_arduino_pin_info_list[9]),  // PB_8 (D9)
+	[25] = &(lt_arduino_pin_info_list[10]), // PB_9 (D10)
+};
+// clang-format on

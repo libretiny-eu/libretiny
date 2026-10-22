@@ -1,0 +1,10 @@
+{
+	"build": {
+		"family": "BK7231Q",
+		"ldscript": "bk7231_bsp.ld",
+		"bkboot_version": "bk7231q"
+	},
+	"upload": {
+		"speed": 460800
+	}
+}

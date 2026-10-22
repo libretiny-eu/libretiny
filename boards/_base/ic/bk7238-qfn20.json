@@ -1,0 +1,70 @@
+{
+	"pcb": {
+		"ic": {
+			"9": {
+				"IO":"I",
+				"CTRL": "CEN"
+			},
+			"10": {
+				"C_NAME": "GPIO24",
+				"GPIO": "P24",
+				"IRQ": null,
+				"PWM": 4,
+				"ADC": 2,
+				"I2C": "2_SCL"
+			},
+			"11": {
+				"C_NAME": "GPIO26",
+				"GPIO": "P26",
+				"IRQ": null,
+				"PWM": 5,
+				"ADC": 1,
+				"I2C": "2_SDA"
+			},
+			"12": {
+				"C_NAME": "GPIO6",
+				"GPIO": "P6",
+				"IRQ": null,
+				"PWM": 0
+			},
+			"13": {
+				"C_NAME": "GPIO8",
+				"GPIO": "P8",
+				"IRQ": null,
+				"PWM": 2
+			},
+			"14": {
+				"C_NAME": "GPIO9",
+				"GPIO": "P9",
+				"IRQ": null,
+				"PWM": 3
+			},
+			"15": {
+				"C_NAME": "GPIO10",
+				"GPIO": "P10",
+				"IRQ": null,
+				"UART": "1_RX",
+				"ADC": 6
+			},
+			"16": {
+				"C_NAME": "GPIO11",
+				"GPIO": "P11",
+				"IRQ": null,
+				"UART": "1_TX"
+			},
+			"17": {
+				"C_NAME": "GPIO1",
+				"GPIO": "P1",
+				"IRQ": null,
+				"UART": "2_RX",
+				"ADC": 5
+			},
+			"18": {
+				"C_NAME": "GPIO0",
+				"GPIO": "P0",
+				"IRQ": null,
+				"UART": "2_TX"
+			}
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"flash": {
+		"app": "0x007000+0x113000",
+		"ota": "0x11A000+0xA8000",
+		"ln_nvds": "0x1C2000+0x3000",
+		"ln_kv": "0x1C5000+0x4000",
+		"kvs": "0x1C9000+0x8000",
+		"userdata": "0x1D1000+0x2F000",
+		"tuya": "0x1EB000+0x15000"
+	},
+	"doc": {
+		"params": {
+			"layout": "**Tuya default** (OTA 0x11A000, KV 0x1C5000)"
+		}
+	}
+}

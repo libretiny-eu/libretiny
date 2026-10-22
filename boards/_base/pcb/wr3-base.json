@@ -1,0 +1,9 @@
+{
+	"pcb": {
+		"templates": [
+			"esp12s",
+			"tuya-16x24",
+			"rf-type1"
+		]
+	}
+}

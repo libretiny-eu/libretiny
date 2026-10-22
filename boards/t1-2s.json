@@ -1,0 +1,23 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7238",
+		"beken-7238-tuya",
+		"ic/bk7238-qfn32",
+		"pcb/t1-2s",
+		"pcb/t1-2s-test"
+	],
+	"build": {
+		"mcu": "bk7238",
+		"variant": "t1-2s"
+	},
+	"name": "T1-2S Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/T1-2S-module-datasheet?id=Kcl2d5xjy1rly",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-T1-2S-NL"
+	},
+	"pcb": {
+		"symbol": "T1-2S-NL"
+	}
+}

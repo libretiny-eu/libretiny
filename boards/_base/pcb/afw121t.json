@@ -1,0 +1,90 @@
+{
+	"pcb": {
+		"templates": [
+			"99iot-21p",
+			"pcb-blue-light",
+			"rf-type1"
+		],
+		"scale": 16,
+		"vars": {
+			"TRACE_COLOR": "#FAFD9D"
+		},
+		"pinout_hidden": "I2S,TRIG,WAKE,CTS,RTS,SD",
+		"pinout": {
+			"1": {
+				"GND": null
+			},
+			"2": {
+				"CTRL": "RF_O"
+			},
+			"3": {
+				"GND": null
+			},
+			"4": {
+				"NC": null
+			},
+			"5": {
+				"CTRL": "CEN"
+			},
+			"6": {
+				"IC": 13,
+				"ARD": "D0"
+			},
+			"7": {
+				"IC": 14,
+				"ARD": "D1"
+			},
+			"8": {
+				"IC": 16,
+				"ARD": "D2"
+			},
+			"9": {
+				"IC": 17,
+				"ARD": "D3"
+			},
+			"10": {
+				"GND": null
+			},
+			"11": {
+				"PWR": 3.3
+			},
+			"12": {
+				"GND": null
+			},
+			"13": {
+				"NC": null
+			},
+			"14": {
+				"IC": 28,
+				"ARD": "D5"
+			},
+			"15": {
+				"IC": 29,
+				"ARD": "D6"
+			},
+			"16": {
+				"IC": 30,
+				"ARD": "D7"
+			},
+			"17": {
+				"IC": 31,
+				"ARD": "D8"
+			},
+			"18": {
+				"IC": 32,
+				"ARD": "D9"
+			},
+			"19": {
+				"IC": 1,
+				"ARD": "D10"
+			},
+			"20": {
+				"IC": 2,
+				"ARD": "D4"
+			},
+			"21": {
+				"GND": null
+			}
+		}
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"realtek-ambz",
+		"realtek-ambz-2mb-788k",
+		"ic/rtl8710bn",
+		"pcb/t112"
+	],
+	"build": {
+		"mcu": "rtl8710bn",
+		"variant": "t112-v1.1"
+	},
+	"name": "T112_V1.1",
+	"url": "https://docs.libretiny.eu/boards/t112-v1.1/",
+	"vendor": "Unknown",
+	"doc": {
+		"fccid": "2AU7O-T102V11",
+		"mcu": "w302"
+	},
+	"pcb": {
+		"symbol": "T112_V1.1"
+	}
+}

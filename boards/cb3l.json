@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"beken-72xx",
+		"beken-7231n",
+		"beken-7231n-tuya",
+		"ic/bk7231-qfn32",
+		"pcb/cb3l"
+	],
+	"build": {
+		"mcu": "bk7231n",
+		"variant": "cb3l"
+	},
+	"name": "CB3L Wi-Fi Module",
+	"url": "https://developer.tuya.com/en/docs/iot/cb3l-module-datasheet?id=Kai51ngmrh3qm",
+	"vendor": "Tuya Inc.",
+	"doc": {
+		"fccid": "2ANDL-CB3L"
+	},
+	"pcb": {
+		"symbol": "CB3L"
+	}
+}

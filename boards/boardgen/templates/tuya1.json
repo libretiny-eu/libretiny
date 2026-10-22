@@ -1,0 +1,99 @@
+{
+	"name": "tuya1",
+	"title": "Tuya boards; 1 series",
+	"width": 18,
+	"height": 23.5,
+	"vars": {
+		"PINTYPE_VERT": "pin_vert_cast_nohole",
+		"PINTYPE_HORZ": "pin_horz_cast_nohole",
+		"RASTER": 1.5,
+		"RF_W": 18,
+		"RF_H": 6.1
+	},
+	"front": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "18,23.5",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "1.3,7.3",
+			"size": "15.4,15.4",
+			"preset": "shield"
+		},
+		{
+			"comment": "Pins (1-9)",
+			"id": "left",
+			"name": "r_pins_vert",
+			"repeat": 9,
+			"pos": "0,10.6",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (10-18)",
+			"id": "right",
+			"name": "r_pins_vert",
+			"repeat": 9,
+			"pos": "18,10.6",
+			"vars": {
+				"PINDIR": "right"
+			}
+		}
+	],
+	"back": [
+		{
+			"comment": "PCB soldermask",
+			"type": "rect",
+			"pos": "0,0",
+			"size": "18,23.5",
+			"preset": "${MASK_PRESET}"
+		},
+		{
+			"comment": "Pins (1-9)",
+			"id": "left",
+			"name": "r_pins_vert",
+			"repeat": 9,
+			"pos": "0,10.6",
+			"vars": {
+				"PINDIR": "left"
+			}
+		},
+		{
+			"comment": "Pins (10-18)",
+			"id": "right",
+			"name": "r_pins_vert",
+			"repeat": 9,
+			"pos": "18,10.6",
+			"vars": {
+				"PINDIR": "right"
+			}
+		}
+	],
+	"pads": {
+		"1": "tuya1.front.left.pin1",
+		"2": "tuya1.front.left.pin2",
+		"3": "tuya1.front.left.pin3",
+		"4": "tuya1.front.left.pin4",
+		"5": "tuya1.front.left.pin5",
+		"6": "tuya1.front.left.pin6",
+		"7": "tuya1.front.left.pin7",
+		"8": "tuya1.front.left.pin8",
+		"9": "tuya1.front.left.pin9",
+		"10": "tuya1.front.right.pin9",
+		"11": "tuya1.front.right.pin8",
+		"12": "tuya1.front.right.pin7",
+		"13": "tuya1.front.right.pin6",
+		"14": "tuya1.front.right.pin5",
+		"15": "tuya1.front.right.pin4",
+		"16": "tuya1.front.right.pin3",
+		"17": "tuya1.front.right.pin2",
+		"18": "tuya1.front.right.pin1"
+	},
+	"test_pads": {}
+}

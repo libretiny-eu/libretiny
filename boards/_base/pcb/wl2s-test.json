@@ -1,0 +1,98 @@
+{
+	"pcb": {
+		"test_pads": {
+			"TA9": "wl2s.back.a9.anchor",
+			"TGND": "wl2s.back.gnd.anchor",
+			"TRX1": "wl2s.back.rx1.anchor",
+			"TTX1": "wl2s.back.tx1.anchor",
+			"TSCLK": "wl2s.back.sclk.anchor",
+			"TSWD": "wl2s.back.swd.anchor"
+		},
+		"back": [
+			{
+				"id": "a9",
+				"name": "label_line_up",
+				"pos": "2.8,11.8",
+				"vars": {
+					"DIR": "left",
+					"W": 2.5,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "3,12"
+			},
+			{
+				"id": "gnd",
+				"name": "label_line_up",
+				"pos": "0.8,8.3",
+				"vars": {
+					"DIR": "left",
+					"W": 0.5,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "1,8.5"
+			},
+			{
+				"id": "rx1",
+				"name": "label_line_up",
+				"pos": "3,5.8",
+				"vars": {
+					"DIR": "left",
+					"W": 2.6,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "3.2,6"
+			},
+			{
+				"id": "tx1",
+				"name": "label_line_up",
+				"pos": "5,5.8",
+				"vars": {
+					"DIR": "left",
+					"W": 4.5,
+					"H": 2
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "5.2,6"
+			},
+			{
+				"id": "swd",
+				"name": "label_line_up",
+				"pos": "10.2,11.1",
+				"vars": {
+					"DIR": "right",
+					"W": 3.0,
+					"H": 1
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "10,11"
+			},
+			{
+				"id": "sclk",
+				"name": "label_line_up",
+				"pos": "5.2,12.2",
+				"vars": {
+					"DIR": "right",
+					"W": 8.0,
+					"H": 0
+				}
+			},
+			{
+				"name": "test_pad_1mm",
+				"pos": "5,12"
+			}
+		]
+	}
+}

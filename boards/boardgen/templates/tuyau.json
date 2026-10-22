@@ -1,0 +1,162 @@
+{
+	"name": "tuyau",
+	"title": "Tuya boards; U series",
+	"width": 15.8,
+	"height": 20.3,
+	"vars": {
+		"PINTYPE_VERT": "pin_vert_cast_nohole",
+		"PINTYPE_HORZ": "pin_horz_cast_nohole",
+		"RF_W": 15.8,
+		"RF_H": 5.2
+	},
+	"front": [
+		{
+			"name": "tuyau_pcb",
+			"pos": "0,0"
+		},
+		{
+			"comment": "Metal shielding",
+			"type": "rect",
+			"pos": "1.1,5.6",
+			"size": "13.6,11.5",
+			"preset": "shield"
+		},
+		{
+			"comment": "Pins (1-7)",
+			"id": "left",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,6.1",
+			"vars": {
+				"PINDIR": "left",
+				"RASTER": 1.4
+			}
+		},
+		{
+			"comment": "Pins (8-14)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "2.5,20.3",
+			"vars": {
+				"PINDIR": "down",
+				"RASTER": 1.8
+			}
+		},
+		{
+			"comment": "Long pads (8-14)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "2.5,17.5 + 1.2",
+			"vars": {
+				"PINTYPE_HORZ": "pad",
+				"W": "0.6 * 1.8",
+				"H": 2.4,
+				"R": 0,
+				"RASTER": 1.8
+			}
+		},
+		{
+			"comment": "Pin labels (8-14)",
+			"id": "down",
+			"name": "r_labels_horz",
+			"repeat": 7,
+			"pos": "2.5,20.3",
+			"vars": {
+				"PINDIR": "down",
+				"RASTER": 1.8
+			}
+		},
+		{
+			"comment": "Pins (15-21)",
+			"id": "right",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "15.8,6.1",
+			"vars": {
+				"PINDIR": "right",
+				"RASTER": 1.4
+			}
+		},
+		{
+			"type": "text",
+			"pos": "6.5,5.0",
+			"text": "${SYMBOL}",
+			"font_size": 1.0,
+			"fill": {
+				"color": "${SILK_COLOR}"
+			}
+		}
+	],
+	"back": [
+		{
+			"name": "tuyau_pcb",
+			"pos": "0,0"
+		},
+		{
+			"comment": "Pins (1-7)",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "0,6.1",
+			"vars": {
+				"PINDIR": "left",
+				"RASTER": 1.4
+			}
+		},
+		{
+			"comment": "Pins (8-14)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "2.5,20.3",
+			"vars": {
+				"PINDIR": "down",
+				"RASTER": 1.8
+			}
+		},
+		{
+			"comment": "Long pads (8-14)",
+			"name": "r_pins_horz",
+			"repeat": 7,
+			"pos": "2.5,17.5 + 1.2",
+			"vars": {
+				"PINTYPE_HORZ": "pad",
+				"W": "0.6 * 1.8",
+				"H": 2.4,
+				"R": 0,
+				"RASTER": 1.8
+			}
+		},
+		{
+			"comment": "Pins (15-21)",
+			"name": "r_pins_vert",
+			"repeat": 7,
+			"pos": "15.8,6.1",
+			"vars": {
+				"PINDIR": "right",
+				"RASTER": 1.4
+			}
+		}
+	],
+	"pads": {
+		"1": "tuyau.front.left.pin1",
+		"2": "tuyau.front.left.pin2",
+		"3": "tuyau.front.left.pin3",
+		"4": "tuyau.front.left.pin4",
+		"5": "tuyau.front.left.pin5",
+		"6": "tuyau.front.left.pin6",
+		"7": "tuyau.front.left.pin7",
+		"8": "tuyau.front.down.label1.anchor",
+		"9": "tuyau.front.down.label2.anchor",
+		"10": "tuyau.front.down.label3.anchor",
+		"11": "tuyau.front.down.label4.anchor",
+		"12": "tuyau.front.down.label5.anchor",
+		"13": "tuyau.front.down.label6.anchor",
+		"14": "tuyau.front.down.label7.anchor",
+		"15": "tuyau.front.right.pin7",
+		"16": "tuyau.front.right.pin6",
+		"17": "tuyau.front.right.pin5",
+		"18": "tuyau.front.right.pin4",
+		"19": "tuyau.front.right.pin3",
+		"20": "tuyau.front.right.pin2",
+		"21": "tuyau.front.right.pin1"
+	}
+}

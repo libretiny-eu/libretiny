@@ -1,0 +1,139 @@
+{
+	"pcb": {
+		"ic": {
+			"10": {
+				"C_NAME": "GPIO28",
+				"GPIO": "P28",
+				"IRQ": null,
+				"USB": "DN"
+			},
+			"11": {
+				"C_NAME": "GPIO14",
+				"GPIO": "P14",
+				"IRQ": null,
+				"SD": "CLK",
+				"SPI": "SCK"
+			},
+			"12": {
+				"C_NAME": "GPIO16",
+				"GPIO": "P16",
+				"IRQ": null,
+				"SD": "D0",
+				"SPI": "MOSI"
+			},
+			"13": {
+				"C_NAME": "GPIO15",
+				"GPIO": "P15",
+				"IRQ": null,
+				"SD": "CMD",
+				"SPI": "CS"
+			},
+			"14": {
+				"C_NAME": "GPIO17",
+				"GPIO": "P17",
+				"IRQ": null,
+				"SD": "D1",
+				"SPI": "MISO"
+			},
+			"15": {
+				"C_NAME": "GPIO26",
+				"GPIO": "P26",
+				"IRQ": null,
+				"PWM": 5,
+				"IRDA": null
+			},
+			"16": {
+				"C_NAME": "GPIO24",
+				"GPIO": "P24",
+				"IRQ": null,
+				"PWM": 4
+			},
+			"17": {
+				"C_NAME": "GPIO23",
+				"GPIO": "P23",
+				"IRQ": null,
+				"ADC": 3,
+				"JTAG": "TDO",
+				"FLASH": "FSO"
+			},
+			"18": {
+				"C_NAME": "GPIO22",
+				"GPIO": "P22",
+				"IRQ": null,
+				"JTAG": "TDI",
+				"FLASH": "FSI"
+			},
+			"19": {
+				"C_NAME": "GPIO21",
+				"GPIO": "P21",
+				"IRQ": null,
+				"I2C": "1_SDA",
+				"JTAG": "TMS",
+				"I2S": "MCLK",
+				"FLASH": "^FCS"
+			},
+			"20": {
+				"C_NAME": "GPIO20",
+				"GPIO": "P20",
+				"IRQ": null,
+				"I2C": "1_SCL",
+				"JTAG": "TCK",
+				"FLASH": "FSCK"
+			},
+			"21": {
+				"IO": "I",
+				"CTRL": "CEN"
+			},
+			"22": {
+				"C_NAME": "GPIO6",
+				"GPIO": "P6",
+				"IRQ": null,
+				"PWM": 0
+			},
+			"23": {
+				"C_NAME": "GPIO7",
+				"GPIO": "P7",
+				"IRQ": null,
+				"PWM": 1
+			},
+			"24": {
+				"C_NAME": "GPIO8",
+				"GPIO": "P8",
+				"IRQ": null,
+				"PWM": 2
+			},
+			"25": {
+				"C_NAME": "GPIO9",
+				"GPIO": "P9",
+				"IRQ": null,
+				"PWM": 3
+			},
+			"26": {
+				"C_NAME": "GPIO10",
+				"GPIO": "P10",
+				"IRQ": null,
+				"UART": "1_RX"
+			},
+			"27": {
+				"C_NAME": "GPIO11",
+				"GPIO": "P11",
+				"IRQ": null,
+				"UART": "1_TX"
+			},
+			"28": {
+				"C_NAME": "GPIO1",
+				"GPIO": "P1",
+				"IRQ": null,
+				"UART": "2_RX",
+				"I2C": "2_SDA"
+			},
+			"29": {
+				"C_NAME": "GPIO0",
+				"GPIO": "P0",
+				"IRQ": null,
+				"UART": "2_TX",
+				"I2C": "2_SCL"
+			}
+		}
+	}
+}
