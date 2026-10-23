@@ -2,6 +2,48 @@
 
 #include <ArduinoPrivate.h>
 
+#if LT_RTL8720D
+
+/* ADC - AmebaD: the measurable channels are PB1/PB2/PB3 (AD_4/5/6); the AmebaZ-named
+ * AD_1..AD_3 pins are not bonded out on the BW16. Uses the efuse-calibrated
+ * ADC_GetVoltage(), one channel at a time. */
+extern int32_t ADC_GetVoltage(uint32_t chan_data);
+
+static analogin_t lt_adc;
+static PinName lt_adc_pin = NC;
+
+uint16_t analogReadVoltage(pin_size_t pinNumber) {
+	PinName ad;
+	switch (pinNumber) {
+		case PIN_A0:
+			ad = AD_4; // PB1
+			break;
+		case PIN_A1:
+			ad = AD_5; // PB2
+			break;
+		case PIN_A2:
+			ad = AD_6; // PB3
+			break;
+		default:
+			return 0;
+	}
+	if (lt_adc_pin != ad) {
+		if (lt_adc_pin != NC)
+			analogin_deinit(&lt_adc);
+		analogin_init(&lt_adc, ad);
+		lt_adc_pin = ad;
+	}
+	uint16_t raw = analogin_read_u16(&lt_adc);
+	int32_t mv	 = ADC_GetVoltage(raw);
+	return mv < 0 ? 0 : (uint16_t)mv;
+}
+
+uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
+	return 3300;
+}
+
+#else
+
 /* ADC */
 static analogin_t adc1;
 static analogin_t adc2;
@@ -59,6 +101,8 @@ uint16_t analogReadMaxVoltage(pin_size_t pinNumber) {
 #endif
 	return 3300;
 }
+
+#endif // LT_RTL8720D
 
 void analogWrite(pin_size_t pinNumber, int value) {
 	pinCheckGetData(pinNumber, PIN_PWM, );

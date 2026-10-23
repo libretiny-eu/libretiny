@@ -44,6 +44,7 @@ plugins:
         "link/flashing-beken-72xx.md": "docs/platform/beken-72xx/README.md#flashing"
         "link/flashing-ln882h.md": "docs/platform/lightning-ln882x/README.md#flashing"
         "link/flashing-realtek-ambz.md": "docs/platform/realtek-ambz/README.md#flashing"
+        "link/flashing-realtek-ambd.md": "docs/platform/realtek-ambd/README.md#flashing"
         "link/bk72xx-keys.md": "docs/platform/beken-72xx/keys.md"
         "link/kickstart.md": "https://github.com/libretiny-eu/esphome-kickstart/releases/latest"
   - section-index
