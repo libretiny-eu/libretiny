@@ -170,6 +170,12 @@ void handleRtwEvent(uint16_t event, const char *data, int len, int flags) {
 			break;
 
 		case WIFI_EVENT_FOURWAY_HANDSHAKE_DONE:
+#if LT_RTL8720D
+			// LPS is per-connection driver state and comes back on every association,
+			// so re-assert the configured power-save mode here.
+			if (!pWiFi->getSleep())
+				wifi_disable_powersave();
+#endif
 			eventId								  = ARDUINO_EVENT_WIFI_STA_CONNECTED;
 			ssid								  = pWiFi->SSID();
 			eventInfo.wifi_sta_connected.ssid_len = ssid.length();

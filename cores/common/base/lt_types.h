@@ -40,6 +40,9 @@ typedef enum {
 	RTL8720CX = RTL8720CM,
 	W701	  = RTL8720CF,
 	W701M	  = RTL8720CM,
+	// Realtek AmebaD
+	RTL8720DN = CPU_MODEL(F_RTL8720D, 0xE0), // TODO(bench): confirm chip id from EFUSE
+	RTL8720DM = CPU_MODEL(F_RTL8720D, 0xE1), // TODO(bench): confirm chip id from EFUSE
 	// Beken 72XX
 	BK7231Q = CPU_MODEL(F_BK7231Q, 0x31), // *SCTRL_CHIP_ID = 0x7231
 	BK7231T = CPU_MODEL(F_BK7231T, 0x1A), // *SCTRL_CHIP_ID = 0x7231a
