@@ -7,13 +7,16 @@
 
 extern Serial_t *serial_handles[SER_PORT_NUM];
 
-uint8_t uart_print_port = LT_UART_DEFAULT_LOGGER;
+extern uint32_t lt_uart_port;
 
 void putchar_(char c) {
-	putchar_p(c, uart_print_port);
+	putchar_p(c, lt_uart_port);
 }
 
 void putchar_p(char c, unsigned long port) {
+	if (port >= SER_PORT_NUM) {
+		return;
+	}
 	serial_putchar(serial_handles[port], c);
 }
 
