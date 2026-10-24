@@ -3,6 +3,7 @@
 #if LT_HAS_LWIP2
 
 #include "mDNS.h"
+#include <WiFiUdp.h>
 #include <map>
 #include <vector>
 
@@ -20,6 +21,540 @@ extern "C" {
 #endif
 
 #if LWIP_MDNS_RESPONDER
+
+namespace {
+
+constexpr uint32_t MDNS_QUERY_TIMEOUT_MS = 3000;
+constexpr size_t MDNS_MAX_RESULTS		 = 20;
+constexpr unsigned int DNS_MAX_JUMPS	 = 16;
+
+constexpr uint16_t DNS_TYPE_A	 = 1;
+constexpr uint16_t DNS_TYPE_PTR	 = 12;
+constexpr uint16_t DNS_TYPE_TXT	 = 16;
+constexpr uint16_t DNS_TYPE_AAAA = 28;
+constexpr uint16_t DNS_TYPE_SRV	 = 33;
+
+constexpr uint16_t DNS_CLASS_IN = 1;
+
+constexpr uint16_t MDNS_PORT		  = 5353;
+constexpr size_t MDNS_MAX_UDP_PAYLOAD = 9000 - 20 - 8;
+
+constexpr uint16_t DNS_FLAG_RESPONSE = 0x8000;
+constexpr uint16_t DNS_FLAG_OPCODE	 = 0x7800;
+constexpr uint16_t DNS_FLAG_RCODE	 = 0x000F;
+constexpr uint16_t DNS_CLASS_MASK	 = 0x7FFF;
+
+struct QueryTxt {
+	String key;
+	String value;
+};
+
+struct QueryResult {
+	String instance;
+	String hostnameFqdn;
+	String hostname;
+
+	IPAddress ip;
+	IPv6Address ipv6;
+
+	uint16_t port = 0;
+
+	std::vector<QueryTxt> txt;
+};
+
+struct DnsRecord {
+	uint16_t type = 0;
+
+	String name;
+	String target;
+
+	uint16_t port = 0;
+
+	IPAddress ip;
+	IPv6Address ipv6;
+
+	std::vector<QueryTxt> txt;
+};
+
+static std::vector<QueryResult> sQueryResults;
+
+static uint16_t dnsRead16(const uint8_t *p) {
+	return ((uint16_t)p[0] << 8) | p[1];
+}
+
+static void dnsAppend16(std::vector<uint8_t> &packet, uint16_t value) {
+	packet.push_back(value >> 8);
+	packet.push_back(value & 0xFF);
+}
+
+static bool dnsNameEquals(const String &a, const String &b) {
+	return strcasecmp(a.c_str(), b.c_str()) == 0;
+}
+
+static bool dnsAppendName(std::vector<uint8_t> &packet, const String &name) {
+	int start  = 0;
+	int length = name.length();
+
+	while (start < length) {
+		int dot = name.indexOf('.', start);
+
+		if (dot < 0)
+			dot = length;
+
+		int labelLength = dot - start;
+
+		if (labelLength <= 0 || labelLength > 63)
+			return false;
+
+		packet.push_back((uint8_t)labelLength);
+
+		for (int i = start; i < dot; i++)
+			packet.push_back((uint8_t)name[i]);
+
+		start = dot + 1;
+	}
+
+	packet.push_back(0);
+
+	return true;
+}
+
+/**
+ * Reads a possibly compressed DNS name.
+ *
+ * 'offset' is advanced past the encoded name in the original stream,
+ * even when the name contains compression pointers.
+ */
+static bool dnsReadName(const uint8_t *packet, size_t packetLength, size_t &offset, String &name) {
+	size_t pos		  = offset;
+	size_t nextOffset = offset;
+
+	bool jumped		   = false;
+	unsigned int jumps = 0;
+
+	name = "";
+
+	while (pos < packetLength) {
+		uint8_t labelLength = packet[pos++];
+
+		if (labelLength == 0) {
+			offset = jumped ? nextOffset : pos;
+			return true;
+		}
+
+		// DNS compression pointer: 11xxxxxx xxxxxxxx
+		if ((labelLength & 0xC0) == 0xC0) {
+			if (pos >= packetLength)
+				return false;
+
+			uint16_t pointer = ((uint16_t)(labelLength & 0x3F) << 8) | packet[pos++];
+
+			if (pointer >= packetLength)
+				return false;
+
+			if (!jumped) {
+				nextOffset = pos;
+				jumped	   = true;
+			}
+
+			// protect against malformed pointer loops
+			if (++jumps > DNS_MAX_JUMPS)
+				return false;
+
+			pos = pointer;
+			continue;
+		}
+
+		if (labelLength & 0xC0)
+			return false;
+
+		if (labelLength > 63)
+			return false;
+
+		if (pos + labelLength > packetLength)
+			return false;
+
+		size_t expandedLength = name.length() + (name.length() ? 1 : 0) + labelLength;
+		if (expandedLength > DNS_MAX_NAME_LENGTH)
+			return false;
+
+		if (name.length())
+			name += '.';
+
+		for (uint8_t i = 0; i < labelLength; i++)
+			name += (char)packet[pos++];
+
+		if (!jumped)
+			offset = pos;
+	}
+
+	return false;
+}
+
+static bool dnsBuildQuery(const String &name, uint16_t type, uint16_t id, std::vector<uint8_t> &packet) {
+	packet.clear();
+	packet.resize(12, 0);
+
+	// transaction ID
+	packet[0] = id >> 8;
+	packet[1] = id & 0xFF;
+
+	// QDCOUNT = 1
+	packet[4] = 0;
+	packet[5] = 1;
+
+	if (!dnsAppendName(packet, name))
+		return false;
+
+	dnsAppend16(packet, type);
+	dnsAppend16(packet, DNS_CLASS_IN);
+
+	return true;
+}
+
+static bool dnsParsePacket(
+	const uint8_t *packet,
+	size_t packetLength,
+	uint16_t expectedId,
+	std::vector<DnsRecord> &records
+) {
+	if (packetLength < 12)
+		return false;
+
+	uint16_t id = dnsRead16(packet);
+
+	if (id != expectedId)
+		return false;
+
+	uint16_t flags = dnsRead16(packet + 2);
+
+	// Must be a successful standard DNS response.
+	if (!(flags & DNS_FLAG_RESPONSE))
+		return false;
+
+	if (flags & DNS_FLAG_OPCODE)
+		return false;
+
+	if (flags & DNS_FLAG_RCODE)
+		return false;
+
+	uint16_t questions	= dnsRead16(packet + 4);
+	uint16_t answers	= dnsRead16(packet + 6);
+	uint16_t authority	= dnsRead16(packet + 8);
+	uint16_t additional = dnsRead16(packet + 10);
+
+	size_t offset = 12;
+
+	// Skip question section
+	for (uint16_t i = 0; i < questions; i++) {
+		String name;
+
+		if (!dnsReadName(packet, packetLength, offset, name))
+			return false;
+
+		// QTYPE + QCLASS
+		if (offset + 4 > packetLength)
+			return false;
+
+		offset += 4;
+	}
+
+	std::vector<DnsRecord> packetRecords;
+
+	uint32_t recordCount = (uint32_t)answers + authority + additional;
+	for (uint32_t i = 0; i < recordCount; i++) {
+		DnsRecord record;
+
+		if (!dnsReadName(packet, packetLength, offset, record.name))
+			return false;
+
+		// TYPE(2) CLASS(2) TTL(4) RDLENGTH(2)
+		if (offset + 10 > packetLength)
+			return false;
+
+		record.type = dnsRead16(packet + offset);
+		offset += 2;
+
+		uint16_t recordClass = dnsRead16(packet + offset);
+		offset += 2;
+
+		// TTL
+		offset += 4;
+
+		uint16_t rdLength = dnsRead16(packet + offset);
+		offset += 2;
+
+		size_t rdata	= offset;
+		size_t rdataEnd = rdata + rdLength;
+
+		if (rdataEnd > packetLength)
+			return false;
+
+		if ((recordClass & DNS_CLASS_MASK) != DNS_CLASS_IN) {
+			offset = rdataEnd;
+			continue;
+		}
+
+		bool keep = false;
+
+		switch (record.type) {
+			case DNS_TYPE_PTR: {
+				size_t nameOffset = rdata;
+
+				if (dnsReadName(packet, packetLength, nameOffset, record.target)) {
+					keep = true;
+				}
+
+				break;
+			}
+
+			case DNS_TYPE_SRV: {
+				// priority(2) weight(2) port(2) target(...)
+				if (rdLength < 6)
+					break;
+
+				record.port = dnsRead16(packet + rdata + 4);
+
+				size_t nameOffset = rdata + 6;
+
+				if (dnsReadName(packet, packetLength, nameOffset, record.target)) {
+					keep = true;
+				}
+
+				break;
+			}
+
+			case DNS_TYPE_TXT: {
+				size_t pos = rdata;
+
+				while (pos < rdataEnd) {
+					uint8_t txtLength = packet[pos++];
+
+					if (pos + txtLength > rdataEnd)
+						break;
+
+					String item;
+
+					for (uint8_t j = 0; j < txtLength; j++)
+						item += (char)packet[pos + j];
+
+					pos += txtLength;
+
+					QueryTxt txt;
+
+					int separator = item.indexOf('=');
+
+					if (separator < 0) {
+						txt.key	  = item;
+						txt.value = "";
+					} else {
+						txt.key	  = item.substring(0, separator);
+						txt.value = item.substring(separator + 1);
+					}
+
+					record.txt.push_back(txt);
+				}
+
+				keep = true;
+				break;
+			}
+
+			case DNS_TYPE_A: {
+				if (rdLength != 4)
+					break;
+
+				record.ip = IPAddress(packet[rdata + 0], packet[rdata + 1], packet[rdata + 2], packet[rdata + 3]);
+
+				keep = true;
+				break;
+			}
+
+			case DNS_TYPE_AAAA: {
+				if (rdLength != 16)
+					break;
+
+				record.ipv6 = IPv6Address(packet + rdata);
+
+				keep = true;
+				break;
+			}
+		}
+
+		if (keep)
+			packetRecords.push_back(std::move(record));
+
+		offset = rdataEnd;
+	}
+
+	// Set records only after a complete successful parse
+	for (auto &record : packetRecords)
+		records.push_back(std::move(record));
+
+	return true;
+}
+
+static uint16_t dnsNextQueryId() {
+	static uint16_t id = 0;
+
+	id++;
+
+	if (id == 0)
+		id++;
+
+	return id;
+}
+
+static bool dnsQuery(const String &name, uint16_t type, uint32_t timeout, std::vector<DnsRecord> &records) {
+	const uint16_t id = dnsNextQueryId();
+
+	std::vector<uint8_t> query;
+
+	if (!dnsBuildQuery(name, type, id, query))
+		return false;
+
+	// Use an ephemeral source port so mDNS responders return legacy
+	// unicast responses without conflicting with the local mDNS responder.
+	WiFiUDP udp;
+
+	if (!udp.beginPacket(IPAddress(224, 0, 0, 251), MDNS_PORT))
+		return false;
+
+	if (udp.write(query.data(), query.size()) != query.size()) {
+		udp.stop();
+		return false;
+	}
+
+	if (!udp.endPacket()) {
+		udp.stop();
+		return false;
+	}
+
+	uint32_t start = millis();
+
+	while ((uint32_t)(millis() - start) < timeout) {
+		int packetLength = udp.parsePacket();
+
+		if (packetLength <= 0) {
+			delay(5);
+			continue;
+		}
+
+		if ((size_t)packetLength > MDNS_MAX_UDP_PAYLOAD) {
+			LT_DM(MDNS, "Ignoring oversized mDNS packet: %u bytes", (unsigned)packetLength);
+			udp.flush();
+			continue;
+		}
+
+		// A valid legacy mDNS reply still originates from port 5353.
+		if (udp.remotePort() != MDNS_PORT) {
+			udp.flush();
+			continue;
+		}
+
+		std::vector<uint8_t> response(packetLength);
+
+		int readLength = udp.read(response.data(), response.size());
+
+		if (readLength > 0) {
+			dnsParsePacket(response.data(), readLength, id, records);
+		}
+	}
+
+	udp.stop();
+
+	return true;
+}
+
+static String dnsStripLocal(const String &hostname) {
+	const char suffix[]		  = ".local";
+	const size_t suffixLength = sizeof(suffix) - 1;
+
+	if (hostname.length() > suffixLength) {
+		const char *start = hostname.c_str() + hostname.length() - suffixLength;
+
+		if (strcasecmp(start, suffix) == 0)
+			return hostname.substring(0, hostname.length() - suffixLength);
+	}
+
+	return hostname;
+}
+
+static const QueryResult *getQueryResult(int idx) {
+	if (idx < 0)
+		return nullptr;
+
+	if ((size_t)idx >= sQueryResults.size())
+		return nullptr;
+
+	return &sQueryResults[idx];
+}
+
+static QueryResult *findQueryResult(const String &instance) {
+	for (auto &result : sQueryResults) {
+		if (dnsNameEquals(result.instance, instance))
+			return &result;
+	}
+
+	return nullptr;
+}
+
+static void buildQueryResults(const String &serviceName, const std::vector<DnsRecord> &records) {
+	sQueryResults.clear();
+
+	// PTR tells us which service instances exist.
+	for (const auto &record : records) {
+		if (record.type != DNS_TYPE_PTR)
+			continue;
+
+		if (!dnsNameEquals(record.name, serviceName))
+			continue;
+
+		if (findQueryResult(record.target))
+			continue;
+
+		if (sQueryResults.size() >= MDNS_MAX_RESULTS)
+			break;
+
+		QueryResult result;
+		result.instance = record.target;
+
+		sQueryResults.push_back(result);
+	}
+
+	// SRV and TXT belong to the service instance.
+	for (auto &result : sQueryResults) {
+		for (const auto &record : records) {
+			if (!dnsNameEquals(record.name, result.instance))
+				continue;
+
+			if (record.type == DNS_TYPE_SRV) {
+				result.hostnameFqdn = record.target;
+				result.hostname		= dnsStripLocal(record.target);
+				result.port			= record.port;
+			} else if (record.type == DNS_TYPE_TXT) {
+				result.txt = record.txt;
+			}
+		}
+	}
+
+	// A / AAAA belong to the host referenced by the SRV record.
+	for (auto &result : sQueryResults) {
+		if (!result.hostnameFqdn.length())
+			continue;
+
+		for (const auto &record : records) {
+			if (!dnsNameEquals(record.name, result.hostnameFqdn))
+				continue;
+
+			if (record.type == DNS_TYPE_A)
+				result.ip = record.ip;
+			else if (record.type == DNS_TYPE_AAAA)
+				result.ipv6 = record.ipv6;
+		}
+	}
+}
+
+} // namespace
 
 struct CachedService {
 	CachedService(const char *_name, const char *_service, mdns_sd_proto _proto, uint16_t _port)
@@ -81,6 +616,8 @@ mDNS::~mDNS() {
 }
 
 void mDNS::cleanup() {
+	sQueryResults.clear();
+
 	sCachedServices.clear();
 
 	free((void *)hostName);
@@ -297,6 +834,173 @@ bool mDNS::addServiceTxtImpl(const char *service, uint8_t proto, const char *ite
 
 	sCachedServices[i].records.push_back(strdup(item));
 	return true;
+}
+
+int mDNS::queryService(char *service, char *proto) {
+	if (!service || !service[0] || !proto || !proto[0])
+		return 0;
+
+	sQueryResults.clear();
+
+	String serviceName;
+
+	if (service[0] == '_')
+		serviceName = service;
+	else {
+		serviceName = "_";
+		serviceName += service;
+	}
+
+	serviceName += ".";
+
+	if (proto[0] == '_')
+		serviceName += proto;
+	else {
+		serviceName += "_";
+		serviceName += proto;
+	}
+
+	serviceName += ".local";
+
+	LT_DM(MDNS, "Query service: %s", serviceName.c_str());
+
+	std::vector<DnsRecord> records;
+
+	if (!dnsQuery(serviceName, DNS_TYPE_PTR, MDNS_QUERY_TIMEOUT_MS, records)) {
+		return 0;
+	}
+
+	LT_DM(MDNS, "Query service: received %u DNS records", (unsigned)records.size());
+
+	buildQueryResults(serviceName, records);
+
+	LT_DM(MDNS, "Query service: found %u services", (unsigned)sQueryResults.size());
+
+	return (int)sQueryResults.size();
+}
+
+String mDNS::hostname(int idx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result)
+		return "";
+
+	return result->hostname;
+}
+
+IPAddress mDNS::IP(int idx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result)
+		return IPAddress();
+
+	return result->ip;
+}
+
+IPv6Address mDNS::IPv6(int idx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result)
+		return IPv6Address();
+
+	return result->ipv6;
+}
+
+uint16_t mDNS::port(int idx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result)
+		return 0;
+
+	return result->port;
+}
+
+int mDNS::numTxt(int idx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result)
+		return 0;
+
+	return (int)result->txt.size();
+}
+
+bool mDNS::hasTxt(int idx, const char *key) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result || !key)
+		return false;
+
+	for (const auto &txt : result->txt) {
+		if (strcmp(txt.key.c_str(), key) == 0)
+			return true;
+	}
+
+	return false;
+}
+
+String mDNS::txt(int idx, const char *key) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result || !key)
+		return "";
+
+	for (const auto &txt : result->txt) {
+		if (strcmp(txt.key.c_str(), key) == 0)
+			return txt.value;
+	}
+
+	return "";
+}
+
+String mDNS::txt(int idx, int txtIdx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result || txtIdx < 0)
+		return "";
+
+	if ((size_t)txtIdx >= result->txt.size())
+		return "";
+
+	return result->txt[txtIdx].value;
+}
+
+String mDNS::txtKey(int idx, int txtIdx) {
+	const QueryResult *result = getQueryResult(idx);
+
+	if (!result || txtIdx < 0)
+		return "";
+
+	if ((size_t)txtIdx >= result->txt.size())
+		return "";
+
+	return result->txt[txtIdx].key;
+}
+
+IPAddress mDNS::queryHost(char *host, uint32_t timeout) {
+	if (!host || !host[0])
+		return IPAddress();
+
+	String hostname = host;
+
+	if (hostname.length() < 6 || strcasecmp(hostname.c_str() + hostname.length() - 6, ".local") != 0) {
+		hostname += ".local";
+	}
+
+	LT_DM(MDNS, "Query host: %s", hostname.c_str());
+
+	std::vector<DnsRecord> records;
+
+	if (!dnsQuery(hostname, DNS_TYPE_A, timeout, records)) {
+		return IPAddress();
+	}
+
+	for (const auto &record : records) {
+		if (record.type == DNS_TYPE_A && dnsNameEquals(record.name, hostname)) {
+			return record.ip;
+		}
+	}
+
+	return IPAddress();
 }
 
 MDNSResponder MDNS;
