@@ -11,6 +11,7 @@
 
 extern uint32_t UART_Writable(void *UARTx);
 extern void UART_CharPut(void *UARTx, uint8_t TxData);
+extern uint32_t lt_uart_port;
 
 static void *uart_dev[3] = {
 	(void *)UART0_REG_BASE,
@@ -18,13 +19,14 @@ static void *uart_dev[3] = {
 	(void *)LOG_UART_REG_BASE,
 };
 
-uint8_t lt_uart_port = 2;
-
 void putchar_(char c) {
 	putchar_p(c, lt_uart_port);
 }
 
 void putchar_p(char c, unsigned long port) {
+	if (port >= 3) {
+		return;
+	}
 	while (UART_Writable(uart_dev[port]) == 0) {}
 	UART_CharPut(uart_dev[port], c);
 }
