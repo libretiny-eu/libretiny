@@ -50,15 +50,15 @@ void SerialClass::beginPrivate(unsigned long baudrate, uint16_t config) {
 	}
 
 	if (this->rx != PIN_INVALID) {
-		UART_TypeDef *uart = this->data->uart;
-		IRQn irq		   = this->data->irq;
+		IRQn irq = this->data->irq;
 
 		VECTOR_IrqUnRegister(irq);
 		VECTOR_IrqRegister((IRQ_FUN)callback, irq, (uint32_t)this->data, 10);
 		VECTOR_IrqEn(irq, 10);
-		UART_RxCmd(uart, ENABLE);
-		UART_INTConfig(uart, RUART_IER_ERBI, ENABLE);
 	}
+	// RX path and RX interrupt are enabled in configure(), after UART_Init():
+	// UART_Init() resets the interrupt enable register, so enabling RX here
+	// (before configure() runs) leaves the UART unable to receive anything.
 }
 
 void SerialClass::configure(unsigned long baudrate, uint16_t config) {
@@ -83,6 +83,11 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 	cfg.StopBit	   = stopBits;
 	UART_Init(uart, &cfg);
 	UART_SetBaud(uart, baudrate);
+
+	if (this->rx != PIN_INVALID) {
+		UART_RxCmd(uart, ENABLE);
+		UART_INTConfig(uart, RUART_IER_ERBI, ENABLE);
+	}
 
 	this->baudrate = baudrate;
 	this->config   = config;
