@@ -8,6 +8,50 @@ extern void bk_wlan_sta_init_adv(network_InitTypeDef_adv_st *inNetworkInitParaAd
 
 extern void bk_wlan_sta_adv_param_2_sta(network_InitTypeDef_adv_st *sta_adv,network_InitTypeDef_st* sta);
 
+/*
+ * Copy the key to a null-terminated buffer, as `key_len` is authoritative. A
+ * 64-character hex PSK fills the whole `key` array with no terminator.
+ */
+static void bk_wlan_copy_key(char key_buffer[PMK_LEN_MAX + 1])
+{
+    size_t key_len = g_sta_param_ptr->key_len;
+
+    if (key_len > PMK_LEN_MAX)
+        key_len = PMK_LEN_MAX;
+
+    memcpy(key_buffer, g_sta_param_ptr->key, key_len);
+    key_buffer[key_len] = 0;
+}
+
+/*
+ * Allow or forbid the supplicant from selecting SAE (WPA3) by toggling the
+ * driver's SAE flag. Must be called after the supplicant is enabled, as that
+ * sets the flag.
+ */
+static void bk_wlan_set_sae_allowed(bool allowed)
+{
+    extern struct wpa_supplicant *wpa_suppliant_ctrl_get_wpas(void);
+    static bool sae_hidden = false;
+    struct wpa_supplicant *wpa_s = wpa_suppliant_ctrl_get_wpas();
+
+    if (!wpa_s)
+        return;
+    if (!allowed && (wpa_s->drv_flags & WPA_DRIVER_FLAGS_SAE)) {
+        wpa_s->drv_flags &= ~(u64)WPA_DRIVER_FLAGS_SAE;
+        sae_hidden = true;
+    } else if (allowed && sae_hidden) {
+        wpa_s->drv_flags |= WPA_DRIVER_FLAGS_SAE;
+        sae_hidden = false;
+    }
+}
+
+/* let wpa_psk_cal thread to calculate the PSK from the passphrase */
+static void bk_wlan_request_psk(const char *key_buffer)
+{
+    wpa_psk_request(g_sta_param_ptr->ssid.array, g_sta_param_ptr->ssid.length,
+                    (char *)key_buffer, NULL, 0);
+}
+
 OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitParaAdv)
 {
     if (bk_wlan_is_monitor_mode()) {
@@ -40,27 +84,10 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 
     bk_wlan_sta_init_adv(inNetworkInitParaAdv);
 
-    /*
-     * Key buffer is not guaranteed to be null terminated: there is a separate
-     * `key_len` field that stores the length. We have to copy the data to a
-     * temporary stack buffer. Fortunately, `wpa_psk_request()` does not keep
-     * the reference, as it's not needed: the end result is PSK that is either
-     * derived from the `ssid` + `key` or is already available. `key` is just a
-     * transient argument.
-     */
     {
         char key_buffer[PMK_LEN_MAX + 1];
-
-        /* Make copy with a guaranteed null terminator. */
-        memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
-        key_buffer[g_sta_param_ptr->key_len] = '\0';
-
-        /*
-         * let wpa_psk_cal thread to calculate psk.
-         * XXX: If you know psk value, fill last two parameters of `wpa_psk_request()'.
-         */
-        wpa_psk_request(g_sta_param_ptr->ssid.array, g_sta_param_ptr->ssid.length,
-                        key_buffer, NULL, 0);
+        bk_wlan_copy_key(key_buffer);
+        bk_wlan_request_psk(key_buffer);
     }
 
     supplicant_main_entry(inNetworkInitParaAdv->ap_info.ssid);
@@ -70,6 +97,7 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 
 #else /* CFG_WPA_CTRL_IFACE */
     wlan_sta_config_t config;
+    char key_buffer[PMK_LEN_MAX + 1];
 
 #if (CFG_SOC_NAME == SOC_BK7231N)
     if (get_ate_mode_state()) {
@@ -79,28 +107,8 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 #endif
     bk_wlan_sta_init_adv(inNetworkInitParaAdv);
 
-    /*
-     * Key buffer is not guaranteed to be null terminated: there is a separate
-     * `key_len` field that stores the length. We have to copy the data to a
-     * temporary stack buffer. Fortunately, `wpa_psk_request()` does not keep
-     * the reference, as it's not needed: the end result is PSK that is either
-     * derived from the `ssid` + `key` or is already available. `key` is just a
-     * transient argument.
-     */
-    {
-        char key_buffer[PMK_LEN_MAX + 1];
-
-        /* Make copy with a guaranteed null terminator. */
-        memcpy(key_buffer, g_sta_param_ptr->key, g_sta_param_ptr->key_len);
-        key_buffer[g_sta_param_ptr->key_len] = '\0';
-
-        /*
-         * let wpa_psk_cal thread to calculate psk.
-         * XXX: If you know psk value, fill last two parameters of `wpa_psk_request()'.
-         */
-        wpa_psk_request(g_sta_param_ptr->ssid.array, g_sta_param_ptr->ssid.length,
-                        key_buffer, NULL, 0);
-    }
+    bk_wlan_copy_key(key_buffer);
+    bk_wlan_request_psk(key_buffer);
 
     /* disconnect previous connected network */
     wlan_sta_disconnect();
@@ -110,7 +118,14 @@ OSStatus bk_wlan_start_sta_adv_fix(network_InitTypeDef_adv_st *inNetworkInitPara
 
     /* set network parameters: ssid, passphase */
     wlan_sta_set((uint8_t*)inNetworkInitParaAdv->ap_info.ssid, strlen(inNetworkInitParaAdv->ap_info.ssid),
-                 (uint8_t*)inNetworkInitParaAdv->key);
+                 (uint8_t*)key_buffer);
+
+    /*
+     * SAE is preferred on WPA2/WPA3 networks but needs the real passphrase, which
+     * a PSK cannot provide. A 64-character key can only be a hex PSK, so hide the
+     * driver's SAE support to use WPA2-PSK.
+     */
+    bk_wlan_set_sae_allowed(g_sta_param_ptr->key_len != PMK_LEN * 2);
 
     /* set fast connect bssid */
     memset(&config, 0, sizeof(config));
