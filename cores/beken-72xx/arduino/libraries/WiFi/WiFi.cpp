@@ -35,7 +35,9 @@ WiFiStatus eventTypeToStatus(uint8_t type) {
 			return WL_CONNECT_FAILED;
 		case RW_EVT_STA_BEACON_LOSE:
 			return WL_CONNECTION_LOST;
+		case RW_EVT_STA_DEAUTH:
 		case RW_EVT_STA_DISASSOC:
+		case RW_EVT_STA_ACTIVE_DISCONNECTED:
 			return WL_DISCONNECTED;
 	}
 	return WL_IDLE_STATUS;

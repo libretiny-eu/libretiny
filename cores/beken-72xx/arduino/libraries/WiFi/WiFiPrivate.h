@@ -47,7 +47,7 @@ WiFiAuthMode securityTypeToAuthMode(uint8_t type);
 // WiFiEvents.cpp
 extern void wifiEventSendArduino(EventId event);
 extern void startWifiTask();
-extern void wifiEventHandler(rw_evt_type event);
+extern void wifiEventHandler(rw_evt_type event, uint16_t reasonCode);
 
 #define RW_EVT_ARDUINO (1 << 7)
 

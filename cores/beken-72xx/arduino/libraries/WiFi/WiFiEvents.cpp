@@ -9,20 +9,35 @@ static xTaskHandle wifiEventTaskHandle	 = NULL;
 
 static const rw_evt_type eventConnected = RW_EVT_STA_CONNECTED;
 
-// callback for bk_wlan_status_register_cb()
-static void wifiStatusCallback(rw_evt_type *pEvent) {
+typedef struct {
+	rw_evt_type event;
+	uint16_t reason; // 802.11 reason/status code, if provided by BDK
+} WiFiQueuedEvent;
+
+static void wifiQueueEvent(rw_evt_type event, uint16_t reason) {
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {
-		xQueueSend(wifiEventQueueHandle, pEvent, portMAX_DELAY);
+		WiFiQueuedEvent item = {event, reason};
+		xQueueSend(wifiEventQueueHandle, &item, portMAX_DELAY);
 	} else {
-		wifiEventHandler(*pEvent);
+		wifiEventHandler(event, reason);
 	}
 }
 
+// callback for bk_wlan_status_register_cb()
+static void wifiStatusCallback(rw_evt_type *pEvent) {
+	uint16_t reason = 0;
+#if CFG_BDK_VERSION >= 30076
+	// BDK passes a wlan_status_t, which starts with the event type.
+	reason = ((wlan_status_t *)pEvent)->reason_code;
+#endif
+	wifiQueueEvent(*pEvent, reason);
+}
+
 static void wifiEventTask(void *arg) {
-	rw_evt_type event = RW_EVT_MAX;
+	WiFiQueuedEvent item = {RW_EVT_MAX, 0};
 	for (;;) {
-		if (xQueueReceive(wifiEventQueueHandle, &event, portMAX_DELAY) == pdTRUE) {
-			wifiEventHandler(event);
+		if (xQueueReceive(wifiEventQueueHandle, &item, portMAX_DELAY) == pdTRUE) {
+			wifiEventHandler(item.event, item.reason);
 		}
 	}
 }
@@ -62,14 +77,13 @@ static String waitForValidSSID(WiFiClass *pWiFi) {
 }
 
 void wifiEventSendArduino(EventId event) {
-	event = (EventId)(RW_EVT_ARDUINO | event);
-	wifiStatusCallback((rw_evt_type *)&event);
+	wifiQueueEvent((rw_evt_type)(RW_EVT_ARDUINO | event), 0);
 }
 
 void startWifiTask() {
 	if (!wifiEventQueueHandle) {
 		LT_HEAP_I();
-		wifiEventQueueHandle = xQueueCreate(32, sizeof(rw_evt_type));
+		wifiEventQueueHandle = xQueueCreate(32, sizeof(WiFiQueuedEvent));
 		LT_HEAP_I();
 	}
 	if (!wifiEventTaskHandle) {
@@ -80,15 +94,17 @@ void startWifiTask() {
 	bk_wlan_status_register_cb((FUNC_1PARAM_PTR)wifiStatusCallback);
 }
 
-void wifiEventHandler(rw_evt_type event) {
+void wifiEventHandler(rw_evt_type event, uint16_t reasonCode) {
 	if (!pWiFi)
 		return; // failsafe
 
-	LT_DM(WIFI, "BK event %u", event);
+	LT_DM(WIFI, "BK event %u (reason code %u)", event, reasonCode);
 
 	EventId eventId;
 	EventInfo eventInfo;
 	String ssid;
+	// Events which only update the state and have no Arduino counterpart.
+	bool stateOnly = false;
 
 	memset(&eventInfo, 0, sizeof(EventInfo));
 
@@ -97,20 +113,38 @@ void wifiEventHandler(rw_evt_type event) {
 			eventId = ARDUINO_EVENT_WIFI_READY;
 			break;
 
+		case RW_EVT_STA_CONNECTING:
+			stateOnly = true;
+			break;
+
 		case RW_EVT_STA_BEACON_LOSE:
 		case RW_EVT_STA_PASSWORD_WRONG:
 		case RW_EVT_STA_NO_AP_FOUND:
 		case RW_EVT_STA_ASSOC_FULL:
 #if CFG_BDK_VERSION >= 30076
+		case RW_EVT_STA_DEAUTH:
 		case RW_EVT_STA_AUTH_FAILED:
 		case RW_EVT_STA_DISASSOC:
 		case RW_EVT_STA_ASSOC_FAILED:
+		// The BDK aborted a connection attempt on its own (during auth/assoc/handshake)
+		// and retries internally after a long delay. Report it, so the upper layer
+		// doesn't have to wait for its own connection timeout.
+		case RW_EVT_STA_ACTIVE_DISCONNECTED:
 #else
 		case RW_EVT_STA_DISCONNECTED:
 		case RW_EVT_STA_CONNECT_FAILED:
 #endif
-			eventId									 = ARDUINO_EVENT_WIFI_STA_DISCONNECTED;
-			eventInfo.wifi_sta_disconnected.ssid_len = 0;
+			eventId = ARDUINO_EVENT_WIFI_STA_DISCONNECTED;
+			// BDK doesn't report which AP failed; use the configured target, so that
+			// listeners don't mistake the event for a spurious one (empty SSID).
+			eventInfo.wifi_sta_disconnected.ssid_len =
+				strnlen(pDATA->configStaAdv.ap_info.ssid, sizeof(eventInfo.wifi_sta_disconnected.ssid));
+			memcpy(
+				eventInfo.wifi_sta_disconnected.ssid,
+				pDATA->configStaAdv.ap_info.ssid,
+				eventInfo.wifi_sta_disconnected.ssid_len
+			);
+			memcpy(eventInfo.wifi_sta_disconnected.bssid, pDATA->configStaAdv.ap_info.bssid, 6);
 			switch (event) {
 				case RW_EVT_STA_BEACON_LOSE:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_BEACON_TIMEOUT;
@@ -128,11 +162,17 @@ void wifiEventHandler(rw_evt_type event) {
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_TOOMANY;
 					break;
 #if CFG_BDK_VERSION >= 30076
+				case RW_EVT_STA_DEAUTH:
+					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_AUTH_LEAVE;
+					break;
 				case RW_EVT_STA_DISASSOC:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_LEAVE;
 					break;
 				case RW_EVT_STA_ASSOC_FAILED:
 					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_CONNECTION_FAIL;
+					break;
+				case RW_EVT_STA_ACTIVE_DISCONNECTED:
+					eventInfo.wifi_sta_disconnected.reason = WIFI_REASON_ASSOC_FAIL;
 					break;
 #else
 				case RW_EVT_STA_DISCONNECTED:
@@ -177,6 +217,17 @@ void wifiEventHandler(rw_evt_type event) {
 			// TODO station MAC
 			break;
 
+		case RW_EVT_AP_CONNECT_FAILED:
+			stateOnly = true;
+			break;
+
+#if CFG_BDK_VERSION >= 30076
+		case RW_EVT_AP_GOT_IP:
+			eventId = ARDUINO_EVENT_WIFI_AP_STAIPASSIGNED;
+			// TODO station IP
+			break;
+#endif
+
 		case RW_EVT_ARDUINO | ARDUINO_EVENT_WIFI_SCAN_DONE:
 			eventId							= ARDUINO_EVENT_WIFI_SCAN_DONE;
 			eventInfo.wifi_scan_done.status = 0;
@@ -200,5 +251,6 @@ void wifiEventHandler(rw_evt_type event) {
 		pDATA->lastApEvent = event;
 	}
 
-	pWiFi->postEvent(eventId, eventInfo);
+	if (!stateOnly)
+		pWiFi->postEvent(eventId, eventInfo);
 }
