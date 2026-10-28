@@ -148,7 +148,14 @@ int SerialClass::peek() {
 }
 
 int SerialClass::read() {
-	return this->rxBuf ? this->rxBuf->read_char() : -1;
+	if (!this->rxBuf)
+		return -1;
+	// the RX interrupt modifies the buffer too
+	int c;
+	taskENTER_CRITICAL();
+	c = this->rxBuf->read_char();
+	taskEXIT_CRITICAL();
+	return c;
 }
 
 #if LT_HW_UART0
