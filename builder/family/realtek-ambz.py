@@ -1,5 +1,7 @@
 # Copyright (c) Kuba Szczodrzyński 2022-04-20.
 
+import sys
+from hashlib import sha256
 from os.path import join
 
 from platformio.platform.board import PlatformBoardConfig
@@ -251,6 +253,31 @@ queue.AppendPublic(
         "_mdns",
     ],
 )
+
+# WPA2/WPA3 transition-mode fix (wraps/rsnxe.c). The wrapper writes into
+# lib_wlan.a's private structures at offsets taken from one specific build of
+# that closed blob, so only enable it when the blob is byte-identical to it.
+# If the SDK's lib_wlan.a changes, re-derive the offsets (see rsnxe.c) and
+# update this hash.
+LIB_WLAN_SHA256 = "2a915c940b098205e39b60f290584043d914b2b21695c1d7a75051fcce83403c"
+lib_wlan = env.subst(
+    # fmt: off
+    join("$SDK_DIR", "component", "soc", "realtek", "8711b", "misc", "bsp", "lib", "common", "GCC", "lib_wlan.a")
+    # fmt: on
+)
+try:
+    with open(lib_wlan, "rb") as f:
+        lib_wlan_sha256 = sha256(f.read()).hexdigest()
+except OSError:
+    lib_wlan_sha256 = None
+if lib_wlan_sha256 == LIB_WLAN_SHA256:
+    queue.AppendPublic(LINKFLAGS=["-Wl,-wrap,rtw_joinbss_cmd"])
+else:
+    sys.stderr.write(
+        "Warning! lib_wlan.a does not match the build the WPA2/WPA3 "
+        "transition-mode fix (wraps/rsnxe.c) was written for; fix disabled. "
+        f"Expected SHA-256 {LIB_WLAN_SHA256}, got {lib_wlan_sha256}.\n"
+    )
 
 # Misc options
 env.Replace(
