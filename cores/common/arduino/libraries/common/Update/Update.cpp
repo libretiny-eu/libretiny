@@ -102,13 +102,17 @@ void UpdateClass::cleanup(bool clearError) {
 	if (!this->ctx)
 		return;
 
-	if (!lt_ota_end(this->ctx)) {
+	// check MD5 before activating the image - never boot a corrupt image
+	bool md5Mismatch = this->md5Digest && this->md5Expected && memcmp(this->md5Digest, this->md5Expected, 16) != 0;
+
+	if (md5Mismatch) {
+		// MD5 doesn't match; free the context without activating
+		lt_ota_cancel(this->ctx);
+		this->errArd = UPDATE_ERROR_MD5;
+		this->errUf2 = UF2_ERR_OK;
+	} else if (!lt_ota_end(this->ctx)) {
 		// activating firmware failed
 		this->errArd = UPDATE_ERROR_ACTIVATE;
-		this->errUf2 = UF2_ERR_OK;
-	} else if (this->md5Digest && this->md5Expected && memcmp(this->md5Digest, this->md5Expected, 16) != 0) {
-		// MD5 doesn't match
-		this->errArd = UPDATE_ERROR_MD5;
 		this->errUf2 = UF2_ERR_OK;
 	} else if (clearError) {
 		// successful finish and activation, clear error codes

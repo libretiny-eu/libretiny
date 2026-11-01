@@ -28,13 +28,17 @@ void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size) {
 	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, scheme: %u", size, lt_ota_dual_get_current(), lt_ota_get_uf2_scheme());
 }
 
+static void lt_ota_free(lt_ota_ctx_t *ctx) {
+	uf2_ctx_free(&ctx->uf2);
+	uf2_info_free(&ctx->info);
+	ctx->running = false;
+}
+
 bool lt_ota_end(lt_ota_ctx_t *ctx) {
 	if (!ctx || !ctx->running)
 		return true;
 
-	uf2_ctx_free(&ctx->uf2);
-	uf2_info_free(&ctx->info);
-	ctx->running = false;
+	lt_ota_free(ctx);
 
 	if (ctx->bytes_written && ctx->bytes_written == ctx->bytes_total) {
 		// try to activate the 2nd image
@@ -43,6 +47,13 @@ bool lt_ota_end(lt_ota_ctx_t *ctx) {
 
 	// activation not attempted (update aborted)
 	return true;
+}
+
+void lt_ota_cancel(lt_ota_ctx_t *ctx) {
+	if (!ctx || !ctx->running)
+		return;
+	// free internal structures, but never activate the (possibly incomplete or corrupt) image
+	lt_ota_free(ctx);
 }
 
 __attribute__((weak)) void lt_ota_set_write_protect(uf2_ota_t *uf2) {}
@@ -57,18 +68,15 @@ size_t lt_ota_write(lt_ota_ctx_t *ctx, const uint8_t *data, size_t len) {
 	while (len && (to_write = MIN((uint16_t)len, lt_ota_buf_left(ctx)))) {
 		LT_VM(OTA, "Writing %u to buffer (%u/512)", len, lt_ota_buf_size(ctx));
 
+		// always copy the data to the buffer - 'data' is const, but the UF2 writer
+		// modifies the block in place (e.g. uf2_binpatch() when writing to OTA2);
+		// the caller may still need its buffer (e.g. as an inflate history window)
 		uf2_block_t *block = NULL;
-		if (to_write == UF2_BLOCK_SIZE) {
-			// data has a complete block; don't use the buffer
-			block = (uf2_block_t *)data;
-		} else {
-			// data has a part of a block; append it to the buffer
-			memcpy(ctx->buf_pos, data, to_write);
-			ctx->buf_pos += to_write;
-			if (lt_ota_buf_size(ctx) == UF2_BLOCK_SIZE) {
-				// the block is complete now
-				block = (uf2_block_t *)ctx->buf;
-			}
+		memcpy(ctx->buf_pos, data, to_write);
+		ctx->buf_pos += to_write;
+		if (lt_ota_buf_size(ctx) == UF2_BLOCK_SIZE) {
+			// the block is complete now
+			block = (uf2_block_t *)ctx->buf;
 		}
 
 		// write if a block is ready
@@ -110,9 +118,9 @@ bool lt_ota_write_block(lt_ota_ctx_t *ctx, uf2_block_t *block) {
 			// given update size does not match the block count
 			LT_EM(
 				OTA,
-				"Image size wrong; got %u, calculated %llu",
+				"Image size wrong; got %u, calculated %u",
 				ctx->bytes_total,
-				block->block_count * UF2_BLOCK_SIZE
+				(unsigned)(block->block_count * UF2_BLOCK_SIZE)
 			);
 			return false;
 		}
