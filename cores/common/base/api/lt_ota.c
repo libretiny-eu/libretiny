@@ -54,6 +54,14 @@ void lt_ota_cancel(lt_ota_ctx_t *ctx) {
 		return;
 	// free internal structures, but never activate the (possibly incomplete or corrupt) image
 	lt_ota_free(ctx);
+	// some dual-slot bootloaders boot a valid image without the switch flag
+	// (AmebaZ2: the one with the higher serial number), so invalidate anything written;
+	// single-slot chips are skipped, as there is no mark to undo (BK72xx) or
+	// lt_ota_switch() ignores 'revert' (LN882H)
+	if (ctx->bytes_written && lt_ota_get_type() == OTA_TYPE_DUAL) {
+		if (!lt_ota_switch(/* revert= */ true))
+			LT_EM(OTA, "Reverting the OTA image failed");
+	}
 }
 
 __attribute__((weak)) void lt_ota_set_write_protect(uf2_ota_t *uf2) {}
