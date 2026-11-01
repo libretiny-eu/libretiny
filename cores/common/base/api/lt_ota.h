@@ -49,6 +49,18 @@ void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size);
 bool lt_ota_end(lt_ota_ctx_t *ctx);
 
 /**
+ * @brief Abort the update process without activating the target image.
+ * Free allocated internal structures. Use this instead of lt_ota_end()
+ * if the written image must not be booted (e.g. checksum mismatch).
+ * On dual-slot chips, the target image is additionally invalidated
+ * (if any data was written), as some bootloaders select a valid image
+ * regardless of the switch flag.
+ *
+ * @param ctx OTA context
+ */
+void lt_ota_cancel(lt_ota_ctx_t *ctx);
+
+/**
  * @brief Set family-specific, write-protected flash areas in the OTA update context.
  * This shouldn't be called manually, as it's done by lt_ota_begin().
  *

@@ -168,9 +168,9 @@ void UpdateClass::printErrorContext() {
 	LT_EM(OTA, "- written: %u of %u", this->ctx->bytes_written, this->ctx->bytes_total);
 	LT_EM(
 		OTA,
-		"- buf: size=%lld, left=%lld",
-		this->ctx->buf_pos - this->ctx->buf,
-		this->ctx->buf + UF2_BLOCK_SIZE - this->ctx->buf_pos
+		"- buf: size=%u, left=%u",
+		(unsigned)(this->ctx->buf_pos - this->ctx->buf),
+		(unsigned)(this->ctx->buf + UF2_BLOCK_SIZE - this->ctx->buf_pos)
 	);
 	hexdump(this->ctx->buf, this->ctx->buf_pos - this->ctx->buf);
 
