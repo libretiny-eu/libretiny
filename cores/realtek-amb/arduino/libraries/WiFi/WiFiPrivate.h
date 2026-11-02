@@ -44,6 +44,14 @@ extern void rltk_suspend_softap_beacon(const char *ifname);
 
 } // extern "C"
 
+#if LT_RTL8720C
+// lt_device.c - MAC kept in flash by the vendor firmware, if there is one
+extern "C" bool lt_get_flash_mac(uint8_t *mac);
+#endif
+
+// WiFiSTA.cpp
+// Use the vendor's MAC from flash if the chip has none. Call before WiFi starts.
+extern void stageVendorMac();
 // WiFi.cpp
 extern rtw_wifi_setting_t wifi_setting;
 extern wifi_mode_t wifi_mode;

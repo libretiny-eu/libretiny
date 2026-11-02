@@ -3,11 +3,13 @@ on:
   push:
     paths:
       - "cores/realtek-amb/arduino/libraries/WiFi/WiFiMacText.h"
+      - "cores/realtek-ambz2/base/lt_cald.h"
       - "tests/realtek_wifi_mac/**"
       - ".github/workflows/test-realtek-wifi-mac.yml"
   pull_request:
     paths:
       - "cores/realtek-amb/arduino/libraries/WiFi/WiFiMacText.h"
+      - "cores/realtek-ambz2/base/lt_cald.h"
       - "tests/realtek_wifi_mac/**"
   workflow_dispatch:
 jobs:
@@ -20,3 +22,6 @@ jobs:
           g++ -std=c++11 -Wall -Wextra -Werror -I cores/realtek-amb/arduino/libraries/WiFi \
             tests/realtek_wifi_mac/test_mac_text.cpp -o /tmp/test_mac_text
           /tmp/test_mac_text
+          g++ -std=c++11 -Wall -Wextra -Werror -I cores/realtek-ambz2/base \
+            tests/realtek_wifi_mac/test_cald.cpp -o /tmp/test_cald
+          /tmp/test_cald

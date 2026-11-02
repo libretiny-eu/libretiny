@@ -54,11 +54,14 @@ RTL8722DM   | Ameba D   | 2.4G+5G+BLE5   | M0+M4  | 200M      | 512K+4M | 4    |
 
 ## MAC address
 
-The station MAC address comes from the chip's eFuse (logical map offset `0x11A`). Chips that were never given a MAC there - this happens with some modules, e.g. the BL3357 found in Broadlink RM4 devices - end up with the driver's built-in default `00:e0:4c:b7:23:00`. Every such device on your network then has the same MAC (and, through DHCP, the same IP address).
+The station MAC address comes from the chip's eFuse (logical map offset `0x11A`). Chips that were never given a MAC there end up with the driver's built-in default - on AmebaZ2 that is `00:e0:4c:b7:23:00`. Every such device on your network then has the same MAC (and, through DHCP, the same IP address).
 
-You can check what your chip does with `WiFi.macAddress()` once WiFi is running. On AmebaZ2, `00:e0:4c:b7:23:00` is the driver default and not a real address.
+The BL3357 module in Broadlink RM4 devices is one of them. Its stock firmware keeps the real MAC in a flash sector at `0x4000` (it starts with the text `CALD`, the MAC follows at byte 8) and gives it to the driver itself. On AmebaZ2, LibreTiny does the same: if the eFuse holds no MAC and that sector is found, its address is used. Nothing is written anywhere, the address is only handed to the driver at WiFi start.
 
-To give the device its own address, call `WiFi.setMacAddress()` **before** WiFi is started:
+!!! warning
+    The `0x4000` sector is where LibreTiny's own bootloader lives. Flashing a full LibreTiny image over the stock firmware **erases the MAC**, and the device falls back to the default address. Back up the stock flash first (`ltchiptool flash read`), the MAC is in that dump: bytes 8 to 13 of the sector at `0x4000`.
+
+To set a MAC yourself (for example the one from such a backup), call `WiFi.setMacAddress()` **before** WiFi is started:
 
 ```cpp
 void setup() {
@@ -69,8 +72,9 @@ void setup() {
 ```
 
 - The address is only kept in RAM and has to be set again after every reset. Nothing is written to the chip.
+- It takes precedence over the MAC from eFuse or flash.
 - The call is rejected while WiFi is running, and for all-zero, all-ones and multicast addresses.
-- Use a locally administered address (second-lowest bit of the first byte set, e.g. `02:...`) unless you own the MAC prefix.
+- Use a locally administered address (second-lowest bit of the first byte set, e.g. `02:...`) unless the address is one you own.
 
 !!! warning
     Do not call the SDK function `wifi_set_mac_address()` yourself. It programs the one-time-programmable eFuse: the change is permanent and the number of writes is limited. LibreTiny used to call it from `WiFi.setMacAddress()`, with the wrong argument format on top.

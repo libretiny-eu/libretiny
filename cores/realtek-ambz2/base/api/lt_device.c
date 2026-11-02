@@ -1,10 +1,19 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-05-22. */
 
 #include <libretiny.h>
+#include <lt_cald.h>
 #include <sdk_private.h>
 
 void lt_get_device_mac(uint8_t *mac) {
 	efuse_logical_read(0x11A, 6, mac);
+}
+
+// Some modules (e.g. the BL3357 in Broadlink RM4 devices) have no MAC in the
+// eFuse. Their vendor firmware keeps it in a flash sector instead, see lt_cald.h.
+bool lt_get_flash_mac(uint8_t *mac) {
+	uint8_t header[LT_CALD_HEADER_SIZE];
+	flash_stream_read(&lt_flash_obj, LT_CALD_FLASH_OFFSET, sizeof(header), header);
+	return lt_cald_parse_mac(header, mac);
 }
 
 void lt_reboot() {

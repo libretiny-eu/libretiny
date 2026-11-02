@@ -9,7 +9,37 @@
 // start, so these must stay valid for the whole program lifetime.
 static uint8_t stagedMac[ETH_ALEN];
 static char stagedMacText[WIFI_MAC_TEXT_SIZE];
-static bool stagedMacUsed = false;
+static bool stagedMacUsed	 = false;
+static bool vendorMacChecked = false;
+
+// Hand the address to the driver and remember it for macAddress().
+static void stageMac(const uint8_t *mac) {
+	memcpy(stagedMac, mac, ETH_ALEN);
+	wifiMacToText(stagedMac, stagedMacText);
+	rtw_initmac	  = stagedMacText;
+	stagedMacUsed = true;
+}
+
+void stageVendorMac() {
+#if LT_RTL8720C
+	if (vendorMacChecked)
+		return;
+	vendorMacChecked = true;
+	if (stagedMacUsed)
+		return; // an explicit setMacAddress() wins
+
+	uint8_t chipMac[ETH_ALEN];
+	lt_get_device_mac(chipMac);
+	if (wifiMacIsAssignable(chipMac))
+		return; // the chip has its own address
+
+	uint8_t flashMac[ETH_ALEN];
+	if (!lt_get_flash_mac(flashMac))
+		return;
+	stageMac(flashMac);
+	LT_IM(WIFI, "No MAC in eFuse, using the one from flash: %s", stagedMacText);
+#endif
+}
 
 WiFiStatus WiFiClass::begin(
 	const char *ssid,
@@ -201,6 +231,7 @@ IPAddress WiFiClass::localIP() {
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	if ((getMode() & WIFI_MODE_STA) == 0) {
 		// the radio is off: report what the station will use once it starts
+		stageVendorMac();
 		if (stagedMacUsed)
 			memcpy(mac, stagedMac, ETH_ALEN);
 		else
@@ -262,10 +293,7 @@ bool WiFiClass::setMacAddress(const uint8_t *mac) {
 		return false;
 	}
 
-	memcpy(stagedMac, mac, ETH_ALEN);
-	wifiMacToText(stagedMac, stagedMacText);
-	rtw_initmac	  = stagedMacText;
-	stagedMacUsed = true;
+	stageMac(mac);
 	LT_IM(WIFI, "MAC address override staged: %s", stagedMacText);
 	return true;
 }
