@@ -26,6 +26,11 @@ extern "C" {
 
 extern struct netif xnetif[NET_IF_NUM];
 
+// freertos_intfs.c (closed-source driver)
+// Optional "aa:bb:cc:dd:ee:ff" string. If set, the driver uses it as the
+// station MAC instead of the eFuse value. RAM only, nothing is programmed.
+extern char *rtw_initmac;
+
 // dhcps.c
 extern void dns_server_init(struct netif *pnetif);
 extern void dns_server_deinit(void);
