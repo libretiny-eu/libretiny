@@ -40,13 +40,17 @@ void stageDefaultMac() {
 		return; // an explicit override (setMacAddress() or the application) wins
 
 #ifdef LT_WIFI_STA_MAC
-	uint8_t buildMac[ETH_ALEN];
-	if (wifiMacFromText(LT_STRINGIFY(LT_WIFI_STA_MAC), buildMac) && wifiMacIsAssignable(buildMac)) {
-		stageMac(buildMac);
-		LT_IM(WIFI, "Using the MAC address from the build: %s", stagedMacText);
-		return;
+	// An empty value means "not set", so build systems can pass the option always.
+	const char *buildMacText = LT_STRINGIFY(LT_WIFI_STA_MAC);
+	if (*buildMacText) {
+		uint8_t buildMac[ETH_ALEN];
+		if (wifiMacFromText(buildMacText, buildMac) && wifiMacIsAssignable(buildMac)) {
+			stageMac(buildMac);
+			LT_IM(WIFI, "Using the MAC address from the build: %s", stagedMacText);
+			return;
+		}
+		LT_EM(WIFI, "LT_WIFI_STA_MAC is not a usable MAC address, expected 12 hex digits");
 	}
-	LT_EM(WIFI, "LT_WIFI_STA_MAC is not a usable MAC address, expected 12 hex digits");
 #endif
 
 #if LT_RTL8720C

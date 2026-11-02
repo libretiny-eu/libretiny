@@ -75,6 +75,8 @@ esphome:
     - -DLT_WIFI_STA_MAC=ec0bae9e21c1
 ```
 
+An empty value (`-DLT_WIFI_STA_MAC=`) counts as not set, so a build system can pass the option unconditionally.
+
 The order in which LibreTiny picks the address is: `WiFi.setMacAddress()`, then `LT_WIFI_STA_MAC`, then the flash sector described above (if the eFuse has no MAC), then the eFuse, then the driver default.
 
 You can also set it from code. Call `WiFi.setMacAddress()` **before** WiFi is started:
