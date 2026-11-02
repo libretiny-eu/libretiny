@@ -51,3 +51,50 @@ RTL8722DM   | Ameba D   | 2.4G+5G+BLE5   | M0+M4  | 200M      | 512K+4M | 4    |
 - RTL8720DN (found in ambd_arduino)
 - [RTL8721DM](https://www.realtek.com/en/products/communications-network-ics/item/rtl8721dm)
 - RTL8722DM (found in ambd_arduino)
+
+## MAC address
+
+The station MAC address comes from the chip's eFuse (logical map offset `0x11A`). Chips that were never given a MAC there end up with the driver's built-in default - on AmebaZ2 that is `00:e0:4c:b7:23:00`. Every such device on your network then has the same MAC (and, through DHCP, the same IP address).
+
+The BL3357 module in Broadlink RM4 devices is one of them. Its stock firmware keeps the real MAC in a flash sector at `0x4000` (it starts with the text `CALD`, the MAC follows at byte 8) and gives it to the driver itself. On AmebaZ2, LibreTiny does the same: if the eFuse holds no MAC and that sector is found, its address is used. Nothing is written anywhere, the address is only handed to the driver at WiFi start.
+
+!!! warning
+    The `0x4000` sector is where LibreTiny's own bootloader lives. Flashing a full LibreTiny image over the stock firmware **erases the MAC**, and the device falls back to the default address. Back up the stock flash first (`ltchiptool flash read`), the MAC is in that dump: bytes 8 to 13 of the sector at `0x4000`.
+
+To use a specific address (for example the one from such a backup, or from the label of the device), pass it at build time as twelve hex digits:
+
+```ini
+build_flags = -DLT_WIFI_STA_MAC=ec0bae9e21c1
+```
+
+In ESPHome the same flag goes into the `esphome:` section:
+
+```yaml
+esphome:
+  build_flags:
+    - -DLT_WIFI_STA_MAC=ec0bae9e21c1
+```
+
+Build tools may read a value that consists only of digits as a number and drop its leading zeros; LibreTiny restores them, so `020000000001` works as well.
+
+An empty value (`-DLT_WIFI_STA_MAC=`) counts as not set, so a build system can pass the option unconditionally.
+
+The order in which LibreTiny picks the address is: `WiFi.setMacAddress()`, then `LT_WIFI_STA_MAC`, then the flash sector described above (if the eFuse has no MAC), then the eFuse, then the driver default.
+
+You can also set it from code. Call `WiFi.setMacAddress()` **before** WiFi is started:
+
+```cpp
+void setup() {
+	const uint8_t mac[6] = {0x02, 0x11, 0x22, 0x33, 0x44, 0x55};
+	WiFi.setMacAddress(mac);
+	WiFi.begin(ssid, password);
+}
+```
+
+- The address is only kept in RAM and has to be set again after every reset. Nothing is written to the chip.
+- It takes precedence over every other source.
+- The call is rejected while WiFi is running, and for all-zero, all-ones and multicast addresses.
+- Use a locally administered address (second-lowest bit of the first byte set, e.g. `02:...`) unless the address is one you own.
+
+!!! warning
+    Do not call the SDK function `wifi_set_mac_address()` yourself. It programs the one-time-programmable eFuse: the change is permanent and the number of writes is limited. LibreTiny used to call it from `WiFi.setMacAddress()`, with the wrong argument format on top.

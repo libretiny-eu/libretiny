@@ -26,6 +26,11 @@ extern "C" {
 
 extern struct netif xnetif[NET_IF_NUM];
 
+// freertos_intfs.c (closed-source driver)
+// Optional "aa:bb:cc:dd:ee:ff" string. If set, the driver uses it as the
+// station MAC instead of the eFuse value. RAM only, nothing is programmed.
+extern char *rtw_initmac;
+
 // dhcps.c
 extern void dns_server_init(struct netif *pnetif);
 extern void dns_server_deinit(void);
@@ -39,6 +44,15 @@ extern void rltk_suspend_softap_beacon(const char *ifname);
 
 } // extern "C"
 
+#if LT_RTL8720C
+// lt_device.c - MAC kept in flash by the vendor firmware, if there is one
+extern "C" bool lt_get_flash_mac(uint8_t *mac);
+#endif
+
+// WiFiSTA.cpp
+// Use the MAC from the build or from flash if the application set none.
+// Call before WiFi starts.
+extern void stageDefaultMac();
 // WiFi.cpp
 extern rtw_wifi_setting_t wifi_setting;
 extern wifi_mode_t wifi_mode;

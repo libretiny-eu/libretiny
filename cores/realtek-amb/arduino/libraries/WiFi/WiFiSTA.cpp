@@ -1,7 +1,71 @@
 /* Copyright (c) Kuba Szczodrzyński 2022-04-25. */
 
+#include "WiFiMacText.h"
 #include "WiFiPrivate.h"
 #include <libretiny.h>
+
+// Station MAC override handed to the driver by setMacAddress().
+// The driver keeps a pointer to the text and re-parses it on every radio
+// start, so these must stay valid for the whole program lifetime.
+static uint8_t stagedMac[ETH_ALEN];
+static char stagedMacText[WIFI_MAC_TEXT_SIZE];
+static bool stagedMacUsed	  = false;
+static bool defaultMacChecked = false;
+
+// Hand the address to the driver and remember it for macAddress().
+static void stageMac(const uint8_t *mac) {
+	memcpy(stagedMac, mac, ETH_ALEN);
+	wifiMacToText(stagedMac, stagedMacText);
+	rtw_initmac	  = stagedMacText;
+	stagedMacUsed = true;
+}
+
+#ifdef LT_WIFI_STA_MAC
+#define LT_STRINGIFY_(x) #x
+#define LT_STRINGIFY(x)	 LT_STRINGIFY_(x)
+#endif
+
+/**
+ * Pick the station MAC address when the application did not set one:
+ * 1. the address given at build time (-DLT_WIFI_STA_MAC=aabbccddeeff),
+ * 2. on AmebaZ2, the address the vendor firmware left in flash, if the chip
+ *    itself has none.
+ * Otherwise the driver keeps using the eFuse, or its built-in default.
+ */
+void stageDefaultMac() {
+	if (defaultMacChecked)
+		return;
+	defaultMacChecked = true;
+	if (stagedMacUsed || rtw_initmac != nullptr)
+		return; // an explicit override (setMacAddress() or the application) wins
+
+#ifdef LT_WIFI_STA_MAC
+	// An empty value means "not set", so build systems can pass the option always.
+	const char *buildMacText = LT_STRINGIFY(LT_WIFI_STA_MAC);
+	if (*buildMacText) {
+		uint8_t buildMac[ETH_ALEN];
+		if (wifiMacFromBuildText(buildMacText, buildMac) && wifiMacIsAssignable(buildMac)) {
+			stageMac(buildMac);
+			LT_IM(WIFI, "Using the MAC address from the build: %s", stagedMacText);
+			return;
+		}
+		LT_EM(WIFI, "LT_WIFI_STA_MAC is not a usable MAC address, expected 12 hex digits");
+	}
+#endif
+
+#if LT_RTL8720C
+	uint8_t chipMac[ETH_ALEN];
+	lt_get_device_mac(chipMac);
+	if (wifiMacIsAssignable(chipMac))
+		return; // the chip has its own address
+
+	uint8_t flashMac[ETH_ALEN];
+	if (!lt_get_flash_mac(flashMac))
+		return;
+	stageMac(flashMac);
+	LT_IM(WIFI, "No MAC in eFuse, using the one from flash: %s", stagedMacText);
+#endif
+}
 
 WiFiStatus WiFiClass::begin(
 	const char *ssid,
@@ -192,7 +256,12 @@ IPAddress WiFiClass::localIP() {
 
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	if ((getMode() & WIFI_MODE_STA) == 0) {
-		lt_get_device_mac(mac);
+		// the radio is off: report what the station will use once it starts
+		stageDefaultMac();
+		if (stagedMacUsed)
+			memcpy(mac, stagedMac, ETH_ALEN);
+		else
+			lt_get_device_mac(mac);
 		return mac;
 	}
 	memcpy(mac, NETIF_RTW_STA.hwaddr, ETH_ALEN);
@@ -224,8 +293,35 @@ bool WiFiClass::setHostname(const char *hostname) {
 	return true;
 }
 
+/**
+ * Override the station MAC address for the next start of the radio.
+ *
+ * This deliberately does NOT use wifi_set_mac_address(). That SDK call is
+ * implemented as "write_mac" -> rtw_efuse_map_write(), which programs the
+ * one-time-programmable eFuse: it cannot be undone, every attempt consumes a
+ * limited number of eFuse entries, and the driver expects twelve hex digits
+ * rather than the raw bytes this method used to pass.
+ *
+ * Instead the address is handed to the driver through `rtw_initmac`, the
+ * hook its probe routine parses right after reading the eFuse. The override
+ * lives in RAM only and is gone after a reset.
+ *
+ * It has to be called while the radio is off (before the first WiFi.mode()
+ * or WiFi.begin()); the address is applied when the driver starts.
+ */
 bool WiFiClass::setMacAddress(const uint8_t *mac) {
-	return wifi_set_mac_address((char *)mac) == RTW_SUCCESS;
+	if (!wifiMacIsAssignable(mac)) {
+		LT_WM(WIFI, "Refusing unusable MAC address");
+		return false;
+	}
+	if (getMode() != WIFI_MODE_NULL) {
+		LT_WM(WIFI, "MAC address can only be changed while WiFi is off");
+		return false;
+	}
+
+	stageMac(mac);
+	LT_IM(WIFI, "MAC address override staged: %s", stagedMacText);
+	return true;
 }
 
 const String WiFiClass::SSID() {
