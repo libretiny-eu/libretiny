@@ -25,8 +25,8 @@ void stageVendorMac() {
 	if (vendorMacChecked)
 		return;
 	vendorMacChecked = true;
-	if (stagedMacUsed)
-		return; // an explicit setMacAddress() wins
+	if (stagedMacUsed || rtw_initmac != nullptr)
+		return; // an explicit override (setMacAddress() or the application) wins
 
 	uint8_t chipMac[ETH_ALEN];
 	lt_get_device_mac(chipMac);
