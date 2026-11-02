@@ -16,7 +16,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		// initialize wifi first
 		LT_IM(WIFI, "Initializing LwIP");
 		// the driver reads the MAC when it starts, so this has to come first
-		stageVendorMac();
+		stageDefaultMac();
 		LwIP_Init();
 		DATA->initialized = true;
 	}

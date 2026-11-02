@@ -37,3 +37,43 @@ static inline void wifiMacToText(const uint8_t *mac, char *text) {
 		text[3 * i + 2] = (i < 5) ? ':' : '\0';
 	}
 }
+
+/**
+ * Read a MAC address given as twelve hex digits, e.g. "ec0bae9e21c1".
+ * Colons, dashes and quote characters in between are skipped, so
+ * "ec:0b:ae:9e:21:c1" works as well. Anything else, or a digit count other than
+ * twelve, fails and leaves `mac` untouched.
+ */
+static inline bool wifiMacFromText(const char *text, uint8_t *mac) {
+	if (text == nullptr)
+		return false;
+
+	uint8_t parsed[6] = {};
+	unsigned digits	  = 0;
+	for (; *text; text++) {
+		char c = *text;
+		if (c == ':' || c == '-' || c == '"' || c == '\\')
+			continue;
+
+		unsigned value;
+		if (c >= '0' && c <= '9')
+			value = c - '0';
+		else if (c >= 'a' && c <= 'f')
+			value = c - 'a' + 10;
+		else if (c >= 'A' && c <= 'F')
+			value = c - 'A' + 10;
+		else
+			return false;
+
+		if (digits >= 12)
+			return false;
+		parsed[digits / 2] = (digits % 2) ? (parsed[digits / 2] | value) : (value << 4);
+		digits++;
+	}
+	if (digits != 12)
+		return false;
+
+	for (unsigned i = 0; i < 6; i++)
+		mac[i] = parsed[i];
+	return true;
+}

@@ -9,8 +9,8 @@
 // start, so these must stay valid for the whole program lifetime.
 static uint8_t stagedMac[ETH_ALEN];
 static char stagedMacText[WIFI_MAC_TEXT_SIZE];
-static bool stagedMacUsed	 = false;
-static bool vendorMacChecked = false;
+static bool stagedMacUsed	  = false;
+static bool defaultMacChecked = false;
 
 // Hand the address to the driver and remember it for macAddress().
 static void stageMac(const uint8_t *mac) {
@@ -20,14 +20,36 @@ static void stageMac(const uint8_t *mac) {
 	stagedMacUsed = true;
 }
 
-void stageVendorMac() {
-#if LT_RTL8720C
-	if (vendorMacChecked)
+#ifdef LT_WIFI_STA_MAC
+#define LT_STRINGIFY_(x) #x
+#define LT_STRINGIFY(x)	 LT_STRINGIFY_(x)
+#endif
+
+/**
+ * Pick the station MAC address when the application did not set one:
+ * 1. the address given at build time (-DLT_WIFI_STA_MAC=aabbccddeeff),
+ * 2. on AmebaZ2, the address the vendor firmware left in flash, if the chip
+ *    itself has none.
+ * Otherwise the driver keeps using the eFuse, or its built-in default.
+ */
+void stageDefaultMac() {
+	if (defaultMacChecked)
 		return;
-	vendorMacChecked = true;
+	defaultMacChecked = true;
 	if (stagedMacUsed || rtw_initmac != nullptr)
 		return; // an explicit override (setMacAddress() or the application) wins
 
+#ifdef LT_WIFI_STA_MAC
+	uint8_t buildMac[ETH_ALEN];
+	if (wifiMacFromText(LT_STRINGIFY(LT_WIFI_STA_MAC), buildMac) && wifiMacIsAssignable(buildMac)) {
+		stageMac(buildMac);
+		LT_IM(WIFI, "Using the MAC address from the build: %s", stagedMacText);
+		return;
+	}
+	LT_EM(WIFI, "LT_WIFI_STA_MAC is not a usable MAC address, expected 12 hex digits");
+#endif
+
+#if LT_RTL8720C
 	uint8_t chipMac[ETH_ALEN];
 	lt_get_device_mac(chipMac);
 	if (wifiMacIsAssignable(chipMac))
@@ -231,7 +253,7 @@ IPAddress WiFiClass::localIP() {
 uint8_t *WiFiClass::macAddress(uint8_t *mac) {
 	if ((getMode() & WIFI_MODE_STA) == 0) {
 		// the radio is off: report what the station will use once it starts
-		stageVendorMac();
+		stageDefaultMac();
 		if (stagedMacUsed)
 			memcpy(mac, stagedMac, ETH_ALEN);
 		else

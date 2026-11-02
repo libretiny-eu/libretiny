@@ -61,7 +61,23 @@ The BL3357 module in Broadlink RM4 devices is one of them. Its stock firmware ke
 !!! warning
     The `0x4000` sector is where LibreTiny's own bootloader lives. Flashing a full LibreTiny image over the stock firmware **erases the MAC**, and the device falls back to the default address. Back up the stock flash first (`ltchiptool flash read`), the MAC is in that dump: bytes 8 to 13 of the sector at `0x4000`.
 
-To set a MAC yourself (for example the one from such a backup), call `WiFi.setMacAddress()` **before** WiFi is started:
+To use a specific address (for example the one from such a backup, or from the label of the device), pass it at build time as twelve hex digits:
+
+```ini
+build_flags = -DLT_WIFI_STA_MAC=ec0bae9e21c1
+```
+
+In ESPHome the same flag goes into the `esphome:` section:
+
+```yaml
+esphome:
+  build_flags:
+    - -DLT_WIFI_STA_MAC=ec0bae9e21c1
+```
+
+The order in which LibreTiny picks the address is: `WiFi.setMacAddress()`, then `LT_WIFI_STA_MAC`, then the flash sector described above (if the eFuse has no MAC), then the eFuse, then the driver default.
+
+You can also set it from code. Call `WiFi.setMacAddress()` **before** WiFi is started:
 
 ```cpp
 void setup() {
@@ -72,7 +88,7 @@ void setup() {
 ```
 
 - The address is only kept in RAM and has to be set again after every reset. Nothing is written to the chip.
-- It takes precedence over the MAC from eFuse or flash.
+- It takes precedence over every other source.
 - The call is rejected while WiFi is running, and for all-zero, all-ones and multicast addresses.
 - Use a locally administered address (second-lowest bit of the first byte set, e.g. `02:...`) unless the address is one you own.
 

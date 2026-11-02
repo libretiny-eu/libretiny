@@ -67,8 +67,45 @@ static void testRoundTrip() {
 	CHECK(std::memcmp(original, parsed, 6) == 0);
 }
 
+static void testFromText() {
+	const uint8_t expected[6] = {0xec, 0x0b, 0xae, 0x9e, 0x21, 0xc1};
+	uint8_t mac[6]			  = {};
+
+	// the form used by the LT_WIFI_STA_MAC build option
+	CHECK(wifiMacFromText("ec0bae9e21c1", mac));
+	CHECK(std::memcmp(mac, expected, 6) == 0);
+
+	std::memset(mac, 0, 6);
+	CHECK(wifiMacFromText("EC:0B:AE:9E:21:C1", mac));
+	CHECK(std::memcmp(mac, expected, 6) == 0);
+
+	// a stringified macro may arrive with quotes
+	std::memset(mac, 0, 6);
+	CHECK(wifiMacFromText("\"ec-0b-ae-9e-21-c1\"", mac));
+	CHECK(std::memcmp(mac, expected, 6) == 0);
+
+	// a leading zero byte must survive
+	CHECK(wifiMacFromText("00e04cb72300", mac));
+	CHECK(mac[0] == 0x00 && mac[1] == 0xe0 && mac[5] == 0x00);
+}
+
+static void testFromTextRejects() {
+	uint8_t mac[6]			   = {1, 2, 3, 4, 5, 6};
+	const uint8_t untouched[6] = {1, 2, 3, 4, 5, 6};
+
+	CHECK(!wifiMacFromText(nullptr, mac));
+	CHECK(!wifiMacFromText("", mac));
+	CHECK(!wifiMacFromText("ec0bae9e21c", mac));   // 11 digits
+	CHECK(!wifiMacFromText("ec0bae9e21c1f", mac)); // 13 digits
+	CHECK(!wifiMacFromText("ec0bae9e21cg", mac));  // not hex
+	CHECK(!wifiMacFromText("ec0b ae9e21c1", mac)); // space
+	CHECK(std::memcmp(mac, untouched, 6) == 0);
+}
+
 int main() {
 	testAssignable();
+	testFromText();
+	testFromTextRejects();
 	testFormat();
 	testRoundTrip();
 	if (failures) {
