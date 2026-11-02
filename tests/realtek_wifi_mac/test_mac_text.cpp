@@ -102,8 +102,38 @@ static void testFromTextRejects() {
 	CHECK(std::memcmp(mac, untouched, 6) == 0);
 }
 
+static void testFromBuildText() {
+	uint8_t mac[6] = {};
+
+	// same as wifiMacFromText() for ordinary values
+	const uint8_t expected[6] = {0xec, 0x0b, 0xae, 0x9e, 0x21, 0xc1};
+	CHECK(wifiMacFromBuildText("ec0bae9e21c1", mac));
+	CHECK(std::memcmp(mac, expected, 6) == 0);
+	CHECK(wifiMacFromBuildText("ec:0b:ae:9e:21:c1", mac));
+	CHECK(std::memcmp(mac, expected, 6) == 0);
+
+	// a build tool turned 020000000001 into the number 20000000001
+	const uint8_t digitsOnly[6] = {0x02, 0x00, 0x00, 0x00, 0x00, 0x01};
+	CHECK(wifiMacFromBuildText("20000000001", mac));
+	CHECK(std::memcmp(mac, digitsOnly, 6) == 0);
+	CHECK(wifiMacFromBuildText("020000000001", mac));
+	CHECK(std::memcmp(mac, digitsOnly, 6) == 0);
+
+	// all twelve digits present, nothing to restore
+	const uint8_t full[6] = {0x12, 0x34, 0x56, 0x78, 0x90, 0x12};
+	CHECK(wifiMacFromBuildText("123456789012", mac));
+	CHECK(std::memcmp(mac, full, 6) == 0);
+
+	// still rejected
+	CHECK(!wifiMacFromBuildText(nullptr, mac));
+	CHECK(!wifiMacFromBuildText("", mac));
+	CHECK(!wifiMacFromBuildText("1234567890123", mac));
+	CHECK(!wifiMacFromBuildText("ec0bae9e21c", mac)); // short, but not only digits
+}
+
 int main() {
 	testAssignable();
+	testFromBuildText();
 	testFromText();
 	testFromTextRejects();
 	testFormat();

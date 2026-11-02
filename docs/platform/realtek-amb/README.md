@@ -75,6 +75,8 @@ esphome:
     - -DLT_WIFI_STA_MAC=ec0bae9e21c1
 ```
 
+Build tools may read a value that consists only of digits as a number and drop its leading zeros; LibreTiny restores them, so `020000000001` works as well.
+
 An empty value (`-DLT_WIFI_STA_MAC=`) counts as not set, so a build system can pass the option unconditionally.
 
 The order in which LibreTiny picks the address is: `WiFi.setMacAddress()`, then `LT_WIFI_STA_MAC`, then the flash sector described above (if the eFuse has no MAC), then the eFuse, then the driver default.

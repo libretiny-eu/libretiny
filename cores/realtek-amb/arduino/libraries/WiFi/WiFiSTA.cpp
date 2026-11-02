@@ -44,7 +44,7 @@ void stageDefaultMac() {
 	const char *buildMacText = LT_STRINGIFY(LT_WIFI_STA_MAC);
 	if (*buildMacText) {
 		uint8_t buildMac[ETH_ALEN];
-		if (wifiMacFromText(buildMacText, buildMac) && wifiMacIsAssignable(buildMac)) {
+		if (wifiMacFromBuildText(buildMacText, buildMac) && wifiMacIsAssignable(buildMac)) {
 			stageMac(buildMac);
 			LT_IM(WIFI, "Using the MAC address from the build: %s", stagedMacText);
 			return;

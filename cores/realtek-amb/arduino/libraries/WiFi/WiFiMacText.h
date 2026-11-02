@@ -3,6 +3,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 // Text buffer size for "aa:bb:cc:dd:ee:ff" including the terminator.
@@ -76,4 +77,34 @@ static inline bool wifiMacFromText(const char *text, uint8_t *mac) {
 	for (unsigned i = 0; i < 6; i++)
 		mac[i] = parsed[i];
 	return true;
+}
+
+/**
+ * Read the MAC address given at build time (-DLT_WIFI_STA_MAC=...).
+ *
+ * Same as wifiMacFromText(), but also copes with a build tool that reads an
+ * all-digit value such as 020000000001 as a number and drops the leading zeros:
+ * a value of only decimal digits that is shorter than twelve is padded with
+ * zeros on the left.
+ */
+static inline bool wifiMacFromBuildText(const char *text, uint8_t *mac) {
+	if (text == nullptr)
+		return false;
+
+	size_t length	= 0;
+	bool onlyDigits = true;
+	for (const char *c = text; *c; c++, length++) {
+		if (*c < '0' || *c > '9')
+			onlyDigits = false;
+	}
+	if (!onlyDigits || length == 0 || length >= 12)
+		return wifiMacFromText(text, mac);
+
+	char padded[13];
+	size_t zeros = 12 - length;
+	for (size_t i = 0; i < zeros; i++)
+		padded[i] = '0';
+	for (size_t i = 0; i <= length; i++)
+		padded[zeros + i] = text[i]; // includes the terminator
+	return wifiMacFromText(padded, mac);
 }
