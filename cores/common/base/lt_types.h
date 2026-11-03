@@ -24,7 +24,7 @@ typedef enum {
 typedef enum {
 	// Realtek AmebaZ
 	// IDs copied from rtl8710b_efuse.h
-	RTL8710BL = CPU_MODEL(F_RTL8710B, 0xE0), // ???
+	RTL8710BL = CPU_MODEL(F_RTL8710B, 0xF7), // found on an actual RTL8710BL
 	RTL8710BN = CPU_MODEL(F_RTL8710B, 0xFF), // CHIPID_8710BN / QFN32
 	RTL8710BU = CPU_MODEL(F_RTL8710B, 0xFE), // CHIPID_8710BU / QFN48
 	RTL8710BX = CPU_MODEL(F_RTL8710B, 0xF6), // found on an actual RTL8710BX
