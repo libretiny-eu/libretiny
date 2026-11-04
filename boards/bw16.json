@@ -1,0 +1,22 @@
+{
+	"_base": [
+		"realtek-ambd",
+		"realtek-ambd-4mb"
+	],
+	"build": {
+		"mcu": "rtl8720dn",
+		"variant": "bw16"
+	},
+	"name": "BW16",
+	"url": "https://docs.ai-thinker.com/en/bw16",
+	"vendor": "Ai-Thinker Co., Ltd.",
+	"pcb": {
+		"symbol": "BW16"
+	},
+	"doc": {
+		"fccid": "2AHMR-BW16",
+		"links": {
+			"Vendor page": "https://docs.ai-thinker.com/en/bw16"
+		}
+	}
+}

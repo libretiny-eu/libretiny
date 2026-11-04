@@ -101,7 +101,7 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 			LT_DM(WIFI, "Mode: %s DISABLE", WLAN1_NAME);
 			netif_set_link_down(WLAN1_NETIF);
 			netif_set_down(WLAN1_NETIF);
-#if !LT_RTL8720C
+#if !LT_RTL8720C && !LT_RTL8720D
 			rltk_stop_softap(WLAN1_NAME);
 #else
 			rltk_suspend_softap(WLAN1_NAME);
