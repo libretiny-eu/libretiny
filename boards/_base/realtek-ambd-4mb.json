@@ -1,0 +1,19 @@
+{
+	"build": {
+		"flash_size": "4MB"
+	},
+	"flash": {
+		"boot": "0x000000+0x4000",
+		"boot_km0": "0x004000+0x1000",
+		"system": "0x005000+0x1000",
+		"ota1": "0x006000+0x1FA000",
+		"ftl": "0x200000+0x6000",
+		"ota2": "0x206000+0x1E2000",
+		"kvs": "0x3E8000+0x8000",
+		"userdata": "0x3F0000+0x10000"
+	},
+	"upload": {
+		"flash_size": 4194304,
+		"maximum_size": 1974272
+	}
+}

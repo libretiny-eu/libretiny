@@ -70,7 +70,7 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 // Enable or disable partial scan for a specific channel
 static void set_pscan_channel(uint8_t channel, bool enable) {
 	uint8_t channel_list[1] = {channel};
-	uint8_t pscan_config[1] = {enable ? (PSCAN_ENABLE | PSCAN_FAST_SURVEY) : 0};
+	uint8_t pscan_config[1] = {(uint8_t)(enable ? (PSCAN_ENABLE | PSCAN_FAST_SURVEY) : 0)};
 	wifi_set_pscan_chan(channel_list, pscan_config, 1);
 }
 
@@ -108,6 +108,20 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 		if (info.channel > 0) {
 			set_pscan_channel(info.channel, true);
 		}
+#if LT_RTL8720D
+		// Not wifi_connect_bssid(): on AmebaD it associates but the data path stays
+		// dead. The partial scan above already gives the channel hint, so plain
+		// wifi_connect() is as fast.
+		ret = wifi_connect(
+			info.ssid,
+			(rtw_security_t)info.auth,
+			info.password,
+			strlen(info.ssid),
+			strlen(info.password),
+			-1,
+			NULL
+		);
+#else
 		ret = wifi_connect_bssid(
 			(unsigned char *)bssid,
 			info.ssid,
@@ -119,6 +133,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			-1,
 			NULL
 		);
+#endif
 		// Reset partial scan config
 		if (info.channel > 0) {
 			set_pscan_channel(info.channel, false);
@@ -143,6 +158,12 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			wifi_disconnect();
 			goto error;
 		}
+	} else {
+		// LwIP_DHCP() also brings the netif up and makes it the default; with DHCP
+		// skipped nothing does, and every routed frame would be dropped.
+		netif_set_up(NETIF_RTW_STA);
+		netif_set_link_up(NETIF_RTW_STA);
+		netif_set_default(NETIF_RTW_STA);
 	}
 
 	LT_HEAP_I();
