@@ -40,10 +40,10 @@
 #include <stdint.h>
 
 #define RSNXE_EID			   0xF4
-#define FIXED_IE_LEN		   12	 // timestamp + beacon interval + capability
-#define MAX_IE_LEN			   768	 // IE area of WLAN_BSSID_EX copied by the driver
-#define NETWORK_IE_LENGTH_OFF  0x94	 // wlan_network.network.IELength
-#define NETWORK_IES_OFF		   0x98	 // wlan_network.network.IEs
+#define FIXED_IE_LEN		   12	  // timestamp + beacon interval + capability
+#define MAX_IE_LEN			   768	  // IE area of WLAN_BSSID_EX copied by the driver
+#define NETWORK_IE_LENGTH_OFF  0x94	  // wlan_network.network.IELength
+#define NETWORK_IES_OFF		   0x98	  // wlan_network.network.IEs
 #define ADAPTER_RSNXE_CAPS_OFF 0x147E // saved AP RSNXE capabilities, read by ClientEAPOLKeyRecvd
 
 extern uint8_t __real_rtw_joinbss_cmd(void *padapter, void *pnetwork);
