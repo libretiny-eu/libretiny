@@ -69,9 +69,23 @@ bool WiFiClass::config(IPAddress localIP, IPAddress gateway, IPAddress subnet, I
 
 // Enable or disable partial scan for a specific channel
 static void set_pscan_channel(uint8_t channel, bool enable) {
-	uint8_t channel_list[1] = {channel};
-	uint8_t pscan_config[1] = {enable ? (PSCAN_ENABLE | PSCAN_FAST_SURVEY) : 0};
-	wifi_set_pscan_chan(channel_list, pscan_config, 1);
+	if (enable) {
+		uint8_t channel_list[1] = {channel};
+		uint8_t pscan_config[1] = {PSCAN_ENABLE | PSCAN_FAST_SURVEY};
+		wifi_set_pscan_chan(channel_list, pscan_config, 1);
+		return;
+	}
+	// The SDK has no "clear partial scan" call. Setting {channel, 0} doesn't
+	// disable partial scan; it leaves a one-channel list with that channel not
+	// enabled, so the next join without a BSSID scans nothing and fails with
+	// RTW_NONE_NETWORK. Restore the full 2.4 GHz channel list instead.
+	uint8_t channel_list[13];
+	uint8_t pscan_config[13];
+	for (uint8_t i = 0; i < 13; i++) {
+		channel_list[i] = i + 1;
+		pscan_config[i] = PSCAN_ENABLE;
+	}
+	wifi_set_pscan_chan(channel_list, pscan_config, 13);
 }
 
 bool WiFiClass::reconnect(const uint8_t *bssid) {
