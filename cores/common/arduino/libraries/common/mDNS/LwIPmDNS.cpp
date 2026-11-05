@@ -273,6 +273,11 @@ bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, 
 
 			if (slot < 0) {
 				LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
+			} else {
+				// The services are registered on this netif now. Mark it so the
+				// netif status callback doesn't add them a second time when the
+				// netif goes down and up again (e.g. Wi-Fi turned off and on).
+				sNetIfState[netif->num] = StateForNetIf::CONFIGURED;
 			}
 
 			added = true;
