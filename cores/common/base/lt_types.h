@@ -25,8 +25,8 @@ typedef enum {
 	// Realtek AmebaZ
 	// IDs copied from rtl8710b_efuse.h
 	// Realtek Ameba1 (F_RTL8710A) — single-variant family, no per-chip efuse id
-	RTL8195A  = CPU_MODEL(F_RTL8710A, 0x00), // RTL8195A / Ameba1
-	RTL8711AM = RTL8195A,					 // module SoC (WN4639L / WCATA007)
+	CPU_RTL8195A = CPU_MODEL(F_RTL8710A, 0x00), // prefixed to avoid SDK RTL8195A macro
+	RTL8711AM    = CPU_RTL8195A, // module SoC (WN4639L / WCATA007)
 
 	RTL8710BL = CPU_MODEL(F_RTL8710B, 0xE0), // ???
 	RTL8710BN = CPU_MODEL(F_RTL8710B, 0xFF), // CHIPID_8710BN / QFN32

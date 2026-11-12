@@ -7,7 +7,7 @@
 lt_cpu_model_t lt_cpu_get_model() {
 	// RTL8195A/RTL8711AM is a single-variant family; there is no per-chip id
 	// efuse read like AmebaZ's EFUSE_OneByteReadROM(0xF8).
-	return CPU_MODEL_ENUM(FAMILY, 0);
+	return CPU_RTL8195A;
 }
 
 uint32_t lt_cpu_get_mac_id() {
