@@ -17,7 +17,7 @@
 	],
 	"upload": {
 		"maximum_ram_size": 524288,
-		"maximum_size": 1507328,
+		"maximum_size": 1048576,
 		"protocol": "spi",
 		"protocols": [
 			"spi"
