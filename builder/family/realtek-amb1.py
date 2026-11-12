@@ -11,14 +11,46 @@
 # Experimental port: compile success does not establish hardware connectivity.
 
 from os.path import isdir, join
+from pathlib import Path
+from shutil import copyfile
 
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Builder, DefaultEnvironment, Environment
+
+
+def prepare_linker_script(env, board):
+    """Stage the selected script before linker flags and framework hooks run."""
+    selected = Path(env.subst(board.get("build.ldscript")))
+    if selected.is_absolute():
+        candidates = [selected]
+    else:
+        candidates = [
+            Path(env.subst("$PROJECT_DIR")) / selected,
+            Path(env.subst("$MISC_DIR")) / selected,
+        ]
+        candidates.extend(
+            Path(env.subst(str(path))) / selected
+            for path in env.get("LIBPATH", [])
+        )
+    source = next((path.resolve() for path in candidates if path.is_file()), None)
+    if source is None:
+        raise FileNotFoundError(f"Linker script not found: {selected}")
+
+    target = Path(env.subst("$BUILD_DIR")).resolve() / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    # Refresh on every setup so patches do not accumulate between builds. Copy
+    # contents only: a read-only framework package must yield a writable script.
+    if source != target:
+        copyfile(source, target)
+    env.Replace(LDSCRIPT_PATH=str(target))
+    board.update("build.ldscript", str(target))
+
 
 env: Environment = DefaultEnvironment()
 board: PlatformBoardConfig = env.BoardConfig()
 queue = env.AddLibraryQueue("realtek-amb1")
 env.ConfigureFamily()
+prepare_linker_script(env, board)
 
 # Make the 8195a SDK headers visible to ALL libraries — the SDK sources here AND
 # LibreTiny's core/fixups (built on a separate queue in base.py). The Realtek SDK
