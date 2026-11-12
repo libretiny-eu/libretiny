@@ -75,6 +75,27 @@ void wifi_indication(rtw_event_indicate_t event, char *buf, int buf_len, int fla
 	if ((uintptr_t)buf < 0x1000)
 		buf = NULL;
 
+#if LT_AMB1
+	// Ameba-1 hands over scan events with a pointer into the driver's
+	// receive-task stack: report_scan_result_one() passes a holder at sp+24
+	// that points at the 62-byte rtw_scan_result_t record at sp+40, and the
+	// driver reuses that frame as soon as wext_wlan_indicate() returns.
+	// wifi_scan_each_report_hdl() reads the record and clears it (rtw_memset)
+	// before returning; that immediate clear is the "consumed" signal the
+	// driver relies on. Deferring through the wifievent queue would run the
+	// handler after the frame is gone (stale read + stray memset into the
+	// reused receive-task stack). Dispatch the SDK handlers here, in the
+	// calling driver context, matching the vendor's synchronous wifi_ind.c.
+	if (flags != -2 && (event == WIFI_EVENT_SCAN_RESULT_REPORT || event == WIFI_EVENT_SCAN_DONE)) {
+		// a scan report must carry a usable record; scan done legitimately
+		// has a NULL buffer
+		if (event == WIFI_EVENT_SCAN_RESULT_REPORT && (!buf || buf_len <= 0))
+			return;
+		handleRtwEvent(event, buf, buf_len, flags);
+		return;
+	}
+#endif
+
 	if (wifiEventQueueHandle && wifiEventTaskHandle) {
 		rtw_event_t *ev = (rtw_event_t *)malloc(sizeof(rtw_event_t));
 		if (!ev) {

@@ -9,9 +9,9 @@ typedef struct {
 
 bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bool ssidHidden, int maxClients) {
 	if (!enableAP(true))
-		return WL_CONNECT_FAILED;
+		return false;
 	if (!validate(ssid, passphrase))
-		return WL_CONNECT_FAILED;
+		return false;
 
 	LT_HEAP_I();
 	vTaskDelay(20);
@@ -44,7 +44,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 			(rtw_security_t)info.auth,
 			info.password,
 			strlen(info.ssid),
-			strlen(info.password),
+			info.password ? strlen(info.password) : 0,
 			info.channel
 		);
 	} else {
@@ -53,7 +53,7 @@ bool WiFiClass::softAP(const char *ssid, const char *passphrase, int channel, bo
 			(rtw_security_t)info.auth,
 			info.password,
 			strlen(info.ssid),
-			strlen(info.password),
+			info.password ? strlen(info.password) : 0,
 			info.channel
 		);
 	}

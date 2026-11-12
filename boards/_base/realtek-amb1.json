@@ -1,0 +1,36 @@
+{
+	"build": {
+		"family": "RTL8710A",
+		"ldscript": "rlx8195A-symbol-v02-img2.ld",
+		"f_cpu": "166000000L",
+		"prefix": "arm-none-eabi-"
+	},
+	"package": "framework-realtek-amb1",
+	"flash": {
+		"boot": "0x000000+0x00B000",
+		"ota1": "0x00B000+0x16C000",
+		"ota2": "0x177000+0x16C000",
+		"system": "0x2E3000+0x51D000"
+	},
+	"connectivity": [
+		"wifi"
+	],
+	"upload": {
+		"maximum_ram_size": 524288,
+		"maximum_size": 1507328,
+		"protocol": "spi",
+		"protocols": [
+			"spi"
+		]
+	},
+	"doc": {
+		"params": {
+			"manufacturer": "Realtek",
+			"series": "Ameba1",
+			"voltage": "3.0V - 3.6V",
+			"extra": {
+				"Wi-Fi": "802.11 b/g/n"
+			}
+		}
+	}
+}
