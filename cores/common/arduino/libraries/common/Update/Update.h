@@ -51,7 +51,7 @@ class UpdateClass {
 	size_t writeStream(Stream &data);
 
   private: /* Update.cpp */
-	void cleanup(bool clearError = false);
+	void cleanup();
 
   public: /* UpdateUtil.cpp */
 	UpdateClass &onProgress(THandlerFunction_Progress handler);
@@ -95,10 +95,12 @@ class UpdateClass {
 	}
 
 	/**
-	 * @brief Same as end().
+	 * @brief Release the update without activating the uploaded image.
 	 */
 	inline void abort() {
-		this->end();
+		if (this->ctx && !this->hasError())
+			this->errArd = UPDATE_ERROR_ABORT;
+		this->cleanup();
 	}
 
 	/**

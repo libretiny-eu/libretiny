@@ -28,15 +28,23 @@ void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size) {
 	LT_DM(OTA, "begin(%u, ...) / OTA curr: %u, scheme: %u", size, lt_ota_dual_get_current(), lt_ota_get_uf2_scheme());
 }
 
-bool lt_ota_end(lt_ota_ctx_t *ctx) {
+void lt_ota_abort(lt_ota_ctx_t *ctx) {
 	if (!ctx || !ctx->running)
-		return true;
+		return;
 
 	uf2_ctx_free(&ctx->uf2);
 	uf2_info_free(&ctx->info);
 	ctx->running = false;
+}
 
-	if (ctx->bytes_written && ctx->bytes_written == ctx->bytes_total) {
+bool lt_ota_end(lt_ota_ctx_t *ctx) {
+	if (!ctx || !ctx->running)
+		return true;
+
+	bool complete = ctx->bytes_written && ctx->bytes_written == ctx->bytes_total &&
+					ctx->error <= UF2_ERR_IGNORE && lt_ota_buf_size(ctx) == 0;
+	lt_ota_abort(ctx);
+	if (complete) {
 		// try to activate the 2nd image
 		return lt_ota_switch(/* revert= */ false);
 	}
@@ -114,6 +122,7 @@ bool lt_ota_write_block(lt_ota_ctx_t *ctx, uf2_block_t *block) {
 				ctx->bytes_total,
 				block->block_count * UF2_BLOCK_SIZE
 			);
+			ctx->error = UF2_ERR_SEQ_MISMATCH;
 			return false;
 		}
 	} else if (ctx->error == UF2_ERR_OK) {

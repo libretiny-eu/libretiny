@@ -39,12 +39,22 @@ typedef struct {
 void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size);
 
 /**
+ * @brief Release the update context without attempting activation. Safe to repeat.
+ * This does not undo flash writes or family-specific status set during streaming.
+ *
+ * @param ctx OTA context
+ */
+void lt_ota_abort(lt_ota_ctx_t *ctx);
+
+/**
  * @brief Finish the update process. If the update has been written completely,
  * try to activate the target image. Free allocated internal structures, regardless
- * of the activation result.
+ * of the activation result. Parser errors or buffered trailing bytes prevent
+ * activation. Callers must validate any expected digest before calling this.
  *
  * @param ctx OTA context
  * @return false if activation was attempted and not successful; true otherwise
+ * (including incomplete/rejected updates, for compatibility)
  */
 bool lt_ota_end(lt_ota_ctx_t *ctx);
 
