@@ -13,9 +13,36 @@
 from os.path import isdir, join
 from pathlib import Path
 from shutil import copyfile
+import subprocess
 
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Builder, DefaultEnvironment, Environment
+
+
+def stage_image2_sdk_lock(sdk_dir, build_dir, patch_path):
+    """Patch disposable SDK copies, never the installed framework package."""
+    stage = Path(build_dir).resolve() / "amb1_image2_sdk"
+    for relative in (
+        "component/os/os_dep/device_lock.c",
+        "component/os/os_dep/include/device_lock.h",
+    ):
+        target = stage / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        copyfile(Path(sdk_dir) / relative, target)
+        # SDK releases mix CRLF headers with LF sources; normalize only copies
+        # so exact-context patching works without permitting fuzzy matches.
+        target.write_bytes(target.read_bytes().replace(b"\r\n", b"\n"))
+    result = subprocess.run(
+        ["patch", "--batch", "--forward", "--fuzz=0", "-p1",
+         "-i", str(Path(patch_path).resolve())],
+        cwd=stage, capture_output=True, text=True,
+    )
+    if result.returncode or "fuzz" in (result.stdout + result.stderr).lower():
+        raise RuntimeError(
+            "AMB1 SDK lock patch failed (no fuzz permitted):\n"
+            + result.stdout + result.stderr
+        )
+    return stage
 
 
 def prepare_linker_script(env, board):
@@ -94,6 +121,30 @@ if not _SDK or not isdir(join(_SDK, "component")):
     _SDK = env.PioPlatform().get_package_dir("framework-realtek-amb1") or _SDK
     env.Replace(SDK_DIR=_SDK)
 env.Append(CPPPATH=[join(_SDK, *p.split("/")) for p in _SDK_INCLUDES])
+
+# Explicit qualification-build opt-in only. This does not bind a scratch policy
+# or authorize runtime writes. Set flags globally before any queue clones env.
+_IMAGE2_SDK_ADAPTER = str(env.GetProjectOption(
+    "custom_amb1_flash_qualification", "no"
+)).strip().lower() == "yes"
+if _IMAGE2_SDK_ADAPTER:
+    _OTA = env.subst("$CORES_DIR/realtek-amb1/base/ota")
+    _STAGED_SDK = stage_image2_sdk_lock(
+        _SDK, env.subst("$BUILD_DIR"),
+        join(_OTA, "image2_controller_lock.patch"),
+    )
+    env.Prepend(CPPPATH=[str(_STAGED_SDK / "component/os/os_dep/include")])
+    env.Append(CPPDEFINES=[("LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER", 1)])
+    queue.AddLibrary(
+        name="amb1_image2_sdk_lock",
+        base_dir=str(_STAGED_SDK),
+        srcs=["+<component/os/os_dep/device_lock.c>"],
+    )
+    queue.AddLibrary(
+        name="amb1_image2_sdk_adapter",
+        base_dir=_OTA,
+        srcs=["+<image2_sdk_adapter.c>"],
+    )
 
 # Flags — Cortex-M3, soft-float, Ameba-1 (RTL8195A)
 queue.AppendPublic(
@@ -216,6 +267,7 @@ queue.AddLibrary(
         "+<component/os/freertos/cmsis_os.c>",
         "+<component/os/freertos/freertos_service.c>",
         "+<component/os/os_dep/*.c>",
+        _IMAGE2_SDK_ADAPTER and "-<component/os/os_dep/device_lock.c>",
     ],
     options=dict(CFLAGS=["-w"]),
 )
