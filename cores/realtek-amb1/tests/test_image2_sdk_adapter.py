@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
     assert(argc == 2);
     image2_flash_sdkops ops;
     uint32_t scratch = 4096;
-    image2_sdk_qualification_policy policy = { 0, sizeof(memory), &scratch, 1 };
+    image2_sdk_qualification_policy policy = { 0, sizeof(memory), &scratch, 1, { 0, 0 }, NULL, 0, { 0, 0 }, 0 };
     uint8_t value = 0xf0, out[300];
     memset(memory, 255, sizeof(memory));
     if (!strcmp(argv[1], "invalidpolicy")) {

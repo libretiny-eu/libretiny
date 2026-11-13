@@ -26,6 +26,12 @@ typedef struct {
 	int (*read)(void *, uint32_t, void *, size_t);
 	int (*program)(void *, uint32_t, const void *, size_t);
 	int (*erase_sector)(void *, uint32_t);
+	/* Optional dedicated activation demote. When present it must write exactly
+	 * the one source-signature byte the adapter was bound to, and must NOT be a
+	 * generic write primitive. NULL keeps the legacy mock path, where the
+	 * session drives the single byte through program(); production adapters
+	 * supply this so generic program/erase can hard-deny the running slot. */
+	int (*demote)(void *);
 } image2_flash_sdkops;
 
 typedef struct {

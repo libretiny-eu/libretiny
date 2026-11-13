@@ -151,7 +151,13 @@ int image2_flash_demote(image2_flash_backend *b) {
 	             !memcmp(sig,"81958711",8) && !b->failed;
 	if (ok) ok = b->ops.read(b->ops.ctx,source,sig,8) == 1 &&
 	             !memcmp(sig,"81958711",8) && !b->failed;
-	if (ok) ok = b->ops.program(b->ops.ctx,source,&old,1) == 1 && !b->failed;
+	/* Prefer the adapter's dedicated demote capability, which is authorized for
+	 * exactly this one byte. Only legacy/mock adapters without one fall back to
+	 * the generic program path. */
+	if (ok && b->ops.demote)
+		ok = b->ops.demote(b->ops.ctx) == 1 && !b->failed;
+	else if (ok)
+		ok = b->ops.program(b->ops.ctx,source,&old,1) == 1 && !b->failed;
 	if (ok) ok = b->ops.read(b->ops.ctx,source,sig,8) == 1 &&
 	             !memcmp(sig,"01958711",8) && !b->failed;
 	b->phase = 4;

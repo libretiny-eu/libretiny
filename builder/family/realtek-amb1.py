@@ -10,10 +10,12 @@
 #
 # Experimental port: compile success does not establish hardware connectivity.
 
+from datetime import datetime
 from os.path import isdir, join
 from pathlib import Path
-from shutil import copyfile
+from shutil import copyfile, which
 import subprocess
+import sys
 
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Builder, DefaultEnvironment, Environment
@@ -71,6 +73,106 @@ def prepare_linker_script(env, board):
         copyfile(source, target)
     env.Replace(LDSCRIPT_PATH=str(target))
     board.update("build.ldscript", str(target))
+
+
+def find_uf2_pack(project_dir):
+    """Locate the reviewed AMB1 UF2 packer for this checkout.
+
+    The packer lives beside the board/OTA host tools (``tools/amb1``), not in
+    the LibreTiny builder tree, so resolve it relative to the project directory
+    and its parents. Returning None makes the build fail closed instead of
+    emitting a fabricated artifact.
+    """
+    current = Path(project_dir).resolve()
+    for candidate in (current, *current.parents):
+        packer = candidate / "tools" / "amb1" / "uf2_pack.py"
+        if packer.is_file():
+            return packer
+    return None
+
+
+def uf2ota_include(env):
+    """Return the installed uf2ota include directory, if resolvable.
+
+    The base framework queue adds this path only after the family libraries are
+    built, so the AMB1 OTA library must carry it explicitly.
+    """
+    platform = getattr(env, "PioPlatform", None)
+    if not callable(platform):
+        return None
+    package = platform().get_package_dir("library-uf2ota")
+    if not package:
+        raise RuntimeError(
+            "library-uf2ota is not installed; the AMB1 OTA build requires it"
+        )
+    return join(package, "include")
+
+
+def build_uf2ota(target, source, env):
+    """Package the linked ELF into a native image2 UF2, or fail the build.
+
+    ``uf2_pack.py`` extracts both load segments from the exact ELF, validates the
+    image with the audited layout gate and wraps it for the dual UF2 schemes.
+    The output is written to a temporary path and only moved into place after a
+    successful, non-empty result, so a failed run never leaves a file that could
+    be mistaken for a flashable image.
+    """
+    target_path = Path(str(target[0]))
+    source_path = Path(str(source[0]))
+    packer = find_uf2_pack(env.subst("$PROJECT_DIR"))
+    if packer is None:
+        raise RuntimeError(
+            "AMB1 UF2 packer not found: expected tools/amb1/uf2_pack.py in the "
+            "project directory or one of its parents"
+        )
+    # $OBJCOPY is the bare toolchain name; the platform puts its bin dir on PATH.
+    objcopy_name = env.subst("$OBJCOPY")
+    objcopy = Path(which(objcopy_name) or objcopy_name)
+    if not objcopy.is_file():
+        raise RuntimeError(f"AMB1 objcopy not found: {objcopy_name}")
+    if not source_path.is_file():
+        raise RuntimeError(f"AMB1 OTA input ELF not found: {source_path}")
+
+    board = env.subst("$BOARD")
+    if not board or board != board.lower():
+        raise RuntimeError(f"AMB1 board code must be lowercase: {board!r}")
+
+    platform = env.PioPlatform()
+    fw_name = platform.custom("fw_name") or Path(env.subst("$PROJECT_DIR")).name
+    fw_version = platform.custom("fw_version") or datetime.now().strftime("%y.%m.%d")
+    lt_version = platform.version
+
+    temporary = target_path.with_name(target_path.name + ".tmp")
+    for stale in (target_path, temporary):
+        if stale.exists():
+            stale.unlink()
+    command = [
+        sys.executable,
+        str(packer),
+        "--elf", str(source_path),
+        "--toolchain-bin", str(objcopy.parent),
+        "--output", str(temporary),
+        "--board", board,
+        "--fw-name", str(fw_name),
+        "--fw-version", str(fw_version),
+        "--lt-version", str(lt_version),
+        # AMB1 linker scripts place the boot markers in image1 overlay sections
+        # that the native image2 packer must include explicitly.
+        "--allow-libretiny-image1-overlays",
+    ]
+    try:
+        result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode:
+            raise RuntimeError(
+                "AMB1 UF2 packaging failed:\n" + result.stdout + result.stderr
+            )
+        if not temporary.is_file() or not temporary.stat().st_size:
+            raise RuntimeError("AMB1 UF2 packaging produced no output")
+        temporary.replace(target_path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+    return 0
 
 
 env: Environment = DefaultEnvironment()
@@ -146,6 +248,55 @@ if _IMAGE2_SDK_ADAPTER:
         base_dir=_OTA,
         srcs=["+<image2_sdk_adapter.c>"],
     )
+    # LT_HAS_OTA is consumed by Update.cpp; keep it 0 for every non-qualification
+    # build. lt_defs.h must not define this key (LoadDefines would clobber it).
+    env.Append(CPPDEFINES=[("LT_HAS_OTA", 1)])
+    _COMMON_API = join(env.subst("$CORES_DIR"), "common", "base", "api")
+    _UF2OTA_INCLUDE = uf2ota_include(env)
+    queue.AddLibrary(
+        name="amb1_image2_ota",
+        base_dir=_OTA,
+        srcs=[
+            "+<lt_ota_family_amb1.c>",
+            "+<lt_ota_family_amb1_sdk.c>",
+            "+<image2_session.c>",
+            "+<image2_activation.c>",
+            "+<image2_transaction.c>",
+            "+<image2_flash_backend.c>",
+            "+<image2_integrity.c>",
+        ],
+        includes=[
+            "!<.>",
+            "!<" + _COMMON_API + ">",
+            "!<" + join(env.subst("$CORES_DIR"), "common", "base") + ">",
+            # lt_ota.h reaches libretiny.h -> lt_family.h/lt_pins.h -> variant.
+            "!<" + join(env.subst("$CORES_DIR"), "realtek-amb1", "base") + ">",
+            "!<" + join(env.subst("$CORES_DIR"), "realtek-amb1", "base", "port") + ">",
+            "!<$VARIANTS_DIR>",
+            *(["!<" + _UF2OTA_INCLUDE + ">"] if _UF2OTA_INCLUDE else []),
+        ],
+        # The core headers are normally prepared by the base queue, which runs
+        # after the family libraries; supply the minimum contract they need.
+        options=dict(
+            CPPDEFINES=[
+                ("LIBRETINY", 1),
+                ("LT_BOARD", "${VARIANT}"),
+                ("LT_VARIANT_H", r"\"${VARIANT}.h\""),
+                ("FAMILY", "F_${FAMILY_SHORT_NAME}"),
+            ],
+        ),
+    )
+    # The bridge keeps a weak NULL default so non-qualification links refuse
+    # uploads. GNU ld only extracts archive members for undefined symbols, and a
+    # weak definition already satisfies the seam, so force this translation unit
+    # in through its anchor (the strong definition then wins over the weak one).
+    env.Append(LINKFLAGS=["-Wl,--undefined=lt_ota_family_amb1_sdk_anchor"])
+    # The family hooks themselves have weak defaults in lt_ota.c, so the bridge
+    # archive member needs its own anchor; otherwise the strong begin/write/end
+    # implementation is never extracted and OTA stays a silent no-op.
+    env.Append(LINKFLAGS=["-Wl,--undefined=lt_ota_family_amb1_anchor"])
+else:
+    env.Append(CPPDEFINES=[("LT_HAS_OTA", 0)])
 
 # Flags — Cortex-M3, soft-float, Ameba-1 (RTL8195A)
 queue.AppendPublic(
@@ -313,16 +464,15 @@ queue.AppendPublic(
     ],
 )
 
-# No ltchiptool image backend exists for amb1. Emit only the small SRAM entry
-# segment here, never a flat binary spanning the 512 MiB SRAM/SDRAM gap.
-# Despite the legacy .uf2 filename this is NOT an installation image; both load
-# segments require separately validated native image2 packaging.
+# No ltchiptool image backend exists for amb1; uf2tool's family dispatcher would
+# raise NotImplementedError even for legacy output. Package the exact linked ELF
+# with the reviewed host packer instead. Keep the legacy "raw" selector so the
+# upload path is not offered an unimplemented native backend.
 env["UF2OTA"] = ["raw"]
 env["BUILDERS"]["BuildUF2OTA"] = Builder(
     action=env.VerboseAction(
-        "$OBJCOPY -j .image2.start.table -j .ram_image2.text "
-        "-j .ram_image2.rodata -j .ram.data -O binary $SOURCE $TARGET",
-        "Building diagnostic SRAM segment $TARGET (not flashable)",
+        build_uf2ota,
+        "Building native image2 UF2 $TARGET from $SOURCE",
     ),
 )
 

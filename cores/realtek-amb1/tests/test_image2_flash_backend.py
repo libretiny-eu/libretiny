@@ -66,7 +66,7 @@ static void setup(void) {
     c.layout.protected_count=1;
     c.layout.protected_ranges[0]=(image2_range){0,256};
     c.image_size=700; c.page_size=64; c.extent=(image2_range){2048,2816};
-    ops=(image2_flash_sdkops){&s,lock,unlock,read_bytes,program,erase};
+    ops=(image2_flash_sdkops){&s,lock,unlock,read_bytes,program,erase,NULL};
 }
 static void opened(void) { setup(); assert(image2_flash_open(&b,&c,&ops)); }
 static void dead(void) {

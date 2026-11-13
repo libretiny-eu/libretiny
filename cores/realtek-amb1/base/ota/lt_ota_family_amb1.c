@@ -79,6 +79,14 @@ __attribute__((weak)) const image2_flash_sdkops *lt_ota_family_amb1_sdkops(void)
 	return NULL;
 }
 
+/* Link extraction anchor. The weak defaults in lt_ota.c already satisfy every
+ * reference to the family hooks, so GNU ld would not extract this strong
+ * implementation from the static archive and the qualification build would
+ * silently keep the no-op path. The builder passes
+ * -Wl,--undefined=lt_ota_family_amb1_anchor for the qualification build only;
+ * keep this symbol unique. */
+const int lt_ota_family_amb1_anchor = 0;
+
 static int round_extent(uint32_t size, uint32_t *end) {
 	if (size > UINT32_MAX - (AMB1_SECTOR_SIZE - 1u)) return 0;
 	*end = ((size + AMB1_SECTOR_SIZE - 1u) / AMB1_SECTOR_SIZE) * AMB1_SECTOR_SIZE;

@@ -19,7 +19,13 @@ static struct {
 	const void *owner;
 	uint32_t read_start, read_size, scratch[IMAGE2_SDK_SCRATCH_MAX];
 	size_t count;
+	image2_sdk_range staging;
+	image2_sdk_range deny[IMAGE2_SDK_DENY_MAX];
+	size_t deny_count;
+	image2_sdk_range source;
+	uint32_t demote_address;
 	int bound, used, held, busy, failed;
+	int staged_write, demoted;
 	uint8_t staged[PAGE], check[PAGE];
 } adapter;
 
@@ -36,6 +42,43 @@ static int scratch_ok(uint32_t address, size_t n) {
 		if (contains(adapter.scratch[i], SECTOR, address, n))
 			return 1;
 	return 0;
+}
+
+static int overlaps(uint32_t address, size_t n, image2_sdk_range r) {
+	/* Both bounds are validated at bind, and n is bounded by the containing
+	 * window check below, but use 64-bit arithmetic so a bad request can never
+	 * wrap the half-open end and look disjoint. */
+	uint64_t end = (uint64_t)address + (uint64_t)n;
+	return (uint64_t)address < (uint64_t)r.end && (uint64_t)r.start < end;
+}
+
+static int staging_ok(uint32_t address, size_t n) {
+	if (adapter.staging.start >= adapter.staging.end)
+		return 0;
+	if (!contains(adapter.staging.start, adapter.staging.end - adapter.staging.start,
+				  address, n))
+		return 0;
+	for (size_t i = 0; i < adapter.deny_count; ++i)
+		if (overlaps(address, n, adapter.deny[i]))
+			return 0;
+	return 1;
+}
+
+/* The observed running slot is a hard denial for every generic mutation, even
+ * when a scratch sector or the staging window overlaps it. */
+static int source_ok(uint32_t address, size_t n) {
+	if (adapter.source.start >= adapter.source.end)
+		return 0;
+	return overlaps(address, n, adapter.source);
+}
+
+/* Either write capability, never an implicit whole-flash or slot-wide grant.
+ * The running-slot source is checked first, so it can never be widened by an
+ * overlapping scratch sector. */
+static int authorized(uint32_t address, size_t n) {
+	if (source_ok(address, n))
+		return 0;
+	return scratch_ok(address, n) || staging_ok(address, n);
 }
 
 static int take(void *ctx, const void *owner) {
@@ -97,7 +140,7 @@ static int read_bytes(void *ctx, uint32_t address, void *data, size_t n) {
 typedef struct { uint32_t address; size_t length; int erase; } mutation_cap;
 static int mutate(const mutation_cap *cap) {
 	if (!task_ok() || !adapter.held || !adapter.owner || !adapter.busy || adapter.failed ||
-		!scratch_ok(cap->address, cap->length))
+		!authorized(cap->address, cap->length))
 		return 0;
 	if (cap->erase) {
 		if (cap->address % SECTOR || cap->length != SECTOR)
@@ -131,7 +174,7 @@ static int program(void *ctx, uint32_t address, const void *data, size_t n) {
 	mutation_cap cap = { address, n, 0 };
 	if (!enter(ctx))
 		return 0;
-	if (!data || !scratch_ok(address, n) || n > PAGE || n > PAGE - address % PAGE)
+	if (!data || !authorized(address, n) || n > PAGE || n > PAGE - address % PAGE)
 		return finish(0);
 	memcpy(adapter.staged, data, n);
 	if (!raw_read(address, adapter.check, n))
@@ -141,7 +184,42 @@ static int program(void *ctx, uint32_t address, const void *data, size_t n) {
 			return finish(0);
 	if (!mutate(&cap) || !raw_read(address, adapter.check, n))
 		return finish(0);
-	return finish(memcmp(adapter.staged, adapter.check, n) == 0);
+	if (memcmp(adapter.staged, adapter.check, n) != 0)
+		return finish(0);
+	adapter.staged_write = 1;
+	return finish(1);
+}
+
+/* Dedicated activation demote. This is the ONLY mutation allowed inside the
+ * running slot: exactly one ASCII '8' -> '0' at the bound signature byte, and
+ * only after this session staged data and the full current signature reads new.
+ * It never consults authorized(), which hard-denies source. */
+static int demote(void *ctx) {
+	static const uint8_t new_signature[8] = {'8', '1', '9', '5', '8', '7', '1', '1'};
+	static const uint8_t old_signature[8] = {'0', '1', '9', '5', '8', '7', '1', '1'};
+	if (ctx != &adapter)
+		return 0;
+	if (!enter(ctx))
+		return finish(0);
+	if (!adapter.demote_address || !adapter.staged_write || adapter.demoted ||
+		adapter.demote_address != adapter.source.start + 8 ||
+		adapter.source.start >= adapter.source.end ||
+		!contains(adapter.source.start, adapter.source.end - adapter.source.start,
+				  adapter.demote_address, 1))
+		return finish(0);
+	if (!raw_read(adapter.demote_address, adapter.check, 8) ||
+		memcmp(adapter.check, new_signature, 8))
+		return finish(0);
+	memcpy(adapter.staged, old_signature, 1);
+	if (__real_flash_burst_write(&adapter.flash, adapter.demote_address, 1,
+								 adapter.staged) != 1)
+		return finish(0);
+	adapter.demoted = 1;
+	/* The full eight-byte signature must now read the demoted form. */
+	if (!raw_read(adapter.demote_address, adapter.check, 8) ||
+		memcmp(adapter.check, old_signature, 8))
+		return finish(0);
+	return finish(1);
 }
 
 int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image2_flash_sdkops *ops) {
@@ -151,20 +229,75 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 	if (adapter.bound || !policy || __get_IPSR() != 0 || !xTaskGetCurrentTaskHandle() ||
 		!policy->read_size || policy->read_start > UINT32_MAX - policy->read_size ||
 		policy->scratch_count > IMAGE2_SDK_SCRATCH_MAX ||
-		(policy->scratch_count && !policy->scratch_sectors))
+		(policy->scratch_count && !policy->scratch_sectors) ||
+		policy->deny_count > IMAGE2_SDK_DENY_MAX ||
+		(policy->deny_count && !policy->deny_ranges) ||
+		policy->staging.start > policy->staging.end ||
+		policy->source.start > policy->source.end)
 		return 0;
 	for (size_t i = 0; i < policy->scratch_count; ++i)
 		if (policy->scratch_sectors[i] % SECTOR ||
 			!contains(policy->read_start, policy->read_size, policy->scratch_sectors[i], SECTOR))
 			return 0;
+	if (policy->staging.start == policy->staging.end) {
+		/* Only the canonical {0, 0} read-only sentinel; deny data without a
+		 * window would silently do nothing and is therefore rejected. */
+		if (policy->staging.start || policy->deny_count)
+			return 0;
+	} else {
+		uint32_t size = policy->staging.end - policy->staging.start;
+		if (policy->staging.start % SECTOR || policy->staging.end % SECTOR ||
+			!contains(policy->read_start, policy->read_size, policy->staging.start, size))
+			return 0;
+		for (size_t i = 0; i < policy->deny_count; ++i) {
+			image2_sdk_range d = policy->deny_ranges[i];
+			if (d.start >= d.end ||
+				!contains(policy->read_start, policy->read_size, d.start, d.end - d.start))
+				return 0;
+			/* The window and every denial must be disjoint before any
+			 * request can be approved; no runtime repair or clamping. */
+			if (d.start < policy->staging.end && policy->staging.start < d.end)
+				return 0;
+		}
+	}
+	/* The observed running slot is a separate capability. It must be disjoint
+	 * from the staging window and, when a demote byte is declared, exactly one
+	 * byte past the start of the full running signature. */
+	if (policy->source.start == policy->source.end) {
+		if (policy->source.start || policy->demote_address)
+			return 0;
+	} else {
+		uint32_t source_size = policy->source.end - policy->source.start;
+		if (!contains(policy->read_start, policy->read_size,
+					  policy->source.start, source_size))
+			return 0;
+		if (policy->staging.start < policy->staging.end &&
+			policy->staging.start < policy->source.end &&
+			policy->source.start < policy->staging.end)
+			return 0;
+		if (policy->demote_address) {
+			if (source_size < 9 ||
+				policy->demote_address != policy->source.start + 8 ||
+				!contains(policy->read_start, policy->read_size,
+						  policy->demote_address, 1))
+				return 0;
+		}
+	}
 	adapter.read_start = policy->read_start;
 	adapter.read_size = policy->read_size;
 	adapter.count = policy->scratch_count;
 	for (size_t i = 0; i < adapter.count; ++i)
 		adapter.scratch[i] = policy->scratch_sectors[i];
+	adapter.staging = policy->staging;
+	adapter.deny_count = policy->deny_count;
+	for (size_t i = 0; i < adapter.deny_count; ++i)
+		adapter.deny[i] = policy->deny_ranges[i];
+	adapter.source = policy->source;
+	adapter.demote_address = policy->demote_address;
 	adapter.task = xTaskGetCurrentTaskHandle();
 	adapter.bound = 1;
-	*ops = (image2_flash_sdkops){ &adapter, take, release, read_bytes, program, erase_sector };
+	*ops = (image2_flash_sdkops){ &adapter, take, release, read_bytes, program,
+								 erase_sector, demote };
 	return 1;
 }
 #else

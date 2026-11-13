@@ -7,6 +7,10 @@
 #include <limits.h>
 #include "preferences_sdk.h"
 
+#if defined(LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER) && LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER
+#include "lt_ota_family_amb1_sdk.h"
+#endif
+
 flash_t lt_flash_obj;
 
 /* Boot-crash instrumentation, see fixups/boot_trace.c (temporary). */
@@ -42,6 +46,14 @@ static int init(void) {
 	 * itself only starts firing once the scheduler is up; the LED is
 	 * initialised from its callback. */
 	lt_amb1_heartbeat_init();
+	/* Prepare the shared flash mutex before any concurrent SDK flash user can
+	 * exist. This runs after BSS clears and __libc_init_array, from the single
+	 * lt_main task, so allocation is valid. Failure is logged only: the OTA SDK
+	 * seam stays fail-closed and never retries with a private mutex. */
+#if defined(LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER) && LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER
+	if (!lt_ota_family_amb1_sdk_prepare())
+		LT_W("AMB1 flash: OTA SDK mutex unavailable; OTA staging stays disabled");
+#endif
 	return 0;
 }
 

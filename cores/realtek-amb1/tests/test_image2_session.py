@@ -122,7 +122,7 @@ static void setup(int running, int old) {
     memcpy(before,mem,sizeof(mem));
 }
 static int begin(void) {
-    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase};
+    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase,NULL};
     image2_session_crypto crypto={&crypto_cookie,authorize,reset,update,check};
     return image2_session_begin(&session,&boot,&config,&sdk,&crypto,config.layout.running_slot);
 }
@@ -148,7 +148,7 @@ static void unused(void) {
 static void terminal(int ok) {
     size_t i; int count=calls;
     image2_session fresh={0};
-    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase};
+    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase,NULL};
     image2_session_crypto crypto={&crypto_cookie,authorize,reset,update,check};
     image2_session_status result=image2_session_get_status(&session);
     assert(!locked && unlocks==(locks && fault!=1 ? 1 : 0));

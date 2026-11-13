@@ -278,7 +278,7 @@ static int sdk_erase(void *ctx, uint32_t address) {
 }
 
 static const image2_flash_sdkops sdk_ops = {
-    NULL, sdk_try_lock, sdk_unlock, sdk_read, sdk_program, sdk_erase
+    NULL, sdk_try_lock, sdk_unlock, sdk_read, sdk_program, sdk_erase, NULL
 };
 
 const image2_flash_sdkops *lt_ota_family_amb1_sdkops(void) {

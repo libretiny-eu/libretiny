@@ -92,7 +92,7 @@ static void upload_setup(image2_upload_boot *b, image2_upload *u,
     fault = crypto_fault = mode = status = 0;
     setup((int)running, old);
     fault = crypto_fault = 0;
-    g_sdk = (image2_flash_sdkops){mem, lock, unlock, read_bytes, program, erase};
+    g_sdk = (image2_flash_sdkops){mem, lock, unlock, read_bytes, program, erase, NULL};
     g_policy = (image2_auth_policy){1, 700, 1, BOARD_ID};
 }
 static int start_valid(image2_upload *u, image2_upload_boot *b,
@@ -483,7 +483,7 @@ static int zero_auth(image2_upload *u) {
 }
 static void upload_case(int running, int kind, size_t chunk) {
     image2_upload_boot b={0}; image2_upload u={0}, other={0};
-    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase};
+    image2_flash_sdkops sdk={mem,lock,unlock,read_bytes,program,erase,NULL};
     image2_auth_policy policy={1,700,1,BOARD_ID};
     unsigned char wire[780]={HEADER_BYTES};
     size_t pos, n; int ok=1;
