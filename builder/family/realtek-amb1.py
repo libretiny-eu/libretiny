@@ -129,6 +129,7 @@ _IMAGE2_SDK_ADAPTER = str(env.GetProjectOption(
 )).strip().lower() == "yes"
 if _IMAGE2_SDK_ADAPTER:
     _OTA = env.subst("$CORES_DIR/realtek-amb1/base/ota")
+    env.Prepend(CPPPATH=[_OTA])
     _STAGED_SDK = stage_image2_sdk_lock(
         _SDK, env.subst("$BUILD_DIR"),
         join(_OTA, "image2_controller_lock.patch"),
