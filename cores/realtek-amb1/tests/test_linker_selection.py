@@ -74,6 +74,9 @@ class Environment(dict):
     def BoardConfig(self):
         return self.board
 
+    def GetProjectOption(self, name, default=None):
+        return default
+
     def AddLibraryQueue(self, name):
         return self.queue
 
