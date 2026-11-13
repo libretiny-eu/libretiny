@@ -3,6 +3,7 @@
 
 #if LT_AMB1_EXPERIMENTAL_KVS && LT_AMB1_WCATA007_KVS_PROFILE
 #include <libretiny.h>
+#include <ameba_soc.h>
 #include <device_lock.h>
 #include <FreeRTOS.h>
 #include <task.h>

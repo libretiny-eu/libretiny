@@ -22,6 +22,7 @@ class ProfileContract(unittest.TestCase):
                 experimental=1, profile=1, attestation_header=True):
         with tempfile.TemporaryDirectory() as tmp:
             work = pathlib.Path(tmp)
+            (work / "ameba_soc.h").write_text("unsigned __get_IPSR(void);\n")
             (work / "libretiny.h").write_text(
                 f"#define FLASH_LENGTH {flash_length}\n#define LT_E(...) ((void)0)\n")
             (work / "device_lock.h").write_text(
