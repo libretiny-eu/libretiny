@@ -26,6 +26,11 @@ class FlashReadOnlyTest(unittest.TestCase):
 typedef struct { int unused; } flash_t;
 int flash_stream_read(flash_t *, uint32_t, uint32_t, uint8_t *);
 """)
+            (path / "device_lock.h").write_text("""
+#define RT_DEV_LOCK_FLASH 0
+static void device_mutex_lock(int device) { (void)device; }
+static void device_mutex_unlock(int device) { (void)device; }
+""")
             (path / "fal.h").write_text("""
 #define FAL_FLASH_DEV_NAME "flash0"
 struct fal_flash_dev {

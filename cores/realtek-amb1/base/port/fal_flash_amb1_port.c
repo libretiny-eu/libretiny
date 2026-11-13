@@ -1,6 +1,7 @@
 /* Ameba1 first-bench policy: flash is readable, never writable. */
 #include <libretiny.h>
 #include <sdk_private.h>
+#include <device_lock.h>
 
 #include <fal.h>
 #include <limits.h>
@@ -32,8 +33,13 @@ static int read(long offset, uint8_t *buf, size_t size) {
 		return -1;
 	if (!size)
 		return 0;
+	/* The SDK read does not lock; serialize with SDK users and the OTA adapter.
+	 * Already-locked OTA callbacks must call the SDK directly, not this path. */
+	device_mutex_lock(RT_DEV_LOCK_FLASH);
+	int result = flash_stream_read(&lt_flash_obj, offset, size, buf);
+	device_mutex_unlock(RT_DEV_LOCK_FLASH);
 	/* RTL8195A returns 1 on success, not the number of bytes transferred. */
-	return flash_stream_read(&lt_flash_obj, offset, size, buf) == 1 ? (int)size : -1;
+	return result == 1 ? (int)size : -1;
 }
 
 static int write(long offset, const uint8_t *buf, size_t size) {
