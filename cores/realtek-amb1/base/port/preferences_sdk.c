@@ -21,7 +21,8 @@ static struct {
 } sdk;
 
 static int task_ready(void) {
-	return __get_IPSR() == 0 && xTaskGetCurrentTaskHandle() != NULL;
+	return __get_IPSR() == 0 && xTaskGetSchedulerState() == taskSCHEDULER_RUNNING &&
+	       xTaskGetCurrentTaskHandle() != NULL;
 }
 
 static int held_range(uint32_t address, size_t size, int erase) {

@@ -16,6 +16,10 @@ STUB = r'''
 #include <stddef.h>
 typedef struct { int unused; } flash_t;
 typedef void *TaskHandle_t;
+#define taskSCHEDULER_NOT_STARTED 0
+#define taskSCHEDULER_SUSPENDED 1
+#define taskSCHEDULER_RUNNING 2
+int xTaskGetSchedulerState(void);
 #define RT_DEV_LOCK_FLASH 2
 unsigned __get_IPSR(void);
 TaskHandle_t xTaskGetCurrentTaskHandle(void);
@@ -35,6 +39,8 @@ HARNESS = r'''
 static unsigned char memory[8192];
 static int held, locks, unlocks, writes, reads, erases, attempted;
 static int ready = 1, prepared = 1, fail_lock, fail_read, fail_write, bad_erase, bad_write;
+static int scheduler = taskSCHEDULER_RUNNING;
+int xTaskGetSchedulerState(void) { return scheduler; }
 unsigned __get_IPSR(void) { return ready ? 0 : 1; }
 TaskHandle_t xTaskGetCurrentTaskHandle(void) { return ready ? (void *)1 : NULL; }
 int device_mutex_try_lock(int id) {
@@ -110,6 +116,11 @@ int main(int argc, char **argv) {
     q=p; q.flash.shared_controller_lock_attested=0; assert(amb1_preferences_sdk_bind(&q)==-1);
     assert(!attempted && !reads && !writes && !erases);
     ready=0; assert(amb1_preferences_sdk_bind(&p)==-1); ready=1;
+    for (scheduler=taskSCHEDULER_NOT_STARTED; scheduler<taskSCHEDULER_RUNNING; ++scheduler) {
+        assert(xTaskGetCurrentTaskHandle() != NULL);
+        assert(amb1_preferences_sdk_bind(&p)==-1);
+        assert(!attempted && !reads && !writes && !erases);
+    }
     prepared=0; assert(amb1_preferences_sdk_bind(&p)==-1); prepared=1;
     p.flash.initial_format_approved = mode == 1;
     p.flash.existing_flashdb_attested = mode == 2;
@@ -118,6 +129,13 @@ int main(int argc, char **argv) {
     assert(!reads && !writes && !erases); /* binding cannot touch flash */
     assert(amb1_preferences_sdk_bind(&p)==-1); /* no live rebind */
     int before = attempted;
+    for (scheduler=taskSCHEDULER_NOT_STARTED; scheduler<taskSCHEDULER_RUNNING; ++scheduler) {
+        assert(xTaskGetCurrentTaskHandle() != NULL);
+        assert(amb1_preferences_sdk_read(0x275000,b,1)==-1);
+        assert(amb1_preferences_sdk_write(0x275000,b,1)==-1);
+        assert(amb1_preferences_sdk_erase(0x275000,4096)==-1);
+        assert(attempted == before && !reads && !writes && !erases);
+    }
     const long invalid[] = {-1, 0, 0x274fff, 0x277000, LONG_MAX};
     for (unsigned i=0;i<sizeof(invalid)/sizeof(invalid[0]);++i) {
         assert(amb1_preferences_sdk_read(invalid[i],b,1)==-1);

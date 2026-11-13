@@ -30,6 +30,10 @@
 #undef INCLUDE_uxTaskGetStackHighWaterMark
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
 
+/* Preferences must reject pre-scheduler and scheduler-suspended callers. */
+#undef INCLUDE_xTaskGetSchedulerState
+#define INCLUDE_xTaskGetSchedulerState 1
+
 /* Bring-up evidence: compiles uxTaskGetSystemState(), used by the one-shot task
  * map to enumerate every task and print its real stack base via the
  * source-backed TCB mirror. Also adds uxTCBNumber/uxTaskNumber to the TCB (the

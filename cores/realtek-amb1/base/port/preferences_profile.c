@@ -4,6 +4,8 @@
 #if LT_AMB1_EXPERIMENTAL_KVS && LT_AMB1_WCATA007_KVS_PROFILE
 #include <libretiny.h>
 #include <device_lock.h>
+#include <FreeRTOS.h>
+#include <task.h>
 #include <string.h>
 
 /* Private, externally reviewed build input; never generated from a host test. */
@@ -37,7 +39,7 @@
 #error "Require existing ownership or separately approved destructive initialization"
 #endif
 
-/* This hook precedes fal_partition_init: these are profile constants, NOT a
+/* These are profile constants, NOT a
  * lookup of the current FAL table. External table review is mandatory. */
 _Static_assert(FLASH_LENGTH == AMB1_PREF_FLASH_SIZE, "WCATA007 requires 8 MiB");
 _Static_assert(AMB1_PREF_SLOT_A_END <= AMB1_PREF_SLOT_B &&
@@ -55,6 +57,10 @@ _Static_assert(sizeof(reviewed_baseline) == AMB1_PREF_SNAPSHOT_HASH_SIZE, "SHA-2
 void lt_amb1_preferences_profile_anchor(void) {}
 
 void lt_amb1_preferences_configure(void) {
+	/* A non-null current TCB alone does not prove the scheduler has started. */
+	if (__get_IPSR() != 0 || xTaskGetSchedulerState() != taskSCHEDULER_RUNNING ||
+	    xTaskGetCurrentTaskHandle() == NULL)
+		return;
 	amb1_preferences_sdk_policy_t policy = {0};
 	policy.flash.review = (amb1_preferences_review_t) {
 		LT_AMB1_KVS_REVIEWED_RESERVATION, LT_AMB1_KVS_BASELINE_MIGRATION_ATTESTED,

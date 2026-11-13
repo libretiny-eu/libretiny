@@ -26,6 +26,13 @@ class ProfileContract(unittest.TestCase):
                 f"#define FLASH_LENGTH {flash_length}\n#define LT_E(...) ((void)0)\n")
             (work / "device_lock.h").write_text(
                 "#define RT_DEV_LOCK_FLASH 7\nint device_mutex_prepare(int);\n")
+            (work / "FreeRTOS.h").write_text(
+                "#include <stddef.h>\ntypedef void *TaskHandle_t;\n"
+                "unsigned __get_IPSR(void);\n")
+            (work / "task.h").write_text(
+                "#define taskSCHEDULER_NOT_STARTED 0\n#define taskSCHEDULER_SUSPENDED 1\n"
+                "#define taskSCHEDULER_RUNNING 2\nint xTaskGetSchedulerState(void);\n"
+                "TaskHandle_t xTaskGetCurrentTaskHandle(void);\n")
             facts = {f"LT_AMB1_KVS_{name}": 1 for name in FACTS}
             facts.update(LT_AMB1_KVS_EXISTING_FLASHDB_ATTESTED=existing,
                          LT_AMB1_KVS_INITIAL_FORMAT_APPROVED=formatting)
@@ -43,7 +50,14 @@ class ProfileContract(unittest.TestCase):
 #include <assert.h>
 #include <string.h>
 #include "preferences_sdk.h"
+#include <FreeRTOS.h>
+#include <task.h>
 static int calls, prepared;
+static int scheduler = taskSCHEDULER_NOT_STARTED, isr;
+static TaskHandle_t current = (void *)1;
+unsigned __get_IPSR(void) { return isr; }
+int xTaskGetSchedulerState(void) { return scheduler; }
+TaskHandle_t xTaskGetCurrentTaskHandle(void) { return current; }
 int device_mutex_prepare(int id) { assert(id == 7); prepared++; return PREPARE; }
 int amb1_preferences_sdk_bind(const amb1_preferences_sdk_policy_t *p) {
     assert(prepared == 1);
@@ -65,6 +79,14 @@ int amb1_preferences_sdk_bind(const amb1_preferences_sdk_policy_t *p) {
 }
 void lt_amb1_preferences_configure(void);
 int main(void) {
+    for (; scheduler < taskSCHEDULER_RUNNING; ++scheduler) {
+        assert(current != NULL);
+        lt_amb1_preferences_configure();
+        assert(!prepared && !calls);
+    }
+    isr = 1; lt_amb1_preferences_configure(); isr = 0;
+    current = NULL; lt_amb1_preferences_configure(); current = (void *)1;
+    assert(!prepared && !calls);
     lt_amb1_preferences_configure();
     assert(calls == (PREPARE == 1));
     return 0;

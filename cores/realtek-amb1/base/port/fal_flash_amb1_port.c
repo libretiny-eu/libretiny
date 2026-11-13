@@ -13,7 +13,7 @@ flash_t lt_flash_obj;
 extern void lt_amb1_trace(const char *tag);
 extern void lt_amb1_heartbeat_init(void);
 
-/* A reviewed profile may bind the SDK bridge here, before FlashDB init.
+/* A reviewed profile may bind the SDK bridge from a running task before FlashDB init.
  * The default neither binds storage nor approves qualification or formatting. */
 __attribute__((weak)) void lt_amb1_preferences_configure(void) {
 }
@@ -42,9 +42,6 @@ static int init(void) {
 	 * itself only starts firing once the scheduler is up; the LED is
 	 * initialised from its callback. */
 	lt_amb1_heartbeat_init();
-#if LT_AMB1_EXPERIMENTAL_KVS
-	lt_amb1_preferences_configure();
-#endif
 	return 0;
 }
 

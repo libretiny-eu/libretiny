@@ -50,6 +50,7 @@ MAIN = r"""
 #include <fal.h>
 #include "preferences_sdk.h"
 extern const struct fal_flash_dev flash0;
+void lt_amb1_preferences_configure(void);
 static int locked, locks, unlocks, reads, calls, bound, fail;
 static int traces, heartbeats, configured;
 static long expected_offset;
@@ -60,7 +61,7 @@ void lt_amb1_trace(const char *tag) {
 }
 void lt_amb1_heartbeat_init(void) { heartbeats++; }
 void test_configure(void) {
-    assert(traces == 1 && heartbeats == 1 && !calls);
+    assert(traces == 1 && heartbeats == 1);
     configured++; bound = 1;
 }
 void device_mutex_lock(int id) {
@@ -100,8 +101,7 @@ int main(void) {
     const long start = AMB1_PREF_KVS_START, end = AMB1_PREF_KVS_END;
     assert(!flash0.ops.init());
     assert(traces == 1 && heartbeats == 1);
-    assert(configured == (LT_AMB1_EXPERIMENTAL_KVS && STRONG_HOOK));
-    assert(bound == configured);
+    assert(!configured && !bound); /* FAL init must never bind, even with a strong hook. */
     assert(!calls && !reads && !locks);
     normal(0,buf,1);
     normal(start-1,buf,2); /* Spanning reads retain the normal locked path. */
@@ -120,7 +120,9 @@ int main(void) {
     assert(!flash0.ops.read(FLASH_LENGTH,0,0));
     assert(reads == r && calls == c);
     for (int enabled=0; enabled<2; enabled++) {
-        bound = enabled;
+        if (enabled) lt_amb1_preferences_configure(); /* Explicit late caller only. */
+        assert(configured == (enabled && STRONG_HOOK));
+        assert(bound == configured);
 #if LT_AMB1_EXPERIMENTAL_KVS
         expect(start,buf,1);
         assert(flash0.ops.read(start,buf,1) == (bound ? 1 : -1));
