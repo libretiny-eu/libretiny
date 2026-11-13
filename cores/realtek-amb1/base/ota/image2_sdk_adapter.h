@@ -50,6 +50,14 @@ typedef struct {
 	 * disables demote and keeps this a staging-only adapter.
 	 */
 	uint32_t demote_address;
+	/* Required whenever demote_address is set, and zero otherwise. It must equal
+	 * staging.start + 8 (the first byte of the inactive-slot signature) with all
+	 * eight signature bytes inside the staging window. demote() reads this
+	 * address and refuses unless the new signature is present there, so a direct
+	 * adapter call cannot demote before the target image is published.
+	 * This is verification evidence, not an extra write capability.
+	 */
+	uint32_t target_signature_address;
 } image2_sdk_qualification_policy;
 
 /* Enabled builds require the reviewed image2_controller_lock.patch applied to
@@ -67,8 +75,12 @@ typedef struct {
  * source is a third, non-generic capability: it is never writable through
  * program()/erase_sector(), and only the dedicated demote() entry point may
  * change the single demote_address byte (source.start + 8), after a staged
- * write. Bind rejects malformed windows, any staging/source overlap, and any
- * demote address that is not the exact inside-source signature byte. A request
+ * write. demote() additionally requires target-published evidence: the
+ * inactive-slot signature at target_signature_address (staging.start + 8) must
+ * read the new signature, mirroring the backend's publication check. Bind
+ * rejects malformed windows, any staging/source overlap, any demote address that
+ * is not the exact inside-source signature byte, and any demote that lacks a
+ * matching, in-window target-signature address. A request
  * that is not wholly inside a capability, or that touches a deny range, is
  * refused immediately before the guarded SDK call.
  *

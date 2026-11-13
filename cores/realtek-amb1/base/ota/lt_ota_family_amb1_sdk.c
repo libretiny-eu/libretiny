@@ -140,9 +140,12 @@ static const image2_flash_sdkops *bind_once(void) {
 	policy.deny_count = 3;
 	/* The running slot is a third capability used ONLY by the dedicated demote
 	 * op: one ASCII '8' -> '0' at running_start + 8 after activation publishes
-	 * the target. Generic program/erase hard-deny the whole source range. */
+	 * the target. Generic program/erase hard-deny the whole source range. The
+	 * demote also requires the inactive slot to have published the new
+	 * signature at target_start + 8, so the adapter alone fails closed. */
 	policy.source = (image2_sdk_range){running_start, running_end};
 	policy.demote_address = running_start + 8u;
+	policy.target_signature_address = target_start + 8u;
 	if (!image2_sdk_adapter_bind(&policy, &bound_ops))
 		return NULL;
 

@@ -327,7 +327,8 @@ int main(int argc, char **argv) {
         ops->unlock(ops->ctx, &marker);
         return 0;
     }
-    if (!strcmp(argv[1], "demote") || !strcmp(argv[1], "demote_no_stage")) {
+    if (!strcmp(argv[1], "demote") || !strcmp(argv[1], "demote_no_stage") ||
+        !strcmp(argv[1], "demote_target_missing")) {
         setup(0, 0);
         ops = lt_ota_family_amb1_sdkops();
         assert(ops != NULL);
@@ -337,9 +338,18 @@ int main(int argc, char **argv) {
             /* The dedicated demote is refused until this session staged data. */
             assert(ops->demote(ops->ctx) == 0);
             assert(!programs && memcmp(memory + SLOT_A_START + 8, new_sig, 8) == 0);
-        } else {
+        } else if (!strcmp(argv[1], "demote_target_missing")) {
+            /* Staged data alone is not enough: the inactive slot must publish the
+             * new signature before the source may be demoted. */
             assert(ops->erase_sector(ops->ctx, SLOT_B_START) == 1);
             assert(ops->program(ops->ctx, SLOT_B_START + 16, &value, 1) == 1);
+            assert(ops->demote(ops->ctx) == 0);
+            assert(memcmp(memory + SLOT_A_START + 8, new_sig, 8) == 0);
+        } else {
+            assert(ops->erase_sector(ops->ctx, SLOT_B_START) == 1);
+            /* Publishing the target signature at the bound offset is also the
+             * required staged write for this session. */
+            assert(ops->program(ops->ctx, SLOT_B_START + 8, new_sig, 8) == 1);
             assert(ops->demote(ops->ctx) == 1);
             assert(memcmp(memory + SLOT_A_START + 8, old_sig, 8) == 0);
             /* Generic writes to the running slot stay denied after demote. */
@@ -354,7 +364,8 @@ int main(int argc, char **argv) {
         ops = lt_ota_family_amb1_sdkops();
         assert(ops != NULL);
         assert(ops->try_lock(ops->ctx, &marker) == 1);
-        assert(ops->program(ops->ctx, SLOT_A_START + 16, &value, 1) == 1);
+        assert(ops->erase_sector(ops->ctx, SLOT_A_START) == 1);
+        assert(ops->program(ops->ctx, SLOT_A_START + 8, new_sig, 8) == 1);
         assert(ops->demote(ops->ctx) == 1);
         assert(memcmp(memory + SLOT_B_START + 8, old_sig, 8) == 0);
         assert(ops->erase_sector(ops->ctx, SLOT_B_START) == 0);
@@ -468,7 +479,8 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
                 self.run_mode(mode)
 
     def test_demote_is_a_separate_after_staging_capability(self):
-        for mode in ("demote", "demote_no_stage", "slot_a_demote"):
+        for mode in ("demote", "demote_no_stage", "demote_target_missing",
+                     "slot_a_demote"):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 

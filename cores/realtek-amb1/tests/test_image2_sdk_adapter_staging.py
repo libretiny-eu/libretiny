@@ -3,7 +3,9 @@
 The REAL ``image2_sdk_adapter.c`` is compiled behind an in-RAM NOR mock and a
 host ``device_lock`` mock. The real shared-mutex primitive is covered separately
 by ``test_image2_sdk_lock_support``/``test_image2_sdk_adapter``; this file proves
-the additive staging capability cannot reach a denied or out-of-window byte.
+the additive staging capability cannot reach a denied or out-of-window byte, and
+that the single-byte demote refuses unless BOTH the running source and the
+inactive staged target publish the new signature.
 
 Authorization failures latch the adapter, so each rejection category runs in its
 own process (``argv`` mode). Bind is also one-shot per boot.
@@ -127,6 +129,7 @@ void __wrap_flash_erase_sector(flash_t *obj, uint32_t a) {
 
 static int bind_full(image2_flash_sdkops *ops, uint32_t staging_start, uint32_t staging_end,
                      uint32_t source_start, uint32_t source_end, uint32_t demote_address,
+                     uint32_t target_signature_address,
                      const uint32_t *scratch, size_t scratch_count) {
     image2_sdk_range deny[3];
     image2_sdk_qualification_policy p;
@@ -141,6 +144,7 @@ static int bind_full(image2_flash_sdkops *ops, uint32_t staging_start, uint32_t 
     p.scratch_count = scratch_count;
     p.source = (image2_sdk_range){ source_start, source_end };
     p.demote_address = demote_address;
+    p.target_signature_address = target_signature_address;
     if (staging_start != staging_end) {
         p.deny_ranges = deny;
         p.deny_count = 3;
@@ -149,7 +153,7 @@ static int bind_full(image2_flash_sdkops *ops, uint32_t staging_start, uint32_t 
 }
 
 static int bind(image2_flash_sdkops *ops, uint32_t staging_start, uint32_t staging_end) {
-    return bind_full(ops, staging_start, staging_end, 0, 0, 0, NULL, 0);
+    return bind_full(ops, staging_start, staging_end, 0, 0, 0, 0, NULL, 0);
 }
 
 int main(int argc, char **argv) {
@@ -234,6 +238,47 @@ int main(int argc, char **argv) {
         p.source = (image2_sdk_range){ 8192, 8196 }; /* too short for a sig */
         assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
 
+        /* Target-publication evidence is bound together with demote: it must be
+         * present, exactly staging.start + 8 and inside a real staging window. */
+        memset(&p, 0, sizeof(p));
+        p.read_start = 0;
+        p.read_size = FLASH_SIZE;
+        p.source = (image2_sdk_range){ 8192, 12288 };
+        p.demote_address = 8200;
+        p.staging = (image2_sdk_range){ 4096, 8192 };
+
+        p.target_signature_address = 0; /* missing evidence */
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        p.target_signature_address = 4105; /* misaligned: not staging.start + 8 */
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        p.target_signature_address = 4096; /* window start, not the signature */
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        p.target_signature_address = 4104;
+        p.staging = (image2_sdk_range){ 0, 0 }; /* evidence without a window */
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        /* Evidence without demote is a malformed policy, never an implicit grant. */
+        memset(&p, 0, sizeof(p));
+        p.read_start = 0;
+        p.read_size = FLASH_SIZE;
+        p.source = (image2_sdk_range){ 8192, 12288 };
+        p.staging = (image2_sdk_range){ 4096, 8192 };
+        p.target_signature_address = 4104;
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        p.source = (image2_sdk_range){ 0, 0 }; /* evidence without a source */
+        assert(!image2_sdk_adapter_bind(&p, &ops) && !ops.ctx);
+
+        /* The matching tuple is accepted last: bind is one-shot, so success must
+         * not be followed by further rejects in this process. It is exercised
+         * end-to-end by the demote modes. */
+        p.source = (image2_sdk_range){ 8192, 12288 };
+        p.demote_address = 8200;
+        assert(image2_sdk_adapter_bind(&p, &ops) == 1);
+
         assert(!programs && !erases && !denied_writes && !reads);
         return 0;
     }
@@ -242,10 +287,10 @@ int main(int argc, char **argv) {
         assert(bind(&ops, 0, 0) == 1);
     } else if (!strcmp(argv[1], "scratch_in_source_denied")) {
         static const uint32_t scratch_source[1] = { 8192 };
-        assert(bind_full(&ops, 4096, 8192, 8192, 12288, 8200,
+        assert(bind_full(&ops, 4096, 8192, 8192, 12288, 8200, 4104,
                          scratch_source, 1) == 1);
     } else if (!strncmp(argv[1], "demote", 6)) {
-        assert(bind_full(&ops, 4096, 8192, 8192, 12288, 8200, NULL, 0) == 1);
+        assert(bind_full(&ops, 4096, 8192, 8192, 12288, 8200, 4104, NULL, 0) == 1);
     } else {
         assert(bind(&ops, 4096, 8192) == 1);
     }
@@ -286,25 +331,58 @@ int main(int argc, char **argv) {
         assert(ops.program(ops.ctx, 4096, &value, 1) == 0);
         assert(!programs && !erases);
     } else if (!strcmp(argv[1], "demote")) {
-        memcpy(memory + 8200, "81958711", 8);
+        /* Both the running source and the inactive target must publish the new
+         * signature; the target write is also the required staged write. */
         assert(ops.erase_sector(ops.ctx, 4096) == 1);
-        assert(ops.program(ops.ctx, 4104, &value, 1) == 1);
+        assert(ops.program(ops.ctx, 4104, "81958711", 8) == 1);
+        memcpy(memory + 8200, "81958711", 8);
         assert(ops.demote(ops.ctx) == 1);
         assert(memcmp(memory + 8200, "01958711", 8) == 0);
         assert(programs == 2 && erases == 1);
         /* The running slot is STILL hard-denied for generic writes. */
         assert(ops.program(ops.ctx, 8200, &value, 1) == 0);
     } else if (!strcmp(argv[1], "demote_twice")) {
+        assert(ops.program(ops.ctx, 4104, "81958711", 8) == 1);
         memcpy(memory + 8200, "81958711", 8);
-        assert(ops.program(ops.ctx, 4104, &value, 1) == 1);
         assert(ops.demote(ops.ctx) == 1);
         assert(ops.demote(ops.ctx) == 0); /* one-shot per bound session */
         assert(memcmp(memory + 8200, "01958711", 8) == 0);
     } else if (!strcmp(argv[1], "demote_no_stage")) {
+        memcpy(memory + 4104, "81958711", 8);
         memcpy(memory + 8200, "81958711", 8);
         assert(ops.demote(ops.ctx) == 0);
         assert(memcmp(memory + 8200, "81958711", 8) == 0);
         assert(!programs);
+    } else if (!strcmp(argv[1], "demote_target_erased")) {
+        /* Valid source and staged write, but the inactive slot is still blank. */
+        assert(ops.program(ops.ctx, 5000, &value, 1) == 1);
+        memcpy(memory + 8200, "81958711", 8);
+        assert(ops.demote(ops.ctx) == 0);
+        assert(memcmp(memory + 8200, "81958711", 8) == 0);
+        assert(programs == 1);
+    } else if (!strcmp(argv[1], "demote_target_old")) {
+        assert(ops.program(ops.ctx, 5000, &value, 1) == 1);
+        memcpy(memory + 4104, "01958711", 8);
+        memcpy(memory + 8200, "81958711", 8);
+        assert(ops.demote(ops.ctx) == 0);
+        assert(memcmp(memory + 8200, "81958711", 8) == 0);
+        assert(programs == 1);
+    } else if (!strcmp(argv[1], "demote_target_partial")) {
+        assert(ops.program(ops.ctx, 5000, &value, 1) == 1);
+        /* Seven new bytes then one erased byte: not a published signature. */
+        memcpy(memory + 4104, "8195871", 7);
+        memcpy(memory + 8200, "81958711", 8);
+        assert(ops.demote(ops.ctx) == 0);
+        assert(memcmp(memory + 8200, "81958711", 8) == 0);
+        assert(programs == 1);
+    } else if (!strcmp(argv[1], "demote_source_old")) {
+        /* Target evidence cannot rescue a source that is not still new. */
+        assert(ops.program(ops.ctx, 5000, &value, 1) == 1);
+        memcpy(memory + 4104, "81958711", 8);
+        memcpy(memory + 8200, "01958711", 8);
+        assert(ops.demote(ops.ctx) == 0);
+        assert(memcmp(memory + 8200, "01958711", 8) == 0);
+        assert(programs == 1);
     } else if (!strcmp(argv[1], "demote_program_denied")) {
         memcpy(memory + 8200, "81958711", 8);
         assert(ops.program(ops.ctx, 8200, &value, 1) == 0);
@@ -380,6 +458,18 @@ class SDKAdapterStagingTest(unittest.TestCase):
 
     def test_demote_requires_a_prior_staged_write(self):
         self.run_mode("demote_no_stage")
+
+    def test_demote_requires_published_target_evidence(self):
+        """A valid source signature is not enough: the inactive slot must have
+        published the new signature. Erased, old or partial targets fail closed
+        with no source mutation."""
+        for mode in ("demote_target_erased", "demote_target_old",
+                     "demote_target_partial"):
+            with self.subTest(mode=mode):
+                self.run_mode(mode)
+
+    def test_demote_still_requires_the_new_source_signature(self):
+        self.run_mode("demote_source_old")
 
     def test_scratch_never_widens_the_running_slot_source(self):
         self.run_mode("scratch_in_source_denied")

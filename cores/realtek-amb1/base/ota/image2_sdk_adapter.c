@@ -24,6 +24,7 @@ static struct {
 	size_t deny_count;
 	image2_sdk_range source;
 	uint32_t demote_address;
+	uint32_t target_signature_address;
 	int bound, used, held, busy, failed;
 	int staged_write, demoted;
 	uint8_t staged[PAGE], check[PAGE];
@@ -192,7 +193,10 @@ static int program(void *ctx, uint32_t address, const void *data, size_t n) {
 
 /* Dedicated activation demote. This is the ONLY mutation allowed inside the
  * running slot: exactly one ASCII '8' -> '0' at the bound signature byte, and
- * only after this session staged data and the full current signature reads new.
+ * only after this session staged data, the FULL running source signature reads
+ * new, AND the inactive-slot target has published that same signature. The
+ * target read duplicates the backend's publication check on purpose: a direct
+ * adapter demote must also fail closed until the target image is fully published.
  * It never consults authorized(), which hard-denies source. */
 static int demote(void *ctx) {
 	static const uint8_t new_signature[8] = {'8', '1', '9', '5', '8', '7', '1', '1'};
@@ -201,13 +205,23 @@ static int demote(void *ctx) {
 		return 0;
 	if (!enter(ctx))
 		return finish(0);
-	if (!adapter.demote_address || !adapter.staged_write || adapter.demoted ||
+	if (!adapter.demote_address || !adapter.target_signature_address ||
+		!adapter.staged_write || adapter.demoted ||
 		adapter.demote_address != adapter.source.start + 8 ||
 		adapter.source.start >= adapter.source.end ||
 		!contains(adapter.source.start, adapter.source.end - adapter.source.start,
-				  adapter.demote_address, 1))
+				  adapter.demote_address, 1) ||
+		adapter.target_signature_address != adapter.staging.start + 8 ||
+		adapter.staging.start >= adapter.staging.end ||
+		!contains(adapter.staging.start, adapter.staging.end - adapter.staging.start,
+				  adapter.target_signature_address, 8))
 		return finish(0);
 	if (!raw_read(adapter.demote_address, adapter.check, 8) ||
+		memcmp(adapter.check, new_signature, 8))
+		return finish(0);
+	/* Target evidence: an erased, old or partial inactive-slot signature means
+	 * the target image is not published yet, so the demote must not fire. */
+	if (!raw_read(adapter.target_signature_address, adapter.check, 8) ||
 		memcmp(adapter.check, new_signature, 8))
 		return finish(0);
 	memcpy(adapter.staged, old_signature, 1);
@@ -262,9 +276,13 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 	}
 	/* The observed running slot is a separate capability. It must be disjoint
 	 * from the staging window and, when a demote byte is declared, exactly one
-	 * byte past the start of the full running signature. */
+	 * byte past the start of the full running signature. The demote and the
+	 * target-publication evidence are bound together so a demote can never be
+	 * authorized without an explicitly named, in-window inactive-slot
+	 * signature address. */
 	if (policy->source.start == policy->source.end) {
-		if (policy->source.start || policy->demote_address)
+		if (policy->source.start || policy->demote_address ||
+			policy->target_signature_address)
 			return 0;
 	} else {
 		uint32_t source_size = policy->source.end - policy->source.start;
@@ -281,6 +299,20 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 				!contains(policy->read_start, policy->read_size,
 						  policy->demote_address, 1))
 				return 0;
+			/* The target signature region mirrors demote_address: the first
+			 * byte past the inactive-slot start, with all eight bytes inside a
+			 * valid staging window and the declared read extent. An erased or
+			 * empty staging window cannot provide publication evidence. */
+			if (policy->staging.start >= policy->staging.end ||
+				policy->staging.end - policy->staging.start < 16 ||
+				policy->target_signature_address != policy->staging.start + 8 ||
+				!contains(policy->read_start, policy->read_size,
+						  policy->target_signature_address, 8))
+				return 0;
+		} else if (policy->target_signature_address) {
+			/* Evidence without a demote capability is a malformed policy, not
+			 * an implicit grant. */
+			return 0;
 		}
 	}
 	adapter.read_start = policy->read_start;
@@ -294,6 +326,7 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 		adapter.deny[i] = policy->deny_ranges[i];
 	adapter.source = policy->source;
 	adapter.demote_address = policy->demote_address;
+	adapter.target_signature_address = policy->target_signature_address;
 	adapter.task = xTaskGetCurrentTaskHandle();
 	adapter.bound = 1;
 	*ops = (image2_flash_sdkops){ &adapter, take, release, read_bytes, program,
