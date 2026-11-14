@@ -10,12 +10,12 @@
 #
 # Experimental port: compile success does not establish hardware connectivity.
 
+import subprocess
+import sys
 from datetime import datetime
 from os.path import isdir, join
 from pathlib import Path
 from shutil import copyfile, which
-import subprocess
-import sys
 
 from platformio.platform.board import PlatformBoardConfig
 from SCons.Script import Builder, DefaultEnvironment, Environment
@@ -35,14 +35,24 @@ def stage_image2_sdk_lock(sdk_dir, build_dir, patch_path):
         # so exact-context patching works without permitting fuzzy matches.
         target.write_bytes(target.read_bytes().replace(b"\r\n", b"\n"))
     result = subprocess.run(
-        ["patch", "--batch", "--forward", "--fuzz=0", "-p1",
-         "-i", str(Path(patch_path).resolve())],
-        cwd=stage, capture_output=True, text=True,
+        [
+            "patch",
+            "--batch",
+            "--forward",
+            "--fuzz=0",
+            "-p1",
+            "-i",
+            str(Path(patch_path).resolve()),
+        ],
+        cwd=stage,
+        capture_output=True,
+        text=True,
     )
     if result.returncode or "fuzz" in (result.stdout + result.stderr).lower():
         raise RuntimeError(
             "AMB1 SDK lock patch failed (no fuzz permitted):\n"
-            + result.stdout + result.stderr
+            + result.stdout
+            + result.stderr
         )
     return stage
 
@@ -58,8 +68,7 @@ def prepare_linker_script(env, board):
             Path(env.subst("$MISC_DIR")) / selected,
         ]
         candidates.extend(
-            Path(env.subst(str(path))) / selected
-            for path in env.get("LIBPATH", [])
+            Path(env.subst(str(path))) / selected for path in env.get("LIBPATH", [])
         )
     source = next((path.resolve() for path in candidates if path.is_file()), None)
     if source is None:
@@ -75,20 +84,10 @@ def prepare_linker_script(env, board):
     board.update("build.ldscript", str(target))
 
 
-def find_uf2_pack(project_dir):
-    """Locate the reviewed AMB1 UF2 packer for this checkout.
-
-    The packer lives beside the board/OTA host tools (``tools/amb1``), not in
-    the LibreTiny builder tree, so resolve it relative to the project directory
-    and its parents. Returning None makes the build fail closed instead of
-    emitting a fabricated artifact.
-    """
-    current = Path(project_dir).resolve()
-    for candidate in (current, *current.parents):
-        packer = candidate / "tools" / "amb1" / "uf2_pack.py"
-        if packer.is_file():
-            return packer
-    return None
+def find_uf2_pack(env):
+    """Locate the AMB1 UF2 packer shipped with this platform."""
+    packer = Path(env.PioPlatform().get_dir()) / "tools" / "amb1" / "uf2_pack.py"
+    return packer if packer.is_file() else None
 
 
 def uf2ota_include(env):
@@ -119,12 +118,9 @@ def build_uf2ota(target, source, env):
     """
     target_path = Path(str(target[0]))
     source_path = Path(str(source[0]))
-    packer = find_uf2_pack(env.subst("$PROJECT_DIR"))
+    packer = find_uf2_pack(env)
     if packer is None:
-        raise RuntimeError(
-            "AMB1 UF2 packer not found: expected tools/amb1/uf2_pack.py in the "
-            "project directory or one of its parents"
-        )
+        raise RuntimeError("AMB1 UF2 packer not found in the platform package")
     # $OBJCOPY is the bare toolchain name; the platform puts its bin dir on PATH.
     objcopy_name = env.subst("$OBJCOPY")
     objcopy = Path(which(objcopy_name) or objcopy_name)
@@ -149,13 +145,20 @@ def build_uf2ota(target, source, env):
     command = [
         sys.executable,
         str(packer),
-        "--elf", str(source_path),
-        "--toolchain-bin", str(objcopy.parent),
-        "--output", str(temporary),
-        "--board", board,
-        "--fw-name", str(fw_name),
-        "--fw-version", str(fw_version),
-        "--lt-version", str(lt_version),
+        "--elf",
+        str(source_path),
+        "--toolchain-bin",
+        str(objcopy.parent),
+        "--output",
+        str(temporary),
+        "--board",
+        board,
+        "--fw-name",
+        str(fw_name),
+        "--fw-version",
+        str(fw_version),
+        "--lt-version",
+        str(lt_version),
         # AMB1 linker scripts place the boot markers in image1 overlay sections
         # that the native image2 packer must include explicitly.
         "--allow-libretiny-image1-overlays",
@@ -226,14 +229,16 @@ env.Append(CPPPATH=[join(_SDK, *p.split("/")) for p in _SDK_INCLUDES])
 
 # Explicit qualification-build opt-in only. This does not bind a scratch policy
 # or authorize runtime writes. Set flags globally before any queue clones env.
-_IMAGE2_SDK_ADAPTER = str(env.GetProjectOption(
-    "custom_amb1_flash_qualification", "no"
-)).strip().lower() == "yes"
+_IMAGE2_SDK_ADAPTER = (
+    str(env.GetProjectOption("custom_amb1_flash_qualification", "no")).strip().lower()
+    == "yes"
+)
 if _IMAGE2_SDK_ADAPTER:
     _OTA = env.subst("$CORES_DIR/realtek-amb1/base/ota")
     env.Prepend(CPPPATH=[_OTA])
     _STAGED_SDK = stage_image2_sdk_lock(
-        _SDK, env.subst("$BUILD_DIR"),
+        _SDK,
+        env.subst("$BUILD_DIR"),
         join(_OTA, "image2_controller_lock.patch"),
     )
     env.Prepend(CPPPATH=[str(_STAGED_SDK / "component/os/os_dep/include")])
@@ -446,8 +451,15 @@ queue.AppendPublic(
     LIBPATH=[
         join(
             "$SDK_DIR",
-            "component", "soc", "realtek", "8195a",
-            "misc", "bsp", "lib", "common", "GCC",
+            "component",
+            "soc",
+            "realtek",
+            "8195a",
+            "misc",
+            "bsp",
+            "lib",
+            "common",
+            "GCC",
         ),
     ],
     LIBS=[
