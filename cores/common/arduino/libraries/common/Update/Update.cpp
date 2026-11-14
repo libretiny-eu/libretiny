@@ -43,7 +43,7 @@ bool UpdateClass::begin(
 #endif
 	if (this->ctx) {
 		LT_W("OTA context unclean!");
-		this->cleanup(true);
+		this->cleanup();
 	}
 	this->clearError();
 	if (size == 0) {
@@ -72,48 +72,50 @@ bool UpdateClass::begin(
 /**
  * @brief Finalize the update process. Check for errors and update completion, then activate the new firmware image.
  *
- * @param evenIfRemaining don't raise errors if still in progress
+ * @param evenIfRemaining retained for compatibility; incomplete images are rejected
  * @return false in case of errors or no update running; true otherwise
  */
-bool UpdateClass::end(bool evenIfRemaining) {
+bool UpdateClass::end(__attribute__((unused)) bool evenIfRemaining) {
 	if (!this->ctx)
 		return false;
 
-	// update is running or finished; cleanup and end it
-	if (!isFinished() && !evenIfRemaining)
-		// abort if not finished
+	if (this->hasError()) {
+		this->cleanup();
+		return false;
+	}
+	if (!this->ctx->bytes_written || !isFinished() || this->ctx->buf_pos != this->ctx->buf) {
 		this->errArd = UPDATE_ERROR_ABORT;
+		this->cleanup();
+		return false;
+	}
 
 	if (!this->md5Digest)
 		this->md5Digest = static_cast<uint8_t *>(malloc(16));
+	if (!this->md5Digest) {
+		this->errArd = UPDATE_ERROR_SPACE;
+		this->cleanup();
+		return false;
+	}
 	MD5Final(this->md5Digest, this->md5Ctx);
 
-	this->cleanup(/* clearError= */ evenIfRemaining);
+	if (this->md5Expected && memcmp(this->md5Digest, this->md5Expected, 16) != 0)
+		this->errArd = UPDATE_ERROR_MD5;
+	else if (!lt_ota_end(this->ctx))
+		this->errArd = UPDATE_ERROR_ACTIVATE;
+
+	this->cleanup();
 	return !this->hasError();
 }
 
 /**
  * @brief Cleanup (free) the update context.
- * Try activating the firmware if possible, set local error codes.
- *
- * @param clearError assume successful finish after correct activation
+ * Preserve error codes and release resources without activating firmware.
  */
-void UpdateClass::cleanup(bool clearError) {
+void UpdateClass::cleanup() {
 	if (!this->ctx)
 		return;
 
-	if (!lt_ota_end(this->ctx)) {
-		// activating firmware failed
-		this->errArd = UPDATE_ERROR_ACTIVATE;
-		this->errUf2 = UF2_ERR_OK;
-	} else if (this->md5Digest && this->md5Expected && memcmp(this->md5Digest, this->md5Expected, 16) != 0) {
-		// MD5 doesn't match
-		this->errArd = UPDATE_ERROR_MD5;
-		this->errUf2 = UF2_ERR_OK;
-	} else if (clearError) {
-		// successful finish and activation, clear error codes
-		this->clearError();
-	} else if (this->ctx->error > UF2_ERR_IGNORE) {
+	if (this->ctx->error > UF2_ERR_IGNORE) {
 		// make error code based on UF2OTA code
 		this->errArd = errorMap[this->ctx->error];
 		this->errUf2 = this->ctx->error;
@@ -127,6 +129,7 @@ void UpdateClass::cleanup(bool clearError) {
 		this->printErrorContext();
 #endif
 
+	lt_ota_abort(this->ctx);
 	free(this->ctx);
 	this->ctx = nullptr;
 	free(this->md5Ctx);
@@ -152,8 +155,10 @@ size_t UpdateClass::write(const uint8_t *data, size_t len) {
 
 	MD5Update(this->md5Ctx, data, len);
 	size_t written = lt_ota_write(ctx, data, len);
-	if (written != len)
-		this->cleanup(/* clearError= */ false);
+	if (written != len) {
+		this->errArd = UPDATE_ERROR_WRITE;
+		this->cleanup();
+	}
 	return written;
 }
 
@@ -180,7 +185,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 			if (millis() - lastData > UPDATE_TIMEOUT_MS) {
 				// waited for data too long; abort with error
 				this->errArd = UPDATE_ERROR_STREAM;
-				this->cleanup(/* clearError= */ false);
+				this->cleanup();
 				return written;
 			}
 			continue;
@@ -200,7 +205,7 @@ size_t UpdateClass::writeStream(Stream &data) {
 			lt_ota_write_block(this->ctx, reinterpret_cast<uf2_block_t *>(this->ctx->buf));
 		// abort on errors
 		if (hasError()) {
-			this->cleanup(/* clearError= */ false);
+			this->cleanup();
 			return written;
 		}
 		written += read;
