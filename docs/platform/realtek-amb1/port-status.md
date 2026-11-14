@@ -64,18 +64,19 @@ tcpip thread rather than dereferencing a client pointer from the caller task.
 - DHCP setup is serialized through lwIP's tcpip netif API. The vendor WLAN
   glue still uses its own raw link-state calls, as in the existing ambz port.
   Association, DHCP, DNS and reconnect behavior require device testing.
-- OTA capability is disabled: the inherited AmebaZ XIP slot probes and boot
-  flag writes are unsafe for the fridge's image2/HMAC loader. Public slot
-  queries/switches return unavailable/failure without changing flash.
+- OTA capability depends on an authenticated image2 loader. The stock OTA
+  family hooks are documented in `cores/common/base/api/lt_ota.h`.
 
-## First-bench storage policy
+## Storage policy
 
-Flash is unconditionally read-only in this core. There is no writable opt-in
-flag and no RAM-backed success substitute for persistence. The family FAL
-adapter returns byte counts on successful reads and `-1` on failed reads,
-writes and erases (including zero-length write/erase requests). It checks
-negative offsets, bounds, null buffers and overflow. RTL8195A stream reads
-return 1 on success; that is converted to the requested FAL byte count.
+Flash is read-only in the default core. The qualification build option
+`custom_amb1_flash_qualification` compiles the staged image2 adapter and
+enables OTA; it is not a general-purpose write authorization.
+
+The family FAL adapter returns byte counts on successful reads and `-1` on
+failed reads, writes and erases (including zero-length write/erase requests). It
+checks negative offsets, bounds, null buffers and overflow. RTL8195A stream
+reads return 1 on success; that is converted to the requested FAL byte count.
 Initialization does not call flash status setters or storage formatting.
 
 `AddCoreSources` selects `base/port/*.c*` for both the amb parent and amb1;
@@ -87,8 +88,7 @@ never `fal_flash_ambz_port.c.o`. Do not force-load the inherited parent adapter.
 
 ### Required builder integration
 
-The builder owner must add these flags to the amb1 family LINKFLAGS (this core
-deliberately does not modify shared builder files):
+The builder adds these flags to the amb1 family LINKFLAGS:
 
 ```
 -Wl,--wrap=flash_write_word
@@ -109,56 +109,13 @@ integer mutators return 0 (SDK success is 1), not a fabricated success. Void
 erase/protection APIs cannot report failure and log that limitation explicitly.
 FAL returns `-1`, so LibreTiny's unsigned flash API reports zero written bytes.
 
-### Layout and preferences
-
-The WCATA007 native image starts are 0xB000 and 0x177000, with slot A ending
-at 0x177000. Preserve OpenBeken config at 0x2E3000..0x2FEFFF inclusive.
-The proposed `system = 0x2E3000 + 0x51D000` is not reviewed free space: it
-includes that config and extends to the end of the 8 MiB device. Do not use it
-as an ESPHome settings region or infer a free area from slot starts alone.
-
-ESPHome LibreTiny preferences call
-`fdb_kvdb_init(&db, "esphome", "kvs", NULL, NULL)`: the required FAL partition
-name is **kvs**, not kv or nvs. FlashDB init can automatically erase/format
-invalid sector headers. `flash_write_interval: never` only affects subsequent
-sync scheduling, not this initialization. Keep `kvs` absent for the first bench
-build: initialization must report an error, not persistence success. Even if a
-partition is mistakenly supplied, the FAL guard rejects writes and erases.
-Before enabling real persistence, independently allocate/review a sector-aligned
-`kvs` area outside both complete image slots, loader metadata, calibration and
-the saved OpenBeken settings; FlashDB KVDB needs at least two sectors. Check
-the exact linked FlashDB version's geometry requirements before choosing size.
-
-### Boot/WLAN audit and remaining gate
+### Boot/WLAN audit
 
 - `lt_main` calls `lt_init_family`, variant init, banner, constructors, then
   `fal_init`; FAL root is assigned before the application starts. Family init
   only changes diagnostic globals and the UART selector, not flash contents.
 - The SDK's `AP_SETTING_SECTOR=0xFE000`, `UART_SETTING_SECTOR=0xFC000`, and
-  `FAST_RECONNECT_DATA=0x7F000` overlap native slot A. They are not valid free
-  storage for this board and must not be used for provisioning.
-- The family config forces OTA, simple config, flash-backed fast connect,
-  JD Smart and fast DHCP off. SDK wifi_conf's persistence callback path is
-  conditional on fast connect/JD Smart. Ordinary autoreconnect is distinct
-  from persistent fast connect and need not be disabled.
-- SDK OTA helpers call flash APIs directly, bypassing FAL. SDK guards block
-  those public mutators as defense in depth; the LT OTA API remains disabled.
-- Read APIs may lazily initialize the SDK SPI controller. `InfraStart` and
-  `SpicFlashInitRtl8195A` reside in vendor archives; FAL guards and public SDK
-  wrappers do not intercept ROM calls, same-object internal calls, direct
-  memory-mapped flash writes, or lower-level SPIC mutation calls. This source
-  audit does NOT prove those opaque paths never write. Before any bench boot,
-  independently inspect the final linked call paths/archives for autonomous
-  calibration/status/erase/program operations. If that cannot be established,
-  the no-unreviewed-writes bench gate remains CLOSED. No hardware write test
-  or assertion of boot-time safety follows from compilation.
-
-Host contract test (no SDK/hardware):
-
-```
-python3 cores/realtek-amb1/tests/test_flash_readonly.py
-```
-
-The test compiles the actual adapter/guards with mocks and checks read offsets,
-byte counts, SDK errors, invalid ranges, denied mutations and diagnostics.
-It does not establish vendor ROM behavior or final firmware archive selection.
+  `FAST_RECONNECT_DATA=0x7F000` overlap native slot A on the WCATA007 board.
+  They must not be used for provisioning.
+- Packaged images are produced by `tools/amb1/uf2_pack.py`, which extracts both
+  load segments from the linked ELF and validates the native image2 boundaries.

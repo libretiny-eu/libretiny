@@ -1,10 +1,12 @@
 {
-	"_base": ["realtek-amb1"],
+	"_base": [
+		"realtek-amb1"
+	],
 	"build": {
 		"mcu": "rtl8711am",
 		"variant": "generic-rtl8711am-8mb"
 	},
-	"name": "WCATA007 - RTL8711AM (8M, reviewed KVS reservation)",
+	"name": "WCATA007 - RTL8711AM (8M)",
 	"symbol": "WCATA007",
 	"vendor": "GE Appliances",
 	"url": "",
