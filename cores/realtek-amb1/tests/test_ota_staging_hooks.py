@@ -14,13 +14,11 @@ Covered contract:
     Update error-map range.
 """
 
-import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 COMMON = ROOT / "cores/common/base/api"
@@ -576,17 +574,44 @@ class OtaStagingHookTests(unittest.TestCase):
 
         def compile_c(source, obj, extra=()):
             subprocess.run(
-                [cc, "-std=c11", "-O2", "-Wall", "-Wextra", *extra,
-                 "-I" + str(tmp), "-I" + str(COMMON), "-c", str(source), "-o", str(obj)],
-                check=True, capture_output=True, text=True,
+                [
+                    cc,
+                    "-std=c11",
+                    "-O2",
+                    "-Wall",
+                    "-Wextra",
+                    *extra,
+                    "-I" + str(tmp),
+                    "-I" + str(COMMON),
+                    "-c",
+                    str(source),
+                    "-o",
+                    str(obj),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
             )
 
         def link_cxx(source, obj_out, objects):
             subprocess.run(
-                [cxx, "-std=c++11", "-O2", "-Wall", "-Wextra",
-                 "-I" + str(tmp), "-I" + str(COMMON), "-I" + str(UPDATE),
-                 str(source), *objects, "-o", str(obj_out)],
-                check=True, capture_output=True, text=True,
+                [
+                    cxx,
+                    "-std=c++11",
+                    "-O2",
+                    "-Wall",
+                    "-Wextra",
+                    "-I" + str(tmp),
+                    "-I" + str(COMMON),
+                    "-I" + str(UPDATE),
+                    str(source),
+                    *objects,
+                    "-o",
+                    str(obj_out),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
             )
 
         lt_ota_o = tmp / "lt_ota.o"
@@ -598,30 +623,70 @@ class OtaStagingHookTests(unittest.TestCase):
 
         cls.default_bin = tmp / "default-path"
         subprocess.run(
-            [cc, "-std=c11", "-O2", "-Wall", "-Wextra",
-             "-I" + str(tmp), "-I" + str(COMMON),
-             str(tmp / "harness_default.c"), str(lt_ota_o), str(stub_o),
-             "-o", str(cls.default_bin)],
-            check=True, capture_output=True, text=True,
+            [
+                cc,
+                "-std=c11",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-I" + str(tmp),
+                "-I" + str(COMMON),
+                str(tmp / "harness_default.c"),
+                str(lt_ota_o),
+                str(stub_o),
+                "-o",
+                str(cls.default_bin),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
         )
 
         cls.family_bin = tmp / "family-path"
         subprocess.run(
-            [cc, "-std=c11", "-O2", "-Wall", "-Wextra",
-             "-I" + str(tmp), "-I" + str(COMMON),
-             str(tmp / "harness_direct.c"), str(lt_ota_o), str(stub_o), str(family_o),
-             "-o", str(cls.family_bin)],
-            check=True, capture_output=True, text=True,
+            [
+                cc,
+                "-std=c11",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-I" + str(tmp),
+                "-I" + str(COMMON),
+                str(tmp / "harness_direct.c"),
+                str(lt_ota_o),
+                str(stub_o),
+                str(family_o),
+                "-o",
+                str(cls.family_bin),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
         )
 
         cls.update_bin = tmp / "update-digest"
         subprocess.run(
-            [cxx, "-std=c++11", "-O2", "-Wall", "-Wextra",
-             "-I" + str(tmp), "-I" + str(COMMON), "-I" + str(UPDATE),
-             str(UPDATE / "Update.cpp"), str(UPDATE / "UpdateUtil.cpp"),
-             str(tmp / "harness_update.cpp"), str(lt_ota_o), str(stub_o), str(family_o),
-             "-o", str(cls.update_bin)],
-            check=True, capture_output=True, text=True,
+            [
+                cxx,
+                "-std=c++11",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-I" + str(tmp),
+                "-I" + str(COMMON),
+                "-I" + str(UPDATE),
+                str(UPDATE / "Update.cpp"),
+                str(UPDATE / "UpdateUtil.cpp"),
+                str(tmp / "harness_update.cpp"),
+                str(lt_ota_o),
+                str(stub_o),
+                str(family_o),
+                "-o",
+                str(cls.update_bin),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
         )
 
     def run_bin(self, binary, mode):
@@ -648,12 +713,12 @@ class OtaStagingHookTests(unittest.TestCase):
 
     def test_default_writer_error_contract_is_unchanged(self):
         values = self.run_bin(self.default_bin, "default_write_error")
-        self.assertEqual(values[0], 1)          # lt_ota_end: no activation attempted
-        self.assertEqual(values[1], 0)          # no switch
-        self.assertEqual(values[2], 2)          # uf2_write called twice
-        self.assertEqual(values[5], 13)         # UF2_ERR_WRITE_FAILED latched
-        self.assertEqual(values[6], 1024)       # only the successful prefix counted
-        self.assertEqual(values[8], 0)          # failing write returned 0
+        self.assertEqual(values[0], 1)  # lt_ota_end: no activation attempted
+        self.assertEqual(values[1], 0)  # no switch
+        self.assertEqual(values[2], 2)  # uf2_write called twice
+        self.assertEqual(values[5], 13)  # UF2_ERR_WRITE_FAILED latched
+        self.assertEqual(values[6], 1024)  # only the successful prefix counted
+        self.assertEqual(values[8], 0)  # failing write returned 0
 
     # ------------------------------------------------------------------- family
     def test_strong_hook_stages_and_short_circuits_fal(self):
@@ -691,10 +756,10 @@ class OtaStagingHookTests(unittest.TestCase):
 
     def test_out_of_range_family_error_is_clamped(self):
         values = self.run_bin(self.family_bin, "handle_write_bad_code")
-        self.assertEqual(values[5], 0)          # never activated
-        self.assertEqual(values[9], 13)         # clamped to UF2_ERR_WRITE_FAILED
+        self.assertEqual(values[5], 0)  # never activated
+        self.assertEqual(values[9], 13)  # clamped to UF2_ERR_WRITE_FAILED
         self.assertEqual(values[10], 13)
-        self.assertEqual(values[13], 0)         # later write did not reach family
+        self.assertEqual(values[13], 0)  # later write did not reach family
 
     def test_begin_error_aborts_without_any_write(self):
         self.assertEqual(
@@ -711,9 +776,9 @@ class OtaStagingHookTests(unittest.TestCase):
     def test_end_pass_is_a_contract_violation(self):
         values = self.run_bin(self.family_bin, "handle_end_pass")
         self.assertEqual(values[0], 0)
-        self.assertEqual(values[3], 1)          # end was attempted
-        self.assertEqual(values[4], 1)          # and aborted
-        self.assertEqual(values[5], 0)          # never activated
+        self.assertEqual(values[3], 1)  # end was attempted
+        self.assertEqual(values[4], 1)  # and aborted
+        self.assertEqual(values[5], 0)  # never activated
         self.assertEqual(values[10], 13)
 
     def test_write_pass_is_a_contract_violation(self):

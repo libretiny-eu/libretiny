@@ -1,8 +1,8 @@
 /* Experimental injected policy only: no production SDK binding. */
 #ifndef AMB1_IMAGE2_SESSION_H
 #define AMB1_IMAGE2_SESSION_H
-#include "image2_flash_backend.h"
 #include "image2_activation.h"
+#include "image2_flash_backend.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,8 +17,11 @@ typedef struct {
 } image2_session_crypto;
 
 typedef enum {
-	IMAGE2_SESSION_UNUSED, IMAGE2_SESSION_STAGING, IMAGE2_SESSION_VERIFIED,
-	IMAGE2_SESSION_NOT_ACTIVATED, IMAGE2_SESSION_ACTIVATED,
+	IMAGE2_SESSION_UNUSED,
+	IMAGE2_SESSION_STAGING,
+	IMAGE2_SESSION_VERIFIED,
+	IMAGE2_SESSION_NOT_ACTIVATED,
+	IMAGE2_SESSION_ACTIVATED,
 	IMAGE2_SESSION_UNCERTAIN
 } image2_session_status;
 
@@ -39,6 +42,7 @@ typedef struct {
 	image2_session_crypto crypto;
 	int used;
 } image2_session_boot;
+
 typedef struct image2_session {
 	const struct image2_session *identity;
 	image2_session_boot *boot;
@@ -46,9 +50,14 @@ typedef struct image2_session {
 	int busy;
 } image2_session;
 
-int image2_session_begin(image2_session *, image2_session_boot *,
-	const image2_flash_config *, const image2_flash_sdkops *,
-	const image2_session_crypto *, unsigned trusted_running_slot);
+int image2_session_begin(
+	image2_session *,
+	image2_session_boot *,
+	const image2_flash_config *,
+	const image2_flash_sdkops *,
+	const image2_session_crypto *,
+	unsigned trusted_running_slot
+);
 int image2_session_write(image2_session *, const void *, size_t);
 int image2_session_verify(image2_session *);
 int image2_session_activate(image2_session *);

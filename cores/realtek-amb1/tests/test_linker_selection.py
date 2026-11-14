@@ -1,14 +1,13 @@
 """Execute the family builder with host doubles; no firmware build is needed."""
 
-from pathlib import Path
 import re
 import runpy
 import sys
 import tempfile
-from types import ModuleType
 import unittest
+from pathlib import Path
+from types import ModuleType
 from unittest.mock import patch
-
 
 ROOT = Path(__file__).resolve().parents[3]
 BUILDER = ROOT / "builder/family/realtek-amb1.py"
@@ -96,10 +95,16 @@ class Environment(dict):
 
 
 def execute_builder(env):
-    modules = {name: ModuleType(name) for name in (
-        "platformio", "platformio.platform", "platformio.platform.board",
-        "SCons", "SCons.Script",
-    )}
+    modules = {
+        name: ModuleType(name)
+        for name in (
+            "platformio",
+            "platformio.platform",
+            "platformio.platform.board",
+            "SCons",
+            "SCons.Script",
+        )
+    }
     modules["platformio.platform.board"].PlatformBoardConfig = Board
     script = modules["SCons.Script"]
     script.Environment = Environment

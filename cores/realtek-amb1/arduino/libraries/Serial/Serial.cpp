@@ -61,11 +61,15 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		else if ((config & SERIAL_PARITY_MASK) == SERIAL_PARITY_ODD)
 			parity = ParityOdd;
 		serial_baud(&data->uart, baudrate);
-		serial_format(&data->uart, (config & SERIAL_DATA_MASK) == SERIAL_DATA_7 ? 7 : 8,
-			parity, (config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1);
+		serial_format(
+			&data->uart,
+			(config & SERIAL_DATA_MASK) == SERIAL_DATA_7 ? 7 : 8,
+			parity,
+			(config & SERIAL_STOP_BIT_MASK) == SERIAL_STOP_BIT_2 ? 2 : 1
+		);
 	}
 	this->baudrate = baudrate;
-	this->config = config;
+	this->config   = config;
 }
 
 void SerialClass::endPrivate() {

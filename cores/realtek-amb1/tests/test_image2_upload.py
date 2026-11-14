@@ -1,14 +1,14 @@
 """Native upload composition: real auth/SHA and all four session modules."""
+
 import os
-from pathlib import Path
 import struct
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
-from test_image2_auth import SDK, KEY, BOARD, envelope
+from test_image2_auth import BOARD, KEY, SDK, envelope
 from test_image2_session import HARNESS, MODULES, OTA
-
 
 # Reuse the session fault-injection harness, but inject an upload-level reentry
 # probe into every callback so the upload busy guard (not just the session one)
@@ -38,7 +38,7 @@ def _payload():
 _HEADER = ",".join(map(str, envelope(_payload())))
 
 
-_COMMON = r'''
+_COMMON = r"""
 #undef session
 #undef boot
 #include "image2_upload.h"
@@ -109,10 +109,10 @@ static void feed(image2_upload *u, const unsigned char *wire, size_t chunk) {
         pos += n;
     }
 }
-'''
+"""
 
 
-_REENTRY_BODY = r'''
+_REENTRY_BODY = r"""
 static void reentry_case(unsigned running, int activate) {
     image2_upload_boot b;
     image2_upload u;
@@ -147,10 +147,10 @@ int main(void) {
     puts("upload callback reentry rejected without flash mutation");
     return 0;
 }
-'''
+"""
 
 
-_KEY_BODY = r'''
+_KEY_BODY = r"""
 static unsigned char key_buffer[KEY_LEN];
 
 static void key_borrowed_until_envelope(unsigned running) {
@@ -218,10 +218,10 @@ int main(void) {
     puts("borrowed key lifetime contract enforced");
     return 0;
 }
-'''
+"""
 
 
-_BOUNDARY_BODY = r'''
+_BOUNDARY_BODY = r"""
 static void invalid_begin(uint64_t total, uint32_t image_size,
                           const image2_flash_config *cfg,
                           const image2_flash_sdkops *ops,
@@ -271,10 +271,10 @@ int main(void) {
     puts("invalid upload begin boundaries rejected");
     return 0;
 }
-'''
+"""
 
 
-_STATUS_BODY = r'''
+_STATUS_BODY = r"""
 static void prepare(image2_upload *u, image2_upload_boot *b,
                     unsigned running, unsigned char *wire) {
     memcpy(wire + 80, image, 700);
@@ -369,10 +369,10 @@ int main(void) {
     puts("terminal upload statuses preserved");
     return 0;
 }
-'''
+"""
 
 
-_LATCH_BODY = r'''
+_LATCH_BODY = r"""
 static void failed_auth_client(unsigned running) {
     image2_upload_boot b;
     image2_upload u1;
@@ -431,7 +431,7 @@ int main(void) {
     puts("shared one-boot latch denies later clients after failure");
     return 0;
 }
-'''
+"""
 
 
 class UploadTest(unittest.TestCase):
@@ -448,19 +448,36 @@ class UploadTest(unittest.TestCase):
             (path / "upload_config.h").write_text("#define MBEDTLS_SHA256_C\n")
             (path / "test.c").write_text(harness)
             exe = path / "test"
-            subprocess.run(["cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-                            "-Wno-unused-function", "-O2", "-fstrict-aliasing",
-                            "-fsanitize=address,undefined",
-                            '-DMBEDTLS_CONFIG_FILE="upload_config.h"',
-                            "-I" + temp, "-I" + str(OTA),
-                            "-I" + str(SDK / "include"),
-                            str(path / "test.c"), *map(str, MODULES),
-                            str(OTA / "image2_auth.c"),
-                            str(OTA / "image2_upload.c"),
-                            str(SDK / "library/sha256.c"), "-o", str(exe)],
-                           check=True)
-            subprocess.run([str(exe)], check=True,
-                           env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"})
+            subprocess.run(
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-Wno-unused-function",
+                    "-O2",
+                    "-fstrict-aliasing",
+                    "-fsanitize=address,undefined",
+                    '-DMBEDTLS_CONFIG_FILE="upload_config.h"',
+                    "-I" + temp,
+                    "-I" + str(OTA),
+                    "-I" + str(SDK / "include"),
+                    str(path / "test.c"),
+                    *map(str, MODULES),
+                    str(OTA / "image2_auth.c"),
+                    str(OTA / "image2_upload.c"),
+                    str(SDK / "library/sha256.c"),
+                    "-o",
+                    str(exe),
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [str(exe)],
+                check=True,
+                env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"},
+            )
 
     def test_composition(self):
         if SDK is None:
@@ -472,7 +489,7 @@ class UploadTest(unittest.TestCase):
         payload[20:26] = b"RTKWin"
         struct.pack_into("<II", payload, 26, 658, 0x30000000)
         header = ",".join(map(str, envelope(payload)))
-        harness = HARNESS.split("int main(void)")[0] + r'''
+        harness = HARNESS.split("int main(void)")[0] + r"""
 #undef session
 #include "image2_upload.h"
 static int zero_auth(image2_upload *u) {
@@ -526,8 +543,10 @@ int main(void) {
     }
     return 0;
 }
-'''
-        harness = harness.replace("HEADER_BYTES", header).replace("BOARD_ID", str(BOARD))
+"""
+        harness = harness.replace("HEADER_BYTES", header).replace(
+            "BOARD_ID", str(BOARD)
+        )
         harness = harness.replace("KEY_TEXT", '"' + KEY.decode() + '"')
         harness = harness.replace("KEY_LEN", str(len(KEY)))
         with tempfile.TemporaryDirectory(prefix="image2-upload-") as temp:
@@ -535,15 +554,36 @@ int main(void) {
             (path / "upload_config.h").write_text("#define MBEDTLS_SHA256_C\n")
             (path / "test.c").write_text(harness)
             exe = path / "test"
-            subprocess.run(["cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-                            "-Wno-unused-function", "-O2", "-fstrict-aliasing",
-                            "-fsanitize=address,undefined", '-DMBEDTLS_CONFIG_FILE="upload_config.h"',
-                            "-I" + temp, "-I" + str(OTA), "-I" + str(SDK / "include"),
-                            str(path / "test.c"), *map(str, MODULES),
-                            str(OTA / "image2_auth.c"), str(OTA / "image2_upload.c"),
-                            str(SDK / "library/sha256.c"), "-o", str(exe)], check=True)
-            subprocess.run([str(exe)], check=True,
-                           env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"})
+            subprocess.run(
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-Wno-unused-function",
+                    "-O2",
+                    "-fstrict-aliasing",
+                    "-fsanitize=address,undefined",
+                    '-DMBEDTLS_CONFIG_FILE="upload_config.h"',
+                    "-I" + temp,
+                    "-I" + str(OTA),
+                    "-I" + str(SDK / "include"),
+                    str(path / "test.c"),
+                    *map(str, MODULES),
+                    str(OTA / "image2_auth.c"),
+                    str(OTA / "image2_upload.c"),
+                    str(SDK / "library/sha256.c"),
+                    "-o",
+                    str(exe),
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [str(exe)],
+                check=True,
+                env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"},
+            )
 
     def test_upload_callback_reentry(self):
         self._run_harness(_REENTRY_BODY)

@@ -1,15 +1,15 @@
 """Compile the actual SDK SHA-256 C, never a mock crypto implementation."""
+
 import ctypes
 import hashlib
 import hmac
 import os
-from pathlib import Path
 import shutil
 import struct
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 OTA = ROOT / "cores/realtek-amb1/base/ota"
@@ -20,13 +20,18 @@ def find_sdk():
     candidates = []
     if os.environ.get("AMB1_SDK_DIR"):
         candidates.append(Path(os.environ["AMB1_SDK_DIR"]).expanduser())
-    candidates.extend((
-        Path.home() / ".platformio/packages/framework-realtek-amb1",
-        ROOT.parent / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
-    ))
+    candidates.extend(
+        (
+            Path.home() / ".platformio/packages/framework-realtek-amb1",
+            ROOT.parent
+            / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
+        )
+    )
     for package in candidates:
         sdk = package / SDK_COMPONENT
-        if (sdk / "library/sha256.c").is_file() and (sdk / "include/mbedtls/sha256.h").is_file():
+        if (sdk / "library/sha256.c").is_file() and (
+            sdk / "include/mbedtls/sha256.h"
+        ).is_file():
             return sdk
     return None
 
@@ -56,7 +61,7 @@ class Image2AuthTest(unittest.TestCase):
         cls.addClassCleanup(cls.tmp.cleanup)
         directory = Path(cls.tmp.name)
         (directory / "auth_config.h").write_text("#define MBEDTLS_SHA256_C\n")
-        (directory / "wrapper.c").write_text(r'''
+        (directory / "wrapper.c").write_text(r"""
 #include "image2_auth.h"
 #include <string.h>
 static image2_auth a;
@@ -123,20 +128,45 @@ int transaction(const void *payload, uint32_t n, int corrupt) {
     return image2_verify(&t);
 }
 int calls(void) { return flash_calls; }
-''')
+""")
         output = directory / "auth.so"
-        subprocess.run([
-            "cc", "-std=c99", "-Wall", "-Wextra", "-Werror", "-O2",
-            "-shared", "-fPIC", '-DMBEDTLS_CONFIG_FILE="auth_config.h"',
-            "-I" + str(directory), "-I" + str(OTA), "-I" + str(SDK / "include"),
-            str(OTA / "image2_auth.c"), str(OTA / "image2_transaction.c"),
-            str(SDK / "library/sha256.c"),
-            str(directory / "wrapper.c"), "-o", str(output),
-        ], check=True, capture_output=True, text=True)
+        subprocess.run(
+            [
+                "cc",
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-O2",
+                "-shared",
+                "-fPIC",
+                '-DMBEDTLS_CONFIG_FILE="auth_config.h"',
+                "-I" + str(directory),
+                "-I" + str(OTA),
+                "-I" + str(SDK / "include"),
+                str(OTA / "image2_auth.c"),
+                str(OTA / "image2_transaction.c"),
+                str(SDK / "library/sha256.c"),
+                str(directory / "wrapper.c"),
+                "-o",
+                str(output),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         cls.lib = ctypes.CDLL(str(output))
-        cls.lib.init.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_uint64,
-                                ctypes.c_void_p, ctypes.c_size_t, ctypes.c_uint32,
-                                ctypes.c_uint32, ctypes.c_int, ctypes.c_uint32]
+        cls.lib.init.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_size_t,
+            ctypes.c_uint64,
+            ctypes.c_void_p,
+            ctypes.c_size_t,
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_int,
+            ctypes.c_uint32,
+        ]
         cls.lib.authorize.argtypes = [ctypes.c_uint32]
         cls.lib.update.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
         cls.lib.transaction.argtypes = [ctypes.c_void_p, ctypes.c_uint32, ctypes.c_int]
@@ -144,22 +174,42 @@ int calls(void) { return flash_calls; }
     def setUp(self):
         self.lib.cleanup()
 
-    def start(self, payload=b"abc", header=None, key=KEY, total=None,
-              minimum=1, maximum=0x100000, require=1, board=BOARD):
+    def start(
+        self,
+        payload=b"abc",
+        header=None,
+        key=KEY,
+        total=None,
+        minimum=1,
+        maximum=0x100000,
+        require=1,
+        board=BOARD,
+    ):
         header = envelope(payload) if header is None else header
-        return self.lib.init(header, len(header), len(payload) + 80 if total is None else total,
-                             key, len(key), minimum, maximum, require, board)
+        return self.lib.init(
+            header,
+            len(header),
+            len(payload) + 80 if total is None else total,
+            key,
+            len(key),
+            minimum,
+            maximum,
+            require,
+            board,
+        )
 
     def verify(self, payload):
         self.assertEqual(self.lib.reset(), 1)
         for i in range(0, len(payload), 63):
-            chunk = payload[i:i + 63]
+            chunk = payload[i : i + 63]
             self.assertEqual(self.lib.update(chunk, len(chunk)), 1)
         self.assertEqual(self.lib.check(), 1)
 
     def test_known_sha_vectors_and_readback_pass(self):
-        self.assertEqual(hashlib.sha256(b"abc").hexdigest(),
-                         "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+        self.assertEqual(
+            hashlib.sha256(b"abc").hexdigest(),
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+        )
         for payload in (b"abc", b"a" * 1000000, bytes(range(256))):
             with self.subTest(length=len(payload)):
                 self.lib.cleanup()
@@ -184,10 +234,12 @@ int calls(void) { return flash_calls; }
             self.assertEqual(self.start(minimum=lo, maximum=hi), 0)
         for version in (b"WCFOTA00", b"WCFOTA02"):
             header = version + envelope(b"abc")[8:48]
-            self.assertEqual(self.start(header=header + hmac.digest(KEY, header, "sha256")), 0)
-        huge = b"WCFOTA01" + struct.pack("<II", 0xffffffff, BOARD) + bytes(32)
+            self.assertEqual(
+                self.start(header=header + hmac.digest(KEY, header, "sha256")), 0
+            )
+        huge = b"WCFOTA01" + struct.pack("<II", 0xFFFFFFFF, BOARD) + bytes(32)
         huge += hmac.digest(KEY, huge, "sha256")
-        self.assertEqual(self.start(header=huge, total=79, maximum=0xffffffff), 0)
+        self.assertEqual(self.start(header=huge, total=79, maximum=0xFFFFFFFF), 0)
 
     def test_key_and_board_policy(self):
         self.assertEqual(self.start(key=b"wrong"), 0)
@@ -203,7 +255,9 @@ int calls(void) { return flash_calls; }
     def test_frozen_inputs_and_reinit_rejection(self):
         header = ctypes.create_string_buffer(envelope(b"abc"))
         key = ctypes.create_string_buffer(KEY)
-        self.assertEqual(self.lib.init(header, 80, 83, key, len(KEY), 1, 10, 1, BOARD), 1)
+        self.assertEqual(
+            self.lib.init(header, 80, 83, key, len(KEY), 1, 10, 1, BOARD), 1
+        )
         ctypes.memset(header, 0, 80)
         ctypes.memset(key, 0, len(KEY))
         self.assertEqual(self.start(b"def"), 0)
@@ -212,8 +266,12 @@ int calls(void) { return flash_calls; }
         self.verify(b"abc")
 
     def test_order_length_and_tamper_fail_closed(self):
-        for failure in (lambda: self.lib.reset(), lambda: self.lib.update(b"a", 1),
-                        lambda: self.lib.check(), lambda: self.lib.authorize(4)):
+        for failure in (
+            lambda: self.lib.reset(),
+            lambda: self.lib.update(b"a", 1),
+            lambda: self.lib.check(),
+            lambda: self.lib.authorize(4),
+        ):
             self.lib.cleanup()
             self.assertEqual(self.start(), 1)
             self.assertEqual(failure(), 0)
@@ -251,10 +309,16 @@ int calls(void) { return flash_calls; }
         self.assertEqual(self.lib.check(), 0)
 
     def test_actual_transaction_authorizes_before_flash_and_hashes_readback(self):
-        payload = (struct.pack("<II", 16, 0x10006000) + b"81958711"
-                   + struct.pack("<I", 0x10006001) + b"RTKWin" + bytes(6)
-                   + struct.pack("<II", 16, 0x30000000) + bytes([255]) * 8
-                   + bytes(range(16)))
+        payload = (
+            struct.pack("<II", 16, 0x10006000)
+            + b"81958711"
+            + struct.pack("<I", 0x10006001)
+            + b"RTKWin"
+            + bytes(6)
+            + struct.pack("<II", 16, 0x30000000)
+            + bytes([255]) * 8
+            + bytes(range(16))
+        )
         self.assertEqual(len(payload), 64)
         self.assertEqual(self.start(payload), 1)
         self.assertEqual(self.lib.transaction(payload, 63, 0), 0)
@@ -262,7 +326,9 @@ int calls(void) { return flash_calls; }
         for corrupt in (0, 1):
             self.lib.cleanup()
             self.assertEqual(self.start(payload), 1)
-            self.assertEqual(self.lib.transaction(payload, len(payload), corrupt), 1-corrupt)
+            self.assertEqual(
+                self.lib.transaction(payload, len(payload), corrupt), 1 - corrupt
+            )
             self.assertGreater(self.lib.calls(), 0)
 
 

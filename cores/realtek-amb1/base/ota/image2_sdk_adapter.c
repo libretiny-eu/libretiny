@@ -2,10 +2,10 @@
 #include <string.h>
 
 #if LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER
-#include <ameba_soc.h>
-#include <flash_api.h>
-#include <device_lock.h>
 #include <FreeRTOS.h>
+#include <ameba_soc.h>
+#include <device_lock.h>
+#include <flash_api.h>
 #include <task.h>
 
 /* Actual wrapped SDK signatures. Only the private capability path uses these. */
@@ -19,6 +19,7 @@ extern int __real_flash_burst_write(flash_t *, uint32_t, uint32_t, uint8_t *);
 extern void lt_wdt_feed(void);
 
 enum { SECTOR = 4096, PAGE = 256 };
+
 static struct {
 	flash_t flash;
 	TaskHandle_t task;
@@ -62,8 +63,7 @@ static int overlaps(uint32_t address, size_t n, image2_sdk_range r) {
 static int staging_ok(uint32_t address, size_t n) {
 	if (adapter.staging.start >= adapter.staging.end)
 		return 0;
-	if (!contains(adapter.staging.start, adapter.staging.end - adapter.staging.start,
-				  address, n))
+	if (!contains(adapter.staging.start, adapter.staging.end - adapter.staging.start, address, n))
 		return 0;
 	for (size_t i = 0; i < adapter.deny_count; ++i)
 		if (overlaps(address, n, adapter.deny[i]))
@@ -94,14 +94,14 @@ static int take(void *ctx, const void *owner) {
 	if (device_mutex_try_lock(RT_DEV_LOCK_FLASH) != 1)
 		return 0;
 	adapter.used = adapter.held = 1;
-	adapter.owner = owner;
+	adapter.owner				= owner;
 	return 1;
 }
 
 static void release(void *ctx, const void *owner) {
 	if (ctx != &adapter || !task_ok() || !adapter.held || adapter.busy || owner != adapter.owner)
 		return;
-	adapter.held = 0;
+	adapter.held  = 0;
 	adapter.owner = NULL;
 	device_mutex_unlock(RT_DEV_LOCK_FLASH);
 }
@@ -144,7 +144,12 @@ static int read_bytes(void *ctx, uint32_t address, void *data, size_t n) {
 
 /* Stack-only capability; neither real symbol is exposed through public ops.
  * Authorization is rechecked immediately before crossing the guard boundary. */
-typedef struct { uint32_t address; size_t length; int erase; } mutation_cap;
+typedef struct {
+	uint32_t address;
+	size_t length;
+	int erase;
+} mutation_cap;
+
 static int mutate(const mutation_cap *cap) {
 	if (!task_ok() || !adapter.held || !adapter.owner || !adapter.busy || adapter.failed ||
 		!authorized(cap->address, cap->length))
@@ -157,12 +162,11 @@ static int mutate(const mutation_cap *cap) {
 	}
 	if (cap->length > PAGE || cap->length > PAGE - cap->address % PAGE)
 		return 0;
-	return __real_flash_burst_write(&adapter.flash, cap->address,
-		(uint32_t)cap->length, adapter.staged) == 1;
+	return __real_flash_burst_write(&adapter.flash, cap->address, (uint32_t)cap->length, adapter.staged) == 1;
 }
 
 static int erase_sector(void *ctx, uint32_t address) {
-	mutation_cap cap = { address, SECTOR, 1 };
+	mutation_cap cap = {address, SECTOR, 1};
 	if (!enter(ctx))
 		return 0;
 	/* Bounds the unfed gap to one sector erase plus its readback. */
@@ -190,7 +194,7 @@ static int erase_sector(void *ctx, uint32_t address) {
 #define PROGRAM_ATTEMPTS 3
 
 static int program(void *ctx, uint32_t address, const void *data, size_t n) {
-	mutation_cap cap = { address, n, 0 };
+	mutation_cap cap = {address, n, 0};
 	int mutated = 0, ok = 0;
 	if (!enter(ctx))
 		return 0;
@@ -237,33 +241,29 @@ static int demote(void *ctx) {
 		return 0;
 	if (!enter(ctx))
 		return finish(0);
-	if (!adapter.demote_address || !adapter.target_signature_address ||
-		!adapter.staged_write || adapter.demoted ||
-		adapter.demote_address != adapter.source.start + 8 ||
-		adapter.source.start >= adapter.source.end ||
-		!contains(adapter.source.start, adapter.source.end - adapter.source.start,
-				  adapter.demote_address, 1) ||
-		adapter.target_signature_address != adapter.staging.start + 8 ||
-		adapter.staging.start >= adapter.staging.end ||
-		!contains(adapter.staging.start, adapter.staging.end - adapter.staging.start,
-				  adapter.target_signature_address, 8))
+	if (!adapter.demote_address || !adapter.target_signature_address || !adapter.staged_write || adapter.demoted ||
+		adapter.demote_address != adapter.source.start + 8 || adapter.source.start >= adapter.source.end ||
+		!contains(adapter.source.start, adapter.source.end - adapter.source.start, adapter.demote_address, 1) ||
+		adapter.target_signature_address != adapter.staging.start + 8 || adapter.staging.start >= adapter.staging.end ||
+		!contains(
+			adapter.staging.start,
+			adapter.staging.end - adapter.staging.start,
+			adapter.target_signature_address,
+			8
+		))
 		return finish(0);
-	if (!raw_read(adapter.demote_address, adapter.check, 8) ||
-		memcmp(adapter.check, new_signature, 8))
+	if (!raw_read(adapter.demote_address, adapter.check, 8) || memcmp(adapter.check, new_signature, 8))
 		return finish(0);
 	/* Target evidence: an erased, old or partial inactive-slot signature means
 	 * the target image is not published yet, so the demote must not fire. */
-	if (!raw_read(adapter.target_signature_address, adapter.check, 8) ||
-		memcmp(adapter.check, new_signature, 8))
+	if (!raw_read(adapter.target_signature_address, adapter.check, 8) || memcmp(adapter.check, new_signature, 8))
 		return finish(0);
 	memcpy(adapter.staged, old_signature, 1);
-	if (__real_flash_burst_write(&adapter.flash, adapter.demote_address, 1,
-								 adapter.staged) != 1)
+	if (__real_flash_burst_write(&adapter.flash, adapter.demote_address, 1, adapter.staged) != 1)
 		return finish(0);
 	adapter.demoted = 1;
 	/* The full eight-byte signature must now read the demoted form. */
-	if (!raw_read(adapter.demote_address, adapter.check, 8) ||
-		memcmp(adapter.check, old_signature, 8))
+	if (!raw_read(adapter.demote_address, adapter.check, 8) || memcmp(adapter.check, old_signature, 8))
 		return finish(0);
 	return finish(1);
 }
@@ -272,13 +272,10 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 	if (!ops)
 		return 0;
 	memset(ops, 0, sizeof(*ops));
-	if (adapter.bound || !policy || __get_IPSR() != 0 || !xTaskGetCurrentTaskHandle() ||
-		!policy->read_size || policy->read_start > UINT32_MAX - policy->read_size ||
-		policy->scratch_count > IMAGE2_SDK_SCRATCH_MAX ||
-		(policy->scratch_count && !policy->scratch_sectors) ||
-		policy->deny_count > IMAGE2_SDK_DENY_MAX ||
-		(policy->deny_count && !policy->deny_ranges) ||
-		policy->staging.start > policy->staging.end ||
+	if (adapter.bound || !policy || __get_IPSR() != 0 || !xTaskGetCurrentTaskHandle() || !policy->read_size ||
+		policy->read_start > UINT32_MAX - policy->read_size || policy->scratch_count > IMAGE2_SDK_SCRATCH_MAX ||
+		(policy->scratch_count && !policy->scratch_sectors) || policy->deny_count > IMAGE2_SDK_DENY_MAX ||
+		(policy->deny_count && !policy->deny_ranges) || policy->staging.start > policy->staging.end ||
 		policy->source.start > policy->source.end)
 		return 0;
 	for (size_t i = 0; i < policy->scratch_count; ++i)
@@ -297,8 +294,7 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 			return 0;
 		for (size_t i = 0; i < policy->deny_count; ++i) {
 			image2_sdk_range d = policy->deny_ranges[i];
-			if (d.start >= d.end ||
-				!contains(policy->read_start, policy->read_size, d.start, d.end - d.start))
+			if (d.start >= d.end || !contains(policy->read_start, policy->read_size, d.start, d.end - d.start))
 				return 0;
 			/* The window and every denial must be disjoint before any
 			 * request can be approved; no runtime repair or clamping. */
@@ -313,33 +309,26 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 	 * authorized without an explicitly named, in-window inactive-slot
 	 * signature address. */
 	if (policy->source.start == policy->source.end) {
-		if (policy->source.start || policy->demote_address ||
-			policy->target_signature_address)
+		if (policy->source.start || policy->demote_address || policy->target_signature_address)
 			return 0;
 	} else {
 		uint32_t source_size = policy->source.end - policy->source.start;
-		if (!contains(policy->read_start, policy->read_size,
-					  policy->source.start, source_size))
+		if (!contains(policy->read_start, policy->read_size, policy->source.start, source_size))
 			return 0;
-		if (policy->staging.start < policy->staging.end &&
-			policy->staging.start < policy->source.end &&
+		if (policy->staging.start < policy->staging.end && policy->staging.start < policy->source.end &&
 			policy->source.start < policy->staging.end)
 			return 0;
 		if (policy->demote_address) {
-			if (source_size < 9 ||
-				policy->demote_address != policy->source.start + 8 ||
-				!contains(policy->read_start, policy->read_size,
-						  policy->demote_address, 1))
+			if (source_size < 9 || policy->demote_address != policy->source.start + 8 ||
+				!contains(policy->read_start, policy->read_size, policy->demote_address, 1))
 				return 0;
 			/* The target signature region mirrors demote_address: the first
 			 * byte past the inactive-slot start, with all eight bytes inside a
 			 * valid staging window and the declared read extent. An erased or
 			 * empty staging window cannot provide publication evidence. */
-			if (policy->staging.start >= policy->staging.end ||
-				policy->staging.end - policy->staging.start < 16 ||
+			if (policy->staging.start >= policy->staging.end || policy->staging.end - policy->staging.start < 16 ||
 				policy->target_signature_address != policy->staging.start + 8 ||
-				!contains(policy->read_start, policy->read_size,
-						  policy->target_signature_address, 8))
+				!contains(policy->read_start, policy->read_size, policy->target_signature_address, 8))
 				return 0;
 		} else if (policy->target_signature_address) {
 			/* Evidence without a demote capability is a malformed policy, not
@@ -348,21 +337,20 @@ int image2_sdk_adapter_bind(const image2_sdk_qualification_policy *policy, image
 		}
 	}
 	adapter.read_start = policy->read_start;
-	adapter.read_size = policy->read_size;
-	adapter.count = policy->scratch_count;
+	adapter.read_size  = policy->read_size;
+	adapter.count	   = policy->scratch_count;
 	for (size_t i = 0; i < adapter.count; ++i)
 		adapter.scratch[i] = policy->scratch_sectors[i];
-	adapter.staging = policy->staging;
+	adapter.staging	   = policy->staging;
 	adapter.deny_count = policy->deny_count;
 	for (size_t i = 0; i < adapter.deny_count; ++i)
 		adapter.deny[i] = policy->deny_ranges[i];
-	adapter.source = policy->source;
-	adapter.demote_address = policy->demote_address;
+	adapter.source					 = policy->source;
+	adapter.demote_address			 = policy->demote_address;
 	adapter.target_signature_address = policy->target_signature_address;
-	adapter.task = xTaskGetCurrentTaskHandle();
-	adapter.bound = 1;
-	*ops = (image2_flash_sdkops){ &adapter, take, release, read_bytes, program,
-								 erase_sector, demote };
+	adapter.task					 = xTaskGetCurrentTaskHandle();
+	adapter.bound					 = 1;
+	*ops = (image2_flash_sdkops){&adapter, take, release, read_bytes, program, erase_sector, demote};
 	return 1;
 }
 #else

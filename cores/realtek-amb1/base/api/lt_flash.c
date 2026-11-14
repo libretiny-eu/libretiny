@@ -1,8 +1,8 @@
 /* Copyright (c) Kuba Szczodrzyński 2023-02-27. */
 
+#include <device_lock.h>
 #include <libretiny.h>
 #include <sdk_private.h>
-#include <device_lock.h>
 
 lt_flash_id_t lt_flash_get_id() {
 	lt_flash_id_t id;

@@ -16,6 +16,7 @@ typedef struct {
 	image2_session_boot session;
 	int used;
 } image2_upload_boot;
+
 typedef struct image2_upload {
 	const struct image2_upload *identity;
 	image2_upload_boot *boot;
@@ -32,9 +33,17 @@ typedef struct image2_upload {
 	int active, busy;
 } image2_upload;
 
-int image2_upload_begin(image2_upload *, image2_upload_boot *, uint64_t total,
-	const image2_flash_config *, const image2_flash_sdkops *, unsigned running,
-	const image2_auth_policy *, const void *key, size_t key_size);
+int image2_upload_begin(
+	image2_upload *,
+	image2_upload_boot *,
+	uint64_t total,
+	const image2_flash_config *,
+	const image2_flash_sdkops *,
+	unsigned running,
+	const image2_auth_policy *,
+	const void *key,
+	size_t key_size
+);
 int image2_upload_write(image2_upload *, const void *, size_t);
 /* Requires exact total and verified readback. activate must be 0 or 1;
  * zero verifies then closes without publishing. Query session status for

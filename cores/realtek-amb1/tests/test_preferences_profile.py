@@ -1,4 +1,5 @@
 """Host-only binding contract checks; no hardware qualification or flash I/O."""
+
 import pathlib
 import shutil
 import subprocess
@@ -9,34 +10,58 @@ ROOT = pathlib.Path(__file__).resolve().parents[3]
 PORT = ROOT / "cores/realtek-amb1/base/port"
 SOURCE = PORT / "preferences_profile.c"
 FACTS = (
-    "HARDWARE_QUALIFIED", "REVIEWED_RESERVATION", "MIGRATED_NATIVE_LOADER",
-    "NORMAL_SELECTOR", "INACTIVE_B_RESERVATION", "ADMITTED_IMAGES_EXCLUDE_KVS",
-    "BASELINE_MIGRATION_ATTESTED", "SHARED_LOCK_ATTESTED", "PROFILE_TABLE_REVIEWED",
+    "HARDWARE_QUALIFIED",
+    "REVIEWED_RESERVATION",
+    "MIGRATED_NATIVE_LOADER",
+    "NORMAL_SELECTOR",
+    "INACTIVE_B_RESERVATION",
+    "ADMITTED_IMAGES_EXCLUDE_KVS",
+    "BASELINE_MIGRATION_ATTESTED",
+    "SHARED_LOCK_ATTESTED",
+    "PROFILE_TABLE_REVIEWED",
 )
 
 
 @unittest.skipUnless(shutil.which("cc"), "C compiler required")
 class ProfileContract(unittest.TestCase):
-    def compile(self, *, selected=True, missing=None, value=None, prepare=1,
-                existing=1, formatting=0, flash_length="0x800000", hash_size=32,
-                experimental=1, profile=1, attestation_header=True):
+    def compile(
+        self,
+        *,
+        selected=True,
+        missing=None,
+        value=None,
+        prepare=1,
+        existing=1,
+        formatting=0,
+        flash_length="0x800000",
+        hash_size=32,
+        experimental=1,
+        profile=1,
+        attestation_header=True,
+    ):
         with tempfile.TemporaryDirectory() as tmp:
             work = pathlib.Path(tmp)
             (work / "ameba_soc.h").write_text("unsigned __get_IPSR(void);\n")
             (work / "libretiny.h").write_text(
-                f"#define FLASH_LENGTH {flash_length}\n#define LT_E(...) ((void)0)\n")
+                f"#define FLASH_LENGTH {flash_length}\n#define LT_E(...) ((void)0)\n"
+            )
             (work / "device_lock.h").write_text(
-                "#define RT_DEV_LOCK_FLASH 7\nint device_mutex_prepare(int);\n")
+                "#define RT_DEV_LOCK_FLASH 7\nint device_mutex_prepare(int);\n"
+            )
             (work / "FreeRTOS.h").write_text(
                 "#include <stddef.h>\ntypedef void *TaskHandle_t;\n"
-                "unsigned __get_IPSR(void);\n")
+                "unsigned __get_IPSR(void);\n"
+            )
             (work / "task.h").write_text(
                 "#define taskSCHEDULER_NOT_STARTED 0\n#define taskSCHEDULER_SUSPENDED 1\n"
                 "#define taskSCHEDULER_RUNNING 2\nint xTaskGetSchedulerState(void);\n"
-                "TaskHandle_t xTaskGetCurrentTaskHandle(void);\n")
+                "TaskHandle_t xTaskGetCurrentTaskHandle(void);\n"
+            )
             facts = {f"LT_AMB1_KVS_{name}": 1 for name in FACTS}
-            facts.update(LT_AMB1_KVS_EXISTING_FLASHDB_ATTESTED=existing,
-                         LT_AMB1_KVS_INITIAL_FORMAT_APPROVED=formatting)
+            facts.update(
+                LT_AMB1_KVS_EXISTING_FLASHDB_ATTESTED=existing,
+                LT_AMB1_KVS_INITIAL_FORMAT_APPROVED=formatting,
+            )
             if missing:
                 if value is None:
                     facts.pop(f"LT_AMB1_KVS_{missing}")
@@ -47,7 +72,7 @@ class ProfileContract(unittest.TestCase):
             header += "#define LT_AMB1_KVS_REVIEWED_BASELINE_SHA256_BYTES "
             header += ",".join(str(i + 1) for i in range(hash_size)) + "\n"
             (work / "attest.h").write_text(header)
-            harness = r'''
+            harness = r"""
 #include <assert.h>
 #include <string.h>
 #include "preferences_sdk.h"
@@ -92,15 +117,28 @@ int main(void) {
     assert(calls == (PREPARE == 1));
     return 0;
 }
-'''
+"""
             (work / "harness.c").write_text(harness)
-            cmd = ["cc", "-std=c11", "-Wall", "-Wextra", "-Werror", "-I", str(work),
-                   "-I", str(PORT), str(SOURCE)]
+            cmd = [
+                "cc",
+                "-std=c11",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-I",
+                str(work),
+                "-I",
+                str(PORT),
+                str(SOURCE),
+            ]
             if selected:
-                cmd += [f"-DLT_AMB1_EXPERIMENTAL_KVS={experimental}",
-                        f"-DLT_AMB1_WCATA007_KVS_PROFILE={profile}",
-                        f"-DPREPARE={prepare}", f"-DEXISTING={existing}",
-                        f"-DFORMATTING={formatting}"]
+                cmd += [
+                    f"-DLT_AMB1_EXPERIMENTAL_KVS={experimental}",
+                    f"-DLT_AMB1_WCATA007_KVS_PROFILE={profile}",
+                    f"-DPREPARE={prepare}",
+                    f"-DEXISTING={existing}",
+                    f"-DFORMATTING={formatting}",
+                ]
                 if attestation_header:
                     cmd += ['-DLT_AMB1_KVS_ATTESTATION_HEADER="attest.h"']
                 if experimental and profile:
@@ -115,8 +153,12 @@ int main(void) {
             if result.returncode == 0 and enabled:
                 subprocess.run([str(work / "result")], check=True)
             if result.returncode == 0 and not enabled:
-                symbols = subprocess.run(["nm", str(work / "result")], capture_output=True,
-                                         text=True, check=True).stdout
+                symbols = subprocess.run(
+                    ["nm", str(work / "result")],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                ).stdout
                 self.assertNotIn("lt_amb1_preferences_configure", symbols)
             return result
 
@@ -132,7 +174,9 @@ int main(void) {
         for name in FACTS:
             for value in (None, 0, 2):
                 with self.subTest(name=name, value=value):
-                    self.assertNotEqual(self.compile(missing=name, value=value).returncode, 0)
+                    self.assertNotEqual(
+                        self.compile(missing=name, value=value).returncode, 0
+                    )
 
     def test_explicit_mock_policy_and_mutex_failure(self):
         for prepare in (0, 1, -1):

@@ -46,7 +46,14 @@
 #define AMB1_SIGNATURE_SIZE	  8u
 
 static const uint8_t amb1_signature_new[AMB1_SIGNATURE_SIZE] = {
-	'8', '1', '9', '5', '8', '7', '1', '1',
+	'8',
+	'1',
+	'9',
+	'5',
+	'8',
+	'7',
+	'1',
+	'1',
 };
 
 /* Private zeroed SDK object, the same pattern the image2 SDK binding uses for
@@ -62,25 +69,27 @@ static uint32_t amb1_slot_start(uint8_t index) {
 
 /* The caller must not already hold RT_DEV_LOCK_FLASH. The SDK reports success
  * as exactly 1, not as a byte count. */
-static int amb1_read_signature(uint32_t address,
-							   uint8_t out[AMB1_SIGNATURE_SIZE]) {
+static int amb1_read_signature(uint32_t address, uint8_t out[AMB1_SIGNATURE_SIZE]) {
 	int ok;
 	device_mutex_lock(RT_DEV_LOCK_FLASH);
-	ok = flash_stream_read(&amb1_probe_flash, address, AMB1_SIGNATURE_SIZE,
-						   out) == 1;
+	ok = flash_stream_read(&amb1_probe_flash, address, AMB1_SIGNATURE_SIZE, out) == 1;
 	device_mutex_unlock(RT_DEV_LOCK_FLASH);
 	return ok;
 }
 
 /* Pure selector decision. Exactly one new signature identifies the slot; every
  * other combination (including unreadable slots) resolves to slot A. */
-static uint8_t amb1_choose_slot(const uint8_t a[AMB1_SIGNATURE_SIZE],
-								const uint8_t b[AMB1_SIGNATURE_SIZE],
-								int have_a, int have_b) {
+static uint8_t amb1_choose_slot(
+	const uint8_t a[AMB1_SIGNATURE_SIZE],
+	const uint8_t b[AMB1_SIGNATURE_SIZE],
+	int have_a,
+	int have_b
+) {
 	if (have_a && have_b) {
 		int new_a = memcmp(a, amb1_signature_new, AMB1_SIGNATURE_SIZE) == 0;
 		int new_b = memcmp(b, amb1_signature_new, AMB1_SIGNATURE_SIZE) == 0;
-		if (new_b && !new_a) return 1;
+		if (new_b && !new_a)
+			return 1;
 	}
 	return 0;
 }
@@ -94,9 +103,9 @@ lt_ota_type_t lt_ota_get_type(void) {
  * for the slot that is running and with the next boot after an activation. */
 bool lt_ota_is_valid(uint8_t index) {
 	uint8_t sig[AMB1_SIGNATURE_SIZE];
-	if (index > 1) return false;
-	if (!amb1_read_signature(amb1_slot_start(index) + AMB1_SIGNATURE_OFFSET,
-							 sig))
+	if (index > 1)
+		return false;
+	if (!amb1_read_signature(amb1_slot_start(index) + AMB1_SIGNATURE_OFFSET, sig))
 		return false;
 	return memcmp(sig, amb1_signature_new, AMB1_SIGNATURE_SIZE) == 0;
 }
@@ -106,7 +115,8 @@ uint8_t lt_ota_dual_get_current(void) {
 	uint8_t b[AMB1_SIGNATURE_SIZE] = {0};
 	int have_a, have_b;
 
-	if (amb1_running_slot >= 0) return (uint8_t)amb1_running_slot;
+	if (amb1_running_slot >= 0)
+		return (uint8_t)amb1_running_slot;
 
 	have_a = amb1_read_signature(AMB1_SLOT_A_START + AMB1_SIGNATURE_OFFSET, a);
 	have_b = amb1_read_signature(AMB1_SLOT_B_START + AMB1_SIGNATURE_OFFSET, b);

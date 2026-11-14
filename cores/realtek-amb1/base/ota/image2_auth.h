@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-#define IMAGE2_AUTH_HEADER_SIZE 48u
+#define IMAGE2_AUTH_HEADER_SIZE	  48u
 #define IMAGE2_AUTH_ENVELOPE_SIZE 80u
 
 typedef struct {
@@ -45,9 +45,15 @@ typedef struct image2_auth {
  * bytes [0,48); bytes [48,80) are the MAC. The image digest is [16,48).
  * A successful init authenticates metadata only, not the image payload.
  */
-int image2_auth_init(image2_auth *, const void *envelope, size_t envelope_size,
-	uint64_t total_size, const void *key, size_t key_size,
-	const image2_auth_policy *);
+int image2_auth_init(
+	image2_auth *,
+	const void *envelope,
+	size_t envelope_size,
+	uint64_t total_size,
+	const void *key,
+	size_t key_size,
+	const image2_auth_policy *
+);
 int image2_auth_callbacks(image2_auth *, image2_session_crypto *);
 void image2_auth_cleanup(image2_auth *);
 

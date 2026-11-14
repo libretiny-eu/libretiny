@@ -5,19 +5,22 @@ Set FLASHDB_SOURCE to an upstream FlashDB source tree if not installed via PIO.
 The portal record is a representative opaque WiFi preference blob, not a claim
 that the ESPHome portal or a hardware SDK was executed.
 """
+
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 PORT = Path(__file__).resolve().parents[1] / "base/port"
-FLASHDB = Path(os.environ.get(
-    "FLASHDB_SOURCE", str(Path.home() / ".platformio/packages/library-flashdb")))
+FLASHDB = Path(
+    os.environ.get(
+        "FLASHDB_SOURCE", str(Path.home() / ".platformio/packages/library-flashdb")
+    )
+)
 
-HARNESS = r'''
+HARNESS = r"""
 #include <assert.h>
 #include <limits.h>
 #include <string.h>
@@ -192,7 +195,7 @@ int main(void) {
     transport_tests(); database_tests(); puts("real FlashDB persistence and transport tests passed");
     return 0;
 }
-'''
+"""
 
 
 class PreferencesFlashTest(unittest.TestCase):
@@ -206,27 +209,35 @@ class PreferencesFlashTest(unittest.TestCase):
             temp = Path(temp)
             (temp / "fdb_cfg.h").write_text(
                 "#define FDB_USING_KVDB\n#define FDB_USING_FAL_MODE\n"
-                "#define FDB_WRITE_GRAN 1\n#define FDB_PRINT(...) ((void)0)\n")
+                "#define FDB_WRITE_GRAN 1\n#define FDB_PRINT(...) ((void)0)\n"
+            )
             (temp / "fal_cfg.h").write_text(
-                '#include <fal_def.h>\nextern const struct fal_flash_dev preferences_test_dev;\n'
-                '#define FAL_FLASH_DEV_TABLE { &preferences_test_dev }\n'
-                '#define FAL_PART_HAS_TABLE_CFG\n'
-                '#define FAL_PART_TABLE { {FAL_PART_MAGIC_WORD,"preferences","prefs",0,8192,0} }\n')
+                "#include <fal_def.h>\nextern const struct fal_flash_dev preferences_test_dev;\n"
+                "#define FAL_FLASH_DEV_TABLE { &preferences_test_dev }\n"
+                "#define FAL_PART_HAS_TABLE_CFG\n"
+                '#define FAL_PART_TABLE { {FAL_PART_MAGIC_WORD,"preferences","prefs",0,8192,0} }\n'
+            )
             source = temp / "harness.c"
             source.write_text(HARNESS)
             binary = temp / "preferences-test"
             includes = [temp, PORT, FLASHDB / "inc", FLASHDB / "port/fal/inc"]
             sources = [source, PORT / "preferences_flash.c"]
-            sources += [FLASHDB / "src" / name for name in
-                        ("fdb.c", "fdb_kvdb.c", "fdb_utils.c")]
-            sources += [FLASHDB / "port/fal/src" / name for name in
-                        ("fal.c", "fal_flash.c", "fal_partition.c")]
+            sources += [
+                FLASHDB / "src" / name
+                for name in ("fdb.c", "fdb_kvdb.c", "fdb_utils.c")
+            ]
+            sources += [
+                FLASHDB / "port/fal/src" / name
+                for name in ("fal.c", "fal_flash.c", "fal_partition.c")
+            ]
             command = [cc, "-std=c99", "-g", "-fsanitize=address,undefined"]
             command += [arg for path in includes for arg in ("-I", str(path))]
             command += [str(path) for path in sources] + ["-o", str(binary)]
             compiled = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stdout + compiled.stderr)
-            result = subprocess.run([str(binary)], capture_output=True, text=True, timeout=30)
+            result = subprocess.run(
+                [str(binary)], capture_output=True, text=True, timeout=30
+            )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("real FlashDB persistence", result.stdout)
 

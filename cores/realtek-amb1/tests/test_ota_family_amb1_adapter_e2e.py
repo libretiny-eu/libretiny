@@ -19,13 +19,13 @@ It proves the activation path that staging-only tests cannot:
 Run: python3 -m unittest discover -s libretiny/cores/realtek-amb1/tests \
         -p test_ota_family_amb1_adapter_e2e.py -v
 """
+
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 OTA = ROOT / "cores/realtek-amb1/base/ota"
@@ -40,13 +40,18 @@ def find_sdk():
     candidates = []
     if os.environ.get("AMB1_SDK_DIR"):
         candidates.append(Path(os.environ["AMB1_SDK_DIR"]).expanduser())
-    candidates.extend((
-        Path.home() / ".platformio/packages/framework-realtek-amb1",
-        ROOT.parent / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
-    ))
+    candidates.extend(
+        (
+            Path.home() / ".platformio/packages/framework-realtek-amb1",
+            ROOT.parent
+            / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
+        )
+    )
     for package in candidates:
         sdk = package / SDK_COMPONENT
-        if (sdk / "library/sha256.c").is_file() and (sdk / "include/mbedtls/sha256.h").is_file():
+        if (sdk / "library/sha256.c").is_file() and (
+            sdk / "include/mbedtls/sha256.h"
+        ).is_file():
             return sdk
     return None
 
@@ -462,21 +467,38 @@ class OtaFamilyAmb1AdapterE2ETests(unittest.TestCase):
         for source in sources:
             obj = tmp / (source.stem + ".o")
             subprocess.run(
-                [cc, "-std=c11", "-O2", "-Wall", "-Wextra", "-Werror",
-                 "-Wno-unused-function", "-Wno-unused-parameter",
-                 "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
-                 '-DMBEDTLS_CONFIG_FILE="mbedtls_config.h"',
-                 "-I" + str(tmp), "-I" + str(OTA), "-I" + str(COMMON),
-                 "-I" + str(sdk / "include"),
-                 "-c", str(source), "-o", str(obj)],
-                check=True, capture_output=True, text=True,
+                [
+                    cc,
+                    "-std=c11",
+                    "-O2",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-Wno-unused-function",
+                    "-Wno-unused-parameter",
+                    "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
+                    '-DMBEDTLS_CONFIG_FILE="mbedtls_config.h"',
+                    "-I" + str(tmp),
+                    "-I" + str(OTA),
+                    "-I" + str(COMMON),
+                    "-I" + str(sdk / "include"),
+                    "-c",
+                    str(source),
+                    "-o",
+                    str(obj),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
             )
             objects.append(str(obj))
 
         cls.binary = tmp / "ota_adapter_e2e"
         subprocess.run(
             [cc, *objects, "-o", str(cls.binary)],
-            check=True, capture_output=True, text=True,
+            check=True,
+            capture_output=True,
+            text=True,
         )
 
     def run_mode(self, *args):

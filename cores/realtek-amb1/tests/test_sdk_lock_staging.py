@@ -1,14 +1,13 @@
 """Exercise the family builder with disposable SDK files and queue mocks."""
 
 import ast
-from pathlib import Path
 import re
-from shutil import copyfile
 import subprocess
 import tempfile
 import unittest
 from os.path import isdir, join
-
+from pathlib import Path
+from shutil import copyfile
 
 ROOT = Path(__file__).resolve().parents[3]
 BUILDER = ROOT / "builder/family/realtek-amb1.py"
@@ -24,7 +23,7 @@ def make_sdk(root):
     position = None
     for line in PATCH.read_text().splitlines(keepends=True):
         if line.startswith("--- a/"):
-            current = line[len("--- a/"):].strip()
+            current = line[len("--- a/") :].strip()
             files[current] = []
             position = None
         elif line.startswith("@@ "):
@@ -71,10 +70,14 @@ class Env(dict):
         (root / "test.ld").write_text("/* linker fixture */\n")
 
     def BoardConfig(self):
-        return type("Board", (), {
-            "get": lambda _, key: self.board[key],
-            "update": lambda _, key, value: self.board.update({key: value}),
-        })()
+        return type(
+            "Board",
+            (),
+            {
+                "get": lambda _, key: self.board[key],
+                "update": lambda _, key, value: self.board.update({key: value}),
+            },
+        )()
 
     def GetProjectOption(self, key, default):
         assert key == "custom_amb1_flash_qualification" and default == "no"
@@ -82,7 +85,8 @@ class Env(dict):
 
     def subst(self, value):
         for key, path in {
-            "SDK_DIR": self.root / "sdk", "BUILD_DIR": self.root / "build",
+            "SDK_DIR": self.root / "sdk",
+            "BUILD_DIR": self.root / "build",
             "CORES_DIR": ROOT / "cores",
         }.items():
             value = value.replace("$" + key, str(path))
@@ -111,12 +115,23 @@ class Env(dict):
 
 def load_builder(env=None):
     tree = ast.parse(BUILDER.read_text())
-    tree.body = [node for node in tree.body if not isinstance(node, (ast.Import, ast.ImportFrom))
-                 and (env is not None or isinstance(node, ast.FunctionDef))]
-    namespace = dict(Path=Path, copyfile=copyfile, subprocess=subprocess,
-                     isdir=isdir, join=join, Environment=Env,
-                     PlatformBoardConfig=object, DefaultEnvironment=lambda: env,
-                     Builder=lambda **kwargs: kwargs)
+    tree.body = [
+        node
+        for node in tree.body
+        if not isinstance(node, (ast.Import, ast.ImportFrom))
+        and (env is not None or isinstance(node, ast.FunctionDef))
+    ]
+    namespace = dict(
+        Path=Path,
+        copyfile=copyfile,
+        subprocess=subprocess,
+        isdir=isdir,
+        join=join,
+        Environment=Env,
+        PlatformBoardConfig=object,
+        DefaultEnvironment=lambda: env,
+        Builder=lambda **kwargs: kwargs,
+    )
     exec(compile(tree, str(BUILDER), "exec"), namespace)
     return namespace
 
@@ -146,8 +161,11 @@ class SDKLockStagingTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 stage_lock(root / "sdk", root / "build", bad)
             source = root / "sdk/component/os/os_dep/device_lock.c"
-            source.write_text(source.read_text().replace(
-                '#include "osdep_service.h"', '#include "changed_context.h"'))
+            source.write_text(
+                source.read_text().replace(
+                    '#include "osdep_service.h"', '#include "changed_context.h"'
+                )
+            )
             changed = source.read_bytes()
             with self.assertRaises(RuntimeError):
                 stage_lock(root / "sdk", root / "build", PATCH)
@@ -167,15 +185,27 @@ class SDKLockStagingTests(unittest.TestCase):
                 self.assertEqual("amb1_image2_sdk_adapter" in libraries, enabled)
                 self.assertEqual("amb1_image2_sdk_lock" in libraries, enabled)
                 exclusions = libraries["amb1_osglue"]["srcs"]
-                self.assertEqual("-<component/os/os_dep/device_lock.c>" in exclusions, enabled)
+                self.assertEqual(
+                    "-<component/os/os_dep/device_lock.c>" in exclusions, enabled
+                )
                 macro = ("LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER", 1)
-                self.assertEqual(macro in env.queue.snapshot.get("CPPDEFINES", []), enabled)
+                self.assertEqual(
+                    macro in env.queue.snapshot.get("CPPDEFINES", []), enabled
+                )
                 if enabled:
-                    self.assertEqual(Path(env["CPPPATH"][0]), (
-                        root / "build/amb1_image2_sdk/component/os/os_dep/include").resolve())
-                    self.assertEqual(libraries["amb1_image2_sdk_adapter"]["base_dir"], str(OTA))
-                    self.assertEqual(libraries["amb1_image2_sdk_lock"]["srcs"],
-                                     ["+<component/os/os_dep/device_lock.c>"])
+                    self.assertEqual(
+                        Path(env["CPPPATH"][0]),
+                        (
+                            root / "build/amb1_image2_sdk/component/os/os_dep/include"
+                        ).resolve(),
+                    )
+                    self.assertEqual(
+                        libraries["amb1_image2_sdk_adapter"]["base_dir"], str(OTA)
+                    )
+                    self.assertEqual(
+                        libraries["amb1_image2_sdk_lock"]["srcs"],
+                        ["+<component/os/os_dep/device_lock.c>"],
+                    )
                 else:
                     self.assertFalse((root / "build/amb1_image2_sdk").exists())
                 for relative, original in originals.items():

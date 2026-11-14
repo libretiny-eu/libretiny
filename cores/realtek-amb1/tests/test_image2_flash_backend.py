@@ -1,14 +1,14 @@
 """Compile and fault-inject the actual injection-only C controller."""
+
 import pathlib
 import subprocess
 import tempfile
 import unittest
 
-
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 OTA = ROOT / "base/ota"
 
-HARNESS = r'''
+HARNESS = r"""
 #include "image2_flash_backend.h"
 #include <assert.h>
 #include <stdint.h>
@@ -222,7 +222,7 @@ int main(void) {
     transaction_integration();
     return 0;
 }
-'''
+"""
 
 
 class Image2FlashBackendTests(unittest.TestCase):
@@ -239,11 +239,23 @@ class Image2FlashBackendTests(unittest.TestCase):
             source.write_text(HARNESS)
             executable = path / "faults"
             subprocess.run(
-                ["cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-                 "-fsanitize=address,undefined", "-fno-omit-frame-pointer",
-                 "-I", str(OTA), str(source), str(OTA / "image2_flash_backend.c"),
-                 str(OTA / "image2_transaction.c"),
-                 "-o", str(executable)], check=True,
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-fsanitize=address,undefined",
+                    "-fno-omit-frame-pointer",
+                    "-I",
+                    str(OTA),
+                    str(source),
+                    str(OTA / "image2_flash_backend.c"),
+                    str(OTA / "image2_transaction.c"),
+                    "-o",
+                    str(executable),
+                ],
+                check=True,
             )
             subprocess.run([str(executable)], check=True)
 

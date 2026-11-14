@@ -4,11 +4,12 @@ Compile the adapter, patched actual SDK device_lock.c and verbatim actual SDK
 erase/burst function bodies. Mock only RTOS/hardware boundaries and SDK reads.
 Run: python3 -m unittest discover -s libretiny/cores/realtek-amb1/tests -p test_image2_sdk_adapter.py -v
 """
-from pathlib import Path
+
 import shutil
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
 import test_image2_sdk_lock_support as lock
 
@@ -189,19 +190,37 @@ class SDKAdapterTest(unittest.TestCase):
             work = Path(directory)
             (work / "main.c").write_text(
                 '#include "image2_sdk_adapter.h"\n#include <assert.h>\n'
-                'int main(void) { image2_flash_sdkops ops; '
-                'assert(!image2_sdk_adapter_bind(0, &ops)); '
-                'assert(!ops.ctx && !ops.program && !ops.erase_sector); return 0; }\n')
+                "int main(void) { image2_flash_sdkops ops; "
+                "assert(!image2_sdk_adapter_bind(0, &ops)); "
+                "assert(!ops.ctx && !ops.program && !ops.erase_sector); return 0; }\n"
+            )
             self.build(work, [BASE / "image2_sdk_adapter.c", work / "main.c"])
             subprocess.run([str(work / "test")], check=True)
 
     def build(self, work, sources, extra=()):
-        result = subprocess.run([
-            shutil.which("cc") or "cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-            "-Wno-unused-function", "-Wno-unused-parameter", "-I", str(work),
-            "-I", str(BASE), "-I", str(work / "component/os/os_dep/include"),
-            *extra, *map(str, sources), "-o", str(work / "test"),
-        ], text=True, capture_output=True)
+        result = subprocess.run(
+            [
+                shutil.which("cc") or "cc",
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-Wno-unused-function",
+                "-Wno-unused-parameter",
+                "-I",
+                str(work),
+                "-I",
+                str(BASE),
+                "-I",
+                str(work / "component/os/os_dep/include"),
+                *extra,
+                *map(str, sources),
+                "-o",
+                str(work / "test"),
+            ],
+            text=True,
+            capture_output=True,
+        )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_real_sdk_lock_erase_burst_with_private_wrapped_binding(self):
@@ -210,33 +229,71 @@ class SDKAdapterTest(unittest.TestCase):
             self.skipTest("installed SDK unavailable; set AMB1_SDK_ROOT")
         with tempfile.TemporaryDirectory(prefix="amb1-adapter-") as directory:
             work = Path(directory)
-            for relative in ("component/os/os_dep/device_lock.c",
-                             "component/os/os_dep/include/device_lock.h"):
+            for relative in (
+                "component/os/os_dep/device_lock.c",
+                "component/os/os_dep/include/device_lock.h",
+            ):
                 target = work / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_text((lock.SDK / relative).read_text())
-            result = subprocess.run(["patch", "--batch", "--fuzz=0", "-p1", "-i", str(lock.PATCH)],
-                                    cwd=work, text=True, capture_output=True)
+            result = subprocess.run(
+                ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(lock.PATCH)],
+                cwd=work,
+                text=True,
+                capture_output=True,
+            )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             (work / "osdep_service.h").write_text(lock.OSDEP)
             (work / "FreeRTOS.h").write_text("#define pdTRUE 1\n#define pdFALSE 0\n")
-            (work / "semphr.h").write_text('#include "osdep_service.h"\nint xSemaphoreTake(_mutex, unsigned int);\n')
-            (work / "task.h").write_text('typedef void *TaskHandle_t;\nTaskHandle_t xTaskGetCurrentTaskHandle(void);\n')
-            (work / "ameba_soc.h").write_text('int mock_ipsr(void);\n#define __get_IPSR mock_ipsr\n')
+            (work / "semphr.h").write_text(
+                '#include "osdep_service.h"\nint xSemaphoreTake(_mutex, unsigned int);\n'
+            )
+            (work / "task.h").write_text(
+                "typedef void *TaskHandle_t;\nTaskHandle_t xTaskGetCurrentTaskHandle(void);\n"
+            )
+            (work / "ameba_soc.h").write_text(
+                "int mock_ipsr(void);\n#define __get_IPSR mock_ipsr\n"
+            )
             (work / "flash_api.h").write_text(FLASH_HEADER)
             source = flash.read_text()
-            actual = function(source, "void flash_erase_sector(") + "\n" + function(source, "int flash_burst_write(")
+            actual = (
+                function(source, "void flash_erase_sector(")
+                + "\n"
+                + function(source, "int flash_burst_write(")
+            )
             # Mach-O ld has no GNU --wrap. Rename only the copied SDK definitions
             # to the linker-provided real-symbol names; adapter stays unchanged.
-            actual = actual.replace("void flash_erase_sector(", "void __real_flash_erase_sector(")
-            actual = actual.replace("int flash_burst_write(", "int __real_flash_burst_write(")
+            actual = actual.replace(
+                "void flash_erase_sector(", "void __real_flash_erase_sector("
+            )
+            actual = actual.replace(
+                "int flash_burst_write(", "int __real_flash_burst_write("
+            )
             mock_lock = lock.HARNESS.split("int main(")[0]
             (work / "main.c").write_text(mock_lock + HARDWARE + actual + MAIN)
-            self.build(work, [BASE / "image2_sdk_adapter.c", work / "component/os/os_dep/device_lock.c", work / "main.c"],
-                       ["-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1", "-Dprintf=mock_printf"])
-            for case in ("success", "readonly", "blankfail", "verifyfail", "retry",
-                         "retryexhausted", "readfail", "bounds", "erasebounds",
-                         "unapproved", "zero", "invalidpolicy"):
+            self.build(
+                work,
+                [
+                    BASE / "image2_sdk_adapter.c",
+                    work / "component/os/os_dep/device_lock.c",
+                    work / "main.c",
+                ],
+                ["-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1", "-Dprintf=mock_printf"],
+            )
+            for case in (
+                "success",
+                "readonly",
+                "blankfail",
+                "verifyfail",
+                "retry",
+                "retryexhausted",
+                "readfail",
+                "bounds",
+                "erasebounds",
+                "unapproved",
+                "zero",
+                "invalidpolicy",
+            ):
                 with self.subTest(case=case):
                     subprocess.run([str(work / "test"), case], check=True)
 

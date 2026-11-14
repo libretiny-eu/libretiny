@@ -6,7 +6,6 @@ import subprocess
 import tempfile
 import unittest
 
-
 CORES = pathlib.Path(__file__).resolve().parents[2]
 AMB1 = CORES / "realtek-amb1"
 
@@ -20,15 +19,13 @@ class CpuModelMacroTest(unittest.TestCase):
             with self.subTest(compiler=compiler), tempfile.TemporaryDirectory() as tmp:
                 directory = pathlib.Path(tmp)
                 (directory / "libretiny.h").write_text(
-                    '#include "lt_types.h"\n'
-                    "void lt_get_device_mac(uint8_t *mac);\n"
+                    '#include "lt_types.h"\n' "void lt_get_device_mac(uint8_t *mac);\n"
                 )
                 (directory / "sdk_private.h").write_text(
                     "uint32_t HalGetCpuClk(void);\n"
                 )
                 source = directory / ("test." + suffix)
-                source.write_text(
-                    r'''
+                source.write_text(r"""
 #include <assert.h>
 #include <string.h>
 /* Match AsyncTCP's SDK-before-Arduino include order. */
@@ -60,8 +57,7 @@ int main(void) {
     assert(lt_cpu_get_mac_id() == 0x123456);
     return 0;
 }
-'''
-                )
+""")
                 executable = directory / "test"
                 subprocess.run(
                     [

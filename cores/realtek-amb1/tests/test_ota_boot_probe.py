@@ -19,12 +19,12 @@ One scenario per process because the running-slot answer is latched.
 Run: python3 -m unittest discover -s libretiny/cores/realtek-amb1/tests \
         -p test_ota_boot_probe.py -v
 """
-from pathlib import Path
+
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 API = ROOT / "cores/realtek-amb1/base/api"
@@ -239,31 +239,51 @@ class OtaBootProbeTests(unittest.TestCase):
         (cls.work / "flash_api.h").write_text(FLASH_API_H)
         (cls.work / "harness.c").write_text(HARNESS)
         cls.binary = cls.work / "test"
-        result = subprocess.run([
-            cc, "-std=c11", "-Wall", "-Wextra", "-Werror",
-            "-I", str(cls.work), "-I", str(API),
-            str(SOURCE), str(cls.work / "harness.c"),
-            "-o", str(cls.binary),
-        ], text=True, capture_output=True)
+        result = subprocess.run(
+            [
+                cc,
+                "-std=c11",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-I",
+                str(cls.work),
+                "-I",
+                str(API),
+                str(SOURCE),
+                str(cls.work / "harness.c"),
+                "-o",
+                str(cls.binary),
+            ],
+            text=True,
+            capture_output=True,
+        )
         if result.returncode:
             raise AssertionError(result.stdout + result.stderr)
 
     def run_mode(self, mode):
-        result = subprocess.run([str(self.binary), mode], text=True,
-                                capture_output=True)
-        self.assertEqual(result.returncode, 0,
-                         f"{mode}: {result.stderr.strip()}")
+        result = subprocess.run(
+            [str(self.binary), mode], text=True, capture_output=True
+        )
+        self.assertEqual(result.returncode, 0, f"{mode}: {result.stderr.strip()}")
 
     # ------------------------------------------------------- slot selection
     def test_running_slot_follows_the_single_new_signature(self):
-        for mode in ("slot_a", "slot_b", "slot_a_erased_b",
-                     "slot_b_erased_a"):
+        for mode in ("slot_a", "slot_b", "slot_a_erased_b", "slot_b_erased_a"):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 
     def test_ambiguous_selector_states_fail_closed_to_slot_a(self):
-        for mode in ("both_new", "both_old", "erased", "garbage", "torn",
-                     "read_fail_a", "read_short", "read_error"):
+        for mode in (
+            "both_new",
+            "both_old",
+            "erased",
+            "garbage",
+            "torn",
+            "read_fail_a",
+            "read_short",
+            "read_error",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 

@@ -1,9 +1,9 @@
 """Host-only contract tests; no SDK, hardware, credentials or flash access."""
+
 import pathlib
 import subprocess
 import tempfile
 import unittest
-
 
 CORE = pathlib.Path(__file__).resolve().parents[1]
 
@@ -95,11 +95,24 @@ int main(void) {{
 }}
 """)
             executable = path / "test"
-            subprocess.run([
-                "cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-                "-I", str(path), str(path / "test.c"), "-o", str(executable),
-            ], check=True)
-            result = subprocess.run([str(executable)], check=True, capture_output=True, text=True)
+            subprocess.run(
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-I",
+                    str(path),
+                    str(path / "test.c"),
+                    "-o",
+                    str(executable),
+                ],
+                check=True,
+            )
+            result = subprocess.run(
+                [str(executable)], check=True, capture_output=True, text=True
+            )
             self.assertIn("read-only bench build", result.stdout)
             self.assertIn("denied erase", result.stdout)
             self.assertIn("denied SDK flash_stream_write", result.stdout)

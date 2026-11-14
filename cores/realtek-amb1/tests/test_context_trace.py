@@ -1,9 +1,9 @@
 """Compile the real context wrapper against host mocks; no hardware required."""
+
 import pathlib
 import subprocess
 import tempfile
 import unittest
-
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
@@ -13,7 +13,7 @@ class ContextTraceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="amb1-context-normal-") as directory:
             d = pathlib.Path(directory)
             source = '#include "' + str(ROOT / "base/fixups/context_trace.c") + '"\n'
-            source += '''
+            source += """
 #include <assert.h>
 static unsigned calls;
 void __real_vTaskSwitchContext(void) { calls++; }
@@ -22,12 +22,22 @@ int main(void) {
     assert(calls == 1);
     return 0;
 }
-'''
+"""
             (d / "test.c").write_text(source)
             for flags in ([], ["-DLT_AMB1_BRINGUP_DIAGNOSTICS=0"]):
                 subprocess.run(
-                    ["cc", "-std=c11", "-Wall", "-Wextra", "-Werror", *flags,
-                     str(d / "test.c"), "-o", str(d / "test")], check=True,
+                    [
+                        "cc",
+                        "-std=c11",
+                        "-Wall",
+                        "-Wextra",
+                        "-Werror",
+                        *flags,
+                        str(d / "test.c"),
+                        "-o",
+                        str(d / "test"),
+                    ],
+                    check=True,
                 )
                 subprocess.run([str(d / "test")], check=True)
 
@@ -48,7 +58,7 @@ typedef void *TaskHandle_t;
 TaskHandle_t xTaskGetCurrentTaskHandle(void);
 char *pcTaskGetTaskName(TaskHandle_t);
 """)
-            source = r'''
+            source = r"""
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -193,12 +203,23 @@ int main(void) {
     puts("context trace host checks passed");
     return 0;
 }
-'''.replace("CONTEXT_SOURCE", str(ROOT / "base/fixups/context_trace.c"))
+""".replace("CONTEXT_SOURCE", str(ROOT / "base/fixups/context_trace.c"))
             (d / "test.c").write_text(source)
             subprocess.run(
-                ["cc", "-std=c11", "-Wall", "-Wextra", "-Werror",
-                 "-DLT_AMB1_BRINGUP_DIAGNOSTICS=1", "-I", str(d),
-                 str(d / "test.c"), "-o", str(d / "test")], check=True,
+                [
+                    "cc",
+                    "-std=c11",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-DLT_AMB1_BRINGUP_DIAGNOSTICS=1",
+                    "-I",
+                    str(d),
+                    str(d / "test.c"),
+                    "-o",
+                    str(d / "test"),
+                ],
+                check=True,
             )
             subprocess.run([str(d / "test")], check=True)
 

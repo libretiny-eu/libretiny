@@ -4,24 +4,25 @@
 
 #define VERIFY_CHUNK 128u
 
-int amb1_preferences_flash_bind(amb1_preferences_flash_t *flash,
-	const amb1_preferences_flash_ops_t *ops, const amb1_preferences_flash_policy_t *policy) {
+int amb1_preferences_flash_bind(
+	amb1_preferences_flash_t *flash,
+	const amb1_preferences_flash_ops_t *ops,
+	const amb1_preferences_flash_policy_t *policy
+) {
 	unsigned i;
 	uint8_t nonzero = 0;
 	if (!flash)
 		return -1;
 	/* Copy first so rebinding from fields of the same instance is well-defined. */
 	if (ops && policy) {
-		amb1_preferences_flash_ops_t saved_ops = *ops;
+		amb1_preferences_flash_ops_t saved_ops		 = *ops;
 		amb1_preferences_flash_policy_t saved_policy = *policy;
 		memset(flash, 0, sizeof(*flash));
-		if (!saved_ops.read || !saved_ops.write || !saved_ops.erase ||
-		    !saved_ops.lock || !saved_ops.unlock ||
-		    !amb1_preferences_layout_reviewed(&saved_policy.review) ||
-		    saved_policy.fresh_snapshot_attested != 1 ||
-		    saved_policy.shared_controller_lock_attested != 1 ||
-		    (saved_policy.existing_flashdb_attested != 0 && saved_policy.existing_flashdb_attested != 1) ||
-		    (saved_policy.initial_format_approved != 0 && saved_policy.initial_format_approved != 1))
+		if (!saved_ops.read || !saved_ops.write || !saved_ops.erase || !saved_ops.lock || !saved_ops.unlock ||
+			!amb1_preferences_layout_reviewed(&saved_policy.review) || saved_policy.fresh_snapshot_attested != 1 ||
+			saved_policy.shared_controller_lock_attested != 1 ||
+			(saved_policy.existing_flashdb_attested != 0 && saved_policy.existing_flashdb_attested != 1) ||
+			(saved_policy.initial_format_approved != 0 && saved_policy.initial_format_approved != 1))
 			return -1;
 		for (i = 0; i < AMB1_PREF_SNAPSHOT_HASH_SIZE; ++i) {
 			nonzero |= saved_policy.expected_snapshot_hash[i];
@@ -30,9 +31,9 @@ int amb1_preferences_flash_bind(amb1_preferences_flash_t *flash,
 		}
 		if (!nonzero)
 			return -1;
-		flash->ops = saved_ops;
+		flash->ops	  = saved_ops;
 		flash->policy = saved_policy;
-		flash->bound = 1;
+		flash->bound  = 1;
 		return 0;
 	}
 	memset(flash, 0, sizeof(*flash));
@@ -41,10 +42,14 @@ int amb1_preferences_flash_bind(amb1_preferences_flash_t *flash,
 
 static int allowed(const amb1_preferences_flash_t *flash, long offset, size_t size, int erase) {
 	const uint32_t capacity = AMB1_PREF_KVS_END - AMB1_PREF_KVS_START;
-	return flash && flash->bound == 1 && offset >= 0 && (unsigned long)offset < capacity &&
-	       size && size <= capacity - (unsigned long)offset &&
-	       amb1_preferences_range_allowed(&flash->policy.review,
-	           AMB1_PREF_KVS_START + (uint32_t)offset, (uint32_t)size, erase);
+	return flash && flash->bound == 1 && offset >= 0 && (unsigned long)offset < capacity && size &&
+		   size <= capacity - (unsigned long)offset &&
+		   amb1_preferences_range_allowed(
+			   &flash->policy.review,
+			   AMB1_PREF_KVS_START + (uint32_t)offset,
+			   (uint32_t)size,
+			   erase
+		   );
 }
 
 static int writable(const amb1_preferences_flash_t *flash) {
@@ -64,15 +69,13 @@ int amb1_preferences_flash_read(amb1_preferences_flash_t *flash, long offset, vo
 	return result ? -1 : (int)size;
 }
 
-int amb1_preferences_flash_write(amb1_preferences_flash_t *flash, long offset,
-	const void *buffer, size_t size) {
+int amb1_preferences_flash_write(amb1_preferences_flash_t *flash, long offset, const void *buffer, size_t size) {
 	uint8_t old[VERIFY_CHUNK];
 	const uint8_t *data = buffer;
 	size_t pos, n, i;
 	uint32_t address;
 	int result = -1;
-	if (!buffer || !allowed(flash, offset, size, 0) || !writable(flash) ||
-	    flash->ops.lock(flash->ops.context))
+	if (!buffer || !allowed(flash, offset, size, 0) || !writable(flash) || flash->ops.lock(flash->ops.context))
 		return -1;
 	address = AMB1_PREF_KVS_START + (uint32_t)offset;
 	/* Check the whole request before programming any of it. */
@@ -87,8 +90,7 @@ int amb1_preferences_flash_write(amb1_preferences_flash_t *flash, long offset,
 	for (pos = 0; pos < size; pos += n) {
 		n = size - pos < sizeof(old) ? size - pos : sizeof(old);
 		if (flash->ops.write(flash->ops.context, address + (uint32_t)pos, data + pos, n) ||
-		    flash->ops.read(flash->ops.context, address + (uint32_t)pos, old, n) ||
-		    memcmp(old, data + pos, n))
+			flash->ops.read(flash->ops.context, address + (uint32_t)pos, old, n) || memcmp(old, data + pos, n))
 			goto done;
 	}
 	result = (int)size;

@@ -6,7 +6,6 @@ import subprocess
 import tempfile
 import unittest
 
-
 SOURCE = pathlib.Path(__file__).resolve().parents[1] / "base/fixups/boot_trace.c"
 
 
@@ -27,8 +26,10 @@ class BootTraceTests(unittest.TestCase):
             self.skipTest("host C compiler unavailable")
         source = SOURCE.read_text()
         helpers = source.split("/* BEGIN host-tested TCM diagnostics")[1]
-        helpers = helpers.split("*/", 1)[1].split("/* END host-tested TCM diagnostics.")[0]
-        harness = r'''
+        helpers = helpers.split("*/", 1)[1].split(
+            "/* END host-tested TCM diagnostics."
+        )[0]
+        harness = r"""
 #include <assert.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -50,8 +51,8 @@ static void DiagPrintf(const char *fmt, ...) {
     (void)fmt;
     lines++;
 }
-'''
-        cases = r'''
+"""
+        cases = r"""
 static void chunk(u32 a, u32 next, u32 size) {
     memory[(a - TR_TCM_START) / 4] = next;
     memory[(a - TR_TCM_START) / 4 + 1] = size;
@@ -130,15 +131,26 @@ int main(void) {
     assert(reads == 64 && lines == 32);
     return 0;
 }
-'''
+"""
         with tempfile.TemporaryDirectory(prefix="amb1-boot-trace-") as tmp:
             cfile = pathlib.Path(tmp) / "test.c"
             binary = pathlib.Path(tmp) / "test"
             cfile.write_text(harness + helpers + cases)
             subprocess.run(
-                [compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                 "-fsanitize=undefined", str(cfile), "-o", str(binary)],
-                check=True, capture_output=True, text=True,
+                [
+                    compiler,
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-fsanitize=undefined",
+                    str(cfile),
+                    "-o",
+                    str(binary),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
             )
             subprocess.run([str(binary)], check=True, capture_output=True, text=True)
 
@@ -146,7 +158,7 @@ int main(void) {
         compiler = shutil.which("cc")
         if compiler is None:
             self.skipTest("host C compiler unavailable")
-        stub = r'''
+        stub = r"""
 #include <stdint.h>
 typedef uint32_t u32;
 extern unsigned writes;
@@ -156,8 +168,8 @@ extern void record_write(u32 address, u32 offset, u32 value);
 #define configUSE_TIMERS 1
 #define configUSE_TRACE_FACILITY 1
 #define portUSING_MPU_WRAPPERS 0
-'''
-        harness = r'''
+"""
+        harness = r"""
 #include <assert.h>
 unsigned writes;
 void record_write(u32 address, u32 offset, u32 value) {
@@ -178,7 +190,7 @@ int main(void) {
     assert(writes == 1);
     return 0;
 }
-'''
+"""
         led = SOURCE.with_name("led_identify.c")
         with tempfile.TemporaryDirectory(prefix="amb1-boot-guards-") as tmp:
             root = pathlib.Path(tmp)
@@ -189,28 +201,56 @@ int main(void) {
                 args = [] if flag is None else [f"-DLT_AMB1_BRINGUP_DIAGNOSTICS={flag}"]
                 result = subprocess.run(
                     [compiler, "-E", "-P", "-I", tmp, *args, str(SOURCE)],
-                    check=True, capture_output=True, text=True,
+                    check=True,
+                    capture_output=True,
+                    text=True,
                 ).stdout
-                for forbidden in ("gpio_init(", "gpio_write(", "PC_0", "PC_2",
-                                  "lt_amb1_led_identify_step("):
+                for forbidden in (
+                    "gpio_init(",
+                    "gpio_write(",
+                    "PC_0",
+                    "PC_2",
+                    "lt_amb1_led_identify_step(",
+                ):
                     self.assertNotIn(forbidden, result)
                 if flag == 1:
-                    for diagnostic in ("xTimerCreate(", "uxTaskGetSystemState(",
-                                       "tr_dump_task(", "DiagPrintf("):
+                    for diagnostic in (
+                        "xTimerCreate(",
+                        "uxTaskGetSystemState(",
+                        "tr_dump_task(",
+                        "DiagPrintf(",
+                    ):
                         self.assertIn(diagnostic, result)
                 else:
-                    for diagnostic in ("xTimerCreate(", "uxTaskGetSystemState(",
-                                       "tr_dump_task(", "DiagPrintf(", "lt_amb1_log_puts("):
+                    for diagnostic in (
+                        "xTimerCreate(",
+                        "uxTaskGetSystemState(",
+                        "tr_dump_task(",
+                        "DiagPrintf(",
+                        "lt_amb1_log_puts(",
+                    ):
                         self.assertNotIn(diagnostic, result)
                     cfile = root / "test.c"
                     binary = root / "test"
                     cfile.write_text(result + led.read_text() + harness)
                     subprocess.run(
-                        [compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                         str(cfile), "-o", str(binary)],
-                        check=True, capture_output=True, text=True,
+                        [
+                            compiler,
+                            "-std=c99",
+                            "-Wall",
+                            "-Wextra",
+                            "-Werror",
+                            str(cfile),
+                            "-o",
+                            str(binary),
+                        ],
+                        check=True,
+                        capture_output=True,
+                        text=True,
                     )
-                    subprocess.run([str(binary)], check=True, capture_output=True, text=True)
+                    subprocess.run(
+                        [str(binary)], check=True, capture_output=True, text=True
+                    )
 
 
 if __name__ == "__main__":

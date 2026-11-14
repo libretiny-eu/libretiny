@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
 """Compile the proposed C region policy; synthetic tests, no SDK or flash I/O."""
+
 import ctypes
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 HEADER = Path(__file__).resolve().parents[1] / "base/port/preferences_layout.h"
 
 
 class Review(ctypes.Structure):
-    _fields_ = [(name, ctypes.c_int) for name in (
-        "reviewed_reservation", "snapshot_matches_review", "migrated_native_loader",
-        "normal_selector", "inactive_b_reservation", "admitted_images_exclude_kvs")]
+    _fields_ = [
+        (name, ctypes.c_int)
+        for name in (
+            "reviewed_reservation",
+            "snapshot_matches_review",
+            "migrated_native_loader",
+            "normal_selector",
+            "inactive_b_reservation",
+            "admitted_images_exclude_kvs",
+        )
+    ]
 
 
 class PreferencesLayoutTest(unittest.TestCase):
@@ -28,17 +36,37 @@ class PreferencesLayoutTest(unittest.TestCase):
         source = Path(cls.temp.name) / "policy.c"
         source.write_text(
             '#include "preferences_layout.h"\n'
-            'int region(const amb1_preferences_review_t *r, uint32_t a, uint32_t n, int e) '
-            '{ return amb1_preferences_range_allowed(r, a, n, e); }\n'
-            'int image(unsigned s, uint32_t n) '
-            '{ return amb1_preferences_image_allowed(s, n); }\n')
+            "int region(const amb1_preferences_review_t *r, uint32_t a, uint32_t n, int e) "
+            "{ return amb1_preferences_range_allowed(r, a, n, e); }\n"
+            "int image(unsigned s, uint32_t n) "
+            "{ return amb1_preferences_image_allowed(s, n); }\n"
+        )
         library = Path(cls.temp.name) / "policy.so"
-        subprocess.run([cc, "-std=c99", "-Wall", "-Wextra", "-Werror", "-shared",
-                        "-fPIC", "-I", str(HEADER.parent), str(source), "-o", str(library)],
-                       check=True, capture_output=True)
+        subprocess.run(
+            [
+                cc,
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-shared",
+                "-fPIC",
+                "-I",
+                str(HEADER.parent),
+                str(source),
+                "-o",
+                str(library),
+            ],
+            check=True,
+            capture_output=True,
+        )
         cls.lib = ctypes.CDLL(str(library))
-        cls.lib.region.argtypes = [ctypes.POINTER(Review), ctypes.c_uint32,
-                                   ctypes.c_uint32, ctypes.c_int]
+        cls.lib.region.argtypes = [
+            ctypes.POINTER(Review),
+            ctypes.c_uint32,
+            ctypes.c_uint32,
+            ctypes.c_int,
+        ]
         cls.lib.region.restype = ctypes.c_int
         cls.lib.image.argtypes = [ctypes.c_uint, ctypes.c_uint32]
         cls.lib.image.restype = ctypes.c_int
@@ -66,8 +94,12 @@ class PreferencesLayoutTest(unittest.TestCase):
         self.assertFalse(self.region(0x276FFF, 2))
 
     def test_no_implicit_erase_rounding(self):
-        for start, size in ((0x275001, 0xFFF), (0x275000, 1),
-                            (0x275FFF, 2), (0x276000, 0x1001)):
+        for start, size in (
+            (0x275001, 0xFFF),
+            (0x275000, 1),
+            (0x275FFF, 2),
+            (0x276000, 0x1001),
+        ):
             with self.subTest(start=start, size=size):
                 self.assertFalse(self.region(start, size, True))
         self.assertTrue(self.region(0x275001, 0xFFF))
@@ -77,13 +109,21 @@ class PreferencesLayoutTest(unittest.TestCase):
         # original GE OTA and all still-unassigned upper-flash sectors.
         for start in range(0, 0x800000, 0x1000):
             with self.subTest(start=hex(start)):
-                self.assertEqual(bool(self.region(start, 0x1000, True)),
-                                 start in (0x275000, 0x276000))
+                self.assertEqual(
+                    bool(self.region(start, 0x1000, True)),
+                    start in (0x275000, 0x276000),
+                )
 
     def test_empty_overflow_and_boundary_crossing(self):
-        for start, size in ((0x275000, 0), (0x274FFF, 2), (0x274000, 0x4000),
-                            (0x277000, 1), (0xFFFFFFFF, 2),
-                            (0x275000, 0xFFFFFFFF), (0, 0xFFFFFFFF)):
+        for start, size in (
+            (0x275000, 0),
+            (0x274FFF, 2),
+            (0x274000, 0x4000),
+            (0x277000, 1),
+            (0xFFFFFFFF, 2),
+            (0x275000, 0xFFFFFFFF),
+            (0, 0xFFFFFFFF),
+        ):
             with self.subTest(start=start, size=size):
                 self.assertFalse(self.region(start, size))
 

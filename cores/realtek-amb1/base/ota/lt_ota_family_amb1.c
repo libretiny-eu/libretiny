@@ -49,8 +49,8 @@
 #define AMB1_SDRAM_END	0x30200000u
 
 #define AMB1_UF2_BLOCK_SIZE 512u
-#define AMB1_DATA_BLOCK	    256u
-#define AMB1_MIN_IMAGE	    42u
+#define AMB1_DATA_BLOCK		256u
+#define AMB1_MIN_IMAGE		42u
 
 enum {
 	AMB1_STATE_UNUSED = 0,
@@ -88,7 +88,8 @@ __attribute__((weak)) const image2_flash_sdkops *lt_ota_family_amb1_sdkops(void)
 const int lt_ota_family_amb1_anchor = 0;
 
 static int round_extent(uint32_t size, uint32_t *end) {
-	if (size > UINT32_MAX - (AMB1_SECTOR_SIZE - 1u)) return 0;
+	if (size > UINT32_MAX - (AMB1_SECTOR_SIZE - 1u))
+		return 0;
 	*end = ((size + AMB1_SECTOR_SIZE - 1u) / AMB1_SECTOR_SIZE) * AMB1_SECTOR_SIZE;
 	return 1;
 }
@@ -98,33 +99,36 @@ static int round_extent(uint32_t size, uint32_t *end) {
 static int build_config(uint32_t image_size, unsigned running) {
 	image2_range target;
 	uint32_t rounded;
-	if (running > 1) return 0;
+	if (running > 1)
+		return 0;
 	target.start = running ? AMB1_SLOT_A_START : AMB1_SLOT_B_START;
-	target.end	= running ? AMB1_SLOT_A_END : AMB1_SLOT_B_END;
-	if (!round_extent(image_size, &rounded)) return 0;
-	if (rounded > target.end - target.start) return 0;
+	target.end	 = running ? AMB1_SLOT_A_END : AMB1_SLOT_B_END;
+	if (!round_extent(image_size, &rounded))
+		return 0;
+	if (rounded > target.end - target.start)
+		return 0;
 
 	memset(&amb1_config, 0, sizeof(amb1_config));
-	amb1_config.layout.flash_size	= AMB1_FLASH_SIZE;
-	amb1_config.layout.sector_size	= AMB1_SECTOR_SIZE;
-	amb1_config.layout.slots[0]		= (image2_range){AMB1_SLOT_A_START, AMB1_SLOT_A_END};
-	amb1_config.layout.slots[1]		= (image2_range){AMB1_SLOT_B_START, AMB1_SLOT_B_END};
-	amb1_config.layout.running_slot = running;
-	amb1_config.layout.reviewed		= target;
+	amb1_config.layout.flash_size		   = AMB1_FLASH_SIZE;
+	amb1_config.layout.sector_size		   = AMB1_SECTOR_SIZE;
+	amb1_config.layout.slots[0]			   = (image2_range){AMB1_SLOT_A_START, AMB1_SLOT_A_END};
+	amb1_config.layout.slots[1]			   = (image2_range){AMB1_SLOT_B_START, AMB1_SLOT_B_END};
+	amb1_config.layout.running_slot		   = running;
+	amb1_config.layout.reviewed			   = target;
 	amb1_config.layout.protected_ranges[0] = (image2_range){AMB1_KVS_START, AMB1_KVS_END};
 	amb1_config.layout.protected_ranges[1] = (image2_range){AMB1_BOOT_START, AMB1_BOOT_END};
-	amb1_config.layout.protected_count = 2;
-	amb1_config.layout.sram_base  = AMB1_SRAM_BASE;
-	amb1_config.layout.sram_end	  = AMB1_SRAM_END;
-	amb1_config.layout.sdram_base = AMB1_SDRAM_BASE;
-	amb1_config.layout.sdram_end  = AMB1_SDRAM_END;
-	amb1_config.layout.reviewed_layout = 1;
-	amb1_config.layout.normal_selector = 1;
+	amb1_config.layout.protected_count	   = 2;
+	amb1_config.layout.sram_base		   = AMB1_SRAM_BASE;
+	amb1_config.layout.sram_end			   = AMB1_SRAM_END;
+	amb1_config.layout.sdram_base		   = AMB1_SDRAM_BASE;
+	amb1_config.layout.sdram_end		   = AMB1_SDRAM_END;
+	amb1_config.layout.reviewed_layout	   = 1;
+	amb1_config.layout.normal_selector	   = 1;
 
-	amb1_config.extent.start = target.start;
-	amb1_config.extent.end	 = target.start + rounded;
-	amb1_config.image_size	 = image_size;
-	amb1_config.page_size	 = AMB1_PAGE_SIZE;
+	amb1_config.extent.start		= target.start;
+	amb1_config.extent.end			= target.start + rounded;
+	amb1_config.image_size			= image_size;
+	amb1_config.page_size			= AMB1_PAGE_SIZE;
 	amb1_config.allow_source_demote = 1;
 	return 1;
 }
@@ -133,9 +137,11 @@ static int build_config(uint32_t image_size, unsigned running) {
  * OTA_PART_INFO and BINPATCH steps, so it never trusts UF2 partition tags. */
 static int in_inactive_slot(uint32_t address, uint32_t length) {
 	image2_range target;
-	if (amb1_running_slot > 1) return 0;
+	if (amb1_running_slot > 1)
+		return 0;
 	target = amb1_config.layout.slots[1u - amb1_running_slot];
-	if (!length || address < target.start || address > target.end) return 0;
+	if (!length || address < target.start || address > target.end)
+		return 0;
 	return length <= target.end - address;
 }
 
@@ -145,24 +151,28 @@ lt_ota_family_result_t lt_ota_family_begin(lt_ota_ctx_t *ctx, size_t size) {
 	unsigned running;
 	uint32_t image_size;
 
-	if (amb1_state != AMB1_STATE_UNUSED) return UF2_ERR_WRITE_FAILED;
+	if (amb1_state != AMB1_STATE_UNUSED)
+		return UF2_ERR_WRITE_FAILED;
 	amb1_state = AMB1_STATE_ABORTED; /* consume the boot latch before any exit */
-	if (!ctx) return UF2_ERR_WRITE_FAILED;
+	if (!ctx)
+		return UF2_ERR_WRITE_FAILED;
 
 	ops = lt_ota_family_amb1_sdkops();
-	if (!ops) return UF2_ERR_WRITE_FAILED;
+	if (!ops)
+		return UF2_ERR_WRITE_FAILED;
 
 	/* Total UF2 size: a 512-byte header plus a whole number of 512-byte
 	 * blocks. uf2tool emits 256-byte data payloads per block, so the exact
 	 * image length is (blocks - 1) * 256, NOT size - 512. */
-	if (size > (size_t)UINT32_MAX ||
-	    size < (size_t)AMB1_UF2_BLOCK_SIZE + AMB1_MIN_IMAGE ||
-	    size % AMB1_UF2_BLOCK_SIZE) return UF2_ERR_WRITE_FAILED;
+	if (size > (size_t)UINT32_MAX || size < (size_t)AMB1_UF2_BLOCK_SIZE + AMB1_MIN_IMAGE || size % AMB1_UF2_BLOCK_SIZE)
+		return UF2_ERR_WRITE_FAILED;
 	image_size = (uint32_t)((size / AMB1_UF2_BLOCK_SIZE) - 1u) * AMB1_DATA_BLOCK;
 
 	running = lt_ota_dual_get_current();
-	if (running > 1) return UF2_ERR_WRITE_FAILED;
-	if (!build_config(image_size, running)) return UF2_ERR_WRITE_FAILED;
+	if (running > 1)
+		return UF2_ERR_WRITE_FAILED;
+	if (!build_config(image_size, running))
+		return UF2_ERR_WRITE_FAILED;
 
 	amb1_running_slot = running; /* frozen for the rest of this boot */
 	amb1_image_size	  = image_size;
@@ -171,13 +181,11 @@ lt_ota_family_result_t lt_ota_family_begin(lt_ota_ctx_t *ctx, size_t size) {
 	amb1_next_seq	  = 1;
 
 	amb1_sdkops = *ops;
-	if (!image2_integrity_init(&amb1_integrity, image_size) ||
-	    !image2_integrity_callbacks(&amb1_integrity, &crypto)) {
+	if (!image2_integrity_init(&amb1_integrity, image_size) || !image2_integrity_callbacks(&amb1_integrity, &crypto)) {
 		image2_integrity_cleanup(&amb1_integrity);
 		return UF2_ERR_WRITE_FAILED;
 	}
-	if (!image2_session_begin(&amb1_session, &amb1_boot, &amb1_config,
-							  &amb1_sdkops, &crypto, running)) {
+	if (!image2_session_begin(&amb1_session, &amb1_boot, &amb1_config, &amb1_sdkops, &crypto, running)) {
 		image2_integrity_cleanup(&amb1_integrity);
 		return UF2_ERR_WRITE_FAILED;
 	}
@@ -186,13 +194,14 @@ lt_ota_family_result_t lt_ota_family_begin(lt_ota_ctx_t *ctx, size_t size) {
 	return LT_OTA_FAMILY_HANDLED;
 }
 
-lt_ota_family_result_t lt_ota_family_write_block(lt_ota_ctx_t *ctx,
-												 const uf2_block_t *block) {
+lt_ota_family_result_t lt_ota_family_write_block(lt_ota_ctx_t *ctx, const uf2_block_t *block) {
 	uint32_t address;
 
 	(void)ctx;
-	if (amb1_state != AMB1_STATE_STAGING) return UF2_ERR_WRITE_FAILED;
-	if (!block) goto fail;
+	if (amb1_state != AMB1_STATE_STAGING)
+		return UF2_ERR_WRITE_FAILED;
+	if (!block)
+		goto fail;
 
 	/* The common path only delivers main-flash blocks with data, but the
 	 * family owns the decision once begin() returned HANDLED. */
@@ -204,14 +213,12 @@ lt_ota_family_result_t lt_ota_family_write_block(lt_ota_ctx_t *ctx,
 		amb1_state = AMB1_STATE_ABORTED;
 		return UF2_ERR_WRITE_LENGTH;
 	}
-	if (block->block_count != amb1_total_blocks ||
-		block->block_seq != amb1_next_seq ||
-		block->addr != amb1_staged) {
+	if (block->block_count != amb1_total_blocks || block->block_seq != amb1_next_seq || block->addr != amb1_staged) {
 		amb1_state = AMB1_STATE_ABORTED;
 		return UF2_ERR_SEQ_MISMATCH;
 	}
-	if (amb1_staged > amb1_image_size ||
-		block->len > amb1_image_size - amb1_staged) goto fail;
+	if (amb1_staged > amb1_image_size || block->len > amb1_image_size - amb1_staged)
+		goto fail;
 
 	/* Map the image-relative UF2 address into the reviewed inactive slot and
 	 * enforce the allowlist independently of any UF2 partition metadata. */
@@ -234,7 +241,8 @@ fail:
 
 lt_ota_family_result_t lt_ota_family_end(lt_ota_ctx_t *ctx) {
 	(void)ctx;
-	if (amb1_state != AMB1_STATE_STAGING) return UF2_ERR_WRITE_FAILED;
+	if (amb1_state != AMB1_STATE_STAGING)
+		return UF2_ERR_WRITE_FAILED;
 	if (amb1_staged != amb1_image_size) {
 		amb1_state = AMB1_STATE_ABORTED;
 		return UF2_ERR_WRITE_FAILED;
@@ -260,8 +268,7 @@ void lt_ota_family_abort(lt_ota_ctx_t *ctx) {
 	/* Idempotent, and never runs after a successful end(). The state may
 	 * already be ABORTED after a rejected block or failed end; cleanup still
 	 * runs exactly once so a live session lock or hash context is released. */
-	if (amb1_state == AMB1_STATE_UNUSED ||
-		amb1_state == AMB1_STATE_FINISHED || amb1_aborted)
+	if (amb1_state == AMB1_STATE_UNUSED || amb1_state == AMB1_STATE_FINISHED || amb1_aborted)
 		return;
 	amb1_aborted = 1;
 	amb1_state	 = AMB1_STATE_ABORTED;

@@ -6,12 +6,11 @@ Set UF2OTA_DIR to a local library-uf2ota 5.0.0 package if not installed normally
 """
 
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 COMMON = ROOT / "cores/common"
@@ -218,48 +217,122 @@ class UpdateActivationTests(unittest.TestCase):
         pkg = next((p for p in candidates if (p / "src/uf2ota.c").is_file()), None)
         if pkg is None:
             raise unittest.SkipTest("set UF2OTA_DIR to installed library-uf2ota 5.0.0")
-        if "#define UF2OTA_VERSION 50000" not in (pkg / "include/uf2ota/uf2types.h").read_text():
+        if (
+            "#define UF2OTA_VERSION 50000"
+            not in (pkg / "include/uf2ota/uf2types.h").read_text()
+        ):
             raise unittest.SkipTest("host fixture supports UF2OTA_VERSION 50000 only")
         cls.temp = tempfile.TemporaryDirectory(prefix="update-activation-")
         cls.addClassCleanup(cls.temp.cleanup)
         tmp = Path(cls.temp.name)
         for name, content in {
-            "libretiny.h": LIBRETINY, "Arduino.h": ARDUINO, "MD5.h": MD5,
-            "fal.h": FAL, "parser.c": PARSER, "harness.cpp": HARNESS,
+            "libretiny.h": LIBRETINY,
+            "Arduino.h": ARDUINO,
+            "MD5.h": MD5,
+            "fal.h": FAL,
+            "parser.c": PARSER,
+            "harness.cpp": HARNESS,
         }.items():
             (tmp / name).write_text(content)
-        includes = ["-I" + str(p) for p in (tmp, COMMON / "base/api", UPDATE, pkg / "include")]
+        includes = [
+            "-I" + str(p) for p in (tmp, COMMON / "base/api", UPDATE, pkg / "include")
+        ]
         objects = []
-        for i, source in enumerate((COMMON / "base/api/lt_ota.c", pkg / "src/uf2ota.c", tmp / "parser.c")):
+        for i, source in enumerate(
+            (COMMON / "base/api/lt_ota.c", pkg / "src/uf2ota.c", tmp / "parser.c")
+        ):
             obj = tmp / (str(i) + ".o")
-            defines = (["-Duf2_ctx_free=real_uf2_ctx_free", "-Duf2_info_free=real_uf2_info_free"]
-                       if source == pkg / "src/uf2ota.c" else [])
-            subprocess.run([cc, "-std=c11", *defines, *includes, "-c", str(source), "-o", str(obj)], check=True, capture_output=True)
+            defines = (
+                [
+                    "-Duf2_ctx_free=real_uf2_ctx_free",
+                    "-Duf2_info_free=real_uf2_info_free",
+                ]
+                if source == pkg / "src/uf2ota.c"
+                else []
+            )
+            subprocess.run(
+                [
+                    cc,
+                    "-std=c11",
+                    *defines,
+                    *includes,
+                    "-c",
+                    str(source),
+                    "-o",
+                    str(obj),
+                ],
+                check=True,
+                capture_output=True,
+            )
             objects.append(str(obj))
         cls.binary = tmp / "activation"
-        subprocess.run([cxx, "-std=c++11", *includes, str(UPDATE / "Update.cpp"),
-                        str(UPDATE / "UpdateUtil.cpp"), str(tmp / "harness.cpp"),
-                        *objects, "-o", str(cls.binary)], check=True, capture_output=True)
+        subprocess.run(
+            [
+                cxx,
+                "-std=c++11",
+                *includes,
+                str(UPDATE / "Update.cpp"),
+                str(UPDATE / "UpdateUtil.cpp"),
+                str(tmp / "harness.cpp"),
+                *objects,
+                "-o",
+                str(cls.binary),
+            ],
+            check=True,
+            capture_output=True,
+        )
         (tmp / "sdk_private.h").write_text(
             "#define UPG_STATE_DOWNLOAD_ING 1\n#define UPG_STATE_DOWNLOAD_OK 2\n"
-            "#define FLASH_OTA_OFFSET 0\nvoid ln_nvds_set_ota_upg_state(int);\n")
+            "#define FLASH_OTA_OFFSET 0\nvoid ln_nvds_set_ota_upg_state(int);\n"
+        )
         (tmp / "ota_image.h").write_text(
             "typedef int image_hdr_t;\n#define OTA_ERR_NONE 0\n"
             "static inline int image_header_fast_read(int o, image_hdr_t *h) { return 0; }\n"
             "static inline int image_header_verify(image_hdr_t *h) { return 0; }\n"
-            "static inline int image_body_verify(int o, image_hdr_t *h) { return 0; }\n")
+            "static inline int image_body_verify(int o, image_hdr_t *h) { return 0; }\n"
+        )
         ln_obj = tmp / "ln.o"
-        subprocess.run([cc, "-std=c11", *includes, "-include", "lt_ota.h", "-c",
-                        str(ROOT / "cores/lightning-ln882h/base/api/lt_ota.c"),
-                        "-o", str(ln_obj)], check=True, capture_output=True)
+        subprocess.run(
+            [
+                cc,
+                "-std=c11",
+                *includes,
+                "-include",
+                "lt_ota.h",
+                "-c",
+                str(ROOT / "cores/lightning-ln882h/base/api/lt_ota.c"),
+                "-o",
+                str(ln_obj),
+            ],
+            check=True,
+            capture_output=True,
+        )
         cls.ln_binary = tmp / "ln-activation"
-        subprocess.run([cxx, "-std=c++11", "-DLN_FAMILY", *includes,
-                        str(UPDATE / "Update.cpp"), str(UPDATE / "UpdateUtil.cpp"),
-                        str(tmp / "harness.cpp"), *objects, str(ln_obj),
-                        "-o", str(cls.ln_binary)], check=True, capture_output=True)
+        subprocess.run(
+            [
+                cxx,
+                "-std=c++11",
+                "-DLN_FAMILY",
+                *includes,
+                str(UPDATE / "Update.cpp"),
+                str(UPDATE / "UpdateUtil.cpp"),
+                str(tmp / "harness.cpp"),
+                *objects,
+                str(ln_obj),
+                "-o",
+                str(cls.ln_binary),
+            ],
+            check=True,
+            capture_output=True,
+        )
 
     def run_case(self, mode, binary=None):
-        result = subprocess.run([str(binary or self.binary), mode], check=True, capture_output=True, text=True)
+        result = subprocess.run(
+            [str(binary or self.binary), mode],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         values = tuple(map(int, result.stdout.split()))
         releases = 2 if mode == "restart" else 1
         self.assertEqual(values[4:], (releases, releases), mode)

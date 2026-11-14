@@ -18,12 +18,12 @@ One scenario per process because the binding latches one result per boot.
 Run: python3 -m unittest discover -s libretiny/cores/realtek-amb1/tests \
         -p test_ota_family_amb1_sdk.py -v
 """
-from pathlib import Path
+
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "cores/realtek-amb1/base/ota"
@@ -399,15 +399,25 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
         (work / "harness.c").write_text(HARNESS)
 
         common = [
-            cc, "-std=c99", "-Wall", "-Wextra", "-Werror",
-            "-Wno-unused-function", "-Wno-unused-parameter",
-            "-I", str(work), "-I", str(BASE),
+            cc,
+            "-std=c99",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-Wno-unused-function",
+            "-Wno-unused-parameter",
+            "-I",
+            str(work),
+            "-I",
+            str(BASE),
         ]
         enabled = [
             "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
             str(BASE / "image2_sdk_adapter.c"),
-            str(SDK_SOURCE), str(work / "harness.c"),
-            "-o", str(work / "test"),
+            str(SDK_SOURCE),
+            str(work / "harness.c"),
+            "-o",
+            str(work / "test"),
         ]
         result = subprocess.run([*common, *enabled], text=True, capture_output=True)
         if result.returncode:
@@ -420,29 +430,39 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
             '#include "lt_ota_family_amb1.h"\n'
             '#include "lt_ota_family_amb1_sdk.h"\n'
             '#include "image2_sdk_adapter.h"\n'
-            '#include <assert.h>\n'
-            'int main(void) { image2_flash_sdkops ops; '
-            'assert(lt_ota_family_amb1_sdk_prepare() == 0); '
-            'assert(lt_ota_family_amb1_sdkops() == NULL); '
-            'assert(!image2_sdk_adapter_bind(0, &ops)); return 0; }\n'
+            "#include <assert.h>\n"
+            "int main(void) { image2_flash_sdkops ops; "
+            "assert(lt_ota_family_amb1_sdk_prepare() == 0); "
+            "assert(lt_ota_family_amb1_sdkops() == NULL); "
+            "assert(!image2_sdk_adapter_bind(0, &ops)); return 0; }\n"
         )
         (work / "off.c").write_text(off_main)
         result = subprocess.run(
-            [*common, str(BASE / "image2_sdk_adapter.c"), str(SDK_SOURCE),
-             str(work / "off.c"), "-o", str(work / "test_off")],
-            text=True, capture_output=True,
+            [
+                *common,
+                str(BASE / "image2_sdk_adapter.c"),
+                str(SDK_SOURCE),
+                str(work / "off.c"),
+                "-o",
+                str(work / "test_off"),
+            ],
+            text=True,
+            capture_output=True,
         )
         if result.returncode:
             raise AssertionError(result.stdout + result.stderr)
 
     def run_mode(self, mode):
-        result = subprocess.run([str(self.binary), mode], text=True, capture_output=True)
+        result = subprocess.run(
+            [str(self.binary), mode], text=True, capture_output=True
+        )
         self.assertEqual(result.returncode, 0, result.stderr.strip())
 
     # ------------------------------------------------------- fail-closed gates
     def test_off_build_returns_null_without_sdk_symbols(self):
-        result = subprocess.run([str(self.work / "test_off")], text=True,
-                                capture_output=True)
+        result = subprocess.run(
+            [str(self.work / "test_off")], text=True, capture_output=True
+        )
         self.assertEqual(result.returncode, 0, result.stderr.strip())
 
     def test_prepare_is_idempotent(self):
@@ -456,8 +476,12 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
         self.run_mode("boot_oob")
 
     def test_selector_evidence_must_match(self):
-        for mode in ("evidence_running", "evidence_running_old",
-                     "evidence_target", "evidence_both_new"):
+        for mode in (
+            "evidence_running",
+            "evidence_running_old",
+            "evidence_target",
+            "evidence_both_new",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 
@@ -477,14 +501,24 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
         self.run_mode("slot_a_target")
 
     def test_running_slot_boot_and_kvs_are_denied(self):
-        for mode in ("deny_running", "deny_program_running", "deny_boot",
-                     "deny_kvs", "slot_a_deny_running", "slot_a_deny_boot"):
+        for mode in (
+            "deny_running",
+            "deny_program_running",
+            "deny_boot",
+            "deny_kvs",
+            "slot_a_deny_running",
+            "slot_a_deny_boot",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 
     def test_demote_is_a_separate_after_staging_capability(self):
-        for mode in ("demote", "demote_no_stage", "demote_target_missing",
-                     "slot_a_demote"):
+        for mode in (
+            "demote",
+            "demote_no_stage",
+            "demote_target_missing",
+            "slot_a_demote",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 
@@ -510,16 +544,32 @@ class OtaFamilyAmb1SDKTests(unittest.TestCase):
             self.skipTest("nm unavailable")
         obj = self.work / "sdk.o"
         cc = shutil.which("cc")
-        result = subprocess.run([
-            cc, "-std=c99", "-Wall", "-Wextra", "-Werror",
-            "-Wno-unused-function", "-Wno-unused-parameter",
-            "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
-            "-I", str(self.work), "-I", str(BASE),
-            "-c", str(SDK_SOURCE), "-o", str(obj),
-        ], text=True, capture_output=True)
+        result = subprocess.run(
+            [
+                cc,
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-Wno-unused-function",
+                "-Wno-unused-parameter",
+                "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
+                "-I",
+                str(self.work),
+                "-I",
+                str(BASE),
+                "-c",
+                str(SDK_SOURCE),
+                "-o",
+                str(obj),
+            ],
+            text=True,
+            capture_output=True,
+        )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        symbols = subprocess.run([nm, "-g", str(obj)], text=True,
-                                 capture_output=True, check=True).stdout
+        symbols = subprocess.run(
+            [nm, "-g", str(obj)], text=True, capture_output=True, check=True
+        ).stdout
         self.assertIn("lt_ota_family_amb1_sdk_anchor", symbols)
         self.assertIn("lt_ota_family_amb1_sdkops", symbols)
 

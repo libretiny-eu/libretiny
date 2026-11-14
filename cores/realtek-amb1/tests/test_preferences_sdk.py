@@ -1,15 +1,15 @@
 """Host-only tests of the actual KVS bridge with SDK stubs; no hardware I/O."""
-from pathlib import Path
+
 import json
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PORT = ROOT / "cores/realtek-amb1/base/port"
-STUB = r'''
+STUB = r"""
 #ifndef SDK_STUB_H
 #define SDK_STUB_H
 #include <stdint.h>
@@ -27,8 +27,8 @@ int device_mutex_try_lock(int);
 void device_mutex_unlock(int);
 int flash_stream_read(flash_t *, uint32_t, uint32_t, uint8_t *);
 #endif
-'''
-HARNESS = r'''
+"""
+HARNESS = r"""
 #include <assert.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
 #endif
     return 0;
 }
-'''
+"""
 
 
 class PreferencesSDKTests(unittest.TestCase):
@@ -202,31 +202,59 @@ class PreferencesSDKTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="preferences-sdk-") as temp:
             temp = Path(temp)
             (temp / "sdk_stub.h").write_text(STUB)
-            for name in ("ameba_soc.h", "flash_api.h", "device_lock.h", "FreeRTOS.h", "task.h"):
+            for name in (
+                "ameba_soc.h",
+                "flash_api.h",
+                "device_lock.h",
+                "FreeRTOS.h",
+                "task.h",
+            ):
                 (temp / name).write_text('#include "sdk_stub.h"\n')
             (temp / "main.c").write_text(HARNESS)
             for enabled in (False, True):
                 output = temp / ("enabled" if enabled else "default")
-                command = [cc, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                           "-I", str(PORT), "-I", str(temp)]
+                command = [
+                    cc,
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-I",
+                    str(PORT),
+                    "-I",
+                    str(temp),
+                ]
                 if enabled:
                     command += ["-DLT_AMB1_EXPERIMENTAL_KVS=1"]
-                command += [str(PORT / "preferences_sdk.c"), str(temp / "main.c"),
-                            "-o", str(output)]
+                command += [
+                    str(PORT / "preferences_sdk.c"),
+                    str(temp / "main.c"),
+                    "-o",
+                    str(output),
+                ]
                 # Default-off must link without even the bridge or SDK symbols.
                 if enabled:
                     command += [str(PORT / "preferences_flash.c")]
                 subprocess.run(command, check=True, capture_output=True, text=True)
                 for mode in (0, 1, 2) if enabled else (0,):
-                    subprocess.run([str(output), str(mode)], check=True, capture_output=True, text=True)
+                    subprocess.run(
+                        [str(output), str(mode)],
+                        check=True,
+                        capture_output=True,
+                        text=True,
+                    )
 
     def test_reserved_board_geometry(self):
         board = json.loads((ROOT / "boards/wcata007-rtl8711am-8mb.json").read_text())
         self.assertEqual(board["build"]["variant"], "generic-rtl8711am-8mb")
-        self.assertEqual(board["upload"]["maximum_size"], 0xfe000)
-        expected = {"boot": (0, 0xb000), "ota1": (0xb000, 0x10b000),
-                    "ota2": (0x177000, 0x275000), "kvs": (0x275000, 0x277000),
-                    "system": (0x2e3000, 0x800000)}
+        self.assertEqual(board["upload"]["maximum_size"], 0xFE000)
+        expected = {
+            "boot": (0, 0xB000),
+            "ota1": (0xB000, 0x10B000),
+            "ota2": (0x177000, 0x275000),
+            "kvs": (0x275000, 0x277000),
+            "system": (0x2E3000, 0x800000),
+        }
         for name, extent in expected.items():
             start, length = (int(x, 16) for x in board["flash"][name].split("+"))
             self.assertEqual((start, start + length), extent)

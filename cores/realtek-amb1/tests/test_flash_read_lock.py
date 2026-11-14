@@ -1,9 +1,9 @@
 """Compile the normal read paths against a non-recursive SDK lock mock."""
+
 import pathlib
 import subprocess
 import tempfile
 import unittest
-
 
 CORE = pathlib.Path(__file__).resolve().parents[1]
 
@@ -132,11 +132,22 @@ int main(void) {{
 }}
 """)
             executable = path / "test"
-            subprocess.run([
-                "cc", "-std=c99", "-Wall", "-Wextra", "-Werror",
-                "-Wno-unused-parameter", "-I", str(path), str(path / "test.c"),
-                "-o", str(executable),
-            ], check=True)
+            subprocess.run(
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-Wno-unused-parameter",
+                    "-I",
+                    str(path),
+                    str(path / "test.c"),
+                    "-o",
+                    str(executable),
+                ],
+                check=True,
+            )
             subprocess.run([str(executable)], check=True)
 
     def test_sdk_int_id(self):

@@ -1,11 +1,11 @@
 /* Ameba1 defaults to read-only; experimental KVS uses a separately bound bridge. */
+#include <device_lock.h>
 #include <libretiny.h>
 #include <sdk_private.h>
-#include <device_lock.h>
 
+#include "preferences_sdk.h"
 #include <fal.h>
 #include <limits.h>
-#include "preferences_sdk.h"
 
 #if defined(LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER) && LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER
 #include "lt_ota_family_amb1_sdk.h"
@@ -19,14 +19,12 @@ extern void lt_amb1_heartbeat_init(void);
 
 /* A reviewed profile may bind the SDK bridge from a running task before FlashDB init.
  * The default neither binds storage nor approves qualification or formatting. */
-__attribute__((weak)) void lt_amb1_preferences_configure(void) {
-}
+__attribute__((weak)) void lt_amb1_preferences_configure(void) {}
 
 #if LT_AMB1_EXPERIMENTAL_KVS
 static int wholly_kvs(long offset, size_t size) {
-	return offset >= 0 && (unsigned long)offset >= AMB1_PREF_KVS_START &&
-		(unsigned long)offset < AMB1_PREF_KVS_END && size &&
-		size <= AMB1_PREF_KVS_END - (unsigned long)offset;
+	return offset >= 0 && (unsigned long)offset >= AMB1_PREF_KVS_START && (unsigned long)offset < AMB1_PREF_KVS_END &&
+		   size && size <= AMB1_PREF_KVS_END - (unsigned long)offset;
 }
 #endif
 
@@ -58,8 +56,8 @@ static int init(void) {
 }
 
 static int read(long offset, uint8_t *buf, size_t size) {
-	if (offset < 0 || (unsigned long)offset > FLASH_LENGTH ||
-		size > FLASH_LENGTH - (unsigned long)offset || size > INT_MAX || (!buf && size))
+	if (offset < 0 || (unsigned long)offset > FLASH_LENGTH || size > FLASH_LENGTH - (unsigned long)offset ||
+		size > INT_MAX || (!buf && size))
 		return -1;
 	if (!size)
 		return 0;
@@ -98,10 +96,10 @@ static int erase(long offset, size_t size) {
 }
 
 const struct fal_flash_dev flash0 = {
-	.name       = FAL_FLASH_DEV_NAME,
-	.addr       = 0,
-	.len        = FLASH_LENGTH,
-	.blk_size   = 4096,
-	.ops        = {init, read, write, erase},
+	.name		= FAL_FLASH_DEV_NAME,
+	.addr		= 0,
+	.len		= FLASH_LENGTH,
+	.blk_size	= 4096,
+	.ops		= {init, read, write, erase},
 	.write_gran = 1,
 };

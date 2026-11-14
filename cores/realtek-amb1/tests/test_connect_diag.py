@@ -593,8 +593,19 @@ int main(void) {
 """
 
 
-def _compile(work: pathlib.Path, source: pathlib.Path, out: str, amb1: bool, extra=None):
-    cmd = ["c++", "-std=c++17", "-Wall", "-Wextra", "-Wno-unused-parameter", "-Wno-c++11-narrowing", "-I", str(work)]
+def _compile(
+    work: pathlib.Path, source: pathlib.Path, out: str, amb1: bool, extra=None
+):
+    cmd = [
+        "c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-c++11-narrowing",
+        "-I",
+        str(work),
+    ]
     if amb1:
         cmd.append("-DLT_AMB1=1")
     cmd += list(extra or [])
@@ -616,11 +627,15 @@ def _build_integration(work: pathlib.Path, amb1: bool):
     (work / "WiFiSTA.cpp").write_text(WIFI_STA.read_text())
     (work / "WiFiConnectDiag.h").write_text(HELPER.read_text())
     (work / "test.cpp").write_text(TEST_CPP)
-    return _compile(work, work / "test.cpp", "connect_diag", amb1, [str(work / "WiFiSTA.cpp")])
+    return _compile(
+        work, work / "test.cpp", "connect_diag", amb1, [str(work / "WiFiSTA.cpp")]
+    )
 
 
 def _run(binary: pathlib.Path, scenario: str):
-    return subprocess.run([str(binary), scenario], check=False, capture_output=True, text=True)
+    return subprocess.run(
+        [str(binary), scenario], check=False, capture_output=True, text=True
+    )
 
 
 class ConnectDiagTest(unittest.TestCase):
@@ -630,7 +645,9 @@ class ConnectDiagTest(unittest.TestCase):
             (work / "WiFiConnectDiag.h").write_text(HELPER.read_text())
             (work / "helper.cpp").write_text(HELPER_TEST)
             binary = _compile(work, work / "helper.cpp", "helper", amb1=True)
-            result = subprocess.run([str(binary)], check=False, capture_output=True, text=True)
+            result = subprocess.run(
+                [str(binary)], check=False, capture_output=True, text=True
+            )
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("helper OK", result.stdout)
 

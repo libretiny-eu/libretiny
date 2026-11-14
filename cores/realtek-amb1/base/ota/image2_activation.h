@@ -27,9 +27,14 @@ typedef struct {
  * Unsupported GPIO/inverted selection, unknown layout or source => refuse.
  * Staging/authentication/validation are delegated to the existing engine.
  */
-int image2_activation_begin(image2_activation *, const image2_layout *,
-	const image2_callbacks *, uint32_t size, unsigned trusted_running_slot,
-	const uint8_t expected_source_signature[8]);
+int image2_activation_begin(
+	image2_activation *,
+	const image2_layout *,
+	const image2_callbacks *,
+	uint32_t size,
+	unsigned trusted_running_slot,
+	const uint8_t expected_source_signature[8]
+);
 int image2_activation_write(image2_activation *, const void *, size_t);
 int image2_activation_verify(image2_activation *);
 /* Permanently latches BEFORE validation or any activation read, even on error.

@@ -1,13 +1,13 @@
 /* Ameba1 WLAN glue for LibreTiny's lwIP2 (not the SDK's lwIP1.4). */
-#include <lwip_netconf.h>
+#include <FreeRTOS.h>
 #include <ethernetif.h>
 #include <lwip/dhcp.h>
 #include <lwip/dns.h>
 #include <lwip/netifapi.h>
 #include <lwip/prot/dhcp.h>
-#include <FreeRTOS.h>
-#include <task.h>
+#include <lwip_netconf.h>
 #include <semphr.h>
+#include <task.h>
 
 struct netif xnetif[NET_IF_NUM];
 int lwip_init_done;
@@ -18,9 +18,11 @@ extern void lt_amb1_trace(const char *tag);
 extern void lt_amb1_trace2(const char *tag, uint32_t value);
 extern void lt_amb1_trace_tcm(const char *tag);
 extern void lt_amb1_app_log_test(const char *tag);
+
 /* A failed tcpip/netif initialization is terminal until reboot: tcpip_init
  * cannot safely be repeated, nor may partially registered netifs be re-added. */
 enum { INIT_NEW, INIT_BUSY, INIT_READY, INIT_FAILED };
+
 static int init_state;
 
 static int initState(void) {
@@ -73,8 +75,7 @@ void LwIP_Init(void) {
 		xnetif[i].name[0] = 'r';
 		xnetif[i].name[1] = '0' + i;
 		lt_amb1_trace2("LwIP netif_add idx", (uint32_t)i);
-		err_t result = netifapi_netif_add(&xnetif[i], &zero, &zero, &zero, NULL,
-			ethernetif_init, tcpip_input);
+		err_t result = netifapi_netif_add(&xnetif[i], &zero, &zero, &zero, NULL, ethernetif_init, tcpip_input);
 		if (result != ERR_OK) {
 			lt_amb1_trace2("LwIP netif_add FAILED idx", (uint32_t)i);
 			goto failed;
@@ -87,7 +88,7 @@ void LwIP_Init(void) {
 	}
 	taskENTER_CRITICAL();
 	lwip_init_done = 1;
-	init_state = INIT_READY;
+	init_state	   = INIT_READY;
 	taskEXIT_CRITICAL();
 	lt_amb1_trace("LwIP_Init READY");
 	return;
@@ -148,10 +149,21 @@ void LwIP_ReleaseIP(uint8_t idx) {
 	LwIP_DHCP(idx, DHCP_RELEASE_IP);
 }
 
-unsigned char *LwIP_GetMAC(struct netif *netif) { return netif->hwaddr; }
-unsigned char *LwIP_GetIP(struct netif *netif) { return (unsigned char *)netif_ip4_addr(netif); }
-unsigned char *LwIP_GetGW(struct netif *netif) { return (unsigned char *)netif_ip4_gw(netif); }
-uint8_t *LwIP_GetMASK(struct netif *netif) { return (uint8_t *)netif_ip4_netmask(netif); }
+unsigned char *LwIP_GetMAC(struct netif *netif) {
+	return netif->hwaddr;
+}
+
+unsigned char *LwIP_GetIP(struct netif *netif) {
+	return (unsigned char *)netif_ip4_addr(netif);
+}
+
+unsigned char *LwIP_GetGW(struct netif *netif) {
+	return (unsigned char *)netif_ip4_gw(netif);
+}
+
+uint8_t *LwIP_GetMASK(struct netif *netif) {
+	return (uint8_t *)netif_ip4_netmask(netif);
+}
 
 uint8_t *LwIP_GetBC(struct netif *netif) {
 	static ip4_addr_t broadcast;
@@ -159,7 +171,18 @@ uint8_t *LwIP_GetBC(struct netif *netif) {
 	return (uint8_t *)&broadcast;
 }
 
-void LwIP_GetDNS(struct ip_addr *dns) { *dns = *dns_getserver(0); }
-void LwIP_SetDNS(struct ip_addr *dns) { dns_setserver(0, dns); }
-void LwIP_UseStaticIP(struct netif *netif) { netifapi_dhcp_stop(netif); }
-uint32_t LWIP_Get_Dynamic_Sleep_Interval(void) { return 0; }
+void LwIP_GetDNS(struct ip_addr *dns) {
+	*dns = *dns_getserver(0);
+}
+
+void LwIP_SetDNS(struct ip_addr *dns) {
+	dns_setserver(0, dns);
+}
+
+void LwIP_UseStaticIP(struct netif *netif) {
+	netifapi_dhcp_stop(netif);
+}
+
+uint32_t LWIP_Get_Dynamic_Sleep_Interval(void) {
+	return 0;
+}

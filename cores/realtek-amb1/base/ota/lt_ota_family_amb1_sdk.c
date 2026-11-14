@@ -16,12 +16,12 @@
 #if LT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER
 #include "image2_sdk_adapter.h"
 
+#include <FreeRTOS.h>
 #include <ameba_soc.h>
 #include <device_lock.h>
 #include <flash_api.h>
-#include <FreeRTOS.h>
-#include <task.h>
 #include <string.h>
+#include <task.h>
 #endif
 
 #define AMB1_FLASH_SIZE	  0x00800000u
@@ -56,7 +56,7 @@ enum {
 
 static const uint8_t new_signature[8] = {'8', '1', '9', '5', '8', '7', '1', '1'};
 static const uint8_t old_signature[8] = {'0', '1', '9', '5', '8', '7', '1', '1'};
-static const uint8_t erased[8] = {255, 255, 255, 255, 255, 255, 255, 255};
+static const uint8_t erased[8]		  = {255, 255, 255, 255, 255, 255, 255, 255};
 
 static int prepare_state;
 static int bind_state;
@@ -68,8 +68,7 @@ static flash_t probe_flash;
 
 int lt_ota_family_amb1_sdk_prepare(void) {
 	if (prepare_state == SDK_PREPARE_UNSET)
-		prepare_state = device_mutex_prepare(RT_DEV_LOCK_FLASH) == 1 ? SDK_PREPARE_READY
-																	: SDK_PREPARE_FAILED;
+		prepare_state = device_mutex_prepare(RT_DEV_LOCK_FLASH) == 1 ? SDK_PREPARE_READY : SDK_PREPARE_FAILED;
 	return prepare_state == SDK_PREPARE_READY;
 }
 
@@ -110,9 +109,9 @@ static const image2_flash_sdkops *bind_once(void) {
 	/* Same index mapping as lt_ota_family_amb1.c: current 0 is slot A and
 	 * current 1 is slot B. */
 	running_start = running ? AMB1_SLOT_B_START : AMB1_SLOT_A_START;
-	running_end = running ? AMB1_SLOT_B_END : AMB1_SLOT_A_END;
-	target_start = target ? AMB1_SLOT_B_START : AMB1_SLOT_A_START;
-	target_end = target ? AMB1_SLOT_B_END : AMB1_SLOT_A_END;
+	running_end	  = running ? AMB1_SLOT_B_END : AMB1_SLOT_A_END;
+	target_start  = target ? AMB1_SLOT_B_START : AMB1_SLOT_A_START;
+	target_end	  = target ? AMB1_SLOT_B_END : AMB1_SLOT_A_END;
 
 	/* Selector evidence, mirroring ota_layout.plan(): a wrong/stale running-slot
 	 * report cannot authorize that slot because its signature will not match. */
@@ -134,23 +133,23 @@ static const image2_flash_sdkops *bind_once(void) {
 	policy.read_start = 0;
 	/* Reads cover the whole flash: the running slot, the inactive readback and
 	 * read-only boot/KVS inspection. Reads never authorize a mutation. */
-	policy.read_size = AMB1_FLASH_SIZE;
-	policy.staging = (image2_sdk_range){target_start, target_end};
+	policy.read_size   = AMB1_FLASH_SIZE;
+	policy.staging	   = (image2_sdk_range){target_start, target_end};
 	policy.deny_ranges = deny;
-	policy.deny_count = 3;
+	policy.deny_count  = 3;
 	/* The running slot is a third capability used ONLY by the dedicated demote
 	 * op: one ASCII '8' -> '0' at running_start + 8 after activation publishes
 	 * the target. Generic program/erase hard-deny the whole source range. The
 	 * demote also requires the inactive slot to have published the new
 	 * signature at target_start + 8, so the adapter alone fails closed. */
-	policy.source = (image2_sdk_range){running_start, running_end};
-	policy.demote_address = running_start + 8u;
+	policy.source					= (image2_sdk_range){running_start, running_end};
+	policy.demote_address			= running_start + 8u;
 	policy.target_signature_address = target_start + 8u;
 	if (!image2_sdk_adapter_bind(&policy, &bound_ops))
 		return NULL;
 
 	bound_running = running;
-	bind_state = SDK_BIND_READY;
+	bind_state	  = SDK_BIND_READY;
 	return &bound_ops;
 }
 

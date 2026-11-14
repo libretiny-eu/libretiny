@@ -22,20 +22,33 @@ def run_cpp(files, source, amb1=1):
         (work / "test.cpp").write_text(source)
         binary = work / "test"
         compiled = subprocess.run(
-            ["c++", "-std=c++17", "-Wno-c++11-narrowing", f"-DLT_AMB1={amb1}", "-I", str(work),
-             str(work / "test.cpp"), "-o", str(binary)],
-            check=False, capture_output=True, text=True,
+            [
+                "c++",
+                "-std=c++17",
+                "-Wno-c++11-narrowing",
+                f"-DLT_AMB1={amb1}",
+                "-I",
+                str(work),
+                str(work / "test.cpp"),
+                "-o",
+                str(binary),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
         )
         if compiled.returncode:
             raise AssertionError(compiled.stderr)
         result = subprocess.run([str(binary)], capture_output=True, text=True)
         if result.returncode:
-            raise AssertionError(f"rc={result.returncode}\n{result.stdout}\n{result.stderr}")
+            raise AssertionError(
+                f"rc={result.returncode}\n{result.stdout}\n{result.stderr}"
+            )
 
 
 class WiFiRecoveryTest(unittest.TestCase):
     def test_softap_open_hidden_failures_and_success(self):
-        declarations = r'''
+        declarations = r"""
     static bool enableAP(bool);
     bool softAP(const char *, const char *, int, bool, int);
     bool softAPConfig(IPAddress, IPAddress, IPAddress);
@@ -45,15 +58,17 @@ class WiFiRecoveryTest(unittest.TestCase):
     const char *softAPgetHostname(); bool softAPsetHostname(const char *);
     uint8_t *softAPmacAddress(uint8_t *); String softAPmacAddress();
     const String softAPSSID();
-'''
+"""
         private = connect.MOCK_WIFI_PRIVATE.replace(
             "char staHostname[64] = {0};", declarations + "char staHostname[64] = {0};"
-        ).replace("#define NETIF_RTW_AP &mock_netif", "#define NETIF_RTW_AP (&mock_netif)")
+        ).replace(
+            "#define NETIF_RTW_AP &mock_netif", "#define NETIF_RTW_AP (&mock_netif)"
+        )
         prelude = connect.TEST_CPP.split("int main(", 1)[0].replace(
             "void wifi_indication(int event, char *buf, int len, int flags) { (void)event; (void)buf; (void)len; (void)flags; }",
             "void wifi_indication(int, char *, int, int) { recovery_ap_events++; }",
         )
-        source = "int recovery_ap_events = 0;\n" + prelude + r'''
+        source = "int recovery_ap_events = 0;\n" + prelude + r"""
 #include <cassert>
 #define AP_STA_NUM 4
 #define NETNAME_AP "wlan1"
@@ -124,12 +139,19 @@ int main() {
     assert(ap_calls == 12 && dhcp_stops == 12 && dhcp_starts == 4);
     WiFiClass::resetNetworkInfo(g_data.ap);
 }
-'''
+"""
         for amb1 in (1, 0):
             with self.subTest(amb1=amb1):
-                run_cpp({"WiFiPrivate.h": private,
-                         "WiFiAP.cpp": (connect.WIFI_STA.parent / "WiFiAP.cpp").read_text()},
-                        source, amb1=amb1)
+                run_cpp(
+                    {
+                        "WiFiPrivate.h": private,
+                        "WiFiAP.cpp": (
+                            connect.WIFI_STA.parent / "WiFiAP.cpp"
+                        ).read_text(),
+                    },
+                    source,
+                    amb1=amb1,
+                )
 
     def test_scan_start_failure_and_synchronous_completion(self):
         private = connect.MOCK_WIFI_PRIVATE.replace(
@@ -139,7 +161,7 @@ int main() {
             "char staHostname[64] = {0};",
         ).replace("WiFiNetworkInfo sta;", "int scanSem; WiFiNetworkInfo sta;")
         prelude = connect.TEST_CPP.split("int main(", 1)[0]
-        source = prelude + r'''
+        source = prelude + r"""
 #include <cassert>
 #define cDATA ((WiFiData *)cls->data)
 #define RTW_TRUE 1
@@ -213,12 +235,19 @@ int main() {
     assert(scan_calls == 6 && empty_waits == 0);
     g_wifi.scanDelete();
 }
-'''
+"""
         for amb1 in (1, 0):
             with self.subTest(amb1=amb1):
-                run_cpp({"WiFiPrivate.h": private,
-                         "WiFiScan.cpp": (connect.WIFI_STA.parent / "WiFiScan.cpp").read_text()},
-                        source, amb1=amb1)
+                run_cpp(
+                    {
+                        "WiFiPrivate.h": private,
+                        "WiFiScan.cpp": (
+                            connect.WIFI_STA.parent / "WiFiScan.cpp"
+                        ).read_text(),
+                    },
+                    source,
+                    amb1=amb1,
+                )
 
     def test_join_failure_dhcp_timeout_and_repeated_begin(self):
         # Retain existing SDK stubs, replacing only configurable observations.
@@ -235,7 +264,10 @@ int main() {
             "memset(&info, 0, sizeof(info));",
             "memset(&info, 0, sizeof(info) - 5 * sizeof(uint32_t));",
         )
-        source = "int recovery_dhcp_result = 1; int recovery_ip_events = 0;\n" + prelude + r'''
+        source = (
+            "int recovery_dhcp_result = 1; int recovery_ip_events = 0;\n"
+            + prelude
+            + r"""
 #include <cassert>
 #include "WiFiSTA.cpp"
 int main() {
@@ -266,21 +298,30 @@ int main() {
     assert(g_data.sta.localIP == 0x01020304 && g_dhcp_calls == dhcp);
     WiFiClass::resetNetworkInfo(g_data.sta);
 }
-'''
+"""
+        )
         wifi_dir = connect.WIFI_STA.parent
-        run_cpp({
-            "WiFiPrivate.h": connect.MOCK_WIFI_PRIVATE,
-            "libretiny.h": connect.MOCK_LIBRETINY,
-            "WiFiSTA.cpp": connect.WIFI_STA.read_text(),
-            "WiFiConnectDiag.h": (wifi_dir / "WiFiConnectDiag.h").read_text(),
-        }, source)
+        run_cpp(
+            {
+                "WiFiPrivate.h": connect.MOCK_WIFI_PRIVATE,
+                "libretiny.h": connect.MOCK_LIBRETINY,
+                "WiFiSTA.cpp": connect.WIFI_STA.read_text(),
+                "WiFiConnectDiag.h": (wifi_dir / "WiFiConnectDiag.h").read_text(),
+            },
+            source,
+        )
 
     def test_disconnect_translation_and_queued_payload_ownership(self):
         prelude = events.TEST_CPP.split("int main(", 1)[0]
-        prelude = prelude.replace("int g_post_calls = 0;", "EventInfo recovery_info = {}; int g_post_calls = 0;")
-        prelude = prelude.replace("void WiFiClass::postEvent(EventId id, EventInfo) {",
-                                  "void WiFiClass::postEvent(EventId id, EventInfo info) { recovery_info = info;")
-        source = prelude + r'''
+        prelude = prelude.replace(
+            "int g_post_calls = 0;",
+            "EventInfo recovery_info = {}; int g_post_calls = 0;",
+        )
+        prelude = prelude.replace(
+            "void WiFiClass::postEvent(EventId id, EventInfo) {",
+            "void WiFiClass::postEvent(EventId id, EventInfo info) { recovery_info = info;",
+        )
+        source = prelude + r"""
 #include <cassert>
 static void drain() {
     for (auto *ev : g_queue) {
@@ -312,9 +353,14 @@ int main() {
     // Null-buffer frees are counted by the inherited mock too.
     assert(g_frees == 6);
 }
-'''
-        run_cpp({"WiFiPrivate.h": events.MOCK_WIFI_PRIVATE,
-                 "WiFiEvents.cpp": events.WIFI_EVENTS.read_text()}, source)
+"""
+        run_cpp(
+            {
+                "WiFiPrivate.h": events.MOCK_WIFI_PRIVATE,
+                "WiFiEvents.cpp": events.WIFI_EVENTS.read_text(),
+            },
+            source,
+        )
 
 
 if __name__ == "__main__":

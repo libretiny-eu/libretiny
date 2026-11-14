@@ -37,7 +37,9 @@ import unittest
 
 HERE = pathlib.Path(__file__).resolve()
 CORES = HERE.parents[2]
-WIFI_EVENTS = CORES / "realtek-amb" / "arduino" / "libraries" / "WiFi" / "WiFiEvents.cpp"
+WIFI_EVENTS = (
+    CORES / "realtek-amb" / "arduino" / "libraries" / "WiFi" / "WiFiEvents.cpp"
+)
 
 MOCK_WIFI_PRIVATE = r"""
 #pragma once

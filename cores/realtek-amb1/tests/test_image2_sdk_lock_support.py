@@ -6,20 +6,23 @@ These are source-contract tests, not FreeRTOS scheduling or hardware qualificati
 """
 
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 PATCH = ROOT / "cores/realtek-amb1/base/ota/image2_controller_lock.patch"
-SDK = Path(os.environ.get(
-    "AMB1_SDK_ROOT",
-    str(Path(os.environ.get("PLATFORMIO_CORE_DIR", "~/.platformio"))
-        / "packages/framework-realtek-amb1"),
-)).expanduser()
+SDK = Path(
+    os.environ.get(
+        "AMB1_SDK_ROOT",
+        str(
+            Path(os.environ.get("PLATFORMIO_CORE_DIR", "~/.platformio"))
+            / "packages/framework-realtek-amb1"
+        ),
+    )
+).expanduser()
 
 OSDEP = r"""
 #ifndef MOCK_OSDEP_H
@@ -139,15 +142,19 @@ class SharedSDKLockTest(unittest.TestCase):
             self.skipTest("host cc and patch required")
         with tempfile.TemporaryDirectory(prefix="amb1-lock-") as directory:
             work = Path(directory)
-            for relative in ("component/os/os_dep/device_lock.c",
-                             "component/os/os_dep/include/device_lock.h"):
+            for relative in (
+                "component/os/os_dep/device_lock.c",
+                "component/os/os_dep/include/device_lock.h",
+            ):
                 target = work / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 # Normalize CRLF because the installed public header uses it.
                 target.write_text((SDK / relative).read_text())
             result = subprocess.run(
                 ["patch", "--batch", "--fuzz=0", "-p1", "-i", str(PATCH)],
-                cwd=work, text=True, capture_output=True,
+                cwd=work,
+                text=True,
+                capture_output=True,
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             (work / "osdep_service.h").write_text(OSDEP)
@@ -157,13 +164,27 @@ class SharedSDKLockTest(unittest.TestCase):
             )
             (work / "harness.c").write_text(HARNESS)
             executable = work / "test_lock"
-            result = subprocess.run([
-                compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                "-Wno-unused-function", "-Dprintf=mock_printf", "-I", str(work),
-                "-I", str(work / "component/os/os_dep/include"),
-                str(work / "component/os/os_dep/device_lock.c"),
-                str(work / "harness.c"), "-o", str(executable),
-            ], text=True, capture_output=True)
+            result = subprocess.run(
+                [
+                    compiler,
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-Wno-unused-function",
+                    "-Dprintf=mock_printf",
+                    "-I",
+                    str(work),
+                    "-I",
+                    str(work / "component/os/os_dep/include"),
+                    str(work / "component/os/os_dep/device_lock.c"),
+                    str(work / "harness.c"),
+                    "-o",
+                    str(executable),
+                ],
+                text=True,
+                capture_output=True,
+            )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             subprocess.run([str(executable)], check=True)
 

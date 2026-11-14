@@ -24,15 +24,13 @@ process (``argv`` mode). Covered contract:
     signature.
 """
 
-import hashlib
 import os
-from pathlib import Path
 import re
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 OTA = ROOT / "cores/realtek-amb1/base/ota"
@@ -50,13 +48,18 @@ def find_sdk():
     candidates = []
     if os.environ.get("AMB1_SDK_DIR"):
         candidates.append(Path(os.environ["AMB1_SDK_DIR"]).expanduser())
-    candidates.extend((
-        Path.home() / ".platformio/packages/framework-realtek-amb1",
-        ROOT.parent / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
-    ))
+    candidates.extend(
+        (
+            Path.home() / ".platformio/packages/framework-realtek-amb1",
+            ROOT.parent
+            / "fridge-local/esphome/.platformio/packages/framework-realtek-amb1",
+        )
+    )
     for package in candidates:
         sdk = package / SDK_COMPONENT
-        if (sdk / "library/sha256.c").is_file() and (sdk / "include/mbedtls/sha256.h").is_file():
+        if (sdk / "library/sha256.c").is_file() and (
+            sdk / "include/mbedtls/sha256.h"
+        ).is_file():
             return sdk
     return None
 
@@ -648,19 +651,35 @@ class OtaFamilyAmb1Tests(unittest.TestCase):
         for source in sources:
             obj = tmp / (source.stem + ".o")
             subprocess.run(
-                [cc, "-std=c11", "-O2", "-Wall", "-Wextra", "-Werror",
-                 '-DMBEDTLS_CONFIG_FILE="mbedtls_config.h"',
-                 "-I" + str(tmp), "-I" + str(OTA), "-I" + str(COMMON),
-                 "-I" + str(sdk / "include"),
-                 "-c", str(source), "-o", str(obj)],
-                check=True, capture_output=True, text=True,
+                [
+                    cc,
+                    "-std=c11",
+                    "-O2",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    '-DMBEDTLS_CONFIG_FILE="mbedtls_config.h"',
+                    "-I" + str(tmp),
+                    "-I" + str(OTA),
+                    "-I" + str(COMMON),
+                    "-I" + str(sdk / "include"),
+                    "-c",
+                    str(source),
+                    "-o",
+                    str(obj),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
             )
             objects.append(str(obj))
 
         cls.binary = tmp / "ota_family_amb1"
         subprocess.run(
             [cc, *objects, "-o", str(cls.binary)],
-            check=True, capture_output=True, text=True,
+            check=True,
+            capture_output=True,
+            text=True,
         )
 
     def run_mode(self, *args):
@@ -722,8 +741,14 @@ class OtaFamilyAmb1Tests(unittest.TestCase):
 
     # -------------------------------------------------------------- concurrency
     def test_contiguity_violations_latch(self):
-        variants = ("seq_zero", "seq_skip", "seq_dup", "addr_wrong",
-                    "count_wrong", "addr_huge")
+        variants = (
+            "seq_zero",
+            "seq_skip",
+            "seq_dup",
+            "addr_wrong",
+            "count_wrong",
+            "addr_huge",
+        )
         for variant in variants:
             with self.subTest(variant=variant):
                 r = self.run_mode("latch", variant)
@@ -761,8 +786,15 @@ class OtaFamilyAmb1Tests(unittest.TestCase):
 
     # -------------------------------------------------------------- begin gates
     def test_begin_rejects_bad_sizes_and_missing_sdkops(self):
-        for variant in ("sdkops", "zero", "small", "misaligned", "huge",
-                        "slot_over", "slot_over_a"):
+        for variant in (
+            "sdkops",
+            "zero",
+            "small",
+            "misaligned",
+            "huge",
+            "slot_over",
+            "slot_over_a",
+        ):
             with self.subTest(variant=variant):
                 r = self.run_mode("begin", variant)
                 self.assertEqual(r["begin"], WRITE_FAILED)
@@ -774,8 +806,10 @@ class OtaFamilyAmb1Tests(unittest.TestCase):
                 self.assertEqual(r["target_new"], 0)
 
     def test_inactive_slot_capacity_is_the_admitted_boundary(self):
-        for variant, sectors in (("slot_limit", 0xFE000 // 0x1000),
-                                 ("slot_limit_a", 0x100000 // 0x1000)):
+        for variant, sectors in (
+            ("slot_limit", 0xFE000 // 0x1000),
+            ("slot_limit_a", 0x100000 // 0x1000),
+        ):
             with self.subTest(variant=variant):
                 r = self.run_mode("begin", variant)
                 self.assertEqual(r["begin"], HANDLED)

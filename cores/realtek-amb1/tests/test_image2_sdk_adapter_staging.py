@@ -13,12 +13,12 @@ own process (``argv`` mode). Bind is also one-shot per boot.
 Run: python3 -m unittest discover -s libretiny/cores/realtek-amb1/tests \
         -p test_image2_sdk_adapter_staging.py -v
 """
-from pathlib import Path
+
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "cores/realtek-amb1/base/ota"
@@ -424,28 +424,49 @@ class SDKAdapterStagingTest(unittest.TestCase):
         (work / "FreeRTOS.h").write_text(FREERTOS_H)
         (work / "task.h").write_text(TASK_H)
         (work / "harness.c").write_text(HARNESS)
-        result = subprocess.run([
-            cc, "-std=c99", "-Wall", "-Wextra", "-Werror",
-            "-Wno-unused-function", "-Wno-unused-parameter",
-            "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
-            "-I", str(work), "-I", str(BASE),
-            str(BASE / "image2_sdk_adapter.c"), str(work / "harness.c"),
-            "-o", str(work / "test"),
-        ], text=True, capture_output=True)
+        result = subprocess.run(
+            [
+                cc,
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-Wno-unused-function",
+                "-Wno-unused-parameter",
+                "-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1",
+                "-I",
+                str(work),
+                "-I",
+                str(BASE),
+                str(BASE / "image2_sdk_adapter.c"),
+                str(work / "harness.c"),
+                "-o",
+                str(work / "test"),
+            ],
+            text=True,
+            capture_output=True,
+        )
         if result.returncode:
             raise AssertionError(result.stdout + result.stderr)
         cls.binary = work / "test"
 
     def run_mode(self, mode):
-        result = subprocess.run([str(self.binary), mode], text=True, capture_output=True)
+        result = subprocess.run(
+            [str(self.binary), mode], text=True, capture_output=True
+        )
         self.assertEqual(result.returncode, 0, result.stderr.strip())
 
     def test_staging_window_and_reads(self):
         self.run_mode("success")
 
     def test_denied_and_out_of_window_mutations_reach_no_sdk_call(self):
-        for mode in ("erase_deny", "program_deny", "erase_outside",
-                     "program_outside", "straddle"):
+        for mode in (
+            "erase_deny",
+            "program_deny",
+            "erase_outside",
+            "program_outside",
+            "straddle",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 
@@ -467,8 +488,11 @@ class SDKAdapterStagingTest(unittest.TestCase):
         """A valid source signature is not enough: the inactive slot must have
         published the new signature. Erased, old or partial targets fail closed
         with no source mutation."""
-        for mode in ("demote_target_erased", "demote_target_old",
-                     "demote_target_partial"):
+        for mode in (
+            "demote_target_erased",
+            "demote_target_old",
+            "demote_target_partial",
+        ):
             with self.subTest(mode=mode):
                 self.run_mode(mode)
 

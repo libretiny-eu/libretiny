@@ -4,22 +4,26 @@
 The selector model classifies signatures only, assuming both bodies loadable.
 It is not a full loader emulator, GPIO selector model, or crash rollback proof.
 """
+
 import ctypes as C
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
-from test_image2_transaction import (Mock, Transaction, Layout, IO, NEW, OLD, FF)
+from test_image2_transaction import FF, IO, NEW, OLD, Layout, Mock, Transaction
 
 DEMOTE = C.CFUNCTYPE(C.c_int, C.c_void_p)
 
 
 class Activation(C.Structure):
-    _fields_ = [("transaction", Transaction), ("activation_attempted", C.c_uint),
-                ("trusted_running_slot", C.c_uint),
-                ("expected_source_signature", C.c_uint8 * 8)]
+    _fields_ = [
+        ("transaction", Transaction),
+        ("activation_attempted", C.c_uint),
+        ("trusted_running_slot", C.c_uint),
+        ("expected_source_signature", C.c_uint8 * 8),
+    ]
 
 
 def normal_choose(signatures):
@@ -41,13 +45,17 @@ class ActivationMock(Mock):
         self.torn_bits = 0
         self.reenter = False
         self.status = 0
+
         def demote(_):
             # Unit-only capability; the linked session tests use the actual
             # backend's target/source rechecks and exact-byte operation.
             sig = C.create_string_buffer(8)
-            return int(self.tx.io.write(self.tx.io.ctx, self.active+8, OLD, 1) == 1
-                       and self.tx.io.read(self.tx.io.ctx, self.active+8, sig, 8) == 1
-                       and sig.raw == OLD)
+            return int(
+                self.tx.io.write(self.tx.io.ctx, self.active + 8, OLD, 1) == 1
+                and self.tx.io.read(self.tx.io.ctx, self.active + 8, sig, 8) == 1
+                and sig.raw == OLD
+            )
+
         self.demote = DEMOTE(demote)
 
     @property
@@ -61,22 +69,32 @@ class ActivationMock(Mock):
 
     def begin(self, size=None):
         return self.lib.image2_activation_begin(
-            C.byref(self.activation), C.byref(self.layout), C.byref(self.callbacks),
-            len(self.payload) if size is None else size, self.layout.running_slot, NEW)
+            C.byref(self.activation),
+            C.byref(self.layout),
+            C.byref(self.callbacks),
+            len(self.payload) if size is None else size,
+            self.layout.running_slot,
+            NEW,
+        )
 
     def upload(self):
-        return (self.begin() and
-                self.lib.image2_activation_write(C.byref(self.activation), self.payload,
-                                                 len(self.payload)) and
-                self.lib.image2_activation_verify(C.byref(self.activation)))
+        return (
+            self.begin()
+            and self.lib.image2_activation_write(
+                C.byref(self.activation), self.payload, len(self.payload)
+            )
+            and self.lib.image2_activation_verify(C.byref(self.activation))
+        )
 
     def commit(self):
         self.activating = True
-        return self.lib.image2_activation_commit(C.byref(self.activation), self.demote, None)
+        return self.lib.image2_activation_commit(
+            C.byref(self.activation), self.demote, None
+        )
 
     def mutation_range(self, address, n):
         if self.activating:
-            assert (address, n) in ((self.target+8, 8), (self.active+8, 1))
+            assert (address, n) in ((self.target + 8, 8), (self.active + 8, 1))
         else:
             super().mutation_range(address, n)
 
@@ -91,7 +109,10 @@ class ActivationMock(Mock):
                 count = len(self.events)
                 assert self.commit() == 0
                 assert self.begin() == 0
-                assert self.lib.image2_activation_write(C.byref(self.activation), b"x", 1) == 0
+                assert (
+                    self.lib.image2_activation_write(C.byref(self.activation), b"x", 1)
+                    == 0
+                )
                 assert self.lib.image2_activation_verify(C.byref(self.activation)) == 0
                 assert len(self.events) == count
             failed = len(self.events) == self.fault_index
@@ -100,10 +121,14 @@ class ActivationMock(Mock):
             if failed and self.fault == "torn" and kind == "write":
                 address, n = details
                 data = NEW if n == 8 else OLD[:1]
-                bits = [(i, b) for i in range(n) for b in range(8)
-                        if self.memory[address+i] & (1 << b) and not data[i] & (1 << b)]
-                for i, b in bits[:self.torn_bits]:
-                    self.memory[address+i] &= ~(1 << b)
+                bits = [
+                    (i, b)
+                    for i in range(n)
+                    for b in range(8)
+                    if self.memory[address + i] & (1 << b) and not data[i] & (1 << b)
+                ]
+                for i, b in bits[: self.torn_bits]:
+                    self.memory[address + i] &= ~(1 << b)
                 return self.status
             result = action()
             return self.status if failed else result
@@ -112,8 +137,9 @@ class ActivationMock(Mock):
             return 0
 
     def selected(self):
-        return normal_choose([bytes(self.memory[s.start+8:s.start+16])
-                              for s in self.layout.slots])
+        return normal_choose(
+            [bytes(self.memory[s.start + 8 : s.start + 16]) for s in self.layout.slots]
+        )
 
 
 class Image2ActivationTest(unittest.TestCase):
@@ -122,20 +148,47 @@ class Image2ActivationTest(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix="image2-activation-")
         ota = Path(__file__).resolve().parents[1] / "base/ota"
         library = Path(cls.temp.name) / "activation.so"
-        subprocess.run([shutil.which("cc") or "cc", "-std=c99", "-Wall", "-Wextra",
-                        "-Werror", "-pedantic", "-shared", "-fPIC",
-                        str(ota / "image2_transaction.c"), str(ota / "image2_activation.c"),
-                        "-o", str(library)], check=True)
+        subprocess.run(
+            [
+                shutil.which("cc") or "cc",
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-pedantic",
+                "-shared",
+                "-fPIC",
+                str(ota / "image2_transaction.c"),
+                str(ota / "image2_activation.c"),
+                "-o",
+                str(library),
+            ],
+            check=True,
+        )
         cls.lib = C.CDLL(str(library))
-        cls.lib.image2_activation_begin.argtypes = [C.POINTER(Activation), C.POINTER(Layout),
-                                                    C.POINTER(IO), C.c_uint32, C.c_uint,
-                                                    C.c_void_p]
-        cls.lib.image2_activation_write.argtypes = [C.POINTER(Activation), C.c_void_p,
-                                                    C.c_size_t]
+        cls.lib.image2_activation_begin.argtypes = [
+            C.POINTER(Activation),
+            C.POINTER(Layout),
+            C.POINTER(IO),
+            C.c_uint32,
+            C.c_uint,
+            C.c_void_p,
+        ]
+        cls.lib.image2_activation_write.argtypes = [
+            C.POINTER(Activation),
+            C.c_void_p,
+            C.c_size_t,
+        ]
         for name in ("verify", "commit", "abort"):
-            getattr(cls.lib, "image2_activation_"+name).argtypes = [C.POINTER(Activation)]
+            getattr(cls.lib, "image2_activation_" + name).argtypes = [
+                C.POINTER(Activation)
+            ]
         cls.lib.image2_activation_abort.restype = None
-        cls.lib.image2_activation_commit.argtypes = [C.POINTER(Activation), DEMOTE, C.c_void_p]
+        cls.lib.image2_activation_commit.argtypes = [
+            C.POINTER(Activation),
+            DEMOTE,
+            C.c_void_p,
+        ]
 
     @classmethod
     def tearDownClass(cls):
@@ -144,7 +197,7 @@ class Image2ActivationTest(unittest.TestCase):
     def ready(self, running):
         m = ActivationMock(self.lib, running)
         self.assertEqual(m.upload(), 1)
-        self.assertEqual(m.memory[m.target+8:m.target+16], FF)
+        self.assertEqual(m.memory[m.target + 8 : m.target + 16], FF)
         m.events.clear()
         return m
 
@@ -153,7 +206,9 @@ class Image2ActivationTest(unittest.TestCase):
         self.assertEqual(m.activation.activation_attempted, 1)
         self.assertEqual(m.begin(), 0)
         self.assertEqual(m.commit(), 0)
-        self.assertEqual(self.lib.image2_activation_write(C.byref(m.activation), b"x", 1), 0)
+        self.assertEqual(
+            self.lib.image2_activation_write(C.byref(m.activation), b"x", 1), 0
+        )
         self.assertEqual(self.lib.image2_activation_verify(C.byref(m.activation)), 0)
         self.lib.image2_activation_abort(C.byref(m.activation))
         self.lib.image2_activation_abort(C.byref(m.activation))
@@ -162,7 +217,9 @@ class Image2ActivationTest(unittest.TestCase):
 
     def assert_stable(self, m, before):
         # Only the nine explicitly allowed signature bytes may ever change.
-        for start, end in sorted(((m.active+8, m.active+9), (m.target+8, m.target+16))):
+        for start, end in sorted(
+            ((m.active + 8, m.active + 9), (m.target + 8, m.target + 16))
+        ):
             self.assertEqual(m.memory[:start], before[:start])
             before = before[:start] + bytes(m.memory[start:end]) + before[end:]
         self.assertEqual(bytes(m.memory), before)
@@ -174,13 +231,20 @@ class Image2ActivationTest(unittest.TestCase):
             before = bytes(m.memory)
             m.reenter = True
             self.assertEqual(m.commit(), 1)
-            self.assertEqual(m.events, [("read", m.active+8, 8),
-                             ("read", m.target+8, 8), ("write", m.target+8, 8),
-                             ("read", m.target+8, 8), ("write", m.active+8, 1),
-                             ("read", m.active+8, 8)])
-            self.assertEqual(m.selected(), 1-running)
-            self.assertEqual(m.memory[m.target:m.target+len(m.payload)], m.payload)
-            self.assertEqual(m.memory[m.active+8:m.active+16], OLD)
+            self.assertEqual(
+                m.events,
+                [
+                    ("read", m.active + 8, 8),
+                    ("read", m.target + 8, 8),
+                    ("write", m.target + 8, 8),
+                    ("read", m.target + 8, 8),
+                    ("write", m.active + 8, 1),
+                    ("read", m.active + 8, 8),
+                ],
+            )
+            self.assertEqual(m.selected(), 1 - running)
+            self.assertEqual(m.memory[m.target : m.target + len(m.payload)], m.payload)
+            self.assertEqual(m.memory[m.active + 8 : m.active + 16], OLD)
             self.assert_stable(m, before)
             self.assert_latched(m)
 
@@ -189,7 +253,9 @@ class Image2ActivationTest(unittest.TestCase):
             for index in range(1, 7):
                 for fault in ("before", "after"):
                     for status in (0, 2, -1):
-                        with self.subTest(running=running, index=index, fault=fault, status=status):
+                        with self.subTest(
+                            running=running, index=index, fault=fault, status=status
+                        ):
                             m = self.ready(running)
                             before = bytes(m.memory)
                             m.fault_index, m.fault, m.status = index, fault, status
@@ -197,25 +263,28 @@ class Image2ActivationTest(unittest.TestCase):
                             self.assertEqual(len(m.events), index)
                             published = index > 3 or (index == 3 and fault == "after")
                             demoted = index > 5 or (index == 5 and fault == "after")
-                            expected = (1-running if demoted else
-                                        (1 if published else running))
+                            expected = (
+                                1 - running
+                                if demoted
+                                else (1 if published else running)
+                            )
                             self.assertEqual(m.selected(), expected)
                             self.assert_stable(m, before)
                             self.assert_latched(m)
 
     def test_torn_program_each_cleared_bit(self):
-        target_bits = sum(8-byte.bit_count() for byte in NEW)
+        target_bits = sum(8 - byte.bit_count() for byte in NEW)
         for running in (0, 1):
             for index, count in ((3, target_bits), (5, 1)):
-                for bits in range(count+1):
+                for bits in range(count + 1):
                     with self.subTest(running=running, index=index, bits=bits):
                         m = self.ready(running)
                         before = bytes(m.memory)
                         m.fault_index, m.fault, m.torn_bits = index, "torn", bits
                         self.assertEqual(m.commit(), 0)
-                        expected = (1 if index == 3 and bits == count else running)
+                        expected = 1 if index == 3 and bits == count else running
                         if index == 5:
-                            expected = 1-running if bits else 1
+                            expected = 1 - running if bits else 1
                         self.assertEqual(m.selected(), expected)
                         self.assert_stable(m, before)
                         self.assert_latched(m)
@@ -233,9 +302,17 @@ class Image2ActivationTest(unittest.TestCase):
             if field == "layout":
                 m.layout.reviewed_layout = 0
             before = bytes(m.memory)
-            self.assertEqual(self.lib.image2_activation_begin(
-                C.byref(m.activation), C.byref(m.layout), C.byref(m.callbacks),
-                len(m.payload), running, expected), 0)
+            self.assertEqual(
+                self.lib.image2_activation_begin(
+                    C.byref(m.activation),
+                    C.byref(m.layout),
+                    C.byref(m.callbacks),
+                    len(m.payload),
+                    running,
+                    expected,
+                ),
+                0,
+            )
             self.assertEqual(m.begin(), 0)
             self.assertEqual(bytes(m.memory), before)
             self.assertEqual(m.events, [])
@@ -246,7 +323,7 @@ class Image2ActivationTest(unittest.TestCase):
                 m = self.ready(running)
                 m.fault_index, m.fault, m.torn_bits, m.status = index, "torn", 0, 1
                 self.assertEqual(m.commit(), 0)
-                self.assertEqual(len(m.events), index+1)
+                self.assertEqual(len(m.events), index + 1)
                 self.assertEqual(m.selected(), running if index == 3 else 1)
                 self.assert_latched(m)
 
@@ -254,10 +331,10 @@ class Image2ActivationTest(unittest.TestCase):
         for running in (0, 1):
             for signature in (OLD, FF, b"x1958711"):
                 m = self.ready(running)
-                m.memory[m.active+8:m.active+16] = signature
+                m.memory[m.active + 8 : m.active + 16] = signature
                 before = bytes(m.memory)
                 self.assertEqual(m.commit(), 0)
-                self.assertEqual(m.events, [("read", m.active+8, 8)])
+                self.assertEqual(m.events, [("read", m.active + 8, 8)])
                 self.assertEqual(bytes(m.memory), before)
                 self.assert_latched(m)
 
@@ -271,7 +348,7 @@ class Image2ActivationTest(unittest.TestCase):
             def mismatched(ctx, address, out, n):
                 result = m.read(ctx, address, out, n)
                 if len(m.events) == (4 if address_kind == "target" else 6):
-                    C.memmove(out, b"?"*n, n)
+                    C.memmove(out, b"?" * n, n)
                 return result
 
             callback = READ(mismatched)

@@ -12,10 +12,19 @@ extern "C" {
 #endif
 
 #define IMAGE2_MAX_PROTECTED 8
-typedef struct { uint32_t start, end; } image2_range;
+
+typedef struct {
+	uint32_t start, end;
+} image2_range;
+
 typedef enum {
-	IMAGE2_IDLE, IMAGE2_STAGING, IMAGE2_VERIFIED, IMAGE2_ABORTED,
-	IMAGE2_FAILED, IMAGE2_COMMIT_ATTEMPTED, IMAGE2_COMMITTED
+	IMAGE2_IDLE,
+	IMAGE2_STAGING,
+	IMAGE2_VERIFIED,
+	IMAGE2_ABORTED,
+	IMAGE2_FAILED,
+	IMAGE2_COMMIT_ATTEMPTED,
+	IMAGE2_COMMITTED
 } image2_state;
 
 typedef struct {

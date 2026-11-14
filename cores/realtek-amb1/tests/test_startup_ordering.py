@@ -155,7 +155,10 @@ class StartupOrderingTest(unittest.TestCase):
         # solely from the FAL flash0 init hook (post-BSS, post-__libc_init_array):
         # the heartbeat, and the one-shot stack map started from it.
         bodies = []
-        for sig in ("void lt_amb1_heartbeat_init(void)", "static void lt_amb1_task_map_start(void)"):
+        for sig in (
+            "void lt_amb1_heartbeat_init(void)",
+            "static void lt_amb1_task_map_start(void)",
+        ):
             body = body_of(code, sig)
             self.assertIsNotNone(body, f"{sig} not found")
             bodies.append(body)
@@ -166,9 +169,18 @@ class StartupOrderingTest(unittest.TestCase):
         rest = code
         for body in bodies:
             rest = rest.replace(body, "")
-        for token in ("xTimerCreate", "xTimerStart", "xTimerGenericCommand", "pvPortMalloc",
-                      "tcm_heap_malloc", "tcm_heap_calloc", "tcm_heap_freemem"):
-            self.assertNotIn(token, rest, f"{token} must appear only inside the safe timer hooks")
+        for token in (
+            "xTimerCreate",
+            "xTimerStart",
+            "xTimerGenericCommand",
+            "pvPortMalloc",
+            "tcm_heap_malloc",
+            "tcm_heap_calloc",
+            "tcm_heap_freemem",
+        ):
+            self.assertNotIn(
+                token, rest, f"{token} must appear only inside the safe timer hooks"
+            )
 
     def test_heartbeat_no_longer_drives_led_tests(self):
         code = strip_comments(read(BOOT_TRACE))
@@ -181,19 +193,26 @@ class StartupOrderingTest(unittest.TestCase):
 
     def test_diagnostics_default_off_and_uart_mask_is_unconditional(self):
         code = strip_comments(read(BOOT_TRACE))
-        self.assertRegex(code, r"#ifndef LT_AMB1_BRINGUP_DIAGNOSTICS\s+"
-                              r"#define LT_AMB1_BRINGUP_DIAGNOSTICS 0")
+        self.assertRegex(
+            code,
+            r"#ifndef LT_AMB1_BRINGUP_DIAGNOSTICS\s+"
+            r"#define LT_AMB1_BRINGUP_DIAGNOSTICS 0",
+        )
         init = body_of(code, "void lt_amb1_trace_init(void)")
         self.assertIn("HAL_WRITE32(0x40003000u, 0x04u, 0)", init)
         # test_boot_trace.py also preprocesses both modes and host-executes the
         # normal-mode hooks to verify the mask survives without diagnostics.
-        self.assertLess(code.index("void lt_amb1_trace_init(void)"),
-                        code.index("#include <FreeRTOS.h>"))
+        self.assertLess(
+            code.index("void lt_amb1_trace_init(void)"),
+            code.index("#include <FreeRTOS.h>"),
+        )
 
     # --------------------------------------------------- the proven UART fix
     def test_direct_log_uart_backend_is_kept(self):
         code = strip_comments(read(PRINTF_C))
-        self.assertIn("lt_amb1_log_putc", code, "the direct polled log-UART writer must stay")
+        self.assertIn(
+            "lt_amb1_log_putc", code, "the direct polled log-UART writer must stay"
+        )
         self.assertIn("0x40003000", code, "log UART register block")
         self.assertNotIn(
             "HalSerialPutcRtl8195a",
@@ -230,8 +249,11 @@ class StartupOrderingTest(unittest.TestCase):
             "pcTaskGetTaskName",
         ):
             self.assertIn(call, code, f"fault diagnostics must use {call}")
-        self.assertIn("tr_tcb_layout_ok", code,
-                      "fault-time stack fields require a validated TCB layout")
+        self.assertIn(
+            "tr_tcb_layout_ok",
+            code,
+            "fault-time stack fields require a validated TCB layout",
+        )
         # No raw TCB access: pxCurrentTCB may not be dereferenced directly.
         self.assertNotIn("pxCurrentTCB", code, "do not dereference pxCurrentTCB raw")
 
@@ -253,16 +275,24 @@ class StartupOrderingTest(unittest.TestCase):
         self.assertIn("offsetof(tr_tcb_head_t, pcTaskName)", code)
         check = body_of(code, "static int tr_tcb_layout_ok(TaskHandle_t h)")
         self.assertIsNotNone(check, "tr_tcb_layout_ok not found")
-        self.assertIn("pcTaskGetTaskName", check, "the mirror must be checked against the kernel")
+        self.assertIn(
+            "pcTaskGetTaskName", check, "the mirror must be checked against the kernel"
+        )
         dump = body_of(code, "static void tr_dump_task(u32 frame)")
         self.assertIsNotNone(dump, "tr_dump_task not found")
-        self.assertIn("tr_tcb_layout_ok", dump, "the stack-field read must be gated on the layout check")
+        self.assertIn(
+            "tr_tcb_layout_ok",
+            dump,
+            "the stack-field read must be gated on the layout check",
+        )
 
     def test_fault_dump_bounds_checks_the_tcb_pointer(self):
         code = strip_comments(read(BOOT_TRACE))
         helper = body_of(code, "static void tr_dump_task(u32 frame)")
         self.assertIsNotNone(helper, "tr_dump_task not found")
-        self.assertIn("tr_readable", helper, "the TCB pointer must be range-checked first")
+        self.assertIn(
+            "tr_readable", helper, "the TCB pointer must be range-checked first"
+        )
 
     def test_rom_printf_format_strings_have_no_percent_u(self):
         # The ROM DiagPrintf does not consume an argument for "%u" (it prints a
@@ -284,8 +314,16 @@ class StartupOrderingTest(unittest.TestCase):
         code = strip_comments(read(BOOT_TRACE))
         fn = body_of(code, "static void tr_dump_task_map(TimerHandle_t t)")
         self.assertIsNotNone(fn, "tr_dump_task_map not found")
-        self.assertIn("uxTaskGetSystemState", fn, "the map must enumerate tasks via the public API")
-        self.assertIn("tr_tcb_layout_ok", fn, "each TCB must pass the layout check before reading pxStack")
+        self.assertIn(
+            "uxTaskGetSystemState",
+            fn,
+            "the map must enumerate tasks via the public API",
+        )
+        self.assertIn(
+            "tr_tcb_layout_ok",
+            fn,
+            "each TCB must pass the layout check before reading pxStack",
+        )
         self.assertIn("pxStack", fn)
 
 

@@ -1,15 +1,18 @@
 """Actual four-module integration, with ASan/UBSan SDK fault injection."""
-from pathlib import Path
+
 import os
 import shutil
 import subprocess
 import tempfile
 import unittest
+from pathlib import Path
 
 OTA = Path(__file__).resolve().parents[1] / "base/ota"
-MODULES = tuple(OTA / ("image2_" + name + ".c") for name in
-                ("transaction", "activation", "flash_backend", "session"))
-HARNESS = r'''
+MODULES = tuple(
+    OTA / ("image2_" + name + ".c")
+    for name in ("transaction", "activation", "flash_backend", "session")
+)
+HARNESS = r"""
 #include "image2_session.h"
 #include <assert.h>
 #include <stdio.h>
@@ -228,7 +231,7 @@ int main(void) {
     printf("%d linked fault-injection scenarios passed\n",total);
     return 0;
 }
-'''
+"""
 
 
 class SessionTest(unittest.TestCase):
@@ -237,17 +240,40 @@ class SessionTest(unittest.TestCase):
             source = Path(temp) / "session.c"
             exe = Path(temp) / "session"
             source.write_text(HARNESS)
-            subprocess.run(["cc", "-std=c99", "-Wall", "-Wextra", "-Werror", "-pedantic",
-                            *flags,
-                            "-I", str(OTA), str(source),
-                            *map(str, MODULES),
-                            "-o", str(exe)], check=True)
-            subprocess.run([str(exe)], check=True,
-                            env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"})
+            subprocess.run(
+                [
+                    "cc",
+                    "-std=c99",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-pedantic",
+                    *flags,
+                    "-I",
+                    str(OTA),
+                    str(source),
+                    *map(str, MODULES),
+                    "-o",
+                    str(exe),
+                ],
+                check=True,
+            )
+            subprocess.run(
+                [str(exe)],
+                check=True,
+                env={**os.environ, "ASAN_OPTIONS": "detect_leaks=0"},
+            )
 
     def test_linked_sanitized_integration(self):
-        self.run_integration(["-O2", "-fstrict-aliasing", "-fsanitize=address,undefined",
-                              "-fno-omit-frame-pointer", "-g"])
+        self.run_integration(
+            [
+                "-O2",
+                "-fstrict-aliasing",
+                "-fsanitize=address,undefined",
+                "-fno-omit-frame-pointer",
+                "-g",
+            ]
+        )
 
     def test_linked_optimized_strict_aliasing(self):
         self.run_integration(["-O2", "-fstrict-aliasing", "-Wstrict-aliasing"])
@@ -255,24 +281,43 @@ class SessionTest(unittest.TestCase):
     def test_cpp_typed_storage(self):
         with tempfile.TemporaryDirectory(prefix="image2-session-cpp-") as temp:
             source = Path(temp) / "session.cpp"
-            source.write_text('''#include "image2_session.h"
+            source.write_text("""#include "image2_session.h"
 static image2_session_boot boot{};
 static image2_session session{};
 int main() {
     return image2_session_begin(&session, &boot, nullptr, nullptr, nullptr, 0);
 }
-''')
-            subprocess.run(["c++", "-std=c++11", "-Wall", "-Wextra", "-Werror",
-                            "-pedantic", "-O2", "-fstrict-aliasing", "-I", str(OTA),
-                            "-c", str(source), "-o", str(Path(temp) / "session.o")],
-                           check=True)
+""")
+            subprocess.run(
+                [
+                    "c++",
+                    "-std=c++11",
+                    "-Wall",
+                    "-Wextra",
+                    "-Werror",
+                    "-pedantic",
+                    "-O2",
+                    "-fstrict-aliasing",
+                    "-I",
+                    str(OTA),
+                    "-c",
+                    str(source),
+                    "-o",
+                    str(Path(temp) / "session.o"),
+                ],
+                check=True,
+            )
 
     def test_arm_optimized_compile_only(self):
-        compiler = (os.environ.get("ARM_NONE_EABI_GCC") or
-                    shutil.which("arm-none-eabi-gcc"))
+        compiler = os.environ.get("ARM_NONE_EABI_GCC") or shutil.which(
+            "arm-none-eabi-gcc"
+        )
         if not compiler:
-            installed = (Path.home() / ".platformio/packages/toolchain-gccarmnoneeabi"
-                         / "bin/arm-none-eabi-gcc")
+            installed = (
+                Path.home()
+                / ".platformio/packages/toolchain-gccarmnoneeabi"
+                / "bin/arm-none-eabi-gcc"
+            )
             if installed.is_file():
                 compiler = str(installed)
         if not compiler:
@@ -281,11 +326,28 @@ int main() {
             source = Path(temp) / "session.c"
             source.write_text(HARNESS)
             for unit in (*MODULES, source):
-                subprocess.run([compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                                "-pedantic", "-O2", "-fstrict-aliasing",
-                                "-Wstrict-aliasing=2", "-mcpu=cortex-m3", "-mthumb",
-                                "-I", str(OTA), "-c", str(unit), "-o",
-                                str(Path(temp) / (unit.stem + ".o"))], check=True)
+                subprocess.run(
+                    [
+                        compiler,
+                        "-std=c99",
+                        "-Wall",
+                        "-Wextra",
+                        "-Werror",
+                        "-pedantic",
+                        "-O2",
+                        "-fstrict-aliasing",
+                        "-Wstrict-aliasing=2",
+                        "-mcpu=cortex-m3",
+                        "-mthumb",
+                        "-I",
+                        str(OTA),
+                        "-c",
+                        str(unit),
+                        "-o",
+                        str(Path(temp) / (unit.stem + ".o")),
+                    ],
+                    check=True,
+                )
 
 
 if __name__ == "__main__":

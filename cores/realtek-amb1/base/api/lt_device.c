@@ -14,9 +14,9 @@ static bool read_factory_mac(uint8_t *mac) {
 	 * RTL8195A _ReadEfuseInfo8195a copies map[0x11A..0x11F]. */
 	uint8_t map[512];
 	memset(map, 0xFF, sizeof(map));
-	uint16_t pos = 0;
+	uint16_t pos	   = 0;
 	unsigned mac_words = 0;
-	uint32_t ctrl = HAL_READ32(SYSTEM_CTRL_BASE, REG_SYS_EFUSE_CTRL);
+	uint32_t ctrl	   = HAL_READ32(SYSTEM_CTRL_BASE, REG_SYS_EFUSE_CTRL);
 	while (pos < 256) {
 		uint8_t header, ext;
 		if (!HALEFUSEOneByteReadRAM(ctrl, pos++, &header, L25EOUTVOLTAGE))
@@ -24,12 +24,12 @@ static bool read_factory_mac(uint8_t *mac) {
 		if (header == 0xFF)
 			break;
 		unsigned section = header >> 4;
-		unsigned mask = header & 15;
+		unsigned mask	 = header & 15;
 		if ((header & 31) == 15) {
 			if (pos >= 256 || !HALEFUSEOneByteReadRAM(ctrl, pos++, &ext, L25EOUTVOLTAGE))
 				return false;
 			section = (header >> 5) | ((ext & 0xF0) >> 1);
-			mask = ext & 15;
+			mask	= ext & 15;
 		}
 		for (unsigned word = 0; word < 4; word++) {
 			if (mask & (1 << word))

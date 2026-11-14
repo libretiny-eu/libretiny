@@ -2,8 +2,8 @@
 #ifndef AMB1_PREFERENCES_FLASH_H
 #define AMB1_PREFERENCES_FLASH_H
 
-#include <stddef.h>
 #include "preferences_layout.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,8 +48,11 @@ typedef struct {
 } amb1_preferences_flash_t;
 
 /* Failed binding clears the instance. No flash access occurs during binding. */
-int amb1_preferences_flash_bind(amb1_preferences_flash_t *,
-	const amb1_preferences_flash_ops_t *, const amb1_preferences_flash_policy_t *);
+int amb1_preferences_flash_bind(
+	amb1_preferences_flash_t *,
+	const amb1_preferences_flash_ops_t *,
+	const amb1_preferences_flash_policy_t *
+);
 
 /* FAL device callbacks can forward here. Offsets are RELATIVE to KVS_START,
  * lengths must be nonzero, success returns length, failure returns -1.

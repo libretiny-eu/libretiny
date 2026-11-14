@@ -1,4 +1,5 @@
 """Host-compile the real FAL adapter with mocked SDK dependencies."""
+
 import pathlib
 import shutil
 import subprocess
@@ -169,7 +170,9 @@ class KvsFalDispatchTest(unittest.TestCase):
             self.skipTest("host C compiler unavailable")
         for flag in (None, 0, 1):
             for strong in (0, 1):
-                with self.subTest(flag=flag, strong=strong), tempfile.TemporaryDirectory() as tmp:
+                with self.subTest(
+                    flag=flag, strong=strong
+                ), tempfile.TemporaryDirectory() as tmp:
                     temp = pathlib.Path(tmp)
                     for name, content in HEADERS.items():
                         (temp / name).write_text(content)
@@ -178,17 +181,30 @@ class KvsFalDispatchTest(unittest.TestCase):
                         "extern void test_configure(void);\n"
                         "void lt_amb1_preferences_configure(void) { test_configure(); }\n"
                     )
-                    command = [compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-                               f"-I{temp}", f"-I{PORT}", f"-DSTRONG_HOOK={strong}"]
+                    command = [
+                        compiler,
+                        "-std=c99",
+                        "-Wall",
+                        "-Wextra",
+                        "-Werror",
+                        f"-I{temp}",
+                        f"-I{PORT}",
+                        f"-DSTRONG_HOOK={strong}",
+                    ]
                     if flag is not None:
                         command.append(f"-DLT_AMB1_EXPERIMENTAL_KVS={flag}")
-                    command += [str(PORT / "fal_flash_amb1_port.c"), str(temp / "main.c")]
+                    command += [
+                        str(PORT / "fal_flash_amb1_port.c"),
+                        str(temp / "main.c"),
+                    ]
                     if strong:
                         command.append(str(temp / "hook.c"))
                     command += ["-o", str(temp / "test")]
                     result = subprocess.run(command, capture_output=True, text=True)
                     self.assertEqual(result.returncode, 0, result.stderr)
-                    result = subprocess.run([str(temp / "test")], capture_output=True, text=True)
+                    result = subprocess.run(
+                        [str(temp / "test")], capture_output=True, text=True
+                    )
                     self.assertEqual(result.returncode, 0, result.stderr)
 
 

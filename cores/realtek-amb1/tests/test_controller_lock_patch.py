@@ -6,22 +6,23 @@ Only temporary copies are patched; this does not qualify hardware exclusion.
 """
 
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import unittest
-
+from pathlib import Path
 
 PATCH = Path(__file__).resolve().parents[1] / "base/ota/image2_controller_lock.patch"
-SDK = Path(os.environ.get(
-    "AMB1_SDK_ROOT",
-    str(Path(os.environ.get("PLATFORMIO_CORE_DIR", "~/.platformio"))
-        / "packages/framework-realtek-amb1"),
-)).expanduser()
-APPROVED_TMP = Path(
-    "/private/var/folders/4q/bvwkg_397v102xfwcpxgdymc0000gn/T/opencode"
-)
+SDK = Path(
+    os.environ.get(
+        "AMB1_SDK_ROOT",
+        str(
+            Path(os.environ.get("PLATFORMIO_CORE_DIR", "~/.platformio"))
+            / "packages/framework-realtek-amb1"
+        ),
+    )
+).expanduser()
+APPROVED_TMP = Path("/private/var/folders/4q/bvwkg_397v102xfwcpxgdymc0000gn/T/opencode")
 SOURCES = (
     "component/os/os_dep/device_lock.c",
     "component/os/os_dep/include/device_lock.h",
@@ -230,10 +231,15 @@ class ControllerLockPatchTest(unittest.TestCase):
             target.write_text(originals[source].decode().replace("\r\n", "\n"))
         result = subprocess.run(
             [patch, "--batch", "--fuzz=0", "-p1", "-i", str(PATCH)],
-            cwd=work, text=True, capture_output=True, timeout=30,
+            cwd=work,
+            text=True,
+            capture_output=True,
+            timeout=30,
         )
         if result.returncode:
-            raise AssertionError("SDK patch does not apply:\n" + result.stdout + result.stderr)
+            raise AssertionError(
+                "SDK patch does not apply:\n" + result.stdout + result.stderr
+            )
         for source in SOURCES:
             if (SDK / source).read_bytes() != originals[source]:
                 raise AssertionError("Installed SDK changed: " + source)
@@ -245,18 +251,37 @@ class ControllerLockPatchTest(unittest.TestCase):
         (work / "harness.c").write_text(HARNESS)
         cls.executable = work / "controller_lock_test"
         result = subprocess.run(
-            [compiler, "-std=c99", "-Wall", "-Wextra", "-Werror",
-             "-Wno-unused-function", "-Dprintf=mock_printf", "-I", str(work),
-             "-I", str(work / "component/os/os_dep/include"),
-             str(work / "harness.c"), "-o", str(cls.executable)],
-            text=True, capture_output=True, timeout=30,
+            [
+                compiler,
+                "-std=c99",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-Wno-unused-function",
+                "-Dprintf=mock_printf",
+                "-I",
+                str(work),
+                "-I",
+                str(work / "component/os/os_dep/include"),
+                str(work / "harness.c"),
+                "-o",
+                str(cls.executable),
+            ],
+            text=True,
+            capture_output=True,
+            timeout=30,
         )
         if result.returncode:
-            raise AssertionError("Patched SDK compile failed:\n" + result.stdout + result.stderr)
+            raise AssertionError(
+                "Patched SDK compile failed:\n" + result.stdout + result.stderr
+            )
 
     def run_scenario(self, scenario):
         result = subprocess.run(
-            [str(self.executable), scenario], text=True, capture_output=True, timeout=5,
+            [str(self.executable), scenario],
+            text=True,
+            capture_output=True,
+            timeout=5,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 

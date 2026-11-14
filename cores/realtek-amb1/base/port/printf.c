@@ -8,9 +8,9 @@
  * and the IER/LSR accesses this core makes there take effect, so the app's own
  * print path writes it directly and polled, with a bounded spin so a wedged UART
  * cannot hang the caller. */
+#include <ameba_soc.h>
 #include <libretiny.h>
 #include <printf/printf.h>
-#include <ameba_soc.h>
 
 uint8_t lt_uart_port = 2;
 
