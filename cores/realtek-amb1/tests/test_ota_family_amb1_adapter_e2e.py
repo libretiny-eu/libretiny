@@ -204,7 +204,7 @@ static uint8_t image[IMAGE_SIZE];
 
 static unsigned current_slot;
 static int mutex_held, mutex_init, prepare_ok = 1, ipsr;
-static unsigned reads, programs, erases, demotes, writes_outside;
+static unsigned reads, programs, erases, demotes, writes_outside, wdt_feeds;
 static unsigned erases_outside, running_writes;
 
 static uint32_t tgt, tgt_end, act;
@@ -278,6 +278,10 @@ void __real_flash_erase_sector(flash_t *obj, uint32_t a) {
     if (a < tgt || a + SECTOR_SIZE > tgt_end) ++erases_outside;
     memset(flash + a, 0xFF, SECTOR_SIZE);
 }
+
+/* Host stand-in for the platform watchdog refresh; the adapter feeds it once
+ * per erased sector so a real 10 s WDT survives the blocking begin(). */
+void lt_wdt_feed(void) { ++wdt_feeds; }
 
 int __real_flash_burst_write(flash_t *obj, uint32_t a, uint32_t n, uint8_t *data) {
     int demote;

@@ -45,7 +45,7 @@ HARDWARE = r"""
 #include "flash_api.h"
 #include "image2_sdk_adapter.h"
 static uint8_t memory[16384];
-static int reads, programs, erases, bad_blank, bad_program, read_status = 1;
+static int reads, programs, erases, bad_blank, bad_program, fail_latches, read_status = 1, wdt_feeds;
 static uint32_t program_address, program_length;
 static int ipsr;
 int mock_ipsr(void) { return ipsr; }
@@ -67,9 +67,13 @@ static void SpicSectorEraseFlashRtl8195A(uint32_t a) {
 }
 static void SpicUserProgramRtl8195A(uint8_t *data, SPIC_INIT_PARA p,
                                    uint32_t a, uint32_t *n) {
-    (void)p; assert(pool[0].held && *n && *n <= 256);
-    ++programs; program_address = a; program_length = *n;
-    if (!bad_program) for (uint32_t i = 0; i < *n; ++i) memory[a+i] &= data[i];
+    uint32_t count = *n;
+    (void)p; assert(pool[0].held && count && count <= 256);
+    ++programs; program_address = a; program_length = count;
+    /* fail_latches models the observed hardware behaviour: the burst is
+     * accepted but nothing latches, so the bytes stay erased. */
+    if (fail_latches) { --fail_latches; *n = 0; return; }
+    if (!bad_program) for (uint32_t i = 0; i < count; ++i) memory[a+i] &= data[i];
     *n = 0;
 }
 int flash_stream_read(flash_t *obj, uint32_t a, uint32_t n, uint8_t *data) {
@@ -83,6 +87,8 @@ int __wrap_flash_burst_write(flash_t *obj, uint32_t a, uint32_t n, uint8_t *data
 void __wrap_flash_erase_sector(flash_t *obj, uint32_t a) {
     (void)obj; (void)a; ++denied_writes;
 }
+/* Host stand-in for the platform watchdog refresh fed once per erased sector. */
+void lt_wdt_feed(void) { ++wdt_feeds; }
 """
 
 MAIN = r"""
@@ -131,7 +137,18 @@ int main(int argc, char **argv) {
         assert(ops.erase_sector(ops.ctx, 4096) == 0 && erases == 1 && reads == 18);
     } else if (!strcmp(argv[1], "verifyfail")) {
         bad_program = 1;
-        assert(ops.program(ops.ctx, 4104, &value, 1) == 0 && programs == 1);
+        assert(ops.program(ops.ctx, 4104, &value, 1) == 0 && programs == 3);
+    } else if (!strcmp(argv[1], "retry")) {
+        /* One lost burst must be recovered by the bounded resend. */
+        fail_latches = 1;
+        assert(ops.program(ops.ctx, 4096, &value, 1) == 1 && programs == 2);
+        assert(memory[4096] == value);
+        /* Like every other case, finish in the shared fail-stop state. */
+        assert(ops.program(ops.ctx, 4096, &value, 0) == 0 && programs == 2);
+    } else if (!strcmp(argv[1], "retryexhausted")) {
+        /* Every burst is lost: still fail closed, with bounded attempts. */
+        fail_latches = 100;
+        assert(ops.program(ops.ctx, 4096, &value, 1) == 0 && programs == 3);
     } else if (!strcmp(argv[1], "readfail")) {
         read_status = 2;
         assert(ops.read(ops.ctx, 4096, out, 1) == 0);
@@ -217,7 +234,9 @@ class SDKAdapterTest(unittest.TestCase):
             (work / "main.c").write_text(mock_lock + HARDWARE + actual + MAIN)
             self.build(work, [BASE / "image2_sdk_adapter.c", work / "component/os/os_dep/device_lock.c", work / "main.c"],
                        ["-DLT_AMB1_EXPERIMENTAL_IMAGE2_SDK_ADAPTER=1", "-Dprintf=mock_printf"])
-            for case in ("success", "readonly", "blankfail", "verifyfail", "readfail", "bounds", "erasebounds", "unapproved", "zero", "invalidpolicy"):
+            for case in ("success", "readonly", "blankfail", "verifyfail", "retry",
+                         "retryexhausted", "readfail", "bounds", "erasebounds",
+                         "unapproved", "zero", "invalidpolicy"):
                 with self.subTest(case=case):
                     subprocess.run([str(work / "test"), case], check=True)
 

@@ -12,6 +12,12 @@
 extern void __real_flash_erase_sector(flash_t *, uint32_t);
 extern int __real_flash_burst_write(flash_t *, uint32_t, uint32_t, uint8_t *);
 
+/* The family hook erases the whole round sector extent inside a single
+ * begin(), which on this part takes about as long as the platform's 10 s
+ * hardware watchdog. ESPHome feeds that watchdog in its own OTA receive loop
+ * but cannot run during this call, so refresh once per erased sector. */
+extern void lt_wdt_feed(void);
+
 enum { SECTOR = 4096, PAGE = 256 };
 static struct {
 	flash_t flash;
@@ -159,6 +165,8 @@ static int erase_sector(void *ctx, uint32_t address) {
 	mutation_cap cap = { address, SECTOR, 1 };
 	if (!enter(ctx))
 		return 0;
+	/* Bounds the unfed gap to one sector erase plus its readback. */
+	lt_wdt_feed();
 	if (!mutate(&cap))
 		return finish(0);
 	for (uint32_t offset = 0; offset < SECTOR; offset += PAGE) {
@@ -171,23 +179,47 @@ static int erase_sector(void *ctx, uint32_t address) {
 	return finish(1);
 }
 
+/* A single serial-NOR program burst occasionally fails to latch every bit on
+ * this part. Observed on hardware, each confirmed by an off-device programmer
+ * read of the chip: one run left the trailing word of a 128-byte burst blank,
+ * another left two bits set in one byte of a programme chunk. Re-issuing the
+ * same program is safe because the preflight below proves every bit we need
+ * set is still set, so a retry can only clear bits that must be clear. The
+ * whole fragment is re-read after every attempt and the result must be exact,
+ * so a genuinely bad cell still fails closed. */
+#define PROGRAM_ATTEMPTS 3
+
 static int program(void *ctx, uint32_t address, const void *data, size_t n) {
 	mutation_cap cap = { address, n, 0 };
+	int mutated = 0, ok = 0;
 	if (!enter(ctx))
 		return 0;
 	if (!data || !authorized(address, n) || n > PAGE || n > PAGE - address % PAGE)
 		return finish(0);
 	memcpy(adapter.staged, data, n);
-	if (!raw_read(address, adapter.check, n))
-		return finish(0);
-	for (size_t i = 0; i < n; ++i)
-		if ((adapter.check[i] & adapter.staged[i]) != adapter.staged[i])
+	for (unsigned attempt = 0; attempt < PROGRAM_ATTEMPTS && !ok; ++attempt) {
+		/* NOR preflight: programming may only clear bits. Re-checked before
+		 * every attempt because a partial program lowers the set bits. */
+		if (!raw_read(address, adapter.check, n))
 			return finish(0);
-	if (!mutate(&cap) || !raw_read(address, adapter.check, n))
+		for (size_t i = 0; i < n; ++i)
+			if ((adapter.check[i] & adapter.staged[i]) != adapter.staged[i])
+				return finish(0);
+		if (memcmp(adapter.staged, adapter.check, n) == 0) {
+			ok = 1; /* already exact, nothing left to programme */
+			break;
+		}
+		if (!mutate(&cap))
+			return finish(0);
+		mutated = 1;
+		if (!raw_read(address, adapter.check, n))
+			return finish(0);
+		ok = memcmp(adapter.staged, adapter.check, n) == 0;
+	}
+	if (!ok)
 		return finish(0);
-	if (memcmp(adapter.staged, adapter.check, n) != 0)
-		return finish(0);
-	adapter.staged_write = 1;
+	if (mutated)
+		adapter.staged_write = 1;
 	return finish(1);
 }
 

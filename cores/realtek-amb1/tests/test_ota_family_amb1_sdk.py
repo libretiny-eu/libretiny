@@ -98,7 +98,7 @@ HARNESS = r"""
 
 static uint8_t memory[FLASH_SIZE];
 static int mutex_held, mutex_init, task = 1, ipsr, prepare_ok = 1;
-static unsigned reads, programs, erases;
+static unsigned reads, programs, erases, wdt_feeds;
 static unsigned current_slot;
 static int marker;
 
@@ -138,6 +138,10 @@ void __real_flash_erase_sector(flash_t *obj, uint32_t a) {
     ++erases;
     memset(memory + a, 255, 4096);
 }
+
+/* Host stand-in for the platform watchdog refresh; the adapter feeds it once
+ * per erased sector so a real 10 s WDT survives the blocking begin(). */
+void lt_wdt_feed(void) { ++wdt_feeds; }
 int __real_flash_burst_write(flash_t *obj, uint32_t a, uint32_t n, uint8_t *data) {
     (void)obj;
     assert(mutex_held && n && n <= 256);
