@@ -10,7 +10,8 @@
 		"code": "amb1",
 		"description": "Realtek Ameba1",
 		"id": "0x9FFFD543",
-		"short_name": "RTL8710A"
+		"short_name": "RTL8710A",
+		"package": "framework-realtek-amb1"
 	},
 	"realtek-ambz": {
 		"parent": "realtek-amb",

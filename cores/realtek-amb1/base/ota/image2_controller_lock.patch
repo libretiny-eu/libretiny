@@ -1,0 +1,95 @@
+Unapplied AMB1 SDK extension; NOT an OTA-private mutex or hardware enablement.
+
+Apply from the framework-realtek-amb1 package root with `patch -p1` only after
+reviewing the selected SDK. The host test applies this artifact to a temporary
+copy of the installed SDK source; it never changes the package or builder.
+
+Integration gate:
+* This patch is specific to the FreeRTOS SDK (not its other OS backends).
+* During single-task startup, before any concurrent device-lock users, call
+  device_mutex_prepare(RT_DEV_LOCK_FLASH) and require exactly 1. Allocation is
+  permitted there, never in device_mutex_try_lock(). Do not free/reinitialize
+  this lock for the lifetime of any SDK users. The existing private free helper
+  is not made public or used here.
+* try_lock returns exactly 1 after taking the SAME private SDK mutex, otherwise
+  0 with no acquisition, allocation, logging, retry, or positive timeout.
+  It is task-only, not ISR/timer/network callback safe. No recursive acquisition.
+* A future SDK binding may map the backend callback to this primitive and release
+  with device_mutex_unlock(RT_DEV_LOCK_FLASH) only after successful acquisition.
+  Retain the backend's identity, boot-lifetime, owner-task, busy/nonreentry and
+  exactly-once close checks; this primitive does not replace those checks or
+  authenticate owner pointers. Native FreeRTOS mutex ownership is task identity.
+  The adapter must enforce dedicated task context before calling this function.
+* No binding is supplied: current FAL/chip-ID readers do not all cooperate.
+  Audit/quiesce ROM, IRQ, DMA, mapped and library users, stage callback data away
+  from flash/network dependencies, qualify actual program footprint, execution
+  safety and timing, then review narrow authorization separately. All existing
+  guards and production denial remain unchanged. Host mocks prove only the
+  source-level same-mutex/zero-tick contract, not hardware exclusion or timing.
+
+The public blocking API and enum remain source compatible. Initialization now
+marks a mutex initialized only after allocation succeeds; startup must abort OTA
+on prepare failure. Legacy void callers still have their old inability to report
+allocation failure and are not made allocation-failure-safe by this extension.
+
+--- a/component/os/os_dep/device_lock.c
++++ b/component/os/os_dep/device_lock.c
+@@ -9,6 +9,8 @@
+ 
+ #include "osdep_service.h"
+ #include "device_lock.h"
++#include <FreeRTOS.h>
++#include <semphr.h>
+ 
+ //------------------------------------------------------
+ #define DEVICE_MUTEX_IS_INIT(device)	(mutex_init & (1<<device))
+@@ -27,7 +29,8 @@
+ 		rtw_enter_critical(&lock, &irqL);
+ 		if(!DEVICE_MUTEX_IS_INIT(device)){
+ 			rtw_mutex_init(&device_mutex[device]);
+-			DEVICE_MUTEX_SET_INIT(device);
++			if(device_mutex[device] != NULL)
++				DEVICE_MUTEX_SET_INIT(device);
+ 		}
+ 		rtw_exit_critical(&lock, &irqL);
+ 	}
+@@ -48,6 +51,25 @@
+ 	}
+ }
+ 
++/* Startup only: finish allocation before enabling concurrent SDK users. */
++int device_mutex_prepare(RT_DEV_LOCK_E device)
++{
++	if((unsigned int)device >= RT_DEV_LOCK_MAX)
++		return 0;
++	device_mutex_init(device);
++	return DEVICE_MUTEX_IS_INIT(device) && device_mutex[device] != NULL;
++}
++
++/* Task only, preinitialized mutex: no lazy allocation or timeout logging. */
++int device_mutex_try_lock(RT_DEV_LOCK_E device)
++{
++	if((unsigned int)device >= RT_DEV_LOCK_MAX)
++		return 0;
++	if(!DEVICE_MUTEX_IS_INIT(device) || device_mutex[device] == NULL)
++		return 0;
++	return xSemaphoreTake(device_mutex[device], 0) == pdTRUE ? 1 : 0;
++}
++
+ //======================================================
+ void device_mutex_lock(RT_DEV_LOCK_E device)
+ {
+--- a/component/os/os_dep/include/device_lock.h
++++ b/component/os/os_dep/include/device_lock.h
+@@ -20,6 +20,11 @@
+ 	RT_DEV_LOCK_MAX = 5
+ }RT_DEV_LOCK_E;
+ 
++/* Single-task startup allocation; exactly 1 means ready, 0 means failure. */
++int device_mutex_prepare(RT_DEV_LOCK_E device);
++/* Task-only, prepared shared mutex. Exactly 1 means acquired, else 0. */
++int device_mutex_try_lock(RT_DEV_LOCK_E device);
++
+ void device_mutex_lock(RT_DEV_LOCK_E device);
+ void device_mutex_unlock(RT_DEV_LOCK_E device);
+ 

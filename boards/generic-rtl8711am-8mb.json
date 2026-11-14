@@ -1,0 +1,13 @@
+{
+	"_base": [
+		"realtek-amb1"
+	],
+	"build": {
+		"mcu": "rtl8711am",
+		"variant": "generic-rtl8711am-8mb"
+	},
+	"name": "Generic - RTL8711AM (8M)",
+	"symbol": "RTL8711AM (8M)",
+	"vendor": "Generic",
+	"url": ""
+}

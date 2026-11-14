@@ -2,6 +2,9 @@
 
 #include "WiFiPrivate.h"
 #include <libretiny.h>
+#if LT_AMB1
+#include "WiFiConnectDiag.h"
+#endif
 
 WiFiStatus WiFiClass::begin(
 	const char *ssid,
@@ -80,14 +83,55 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 	WiFiNetworkInfo &info = DATA->sta;
 	EventInfo *eventInfo  = nullptr;
 
+#if LT_AMB1
+	const size_t amb1_ssid_len = info.ssid ? strlen(info.ssid) : 0;
+	const size_t amb1_pass_len = info.password ? strlen(info.password) : 0;
+	const bool amb1_bssid_arg  = bssid != NULL;
+
+	/*
+	 * Ameba-1 station joins exactly like the known-working vendor firmware:
+	 * plain wifi_connect(), no wext_set_ssid("-") pre-clear, no BSSID and no
+	 * partial scan. A BSSID supplied through begin() is accepted for API
+	 * compatibility but ignored on this family.
+	 */
+	LT_IM(
+		WIFI,
+		"AMB1 diag: ssid_len=%u pass_len=%u auth=0x%08x channel=%d bssid_arg=%s path=%s",
+		(unsigned)amb1_ssid_len,
+		(unsigned)amb1_pass_len,
+		(unsigned)info.auth,
+		(int)info.channel,
+		amb1_bssid_arg ? "ignored" : "absent",
+		lt_amb1_path_name()
+	);
+#else
 	LT_IM(WIFI, "Connecting to %s (bssid=%p)", info.ssid, bssid);
+#endif
 	DIAG_PRINTF_DISABLE();
 
+#if !LT_AMB1
+	/*
+	 * Non-AMB1 keeps the legacy pre-clear. Ameba-1 deliberately does not:
+	 * the 8195a SDK's wifi_connect_local() sets the real SSID itself, and
+	 * leaving the driver on SSID "-" is the suspected candidate010 failure.
+	 */
 	wext_set_ssid(WLAN0_NAME, (uint8_t *)"-", 1);
+#endif
 
 	// Feed watchdog before potentially long-blocking connect
 	lt_wdt_feed();
 
+#if LT_AMB1
+	ret = wifi_connect(
+		info.ssid,
+		(rtw_security_t)info.auth,
+		info.password,
+		amb1_ssid_len,
+		amb1_pass_len,
+		LT_AMB1_JOIN_KEY_ID,
+		NULL
+	);
+#else
 	if (!bssid) {
 		ret = wifi_connect(
 			info.ssid,
@@ -124,6 +168,7 @@ bool WiFiClass::reconnect(const uint8_t *bssid) {
 			set_pscan_channel(info.channel, false);
 		}
 	}
+#endif
 
 	// Feed watchdog after connect, before DHCP
 	lt_wdt_feed();

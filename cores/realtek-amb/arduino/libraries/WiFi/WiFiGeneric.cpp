@@ -16,6 +16,12 @@ bool WiFiClass::modePriv(WiFiMode mode, WiFiModeAction sta, WiFiModeAction ap) {
 		// initialize wifi first
 		LT_IM(WIFI, "Initializing LwIP");
 		LwIP_Init();
+#if LT_AMB1
+		if (!lt_amb1_lwip_ready()) {
+			DIAG_PRINTF_ENABLE();
+			return false;
+		}
+#endif
 		DATA->initialized = true;
 	}
 	LT_HEAP_I();

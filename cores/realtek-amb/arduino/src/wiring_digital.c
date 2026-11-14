@@ -54,8 +54,16 @@ void pinMode(pin_size_t pinNumber, PinMode pinMode) {
 	}
 	data->gpioMode = pinMode;
 
+#if LT_AMB1
+	// Ameba1 gpio_dir reinitializes an already-claimed pin and can leave it input.
+	// gpio_init already selects PullNone; avoid reclaiming the pad for outputs.
+	if (mode != PullNone)
+		gpio_mode(gpio, mode);
+	gpio_change_dir(gpio, dir);
+#else
 	gpio_dir(gpio, dir);
 	gpio_mode(gpio, mode);
+#endif
 }
 
 void digitalWrite(pin_size_t pinNumber, PinStatus status) {

@@ -45,14 +45,16 @@ int16_t WiFiClass::scanNetworks(bool async, bool showHidden, bool passive, uint3
 
 	LT_IM(WIFI, "Starting WiFi scan");
 
-	if (wifi_scan_networks(scanHandler, this) != RTW_SUCCESS)
-		return WIFI_SCAN_FAILED;
-
+	// Completion may run before wifi_scan_networks() returns.
+	xSemaphoreTake(DATA->scanSem, 1); // discard any previous completion
 	scan->running = true;
+	if (wifi_scan_networks(scanHandler, this) != RTW_SUCCESS) {
+		scan->running = false;
+		return WIFI_SCAN_FAILED;
+	}
 
 	if (!async) {
 		LT_IM(WIFI, "Waiting for results");
-		xSemaphoreTake(DATA->scanSem, 1); // reset the semaphore quickly
 		xSemaphoreTake(DATA->scanSem, pdMS_TO_TICKS(maxMsPerChannel * 20));
 		return scan->count;
 	}

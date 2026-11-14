@@ -32,6 +32,10 @@ custom_board = myboard.json
 # custom library versions (not recommended)
 custom_versions.lwip = 2.1.3
 custom_versions.beken_bdk = 2021.06.07
+
+# AMB1 only: build the staged image2 OTA adapter and enable LT_HAS_OTA.
+# Bench/qualification use; requires a matching loader and partition layout.
+custom_amb1_flash_qualification = yes
 ```
 
 ## LibreTiny options

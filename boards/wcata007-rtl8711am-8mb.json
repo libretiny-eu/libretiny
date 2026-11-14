@@ -1,0 +1,23 @@
+{
+	"_base": [
+		"realtek-amb1"
+	],
+	"build": {
+		"mcu": "rtl8711am",
+		"variant": "generic-rtl8711am-8mb"
+	},
+	"name": "WCATA007 - RTL8711AM (8M)",
+	"symbol": "WCATA007",
+	"vendor": "GE Appliances",
+	"url": "",
+	"flash": {
+		"boot": "0x000000+0x00B000",
+		"ota1": "0x00B000+0x100000",
+		"ota2": "0x177000+0x0FE000",
+		"kvs": "0x275000+0x002000",
+		"system": "0x2E3000+0x51D000"
+	},
+	"upload": {
+		"maximum_size": 1040384
+	}
+}

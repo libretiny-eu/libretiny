@@ -26,9 +26,112 @@ typedef struct {
 	uint32_t bytes_total;		   // total update size
 	uf2_err_t error;			   // LT OTA/uf2ota error code
 	bool running;				   // whether update has begun
+	bool family_handled;		   // family lifecycle hook owns this update
+	bool family_finished;		   // family end hook completed successfully
+	uf2_err_t family_error;		   // sticky family hook error
 	void (*callback)(void *param); // progress callback
 	void *callback_param;		   // callback argument
 } lt_ota_ctx_t;
+
+/**
+ * @brief Result of a family OTA lifecycle hook.
+ *
+ * LT_OTA_FAMILY_PASS (0) means "not handled"; the common path keeps its normal
+ * behaviour. LT_OTA_FAMILY_HANDLED means the family accepted/staged the item and
+ * the stock FAL writer must not run. Every other value must be a uf2_err_t error
+ * code greater than UF2_ERR_IGNORE; out-of-range values are latched as
+ * UF2_ERR_WRITE_FAILED so they stay safe for the Update error mapping.
+ */
+typedef int lt_ota_family_result_t;
+
+#define LT_OTA_FAMILY_PASS	  0
+#define LT_OTA_FAMILY_HANDLED 0x1000
+
+/*
+ * Family OTA lifecycle hooks (weak, opt-in; additive to the common OTA path).
+ *
+ * Families that need staged/authenticated activation (for example AMB1 image2)
+ * override all four hooks. Other families link unchanged because the weak
+ * defaults below are no-ops.
+ *
+ * Contract guaranteed by the common path:
+ *  - begin() is called once, after the UF2 context and write protection are
+ *    initialized, before any block is processed.
+ *  - write_block() is called only for blocks that would otherwise reach the
+ *    stock uf2_write() FAL writer: magic/family checked, the UF2 header already
+ *    parsed, and the block is main-flash with len > 0. It is not called for the
+ *    header block or for blocks the stock writer would ignore.
+ *  - end() is called at most once, only when the upload is byte-complete with no
+ *    parser/family error and no partially buffered block, and only after the
+ *    caller's digest/authentication check has passed (UpdateClass verifies MD5
+ *    before calling lt_ota_end()). It must finalize/verify but MUST NOT switch
+ *    images, activate, or reboot.
+ *  - abort() is called once for an unfinished transaction (begin error, explicit
+ *    abort, incomplete upload, parser/family error, digest mismatch) and never
+ *    after a successful end(). It must be idempotent and MUST NOT commit,
+ *    activate, or reboot.
+ *
+ * Parser limitation: uf2ota 5.0.0 exposes no parse-only data-block API. A
+ * handled block is delivered before the private uf2_parse_block()/uf2_write()
+ * step, so OTA_PART_INFO target selection, BINPATCH application and the stock
+ * sequence check have not run. The family MUST therefore validate
+ * block_seq/block_count/addr/len/contiguity, enforce its own target-slot
+ * allowlist (never trust UF2 partition tags), treat the block as read-only, and
+ * independently verify the staged image before any activation. A clean extension
+ * would expose a public parse-only uf2 entry point (or split uf2_write into
+ * validate + sink stages); see lt_ota.c for the exact gap.
+ */
+
+/**
+ * @brief Begin a family OTA transaction.
+ *
+ * @param ctx OTA context
+ * @param size update file size passed to lt_ota_begin(); 0 if unknown
+ * @return LT_OTA_FAMILY_PASS to use the stock writer; LT_OTA_FAMILY_HANDLED to
+ * take ownership of every subsequent main-flash block (the common path will not
+ * call uf2_write() or lt_ota_switch()); or a uf2_err_t error to refuse the update
+ */
+lt_ota_family_result_t lt_ota_family_begin(lt_ota_ctx_t *ctx, size_t size);
+
+/**
+ * @brief Accept or stage one main-flash UF2 block.
+ *
+ * The block has passed uf2_check_block() (magic/family) and the header has been
+ * parsed, but data-block tags, partition selection and binpatch have NOT been
+ * applied. See the parser limitation above.
+ *
+ * @param ctx OTA context
+ * @param block block to accept; must be treated as read-only; cannot be NULL.
+ * The pointer and its data are only valid for the duration of the call.
+ * @return LT_OTA_FAMILY_HANDLED if accepted/staged (the stock FAL writer is
+ * skipped); a uf2_err_t error to abort the upload. LT_OTA_FAMILY_PASS after
+ * begin() returned HANDLED is a contract violation and latches
+ * UF2_ERR_WRITE_FAILED.
+ */
+lt_ota_family_result_t lt_ota_family_write_block(lt_ota_ctx_t *ctx, const uf2_block_t *block);
+
+/**
+ * @brief Finalize a family OTA transaction after the caller's digest check.
+ *
+ * Must verify/finalize the staged image only. It must not activate, switch
+ * images, or reboot; activation is a separate, explicit family operation.
+ *
+ * @param ctx OTA context
+ * @return LT_OTA_FAMILY_HANDLED on success; a uf2_err_t error on failure.
+ * LT_OTA_FAMILY_PASS after begin() returned HANDLED is treated as a contract
+ * violation and latches UF2_ERR_WRITE_FAILED.
+ */
+lt_ota_family_result_t lt_ota_family_end(lt_ota_ctx_t *ctx);
+
+/**
+ * @brief Abandon an unfinished family OTA transaction.
+ *
+ * Called at most once, and never after a successful lt_ota_family_end(). Must be
+ * idempotent and must never commit, activate, or reboot.
+ *
+ * @param ctx OTA context
+ */
+void lt_ota_family_abort(lt_ota_ctx_t *ctx);
 
 /**
  * @brief Initialize the update context to begin OTA process.
@@ -39,12 +142,22 @@ typedef struct {
 void lt_ota_begin(lt_ota_ctx_t *ctx, size_t size);
 
 /**
+ * @brief Release the update context without attempting activation. Safe to repeat.
+ * This does not undo flash writes or family-specific status set during streaming.
+ *
+ * @param ctx OTA context
+ */
+void lt_ota_abort(lt_ota_ctx_t *ctx);
+
+/**
  * @brief Finish the update process. If the update has been written completely,
  * try to activate the target image. Free allocated internal structures, regardless
- * of the activation result.
+ * of the activation result. Parser errors or buffered trailing bytes prevent
+ * activation. Callers must validate any expected digest before calling this.
  *
  * @param ctx OTA context
  * @return false if activation was attempted and not successful; true otherwise
+ * (including incomplete/rejected updates, for compatibility)
  */
 bool lt_ota_end(lt_ota_ctx_t *ctx);
 
