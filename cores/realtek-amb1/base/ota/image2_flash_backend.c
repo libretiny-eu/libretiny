@@ -3,6 +3,66 @@
 
 #define CHECK_CHUNK 128u
 
+/* ---------------------------------------------------------------------------
+ * TEST-ONLY power-loss instrumentation on the demote path.
+ *
+ * LT_AMB1_POWERLOSS_TEST is a NEW, explicitly opt-in flag. Nothing in this tree
+ * defines it: no header defaults it, the family builder never adds it, and the
+ * whole block below is preprocessed away unless a caller passes
+ * -DLT_AMB1_POWERLOSS_TEST=1 by hand. It MUST be absent (or the hook removed)
+ * for every production or acceptance build; see AMB1_POWERLOSS_TEST_PLAN.md.
+ *
+ * When enabled, image2_flash_demote() emits one greppable ASCII line on the
+ * same polled 38400 log UART the bench already captures (module H7 TX -> Pico
+ * GP5 RX, the lt_amb1_log_puts path used by the core's own bring-up output)
+ * after ALL demote preconditions have passed -- phase 3, publication attempted,
+ * source demote allowed, and both the target-publication and full source
+ * signatures read back as "81958711" -- and immediately before the single
+ * activation byte is demoted. It then stalls for about 30 s so an operator can
+ * cut the module's power by hand.
+ *
+ * The stall feeds lt_wdt_feed() every step, so the platform's 10 s hardware
+ * watchdog does NOT fire: the hook must never itself trigger a reset. The loop
+ * is bounded, so a forgotten power cut simply lets the OTA finish normally.
+ *
+ * The hook is strictly additive: it changes no validation, no return value and
+ * no order of the checks around it. The host test compiles this file with the
+ * flag and overrides lt_amb1_powerloss_delay_ms() so the suite never waits.
+ * ------------------------------------------------------------------------- */
+#ifdef LT_AMB1_POWERLOSS_TEST
+#if !LT_AMB1_POWERLOSS_TEST
+#error "LT_AMB1_POWERLOSS_TEST must be exactly 1 when defined"
+#endif
+
+extern void lt_wdt_feed(void);
+extern void lt_amb1_log_puts(const char *s);
+
+/* 166 MHz Cortex-M3, about six cycles per volatile iteration. Deliberately
+ * approximate: the window only has to be comfortably longer than an operator
+ * reaching for the USB power lead. */
+#define LT_AMB1_POWERLOSS_SPINS_PER_MS 32000u
+#define LT_AMB1_POWERLOSS_STEP_MS	   10u
+#define LT_AMB1_POWERLOSS_STALL_MS	   30000u
+
+/* Weak so the host test can substitute a counter and never wait. */
+__attribute__((weak)) void lt_amb1_powerloss_delay_ms(uint32_t ms) {
+	volatile uint32_t spins = ms * LT_AMB1_POWERLOSS_SPINS_PER_MS;
+	while (spins--) {
+	}
+}
+
+static void lt_amb1_powerloss_demote_armed(void) {
+	uint32_t waited;
+	lt_amb1_log_puts("\r\nAMB1-POWERLOSS-DEMOTE-ARMED\r\n");
+	for (waited = 0; waited < LT_AMB1_POWERLOSS_STALL_MS;
+		 waited += LT_AMB1_POWERLOSS_STEP_MS) {
+		lt_wdt_feed();
+		lt_amb1_powerloss_delay_ms(LT_AMB1_POWERLOSS_STEP_MS);
+	}
+	lt_wdt_feed();
+}
+#endif /* LT_AMB1_POWERLOSS_TEST */
+
 static int valid_range(image2_range r, uint32_t size) {
 	return r.start < r.end && r.end <= size;
 }
@@ -151,6 +211,13 @@ int image2_flash_demote(image2_flash_backend *b) {
 	             !memcmp(sig,"81958711",8) && !b->failed;
 	if (ok) ok = b->ops.read(b->ops.ctx,source,sig,8) == 1 &&
 	             !memcmp(sig,"81958711",8) && !b->failed;
+#ifdef LT_AMB1_POWERLOSS_TEST
+	/* Test-only: every check above has passed and the target publication is
+	 * proven; announce the window and stall while feeding the watchdog so an
+	 * operator can cut power immediately before the activation byte is written.
+	 * Additive and compiled out unless the flag is explicitly set. */
+	if (ok) lt_amb1_powerloss_demote_armed();
+#endif
 	/* Prefer the adapter's dedicated demote capability, which is authorized for
 	 * exactly this one byte. Only legacy/mock adapters without one fall back to
 	 * the generic program path. */
