@@ -117,5 +117,8 @@ FAL returns `-1`, so LibreTiny's unsigned flash API reports zero written bytes.
 - The SDK's `AP_SETTING_SECTOR=0xFE000`, `UART_SETTING_SECTOR=0xFC000`, and
   `FAST_RECONNECT_DATA=0x7F000` overlap native slot A on the WCATA007 board.
   They must not be used for provisioning.
+- The WCATA007 board's `system` partition is a size hint inherited from the
+  family layout. On that product it spans saved vendor configuration; it is not
+  a reviewed free-space grant and must not be used for settings or KVS.
 - Packaged images are produced by `tools/amb1/uf2_pack.py`, which extracts both
   load segments from the linked ELF and validates the native image2 boundaries.

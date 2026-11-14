@@ -33,10 +33,9 @@ Resources:
 	include-markdown "../../inc/flashing-note.md"
 %}
 
-The RTL8711AM boot ROM does not provide the standard UART download protocol used
-by AmebaZ. Boards in this family are supported with an external SPI programmer
-and a native loader image; use the board's documentation before attempting to
-write flash.
+This port is qualified with an external SPI programmer and a native image2
+loader. UART download/flashing support has not been implemented or validated for
+this family; use the board's documentation before attempting to write flash.
 
 The runtime status, memory layout, and known limitations of this port are
 documented in [Port status](port-status.md).
