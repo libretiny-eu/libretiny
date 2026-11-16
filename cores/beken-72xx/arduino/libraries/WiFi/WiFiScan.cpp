@@ -25,10 +25,13 @@ static void scanHandler(void *ctx, uint8_t param) {
 	}
 	LT_IM(WIFI, "Found %d APs", result.ApNum);
 
-	apNum = cls->scanAlloc(result.ApNum);
-	if (0 == apNum) {
-		LT_WM(WIFI, "scan->ap alloc failed");
-		goto end;
+	// A scan that found nothing is done too: only a list to copy needs memory.
+	if (result.ApNum) {
+		apNum = cls->scanAlloc(result.ApNum);
+		if (0 == apNum) {
+			LT_WM(WIFI, "scan->ap alloc failed");
+			goto end;
+		}
 	}
 
 	if (apNum < result.ApNum) {
