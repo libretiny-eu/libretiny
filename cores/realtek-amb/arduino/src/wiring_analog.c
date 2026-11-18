@@ -75,6 +75,6 @@ void analogWrite(pin_size_t pinNumber, int value) {
 		pinEnable(pin, PIN_PWM);
 	}
 
-	float percent = value * 1.0 / (1 << _analogWriteResolution);
+	float percent = value * 1.0 / ((1 << _analogWriteResolution) - 1);
 	pwmout_write(pwm, percent);
 }
