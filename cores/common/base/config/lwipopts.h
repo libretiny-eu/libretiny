@@ -8,6 +8,7 @@
 
 #define LWIP_MDNS_RESPONDER 1
 #define MDNS_MAX_SERVICES	10
+#define MDNS_TXT_RDATA_SIZE 384 // TXT record buffer per service; lwIP's default 256 is too small for ESPHome
 
 #include_next "lwipopts.h"
 
