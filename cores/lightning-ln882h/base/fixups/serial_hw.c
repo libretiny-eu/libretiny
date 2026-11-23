@@ -234,6 +234,8 @@ static void hw_uart_tx_start_polling(struct SerialHardware * _hw)
         while (hal_uart_flag_get(pdev->uart_base, USART_FLAG_TXE) != HAL_SET) {};
         //while (uart_flag_get(pdev->uart_base, USART_FLAG_TX_FIFO_FULL) == HAL_SET) {};
         hal_uart_send_data(pdev->uart_base, ch);
+        // the byte is in the UART until TC; serial_flush() waits for it
+        hw->Hardware.isSending = LN_TRUE;
     }
 }
 
@@ -260,9 +262,13 @@ static void hw_uart_tx_start_isr(struct SerialHardware * _hw)
 static int8_t hw_uart_tx_is_sending(struct SerialHardware * _hw)
 {
     ln_serial_t *hw = NULL;
+    uart_dev_t * pdev;
 
     LN_ASSERT(_hw);
     hw = (ln_serial_t *)_hw;
+    pdev = (uart_dev_t *)hw->Hardware.hw_device;
+    if (hw->Hardware.isSending && hal_uart_flag_get(pdev->uart_base, USART_FLAG_TC) == HAL_SET)
+        hw->Hardware.isSending = LN_FALSE;
     return hw->Hardware.isSending;
 }
 
