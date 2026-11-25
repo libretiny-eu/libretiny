@@ -4,4 +4,6 @@
 
 #include <ArduinoPrivate.h>
 
-struct SerialData {};
+struct SerialData {
+	bool started; //!< uart1_init()/uart2_init() was called, and not undone by endPrivate()
+};

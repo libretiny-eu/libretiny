@@ -41,10 +41,15 @@ void SerialClass::configure(unsigned long baudrate, uint16_t config) {
 		.flow_control = FLOW_CTRL_DISABLED,
 	};
 
-	if (this->port == 1)
-		uart1_init();
-	else if (this->port == 2)
-		uart2_init();
+	// uartX_init() allocates the port's FIFOs and registers the device again on every call,
+	// so a running port only gets its settings changed
+	if (!this->data->started) {
+		if (this->port == 1)
+			uart1_init();
+		else if (this->port == 2)
+			uart2_init();
+		this->data->started = true;
+	}
 	uart_hw_set_change(this->port - 1, &cfg);
 
 	this->baudrate = baudrate;
@@ -56,6 +61,9 @@ void SerialClass::endPrivate() {
 		return;
 
 	uart_rx_callback_set(this->port - 1, nullptr, nullptr);
+	if (!this->data->started)
+		return;
+	this->data->started = false;
 	switch (this->port) {
 		case 1:
 			uart1_exit();
