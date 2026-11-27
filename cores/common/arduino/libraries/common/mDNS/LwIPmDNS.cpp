@@ -66,13 +66,8 @@ static const char *hostName;
 NETIF_DECLARE_EXT_CALLBACK(netif_callback)
 #endif
 
-enum StateForNetIf {
-	DISABLED = 0, // not yet enabled
-	ENABLED,	  // enabled, but no services added
-	CONFIGURED	  // enabled and services added
-};
-
-static std::map<uint8_t, StateForNetIf> sNetIfState; // netif->num  --> state
+// An entry means the responder is enabled; each bit tracks a cached service.
+static std::map<uint8_t, std::vector<bool>> sRegisteredServices;
 
 mDNS::mDNS() {}
 
@@ -113,9 +108,12 @@ static void mdnsStatusCallback(struct netif *netif, uint8_t result, int8_t slot)
 }
 #endif
 
-#ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
-static void addServices(struct netif *netif) {
-	for (uint8_t i = 0; i < sCachedServices.size(); i++) {
+static void addServices(struct netif *netif, std::vector<bool> &registered) {
+	registered.resize(sCachedServices.size());
+	for (size_t i = 0; i < sCachedServices.size(); i++) {
+		if (registered[i])
+			continue;
+
 		const auto &cachedService = sCachedServices[i];
 		LT_DM(
 			MDNS,
@@ -141,10 +139,11 @@ static void addServices(struct netif *netif) {
 
 		if (slot < 0) {
 			LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
+		} else {
+			registered[i] = true;
 		}
 	}
 }
-#endif
 
 static bool enableMDNS(struct netif *netif) {
 	if (netif_is_up(netif)) {
@@ -174,36 +173,35 @@ static bool enableMDNS(struct netif *netif) {
 	return false;
 }
 
+static bool updateMDNS(struct netif *netif) {
+	if (!hostName || !netif_is_up(netif))
+		return false;
+
+	auto it = sRegisteredServices.find(netif->num);
+	if (it == sRegisteredServices.end()) {
+		if (!enableMDNS(netif))
+			return false;
+		it = sRegisteredServices.emplace(netif->num, std::vector<bool>{}).first;
+	}
+
+	auto &registered = it->second;
+	addServices(netif, registered);
+	return !registered.empty() && registered.back();
+}
+
 #ifdef LWIP_NETIF_EXT_STATUS_CALLBACK
 static void mdns_netif_ext_status_callback(
 	struct netif *netif,
 	netif_nsc_reason_t reason,
 	const netif_ext_callback_args_t *args
 ) {
-	auto stateIter = sNetIfState.find(netif->num);
-	if (stateIter == sNetIfState.end()) {
-		stateIter = sNetIfState.insert(std::make_pair(netif->num, StateForNetIf::DISABLED)).first;
-	}
-	auto currentState = sNetIfState[netif->num];
 	if (reason & LWIP_NSC_NETIF_REMOVED) {
-		if (StateForNetIf::DISABLED != stateIter->second) {
+		if (sRegisteredServices.erase(netif->num)) {
 			LT_DM(MDNS, "Netif removed, stopping mDNS on netif %u", netif->num);
 			mdns_resp_remove_netif(netif);
-			sNetIfState.erase(stateIter);
 		}
 	} else if ((reason & LWIP_NSC_STATUS_CHANGED) || (reason & LWIP_NSC_NETIF_ADDED)) {
-		if (StateForNetIf::DISABLED == stateIter->second) {
-			LT_DM(MDNS, "Starting mDNS on netif %u", netif->num);
-			if (enableMDNS(netif)) {
-				stateIter->second = StateForNetIf::ENABLED;
-			}
-		}
-
-		if ((StateForNetIf::ENABLED == stateIter->second) && (sCachedServices.size() > 0)) {
-			stateIter->second = StateForNetIf::CONFIGURED;
-			LT_DM(MDNS, "Adding services to netif %u", netif->num);
-			addServices(netif);
-		}
+		updateMDNS(netif);
 	}
 }
 #endif
@@ -220,12 +218,8 @@ bool mDNS::begin(const char *hostname) {
 #endif
 	mdns_resp_init();
 
-	struct netif *netif;
-	for (netif = netif_list; netif != NULL; netif = netif->next) {
-		sNetIfState[netif->num] = StateForNetIf::DISABLED;
-		if (enableMDNS(netif)) {
-			sNetIfState[netif->num] = StateForNetIf::ENABLED;
-		}
+	for (struct netif *netif = netif_list; netif != NULL; netif = netif->next) {
+		updateMDNS(netif);
 	}
 	return true;
 }
@@ -235,49 +229,21 @@ void mDNS::end() {
 	netif_remove_ext_callback(&netif_callback);
 #endif
 
-	struct netif *netif = netif_list;
-	while (netif != NULL) {
-		if (netif_is_up(netif))
+	for (struct netif *netif = netif_list; netif != NULL; netif = netif->next) {
+		if (sRegisteredServices.erase(netif->num))
 			mdns_resp_remove_netif(netif);
-		netif = netif->next;
 	}
 
 	cleanup();
 }
 
 bool mDNS::addServiceImpl(const char *name, const char *service, uint8_t proto, uint16_t port) {
-	bool added			= false;
-	struct netif *netif = netif_list;
-
-	std::size_t serviceIndex = sCachedServices.size();
-	// add the service to TXT record arrays
 	sCachedServices.emplace_back(name, service, (mdns_sd_proto)proto, port);
 
-	while (netif != NULL) {
-		if (netif_is_up(netif)) {
-			// register TXT callback;
-			// pass service index as userdata parameter
-			LT_DM(MDNS, "Add service: netif %u / %s / %s / %u / %u", netif->num, name, service, proto, port);
-			s8_t slot = mdns_resp_add_service(
-				netif,
-				name,
-				service,
-				(mdns_sd_proto)proto,
-				port,
-#if LWIP_VERSION_SIMPLE < 20200 // TTL removed in LwIP commit 62fb2fd749b (2.2.0 release)
-				255,
-#endif
-				mdnsTxtCallback,
-				(void *)serviceIndex // index of newly added service
-			);
-
-			if (slot < 0) {
-				LT_DM(MDNS, "mdns_resp_add_service returned error %d", slot);
-			}
-
+	bool added = false;
+	for (struct netif *netif = netif_list; netif != NULL; netif = netif->next) {
+		if (updateMDNS(netif))
 			added = true;
-		}
-		netif = netif->next;
 	}
 
 	return added;
