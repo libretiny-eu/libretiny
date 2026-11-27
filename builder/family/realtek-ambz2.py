@@ -54,6 +54,7 @@ queue.AppendPublic(
         # other options
         "__thumb2__",
         "CONFIG_PLATFORM_8710C",
+        ("LWIP_NETIF_API", "1"),
         ("__ARM_ARCH_8M_MAIN__", "1"),
         ("CONFIG_BUILD_RAM", "1"),
         "V8M_STKOVF",
@@ -265,6 +266,7 @@ queue.AddLibrary(
         "+<common/network/ssl/ssl_ram_map/rom>",
     ],
     options=dict(
+        CPPDEFINES=[("netif_set_link_up", "lt_ambz2_netif_set_link_up")],
         CCFLAGS=[
             "-Wno-pointer-sign",
             "-Wno-unused-value",

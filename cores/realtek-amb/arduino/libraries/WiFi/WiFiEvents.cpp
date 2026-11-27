@@ -2,6 +2,10 @@
 
 #include "WiFiPrivate.h"
 
+#if LT_RTL8720C
+#include <lwip/netifapi.h>
+#endif
+
 #include <vector>
 
 #define WIFI_EVENT_MAX_ROW 3
@@ -141,6 +145,15 @@ void handleRtwEvent(uint16_t event, const char *data, int len, int flags) {
 		pWiFi->postEvent(eventId, eventInfo ? *eventInfo : empty);
 		return;
 	}
+
+#if LT_RTL8720C
+	// Clear the station link before SDK listeners can wake a waiting join.
+	if (event == WIFI_EVENT_DISCONNECT && (wifi_mode & WIFI_MODE_STA)) {
+		err_t err = netifapi_netif_set_link_down(NETIF_RTW_STA);
+		if (err != ERR_OK)
+			LT_EM(WIFI, "Failed to set WiFi station link down: %d", err);
+	}
+#endif
 
 	// send to SDK listeners
 	for (uint8_t i = 0; i < WIFI_EVENT_MAX_ROW; i++) {
